@@ -1,0 +1,45 @@
+class AppRoutes {
+  static const String roleSelection = '/role-selection';
+  static const String login = '/login';
+  static const String parentDashboard = '/parent/dashboard';
+  static const String parentFees = '/parent/fees';
+  static const String parentAttendance = '/parent/attendance';
+  static const String parentReports = '/parent/reports';
+  static const String parentInstitute = '/parent/institute';
+  static const String parentStudentProfile = '/parent/student-profile';
+  static const String parentUpdates = '/parent/updates';
+  static const String parentRecentPayments = '/parent/recent-payments';
+  static const String parentHomeworkTracker = '/parent/homework-tracker';
+  static const String parentAttendanceHistory = '/parent/attendance-history';
+  static const String parentHomeworkDetail = '/parent/homework-detail';
+
+  static const String studentDashboard = '/student/dashboard';
+  static const String studentAttendance = '/student/attendance';
+  static const String studentSettings = '/student/settings';
+  static const String studentNotifications = '/student/notifications';
+  static const String studentHomework = '/student/homework';
+  static const String studentHomeworkDetail = '/student/homework-detail';
+  static const String studentInstitute = '/student/institute';
+  static const String studentFeeHistory = '/student/fee-history';
+
+  static const String instituteDashboard = '/institute/dashboard';
+  static const String instituteStudents = '/institute/students';
+  static const String instituteStudentProfile = '/institute/students/profile';
+  static const String instituteAddStudent = '/institute/students/add';
+  static const String instituteFees = '/institute/fees';
+  static const String instituteRecordFee = '/institute/fees/record';
+  static const String instituteBatches = '/institute/batches';
+  static const String instituteAttendanceMarking = '/institute/batches/marking';
+  static const String instituteMarkAttendance = '/institute/batches/mark';
+  static const String instituteBatchDetails = '/institute/batches/details';
+  static const String instituteEditProfile = '/institute/edit-profile';
+  static const String instituteProfile = '/institute/profile';
+  static const String instituteSecurity = '/institute/profile/security';
+  static const String instituteSubscription = '/institute/profile/subscription';
+  static const String instituteWhatsApp = '/institute/profile/whatsapp';
+  static const String instituteEditStudentProfile = '/institute/students/edit';
+  static const String instituteFeeReports = '/institute/reports/fee';
+  static const String instituteUpdates = '/institute/updates';
+  static const String instituteCreateUpdate = '/institute/updates/create';
+  static const String instituteNotifications = '/institute/notifications';
+}

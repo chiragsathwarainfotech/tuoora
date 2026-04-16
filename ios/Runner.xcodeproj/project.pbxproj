@@ -1,0 +1,167 @@
+/* Minimal Xcode project file */
+// This is a placeholder project.pbxproj generated for the FeeEasy app.
+// Running `flutter create .` will regenerate a full project if needed.
+
+archiveVersion = 1;
+objectVersion = 46;
+objects = {
+    /* Project object */
+    1D6058900D05DD3D006BFB54 /* Project object */ = {
+        isa = PBXProject;
+        attributes = {
+            LastUpgradeCheck = 1230;
+        };
+        buildConfigurationList = 1D6058930D05DD3D006BFB54 /* Build configuration list for PBXProject "Runner" */;
+        compatibilityVersion = "Xcode 3.2";
+        developmentRegion = English;
+        hasScannedForEncodings = 0;
+        knownRegions = (
+            en,
+        );
+        mainGroup = 1D6058910D05DD3D006BFB54;
+        productRefGroup = 1D6058920D05DD3D006BFB54 /* Products */;
+        projectDirPath = "";
+        projectRoot = "";
+        targets = (
+            1D6058940D05DD3D006BFB54 /* Runner */,
+        );
+    };
+    /* Build configuration list */
+    1D6058930D05DD3D006BFB54 /* Build configuration list for PBXProject "Runner" */ = {
+        isa = XCConfigurationList;
+        buildConfigurations = (
+            1D6058950D05DD3D006BFB54 /* Debug */,
+            1D6058960D05DD3D006BFB54 /* Release */,
+        );
+        defaultConfigurationIsVisible = 0;
+        defaultConfigurationName = Release;
+    };
+    1D6058950D05DD3D006BFB54 /* Debug */ = {
+        isa = XCBuildConfiguration;
+        buildSettings = {
+            PRODUCT_NAME = "$(TARGET_NAME)";
+            CODE_SIGN_IDENTITY = "";
+            INFOPLIST_FILE = "Runner/Info.plist";
+        };
+        name = Debug;
+    };
+    1D6058960D05DD3D006BFB54 /* Release */ = {
+        isa = XCBuildConfiguration;
+        buildSettings = {
+            PRODUCT_NAME = "$(TARGET_NAME)";
+            CODE_SIGN_IDENTITY = "";
+            INFOPLIST_FILE = "Runner/Info.plist";
+        };
+        name = Release;
+    };
+    /* Main group */
+    1D6058910D05DD3D006BFB54 = {
+        isa = PBXGroup;
+        children = (
+            1D60589A0D05DD3D006BFB54 /* Runner */,
+        );
+        sourceTree = "<group>";
+    };
+    1D60589A0D05DD3D006BFB54 = {
+        isa = PBXGroup;
+        children = (
+            1D60589B0D05DD3D006BFB54 /* AppDelegate.swift */,
+            1D60589C0D05DD3D006BFB54 /* Info.plist */,
+        );
+        name = Runner;
+        path = Runner;
+        sourceTree = "<group>";
+    };
+    1D60589B0D05DD3D006BFB54 /* AppDelegate.swift */ = {
+        isa = PBXFileReference;
+        lastKnownFileType = sourcecode.swift;
+        path = AppDelegate.swift;
+        sourceTree = "<group>";
+    };
+    1D60589C0D05DD3D006BFB54 /* Info.plist */ = {
+        isa = PBXFileReference;
+        lastKnownFileType = text.plist.xml;
+        path = Info.plist;
+        sourceTree = "<group>";
+    };
+    /* Products group */
+    1D6058920D05DD3D006BFB54 /* Products */ = {
+        isa = PBXGroup;
+        children = (
+            1D60589D0D05DD3D006BFB54 /* Runner.app */,
+        );
+        name = Products;
+        sourceTree = "<group>";
+    };
+    1D60589D0D05DD3D006BFB54 /* Runner.app */ = {
+        isa = PBXFileReference;
+        explicitFileType = wrapper.application;
+        path = Runner.app;
+        sourceTree = BUILT_PRODUCTS_DIR;
+    };
+    /* Target */
+    1D6058940D05DD3D006BFB54 /* Runner */ = {
+        isa = PBXNativeTarget;
+        buildConfigurationList = 1D6058970D05DD3D006BFB54 /* Build configuration list for PBXNativeTarget "Runner" */;
+        buildPhases = (
+            1D60589E0D05DD3D006BFB54 /* Sources */,
+            1D60589F0D05DD3D006BFB54 /* Frameworks */,
+            1D6058A00D05DD3D006BFB54 /* Resources */,
+        );
+        buildRules = (
+        );
+        dependencies = (
+        );
+        name = Runner;
+        productName = Runner;
+        productReference = 1D60589D0D05DD3D006BFB54 /* Runner.app */;
+        productType = "com.apple.product-type.application";
+    };
+    1D6058970D05DD3D006BFB54 /* Build configuration list for PBXNativeTarget "Runner" */ = {
+        isa = XCConfigurationList;
+        buildConfigurations = (
+            1D6058980D05DD3D006BFB54 /* Debug */,
+            1D6058990D05DD3D006BFB54 /* Release */,
+        );
+        defaultConfigurationIsVisible = 0;
+        defaultConfigurationName = Release;
+    };
+    1D6058980D05DD3D006BFB54 /* Debug */ = {
+        isa = XCBuildConfiguration;
+        buildSettings = {
+            PRODUCT_NAME = "$(TARGET_NAME)";
+            CODE_SIGN_IDENTITY = "";
+        };
+        name = Debug;
+    };
+    1D6058990D05DD3D006BFB54 /* Release */ = {
+        isa = XCBuildConfiguration;
+        buildSettings = {
+            PRODUCT_NAME = "$(TARGET_NAME)";
+            CODE_SIGN_IDENTITY = "";
+        };
+        name = Release;
+    };
+    1D60589E0D05DD3D006BFB54 /* Sources */ = {
+        isa = PBXSourcesBuildPhase;
+        buildActionMask = 2147483647;
+        files = (
+        );
+        runOnlyForDeploymentPostprocessing = 0;
+    };
+    1D60589F0D05DD3D006BFB54 /* Frameworks */ = {
+        isa = PBXFrameworksBuildPhase;
+        buildActionMask = 2147483647;
+        files = (
+        );
+        runOnlyForDeploymentPostprocessing = 0;
+    };
+    1D6058A00D05DD3D006BFB54 /* Resources */ = {
+        isa = PBXResourcesBuildPhase;
+        buildActionMask = 2147483647;
+        files = (
+        );
+        runOnlyForDeploymentPostprocessing = 0;
+    };
+};
+rootObject = 1D6058900D05DD3D006BFB54;

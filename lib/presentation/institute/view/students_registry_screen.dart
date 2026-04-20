@@ -1,46 +1,30 @@
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
-import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
-import 'package:fee_easy/presentation/institute/widgets/institute_bottom_nav.dart';
 import 'package:fee_easy/config/app_routes.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../controllers/institute_controller.dart';
-import 'package:fee_easy/presentation/institute/widgets/institute_root_scaffold.dart';
 
 class StudentsRegistryScreen extends GetView<InstituteController> {
-  final bool showShell;
-  const StudentsRegistryScreen({super.key, this.showShell = true});
+  const StudentsRegistryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return InstituteRootScaffold(
-      title: 'Student Registry',
-      currentIndex: 1,
-      showShell: showShell,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Get.toNamed(AppRoutes.instituteAddStudent),
-        backgroundColor: AppColors.instDarkBtnBlue,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        elevation: 4,
-        child: const Icon(Icons.add, color: Colors.white, size: AppSpacing.s28),
-      ),
-      body: SingleChildScrollView(
-        padding: AppSpacing.x24,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AppSpacing.v16,
-            _buildSearchBar(),
-            AppSpacing.v20,
-            _buildFilterRow(),
-            AppSpacing.v24,
-            _buildStudentsList(),
-          ],
-        ),
+    return SingleChildScrollView(
+      padding: AppSpacing.x24,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AppSpacing.v16,
+          _buildSearchBar(),
+          AppSpacing.v20,
+          _buildFilterRow(),
+          AppSpacing.v24,
+          _buildStudentsList(),
+        ],
       ),
     );
   }
@@ -178,38 +162,16 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Avatar Stack
-            Stack(
-              children: [
-                Container(
-                  width: AppSpacing.s64,
-                  height: AppSpacing.s64,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    image: DecorationImage(
-                      image: NetworkImage(imageUrl),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+            Container(
+              width: AppSpacing.s64,
+              height: AppSpacing.s64,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                image: DecorationImage(
+                  image: NetworkImage(imageUrl),
+                  fit: BoxFit.cover,
                 ),
-                if (showOnlineBadge)
-                  Positioned(
-                    bottom: -2,
-                    right: -2,
-                    child: Container(
-                      width: AppSpacing.s16,
-                      height: AppSpacing.s16,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF10B981), // Green dot
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: Colors.white,
-                          width: AppSpacing.s2,
-                        ),
-                      ),
-                    ),
-                  ),
-              ],
+              ),
             ),
             AppSpacing.h16,
 

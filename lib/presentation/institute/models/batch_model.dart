@@ -1,0 +1,25 @@
+import 'package:flutter/material.dart';
+
+class BatchModel {
+  final String id;
+  final String title;
+  final String time;
+  final String studentCount;
+  final String location;
+  final String statusLabel;
+  final Color statusBg;
+  final Color leftBorderColor;
+  final Color statusTextColor;
+
+  BatchModel({
+    required this.id,
+    required this.title,
+    required this.time,
+    required this.studentCount,
+    required this.location,
+    required this.statusLabel,
+    required this.statusBg,
+    required this.leftBorderColor,
+    this.statusTextColor = Colors.white,
+  });
+}

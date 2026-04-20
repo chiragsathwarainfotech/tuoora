@@ -1,4 +1,5 @@
 import 'package:fee_easy/core/constants/app_text_styles.dart';
+import 'package:fee_easy/presentation/institute/controllers/institute_profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:fee_easy/config/app_routes.dart';
 import 'package:fee_easy/core/constants/app_colors.dart';
@@ -11,6 +12,8 @@ class InstituteDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final profileController = Get.find<InstituteProfileController>();
+
     return Drawer(
       backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
@@ -24,64 +27,72 @@ class InstituteDrawer extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             AppSpacing.v24,
-            // Header Profile
             Padding(
               padding: AppSpacing.x24,
-              child: Row(
-                children: [
-                  Container(
-                    width: AppSpacing.s48,
-                    height: AppSpacing.s48,
-                    decoration: BoxDecoration(
-                      color: AppColors.inputSolidGrey,
-                      borderRadius: BorderRadius.circular(12),
-                      image: const DecorationImage(
-                        image: NetworkImage(
-                          'https://i.pravatar.cc/150?u=admin_atelier',
-                        ),
-                        fit: BoxFit.cover,
+              child: Obx(
+                () => Row(
+                  children: [
+                    Container(
+                      width: AppSpacing.s48,
+                      height: AppSpacing.s48,
+                      decoration: BoxDecoration(
+                        color: AppColors.inputSolidGrey,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: profileController.profileImagePath.value == null
+                          ? const Center(
+                              child: Icon(
+                                Icons.school_rounded,
+                                color: AppColors.instPrimaryBlue,
+                                size: 24,
+                              ),
+                            )
+                          : null,
+                    ),
+                    AppSpacing.h12,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  profileController.instituteName.value,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: AppTextStyles.manrope(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w800,
+                                    color: AppColors.instPrimaryBlue,
+                                  ),
+                                ),
+                              ),
+                              AppSpacing.h8,
+                              GestureDetector(
+                                onTap: () =>
+                                    Get.toNamed(AppRoutes.instituteEditProfile),
+                                child: const Icon(
+                                  Icons.edit_rounded,
+                                  color: AppColors.instAccentBlue,
+                                  size: AppSpacing.s14,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Text(
+                            AppStrings.instDrawerAdminRole,
+                            style: AppTextStyles.lexend(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              color: AppColors.textTertiary,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                  AppSpacing.h12,
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              AppStrings.instDrawerAdminName,
-                              style: AppTextStyles.manrope(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w800,
-                                color: AppColors.instPrimaryBlue,
-                              ),
-                            ),
-                            AppSpacing.h8,
-                            GestureDetector(
-                              onTap: () =>
-                                  Get.toNamed(AppRoutes.instituteEditProfile),
-                              child: const Icon(
-                                Icons.edit_rounded,
-                                color: AppColors.instAccentBlue,
-                                size: AppSpacing.s14,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Text(
-                          AppStrings.instDrawerAdminRole,
-                          style: AppTextStyles.lexend(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            color: AppColors.textTertiary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             AppSpacing.v32,
@@ -109,14 +120,14 @@ class InstituteDrawer extends StatelessWidget {
               isActive: false,
               onTap: () => Get.toNamed(AppRoutes.instituteFeeReports),
             ),
-            _buildDrawerItem(
-              icon: Icons.person_outline_rounded,
-              label: 'Profile',
-              isActive: false,
-              onTap: () {
-                Get.toNamed(AppRoutes.instituteProfile);
-              },
-            ),
+            // _buildDrawerItem(
+            //   icon: Icons.person_outline_rounded,
+            //   label: 'Profile',
+            //   isActive: false,
+            //   onTap: () {
+            //     Get.toNamed(AppRoutes.instituteProfile);
+            //   },
+            // ),
             _buildDrawerItem(
               icon: Icons.history_rounded,
               label: AppStrings.instDrawerUpdates,

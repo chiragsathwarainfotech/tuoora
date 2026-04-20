@@ -2,42 +2,33 @@ import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/config/app_routes.dart';
-import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
-import 'package:fee_easy/presentation/institute/widgets/institute_bottom_nav.dart';
+import 'package:fee_easy/presentation/institute/controllers/institute_controller.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-import 'package:fee_easy/presentation/institute/widgets/institute_root_scaffold.dart';
-
 class InstituteFeesScreen extends StatelessWidget {
-  final bool showShell;
-  const InstituteFeesScreen({super.key, this.showShell = true});
+  const InstituteFeesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return InstituteRootScaffold(
-      title: 'Financial Ledger',
-      currentIndex: 3,
-      showShell: showShell,
-      body: SingleChildScrollView(
-        padding: AppSpacing.x24,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AppSpacing.v16,
-            _buildTotalCollectedCard(),
-            AppSpacing.v16,
-            _buildTotalPendingCard(),
-            AppSpacing.v16,
-            _buildFinancialReportCard(),
-            AppSpacing.v32,
-            _buildRegistryHeader(),
-            AppSpacing.v16,
-            _buildRegistryList(),
-            AppSpacing.v32,
-          ],
-        ),
+    return SingleChildScrollView(
+      padding: AppSpacing.x24,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AppSpacing.v16,
+          _buildTotalCollectedCard(),
+          AppSpacing.v16,
+          _buildTotalPendingCard(),
+          AppSpacing.v16,
+          _buildFinancialReportCard(),
+          AppSpacing.v32,
+          _buildRegistryHeader(),
+          AppSpacing.v16,
+          _buildRegistryList(),
+          AppSpacing.v32,
+        ],
       ),
     );
   }
@@ -88,7 +79,11 @@ class InstituteFeesScreen extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.trending_up, color: Colors.white, size: AppSpacing.s16),
+                    const Icon(
+                      Icons.trending_up,
+                      color: Colors.white,
+                      size: AppSpacing.s16,
+                    ),
                     AppSpacing.h4,
                     Text(
                       '12%',
@@ -170,7 +165,10 @@ class InstituteFeesScreen extends StatelessWidget {
               color: Colors.white,
               borderRadius: BorderRadius.circular(16),
             ),
-            child: const Icon(Icons.analytics_outlined, color: AppColors.instFeesCollectedBg),
+            child: const Icon(
+              Icons.analytics_outlined,
+              color: AppColors.instFeesCollectedBg,
+            ),
           ),
           AppSpacing.h16,
           Expanded(
@@ -200,11 +198,17 @@ class InstituteFeesScreen extends StatelessWidget {
             onPressed: () {},
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.instFeesDownloadBtn,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               elevation: 0,
               padding: AppSpacing.x16.add(AppSpacing.y12),
             ),
-            child: const Icon(Icons.download_rounded, color: Colors.white, size: AppSpacing.s20),
+            child: const Icon(
+              Icons.download_rounded,
+              color: Colors.white,
+              size: AppSpacing.s20,
+            ),
           ),
         ],
       ),
@@ -231,7 +235,11 @@ class InstituteFeesScreen extends StatelessWidget {
               color: AppColors.instAccentBlue,
               borderRadius: BorderRadius.circular(10),
             ),
-            child: const Icon(Icons.add, color: Colors.white, size: AppSpacing.s20),
+            child: const Icon(
+              Icons.add,
+              color: Colors.white,
+              size: AppSpacing.s20,
+            ),
           ),
         ),
       ],
@@ -239,20 +247,32 @@ class InstituteFeesScreen extends StatelessWidget {
   }
 
   Widget _buildRegistryList() {
-    return Column(
-      children: [
-        _buildFeeItem('Arjun Malhotra', '₹2,500', 'Paid', AppColors.instFeesPaidBadgeBg, AppColors.instFeesPaidText),
-        AppSpacing.v12,
-        _buildFeeItem('Sarah Jenkins', '₹2,500', 'Due', AppColors.instFeesDueBadgeBg, AppColors.instFeesDueText),
-        AppSpacing.v12,
-        _buildFeeItem('Rahul Sharma', '₹2,500', 'Paid', AppColors.instFeesPaidBadgeBg, AppColors.instFeesPaidText),
-        AppSpacing.v12,
-        _buildFeeItem('Priya Gupta', '₹2,500', 'Due', AppColors.instFeesDueBadgeBg, AppColors.instFeesDueText),
-      ],
+    final controller = Get.find<InstituteController>();
+    return Obx(
+      () => Column(
+        children: controller.feeRecords.map((record) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: AppSpacing.s12),
+            child: _buildFeeItem(
+              record.studentName,
+              record.amount,
+              record.status,
+              record.statusBg,
+              record.statusText,
+            ),
+          );
+        }).toList(),
+      ),
     );
   }
 
-  Widget _buildFeeItem(String name, String amount, String status, Color statusBg, Color statusText) {
+  Widget _buildFeeItem(
+    String name,
+    String amount,
+    String status,
+    Color statusBg,
+    Color statusText,
+  ) {
     return Container(
       padding: AppSpacing.all16,
       decoration: BoxDecoration(
@@ -264,7 +284,10 @@ class InstituteFeesScreen extends StatelessWidget {
         children: [
           CircleAvatar(
             backgroundColor: AppColors.instFeesAvatarBg,
-            child: Text(name[0], style: const TextStyle(color: AppColors.textSecondary)),
+            child: Text(
+              name[0],
+              style: const TextStyle(color: AppColors.textSecondary),
+            ),
           ),
           AppSpacing.h16,
           Expanded(

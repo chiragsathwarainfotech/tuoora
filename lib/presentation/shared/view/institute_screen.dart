@@ -28,19 +28,18 @@ class InstituteScreen extends StatelessWidget {
     final bool isParent = Get.currentRoute.contains('/parent');
 
     Widget content = SingleChildScrollView(
-        child: Column(
-          children: [
-            _buildAboutHeader(),
-            AppSpacing.v24,
-            _buildInstituteDetailsCard(),
-            AppSpacing.v24,
-            _buildConnectSection(),
-            AppSpacing.v24,
-            _buildPresenceCard(),
-            AppSpacing.v40,
-          ],
-        ),
-      );
+      child: Column(
+        children: [
+          AppSpacing.v20,
+          _buildInstituteDetailsCard(),
+          AppSpacing.v24,
+          _buildConnectSection(),
+          AppSpacing.v24,
+          _buildPresenceCard(),
+          AppSpacing.v40,
+        ],
+      ),
+    );
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
@@ -85,60 +84,18 @@ class InstituteScreen extends StatelessWidget {
       body: content,
       bottomNavigationBar: showBottomNav
           ? (isParent
-              ? const ParentBottomNav(currentIndex: 4)
-              : const StudentBottomNav(currentIndex: 3))
+                ? const ParentBottomNav(currentIndex: 4)
+                : const StudentBottomNav(currentIndex: 3))
           : null,
-    );
-  }
-
-  Widget _buildAboutHeader() {
-    return Container(
-      height: AppSpacing.s240,
-      width: double.infinity,
-      margin: AppSpacing.x20.add(const EdgeInsets.symmetric(vertical: AppSpacing.s10)),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(AppSpacing.s32),
-        image: const DecorationImage(
-          image: AssetImage('assets/institute_header.png'),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(AppSpacing.s32),
-              gradient: LinearGradient(
-                colors: [
-                  Colors.black.withValues(alpha: 0.1),
-                  Colors.black.withValues(alpha: 0.6),
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-            ),
-          ),
-          const Center(
-            child: Text(
-              'About Institute',
-              style: TextStyle(
-                fontFamily: 'Manrope',
-                fontSize: 34,
-                fontWeight: FontWeight.w800,
-                color: Colors.white,
-                letterSpacing: -0.5,
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 
   Widget _buildInstituteDetailsCard() {
     return Container(
       margin: AppSpacing.x20,
-      padding: AppSpacing.x24.add(const EdgeInsets.symmetric(vertical: AppSpacing.s32)),
+      padding: AppSpacing.x24.add(
+        const EdgeInsets.symmetric(vertical: AppSpacing.s32),
+      ),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(AppSpacing.s32),
@@ -153,15 +110,15 @@ class InstituteScreen extends StatelessWidget {
       child: Column(
         children: [
           Container(
+            height: AppSpacing.s100,
+            width: AppSpacing.s100,
             padding: const EdgeInsets.all(AppSpacing.s18),
             decoration: BoxDecoration(
-              color: const Color(0xFFE0E7FF),
-              borderRadius: BorderRadius.circular(AppSpacing.s20),
-            ),
-            child: const Icon(
-              Icons.account_balance_rounded,
-              color: Color(0xFF1E3A8A),
-              size: AppSpacing.s32,
+              borderRadius: BorderRadius.circular(AppSpacing.s32),
+              image: const DecorationImage(
+                image: AssetImage('assets/institute_header.png'),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           AppSpacing.v20,
@@ -174,17 +131,11 @@ class InstituteScreen extends StatelessWidget {
             ),
           ),
           AppSpacing.v4,
-          Text(
-            'Empowering Future Leaders',
-            style: AppTextStyles.manrope(
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
-              color: const Color(0xFF2B5BCC),
-              letterSpacing: 0.5,
-            ),
+          const Divider(
+            height: AppSpacing.s48,
+            thickness: 1,
+            color: Color(0xFFF3F4F6),
           ),
-          AppSpacing.v4,
-          const Divider(height: AppSpacing.s48, thickness: 1, color: Color(0xFFF3F4F6)),
           _buildInfoTile(
             icon: Icons.person_outline_rounded,
             label: 'Owner & Founder',

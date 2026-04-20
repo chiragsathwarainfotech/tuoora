@@ -1,13 +1,14 @@
-import 'package:fee_easy/config/app_routes.dart';
+import 'dart:io';
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
+import 'package:fee_easy/presentation/institute/controllers/student_controller.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class EditStudentProfileScreen extends StatelessWidget {
+class EditStudentProfileScreen extends GetView<InstituteStudentController> {
   const EditStudentProfileScreen({super.key});
 
   @override
@@ -24,7 +25,7 @@ class EditStudentProfileScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    _buildMainFormCard(),
+                    _buildMainFormCard(context),
                     AppSpacing.v16,
                     _buildFeeStructureCard(),
                     AppSpacing.v24,
@@ -40,7 +41,7 @@ class EditStudentProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMainFormCard() {
+  Widget _buildMainFormCard(BuildContext context) {
     return Container(
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
@@ -60,18 +61,51 @@ class EditStudentProfileScreen extends StatelessWidget {
           // Identity Section
           Row(
             children: [
-              Container(
-                width: AppSpacing.s64,
-                height: AppSpacing.s64,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF5B98A6),
-                  borderRadius: BorderRadius.circular(AppSpacing.s12),
-                  image: const DecorationImage(
-                    image: NetworkImage(
-                      'https://i.pravatar.cc/150?u=student_arjun',
+              GestureDetector(
+                onTap: () => controller.showImagePickerSourceSheet(context),
+                child: Stack(
+                  children: [
+                    Obx(
+                      () => Container(
+                        width: AppSpacing.s80,
+                        height: AppSpacing.s80,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF5B98A6),
+                          borderRadius: BorderRadius.circular(AppSpacing.s16),
+                          image: controller.selectedImagePath.value != null
+                              ? DecorationImage(
+                                  image: FileImage(
+                                    File(controller.selectedImagePath.value!),
+                                  ),
+                                  fit: BoxFit.cover,
+                                )
+                              : const DecorationImage(
+                                  image: NetworkImage(
+                                    'https://i.pravatar.cc/150?u=student_arjun',
+                                  ),
+                                  fit: BoxFit.cover,
+                                ),
+                        ),
+                      ),
                     ),
-                    fit: BoxFit.cover,
-                  ),
+                    Positioned(
+                      bottom: -2,
+                      right: -2,
+                      child: Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: AppColors.instDarkBtnBlue,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 2),
+                        ),
+                        child: const Icon(
+                          Icons.camera_alt_rounded,
+                          color: Colors.white,
+                          size: 14,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               AppSpacing.h16,
@@ -91,7 +125,7 @@ class EditStudentProfileScreen extends StatelessWidget {
                     Text(
                       'Tap to change the student profile picture',
                       style: AppTextStyles.lexend(
-                        fontSize: 14,
+                        fontSize: 13,
                         fontWeight: FontWeight.w400,
                         color: AppColors.textTertiary,
                         height: 1.4,
@@ -121,12 +155,21 @@ class EditStudentProfileScreen extends StatelessWidget {
             label: AppStrings.instPhoneLabel,
             hint: '+91 98765-43210',
             icon: Icons.phone,
+            keyboardType: TextInputType.phone,
           ),
           AppSpacing.v20,
-          _buildDropdownField(
-            label: AppStrings.instGradeLabel,
-            hint: 'Grade 10-A',
-            icon: Icons.school,
+          Obx(
+            () => _buildDropdownField(
+              label: AppStrings.instGradeLabel,
+              hint: controller.selectedGrade.value,
+              icon: Icons.school,
+              onTap: () => controller.showGradeSelection(context, [
+                'Grade 9-A',
+                'Grade 10-A',
+                'Grade 11-A',
+                'Grade 12-A',
+              ]),
+            ),
           ),
           AppSpacing.v20,
           _buildInputField(
@@ -146,24 +189,32 @@ class EditStudentProfileScreen extends StatelessWidget {
             ),
           ),
           AppSpacing.v12,
-          Row(
-            children: [
-              Expanded(
-                child: _buildBatchCard(
-                  title: 'Science Stream',
-                  time: '08:00 AM - 10:00 AM',
-                  isSelected: true,
+          Obx(
+            () => Row(
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () => controller.setBatch(0),
+                    child: _buildBatchCard(
+                      title: 'Science Stream',
+                      time: '08:00 AM - 10:00 AM',
+                      isSelected: controller.selectedBatchIndex.value == 0,
+                    ),
+                  ),
                 ),
-              ),
-              AppSpacing.h12,
-              Expanded(
-                child: _buildBatchCard(
-                  title: 'Evening Batch',
-                  time: '04:00 PM - 06:00 PM',
-                  isSelected: false,
+                AppSpacing.h12,
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () => controller.setBatch(1),
+                    child: _buildBatchCard(
+                      title: 'Evening Batch',
+                      time: '04:00 PM - 06:00 PM',
+                      isSelected: controller.selectedBatchIndex.value == 1,
+                    ),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
@@ -174,6 +225,7 @@ class EditStudentProfileScreen extends StatelessWidget {
     required String label,
     required String hint,
     required IconData icon,
+    TextInputType keyboardType = TextInputType.text,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -194,6 +246,7 @@ class EditStudentProfileScreen extends StatelessWidget {
           ),
           child: TextField(
             controller: TextEditingController(text: hint),
+            keyboardType: keyboardType,
             style: AppTextStyles.lexend(
               fontSize: 14,
               color: AppColors.textPrimary,
@@ -217,47 +270,51 @@ class EditStudentProfileScreen extends StatelessWidget {
     required String label,
     required String hint,
     required IconData icon,
+    VoidCallback? onTap,
   }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: AppTextStyles.manrope(
-            fontSize: 14,
-            fontWeight: FontWeight.w800,
-            color: AppColors.textDarkGrey,
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: AppTextStyles.manrope(
+              fontSize: 14,
+              fontWeight: FontWeight.w800,
+              color: AppColors.textDarkGrey,
+            ),
           ),
-        ),
-        AppSpacing.v8,
-        Container(
-          decoration: BoxDecoration(
-            color: AppColors.inputSolidGrey,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          padding: AppSpacing.all16,
-          child: Row(
-            children: [
-              Icon(icon, color: AppColors.textTertiary, size: AppSpacing.s20),
-              AppSpacing.h12,
-              Expanded(
-                child: Text(
-                  hint,
-                  style: AppTextStyles.lexend(
-                    fontSize: 14,
-                    color: AppColors.textPrimary,
+          AppSpacing.v8,
+          Container(
+            decoration: BoxDecoration(
+              color: AppColors.inputSolidGrey,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            padding: AppSpacing.all16,
+            child: Row(
+              children: [
+                Icon(icon, color: AppColors.textTertiary, size: AppSpacing.s20),
+                AppSpacing.h12,
+                Expanded(
+                  child: Text(
+                    hint,
+                    style: AppTextStyles.lexend(
+                      fontSize: 14,
+                      color: AppColors.textPrimary,
+                    ),
                   ),
                 ),
-              ),
-              const Icon(
-                Icons.keyboard_arrow_down_rounded,
-                color: AppColors.textTertiary,
-                size: AppSpacing.s20,
-              ),
-            ],
+                const Icon(
+                  Icons.keyboard_arrow_down_rounded,
+                  color: AppColors.textTertiary,
+                  size: AppSpacing.s20,
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -281,6 +338,8 @@ class EditStudentProfileScreen extends StatelessWidget {
         children: [
           Text(
             title,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: AppTextStyles.manrope(
               fontSize: 14,
               fontWeight: FontWeight.w700,
@@ -292,8 +351,10 @@ class EditStudentProfileScreen extends StatelessWidget {
           AppSpacing.v4,
           Text(
             time,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: AppTextStyles.lexend(
-              fontSize: 13,
+              fontSize: 11,
               fontWeight: FontWeight.w400,
               color: isSelected
                   ? AppColors.instAccentBlue.withValues(alpha: 0.7)
@@ -332,47 +393,93 @@ class EditStudentProfileScreen extends StatelessWidget {
             ),
           ),
           AppSpacing.v16,
-          Container(
-            padding: AppSpacing.all16,
-            decoration: BoxDecoration(
-              color: AppColors.scaffoldBg,
-              borderRadius: BorderRadius.circular(AppSpacing.s12),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Monthly Tuition Fee',
-                      style: AppTextStyles.manrope(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.textSecondary,
-                        height: 1.4,
+          Obx(
+            () => Container(
+              padding: AppSpacing.all16,
+              decoration: BoxDecoration(
+                color: AppColors.scaffoldBg,
+                borderRadius: BorderRadius.circular(AppSpacing.s12),
+              ),
+              child: Column(
+                children: [
+                  GestureDetector(
+                    onTap: () => controller.toggleFeeStructure(),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Monthly Tuition Fee',
+                                style: AppTextStyles.manrope(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w400,
+                                  color: AppColors.textSecondary,
+                                  height: 1.4,
+                                ),
+                              ),
+                              AppSpacing.v4,
+                              Text(
+                                controller.totalMonthlyFee.value,
+                                style: AppTextStyles.manrope(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w800,
+                                  color: AppColors.instDarkBtnBlue,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Text(
+                          controller.isFeeStructureExpanded.value
+                              ? 'Close'
+                              : 'Change',
+                          style: AppTextStyles.manrope(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.instDarkBtnBlue,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (controller.isFeeStructureExpanded.value) ...[
+                    AppSpacing.v16,
+                    const Divider(),
+                    AppSpacing.v12,
+                    ...controller.feeBreakdown.entries.map(
+                      (entry) => Padding(
+                        padding: AppSpacing.bottom12,
+                        child: _buildEditableFeeRow(entry.key, entry.value),
                       ),
                     ),
-                    AppSpacing.v4,
-                    Text(
-                      '₹2,500.00',
-                      style: AppTextStyles.manrope(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.instDarkBtnBlue,
+                    AppSpacing.v8,
+                    GestureDetector(
+                      onTap: () => controller.applyFeeChanges(),
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        decoration: BoxDecoration(
+                          color: AppColors.instDarkBtnBlue,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Save Fee Changes',
+                            style: AppTextStyles.manrope(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ],
-                ),
-                Text(
-                  'Change',
-                  style: AppTextStyles.manrope(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.instDarkBtnBlue,
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],
@@ -380,21 +487,55 @@ class EditStudentProfileScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildEditableFeeRow(String label, RxString amount) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: Text(
+            label,
+            style: AppTextStyles.lexend(
+              fontSize: 14,
+              color: AppColors.textSecondary,
+            ),
+          ),
+        ),
+        SizedBox(
+          width: 100,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: AppColors.borderGrey),
+            ),
+            child: TextField(
+              controller: TextEditingController(text: amount.value),
+              keyboardType: TextInputType.number,
+              textAlign: TextAlign.right,
+              onChanged: (val) => amount.value = val,
+              style: AppTextStyles.manrope(
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+                color: AppColors.instDarkBtnBlue,
+              ),
+              decoration: const InputDecoration(
+                prefixText: '₹',
+                border: InputBorder.none,
+                isDense: true,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildActionButtons() {
     return Column(
       children: [
         GestureDetector(
-          onTap: () {
-            Get.offAllNamed(AppRoutes.instituteStudents);
-            Get.snackbar(
-              'Profile Updated',
-              'Student information has been successfully saved.',
-              backgroundColor: const Color(0xFF027A48),
-              colorText: Colors.white,
-              snackPosition: SnackPosition.BOTTOM,
-              margin: AppSpacing.all16,
-            );
-          },
+          onTap: () => controller.saveStudent(),
           child: Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: AppSpacing.s18),
@@ -423,7 +564,7 @@ class EditStudentProfileScreen extends StatelessWidget {
         ),
         AppSpacing.v16,
         GestureDetector(
-          onTap: () => Get.back(),
+          onTap: () => controller.discardChanges(),
           child: Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: AppSpacing.s18),

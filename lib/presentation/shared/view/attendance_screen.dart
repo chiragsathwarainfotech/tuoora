@@ -66,18 +66,18 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     final bool isParent = Get.currentRoute.contains('/parent');
 
     Widget content = SingleChildScrollView(
-        padding: AppSpacing.screenPadding,
-        child: Column(
-          children: [
-            _buildAttendanceHeaderCard(),
-            AppSpacing.v32,
-            _buildCalendarSection(),
-            AppSpacing.v32,
-            _buildRecentHistorySection(),
-            AppSpacing.v24,
-          ],
-        ),
-      );
+      padding: AppSpacing.screenPadding,
+      child: Column(
+        children: [
+          _buildAttendanceHeaderCard(),
+          AppSpacing.v32,
+          _buildCalendarSection(),
+          AppSpacing.v32,
+          _buildRecentHistorySection(),
+          AppSpacing.v24,
+        ],
+      ),
+    );
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FB),
@@ -122,8 +122,8 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       body: content,
       bottomNavigationBar: widget.showBottomNav
           ? (isParent
-              ? const ParentBottomNav(currentIndex: 3)
-              : const StudentBottomNav(currentIndex: 1))
+                ? const ParentBottomNav(currentIndex: 3)
+                : const StudentBottomNav(currentIndex: 1))
           : null,
     );
   }
@@ -350,22 +350,22 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         if (day == now.day) {
           status = 't'; // today
         } else if (day > now.day) {
-          status = 'i'; // future
+          status = 'i';
         } else {
-          // somewhat random mock historical data
-          if (day % 7 == 0)
-            status = 'a'; // absent randomly
-          else if (day % 13 == 0)
-            status = 'h'; // holiday randomly
+          if (day % 7 == 0) {
+            status = 'a';
+          } else if (day % 13 == 0) {
+            status = 'h';
+          }
         }
       } else if (_viewDate.isAfter(now)) {
         status = 'i'; // entirely in the future
       } else {
-        // Past months
-        if (day % 8 == 0)
+        if (day % 8 == 0) {
           status = 'a';
-        else if (day % 15 == 0)
+        } else if (day % 15 == 0) {
           status = 'h';
+        }
       }
 
       currentRow.add('$day$status');

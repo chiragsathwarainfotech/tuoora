@@ -39,7 +39,10 @@ class AppRoutes {
   static const String instituteWhatsApp = '/institute/profile/whatsapp';
   static const String instituteEditStudentProfile = '/institute/students/edit';
   static const String instituteFeeReports = '/institute/reports/fee';
+  static const String instituteDefaultersList = '/institute/reports/defaulters';
   static const String instituteUpdates = '/institute/updates';
   static const String instituteCreateUpdate = '/institute/updates/create';
   static const String instituteNotifications = '/institute/notifications';
+  static const String instituteMain = '/institute/main';
+  static const String instituteBillingHistory = '/institute/profile/billing-history';
 }

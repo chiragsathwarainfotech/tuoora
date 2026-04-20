@@ -8,6 +8,7 @@ class PaymentHistoryScreen extends StatelessWidget {
   final String title;
   const PaymentHistoryScreen({super.key, required this.title});
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FB),

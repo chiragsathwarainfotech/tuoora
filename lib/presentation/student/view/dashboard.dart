@@ -354,101 +354,6 @@ class StudentDashboard extends StatelessWidget {
               subject: 'Biology',
               dueDate: 'NOV 24',
             ),
-            AppSpacing.v32,
-            Text(
-              AppStrings.latestNews,
-              style: AppTextStyles.manrope(
-                fontSize: 18,
-                fontWeight: FontWeight.w800,
-                color: AppColors.textPrimary,
-              ),
-            ),
-            AppSpacing.v16,
-            Container(
-              height: AppSpacing.s240,
-              decoration: BoxDecoration(
-                color: const Color(0xFF0052C2),
-                borderRadius: BorderRadius.circular(AppSpacing.s32),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1),
-                    blurRadius: AppSpacing.s12,
-                    offset: const Offset(0, AppSpacing.s6),
-                  ),
-                ],
-                image: const DecorationImage(
-                  fit: BoxFit.cover,
-                  image: NetworkImage(
-                    'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                  ),
-                ),
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(AppSpacing.s24),
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.transparent,
-                      Colors.black.withValues(alpha: 0.8),
-                    ],
-                  ),
-                ),
-                padding: AppSpacing.all24,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.s10,
-                        vertical: AppSpacing.s4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(AppSpacing.s20),
-                        border: Border.all(
-                          color: Colors.white.withValues(alpha: 0.3),
-                        ),
-                      ),
-                      child: Text(
-                        'CAMPUS LIFE',
-                        style: AppTextStyles.manrope(
-                          fontSize: 8,
-                          fontWeight: FontWeight.w800,
-                          color: Colors.white,
-                          letterSpacing: 1.0,
-                        ),
-                      ),
-                    ),
-                    AppSpacing.v12,
-                    Text(
-                      'New Innovation Hub\nOpening This Fall',
-                      style: AppTextStyles.manrope(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w800,
-                        color: Colors.white,
-                        height: 1.2,
-                      ),
-                    ),
-                    AppSpacing.v8,
-                    Text(
-                      'Aeon Academy is proud to announce the\ncompletion of our state-of-the-art...',
-                      style: AppTextStyles.lexend(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white.withValues(alpha: 0.8),
-                        height: 1.5,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            AppSpacing.v32,
           ],
         ),
       ),
@@ -457,7 +362,7 @@ class StudentDashboard extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       appBar: PortalAppBar(
-        title: AppStrings.appName,
+        title: "Julian Smith", // Student name
         profileRoute: AppRoutes.studentSettings,
         notificationsRoute: AppRoutes.studentNotifications,
       ),

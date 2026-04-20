@@ -2,31 +2,24 @@ import 'package:fee_easy/config/app_routes.dart';
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
-import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
-import 'package:fee_easy/presentation/institute/widgets/institute_bottom_nav.dart';
-import 'package:fee_easy/presentation/institute/widgets/institute_drawer.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
-import 'package:fee_easy/presentation/institute/view/edit_profile_screen.dart';
+import 'package:fee_easy/presentation/institute/controllers/institute_profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:fee_easy/presentation/institute/widgets/institute_root_scaffold.dart';
-
 class InstituteProfileViewScreen extends StatelessWidget {
-  final bool showShell;
-  const InstituteProfileViewScreen({super.key, this.showShell = true});
+  const InstituteProfileViewScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return InstituteRootScaffold(
-      title: "St. Augustine's Institute",
-      currentIndex: 4,
-      showShell: showShell,
-      body: SingleChildScrollView(
-        padding: AppSpacing.x24.add(AppSpacing.y20),
-        child: Column(
+    final controller = Get.find<InstituteProfileController>();
+
+    return SingleChildScrollView(
+      padding: AppSpacing.x24.add(AppSpacing.y20),
+      child: Obx(
+        () => Column(
           children: [
-            _buildInstituteIdentityCard(),
+            _buildInstituteIdentityCard(controller),
             AppSpacing.v24,
             _buildAccountManagementCard(),
             AppSpacing.v24,
@@ -38,7 +31,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildInstituteIdentityCard() {
+  Widget _buildInstituteIdentityCard(InstituteProfileController controller) {
     return Container(
       width: double.infinity,
       padding: AppSpacing.all24,
@@ -55,10 +48,10 @@ class InstituteProfileViewScreen extends StatelessWidget {
       ),
       child: Column(
         children: [
-          _buildLogoHeader(),
+          _buildLogoHeader(controller),
           AppSpacing.v24,
           Text(
-            "St. Augustine's Institute of Research",
+            controller.instituteName.value,
             textAlign: TextAlign.center,
             style: AppTextStyles.manrope(
               fontSize: 22,
@@ -76,26 +69,29 @@ class InstituteProfileViewScreen extends StatelessWidget {
                 color: AppColors.textTertiary,
               ),
               AppSpacing.h8,
-              Text(
-                'Academic District, Cambridge',
-                style: AppTextStyles.lexend(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  color: AppColors.textSecondary,
+              Flexible(
+                child: Text(
+                  controller.address.value,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.lexend(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    color: AppColors.textSecondary,
+                  ),
                 ),
               ),
             ],
           ),
           AppSpacing.v24,
-          _buildInfoChip(Icons.email_rounded, 'admin@st-augustine.edu'),
+          _buildInfoChip(Icons.email_rounded, controller.email.value),
           AppSpacing.v12,
-          _buildInfoChip(Icons.phone_rounded, '+44 20 7946 0123'),
+          _buildInfoChip(Icons.phone_rounded, controller.phone.value),
         ],
       ),
     );
   }
 
-  Widget _buildLogoHeader() {
+  Widget _buildLogoHeader(InstituteProfileController controller) {
     return Stack(
       children: [
         Container(
@@ -106,19 +102,21 @@ class InstituteProfileViewScreen extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
             border: Border.all(color: const Color(0xFFE5E7EB), width: 1.5),
           ),
-          child: const Center(
-            child: Icon(
-              Icons.school_rounded,
-              color: Color(0xFF5B98A6),
-              size: AppSpacing.s48,
-            ),
-          ),
+          child: controller.profileImagePath.value == null
+              ? const Center(
+                  child: Icon(
+                    Icons.school_rounded,
+                    color: Color(0xFF5B98A6),
+                    size: AppSpacing.s48,
+                  ),
+                )
+              : null,
         ),
         Positioned(
           bottom: AppSpacing.s4,
           right: AppSpacing.s4,
           child: GestureDetector(
-            onTap: () => Get.to(() => const InstituteEditProfileScreen()),
+            onTap: () => Get.toNamed(AppRoutes.instituteEditProfile),
             child: Container(
               padding: AppSpacing.all6,
               decoration: const BoxDecoration(
@@ -210,13 +208,6 @@ class InstituteProfileViewScreen extends StatelessWidget {
               subtitle: 'Automate alerts via Meta API',
               iconColor: const Color(0xFFDCFCE7),
             ),
-          ),
-          const Divider(height: AppSpacing.s40, color: Color(0xFFF9FAFB)),
-          _buildManagementItem(
-            icon: Icons.visibility_rounded,
-            title: AppStrings.instPrivacySettings,
-            subtitle: AppStrings.instManageVisibility,
-            iconColor: const Color(0xFFC7D2FE),
           ),
           const Divider(height: AppSpacing.s40, color: Color(0xFFF9FAFB)),
           GestureDetector(

@@ -5,19 +5,11 @@ import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
 
-class InstituteWhatsAppScreen extends StatefulWidget {
+import 'package:fee_easy/presentation/institute/controllers/whatsapp_controller.dart';
+import 'package:get/get.dart';
+
+class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
   const InstituteWhatsAppScreen({super.key});
-
-  @override
-  State<InstituteWhatsAppScreen> createState() =>
-      _InstituteWhatsAppScreenState();
-}
-
-class _InstituteWhatsAppScreenState extends State<InstituteWhatsAppScreen> {
-  bool feesReminders = true;
-  bool attendanceAlerts = true;
-  bool homeworkUpdates = false;
-  bool holidayNotices = false;
 
   @override
   Widget build(BuildContext context) {
@@ -56,9 +48,6 @@ class _InstituteWhatsAppScreenState extends State<InstituteWhatsAppScreen> {
                     _buildHowToFindBox(),
                     AppSpacing.v48,
                     _buildAutomatedAlertsSection(),
-                    AppSpacing.v48,
-                    _buildImpactBanner(),
-                    AppSpacing.v40,
                   ],
                 ),
               ),
@@ -128,18 +117,27 @@ class _InstituteWhatsAppScreenState extends State<InstituteWhatsAppScreen> {
           AppSpacing.v32,
           _buildInputLabel(AppStrings.instAccessToken),
           AppSpacing.v12,
-          _buildTextField('••••••••••••••••••••••••••••••••', true),
+          _buildTextField(
+            hint: '••••••••••••••••••••••••••••••••',
+            controller: controller.accessTokenController,
+          ),
           AppSpacing.v24,
           _buildInputLabel(AppStrings.instPhoneNumberId),
           AppSpacing.v12,
-          _buildTextField('1059...', false),
+          _buildTextField(
+            hint: '1059...',
+            controller: controller.phoneNumberIdController,
+          ),
           AppSpacing.v24,
           _buildInputLabel(AppStrings.instBusinessAccountId),
           AppSpacing.v12,
-          _buildTextField('2941...', false),
+          _buildTextField(
+            hint: '2941...',
+            controller: controller.businessAccountIdController,
+          ),
           AppSpacing.v32,
           ElevatedButton(
-            onPressed: () {},
+            onPressed: controller.verifyApi,
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF0055BB),
               foregroundColor: Colors.white,
@@ -181,18 +179,30 @@ class _InstituteWhatsAppScreenState extends State<InstituteWhatsAppScreen> {
     );
   }
 
-  Widget _buildTextField(String hint, bool isPassword) {
+  Widget _buildTextField({
+    required String hint,
+    required TextEditingController controller,
+  }) {
     return Container(
-      padding: AppSpacing.x16.add(AppSpacing.y18),
+      padding: AppSpacing.x16.add(AppSpacing.y2),
       decoration: BoxDecoration(
         color: const Color(0xFFF3F4F6),
         borderRadius: BorderRadius.circular(AppSpacing.s12),
       ),
-      child: Text(
-        hint,
+      child: TextField(
+        controller: controller,
         style: AppTextStyles.lexend(
           fontSize: AppSpacing.s14,
-          color: AppColors.textSecondary,
+          color: AppColors.textPrimary,
+        ),
+        decoration: InputDecoration(
+          hintText: hint,
+          hintStyle: AppTextStyles.lexend(
+            fontSize: AppSpacing.s14,
+            color: AppColors.textMuted,
+          ),
+          border: InputBorder.none,
+          contentPadding: const EdgeInsets.symmetric(vertical: 16),
         ),
       ),
     );
@@ -278,43 +288,51 @@ class _InstituteWhatsAppScreenState extends State<InstituteWhatsAppScreen> {
           ),
           child: Column(
             children: [
-              _buildToggleItem(
-                Icons.account_balance_wallet_rounded,
-                const Color(0xFFFFE4E1),
-                const Color(0xFFB91C1C),
-                AppStrings.instFeesReminders,
-                AppStrings.instFeesRemindersDesc,
-                feesReminders,
-                (v) => setState(() => feesReminders = v),
+              Obx(
+                () => _buildToggleItem(
+                  Icons.account_balance_wallet_rounded,
+                  const Color(0xFFFFE4E1),
+                  const Color(0xFFB91C1C),
+                  AppStrings.instFeesReminders,
+                  AppStrings.instFeesRemindersDesc,
+                  controller.feesReminders.value,
+                  (v) => controller.feesReminders.value = v,
+                ),
               ),
-              _buildToggleItem(
-                Icons.person_outline_rounded,
-                const Color(0xFFE0E7FF),
-                const Color(0xFF4338CA),
-                AppStrings.instAttendanceAlerts,
-                AppStrings.instAttendanceAlertsDesc,
-                attendanceAlerts,
-                (v) => setState(() => attendanceAlerts = v),
+              Obx(
+                () => _buildToggleItem(
+                  Icons.person_outline_rounded,
+                  const Color(0xFFE0E7FF),
+                  const Color(0xFF4338CA),
+                  AppStrings.instAttendanceAlerts,
+                  AppStrings.instAttendanceAlertsDesc,
+                  controller.attendanceAlerts.value,
+                  (v) => controller.attendanceAlerts.value = v,
+                ),
               ),
-              _buildToggleItem(
-                Icons.auto_stories_rounded,
-                const Color(0xFFE0F2FE),
-                const Color(0xFF0369A1),
-                AppStrings.instHomeworkUpdates,
-                AppStrings.instHomeworkUpdatesDesc,
-                homeworkUpdates,
-                (v) => setState(() => homeworkUpdates = v),
-                showDivider: true,
+              Obx(
+                () => _buildToggleItem(
+                  Icons.auto_stories_rounded,
+                  const Color(0xFFE0F2FE),
+                  const Color(0xFF0369A1),
+                  AppStrings.instHomeworkUpdates,
+                  AppStrings.instHomeworkUpdatesDesc,
+                  controller.homeworkUpdates.value,
+                  (v) => controller.homeworkUpdates.value = v,
+                  showDivider: true,
+                ),
               ),
-              _buildToggleItem(
-                Icons.campaign_rounded,
-                const Color(0xFFF3F4F6),
-                const Color(0xFF4B5563),
-                AppStrings.instHolidayNotices,
-                AppStrings.instHolidayNoticesDesc,
-                holidayNotices,
-                (v) => setState(() => holidayNotices = v),
-                showDivider: false,
+              Obx(
+                () => _buildToggleItem(
+                  Icons.campaign_rounded,
+                  const Color(0xFFF3F4F6),
+                  const Color(0xFF4B5563),
+                  AppStrings.instHolidayNotices,
+                  AppStrings.instHolidayNoticesDesc,
+                  controller.holidayNotices.value,
+                  (v) => controller.holidayNotices.value = v,
+                  showDivider: false,
+                ),
               ),
             ],
           ),
@@ -385,49 +403,6 @@ class _InstituteWhatsAppScreenState extends State<InstituteWhatsAppScreen> {
             indent: AppSpacing.s88,
             color: Color(0xFFF3F4F6),
           ),
-      ],
-    );
-  }
-
-  Widget _buildImpactBanner() {
-    return Column(
-      children: [
-        Text(
-          AppStrings.instImpactQuote,
-          textAlign: TextAlign.center,
-          style: AppTextStyles.lexend(
-            fontSize: AppSpacing.s14,
-            height: 1.5,
-            color: AppColors.textTertiary,
-          ).copyWith(fontStyle: FontStyle.italic),
-        ),
-        AppSpacing.v24,
-        Container(
-          width: double.infinity,
-          height: AppSpacing.s160,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(AppSpacing.s20),
-            image: const DecorationImage(
-              image: NetworkImage(
-                'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=800',
-              ),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(AppSpacing.s20),
-              gradient: LinearGradient(
-                begin: Alignment.bottomCenter,
-                end: Alignment.topCenter,
-                colors: [
-                  Colors.black.withValues(alpha: 0.6),
-                  Colors.transparent,
-                ],
-              ),
-            ),
-          ),
-        ),
       ],
     );
   }

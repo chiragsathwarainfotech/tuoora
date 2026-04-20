@@ -1,26 +1,23 @@
 import 'package:fee_easy/config/app_routes.dart';
 import 'package:fee_easy/presentation/institute/bindings/institute_binding.dart';
 import 'package:fee_easy/presentation/institute/view/institute_main_screen.dart';
-import 'package:fee_easy/presentation/institute/view/dashboard.dart';
 import 'package:fee_easy/presentation/institute/view/edit_student_profile_screen.dart';
-import 'package:fee_easy/presentation/institute/view/students_registry_screen.dart';
 import 'package:fee_easy/presentation/institute/view/add_student_screen.dart';
 import 'package:fee_easy/presentation/institute/view/batch_details_screen.dart';
-import 'package:fee_easy/presentation/institute/view/batches_screen.dart';
 import 'package:fee_easy/presentation/institute/view/attendance_marking_screen.dart';
 import 'package:fee_easy/presentation/institute/view/mark_attendance_screen.dart';
 import 'package:fee_easy/presentation/institute/view/student_profile_screen.dart';
-import 'package:fee_easy/presentation/institute/view/fees_screen.dart';
 import 'package:fee_easy/presentation/institute/view/record_fee_screen.dart';
 import 'package:fee_easy/presentation/institute/view/edit_profile_screen.dart';
-import 'package:fee_easy/presentation/institute/view/institute_profile_view_screen.dart';
 import 'package:fee_easy/presentation/institute/view/institute_security_screen.dart';
 import 'package:fee_easy/presentation/institute/view/institute_subscription_screen.dart';
 import 'package:fee_easy/presentation/institute/view/institute_whatsapp_screen.dart';
 import 'package:fee_easy/presentation/institute/view/fee_reports_screen.dart';
+import 'package:fee_easy/presentation/institute/view/defaulters_list_screen.dart';
 import 'package:fee_easy/presentation/institute/view/institute_updates_screen.dart';
 import 'package:fee_easy/presentation/institute/view/create_update_screen.dart';
 import 'package:fee_easy/presentation/institute/view/institute_notifications_screen.dart';
+import 'package:fee_easy/presentation/institute/view/billing_history_screen.dart';
 import 'package:fee_easy/presentation/parent/view/parent_main_screen.dart';
 import 'package:fee_easy/presentation/shared/view/payment_history_screen.dart';
 import 'package:fee_easy/presentation/parent/view/homework_tracker_screen.dart';
@@ -41,7 +38,9 @@ import 'package:get/get.dart';
 class AppPages {
   static final pages = [
     GetPage(
-        name: AppRoutes.roleSelection, page: () => const RoleSelectionScreen()),
+      name: AppRoutes.roleSelection,
+      page: () => const RoleSelectionScreen(),
+    ),
     GetPage(name: AppRoutes.login, page: () => const LoginScreen()),
     // Parent routes
     GetPage(
@@ -137,6 +136,11 @@ class AppPages {
       binding: InstituteBinding(),
     ),
     GetPage(
+      name: AppRoutes.instituteMain,
+      page: () => const InstituteMainScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
       name: AppRoutes.instituteStudents,
       page: () => const InstituteMainScreen(),
       binding: InstituteBinding(),
@@ -144,6 +148,7 @@ class AppPages {
     GetPage(
       name: AppRoutes.instituteAddStudent,
       page: () => const AddStudentScreen(),
+      binding: InstituteBinding(),
     ),
     GetPage(
       name: AppRoutes.instituteEditStudentProfile,
@@ -206,6 +211,10 @@ class AppPages {
       page: () => const FeeReportsScreen(),
     ),
     GetPage(
+      name: AppRoutes.instituteDefaultersList,
+      page: () => const DefaultersListScreen(),
+    ),
+    GetPage(
       name: AppRoutes.instituteUpdates,
       page: () => const InstituteUpdatesScreen(),
       binding: InstituteBinding(),
@@ -219,6 +228,10 @@ class AppPages {
       name: AppRoutes.instituteNotifications,
       page: () => const InstituteNotificationsScreen(),
       binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteBillingHistory,
+      page: () => const BillingHistoryScreen(),
     ),
   ];
 }

@@ -1,4 +1,3 @@
-import 'package:fee_easy/config/app_routes.dart';
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
@@ -7,7 +6,10 @@ import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class InstituteEditProfileScreen extends StatelessWidget {
+import 'dart:io';
+import '../controllers/institute_profile_controller.dart';
+
+class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
   const InstituteEditProfileScreen({super.key});
 
   @override
@@ -50,50 +52,65 @@ class InstituteEditProfileScreen extends StatelessWidget {
       children: [
         Stack(
           children: [
-            Container(
-              width: 140,
-              height: 140,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(32),
-                border: Border.all(color: AppColors.borderGrey, width: 2),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 20,
-                    offset: const Offset(0, 10),
-                  ),
-                ],
-              ),
-              child: const Center(
-                child: Icon(
-                  Icons.school_rounded,
-                  size: 64,
-                  color: AppColors.instPrimaryBlue,
+            Obx(
+              () => Container(
+                width: 140,
+                height: 140,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(32),
+                  border: Border.all(color: AppColors.borderGrey, width: 2),
+                  image: controller.profileImagePath.value != null
+                      ? DecorationImage(
+                          image: FileImage(
+                            File(controller.profileImagePath.value!),
+                          ),
+                          fit: BoxFit.cover,
+                        )
+                      : null,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.05),
+                      blurRadius: 20,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
                 ),
+                child: controller.profileImagePath.value == null
+                    ? const Center(
+                        child: Icon(
+                          Icons.school_rounded,
+                          size: 64,
+                          color: AppColors.instPrimaryBlue,
+                        ),
+                      )
+                    : null,
               ),
             ),
             Positioned(
               bottom: 8,
               right: 8,
-              child: Container(
-                padding: AppSpacing.all10,
-                decoration: BoxDecoration(
-                  color: AppColors.instPrimaryBlue,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white, width: 3),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.instPrimaryBlue.withValues(alpha: 0.3),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: const Icon(
-                  Icons.camera_alt_rounded,
-                  color: Colors.white,
-                  size: 18,
+              child: GestureDetector(
+                onTap: () => controller.pickImage(),
+                child: Container(
+                  padding: AppSpacing.all10,
+                  decoration: BoxDecoration(
+                    color: AppColors.instPrimaryBlue,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 3),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.instPrimaryBlue.withValues(alpha: 0.3),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: const Icon(
+                    Icons.camera_alt_rounded,
+                    color: Colors.white,
+                    size: 18,
+                  ),
                 ),
               ),
             ),
@@ -151,31 +168,33 @@ class InstituteEditProfileScreen extends StatelessWidget {
           AppSpacing.v24,
           _buildInputField(
             label: AppStrings.instInstituteNameLabel,
-            initialValue: "St. Augustine's Institute",
+            textController: controller.nameController,
             icon: Icons.school_outlined,
           ),
           AppSpacing.v20,
           _buildInputField(
             label: AppStrings.instOwnerNameLabel,
-            initialValue: 'Dr. Elizabeth Sterling',
+            textController: controller.ownerController,
             icon: Icons.person_outline_rounded,
           ),
           AppSpacing.v20,
           _buildInputField(
             label: AppStrings.instContactEmailLabel,
-            initialValue: 'admin@st-augustine.edu',
+            textController: controller.emailController,
             icon: Icons.alternate_email_rounded,
+            keyboardType: TextInputType.emailAddress,
           ),
           AppSpacing.v20,
           _buildInputField(
             label: AppStrings.instPhoneNumberLabel,
-            initialValue: '+44 20 7946 0123',
+            textController: controller.phoneController,
             icon: Icons.phone_iphone_rounded,
+            keyboardType: TextInputType.number,
           ),
           AppSpacing.v20,
           _buildInputField(
             label: 'Institute Address',
-            initialValue: 'Academic District, Cambridge, UK',
+            textController: controller.addressController,
             icon: Icons.location_on_outlined,
             isLast: true,
           ),
@@ -186,8 +205,9 @@ class InstituteEditProfileScreen extends StatelessWidget {
 
   Widget _buildInputField({
     required String label,
-    required String initialValue,
+    required TextEditingController textController,
     required IconData icon,
+    TextInputType keyboardType = TextInputType.text,
     bool isLast = false,
   }) {
     return Column(
@@ -204,23 +224,33 @@ class InstituteEditProfileScreen extends StatelessWidget {
         ),
         AppSpacing.v8,
         Container(
-          padding: AppSpacing.x16.add(AppSpacing.y16),
+          padding: AppSpacing.x16,
           decoration: BoxDecoration(
             color: AppColors.inputBg,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.borderGrey.withValues(alpha: 0.5)),
+            border: Border.all(
+              color: AppColors.borderGrey.withValues(alpha: 0.5),
+            ),
           ),
           child: Row(
             children: [
               Icon(icon, color: AppColors.instPrimaryBlue, size: 20),
               AppSpacing.h16,
               Expanded(
-                child: Text(
-                  initialValue,
+                child: TextField(
+                  controller: textController,
+                  keyboardType: keyboardType,
                   style: AppTextStyles.manrope(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                     color: AppColors.textPrimary,
+                  ),
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    isDense: true,
+                    contentPadding: EdgeInsets.symmetric(
+                      vertical: AppSpacing.s18,
+                    ),
                   ),
                 ),
               ),
@@ -281,17 +311,7 @@ class InstituteEditProfileScreen extends StatelessWidget {
     return Column(
       children: [
         GestureDetector(
-          onTap: () {
-            Get.back();
-            Get.snackbar(
-              'Profile Updated',
-              'Institute details have been successfully saved.',
-              backgroundColor: const Color(0xFF027A48),
-              colorText: Colors.white,
-              snackPosition: SnackPosition.BOTTOM,
-              margin: AppSpacing.all16,
-            );
-          },
+          onTap: () => controller.saveProfile(),
           child: Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: AppSpacing.s18),
@@ -320,7 +340,7 @@ class InstituteEditProfileScreen extends StatelessWidget {
         ),
         AppSpacing.v16,
         GestureDetector(
-          onTap: () => Get.back(),
+          onTap: () => controller.discardChanges(),
           child: Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: AppSpacing.s18),

@@ -9,7 +9,7 @@ class InstituteRootScaffold extends StatelessWidget {
   final Widget body;
   final Widget? floatingActionButton;
   final Color? backgroundColor;
-  final bool showShell;
+
 
   const InstituteRootScaffold({
     super.key,
@@ -18,13 +18,10 @@ class InstituteRootScaffold extends StatelessWidget {
     required this.body,
     this.floatingActionButton,
     this.backgroundColor,
-    this.showShell = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (!showShell) return body;
-
     return Scaffold(
       backgroundColor: backgroundColor ?? const Color(0xFFF8F9FA),
       drawer: const InstituteDrawer(),

@@ -5,7 +5,6 @@ import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/config/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
-import 'package:get/get.dart';
 
 class ReportsScreen extends StatelessWidget {
   final bool showBottomNav;
@@ -14,23 +13,23 @@ class ReportsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget content = SingleChildScrollView(
-        padding: AppSpacing.x24.add(AppSpacing.y32),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildHeader(),
-            AppSpacing.v32,
-            _buildFinancialOverviewCard(),
-            AppSpacing.v24,
-            _buildEngagementCard(),
-            AppSpacing.v24,
-            _buildAcademicSuccessCard(),
-            AppSpacing.v24,
-            _buildInsightBanner(),
-            AppSpacing.v40,
-          ],
-        ),
-      );
+      padding: AppSpacing.x24.add(AppSpacing.y32),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildHeader(),
+          AppSpacing.v32,
+          _buildFinancialOverviewCard(),
+          AppSpacing.v24,
+          _buildEngagementCard(),
+          AppSpacing.v24,
+          _buildAcademicSuccessCard(),
+          AppSpacing.v24,
+          _buildInsightBanner(),
+          AppSpacing.v40,
+        ],
+      ),
+    );
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FB),
@@ -40,8 +39,9 @@ class ReportsScreen extends StatelessWidget {
         notificationsRoute: AppRoutes.parentUpdates,
       ),
       body: content,
-      bottomNavigationBar:
-          showBottomNav ? const ParentBottomNav(currentIndex: 1) : null,
+      bottomNavigationBar: showBottomNav
+          ? const ParentBottomNav(currentIndex: 1)
+          : null,
     );
   }
 

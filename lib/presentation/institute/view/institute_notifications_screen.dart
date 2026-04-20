@@ -148,7 +148,7 @@ class _InstituteNotificationsScreenState extends State<InstituteNotificationsScr
           Switch.adaptive(
             value: value,
             onChanged: onChanged,
-            activeColor: const Color(0xFF003082),
+            activeThumbColor: const Color(0xFF003082),
           ),
         ],
       ),

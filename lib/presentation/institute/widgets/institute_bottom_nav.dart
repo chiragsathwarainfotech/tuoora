@@ -39,11 +39,27 @@ class InstituteBottomNav extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildNavItem(0, Icons.grid_view_rounded, AppStrings.instNavDashboard),
-                _buildNavItem(1, Icons.people_alt_outlined, AppStrings.instNavStudents),
-                _buildNavItem(2, Icons.groups_outlined, AppStrings.instNavBatches),
-                _buildNavItem(3, Icons.account_balance_wallet_outlined, AppStrings.instNavFees),
-                _buildNavItem(4, Icons.person_rounded, 'Profile'),
+                _buildNavItem(
+                  0,
+                  Icons.grid_view_rounded,
+                  AppStrings.instNavDashboard,
+                ),
+                _buildNavItem(
+                  1,
+                  Icons.people_alt_outlined,
+                  AppStrings.instNavStudents,
+                ),
+                _buildNavItem(
+                  2,
+                  Icons.groups_outlined,
+                  AppStrings.instNavBatches,
+                ),
+                _buildNavItem(
+                  3,
+                  Icons.account_balance_wallet_outlined,
+                  AppStrings.instNavFees,
+                ),
+                _buildNavItem(4, Icons.person_rounded, AppStrings.instProfile),
               ],
             ),
           ),
@@ -57,6 +73,8 @@ class InstituteBottomNav extends StatelessWidget {
     final Color itemColor = isSelected
         ? AppColors.instAccentBlue
         : AppColors.instNavInactive;
+
+    final Widget iconWidget = Icon(icon, color: itemColor, size: AppSpacing.s22);
 
     return Expanded(
       child: GestureDetector(
@@ -74,7 +92,7 @@ class InstituteBottomNav extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(icon, color: itemColor, size: AppSpacing.s22),
+                iconWidget,
                 AppSpacing.v4,
                 Flexible(
                   child: FittedBox(

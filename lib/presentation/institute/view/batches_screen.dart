@@ -1,68 +1,41 @@
-import 'package:fee_easy/config/app_routes.dart';
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
-import 'package:fee_easy/presentation/institute/widgets/institute_bottom_nav.dart';
-import 'package:fee_easy/presentation/institute/widgets/institute_drawer.dart';
-import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
+import 'package:fee_easy/presentation/institute/controllers/batch_controller.dart';
+import 'package:fee_easy/presentation/institute/models/batch_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:fee_easy/config/app_routes.dart';
 
-import 'package:fee_easy/presentation/institute/widgets/institute_root_scaffold.dart';
-
-class BatchesScreen extends StatelessWidget {
-  final bool showShell;
-  const BatchesScreen({super.key, this.showShell = true});
+class BatchesScreen extends GetView<BatchController> {
+  const BatchesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return InstituteRootScaffold(
-      title: 'Active Batches',
-      currentIndex: 2,
-      showShell: showShell,
-      body: SingleChildScrollView(
-        padding: AppSpacing.all24,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _buildHeader(),
-            AppSpacing.v32,
-            _buildBatchCard(
-              'Mathematics - 10th Std',
-              '08:00 AM - 09:30 AM',
-              '42 Students',
-              'Lab A',
-              AppStrings.instStatusHighCapacity,
-              AppColors.instStatusHighCapacityBg,
-              AppColors.instBorderHighCapacity,
+    return SingleChildScrollView(
+      padding: AppSpacing.all24,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _buildHeader(),
+          AppSpacing.v32,
+          Obx(
+            () => ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: controller.batchesList.length,
+              separatorBuilder: (context, index) => AppSpacing.v16,
+              itemBuilder: (context, index) {
+                final batch = controller.batchesList[index];
+                return _buildBatchCard(batch);
+              },
             ),
-            AppSpacing.v16,
-            _buildBatchCard(
-              'Physics - Advanced',
-              '10:30 AM - 12:00 PM',
-              '50 Students',
-              'Hall 3',
-              AppStrings.instStatusFull,
-              AppColors.instStatusFullBg,
-              AppColors.instBorderFull,
-            ),
-            AppSpacing.v16,
-            _buildBatchCard(
-              'Literature 101',
-              '02:00 PM - 03:30 PM',
-              '18 Students',
-              'Room 12',
-              AppStrings.instStatusOpen,
-              AppColors.instStatusOpenBg,
-              AppColors.instBorderOpen,
-              statusTextColor: AppColors.instStatusOpenText,
-            ),
-            AppSpacing.v32,
-            _buildAnalyticsSection(),
-            AppSpacing.v24,
-          ],
-        ),
+          ),
+          AppSpacing.v32,
+          _buildAnalyticsSection(),
+          AppSpacing.v24,
+        ],
       ),
     );
   }
@@ -83,16 +56,7 @@ class BatchesScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBatchCard(
-    String title,
-    String time,
-    String students,
-    String location,
-    String statusLabel,
-    Color statusBg,
-    Color leftBorderColor, {
-    Color statusTextColor = Colors.white,
-  }) {
+  Widget _buildBatchCard(BatchModel batch) {
     return GestureDetector(
       onTap: () => Get.toNamed(AppRoutes.instituteBatchDetails),
       child: Container(
@@ -112,7 +76,7 @@ class BatchesScreen extends StatelessWidget {
           child: IntrinsicHeight(
             child: Row(
               children: [
-                Container(width: AppSpacing.s4, color: leftBorderColor),
+                Container(width: AppSpacing.s4, color: batch.leftBorderColor),
                 Expanded(
                   child: Padding(
                     padding: AppSpacing.all20,
@@ -124,36 +88,49 @@ class BatchesScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Expanded(
-                              child: Text(
-                                title,
-                                style: AppTextStyles.manrope(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w800,
-                                  color: const Color(0xFF1E3A8A),
-                                ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    batch.title,
+                                    style: AppTextStyles.manrope(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w800,
+                                      color: const Color(0xFF1E3A8A),
+                                    ),
+                                  ),
+                                  AppSpacing.v8,
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: AppSpacing.s10,
+                                      vertical: AppSpacing.s6,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: batch.statusBg,
+                                      borderRadius: BorderRadius.circular(
+                                        AppSpacing.s8,
+                                      ),
+                                    ),
+                                    child: Text(
+                                      batch.statusLabel,
+                                      style: AppTextStyles.manrope(
+                                        fontSize: 9,
+                                        fontWeight: FontWeight.w900,
+                                        color: batch.statusTextColor,
+                                        letterSpacing: 0.5,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                             AppSpacing.h8,
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: AppSpacing.s10,
-                                vertical: AppSpacing.s6,
-                              ),
-                              decoration: BoxDecoration(
-                                color: statusBg,
-                                borderRadius: BorderRadius.circular(
-                                  AppSpacing.s8,
-                                ),
-                              ),
-                              child: Text(
-                                statusLabel,
-                                style: AppTextStyles.manrope(
-                                  fontSize: 9,
-                                  fontWeight: FontWeight.w900,
-                                  color: statusTextColor,
-                                  letterSpacing: 0.5,
-                                ),
-                              ),
+                            IconButton(
+                              onPressed: () => _showDeleteConfirmation(batch),
+                              icon: const Icon(Icons.delete_outline_rounded,
+                                  color: Colors.redAccent, size: 22),
+                              constraints: const BoxConstraints(),
+                              padding: EdgeInsets.zero,
                             ),
                           ],
                         ),
@@ -167,7 +144,7 @@ class BatchesScreen extends StatelessWidget {
                             ),
                             AppSpacing.h8,
                             Text(
-                              time,
+                              batch.time,
                               style: AppTextStyles.manrope(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
@@ -188,7 +165,7 @@ class BatchesScreen extends StatelessWidget {
                             ),
                             AppSpacing.h8,
                             Text(
-                              students,
+                              batch.studentCount,
                               style: AppTextStyles.manrope(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w700,
@@ -209,7 +186,7 @@ class BatchesScreen extends StatelessWidget {
                             ),
                             AppSpacing.h8,
                             Text(
-                              location,
+                              batch.location,
                               style: AppTextStyles.manrope(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w700,
@@ -277,6 +254,93 @@ class BatchesScreen extends StatelessWidget {
                 ),
               ],
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showDeleteConfirmation(BatchModel batch) {
+    Get.dialog(
+      Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        child: Padding(
+          padding: AppSpacing.all24,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: AppSpacing.all16,
+                decoration: const BoxDecoration(
+                  color: Color(0xFFFEF2F2),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.delete_forever_rounded,
+                    color: Colors.redAccent, size: 32),
+              ),
+              AppSpacing.v24,
+              Text(
+                'Delete Batch?',
+                style: AppTextStyles.manrope(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+              AppSpacing.v12,
+              Text(
+                'Are you sure you want to delete "${batch.title}"? This action cannot be undone.',
+                textAlign: TextAlign.center,
+                style: AppTextStyles.manrope(
+                  fontSize: 14,
+                  color: AppColors.textSecondary,
+                ),
+              ),
+              AppSpacing.v32,
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => Get.back(),
+                      style: OutlinedButton.styleFrom(
+                        padding: AppSpacing.y16,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
+                      ),
+                      child: Text(
+                        'Cancel',
+                        style: AppTextStyles.manrope(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.textPrimary),
+                      ),
+                    ),
+                  ),
+                  AppSpacing.h12,
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Get.back();
+                        controller.deleteBatch(batch.id);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.redAccent,
+                        padding: AppSpacing.y16,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
+                      ),
+                      child: Text(
+                        'Delete',
+                        style: AppTextStyles.manrope(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),

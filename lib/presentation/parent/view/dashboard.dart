@@ -305,7 +305,8 @@ class ParentDashboard extends StatelessWidget {
             SectionHeader(
               title: AppStrings.homeworkTracker,
               actionLabel: AppStrings.viewAllAlt,
-              onActionPressed: () => Get.toNamed(AppRoutes.parentHomeworkTracker),
+              onActionPressed: () =>
+                  Get.toNamed(AppRoutes.parentHomeworkTracker),
             ),
             AppSpacing.v12,
 
@@ -523,12 +524,14 @@ class ParentDashboard extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       appBar: PortalAppBar(
-        title: AppStrings.appName,
+        title: "Julian Smith", // Student name
         profileRoute: AppRoutes.parentStudentProfile,
         notificationsRoute: AppRoutes.parentUpdates,
       ),
       body: content,
-      bottomNavigationBar: showBottomNav ? const ParentBottomNav(currentIndex: 0) : null,
+      bottomNavigationBar: showBottomNav
+          ? const ParentBottomNav(currentIndex: 0)
+          : null,
     );
   }
 

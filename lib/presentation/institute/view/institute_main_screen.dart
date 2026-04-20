@@ -7,6 +7,9 @@ import 'package:fee_easy/presentation/institute/view/institute_profile_view_scre
 import 'package:fee_easy/presentation/institute/widgets/institute_bottom_nav.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_drawer.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
+import 'package:fee_easy/config/app_routes.dart';
+import 'package:fee_easy/core/constants/app_colors.dart';
+import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -40,21 +43,18 @@ class InstituteMainScreen extends GetView<InstituteController> {
                   title = 'Profile';
                   break;
               }
-              return InstituteAppBar(
-                title: title,
-                isRoot: true,
-              );
+              return InstituteAppBar(title: title, isRoot: true);
             }),
             Expanded(
               child: PageView(
                 controller: controller.pageController,
                 physics: const NeverScrollableScrollPhysics(),
                 children: [
-                   InstituteDashboard(showShell: false),
-                   StudentsRegistryScreen(showShell: false),
-                   BatchesScreen(showShell: false),
-                   InstituteFeesScreen(showShell: false),
-                   InstituteProfileViewScreen(showShell: false),
+                  const InstituteDashboard(),
+                  const StudentsRegistryScreen(),
+                  const BatchesScreen(),
+                  const InstituteFeesScreen(),
+                  const InstituteProfileViewScreen(),
                 ],
               ),
             ),
@@ -67,6 +67,18 @@ class InstituteMainScreen extends GetView<InstituteController> {
           onTap: controller.changePage,
         ),
       ),
+      floatingActionButton: Obx(() {
+        if (controller.currentIndex == 1) {
+          return FloatingActionButton(
+            onPressed: () => Get.toNamed(AppRoutes.instituteAddStudent),
+            backgroundColor: AppColors.instDarkBtnBlue,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            elevation: 4,
+            child: const Icon(Icons.add, color: Colors.white, size: AppSpacing.s28),
+          );
+        }
+        return const SizedBox.shrink();
+      }),
     );
   }
 }

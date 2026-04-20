@@ -1,4 +1,3 @@
-import 'package:fee_easy/config/app_routes.dart';
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
@@ -7,7 +6,10 @@ import 'package:fee_easy/presentation/institute/view/create_update_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class InstituteUpdatesScreen extends StatelessWidget {
+import 'package:fee_easy/presentation/institute/controllers/updates_controller.dart';
+import 'package:intl/intl.dart';
+
+class InstituteUpdatesScreen extends GetView<UpdatesController> {
   const InstituteUpdatesScreen({super.key});
 
   @override
@@ -61,55 +63,59 @@ class InstituteUpdatesScreen extends StatelessWidget {
   }
 
   Widget _buildTimelineList() {
-    return ListView(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      children: [
-        _buildTimelineItem(
-          icon: Icons.request_quote_rounded,
-          iconBg: const Color(0xFFDBEAFE),
-          iconColor: const Color(0xFF1E40AF),
-          badgeText: 'FEE REMINDER',
-          badgeBg: const Color(0xFFDBEAFE),
-          badgeTextColor: const Color(0xFF1E40AF),
-          timeText: '2h ago',
-          title: 'March Tuition Fee Reminder',
-          subtitleIcon: Icons.people_outline_rounded,
-          subtitleText: '452 Students',
-          dateText: 'Mar 15, 2024',
-          isFirst: true,
-        ),
-        _buildTimelineItem(
-          icon: Icons.menu_book_rounded,
-          iconBg: const Color(0xFFFFEDD5),
-          iconColor: const Color(0xFFC2410C),
-          badgeText: 'HOMEWORK',
-          badgeBg: const Color(0xFFFFEDD5),
-          badgeTextColor: const Color(0xFFC2410C),
-          timeText: '1d ago',
-          title: 'Final Semester Project Guidelines',
-          subtitleIcon: Icons.people_outline_rounded,
-          subtitleText: 'Grade 10 - Batch A',
-          dateText: 'Mar 14, 2024',
-        ),
-        _buildTimelineItem(
-          icon: Icons.campaign_rounded,
-          iconBg: const Color(0xFF003D99),
-          iconColor: Colors.white,
-          badgeText: 'ANNOUNCEMENT',
-          badgeBg: const Color(0xFFDBEAFE),
-          badgeTextColor: const Color(0xFF1E40AF),
-          secondaryBadge: 'URGENT',
-          secondaryBadgeBg: const Color(0xFFB91C1C),
-          timeText: '3d ago',
-          title: 'Annual Sports Day Schedule',
-          subtitleIcon: Icons.people_outline_rounded,
-          subtitleText: 'All Batches',
-          dateText: 'Mar 12, 2024',
-          isLast: true,
-          hasCardBorder: true,
-        ),
-      ],
+    return Obx(
+      () => ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: controller.updatesList.length,
+        itemBuilder: (context, index) {
+          final update = controller.updatesList[index];
+          final isLast = index == controller.updatesList.length - 1;
+
+          Color iconBg;
+          Color iconColor;
+          IconData icon;
+
+          switch (update.category) {
+            case 'Fee Reminder':
+              iconBg = const Color(0xFFDBEAFE);
+              iconColor = const Color(0xFF1E40AF);
+              icon = Icons.request_quote_rounded;
+              break;
+            case 'Holiday':
+              iconBg = const Color(0xFFFFEDD5);
+              iconColor = const Color(0xFFC2410C);
+              icon = Icons.beach_access_rounded;
+              break;
+            case 'Event':
+              iconBg = const Color(0xFFF3E8FF);
+              iconColor = const Color(0xFF7E22CE);
+              icon = Icons.event_available_rounded;
+              break;
+            case 'Notice':
+            default:
+              iconBg = const Color(0xFFF1F5F9);
+              iconColor = const Color(0xFF475569);
+              icon = Icons.info_outline_rounded;
+              break;
+          }
+
+          return _buildTimelineItem(
+            icon: icon,
+            iconBg: iconBg,
+            iconColor: iconColor,
+            badgeText: update.category.toUpperCase(),
+            badgeBg: iconBg,
+            badgeTextColor: iconColor,
+            timeText: update.timeAgo,
+            title: update.subject,
+            subtitleIcon: Icons.people_outline_rounded,
+            subtitleText: update.audience,
+            dateText: DateFormat('MMM dd, yyyy').format(update.date),
+            isLast: isLast,
+          );
+        },
+      ),
     );
   }
 
@@ -127,7 +133,6 @@ class InstituteUpdatesScreen extends StatelessWidget {
     required String dateText,
     String? secondaryBadge,
     Color? secondaryBadgeBg,
-    bool isFirst = false,
     bool isLast = false,
     bool hasCardBorder = false,
   }) {
@@ -135,7 +140,6 @@ class InstituteUpdatesScreen extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Left Timeline Sidebar
           Column(
             children: [
               Container(

@@ -1,3 +1,4 @@
+import 'package:fee_easy/config/app_routes.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +39,9 @@ class StudentProfileScreen extends StatelessWidget {
             _buildAcademicDetails(),
             AppSpacing.v16,
             _buildPersonalDetails(),
+            AppSpacing.v40,
+            _buildSignOutSection(),
+            AppSpacing.v40,
           ],
         ),
       ),
@@ -452,6 +456,59 @@ class StudentProfileScreen extends StatelessWidget {
               : TextAlign.right,
         ),
       ],
+    );
+  }
+
+  Widget _buildSignOutSection() {
+    return InkWell(
+      onTap: () => Get.offAllNamed(AppRoutes.login),
+      child: Container(
+        padding: AppSpacing.all24,
+        decoration: BoxDecoration(
+          color: const Color(0xFFFEF2F2),
+          borderRadius: BorderRadius.circular(AppSpacing.s24),
+          border: Border.all(color: const Color(0xFFFEE2E2)),
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: AppSpacing.all12,
+              decoration: BoxDecoration(
+                color: const Color(0xFFFEE2E2),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Icon(
+                Icons.logout_rounded,
+                color: Color(0xFF991B1B),
+                size: AppSpacing.s20,
+              ),
+            ),
+            AppSpacing.h16,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Sign Out',
+                    style: AppTextStyles.manrope(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800,
+                      color: const Color(0xFF991B1B),
+                    ),
+                  ),
+                  Text(
+                    'Securely terminate session',
+                    style: AppTextStyles.lexend(
+                      fontSize: 12,
+                      color: const Color(0xFFEF4444).withValues(alpha: 0.7),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

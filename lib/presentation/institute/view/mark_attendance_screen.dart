@@ -1,52 +1,14 @@
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
-import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
+import 'package:fee_easy/presentation/institute/controllers/attendance_controller.dart';
+import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class MarkAttendanceScreen extends StatefulWidget {
+class MarkAttendanceScreen extends GetView<AttendanceController> {
   const MarkAttendanceScreen({super.key});
-
-  @override
-  State<MarkAttendanceScreen> createState() => _MarkAttendanceScreenState();
-}
-
-class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
-  // Using simple list for mock state
-  final List<Map<String, dynamic>> students = [
-    {
-      'name': 'Aria Smith',
-      'id': 'PHY-2023-001',
-      'isPresent': true,
-      'avatar': 'https://i.pravatar.cc/150?u=aria',
-    },
-    {
-      'name': 'Julian Chen',
-      'id': 'PHY-2023-042',
-      'isPresent': true,
-      'avatar': 'https://i.pravatar.cc/150?u=julian',
-    },
-    {
-      'name': 'Elena Rodriguez',
-      'id': 'PHY-2023-115',
-      'isPresent': false,
-      'avatar': 'https://i.pravatar.cc/150?u=elena',
-    },
-    {
-      'name': 'Marcus Wright',
-      'id': 'PHY-2023-089',
-      'isPresent': true,
-      'avatar': 'https://i.pravatar.cc/150?u=marcus',
-    },
-    {
-      'name': 'Sarah Jenkins',
-      'id': 'PHY-2023-201',
-      'isPresent': true,
-      'avatar': 'https://i.pravatar.cc/150?u=sarah',
-    },
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -59,22 +21,37 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
             Expanded(
               child: SingleChildScrollView(
                 padding: AppSpacing.x24.add(AppSpacing.y16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _buildBatchHeader(),
-                    AppSpacing.v24,
-                    _buildBulkActionButton(),
-                    AppSpacing.v24,
-                    _buildSearchBar(),
-                    AppSpacing.v24,
-                    ...students.map(
-                      (student) => Padding(
-                        padding: AppSpacing.bottom16,
-                        child: _buildStudentCard(student),
+                child: Obx(
+                  () => Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _buildBatchHeader(),
+                      AppSpacing.v24,
+                      _buildBulkActionButton(),
+                      AppSpacing.v24,
+                      _buildSearchBar(),
+                      AppSpacing.v24,
+                      ...controller.filteredStudents.map(
+                        (student) => Padding(
+                          padding: AppSpacing.bottom16,
+                          child: _buildStudentCard(student),
+                        ),
                       ),
-                    ),
-                  ],
+                      if (controller.filteredStudents.isEmpty)
+                        Center(
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 40),
+                            child: Text(
+                              'No students found',
+                              style: AppTextStyles.manrope(
+                                fontSize: 16,
+                                color: AppColors.textTertiary,
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -99,7 +76,7 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
         ),
         AppSpacing.v4,
         Text(
-          'October 24, 2023 • Tuesday',
+          controller.formattedDate,
           style: AppTextStyles.manrope(
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -112,13 +89,7 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
 
   Widget _buildBulkActionButton() {
     return OutlinedButton(
-      onPressed: () {
-        setState(() {
-          for (var s in students) {
-            s['isPresent'] = true;
-          }
-        });
-      },
+      onPressed: () => controller.markAllPresent(),
       style: OutlinedButton.styleFrom(
         side: const BorderSide(color: Color(0xFFD1D5DB)),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -155,6 +126,7 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
         borderRadius: BorderRadius.circular(12),
       ),
       child: TextField(
+        onChanged: (value) => controller.searchQuery.value = value,
         decoration: InputDecoration(
           border: InputBorder.none,
           icon: const Icon(Icons.search, color: AppColors.textMuted),
@@ -233,7 +205,7 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
       child: Row(
         children: [
           GestureDetector(
-            onTap: () => setState(() => student['isPresent'] = true),
+            onTap: () => controller.toggleStatus(student, true),
             child: Container(
               padding: AppSpacing.x12,
               decoration: BoxDecoration(
@@ -253,7 +225,7 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
             ),
           ),
           GestureDetector(
-            onTap: () => setState(() => student['isPresent'] = false),
+            onTap: () => controller.toggleStatus(student, false),
             child: Container(
               padding: AppSpacing.x12,
               decoration: BoxDecoration(
@@ -293,7 +265,10 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
         ],
       ),
       child: ElevatedButton(
-        onPressed: () => Get.back(),
+        onPressed: () {
+          Get.back();
+          Get.snackbar('Success', 'Attendance submitted successfully');
+        },
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFF005AC1),
           shape: RoundedRectangleBorder(

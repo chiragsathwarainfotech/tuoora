@@ -4,6 +4,9 @@ import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../../../config/app_routes.dart';
 
 class InstituteSubscriptionScreen extends StatelessWidget {
   const InstituteSubscriptionScreen({super.key});
@@ -93,18 +96,6 @@ class InstituteSubscriptionScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              Container(
-                padding: AppSpacing.all10,
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(AppSpacing.s12),
-                ),
-                child: const Icon(
-                  Icons.auto_awesome_rounded,
-                  color: Colors.white,
-                  size: AppSpacing.s24,
-                ),
-              ),
             ],
           ),
           AppSpacing.v24,
@@ -129,58 +120,34 @@ class InstituteSubscriptionScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'ANNUAL BILLING',
-                    style: AppTextStyles.manrope(
-                      fontSize: AppSpacing.s12,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white60,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: '\$4,990',
-                          style: AppTextStyles.manrope(
-                            fontSize: AppSpacing.s24,
-                            fontWeight: FontWeight.w800,
-                            color: Colors.white,
-                          ),
-                        ),
-                        TextSpan(
-                          text: '/yr',
-                          style: AppTextStyles.lexend(
-                            fontSize: 14,
-                            color: Colors.white60,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  foregroundColor: const Color(0xFF004494),
-                  padding: AppSpacing.x24.add(AppSpacing.y12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(AppSpacing.s12),
-                  ),
-                  elevation: 0,
+              Text(
+                'ANNUAL BILLING',
+                style: AppTextStyles.manrope(
+                  fontSize: AppSpacing.s12,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white60,
+                  letterSpacing: 0.5,
                 ),
-                child: Text(
-                  'Manage',
-                  style: AppTextStyles.manrope(
-                    fontSize: AppSpacing.s16,
-                    fontWeight: FontWeight.w800,
-                  ),
+              ),
+              RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: '\$4,990',
+                      style: AppTextStyles.manrope(
+                        fontSize: AppSpacing.s24,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white,
+                      ),
+                    ),
+                    TextSpan(
+                      text: '/yr',
+                      style: AppTextStyles.lexend(
+                        fontSize: 14,
+                        color: Colors.white60,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -504,13 +471,16 @@ class InstituteSubscriptionScreen extends StatelessWidget {
                 color: AppColors.textPrimary,
               ),
             ),
-            Text(
-              'VIEW ALL',
-              style: AppTextStyles.manrope(
-                fontSize: AppSpacing.s12,
-                fontWeight: FontWeight.w900,
-                color: const Color(0xFF1E40AF),
-                letterSpacing: AppSpacing.s2,
+            GestureDetector(
+              onTap: () => Get.toNamed(AppRoutes.instituteBillingHistory),
+              child: Text(
+                'VIEW ALL',
+                style: AppTextStyles.manrope(
+                  fontSize: AppSpacing.s12,
+                  fontWeight: FontWeight.w900,
+                  color: const Color(0xFF1E40AF),
+                  letterSpacing: AppSpacing.s2,
+                ),
               ),
             ),
           ],

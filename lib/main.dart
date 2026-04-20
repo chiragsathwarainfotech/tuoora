@@ -14,7 +14,7 @@ class FeeEasyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'FeeEasy',
+      title: 'Tuoora',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       initialRoute: AppRoutes.roleSelection,

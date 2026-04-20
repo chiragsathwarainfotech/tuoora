@@ -3,7 +3,6 @@ import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
-import 'package:fee_easy/config/app_routes.dart';
 import 'package:fee_easy/presentation/institute/view/edit_student_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -59,35 +58,18 @@ class StudentProfileScreen extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Stack(
-            children: [
-              Container(
-                width: 120,
-                height: 120,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(24),
-                  image: const DecorationImage(
-                    image: NetworkImage(
-                      'https://i.pravatar.cc/150?u=student_arjun',
-                    ),
-                    fit: BoxFit.cover,
-                  ),
+          Container(
+            width: 120,
+            height: 120,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(24),
+              image: const DecorationImage(
+                image: NetworkImage(
+                  'https://i.pravatar.cc/150?u=student_arjun',
                 ),
+                fit: BoxFit.cover,
               ),
-              Positioned(
-                bottom: 4,
-                right: 4,
-                child: Container(
-                  width: 20,
-                  height: 20,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF10B981),
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 3),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
           AppSpacing.v20,
           Text(

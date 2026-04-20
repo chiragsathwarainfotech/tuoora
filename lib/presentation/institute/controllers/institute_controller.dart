@@ -2,6 +2,8 @@ import 'package:fee_easy/config/app_routes.dart';
 import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:fee_easy/core/constants/app_colors.dart';
+import '../models/fee_record.dart';
 
 class Student {
   final String name;
@@ -36,12 +38,69 @@ class InstituteController extends GetxController {
   final students = <Student>[].obs;
   final filteredStudents = <Student>[].obs;
 
+  // Fee Registry Logic
+  final feeRecords = <FeeRecord>[].obs;
+
   @override
   void onInit() {
     super.onInit();
     _setInitialIndex();
     pageController = PageController(initialPage: _currentIndex.value);
     _loadMockStudents();
+    _loadMockFeeRecords();
+  }
+
+  void _loadMockFeeRecords() {
+    feeRecords.assignAll([
+      FeeRecord(
+        studentName: 'Arjun Malhotra',
+        studentId: 'STU-2024-001',
+        batch: 'Evening • Batch A',
+        amount: '₹2,500',
+        status: 'Paid',
+        month: 'October 2023',
+        paymentMethod: 'Online',
+        timestamp: DateTime.now(),
+        statusBg: AppColors.instFeesPaidBadgeBg,
+        statusText: AppColors.instFeesPaidText,
+      ),
+      FeeRecord(
+        studentName: 'Sarah Jenkins',
+        studentId: 'STU-2024-042',
+        batch: 'Morning • Advanced',
+        amount: '₹2,500',
+        status: 'Due',
+        month: 'October 2023',
+        paymentMethod: 'Cash',
+        timestamp: DateTime.now(),
+        statusBg: AppColors.instFeesDueBadgeBg,
+        statusText: AppColors.instFeesDueText,
+      ),
+      FeeRecord(
+        studentName: 'Rahul Sharma',
+        studentId: 'STU-2024-105',
+        batch: 'Evening • Batch B',
+        amount: '₹2,500',
+        status: 'Paid',
+        month: 'October 2023',
+        paymentMethod: 'Online',
+        timestamp: DateTime.now(),
+        statusBg: AppColors.instFeesPaidBadgeBg,
+        statusText: AppColors.instFeesPaidText,
+      ),
+      FeeRecord(
+        studentName: 'Priya Gupta',
+        studentId: 'STU-2024-089',
+        batch: 'Evening • Batch A',
+        amount: '₹2,500',
+        status: 'Due',
+        month: 'October 2023',
+        paymentMethod: 'Cash',
+        timestamp: DateTime.now(),
+        statusBg: AppColors.instFeesDueBadgeBg,
+        statusText: AppColors.instFeesDueText,
+      ),
+    ]);
   }
 
   void _loadMockStudents() {

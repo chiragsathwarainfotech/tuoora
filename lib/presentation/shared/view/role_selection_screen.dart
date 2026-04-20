@@ -22,7 +22,7 @@ class RoleSelectionScreen extends StatelessWidget {
               _buildLogo(),
               AppSpacing.v40,
               Text(
-                'FeeEasy',
+                'Tuoora',
                 textAlign: TextAlign.center,
                 style: AppTextStyles.manrope(
                   fontSize: 32,
@@ -75,7 +75,7 @@ class RoleSelectionScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 15,
               offset: const Offset(0, 5),
             ),
@@ -117,7 +117,7 @@ class RoleSelectionScreen extends StatelessWidget {
           border: Border.all(color: const Color(0xFFE5E7EB), width: 1),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.03),
+              color: Colors.black.withValues(alpha: 0.03),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
@@ -129,7 +129,7 @@ class RoleSelectionScreen extends StatelessWidget {
               width: AppSpacing.s72,
               height: AppSpacing.s72,
               decoration: BoxDecoration(
-                color: iconColor.withOpacity(0.12),
+                color: iconColor.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Center(child: Icon(icon, color: iconColor, size: 32)),

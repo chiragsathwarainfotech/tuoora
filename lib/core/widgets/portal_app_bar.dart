@@ -1,8 +1,7 @@
+import 'package:fee_easy/core/constants/app_text_styles.dart';
+import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../core/constants/app_strings.dart';
-import '../../core/constants/app_text_styles.dart';
-import '../../core/theme/app_spacing.dart';
 
 class PortalAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -51,7 +50,8 @@ class PortalAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         IconButton(
           onPressed: () => Get.toNamed(notificationsRoute),
-          icon: notificationIcon ??
+          icon:
+              notificationIcon ??
               const Icon(
                 Icons.notifications_none_rounded,
                 color: Color(0xFF111827),

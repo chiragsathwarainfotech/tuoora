@@ -99,6 +99,7 @@ class AppSpacing {
 
   // Bottom Spacing
   static const EdgeInsets bottom16 = EdgeInsets.only(bottom: s16);
+  static const EdgeInsets bottom12 = EdgeInsets.only(bottom: s12);
 
   // Top Spacing
   static const EdgeInsets top4 = EdgeInsets.only(top: s4);

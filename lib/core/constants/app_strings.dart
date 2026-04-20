@@ -1,6 +1,6 @@
 class AppStrings {
   // Global
-  static const String appName = 'FeeEasy';
+  static const String appName = 'Tuoora';
 
   // Login Screen
   static const String loginHeader = 'SECURE ACCESS';
@@ -54,6 +54,7 @@ class AppStrings {
   static const String instNavStudents = 'Students';
   static const String instNavBatches = 'Batches';
   static const String instNavFees = 'Fees';
+  static const String instProfile = 'Profile';
 
   // Institute Login
   static const String instLoginSubtitle =
@@ -91,7 +92,8 @@ class AppStrings {
   // Institute Add Student
   static const String instAddStudentTitle = 'Add Student';
   static const String instStudentIdentity = 'Student Identity';
-  static const String instUploadPhotoDesc = 'Upload student photo for\ndigital ID';
+  static const String instUploadPhotoDesc =
+      'Upload student photo for\ndigital ID';
   static const String instStudentNameLabel = 'Student Name';
   static const String instStudentNameHint = 'Full Name';
   static const String instParentNameLabel = 'Parent Name';
@@ -110,6 +112,11 @@ class AppStrings {
   static const String instMonthlyFeeAmount = '₹2,500.00';
   static const String instEditStructureBtn = 'Edit\nStructure';
   static const String instConfirmBtn = 'Confirm and Save Student';
+  static const String instNameHint = 'Full Name';
+  static const String instGuardianHint = "Father or Mother's Name";
+  static const String instStudentPhotoLabel = 'Student Photo';
+  static const String instStudentPhotoHint =
+      'Upload student photo for digital ID';
   static const String instDiscardBtn = 'Discard Changes';
 
   // Institute Fees
@@ -139,7 +146,8 @@ class AppStrings {
   static const String instPaymentCash = 'Cash';
   static const String instPaymentOnline = 'Online';
   static const String instAutoReceiptTitle = 'Auto-generate Receipt';
-  static const String instAutoReceiptDesc = 'Receipt #FE-2023-1024 will be generated\nautomatically.';
+  static const String instAutoReceiptDesc =
+      'Receipt #FE-2023-1024 will be generated\nautomatically.';
   static const String instPreviewReceipt = 'Preview Receipt';
   static const String instSaveFeeBtn = 'Save Fee Record';
 
@@ -151,12 +159,14 @@ class AppStrings {
   static const String instStudentEnrollmentLabel = 'Student Enrollment';
   static const String instAddStudentToBatch = 'Add Student to Batch';
   static const String instAttendanceRateLabel = 'Attendance';
-  static const String instAverageAttendance = 'Average attendance for this batch over\nthe last 30 days.';
+  static const String instAverageAttendance =
+      'Average attendance for this batch over\nthe last 30 days.';
   static const String instStudentListLabel = 'Student List';
 
   // Institute Batches Overview
   static const String instActiveBatchesTitle = 'Active Batches';
-  static const String instActiveBatchesSubtitle = 'Managing current student cohorts and scheduling';
+  static const String instActiveBatchesSubtitle =
+      'Managing current student cohorts and scheduling';
   static const String instStatusHighCapacity = 'HIGH CAPACITY';
   static const String instStatusFull = 'FULL';
   static const String instStatusOpen = 'OPEN';
@@ -165,7 +175,8 @@ class AppStrings {
   static const String instBatchAnalytics = 'Batch Analytics';
   static const String instRealTimeResource = 'Real-time resource utilization';
   static const String instOverallCapacity = 'OVERALL CAPACITY';
-  static const String instSeatOccupancy = '110 / 130 seats occupied across active sessions';
+  static const String instSeatOccupancy =
+      '110 / 130 seats occupied across active sessions';
   static const String instAvgAttendanceLabelAlt = 'AVG. ATTENDANCE';
   static const String instResourcesLabel = 'RESOURCES';
   static const String instResourceOptimal = 'Optimal';
@@ -174,7 +185,8 @@ class AppStrings {
   static const String instAttendanceMarkingHeading = 'ATTENDANCE MARKING';
   static const String instAttendanceTitle = 'Attendance';
   static const String instSelectActiveBatchHeading = 'SELECT ACTIVE BATCH';
-  static const String instSelectClassDesc = 'Select a class to start marking student attendance.';
+  static const String instSelectClassDesc =
+      'Select a class to start marking student attendance.';
   static const String instSampleDateLabel = 'October 24, 2023';
   static const String instBatchPhysics = 'Advanced Physics';
   static const String instBatchChemistry = 'Organic Chem';
@@ -185,13 +197,15 @@ class AppStrings {
   static const String instMarkAttendanceTitle = 'Mark Attendance';
   static const String instMarkAllPresent = 'Mark All Present';
   static const String instSubmitAttendance = 'Submit Attendance';
-  static const String instSearchStudentHintAlt = 'Search student by name or ID...';
+  static const String instSearchStudentHintAlt =
+      'Search student by name or ID...';
   static const String instStatusPresentRaw = 'PRESENT';
   static const String instStatusAbsentRaw = 'ABSENT';
 
   // Institute Student Profile
   static const String instStudentProfileTitle = 'Student Profile';
-  static const String instAcademicContactInfo = 'Academic & Contact Information';
+  static const String instAcademicContactInfo =
+      'Academic & Contact Information';
   static const String instBatchNameLabel = 'BATCH NAME';
   static const String instAdmissionDateLabel = 'DATE OF ADMISSION';
   static const String instGuardianNameLabel = 'GUARDIAN NAME';
@@ -220,7 +234,8 @@ class AppStrings {
   static const String instPasswordSecurity = 'Password & Security';
   static const String instUpdateCredentials = 'Update credentials and 2FA';
   static const String instPrivacySettings = 'Privacy Settings';
-  static const String instManageVisibility = 'Manage visibility and data sharing';
+  static const String instManageVisibility =
+      'Manage visibility and data sharing';
   static const String instNotificationPrefs = 'Notification Preferences';
   static const String instEmailSmsSettings = 'Email, SMS and push settings';
   static const String instSignOutLabel = 'Sign Out';
@@ -233,7 +248,8 @@ class AppStrings {
   static const String instNextRenewal = 'Next Renewal';
   static const String instMonthlyUsage = 'Monthly Usage';
   static const String instUpgradePlanBtn = 'Upgrade/Renew Plan';
-  static const String instViewBillingHistory = 'VIEW BILLING HISTORY AND INVOICES';
+  static const String instViewBillingHistory =
+      'VIEW BILLING HISTORY AND INVOICES';
 
   // Institute Security
   static const String instAccountSecurityTitle = 'Security';
@@ -264,9 +280,11 @@ class AppStrings {
   static const String instStudentsEnrolledSuffix = 'students enrolled';
   static const String instIncludedBenefits = 'Included Benefits';
   static const String instAutomatedBilling = 'Automated Billing';
-  static const String instAutoBillingDesc = 'Real-time invoice generation & SMS alerts';
+  static const String instAutoBillingDesc =
+      'Real-time invoice generation & SMS alerts';
   static const String instPrioritySupport = 'Priority Support';
-  static const String instPrioritySupportDesc = 'Dedicated manager available 24/7';
+  static const String instPrioritySupportDesc =
+      'Dedicated manager available 24/7';
   static const String instWhatsAppOption = 'WhatsApp Integration';
   static const String instWhatsAppOptionDesc = 'Direct fee reminders via API';
   static const String instRecentBilling = 'Recent Billing';
@@ -277,7 +295,8 @@ class AppStrings {
   static const String instWhatsAppConfigDesc =
       'Configure your Meta Business API credentials to automate student alerts and institute communications directly through WhatsApp.';
   static const String instMetaApiConfig = 'Meta API Configuration';
-  static const String instLinkWhatsAppAccount = 'Link your WhatsApp Business Account';
+  static const String instLinkWhatsAppAccount =
+      'Link your WhatsApp Business Account';
   static const String instAccessToken = 'ACCESS TOKEN';
   static const String instPhoneNumberId = 'PHONE NUMBER ID';
   static const String instBusinessAccountId = 'BUSINESS ACCOUNT ID';
@@ -293,8 +312,10 @@ class AppStrings {
   static const String instHomeworkUpdates = 'Homework Updates';
   static const String instHomeworkUpdatesDesc = 'Shared with parents at 4 PM';
   static const String instHolidayNotices = 'Holiday Notices';
-  static const String instHolidayNoticesDesc = 'General Institute announcements';
-  static const String instImpactQuote = '"Automated messaging reduces administrative calls by 40%"';
+  static const String instHolidayNoticesDesc =
+      'General Institute announcements';
+  static const String instImpactQuote =
+      '"Automated messaging reduces administrative calls by 40%"';
 
   // Parent Attendance
   static const String academicIntegrity = 'ACADEMIC INTEGRITY';

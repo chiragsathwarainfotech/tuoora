@@ -3,13 +3,14 @@ import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/config/app_routes.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
-import 'package:fee_easy/presentation/institute/widgets/institute_bottom_nav.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_drawer.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class AttendanceMarkingScreen extends StatelessWidget {
+import '../controllers/attendance_controller.dart';
+
+class AttendanceMarkingScreen extends GetView<AttendanceController> {
   const AttendanceMarkingScreen({super.key});
 
   @override
@@ -24,34 +25,36 @@ class AttendanceMarkingScreen extends StatelessWidget {
             Expanded(
               child: SingleChildScrollView(
                 padding: AppSpacing.all24,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _buildDateSelector(),
-                    AppSpacing.v32,
-                    _buildSelectionLabel(),
-                    AppSpacing.v24,
-                    _buildBatchCard(
-                      AppStrings.instBatchPhysics,
-                      '09:00 AM - 10:30 AM',
-                      isSelected: true,
-                    ),
-                    AppSpacing.v16,
-                    _buildBatchCard(
-                      AppStrings.instBatchChemistry,
-                      '11:00 AM - 12:30 PM',
-                    ),
-                    AppSpacing.v16,
-                    _buildBatchCard(
-                      AppStrings.instBatchMathematics,
-                      '02:00 PM - 03:30 PM',
-                    ),
-                    AppSpacing.v16,
-                    _buildBatchCard(
-                      AppStrings.instBatchHistory,
-                      '04:00 PM - 05:30 PM',
-                    ),
-                  ],
+                child: Obx(
+                  () => Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _buildDateSelector(context),
+                      AppSpacing.v32,
+                      _buildSelectionLabel(),
+                      AppSpacing.v24,
+                      _buildBatchCard(
+                        AppStrings.instBatchPhysics,
+                        '09:00 AM - 10:30 AM',
+                        isSelected: true,
+                      ),
+                      AppSpacing.v16,
+                      _buildBatchCard(
+                        AppStrings.instBatchChemistry,
+                        '11:00 AM - 12:30 PM',
+                      ),
+                      AppSpacing.v16,
+                      _buildBatchCard(
+                        AppStrings.instBatchMathematics,
+                        '02:00 PM - 03:30 PM',
+                      ),
+                      AppSpacing.v16,
+                      _buildBatchCard(
+                        AppStrings.instBatchHistory,
+                        '04:00 PM - 05:30 PM',
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -61,30 +64,38 @@ class AttendanceMarkingScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDateSelector() {
-    return Container(
-      padding: AppSpacing.all16,
-      decoration: BoxDecoration(
-        color: const Color(0xFFE5E7EB).withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(AppSpacing.s12),
-      ),
-      child: Row(
-        children: [
-          const Icon(
-            Icons.calendar_today_rounded,
-            color: AppColors.instAccentBlue,
-            size: AppSpacing.s20,
+  Widget _buildDateSelector(BuildContext context) {
+    return GestureDetector(
+      onTap: () => controller.selectDate(context),
+      child: Container(
+        padding: AppSpacing.all16,
+        decoration: BoxDecoration(
+          color: const Color(0xFFE5E7EB).withValues(alpha: 0.5),
+          borderRadius: BorderRadius.circular(AppSpacing.s12),
+          border: Border.all(
+            color: AppColors.instAccentBlue.withValues(alpha: 0.2),
           ),
-          AppSpacing.h12,
-          Text(
-            AppStrings.instSampleDateLabel,
-            style: AppTextStyles.manrope(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-              color: AppColors.textPrimary,
+        ),
+        child: Row(
+          children: [
+            const Icon(
+              Icons.calendar_today_rounded,
+              color: AppColors.instAccentBlue,
+              size: AppSpacing.s20,
             ),
-          ),
-        ],
+            AppSpacing.h12,
+            Text(
+              controller.shortDate,
+              style: AppTextStyles.manrope(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: AppColors.textPrimary,
+              ),
+            ),
+            const Spacer(),
+            const Icon(Icons.arrow_drop_down, color: AppColors.textTertiary),
+          ],
+        ),
       ),
     );
   }

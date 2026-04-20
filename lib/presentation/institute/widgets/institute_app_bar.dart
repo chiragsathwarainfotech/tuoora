@@ -30,19 +30,25 @@ class InstituteAppBar extends StatelessWidget implements PreferredSizeWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              _buildLeadingButton(context),
-              AppSpacing.h16,
-              Text(
-                title,
-                style: AppTextStyles.manrope(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.instAccentBlue,
+          Expanded(
+            child: Row(
+              children: [
+                _buildLeadingButton(context),
+                AppSpacing.h16,
+                Expanded(
+                  child: Text(
+                    title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyles.manrope(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.instAccentBlue,
+                    ),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           if (actions != null) Row(children: actions!),
           if (isRoot && actions == null) _buildDefaultRootActions(),

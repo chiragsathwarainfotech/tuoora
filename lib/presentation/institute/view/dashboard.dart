@@ -2,118 +2,98 @@ import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/config/app_routes.dart';
+import 'package:fee_easy/presentation/institute/controllers/institute_controller.dart';
 import 'package:get/get.dart';
-import 'package:fee_easy/presentation/institute/widgets/institute_root_scaffold.dart';
 import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 
 class InstituteDashboard extends StatelessWidget {
-  final bool showShell;
-  const InstituteDashboard({super.key, this.showShell = true});
+  const InstituteDashboard({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return InstituteRootScaffold(
-      title: 'Fee Easy',
-      currentIndex: 0,
-      showShell: showShell,
-      body: SingleChildScrollView(
-        padding: AppSpacing.all24,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _buildHeaderTitles(),
-            AppSpacing.v16,
-            _buildTotalStudentsCard(),
-            AppSpacing.v16,
-            Row(
-              children: [
-                Expanded(
-                  child: _buildMetricCard(
-                    AppStrings.instPendingFees,
-                    '\$4,200',
-                    Icons.assignment_late_outlined,
-                    AppColors.orangeTag,
-                  ),
+    return SingleChildScrollView(
+      padding: AppSpacing.all24,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _buildHeaderTitles(),
+          AppSpacing.v16,
+          _buildTotalStudentsCard(),
+          AppSpacing.v16,
+          Row(
+            children: [
+              Expanded(
+                child: _buildMetricCard(
+                  AppStrings.instPendingFees,
+                  '\$4,200',
+                  Icons.assignment_late_outlined,
+                  AppColors.orangeTag,
                 ),
-                AppSpacing.h16,
-                Expanded(
-                  child: _buildMetricCard(
-                    AppStrings.instAttendance,
-                    '85%',
-                    Icons.calendar_today_outlined,
-                    AppColors.instAccentBlue,
-                  ),
+              ),
+              AppSpacing.h16,
+              Expanded(
+                child: _buildMetricCard(
+                  AppStrings.instAttendance,
+                  '85%',
+                  Icons.calendar_today_outlined,
+                  AppColors.instAccentBlue,
                 ),
-              ],
-            ),
-            AppSpacing.v32,
-            _buildSectionHeader(AppStrings.instActiveBatches, true),
-            AppSpacing.v16,
-            _buildBatchItem(
-              'Advanced Physics',
-              'Batch A-1 • 42 Students',
-              Icons.science,
-              AppColors.instLightBlueBg,
-              AppColors.instAccentBlue,
-            ),
-            AppSpacing.v12,
-            _buildBatchItem(
-              'Calculus II',
-              'Batch B-4 • 38 Students',
-              Icons.functions,
-              AppColors.instPurpleBg.withValues(alpha: 0.4),
-              AppColors.instPurpleBlue,
-            ),
-            AppSpacing.v32,
-            _buildUpcomingCollectionCard(),
-            AppSpacing.v32,
-            _buildStudentListHeader(),
-            AppSpacing.v16,
-            _buildDashboardStudentItem(
-              'Aarav Sharma',
-              'Roll No: #M-001 • Joined 12 Jan',
-              'https://i.pravatar.cc/150?u=aarav',
-            ),
-            _buildDashboardStudentItem(
-              'Ishani Verma',
-              'Roll No: #M-002 • Joined 14 Jan',
-              'https://i.pravatar.cc/150?u=ishani',
-            ),
-            _buildDashboardStudentItem(
-              'Rohan Das',
-              'Roll No: #M-003 • Joined 15 Jan',
-              'https://i.pravatar.cc/150?u=rohan',
-            ),
-            AppSpacing.v32,
-          ],
-        ),
+              ),
+            ],
+          ),
+          AppSpacing.v32,
+          _buildSectionHeader(AppStrings.instActiveBatches, true),
+          AppSpacing.v16,
+          _buildBatchItem(
+            'Advanced Physics',
+            'Batch A-1 • 42 Students',
+            Icons.science,
+            AppColors.instLightBlueBg,
+            AppColors.instAccentBlue,
+          ),
+          AppSpacing.v12,
+          _buildBatchItem(
+            'Calculus II',
+            'Batch B-4 • 38 Students',
+            Icons.functions,
+            AppColors.instPurpleBg.withValues(alpha: 0.4),
+            AppColors.instPurpleBlue,
+          ),
+          AppSpacing.v32,
+          _buildUpcomingCollectionCard(),
+          AppSpacing.v32,
+          _buildStudentListHeader(),
+          AppSpacing.v16,
+          _buildDashboardStudentItem(
+            'Aarav Sharma',
+            'Roll No: #M-001 • Joined 12 Jan',
+            'https://i.pravatar.cc/150?u=aarav',
+          ),
+          _buildDashboardStudentItem(
+            'Ishani Verma',
+            'Roll No: #M-002 • Joined 14 Jan',
+            'https://i.pravatar.cc/150?u=ishani',
+          ),
+          _buildDashboardStudentItem(
+            'Rohan Das',
+            'Roll No: #M-003 • Joined 15 Jan',
+            'https://i.pravatar.cc/150?u=rohan',
+          ),
+          AppSpacing.v32,
+        ],
       ),
     );
   }
 
   Widget _buildHeaderTitles() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          AppStrings.instOverview,
-          style: AppTextStyles.manrope(
-            fontSize: 14,
-            fontWeight: FontWeight.w700,
-            color: AppColors.instAccentBlue,
-          ),
-        ),
-        AppSpacing.v4,
-        Text(
-          AppStrings.instSummary,
-          style: AppTextStyles.manrope(
-            fontSize: 28,
-            fontWeight: FontWeight.w800,
-            color: AppColors.textPrimary,
-          ),
-        ),
-      ],
+    return Text(
+      AppStrings.instSummary,
+      style: AppTextStyles.manrope(
+        fontSize: 28,
+        fontWeight: FontWeight.w800,
+        color: AppColors.textPrimary,
+      ),
     );
   }
 
@@ -121,7 +101,7 @@ class InstituteDashboard extends StatelessWidget {
     return Container(
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
-        color: AppColors.instCardBlue, // Deep blue gradient base
+        color: AppColors.instCardBlue,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -462,7 +442,7 @@ class InstituteDashboard extends StatelessWidget {
           ),
         ),
         GestureDetector(
-          onTap: () => Get.toNamed(AppRoutes.instituteStudents),
+          onTap: () => Get.find<InstituteController>().setIndex(1),
           child: Text(
             'View All',
             style: AppTextStyles.manrope(

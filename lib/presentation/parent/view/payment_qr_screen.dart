@@ -1,0 +1,226 @@
+import 'package:fee_easy/core/constants/app_text_styles.dart';
+import 'package:fee_easy/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+
+class PaymentQRScreen extends StatelessWidget {
+  const PaymentQRScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    const upiId = 'julian.sterling@okaxis';
+
+    return Scaffold(
+      backgroundColor: const Color(0xFFF8F9FB),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Color(0xFF1E3A8A)),
+          onPressed: () => Get.back(),
+        ),
+        title: Text(
+          'Payment QR',
+          style: AppTextStyles.manrope(
+            fontSize: 18,
+            fontWeight: FontWeight.w800,
+            color: const Color(0xFF1E3A8A),
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.download, color: Color(0xFF1E3A8A)),
+            onPressed: () => Get.snackbar(
+              'Success',
+              'QR Code saved to gallery',
+              snackPosition: SnackPosition.BOTTOM,
+              backgroundColor: Colors.green[700],
+              colorText: Colors.white,
+              margin: const EdgeInsets.all(16),
+            ),
+          ),
+        ],
+        centerTitle: false,
+      ),
+      body: Column(
+        children: [
+          AppSpacing.v24,
+          Container(
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(32),
+                bottomRight: Radius.circular(32),
+              ),
+            ),
+            child: Column(
+              children: [
+                Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: const Color(0xFFE0E7FF),
+                      width: 3,
+                    ),
+                    image: const DecorationImage(
+                      image: AssetImage('assets/julian_profile.png'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                AppSpacing.v20,
+                Text(
+                  'Julian Sterling',
+                  style: AppTextStyles.manrope(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w800,
+                    color: const Color(0xFF111827),
+                  ),
+                ),
+                AppSpacing.v4,
+                Text(
+                  'Grade 11 • Section A-Alpha',
+                  style: AppTextStyles.lexend(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: const Color(0xFF6B7280),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          AppSpacing.v32,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Container(
+              width: double.infinity,
+              padding: AppSpacing.all32,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(32),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.04),
+                    blurRadius: 20,
+                    offset: const Offset(0, 10),
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    width: 210,
+                    height: 210,
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                        color: const Color(0xFFF1F5F9),
+                        width: 1.5,
+                      ),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Opacity(
+                          opacity: 0.8,
+                          child: Icon(
+                            Icons.qr_code_2_rounded,
+                            size: 180,
+                            color: Colors.blue[900],
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.1),
+                                blurRadius: 4,
+                              ),
+                            ],
+                          ),
+                          child: const Icon(
+                            Icons.account_balance_wallet_rounded,
+                            color: Color(0xFF1E3A8A),
+                            size: 32,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  AppSpacing.v32,
+                  Text(
+                    'SCAN TO PAY FEES',
+                    style: AppTextStyles.manrope(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w800,
+                      color: const Color(0xFF94A3B8),
+                      letterSpacing: 1.5,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          AppSpacing.v24,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: InkWell(
+              onTap: () {
+                Clipboard.setData(const ClipboardData(text: upiId));
+                Get.snackbar(
+                  'Copied',
+                  'UPI ID copied to clipboard',
+                  snackPosition: SnackPosition.BOTTOM,
+                  backgroundColor: const Color(0xFF1E293B),
+                  colorText: Colors.white,
+                  margin: const EdgeInsets.all(20),
+                  borderRadius: 16,
+                );
+              },
+              borderRadius: BorderRadius.circular(16),
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 14,
+                ),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFE0E7FF).withValues(alpha: 0.4),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: const Color(0xFFDBEAFE)),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      upiId,
+                      style: AppTextStyles.manrope(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        color: const Color(0xFF1E40AF),
+                      ),
+                    ),
+                    AppSpacing.h12,
+                    const Icon(
+                      Icons.copy_rounded,
+                      color: Color(0xFF1E40AF),
+                      size: 18,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

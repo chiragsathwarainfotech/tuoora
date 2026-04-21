@@ -125,13 +125,6 @@ class BatchesScreen extends GetView<BatchController> {
                               ),
                             ),
                             AppSpacing.h8,
-                            IconButton(
-                              onPressed: () => _showDeleteConfirmation(batch),
-                              icon: const Icon(Icons.delete_outline_rounded,
-                                  color: Colors.redAccent, size: 22),
-                              constraints: const BoxConstraints(),
-                              padding: EdgeInsets.zero,
-                            ),
                           ],
                         ),
                         AppSpacing.v12,
@@ -200,7 +193,8 @@ class BatchesScreen extends GetView<BatchController> {
                           children: [
                             Expanded(
                               child: ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () =>
+                                    controller.openAssignStudents(batch),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: const Color(0xFF004CB2),
                                   shape: RoundedRectangleBorder(
@@ -224,7 +218,10 @@ class BatchesScreen extends GetView<BatchController> {
                             AppSpacing.h12,
                             Expanded(
                               child: OutlinedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  controller.initEditMode(batch);
+                                  Get.toNamed(AppRoutes.instituteEditBatch);
+                                },
                                 style: OutlinedButton.styleFrom(
                                   side: const BorderSide(
                                     color: Color(0xFFD1D5DB),
@@ -254,93 +251,6 @@ class BatchesScreen extends GetView<BatchController> {
                 ),
               ],
             ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _showDeleteConfirmation(BatchModel batch) {
-    Get.dialog(
-      Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-        child: Padding(
-          padding: AppSpacing.all24,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                padding: AppSpacing.all16,
-                decoration: const BoxDecoration(
-                  color: Color(0xFFFEF2F2),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(Icons.delete_forever_rounded,
-                    color: Colors.redAccent, size: 32),
-              ),
-              AppSpacing.v24,
-              Text(
-                'Delete Batch?',
-                style: AppTextStyles.manrope(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-              AppSpacing.v12,
-              Text(
-                'Are you sure you want to delete "${batch.title}"? This action cannot be undone.',
-                textAlign: TextAlign.center,
-                style: AppTextStyles.manrope(
-                  fontSize: 14,
-                  color: AppColors.textSecondary,
-                ),
-              ),
-              AppSpacing.v32,
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () => Get.back(),
-                      style: OutlinedButton.styleFrom(
-                        padding: AppSpacing.y16,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                      ),
-                      child: Text(
-                        'Cancel',
-                        style: AppTextStyles.manrope(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.textPrimary),
-                      ),
-                    ),
-                  ),
-                  AppSpacing.h12,
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Get.back();
-                        controller.deleteBatch(batch.id);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.redAccent,
-                        padding: AppSpacing.y16,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                      ),
-                      child: Text(
-                        'Delete',
-                        style: AppTextStyles.manrope(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
           ),
         ),
       ),

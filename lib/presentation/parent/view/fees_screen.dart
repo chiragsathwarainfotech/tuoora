@@ -113,31 +113,35 @@ class ParentFeesScreen extends StatelessWidget {
             ],
           ),
           AppSpacing.v32,
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: AppSpacing.s18),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(AppSpacing.s20),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Pay Now',
-                  style: AppTextStyles.manrope(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w800,
-                    color: const Color(0xFF003781),
+          InkWell(
+            onTap: () => Get.toNamed(AppRoutes.parentPaymentQR),
+            borderRadius: BorderRadius.circular(AppSpacing.s20),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: AppSpacing.s18),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(AppSpacing.s20),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Pay Now',
+                    style: AppTextStyles.manrope(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                      color: const Color(0xFF003781),
+                    ),
                   ),
-                ),
-                AppSpacing.h12,
-                const Icon(
-                  Icons.arrow_forward,
-                  size: AppSpacing.s20,
-                  color: Color(0xFF003781),
-                ),
-              ],
+                  AppSpacing.h12,
+                  const Icon(
+                    Icons.arrow_forward,
+                    size: AppSpacing.s20,
+                    color: Color(0xFF003781),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

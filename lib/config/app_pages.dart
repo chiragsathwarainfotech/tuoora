@@ -18,11 +18,15 @@ import 'package:fee_easy/presentation/institute/view/institute_updates_screen.da
 import 'package:fee_easy/presentation/institute/view/create_update_screen.dart';
 import 'package:fee_easy/presentation/institute/view/institute_notifications_screen.dart';
 import 'package:fee_easy/presentation/institute/view/billing_history_screen.dart';
+import 'package:fee_easy/presentation/institute/view/add_edit_batch_screen.dart';
+import 'package:fee_easy/presentation/institute/view/assign_students_screen.dart';
 import 'package:fee_easy/presentation/parent/view/parent_main_screen.dart';
+
 import 'package:fee_easy/presentation/shared/view/payment_history_screen.dart';
 import 'package:fee_easy/presentation/parent/view/homework_tracker_screen.dart';
 import 'package:fee_easy/presentation/parent/view/homework_detail_screen.dart';
 import 'package:fee_easy/presentation/parent/view/attendance_history_screen.dart';
+import 'package:fee_easy/presentation/parent/view/payment_qr_screen.dart';
 import 'package:fee_easy/presentation/parent/bindings/parent_binding.dart';
 import 'package:fee_easy/presentation/shared/view/login_screen.dart';
 import 'package:fee_easy/presentation/shared/view/student_profile_screen.dart'
@@ -91,6 +95,10 @@ class AppPages {
     GetPage(
       name: AppRoutes.parentHomeworkDetail,
       page: () => const HomeworkDetailScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.parentPaymentQR,
+      page: () => const PaymentQRScreen(),
     ),
     // Student routes
     GetPage(
@@ -232,6 +240,21 @@ class AppPages {
     GetPage(
       name: AppRoutes.instituteBillingHistory,
       page: () => const BillingHistoryScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteAddBatch,
+      page: () => const AddEditBatchScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteEditBatch,
+      page: () => const AddEditBatchScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteAssignStudents,
+      page: () => const AssignStudentsScreen(),
+      binding: InstituteBinding(),
     ),
   ];
 }

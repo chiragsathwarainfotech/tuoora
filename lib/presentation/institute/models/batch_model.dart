@@ -4,6 +4,7 @@ class BatchModel {
   final String id;
   final String title;
   final String time;
+  final String subject;
   final String studentCount;
   final String location;
   final String statusLabel;
@@ -15,6 +16,7 @@ class BatchModel {
     required this.id,
     required this.title,
     required this.time,
+    required this.subject,
     required this.studentCount,
     required this.location,
     required this.statusLabel,

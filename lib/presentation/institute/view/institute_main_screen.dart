@@ -1,3 +1,4 @@
+import 'package:fee_easy/presentation/institute/controllers/batch_controller.dart';
 import 'package:fee_easy/presentation/institute/controllers/institute_controller.dart';
 import 'package:fee_easy/presentation/institute/view/dashboard.dart';
 import 'package:fee_easy/presentation/institute/view/students_registry_screen.dart';
@@ -68,13 +69,26 @@ class InstituteMainScreen extends GetView<InstituteController> {
         ),
       ),
       floatingActionButton: Obx(() {
-        if (controller.currentIndex == 1) {
+        if (controller.currentIndex == 1 || controller.currentIndex == 2) {
           return FloatingActionButton(
-            onPressed: () => Get.toNamed(AppRoutes.instituteAddStudent),
+            onPressed: () {
+              if (controller.currentIndex == 1) {
+                Get.toNamed(AppRoutes.instituteAddStudent);
+              } else {
+                Get.find<BatchController>().initAddMode();
+                Get.toNamed(AppRoutes.instituteAddBatch);
+              }
+            },
             backgroundColor: AppColors.instDarkBtnBlue,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
             elevation: 4,
-            child: const Icon(Icons.add, color: Colors.white, size: AppSpacing.s28),
+            child: const Icon(
+              Icons.add,
+              color: Colors.white,
+              size: AppSpacing.s28,
+            ),
           );
         }
         return const SizedBox.shrink();

@@ -12,6 +12,7 @@ class AppRoutes {
   static const String parentHomeworkTracker = '/parent/homework-tracker';
   static const String parentAttendanceHistory = '/parent/attendance-history';
   static const String parentHomeworkDetail = '/parent/homework-detail';
+  static const String parentPaymentQR = '/parent/payment-qr';
 
   static const String studentDashboard = '/student/dashboard';
   static const String studentAttendance = '/student/attendance';
@@ -45,4 +46,7 @@ class AppRoutes {
   static const String instituteNotifications = '/institute/notifications';
   static const String instituteMain = '/institute/main';
   static const String instituteBillingHistory = '/institute/profile/billing-history';
+  static const String instituteAddBatch = '/institute/batches/add';
+  static const String instituteEditBatch = '/institute/batches/edit';
+  static const String instituteAssignStudents = '/institute/batches/assign-students';
 }

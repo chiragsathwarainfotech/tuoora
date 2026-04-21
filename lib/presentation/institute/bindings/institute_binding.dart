@@ -14,13 +14,22 @@ class InstituteBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut<InstituteController>(() => InstituteController());
-    Get.lazyPut<InstituteStudentController>(() => InstituteStudentController(), fenix: true);
+    Get.lazyPut<InstituteStudentController>(
+      () => InstituteStudentController(),
+      fenix: true,
+    );
     Get.lazyPut<RecordFeeController>(() => RecordFeeController(), fenix: true);
-    Get.lazyPut<AttendanceController>(() => AttendanceController(), fenix: true);
+    Get.lazyPut<AttendanceController>(
+      () => AttendanceController(),
+      fenix: true,
+    );
     Get.lazyPut<ReportsController>(() => ReportsController(), fenix: true);
-    Get.lazyPut<InstituteProfileController>(() => InstituteProfileController(), fenix: true);
+    Get.lazyPut<InstituteProfileController>(
+      () => InstituteProfileController(),
+      fenix: true,
+    );
     Get.lazyPut<UpdatesController>(() => UpdatesController(), fenix: true);
-    Get.lazyPut<BatchController>(() => BatchController(), fenix: true);
+    Get.put<BatchController>(BatchController(), permanent: true);
     Get.lazyPut<SecurityController>(() => SecurityController(), fenix: true);
     Get.lazyPut<WhatsAppController>(() => WhatsAppController(), fenix: true);
   }

@@ -41,7 +41,7 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
                         AppSpacing.v24,
                         _buildFeeBalanceCard(),
                         AppSpacing.v32,
-                        _buildActionButtons(context, name),
+                        _buildActionButtons(context, name, id, studentData),
                         AppSpacing.v40,
                       ],
                     ),
@@ -190,6 +190,10 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
             studentData['guardianName'] ?? 'Not Specified',
           ),
           _buildInfoField(
+            AppStrings.instGuardianPhoneLabel,
+            studentData['guardianName'] ?? 'Not Specified',
+          ),
+          _buildInfoField(
             AppStrings.instProfilePhoneLabel,
             studentData['phone'] ?? 'Not Available',
           ),
@@ -322,15 +326,16 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
     );
   }
 
-  Widget _buildActionButtons(BuildContext context, String studentName) {
+  Widget _buildActionButtons(
+      BuildContext context, String studentName, String id, Map studentData) {
     return Column(
       children: [
         OutlinedButton.icon(
           onPressed: () => Get.toNamed(
-            AppRoutes.instituteAddStudent,
+            AppRoutes.instituteEditStudentProfile,
             arguments: {
-              'studentId': controller.editingStudentId,
-              'student': Get.arguments?['student'],
+              'studentId': id,
+              'student': studentData,
             },
           ),
           icon: const Icon(

@@ -1,4 +1,3 @@
-import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
@@ -8,35 +7,81 @@ class InstituteNotificationsScreen extends StatefulWidget {
   const InstituteNotificationsScreen({super.key});
 
   @override
-  State<InstituteNotificationsScreen> createState() => _InstituteNotificationsScreenState();
+  State<InstituteNotificationsScreen> createState() =>
+      _InstituteNotificationsScreenState();
 }
 
-class _InstituteNotificationsScreenState extends State<InstituteNotificationsScreen> {
-  bool pushEnabled = true;
-  bool whatsappEnabled = true;
-  bool soundEnabled = true;
-
+class _InstituteNotificationsScreenState
+    extends State<InstituteNotificationsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.scaffoldBg,
+      backgroundColor: const Color(0xFFF8F9FB),
       body: SafeArea(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const InstituteAppBar(title: 'Notifications', isRoot: false),
+            const InstituteAppBar(title: 'Notification', isRoot: false),
             Expanded(
               child: SingleChildScrollView(
-                padding: AppSpacing.all24,
+                padding: AppSpacing.x24.add(AppSpacing.y4),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildSectionHeader('Preferences'),
+                    _buildNotificationCard(
+                      badge: 'URGENT',
+                      badgeColor: const Color(0xFF7C2D12),
+                      badgeTextColor: Colors.white,
+                      time: '3h ago',
+                      title: 'Subscription Expiring Soon',
+                      description:
+                          'Your Premium plan expires in 3 days. Renew now to avoid service interruption.',
+                      icon: Icons.warning_amber_rounded,
+                      iconBg: const Color(0xFFFFEDD5),
+                      iconColor: const Color(0xFFD97706),
+                      actionText: 'Renew Plan',
+                    ),
                     AppSpacing.v16,
-                    _buildSettingsCard(),
-                    AppSpacing.v32,
-                    _buildSectionHeader('Recent Activity'),
+                    _buildNotificationCard(
+                      badge: 'UPDATE',
+                      badgeColor: const Color(0xFF1D4ED8),
+                      badgeTextColor: Colors.white,
+                      time: 'Yesterday',
+                      title: 'New Feature: Attendance Reports',
+                      description:
+                          'You can now export detailed monthly attendance reports in PDF format.',
+                      icon: Icons.update_rounded,
+                      iconBg: const Color(0xFFDBEAFE),
+                      iconColor: const Color(0xFF2563EB),
+                      imageUrl:
+                          'https://img.freepik.com/free-vector/data-report-concept-illustration_114360-883.jpg',
+                    ),
                     AppSpacing.v16,
-                    _buildNotificationsList(),
+                    _buildNotificationCard(
+                      badge: 'INFO',
+                      badgeColor: const Color(0xFF64748B),
+                      badgeTextColor: Colors.white,
+                      time: 'Mar 15',
+                      title: 'System Maintenance',
+                      description:
+                          'Scheduled maintenance on Sunday, March 20, from 2 AM to 4 AM IST. The platform will be temporarily inaccessible.',
+                      icon: Icons.info_outline_rounded,
+                      iconBg: const Color(0xFFF1F5F9),
+                      iconColor: const Color(0xFF475569),
+                    ),
+                    AppSpacing.v16,
+                    _buildNotificationCard(
+                      badge: 'SUCCESS',
+                      badgeColor: const Color(0xFFE2E8F0),
+                      badgeTextColor: const Color(0xFF475569),
+                      time: '1w ago',
+                      title: 'Fee Collection Milestone',
+                      description:
+                          'Congratulations! You\'ve reached 90% fee collection for the current quarter.',
+                      icon: Icons.check_circle_outline_rounded,
+                      iconBg: const Color(0xFFF1F5F9),
+                      iconColor: const Color(0xFF475569),
+                    ),
                     AppSpacing.v40,
                   ],
                 ),
@@ -48,169 +93,32 @@ class _InstituteNotificationsScreenState extends State<InstituteNotificationsScr
     );
   }
 
-  Widget _buildSectionHeader(String title) {
-    return Text(
-      title,
-      style: AppTextStyles.manrope(
-        fontSize: 16,
-        fontWeight: FontWeight.w800,
-        color: const Color(0xFF003D99),
-      ),
-    );
-  }
-
-  Widget _buildSettingsCard() {
-    return Container(
-      padding: AppSpacing.all16,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
-            blurRadius: 15,
-            offset: const Offset(0, 5),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          _buildSettingItem(
-            icon: Icons.notifications_active_rounded,
-            title: 'Push Notifications',
-            subtitle: 'Alerts on student device',
-            value: pushEnabled,
-            onChanged: (val) => setState(() => pushEnabled = val),
-          ),
-          const Divider(height: 1, color: Color(0xFFF3F4FB)),
-          _buildSettingItem(
-            icon: Icons.chat_bubble_rounded,
-            title: 'WhatsApp Alerts',
-            subtitle: 'Direct messages via API',
-            value: whatsappEnabled,
-            onChanged: (val) => setState(() => whatsappEnabled = val),
-          ),
-          const Divider(height: 1, color: Color(0xFFF3F4FB)),
-          _buildSettingItem(
-            icon: Icons.volume_up_rounded,
-            title: 'Alert Sounds',
-            subtitle: 'Chimes for critical updates',
-            value: soundEnabled,
-            onChanged: (val) => setState(() => soundEnabled = val),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSettingItem({
-    required IconData icon,
+  Widget _buildNotificationCard({
+    required String badge,
+    required Color badgeColor,
+    required Color badgeTextColor,
+    required String time,
     required String title,
-    required String subtitle,
-    required bool value,
-    required ValueChanged<bool> onChanged,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-      child: Row(
-        children: [
-          Container(
-            padding: AppSpacing.all10,
-            decoration: BoxDecoration(
-              color: const Color(0xFFEFF6FF),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Icon(icon, color: const Color(0xFF1E40AF), size: 18),
-          ),
-          AppSpacing.h16,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: AppTextStyles.manrope(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-                Text(
-                  subtitle,
-                  style: AppTextStyles.lexend(
-                    fontSize: 11,
-                    color: AppColors.textTertiary,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Switch.adaptive(
-            value: value,
-            onChanged: onChanged,
-            activeThumbColor: const Color(0xFF003082),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNotificationsList() {
-    return Column(
-      children: [
-        _buildNotificationItem(
-          icon: Icons.account_balance_wallet_rounded,
-          iconBg: const Color(0xFFDCFCE7),
-          iconColor: const Color(0xFF166534),
-          title: 'Fee Collected',
-          message: 'Q2 Fee for Student #1042 was successfully recorded.',
-          time: '10m ago',
-        ),
-        AppSpacing.v16,
-        _buildNotificationItem(
-          icon: Icons.person_add_rounded,
-          iconBg: const Color(0xFFDBEAFE),
-          iconColor: const Color(0xFF1E40AF),
-          title: 'New Admission',
-          message: 'Rahul Sharma (Grade 10) was added to Batch B.',
-          time: '2h ago',
-        ),
-        AppSpacing.v16,
-        _buildNotificationItem(
-          icon: Icons.warning_amber_rounded,
-          iconBg: const Color(0xFFFEE2E2),
-          iconColor: const Color(0xFF991B1B),
-          title: 'Attendance Alert',
-          message: '3 students in Batch A have been absent for 3 days.',
-          time: 'Yesterday',
-        ),
-        AppSpacing.v16,
-        _buildNotificationItem(
-          icon: Icons.verified_rounded,
-          iconBg: const Color(0xFFFEF9C3),
-          iconColor: const Color(0xFF854D0E),
-          title: 'Subscription Renewed',
-          message: 'Your Premium plan for St. Augustine\'s Institute was renewed.',
-          time: '2 days ago',
-        ),
-      ],
-    );
-  }
-
-  Widget _buildNotificationItem({
+    required String description,
     required IconData icon,
     required Color iconBg,
     required Color iconColor,
-    required String title,
-    required String message,
-    required String time,
+    String? actionText,
+    String? imageUrl,
   }) {
     return Container(
-      padding: AppSpacing.all16,
+      width: double.infinity,
+      padding: AppSpacing.all24,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFFF1F5F9)),
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.02),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -221,9 +129,9 @@ class _InstituteNotificationsScreenState extends State<InstituteNotificationsScr
               color: iconBg,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(icon, color: iconColor, size: 20),
+            child: Icon(icon, color: iconColor, size: 24),
           ),
-          AppSpacing.h16,
+          AppSpacing.h20,
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -231,32 +139,89 @@ class _InstituteNotificationsScreenState extends State<InstituteNotificationsScr
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      title,
-                      style: AppTextStyles.manrope(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.textPrimary,
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: badgeColor,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        badge,
+                        style: AppTextStyles.manrope(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w900,
+                          color: badgeTextColor,
+                        ),
                       ),
                     ),
                     Text(
                       time,
-                      style: AppTextStyles.lexend(
-                        fontSize: 10,
-                        color: AppColors.textMuted,
+                      style: AppTextStyles.manrope(
+                        fontSize: 12,
+                        color: const Color(0xFF94A3B8),
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ],
                 ),
-                AppSpacing.v4,
+                AppSpacing.v12,
                 Text(
-                  message,
-                  style: AppTextStyles.lexend(
-                    fontSize: 12,
-                    color: AppColors.textSecondary,
-                    height: 1.4,
+                  title,
+                  style: AppTextStyles.manrope(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                    color: const Color(0xFF1E293B),
+                    height: 1.2,
                   ),
                 ),
+                AppSpacing.v8,
+                Text(
+                  description,
+                  style: AppTextStyles.lexend(
+                    fontSize: 13,
+                    color: const Color(0xFF475569),
+                    height: 1.5,
+                  ),
+                ),
+                if (imageUrl != null) ...[
+                  AppSpacing.v16,
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.network(
+                      imageUrl,
+                      height: 140,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ],
+                if (actionText != null) ...[
+                  AppSpacing.v16,
+                  GestureDetector(
+                    onTap: () {},
+                    child: Row(
+                      children: [
+                        Text(
+                          actionText,
+                          style: AppTextStyles.manrope(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w800,
+                            color: const Color(0xFF1D4ED8),
+                          ),
+                        ),
+                        AppSpacing.h8,
+                        const Icon(
+                          Icons.arrow_forward,
+                          color: Color(0xFF1D4ED8),
+                          size: 16,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ],
             ),
           ),

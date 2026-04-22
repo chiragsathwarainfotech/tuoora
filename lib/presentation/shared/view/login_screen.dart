@@ -3,6 +3,7 @@ import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/presentation/shared/controllers/login_controller.dart';
+import 'package:fee_easy/config/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:get/get.dart';
@@ -99,8 +100,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               AppSpacing.v32,
-
-              // Main Authentication Card
               Container(
                 margin: AppSpacing.x24,
                 padding: const EdgeInsets.all(AppSpacing.s28),
@@ -239,42 +238,82 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
               ),
-
-              AppSpacing.v32,
-
-              // Bottom Footer
-              RichText(
-                text: TextSpan(
-                  text: AppStrings.enrolmentText,
-                  style: AppTextStyles.lexend(
-                    fontSize: 14,
-                    color: AppColors.textSecondary,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  children: [
-                    TextSpan(
-                      text: AppStrings.enrolmentLink,
-                      style: AppTextStyles.lexend(
-                        color: AppColors.primaryBlue,
-                        fontWeight: FontWeight.w700,
+              if (_selectedRole == 'INSTITUTE') ...[
+                AppSpacing.v32,
+                Padding(
+                  padding: AppSpacing.x24,
+                  child: Row(
+                    children: [
+                      const Expanded(child: Divider()),
+                      Padding(
+                        padding: AppSpacing.x16,
+                        child: Text(
+                          'OR EXPAND YOUR REACH',
+                          style: AppTextStyles.manrope(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.textDarkGrey,
+                            letterSpacing: 1.0,
+                          ),
+                        ),
                       ),
+                      const Expanded(child: Divider()),
+                    ],
+                  ),
+                ),
+                AppSpacing.v32,
+                Padding(
+                  padding: AppSpacing.x24,
+                  child: AppButton(
+                    label: 'Institute Registration',
+                    onPressed: () => Get.toNamed(AppRoutes.instituteSignup),
+                    icon: Icons.storefront_outlined,
+                    backgroundColor: Colors.white,
+                    foregroundColor: const Color(0xFF003082),
+                    borderColor: const Color(0xFFE5E7EB),
+                    borderRadius: AppSpacing.s16,
+                    padding: const EdgeInsets.symmetric(
+                      vertical: AppSpacing.s18,
                     ),
-                  ],
+                    fontSize: 16,
+                    fullWidth: true,
+                  ),
+                ),
+              ],
+              AppSpacing.v32,
+              Padding(
+                padding: AppSpacing.x24,
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    style: AppTextStyles.lexend(
+                      fontSize: 12,
+                      color: AppColors.textTertiary,
+                    ),
+                    children: [
+                      const TextSpan(text: 'By continuing, you agree to our '),
+                      TextSpan(
+                        text: 'Terms of Service',
+                        style: AppTextStyles.lexend(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                      const TextSpan(text: ' and '),
+                      TextSpan(
+                        text: 'Privacy Policy',
+                        style: AppTextStyles.lexend(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                      const TextSpan(text: '.'),
+                    ],
+                  ),
                 ),
               ),
-
-              AppSpacing.v24,
-
-              // Support & Security Cards
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildBottomCard(Icons.help_outline, 'SUPPORT'),
-                  AppSpacing.h16,
-                  _buildBottomCard(Icons.security, 'SECURITY'),
-                ],
-              ),
-
               AppSpacing.v32,
             ],
           ),
@@ -316,39 +355,6 @@ class _LoginScreenState extends State<LoginScreen> {
           border: InputBorder.none,
           contentPadding: AppSpacing.all16,
         ),
-      ),
-    );
-  }
-
-  Widget _buildBottomCard(IconData icon, String title) {
-    return Container(
-      width: AppSpacing.s140,
-      padding: AppSpacing.y16,
-      decoration: BoxDecoration(
-        color: AppColors.cardBg,
-        borderRadius: BorderRadius.circular(AppSpacing.s16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
-            blurRadius: AppSpacing.s10,
-            offset: const Offset(0, AppSpacing.s4),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Icon(icon, color: AppColors.primaryBlue, size: AppSpacing.s20),
-          AppSpacing.v8,
-          Text(
-            title,
-            style: AppTextStyles.manrope(
-              fontSize: 10,
-              fontWeight: FontWeight.w800,
-              color: AppColors.textSecondary,
-              letterSpacing: 1.0,
-            ),
-          ),
-        ],
       ),
     );
   }

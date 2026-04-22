@@ -4,7 +4,6 @@ import 'package:fee_easy/presentation/institute/view/dashboard.dart';
 import 'package:fee_easy/presentation/institute/view/students_registry_screen.dart';
 import 'package:fee_easy/presentation/institute/view/batches_screen.dart';
 import 'package:fee_easy/presentation/institute/view/fees_screen.dart';
-import 'package:fee_easy/presentation/institute/view/institute_profile_view_screen.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_bottom_nav.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_drawer.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
@@ -40,9 +39,6 @@ class InstituteMainScreen extends GetView<InstituteController> {
                 case 3:
                   title = 'Fees';
                   break;
-                case 4:
-                  title = 'Profile';
-                  break;
               }
               return InstituteAppBar(title: title, isRoot: true);
             }),
@@ -55,7 +51,6 @@ class InstituteMainScreen extends GetView<InstituteController> {
                   const StudentsRegistryScreen(),
                   const BatchesScreen(),
                   const InstituteFeesScreen(),
-                  const InstituteProfileViewScreen(),
                 ],
               ),
             ),

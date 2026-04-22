@@ -42,10 +42,36 @@ class AttendanceController extends GetxController {
 
   final filteredStudents = <Map<String, dynamic>>[].obs;
 
+  final batches = <Map<String, dynamic>>[
+    {
+      'title': 'Physics Batch A',
+      'time': '09:00 AM - 10:30 AM',
+      'date': DateTime.now(),
+    },
+    {
+      'title': 'Chemistry Batch B',
+      'time': '11:00 AM - 12:30 PM',
+      'date': DateTime.now(),
+    },
+    {
+      'title': 'Maths Batch C',
+      'time': '02:00 PM - 03:30 PM',
+      'date': DateTime.now().subtract(const Duration(days: 1)),
+    },
+    {
+      'title': 'History Batch D',
+      'time': '04:00 PM - 05:30 PM',
+      'date': DateTime.now().add(const Duration(days: 1)),
+    },
+  ].obs;
+
+  final filteredBatches = <Map<String, dynamic>>[].obs;
+
   @override
   void onInit() {
     super.onInit();
     filteredStudents.assignAll(allStudents);
+    filterBatches();
     
     // Setup search listener
     debounce(searchQuery, (_) => filterStudents(), time: const Duration(milliseconds: 300));
@@ -63,7 +89,19 @@ class AttendanceController extends GetxController {
     );
     if (picked != null && picked != selectedDate.value) {
       selectedDate.value = picked;
+      filterBatches();
     }
+  }
+
+  void filterBatches() {
+    filteredBatches.assignAll(
+      batches.where((batch) {
+        final batchDate = batch['date'] as DateTime;
+        return batchDate.year == selectedDate.value.year &&
+               batchDate.month == selectedDate.value.month &&
+               batchDate.day == selectedDate.value.day;
+      }).toList()
+    );
   }
 
   void filterStudents() {
@@ -88,6 +126,14 @@ class AttendanceController extends GetxController {
   void markAllPresent() {
     for (var s in allStudents) {
       s['isPresent'] = true;
+    }
+    allStudents.refresh();
+    filterStudents();
+  }
+
+  void markAllAbsent() {
+    for (var s in allStudents) {
+      s['isPresent'] = false;
     }
     allStudents.refresh();
     filterStudents();

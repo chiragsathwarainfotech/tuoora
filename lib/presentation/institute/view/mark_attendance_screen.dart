@@ -20,14 +20,14 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
             const InstituteAppBar(title: 'Mark Attendance'),
             Expanded(
               child: SingleChildScrollView(
-                padding: AppSpacing.x24.add(AppSpacing.y16),
+                padding: AppSpacing.x24.add(const EdgeInsets.only(top: 8, bottom: 16)),
                 child: Obx(
                   () => Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       _buildBatchHeader(),
                       AppSpacing.v24,
-                      _buildBulkActionButton(),
+                      _buildBulkActionButtons(),
                       AppSpacing.v24,
                       _buildSearchBar(),
                       AppSpacing.v24,
@@ -69,7 +69,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
         Text(
           AppStrings.instBatchPhysics,
           style: AppTextStyles.manrope(
-            fontSize: 28,
+            fontSize: 22,
             fontWeight: FontWeight.w800,
             color: AppColors.textPrimary,
           ),
@@ -78,7 +78,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
         Text(
           controller.formattedDate,
           style: AppTextStyles.manrope(
-            fontSize: 16,
+            fontSize: 14,
             fontWeight: FontWeight.w600,
             color: AppColors.textSecondary,
           ),
@@ -87,30 +87,55 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
     );
   }
 
-  Widget _buildBulkActionButton() {
+  Widget _buildBulkActionButtons() {
+    return Row(
+      children: [
+        Expanded(
+          child: _buildBulkButton(
+            label: 'All Present',
+            icon: Icons.done_all_rounded,
+            color: const Color(0xFF1E3A8A),
+            onTap: () => controller.markAllPresent(),
+          ),
+        ),
+        AppSpacing.h16,
+        Expanded(
+          child: _buildBulkButton(
+            label: 'All Absent',
+            icon: Icons.person_off_rounded,
+            color: const Color(0xFF7C2D12),
+            onTap: () => controller.markAllAbsent(),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBulkButton({
+    required String label,
+    required IconData icon,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
     return OutlinedButton(
-      onPressed: () => controller.markAllPresent(),
+      onPressed: onTap,
       style: OutlinedButton.styleFrom(
-        side: const BorderSide(color: Color(0xFFD1D5DB)),
+        side: BorderSide(color: color.withValues(alpha: 0.3)),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        padding: AppSpacing.y16,
+        padding: const EdgeInsets.symmetric(vertical: 14),
         backgroundColor: Colors.white,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(
-            Icons.done_all_rounded,
-            color: Color(0xFF1E3A8A),
-            size: AppSpacing.s20,
-          ),
+          Icon(icon, color: color, size: 18),
           AppSpacing.h8,
           Text(
-            AppStrings.instMarkAllPresent,
+            label,
             style: AppTextStyles.manrope(
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: FontWeight.w800,
-              color: const Color(0xFF1E3A8A),
+              color: color,
             ),
           ),
         ],

@@ -89,6 +89,10 @@ class AppStrings {
   static const String instStudentSearchHint = 'Search by name or student ID';
   static const String instBadgeActive = 'ACTIVE';
   static const String instBadgePending = 'PENDING';
+  static const String instFilterAll = 'All Students';
+  static const String instFilter10th = '10th Standard';
+  static const String instFilter9th = '9th Standard';
+  static const String instFilterBatches = 'By Batches';
 
   // Institute Add Student
   static const String instAddStudentTitle = 'Add Student';
@@ -215,6 +219,7 @@ class AppStrings {
   static const String instAdmissionDateLabel = 'DATE OF ADMISSION';
   static const String instGuardianNameLabel = 'GUARDIAN NAME';
   static const String instProfilePhoneLabel = 'PHONE NUMBER';
+  static const String instGuardianPhoneLabel = 'GUARDIAN PHONE NUMBER';
   static const String instResAddressLabel = 'RESIDENTIAL ADDRESS';
   static const String instFeeBalanceHeading = 'Fee Balance';
   static const String instCurrentAcadYear = 'Current academic year';

@@ -28,9 +28,11 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
                   children: [
                     _buildMainFormCard(context),
                     AppSpacing.v16,
-                    Obx(() => controller.selectedBatchId.value.isEmpty
-                      ? const SizedBox.shrink()
-                      : _buildFeeStructureCard()),
+                    Obx(
+                      () => controller.selectedBatchId.value.isEmpty
+                          ? const SizedBox.shrink()
+                          : _buildFeeStructureCard(),
+                    ),
                     AppSpacing.v24,
                     _buildActionButtons(),
                     AppSpacing.v32,
@@ -541,23 +543,27 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
         Obx(
           () => GestureDetector(
             onTap: controller.isFormValid.value
-              ? () => controller.saveStudent()
-              : null,
+                ? () => controller.saveStudent()
+                : null,
             child: Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: AppSpacing.s18),
               decoration: BoxDecoration(
                 color: controller.isFormValid.value
-                  ? AppColors.instDarkBtnBlue
-                  : AppColors.textMuted,
+                    ? AppColors.instDarkBtnBlue
+                    : AppColors.textMuted,
                 borderRadius: BorderRadius.circular(AppSpacing.s12),
-                boxShadow: controller.isFormValid.value ? [
-                  BoxShadow(
-                    color: AppColors.instDarkBtnBlue.withValues(alpha: 0.2),
-                    blurRadius: AppSpacing.s16,
-                    offset: const Offset(0, AppSpacing.s8),
-                  ),
-                ] : [],
+                boxShadow: controller.isFormValid.value
+                    ? [
+                        BoxShadow(
+                          color: AppColors.instDarkBtnBlue.withValues(
+                            alpha: 0.2,
+                          ),
+                          blurRadius: AppSpacing.s16,
+                          offset: const Offset(0, AppSpacing.s8),
+                        ),
+                      ]
+                    : [],
               ),
               child: Center(
                 child: Text(

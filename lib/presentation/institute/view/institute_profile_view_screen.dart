@@ -4,6 +4,7 @@ import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/presentation/institute/controllers/institute_profile_controller.dart';
+import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,26 +15,33 @@ class InstituteProfileViewScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<InstituteProfileController>();
 
-    return Obx(() {
-      if (controller.isLoading.value) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      }
-      return SingleChildScrollView(
-        padding: AppSpacing.x24.add(AppSpacing.y20),
+    return Scaffold(
+      backgroundColor: AppColors.scaffoldBg,
+      body: SafeArea(
         child: Column(
           children: [
-            _buildInstituteIdentityCard(controller),
-            AppSpacing.v24,
-            _buildAccountManagementCard(),
-            AppSpacing.v24,
-            _buildPremiumPlanCard(),
-            AppSpacing.v40,
+            const InstituteAppBar(title: 'Profile', isRoot: false),
+            Expanded(
+              child: Obx(() {
+                if (controller.isLoading.value) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                return SingleChildScrollView(
+                  padding: AppSpacing.x24.add(AppSpacing.y20),
+                  child: Column(
+                    children: [
+                      _buildInstituteIdentityCard(controller),
+                      AppSpacing.v24,
+                      _buildAccountManagementCard(),
+                    ],
+                  ),
+                );
+              }),
+            ),
           ],
         ),
-      );
-    });
+      ),
+    );
   }
 
   Widget _buildInstituteIdentityCard(InstituteProfileController controller) {
@@ -51,46 +59,29 @@ class InstituteProfileViewScreen extends StatelessWidget {
           ),
         ],
       ),
-      child: Column(
+      child: Row(
         children: [
           _buildLogoHeader(controller),
-          AppSpacing.v24,
-          Text(
-            controller.instituteName.value,
-            textAlign: TextAlign.center,
-            style: AppTextStyles.manrope(
-              fontSize: 22,
-              fontWeight: FontWeight.w800,
-              color: const Color(0xFF003082),
-            ),
-          ),
-          AppSpacing.v12,
-          Row(
+          AppSpacing.h12,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
-                Icons.location_on_rounded,
-                size: AppSpacing.s16,
-                color: AppColors.textTertiary,
-              ),
-              AppSpacing.h8,
-              Flexible(
-                child: Text(
-                  controller.address.value,
-                  textAlign: TextAlign.center,
-                  style: AppTextStyles.lexend(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    color: AppColors.textSecondary,
-                  ),
+              Text(
+                controller.instituteName.value,
+                textAlign: TextAlign.center,
+                style: AppTextStyles.manrope(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w800,
+                  color: const Color(0xFF003082),
                 ),
               ),
+              AppSpacing.v6,
+              _buildInfoChip(Icons.email_rounded, controller.email.value),
+              AppSpacing.v6,
+              _buildInfoChip(Icons.phone_rounded, controller.phone.value),
             ],
           ),
-          AppSpacing.v24,
-          _buildInfoChip(Icons.email_rounded, controller.email.value),
-          AppSpacing.v12,
-          _buildInfoChip(Icons.phone_rounded, controller.phone.value),
         ],
       ),
     );
@@ -141,27 +132,20 @@ class InstituteProfileViewScreen extends StatelessWidget {
   }
 
   Widget _buildInfoChip(IconData icon, String text) {
-    return Container(
-      padding: AppSpacing.x16.add(AppSpacing.y12),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF3F4F6),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: AppSpacing.s18, color: const Color(0xFF003082)),
-          AppSpacing.h12,
-          Text(
-            text,
-            style: AppTextStyles.manrope(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: AppColors.textPrimary,
-            ),
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: AppSpacing.s18, color: const Color(0xFF003082)),
+        AppSpacing.h12,
+        Text(
+          text,
+          style: AppTextStyles.manrope(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: AppColors.textPrimary,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -216,21 +200,34 @@ class InstituteProfileViewScreen extends StatelessWidget {
           ),
           const Divider(height: AppSpacing.s40, color: Color(0xFFF9FAFB)),
           GestureDetector(
-            onTap: () => Get.toNamed(AppRoutes.instituteNotifications),
+            onTap: () => Get.snackbar('Coming Soon', 'Terms & Conditions will be available soon.'),
             child: _buildManagementItem(
-              icon: Icons.notifications_rounded,
-              title: AppStrings.instNotificationPrefs,
-              subtitle: AppStrings.instEmailSmsSettings,
-              iconColor: const Color(0xFFDBEAFE),
+              icon: Icons.description_rounded,
+              title: 'Terms & Conditions',
+              subtitle: 'Read our terms of service',
+              iconColor: const Color(0xFFE0E7FF),
             ),
           ),
-          const Divider(
-            height: AppSpacing.s40,
-            color: Color(0xFFF3F4F6),
-            thickness: 1,
+          const Divider(height: AppSpacing.s40, color: Color(0xFFF9FAFB)),
+          GestureDetector(
+            onTap: () => Get.snackbar('Coming Soon', 'Privacy Policy will be available soon.'),
+            child: _buildManagementItem(
+              icon: Icons.privacy_tip_rounded,
+              title: 'Privacy Policy',
+              subtitle: 'Learn how we protect your data',
+              iconColor: const Color(0xFFFCE7F3),
+            ),
           ),
-          AppSpacing.v8,
-          _buildSignOutItem(),
+          const Divider(height: AppSpacing.s40, color: Color(0xFFF9FAFB)),
+          GestureDetector(
+            onTap: () => Get.snackbar('Coming Soon', 'Help Center will be available soon.'),
+            child: _buildManagementItem(
+              icon: Icons.help_outline_rounded,
+              title: 'Help & Support',
+              subtitle: 'Get assistance and FAQs',
+              iconColor: const Color(0xFFFEF3C7),
+            ),
+          ),
         ],
       ),
     );
@@ -284,214 +281,6 @@ class InstituteProfileViewScreen extends StatelessWidget {
           Icons.chevron_right_rounded,
           color: AppColors.textMuted,
           size: 20,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSignOutItem() {
-    return InkWell(
-      onTap: () => Get.offAllNamed(AppRoutes.login),
-      child: Row(
-        children: [
-          Container(
-            padding: AppSpacing.all12,
-            decoration: BoxDecoration(
-              color: const Color(0xFFFEE2E2),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: const Icon(
-              Icons.logout_rounded,
-              color: Color(0xFF991B1B),
-              size: AppSpacing.s20,
-            ),
-          ),
-          AppSpacing.h16,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  AppStrings.instSignOutLabel,
-                  style: AppTextStyles.manrope(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w800,
-                    color: const Color(0xFF991B1B),
-                  ),
-                ),
-                Text(
-                  AppStrings.instTerminateSession,
-                  style: AppTextStyles.lexend(
-                    fontSize: 12,
-                    color: AppColors.textTertiary,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const Icon(
-            Icons.arrow_forward_rounded,
-            color: Color(0xFF991B1B),
-            size: AppSpacing.s20,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPremiumPlanCard() {
-    return Container(
-      width: double.infinity,
-      padding: AppSpacing.all32,
-      decoration: BoxDecoration(
-        color: const Color(0xFF003E8C),
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFF003E8C).withValues(alpha: 0.25),
-            blurRadius: 20,
-            offset: const Offset(0, AppSpacing.s10),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                padding: AppSpacing.x14.add(AppSpacing.y8),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF1E40AF),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  AppStrings.instActivePlan,
-                  style: AppTextStyles.manrope(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.white,
-                    letterSpacing: 0.8,
-                  ),
-                ),
-              ),
-              const Icon(
-                Icons.verified_rounded,
-                color: Color(0xFF60A5FA),
-                size: AppSpacing.s28,
-              ),
-            ],
-          ),
-          AppSpacing.v20,
-          Text(
-            AppStrings.instInstitutionPremium,
-            style: AppTextStyles.manrope(
-              fontSize: 28,
-              fontWeight: FontWeight.w800,
-              color: Colors.white,
-            ),
-          ),
-          AppSpacing.v32,
-          _buildPlanInfoRow(AppStrings.instMemberSince, 'Sept 2021'),
-          const Divider(height: AppSpacing.s32, color: Colors.white10),
-          _buildPlanInfoRow(AppStrings.instNextRenewal, 'Oct 12, 2024'),
-          AppSpacing.v32,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                AppStrings.instMonthlyUsage,
-                style: AppTextStyles.manrope(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white70,
-                ),
-              ),
-              Text(
-                '65%',
-                style: AppTextStyles.manrope(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          ),
-          AppSpacing.v12,
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: const LinearProgressIndicator(
-              value: 0.65,
-              minHeight: AppSpacing.s12,
-              backgroundColor: Colors.white12,
-              color: Color(0xFF60A5FA),
-            ),
-          ),
-          AppSpacing.v32,
-          Container(
-            width: double.infinity,
-            padding: AppSpacing.y20,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  AppStrings.instUpgradePlanBtn,
-                  style: AppTextStyles.manrope(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w800,
-                    color: const Color(0xFF003E8C),
-                  ),
-                ),
-                AppSpacing.h8,
-                const Icon(
-                  Icons.arrow_upward_rounded,
-                  color: Color(0xFF003E8C),
-                  size: AppSpacing.s18,
-                ),
-              ],
-            ),
-          ),
-          AppSpacing.v24,
-          Center(
-            child: Text(
-              AppStrings.instViewBillingHistory,
-              style: AppTextStyles.manrope(
-                fontSize: 10,
-                fontWeight: FontWeight.w900,
-                color: Colors.white54,
-                letterSpacing: 0.5,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPlanInfoRow(String label, String value) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          label,
-          style: AppTextStyles.manrope(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: Colors.white60,
-          ),
-        ),
-        Text(
-          value,
-          style: AppTextStyles.manrope(
-            fontSize: 16,
-            fontWeight: FontWeight.w800,
-            color: Colors.white,
-          ),
         ),
       ],
     );

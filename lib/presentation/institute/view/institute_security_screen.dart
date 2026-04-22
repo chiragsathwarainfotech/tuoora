@@ -4,7 +4,6 @@ import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
-
 import 'package:fee_easy/presentation/institute/controllers/security_controller.dart';
 import 'package:get/get.dart';
 
@@ -81,38 +80,24 @@ class InstituteSecurityScreen extends GetView<SecurityController> {
             onToggle: controller.toggleConfirmPasswordVisibility,
           ),
           AppSpacing.v32,
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  '${AppStrings.instLastChangedPrefix} 3\nmonths ago',
-                  style: AppTextStyles.lexend(
-                    fontSize: 12,
-                    color: AppColors.textTertiary,
-                  ).copyWith(fontStyle: FontStyle.italic),
-                ),
+          ElevatedButton(
+            onPressed: controller.updatePassword,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF004CB3),
+              foregroundColor: Colors.white,
+              padding: AppSpacing.x28.add(AppSpacing.y18),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
               ),
-              AppSpacing.h16,
-              ElevatedButton(
-                onPressed: controller.updatePassword,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF004CB3),
-                  foregroundColor: Colors.white,
-                  padding: AppSpacing.x28.add(AppSpacing.y18),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  elevation: 0,
-                ),
-                child: Text(
-                  AppStrings.instUpdatePasswordBtn,
-                  style: AppTextStyles.manrope(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
+              elevation: 0,
+            ),
+            child: Text(
+              AppStrings.instUpdatePasswordBtn,
+              style: AppTextStyles.manrope(
+                fontSize: 15,
+                fontWeight: FontWeight.w800,
               ),
-            ],
+            ),
           ),
         ],
       ),

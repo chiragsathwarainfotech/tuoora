@@ -6,6 +6,7 @@ import 'package:fee_easy/presentation/institute/view/edit_student_profile_screen
 import 'package:fee_easy/presentation/institute/view/add_student_screen.dart';
 import 'package:fee_easy/presentation/institute/view/batch_details_screen.dart';
 import 'package:fee_easy/presentation/institute/view/attendance_marking_screen.dart';
+import 'package:fee_easy/presentation/institute/view/institute_profile_view_screen.dart';
 import 'package:fee_easy/presentation/institute/view/mark_attendance_screen.dart';
 import 'package:fee_easy/presentation/institute/view/student_profile_screen.dart';
 import 'package:fee_easy/presentation/institute/view/record_fee_screen.dart';
@@ -41,6 +42,10 @@ import 'package:fee_easy/presentation/student/view/homework_detail_screen.dart';
 import 'package:fee_easy/presentation/shared/view/role_selection_screen.dart';
 import 'package:fee_easy/presentation/shared/bindings/splash_binding.dart';
 import 'package:fee_easy/presentation/shared/view/splash_screen.dart';
+import 'package:fee_easy/presentation/shared/bindings/signup_binding.dart';
+import 'package:fee_easy/presentation/shared/view/institute_signup_screen.dart';
+import 'package:fee_easy/presentation/shared/view/institute_otp_screen.dart';
+import 'package:fee_easy/presentation/shared/view/institute_profile_setup_screen.dart';
 import 'package:get/get.dart';
 
 class AppPages {
@@ -212,7 +217,7 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.instituteProfile,
-      page: () => const InstituteMainScreen(),
+      page: () => const InstituteProfileViewScreen(),
       binding: InstituteBinding(),
     ),
     GetPage(
@@ -273,6 +278,21 @@ class AppPages {
       name: AppRoutes.instituteFeeTransactionHistory,
       page: () => const FeeTransactionHistoryScreen(),
       binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteSignup,
+      page: () => const InstituteSignupScreen(),
+      binding: SignupBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteOtp,
+      page: () => const InstituteOtpScreen(),
+      binding: SignupBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteProfileSetup,
+      page: () => const InstituteProfileSetupScreen(),
+      binding: SignupBinding(),
     ),
   ];
 }

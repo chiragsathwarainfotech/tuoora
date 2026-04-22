@@ -1,11 +1,9 @@
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
-import 'package:fee_easy/data/models/student_model.dart';
 import 'package:fee_easy/presentation/institute/controllers/batch_controller.dart';
-import 'package:fee_easy/presentation/institute/controllers/institute_controller.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
-import 'package:fee_easy/config/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class AddEditBatchScreen extends GetView<BatchController> {
@@ -52,6 +50,23 @@ class AddEditBatchScreen extends GetView<BatchController> {
                     _buildLabel('Subject'),
                     AppSpacing.v12,
                     _buildDropdown(),
+                    AppSpacing.v24,
+                    _buildLabel('Batch Description'),
+                    AppSpacing.v12,
+                    _buildTextField(
+                      controller: controller.descriptionController,
+                      hint: 'Enter batch details or topics covered...',
+                      maxLines: 3,
+                    ),
+                    AppSpacing.v24,
+                    _buildLabel('Batch Fee (₹)'),
+                    AppSpacing.v12,
+                    _buildTextField(
+                      controller: controller.batchFeeController,
+                      hint: 'e.g., 2500',
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    ),
                     AppSpacing.v32,
                     _buildSectionHeader(
                       Icons.access_time_filled_rounded,
@@ -63,10 +78,6 @@ class AddEditBatchScreen extends GetView<BatchController> {
                     _buildLabel('ACTIVE DAYS'),
                     AppSpacing.v16,
                     _buildDaysSelection(),
-                    AppSpacing.v32,
-                    _buildAssignStudentsHeader(),
-                    AppSpacing.v16,
-                    _buildStudentsSection(),
                     AppSpacing.v32,
                   ],
                 ),
@@ -93,6 +104,9 @@ class AddEditBatchScreen extends GetView<BatchController> {
   Widget _buildTextField({
     required TextEditingController controller,
     required String hint,
+    int maxLines = 1,
+    TextInputType keyboardType = TextInputType.text,
+    List<TextInputFormatter>? inputFormatters,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -101,6 +115,9 @@ class AddEditBatchScreen extends GetView<BatchController> {
       ),
       child: TextField(
         controller: controller,
+        maxLines: maxLines,
+        keyboardType: keyboardType,
+        inputFormatters: inputFormatters,
         style: AppTextStyles.manrope(fontSize: 14, fontWeight: FontWeight.w600),
         decoration: InputDecoration(
           hintText: hint,
@@ -271,194 +288,6 @@ class AddEditBatchScreen extends GetView<BatchController> {
           );
         });
       }).toList(),
-    );
-  }
-
-  Widget _buildAssignStudentsHeader() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            const Icon(
-              Icons.people_alt_rounded,
-              color: Color(0xFF1E3A8A),
-              size: 20,
-            ),
-            AppSpacing.h12,
-            Text(
-              'Assign Students',
-              style: AppTextStyles.manrope(
-                fontSize: 16,
-                fontWeight: FontWeight.w800,
-                color: const Color(0xFF1E3A8A),
-              ),
-            ),
-          ],
-        ),
-        Obx(
-          () => Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-            decoration: BoxDecoration(
-              color: const Color(0xFFDBEAFE),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Text(
-              '${controller.selectedStudentIds.length} Selected',
-              style: AppTextStyles.manrope(
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-                color: const Color(0xFF1E40AF),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildStudentsSection() {
-    final instituteController = Get.find<InstituteController>();
-
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xFFF3F4F6),
-        borderRadius: BorderRadius.circular(24),
-      ),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: TextField(
-                controller: controller.searchController,
-                onChanged: (val) => controller.searchQuery.value = val,
-                decoration: InputDecoration(
-                  hintText: 'Search roster by name or ID...',
-                  hintStyle: AppTextStyles.manrope(
-                    fontSize: 14,
-                    color: Colors.grey,
-                  ),
-                  icon: const Icon(Icons.search, color: Colors.grey, size: 20),
-                  border: InputBorder.none,
-                ),
-              ),
-            ),
-          ),
-          Obx(() {
-            final query = controller.searchQuery.value.toLowerCase();
-            final filteredList = instituteController.students
-                .where((s) {
-                  return s.name.toLowerCase().contains(query) ||
-                      s.id.toLowerCase().contains(query);
-                })
-                .take(3)
-                .toList();
-
-            return Container(
-              color: Colors.white,
-              child: Column(
-                children: filteredList.map((student) {
-                  return _buildStudentTile(student);
-                }).toList(),
-              ),
-            );
-          }),
-          GestureDetector(
-            onTap: () => Get.toNamed(AppRoutes.instituteAssignStudents),
-            child: Container(
-              padding: AppSpacing.all16,
-              decoration: const BoxDecoration(
-                color: Color(0xFFF9FAFB),
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(24),
-                  bottomRight: Radius.circular(24),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    Icons.person_add_alt_1_rounded,
-                    color: Color(0xFF1E3A8A),
-                    size: 20,
-                  ),
-                  AppSpacing.h12,
-                  Text(
-                    'Manage Student Assignment',
-                    style: AppTextStyles.manrope(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: const Color(0xFF1E3A8A),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStudentTile(Student student) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: Color(0xFFF3F4F6))),
-      ),
-      child: Row(
-        children: [
-          CircleAvatar(
-            radius: 20,
-            backgroundImage: NetworkImage(student.imageUrl),
-          ),
-          AppSpacing.h12,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  student.name,
-                  style: AppTextStyles.manrope(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: const Color(0xFF111827),
-                  ),
-                ),
-                Text(
-                  'ID: ${student.id}',
-                  style: AppTextStyles.manrope(
-                    fontSize: 11,
-                    color: const Color(0xFF6B7280),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Obx(() {
-            final isSelected = controller.selectedStudentIds.contains(
-              student.id,
-            );
-            return GestureDetector(
-              onTap: () => controller.toggleStudent(student.id),
-              child: Icon(
-                isSelected
-                    ? Icons.check_circle_rounded
-                    : Icons.radio_button_unchecked_rounded,
-                color: isSelected
-                    ? const Color(0xFF1E3A8A)
-                    : const Color(0xFFD1D5DB),
-              ),
-            );
-          }),
-        ],
-      ),
     );
   }
 

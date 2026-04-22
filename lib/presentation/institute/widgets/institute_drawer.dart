@@ -30,68 +30,58 @@ class InstituteDrawer extends StatelessWidget {
             Padding(
               padding: AppSpacing.x24,
               child: Obx(
-                () => Row(
-                  children: [
-                    Container(
-                      width: AppSpacing.s48,
-                      height: AppSpacing.s48,
-                      decoration: BoxDecoration(
-                        color: AppColors.inputSolidGrey,
-                        borderRadius: BorderRadius.circular(12),
+                () => GestureDetector(
+                  onTap: () {
+                    Get.back(); // Close drawer
+                    Get.toNamed(AppRoutes.instituteProfile);
+                  },
+                  child: Row(
+                    children: [
+                      Container(
+                        width: AppSpacing.s48,
+                        height: AppSpacing.s48,
+                        decoration: BoxDecoration(
+                          color: AppColors.inputSolidGrey,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: profileController.profileImagePath.value == null
+                            ? const Center(
+                                child: Icon(
+                                  Icons.school_rounded,
+                                  color: AppColors.instPrimaryBlue,
+                                  size: 24,
+                                ),
+                              )
+                            : null,
                       ),
-                      child: profileController.profileImagePath.value == null
-                          ? const Center(
-                              child: Icon(
-                                Icons.school_rounded,
+                      AppSpacing.h12,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              profileController.instituteName.value,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTextStyles.manrope(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w800,
                                 color: AppColors.instPrimaryBlue,
-                                size: 24,
                               ),
-                            )
-                          : null,
-                    ),
-                    AppSpacing.h12,
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Flexible(
-                                child: Text(
-                                  profileController.instituteName.value,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: AppTextStyles.manrope(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w800,
-                                    color: AppColors.instPrimaryBlue,
-                                  ),
-                                ),
-                              ),
-                              AppSpacing.h8,
-                              GestureDetector(
-                                onTap: () =>
-                                    Get.toNamed(AppRoutes.instituteEditProfile),
-                                child: const Icon(
-                                  Icons.edit_rounded,
-                                  color: AppColors.instAccentBlue,
-                                  size: AppSpacing.s14,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Text(
-                            AppStrings.instDrawerAdminRole,
-                            style: AppTextStyles.lexend(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                              color: AppColors.textTertiary,
                             ),
-                          ),
-                        ],
+                            Text(
+                              AppStrings.instDrawerAdminRole,
+                              style: AppTextStyles.lexend(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                color: AppColors.textTertiary,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

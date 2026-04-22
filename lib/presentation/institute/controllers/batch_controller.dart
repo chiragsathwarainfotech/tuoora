@@ -11,6 +11,8 @@ class BatchController extends GetxController {
   // Form State
   final isEditMode = false.obs;
   final batchNameController = TextEditingController();
+  final descriptionController = TextEditingController();
+  final batchFeeController = TextEditingController();
   final selectedSubject = 'Mathematics'.obs;
   final startTime = const TimeOfDay(hour: 8, minute: 0).obs;
   final endTime = const TimeOfDay(hour: 9, minute: 30).obs;
@@ -43,6 +45,7 @@ class BatchController extends GetxController {
       BatchModel(
         id: '1',
         title: 'Mathematics - 10th Std',
+        description: 'Advanced mathematics for 10th standard students.',
         time: '08:00 AM - 09:30 AM',
         subject: 'Mathematics',
         studentCount: '42 Students',
@@ -55,6 +58,8 @@ class BatchController extends GetxController {
       BatchModel(
         id: '2',
         title: 'Physics - Advanced',
+        description:
+            'Foundational physics concepts and advanced problem solving.',
         time: '10:30 AM - 12:00 PM',
         subject: 'Mathematics',
         studentCount: '50 Students',
@@ -67,6 +72,7 @@ class BatchController extends GetxController {
       BatchModel(
         id: '3',
         title: 'Literature 101',
+        description: 'Introduction to world literature and creative writing.',
         time: '02:00 PM - 03:30 PM',
         subject: 'Mathematics',
         studentCount: '18 Students',
@@ -83,6 +89,8 @@ class BatchController extends GetxController {
   void initAddMode() {
     isEditMode.value = false;
     batchNameController.clear();
+    descriptionController.clear();
+    batchFeeController.clear();
     selectedSubject.value = subjects[0];
     startTime.value = const TimeOfDay(hour: 8, minute: 0);
     endTime.value = const TimeOfDay(hour: 9, minute: 30);
@@ -97,8 +105,9 @@ class BatchController extends GetxController {
     isEditMode.value = true;
     currentEditingBatchId.value = batch.id;
     batchNameController.text = batch.title;
+    descriptionController.text = batch.description;
+    batchFeeController.text = batch.baseFee.toStringAsFixed(0);
     selectedSubject.value = batch.subject;
-    selectedSubject.value = 'Algebra';
     selectedDays.assignAll(['Mon', 'Wed', 'Fri']);
     searchQuery.value = '';
     searchController.clear();
@@ -181,10 +190,13 @@ class BatchController extends GetxController {
           ? currentEditingBatchId.value
           : DateTime.now().millisecondsSinceEpoch.toString(),
       title: batchNameController.text.trim(),
+      description: descriptionController.text.trim(),
+      baseFee: double.tryParse(batchFeeController.text) ?? 0.0,
       time:
           '${startTime.value.format(context)} - ${endTime.value.format(context)}',
       subject: selectedSubject.value,
-      studentCount: '${selectedStudentIds.length} Students',
+      studentCount:
+          '0 Students', // Student management is now handled separately
       location: 'TBD',
       statusLabel: 'Active',
       statusBg: AppColors.instStatusOpenBg,
@@ -235,6 +247,8 @@ class BatchController extends GetxController {
       batchesList[index] = BatchModel(
         id: batch.id,
         title: batch.title,
+        description: batch.description,
+        baseFee: batch.baseFee,
         subject: batch.subject,
         time: batch.time,
         studentCount: '${selectedStudentIds.length} Students',
@@ -246,6 +260,13 @@ class BatchController extends GetxController {
       );
 
       batchesList.refresh();
+      Get.back();
+      Get.snackbar(
+        'Success',
+        'Students assigned successfully',
+        backgroundColor: const Color(0xFF027A48),
+        colorText: Colors.white,
+      );
     }
   }
 
@@ -259,5 +280,14 @@ class BatchController extends GetxController {
       snackPosition: SnackPosition.BOTTOM,
       margin: const EdgeInsets.all(16),
     );
+  }
+
+  @override
+  void onClose() {
+    batchNameController.dispose();
+    descriptionController.dispose();
+    batchFeeController.dispose();
+    searchController.dispose();
+    super.onClose();
   }
 }

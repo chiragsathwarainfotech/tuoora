@@ -18,12 +18,22 @@ class AuthService extends GetxService {
   }
 
   void _loadSession() {
-    final userData = _storage.read('user');
-    final savedToken = _storage.read('token');
-    
-    if (userData != null && savedToken != null) {
-      _token.value = savedToken;
-      _currentUser.value = User.fromJson(userData, savedToken, userData['role']);
+    try {
+      final userData = _storage.read('user');
+      final savedToken = _storage.read('token');
+      
+      print('AuthService: Loading session. Token: $savedToken');
+      
+      if (userData != null && savedToken != null) {
+        _token.value = savedToken;
+        final role = userData['role'] ?? 'INSTITUTE'; // Default if missing
+        _currentUser.value = User.fromJson(userData, savedToken, role);
+        print('AuthService: Session loaded for role: $role');
+      } else {
+        print('AuthService: No session found.');
+      }
+    } catch (e) {
+      print('AuthService: Error loading session: $e');
     }
   }
 

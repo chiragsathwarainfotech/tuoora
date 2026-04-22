@@ -11,6 +11,7 @@ class BatchModel {
   final Color statusBg;
   final Color leftBorderColor;
   final double baseFee;
+  final String description;
   final Color statusTextColor;
 
   BatchModel({
@@ -24,6 +25,7 @@ class BatchModel {
     required this.statusBg,
     required this.leftBorderColor,
     this.baseFee = 0.0,
+    this.description = '',
     this.statusTextColor = Colors.white,
   });
 }

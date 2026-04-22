@@ -9,21 +9,41 @@ class ApiClient extends GetConnect {
     httpClient.baseUrl = ApiConstants.baseUrl;
 
     // Add default headers
+    // Detailed Request Logging
     httpClient.addRequestModifier<dynamic>((request) {
       final authService = Get.find<AuthService>();
       request.headers['Accept'] = 'application/json';
       if (authService.isAuthenticated) {
         request.headers['Authorization'] = 'Bearer ${authService.token}';
       }
+
+      print('🚀 [API REQUEST] ${request.method.toUpperCase()} ${request.url}');
+      print('Headers: ${request.headers}');
+      
       return request;
     });
 
-    // Logging & Error Handling
+    // Detailed Response & Error Logging
     httpClient.addResponseModifier((request, response) {
+      print('📥 [API RESPONSE] ${request.method.toUpperCase()} ${request.url}');
+      print('Status Code: ${response.statusCode}');
+      
       if (response.hasError) {
-        // You can add global error handling here (e.g., refreshing tokens or logging out on 401)
-        print('API Error: ${response.statusCode} - ${response.statusText}');
+        print('❌ [API ERROR]');
+        print('URL: ${request.url}');
+        print('Status: ${response.statusCode} ${response.statusText}');
+        print('Body: ${response.body}');
+        
+        // Handle unauthorized globally if needed
+        if (response.statusCode == 401) {
+          // Get.find<AuthService>().logout();
+        }
+      } else {
+        // Log body only in debug mode or if specifically needed, keeping it minimal for now
+        // print('Body: ${response.body}');
       }
+      
+      print('--------------------------------------------------');
       return response;
     });
 

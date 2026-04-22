@@ -14,6 +14,8 @@ class AppButton extends StatelessWidget {
   final double elevation;
   final bool fullWidth;
   final bool isLoading;
+  final IconData? icon;
+  final Color? borderColor;
 
   const AppButton({
     super.key,
@@ -28,6 +30,8 @@ class AppButton extends StatelessWidget {
     this.elevation = 0,
     this.fullWidth = false,
     this.isLoading = false,
+    this.icon,
+    this.borderColor,
   });
 
   @override
@@ -41,6 +45,9 @@ class AppButton extends StatelessWidget {
         elevation: elevation,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(borderRadius),
+          side: borderColor != null
+              ? BorderSide(color: borderColor!, width: 1)
+              : BorderSide.none,
         ),
       ),
       child: isLoading
@@ -52,12 +59,22 @@ class AppButton extends StatelessWidget {
                 valueColor: AlwaysStoppedAnimation<Color>(foregroundColor),
               ),
             )
-          : Text(
-              label,
-              style: AppTextStyles.manrope(
-                fontSize: fontSize,
-                fontWeight: fontWeight,
-              ),
+          : Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (icon != null) ...[
+                  Icon(icon, color: foregroundColor, size: 20),
+                  const SizedBox(width: 8),
+                ],
+                Text(
+                  label,
+                  style: AppTextStyles.manrope(
+                    fontSize: fontSize,
+                    fontWeight: fontWeight,
+                  ),
+                ),
+              ],
             ),
     );
 

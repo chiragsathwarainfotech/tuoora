@@ -59,7 +59,6 @@ class InstituteBottomNav extends StatelessWidget {
                   Icons.account_balance_wallet_outlined,
                   AppStrings.instNavFees,
                 ),
-                _buildNavItem(4, Icons.person_rounded, AppStrings.instProfile),
               ],
             ),
           ),
@@ -139,9 +138,6 @@ class InstituteBottomNav extends StatelessWidget {
         break;
       case 3:
         Get.offAllNamed(AppRoutes.instituteFees);
-        break;
-      case 4:
-        Get.offAllNamed(AppRoutes.instituteProfile);
         break;
     }
   }

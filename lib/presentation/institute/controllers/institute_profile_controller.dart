@@ -10,13 +10,15 @@ class InstituteProfileController extends GetxController {
 
   // Current values (for display)
   final instituteName = "".obs;
+  final profileImagePath = RxnString();
   final ownerName = "".obs;
   final email = "".obs;
   final phone = "".obs;
-  final address = "".obs;
-  final profileImagePath = RxnString();
+  final addressLine1 = "".obs;
+  final addressLine2 = "".obs;
   final city = "".obs;
   final state = "".obs;
+  final country = "".obs;
   final pincode = "".obs;
 
   final isLoading = false.obs;
@@ -26,7 +28,12 @@ class InstituteProfileController extends GetxController {
   late TextEditingController ownerController;
   late TextEditingController emailController;
   late TextEditingController phoneController;
-  late TextEditingController addressController;
+  late TextEditingController addressLine1Controller;
+  late TextEditingController addressLine2Controller;
+  late TextEditingController cityController;
+  late TextEditingController stateController;
+  late TextEditingController countryController;
+  late TextEditingController pincodeController;
 
   final ImagePicker _picker = ImagePicker();
 
@@ -42,23 +49,30 @@ class InstituteProfileController extends GetxController {
     ownerController = TextEditingController(text: ownerName.value);
     emailController = TextEditingController(text: email.value);
     phoneController = TextEditingController(text: phone.value);
-    addressController = TextEditingController(text: address.value);
+    addressLine1Controller = TextEditingController(text: addressLine1.value);
+    addressLine2Controller = TextEditingController(text: addressLine2.value);
+    cityController = TextEditingController(text: city.value);
+    stateController = TextEditingController(text: state.value);
+    countryController = TextEditingController(text: country.value);
+    pincodeController = TextEditingController(text: pincode.value);
   }
 
   Future<void> fetchProfile() async {
     try {
       isLoading.value = true;
       final user = await _authRepository.getInstituteProfile();
-      
+
       instituteName.value = user.instituteName ?? '';
       ownerName.value = user.name;
       email.value = user.email;
       phone.value = user.phone ?? '';
-      address.value = user.address ?? '';
+      addressLine1.value = user.address ?? '';
+      addressLine2.value = ''; // Map as needed from backend
       city.value = user.city ?? '';
       state.value = user.state ?? '';
+      country.value = 'India'; // Default or from user model
       pincode.value = user.pincode ?? '';
-      
+
       if (user.logo != null) {
         profileImagePath.value = user.logo;
       }
@@ -119,7 +133,12 @@ class InstituteProfileController extends GetxController {
     ownerName.value = ownerController.text;
     email.value = emailController.text;
     phone.value = phoneController.text;
-    address.value = addressController.text;
+    addressLine1.value = addressLine1Controller.text;
+    addressLine2.value = addressLine2Controller.text;
+    city.value = cityController.text;
+    state.value = stateController.text;
+    country.value = countryController.text;
+    pincode.value = pincodeController.text;
 
     Get.back();
     Get.snackbar(
@@ -143,7 +162,12 @@ class InstituteProfileController extends GetxController {
     ownerController.dispose();
     emailController.dispose();
     phoneController.dispose();
-    addressController.dispose();
+    addressLine1Controller.dispose();
+    addressLine2Controller.dispose();
+    cityController.dispose();
+    stateController.dispose();
+    countryController.dispose();
+    pincodeController.dispose();
     super.onClose();
   }
 }

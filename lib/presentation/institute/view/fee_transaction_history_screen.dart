@@ -112,10 +112,6 @@ class FeeTransactionHistoryScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSummaryItem(String label, String value) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: []);
-  }
-
   Widget _buildTransactionList() {
     final transactions = [
       {

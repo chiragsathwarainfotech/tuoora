@@ -51,4 +51,7 @@ class AppRoutes {
   static const String instituteEditBatch = '/institute/batches/edit';
   static const String instituteAssignStudents = '/institute/batches/assign-students';
   static const String instituteFeeTransactionHistory = '/institute/students/transaction-history';
+  static const String instituteSignup = '/institute/signup';
+  static const String instituteOtp = '/institute/otp';
+  static const String instituteProfileSetup = '/institute/profile-setup';
 }

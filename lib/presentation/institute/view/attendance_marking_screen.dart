@@ -33,26 +33,30 @@ class AttendanceMarkingScreen extends GetView<AttendanceController> {
                       AppSpacing.v32,
                       _buildSelectionLabel(),
                       AppSpacing.v24,
-                      _buildBatchCard(
-                        AppStrings.instBatchPhysics,
-                        '09:00 AM - 10:30 AM',
-                        isSelected: true,
-                      ),
-                      AppSpacing.v16,
-                      _buildBatchCard(
-                        AppStrings.instBatchChemistry,
-                        '11:00 AM - 12:30 PM',
-                      ),
-                      AppSpacing.v16,
-                      _buildBatchCard(
-                        AppStrings.instBatchMathematics,
-                        '02:00 PM - 03:30 PM',
-                      ),
-                      AppSpacing.v16,
-                      _buildBatchCard(
-                        AppStrings.instBatchHistory,
-                        '04:00 PM - 05:30 PM',
-                      ),
+                      if (controller.filteredBatches.isEmpty)
+                        Center(
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 40),
+                            child: Text(
+                              'No batches scheduled for this date',
+                              style: AppTextStyles.manrope(
+                                fontSize: 16,
+                                color: AppColors.textTertiary,
+                              ),
+                            ),
+                          ),
+                        )
+                      else
+                        ...controller.filteredBatches.map(
+                          (batch) => Padding(
+                            padding: AppSpacing.bottom16,
+                            child: _buildBatchCard(
+                              batch['title'],
+                              batch['time'],
+                              isSelected: false,
+                            ),
+                          ),
+                        ),
                     ],
                   ),
                 ),

@@ -10,6 +10,7 @@ class BatchModel {
   final String statusLabel;
   final Color statusBg;
   final Color leftBorderColor;
+  final double baseFee;
   final Color statusTextColor;
 
   BatchModel({
@@ -22,6 +23,7 @@ class BatchModel {
     required this.statusLabel,
     required this.statusBg,
     required this.leftBorderColor,
+    this.baseFee = 0.0,
     this.statusTextColor = Colors.white,
   });
 }

@@ -1,5 +1,6 @@
 import 'package:fee_easy/config/app_routes.dart';
 import 'package:fee_easy/presentation/institute/bindings/institute_binding.dart';
+import 'package:fee_easy/presentation/institute/view/fee_transaction_history_screen.dart';
 import 'package:fee_easy/presentation/institute/view/institute_main_screen.dart';
 import 'package:fee_easy/presentation/institute/view/edit_student_profile_screen.dart';
 import 'package:fee_easy/presentation/institute/view/add_student_screen.dart';
@@ -254,6 +255,11 @@ class AppPages {
     GetPage(
       name: AppRoutes.instituteAssignStudents,
       page: () => const AssignStudentsScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteFeeTransactionHistory,
+      page: () => const FeeTransactionHistoryScreen(),
       binding: InstituteBinding(),
     ),
   ];

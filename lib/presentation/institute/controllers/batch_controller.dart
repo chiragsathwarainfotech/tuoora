@@ -50,6 +50,7 @@ class BatchController extends GetxController {
         statusLabel: AppStrings.instStatusHighCapacity,
         statusBg: AppColors.instStatusHighCapacityBg,
         leftBorderColor: AppColors.instBorderHighCapacity,
+        baseFee: 2500,
       ),
       BatchModel(
         id: '2',
@@ -61,6 +62,7 @@ class BatchController extends GetxController {
         statusLabel: AppStrings.instStatusFull,
         statusBg: AppColors.instStatusFullBg,
         leftBorderColor: AppColors.instBorderFull,
+        baseFee: 3000,
       ),
       BatchModel(
         id: '3',
@@ -73,6 +75,7 @@ class BatchController extends GetxController {
         statusBg: AppColors.instStatusOpenBg,
         leftBorderColor: AppColors.instBorderOpen,
         statusTextColor: AppColors.instStatusOpenText,
+        baseFee: 1800,
       ),
     ]);
   }

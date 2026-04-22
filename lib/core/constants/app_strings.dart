@@ -77,15 +77,16 @@ class AppStrings {
   static const String instDrawerAttendance = 'Attendance';
   static const String instDrawerReports = 'Reports';
   static const String instDrawerUpdates = 'Updates';
+  static const String instDrawerTeacherManagement = 'Teacher Management';
+  static const String instDrawerNotesManagement = 'Notes Management';
+  static const String instDrawerExpenseManagement = 'Expense Management';
+  static const String instDrawerLeadManagement = 'Lead Management';
+  static const String instDrawerStudentEngagement = 'Student Engagement';
   static const String instDrawerAppVersion = 'FeeEasy v2.4.0';
 
   // Institute Students Registry
   static const String instStudentRegistry = 'Student Registry';
   static const String instStudentSearchHint = 'Search by name or student ID';
-  static const String instFilterAll = 'All';
-  static const String instFilter10th = '10th Std';
-  static const String instFilter9th = '9th Std';
-  static const String instFilterBatches = 'Batches';
   static const String instBadgeActive = 'ACTIVE';
   static const String instBadgePending = 'PENDING';
 
@@ -111,6 +112,10 @@ class AppStrings {
   static const String instMonthlyFeeLabel = 'Standard Monthly\nFee';
   static const String instMonthlyFeeAmount = '₹2,500.00';
   static const String instEditStructureBtn = 'Edit\nStructure';
+  static const String instStudentEmailLabel = 'Student Email';
+  static const String instStudentDobLabel = 'Date of Birth';
+  static const String instSelectBatchLabel = 'Select Batch';
+  static const String instFeeTransactionHistoryTitle = 'Transaction History';
   static const String instConfirmBtn = 'Confirm and Save Student';
   static const String instNameHint = 'Full Name';
   static const String instGuardianHint = "Father or Mother's Name";

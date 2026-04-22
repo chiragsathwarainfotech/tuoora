@@ -134,6 +134,51 @@ class InstituteDrawer extends StatelessWidget {
               isActive: false,
               onTap: () => Get.toNamed(AppRoutes.instituteUpdates),
             ),
+            _buildDrawerItem(
+              icon: Icons.supervisor_account_rounded,
+              label: AppStrings.instDrawerTeacherManagement,
+              isActive: false,
+              onTap: () {
+                Get.back();
+                Get.snackbar('Coming Soon', 'Teacher Management feature is under development');
+              },
+            ),
+            _buildDrawerItem(
+              icon: Icons.description_outlined,
+              label: AppStrings.instDrawerNotesManagement,
+              isActive: false,
+              onTap: () {
+                Get.back();
+                Get.snackbar('Coming Soon', 'Notes Management feature is under development');
+              },
+            ),
+            _buildDrawerItem(
+              icon: Icons.receipt_long_outlined,
+              label: AppStrings.instDrawerExpenseManagement,
+              isActive: false,
+              onTap: () {
+                Get.back();
+                Get.snackbar('Coming Soon', 'Expense Management feature is under development');
+              },
+            ),
+            _buildDrawerItem(
+              icon: Icons.leaderboard_rounded,
+              label: AppStrings.instDrawerLeadManagement,
+              isActive: false,
+              onTap: () {
+                Get.back();
+                Get.snackbar('Coming Soon', 'Lead Management feature is under development');
+              },
+            ),
+            _buildDrawerItem(
+              icon: Icons.campaign_rounded,
+              label: AppStrings.instDrawerStudentEngagement,
+              isActive: false,
+              onTap: () {
+                Get.back();
+                Get.snackbar('Coming Soon', 'Student Engagement feature is under development');
+              },
+            ),
 
             const Spacer(),
 

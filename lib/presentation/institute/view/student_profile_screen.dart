@@ -1,3 +1,4 @@
+import 'package:fee_easy/config/app_routes.dart';
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
@@ -56,11 +57,11 @@ class StudentProfileScreen extends StatelessWidget {
           ),
         ],
       ),
-      child: Column(
+      child: Row(
         children: [
           Container(
-            width: 120,
-            height: 120,
+            width: 100,
+            height: 100,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(24),
               image: const DecorationImage(
@@ -71,60 +72,46 @@ class StudentProfileScreen extends StatelessWidget {
               ),
             ),
           ),
-          AppSpacing.v20,
-          Text(
-            'Arjun Malhotra',
-            style: AppTextStyles.manrope(
-              fontSize: 24,
-              fontWeight: FontWeight.w800,
-              color: AppColors.instPrimaryBlue,
-            ),
-          ),
-          AppSpacing.v4,
-          Text(
-            'ID: STU-2023-0842',
-            style: AppTextStyles.manrope(
-              fontSize: 15,
-              fontWeight: FontWeight.w600,
-              color: AppColors.instAccentBlue,
-            ),
-          ),
-          AppSpacing.v16,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          AppSpacing.h8,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildBadge(
-                'Grade 10-A',
-                AppColors.instProfileTagBlueBg,
-                AppColors.instAccentBlue,
+              Text(
+                'Arjun Malhotra',
+                style: AppTextStyles.manrope(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.instPrimaryBlue,
+                ),
               ),
-              AppSpacing.h12,
-              _buildBadge(
-                'Paid',
-                AppColors.instProfileTagGreenBg,
-                const Color(0xFF039855),
+              AppSpacing.h4,
+              Text(
+                'ID: STU-2023-0842',
+                style: AppTextStyles.manrope(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.instAccentBlue,
+                ),
+              ),
+              AppSpacing.v4,
+              Container(
+                padding: AppSpacing.x16.add(AppSpacing.y8),
+                decoration: BoxDecoration(
+                  color: AppColors.instProfileTagBlueBg,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  'Grade 10-A',
+                  style: AppTextStyles.manrope(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.instAccentBlue,
+                  ),
+                ),
               ),
             ],
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildBadge(String text, Color bgColor, Color textColor) {
-    return Container(
-      padding: AppSpacing.x16.add(AppSpacing.y8),
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Text(
-        text,
-        style: AppTextStyles.manrope(
-          fontSize: 12,
-          fontWeight: FontWeight.w800,
-          color: textColor,
-        ),
       ),
     );
   }
@@ -169,9 +156,8 @@ class StudentProfileScreen extends StatelessWidget {
           _buildInfoField(AppStrings.instAdmissionDateLabel, 'August 12, 2023'),
           _buildInfoField(
             AppStrings.instGuardianNameLabel,
-            'Mr. Rajesh Malhotra',
+            'Mr. Rajesh Malhotra\n+91 98765-43210',
           ),
-          _buildInfoField(AppStrings.instProfilePhoneLabel, '+91 98765-43210'),
           _buildInfoField(
             AppStrings.instResAddressLabel,
             '42, Emerald Heights, Sector 18, Gurgaon, Haryana - 122001',
@@ -277,7 +263,8 @@ class StudentProfileScreen extends StatelessWidget {
           ),
           AppSpacing.v24,
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () =>
+                Get.toNamed(AppRoutes.instituteFeeTransactionHistory),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,
               shape: RoundedRectangleBorder(
@@ -304,7 +291,11 @@ class StudentProfileScreen extends StatelessWidget {
     return Column(
       children: [
         OutlinedButton.icon(
-          onPressed: () => Get.to(() => const EditStudentProfileScreen()),
+          onPressed: () => Get.toNamed(AppRoutes.instituteEditStudentProfile, arguments: {
+            'name': 'Arjun Malhotra',
+            'grade': '10th Std',
+            'batch': 'Evening • Batch A'
+          }),
           icon: const Icon(
             Icons.edit_outlined,
             size: 20,

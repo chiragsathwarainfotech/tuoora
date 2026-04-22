@@ -1,9 +1,8 @@
 import 'package:fee_easy/config/app_routes.dart';
-import 'package:fee_easy/core/constants/app_strings.dart';
+import 'package:fee_easy/presentation/institute/models/fee_record.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:fee_easy/core/constants/app_colors.dart';
-import '../models/fee_record.dart';
 
 class Student {
   final String name;
@@ -34,9 +33,7 @@ class InstituteController extends GetxController {
   late PageController pageController;
 
   // Student Registry Logic
-  final selectedFilter = AppStrings.instFilterAll.obs;
   final students = <Student>[].obs;
-  final filteredStudents = <Student>[].obs;
 
   // Fee Registry Logic
   final feeRecords = <FeeRecord>[].obs;
@@ -141,25 +138,6 @@ class InstituteController extends GetxController {
         showOnlineBadge: true,
       ),
     ]);
-    _applyFilter();
-  }
-
-  void setFilter(String filter) {
-    selectedFilter.value = filter;
-    _applyFilter();
-  }
-
-  void _applyFilter() {
-    if (selectedFilter.value == AppStrings.instFilterAll) {
-      filteredStudents.assignAll(students);
-    } else if (selectedFilter.value == AppStrings.instFilter10th) {
-      filteredStudents.assignAll(students.where((s) => s.grade.contains('10th')));
-    } else if (selectedFilter.value == AppStrings.instFilter9th) {
-      filteredStudents.assignAll(students.where((s) => s.grade.contains('9th')));
-    } else if (selectedFilter.value == AppStrings.instFilterBatches) {
-      // Logic for batches filter if needed
-      filteredStudents.assignAll(students);
-    }
   }
 
   void _setInitialIndex() {
@@ -179,7 +157,7 @@ class InstituteController extends GetxController {
 
   void changePage(int index) {
     if (_currentIndex.value == index) return;
-    
+
     _currentIndex.value = index;
     pageController.animateToPage(
       index,
@@ -192,6 +170,19 @@ class InstituteController extends GetxController {
     _currentIndex.value = index;
     if (pageController.hasClients) {
       pageController.jumpToPage(index);
+    }
+  }
+
+  void addStudent(Student student) {
+    students.insert(0, student);
+    students.refresh();
+  }
+
+  void updateStudent(Student student) {
+    final index = students.indexWhere((s) => s.id == student.id);
+    if (index != -1) {
+      students[index] = student;
+      students.refresh();
     }
   }
 

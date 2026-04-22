@@ -85,6 +85,18 @@ class InstituteAppBar extends StatelessWidget implements PreferredSizeWidget {
     return Row(
       children: [
         GestureDetector(
+          onTap: () {
+            // TODO: Implement chat navigation
+            Get.snackbar('Coming Soon', 'Chat feature is under development');
+          },
+          child: const Icon(
+            Icons.chat_bubble_outline_rounded,
+            color: AppColors.instAccentBlue,
+            size: AppSpacing.s24,
+          ),
+        ),
+        AppSpacing.h16,
+        GestureDetector(
           onTap: () => Get.toNamed(AppRoutes.instituteNotifications),
           child: const Icon(
             Icons.notifications_none_rounded,

@@ -59,6 +59,7 @@ class AppSpacing {
   static const h12 = SizedBox(width: s12);
   static const h16 = SizedBox(width: s16);
   static const h20 = SizedBox(width: s20);
+  static const h32 = SizedBox(width: s32);
 
   // EdgeInsets (Common Padding & Margins)
   static const all4 = EdgeInsets.all(s4);

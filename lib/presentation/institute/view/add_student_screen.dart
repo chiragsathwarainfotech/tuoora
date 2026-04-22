@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
+import 'package:fee_easy/presentation/institute/controllers/batch_controller.dart';
 import 'package:fee_easy/presentation/institute/controllers/student_controller.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
@@ -27,7 +28,9 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
                   children: [
                     _buildMainFormCard(context),
                     AppSpacing.v16,
-                    _buildFeeStructureCard(),
+                    Obx(() => controller.selectedBatchId.value.isEmpty 
+                      ? const SizedBox.shrink() 
+                      : _buildFeeStructureCard()),
                     AppSpacing.v24,
                     _buildActionButtons(),
                     AppSpacing.v32,
@@ -58,7 +61,6 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Identity Section
           Row(
             children: [
               GestureDetector(
@@ -137,24 +139,42 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
             ],
           ),
           AppSpacing.v32,
-
-          // Input Fields
           _buildInputField(
             label: AppStrings.instStudentNameLabel,
             hint: AppStrings.instNameHint,
             icon: Icons.person,
+            controller: controller.nameController,
+          ),
+          AppSpacing.v20,
+          _buildInputField(
+            label: AppStrings.instStudentEmailLabel,
+            hint: 'student@example.com',
+            icon: Icons.email_rounded,
+            controller: controller.emailController,
+            keyboardType: TextInputType.emailAddress,
+          ),
+          AppSpacing.v20,
+          _buildInputField(
+            label: AppStrings.instStudentDobLabel,
+            hint: 'DD/MM/YYYY',
+            icon: Icons.calendar_today_rounded,
+            controller: controller.dobController,
+            readOnly: true,
+            onTap: () => controller.selectDOB(context),
           ),
           AppSpacing.v20,
           _buildInputField(
             label: AppStrings.instGuardianNameLabel,
             hint: AppStrings.instGuardianHint,
             icon: Icons.group,
+            controller: controller.parentNameController,
           ),
           AppSpacing.v20,
           _buildInputField(
             label: AppStrings.instPhoneLabel,
             hint: AppStrings.instPhoneHint,
             icon: Icons.phone,
+            controller: controller.phoneController,
             keyboardType: TextInputType.phone,
           ),
           AppSpacing.v20,
@@ -172,44 +192,71 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
             ),
           ),
           AppSpacing.v32,
-
-          // Batch Assignment
-          Text(
-            AppStrings.instBatchAssignmentLabel,
-            style: AppTextStyles.manrope(
-              fontSize: 14,
-              fontWeight: FontWeight.w800,
-              color: AppColors.textDarkGrey,
-            ),
-          ),
-          AppSpacing.v12,
-          Obx(
-            () => Row(
-              children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () => controller.setBatch(0),
-                    child: _buildBatchCard(
-                      title: AppStrings.instMorningBatch,
-                      time: AppStrings.instMorningTime,
-                      isSelected: controller.selectedBatchIndex.value == 0,
+          Obx(() {
+            final batchController = Get.find<BatchController>();
+            final selectedBatch = batchController.batchesList.firstWhereOrNull(
+              (b) => b.id == controller.selectedBatchId.value,
+            );
+            return _buildDropdownField(
+              label: AppStrings.instSelectBatchLabel,
+              hint: selectedBatch?.title ?? 'Select a Batch',
+              icon: Icons.access_time_filled_rounded,
+              onTap: () {
+                Get.bottomSheet(
+                  Container(
+                    padding: AppSpacing.all24,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(24),
+                        topRight: Radius.circular(24),
+                      ),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Select Batch',
+                          style: AppTextStyles.manrope(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.textPrimary,
+                          ),
+                        ),
+                        AppSpacing.v16,
+                        ...batchController.batchesList.map(
+                          (batch) => ListTile(
+                            title: Text(
+                              batch.title,
+                              style: AppTextStyles.lexend(fontSize: 16),
+                            ),
+                            subtitle: Text(
+                              batch.time,
+                              style: AppTextStyles.lexend(
+                                fontSize: 12,
+                                color: AppColors.textDarkGrey,
+                              ),
+                            ),
+                            trailing: Text(
+                              '₹${batch.baseFee.toStringAsFixed(0)}',
+                              style: AppTextStyles.manrope(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            onTap: () {
+                              controller.setBatchById(batch.id, batch.baseFee);
+                              Get.back();
+                            },
+                          ),
+                        ),
+                        AppSpacing.v24,
+                      ],
                     ),
                   ),
-                ),
-                AppSpacing.h12,
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () => controller.setBatch(1),
-                    child: _buildBatchCard(
-                      title: AppStrings.instEveningBatch,
-                      time: AppStrings.instEveningTime,
-                      isSelected: controller.selectedBatchIndex.value == 1,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+                );
+              },
+            );
+          }),
         ],
       ),
     );
@@ -219,7 +266,10 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
     required String label,
     required String hint,
     required IconData icon,
+    TextEditingController? controller,
     TextInputType keyboardType = TextInputType.text,
+    bool readOnly = false,
+    VoidCallback? onTap,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -239,6 +289,9 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
             borderRadius: BorderRadius.circular(8),
           ),
           child: TextField(
+            controller: controller,
+            readOnly: readOnly,
+            onTap: onTap,
             style: AppTextStyles.lexend(
               fontSize: 14,
               color: AppColors.textPrimary,
@@ -309,55 +362,6 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
                   size: AppSpacing.s20,
                 ),
               ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBatchCard({
-    required String title,
-    required String time,
-    bool isSelected = false,
-  }) {
-    return Container(
-      padding: AppSpacing.all16,
-      decoration: BoxDecoration(
-        color: isSelected ? AppColors.instLightBlueBg : Colors.transparent,
-        borderRadius: BorderRadius.circular(AppSpacing.s8),
-        border: Border.all(
-          color: isSelected ? AppColors.instAccentBlue : AppColors.borderGrey,
-          width: 1.5,
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: AppTextStyles.manrope(
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
-              color: isSelected
-                  ? AppColors.instAccentBlue
-                  : AppColors.textPrimary,
-            ),
-          ),
-          AppSpacing.v4,
-          Text(
-            time,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: AppTextStyles.lexend(
-              fontSize: 11,
-              fontWeight: FontWeight.w400,
-              color: isSelected
-                  ? AppColors.instAccentBlue.withValues(alpha: 0.7)
-                  : AppColors.textTertiary,
-              height: 1.4,
             ),
           ),
         ],
@@ -534,29 +538,35 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
   Widget _buildActionButtons() {
     return Column(
       children: [
-        GestureDetector(
-          onTap: () => controller.saveStudent(),
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: AppSpacing.s18),
-            decoration: BoxDecoration(
-              color: AppColors.instDarkBtnBlue,
-              borderRadius: BorderRadius.circular(AppSpacing.s12),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.instDarkBtnBlue.withValues(alpha: 0.2),
-                  blurRadius: AppSpacing.s16,
-                  offset: const Offset(0, AppSpacing.s8),
-                ),
-              ],
-            ),
-            child: Center(
-              child: Text(
-                AppStrings.instConfirmBtn,
-                style: AppTextStyles.manrope(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.white,
+        Obx(
+          () => GestureDetector(
+            onTap: controller.isFormValid.value 
+              ? () => controller.saveStudent() 
+              : null,
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: AppSpacing.s18),
+              decoration: BoxDecoration(
+                color: controller.isFormValid.value 
+                  ? AppColors.instDarkBtnBlue 
+                  : AppColors.textMuted,
+                borderRadius: BorderRadius.circular(AppSpacing.s12),
+                boxShadow: controller.isFormValid.value ? [
+                  BoxShadow(
+                    color: AppColors.instDarkBtnBlue.withValues(alpha: 0.2),
+                    blurRadius: AppSpacing.s16,
+                    offset: const Offset(0, AppSpacing.s8),
+                  ),
+                ] : [],
+              ),
+              child: Center(
+                child: Text(
+                  AppStrings.instConfirmBtn,
+                  style: AppTextStyles.manrope(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w800,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),

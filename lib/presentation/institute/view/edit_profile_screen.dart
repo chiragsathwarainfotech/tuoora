@@ -17,31 +17,39 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
-        child: Column(
-          children: [
-            const InstituteAppBar(
-              title: 'Edit Institute Profile',
-              isRoot: false,
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: AppSpacing.all24,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _buildLogoSection(),
-                    AppSpacing.v32,
-                    _buildFormSection(),
-                    AppSpacing.v24,
-                    _buildSecurityNotice(),
-                    AppSpacing.v40,
-                    _buildActionButtons(),
-                    AppSpacing.v40,
-                  ],
-                ),
+        child: Obx(
+          () => Stack(
+            children: [
+              Column(
+                children: [
+                  const InstituteAppBar(
+                    title: 'Edit Institute Profile',
+                    isRoot: false,
+                  ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: AppSpacing.all24,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          _buildLogoSection(),
+                          AppSpacing.v32,
+                          _buildFormSection(),
+                          AppSpacing.v24,
+                          _buildSecurityNotice(),
+                          AppSpacing.v40,
+                          _buildActionButtons(),
+                          AppSpacing.v40,
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
+              if (controller.isLoading.value)
+                const Center(child: CircularProgressIndicator()),
+            ],
+          ),
         ),
       ),
     );
@@ -53,29 +61,9 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
         Stack(
           children: [
             Obx(
-              () => Container(
+              () => SizedBox(
                 width: 140,
                 height: 140,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(32),
-                  border: Border.all(color: AppColors.borderGrey, width: 2),
-                  image: controller.profileImagePath.value != null
-                      ? DecorationImage(
-                          image: FileImage(
-                            File(controller.profileImagePath.value!),
-                          ),
-                          fit: BoxFit.cover,
-                        )
-                      : null,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
-                      blurRadius: 20,
-                      offset: const Offset(0, 10),
-                    ),
-                  ],
-                ),
                 child: controller.profileImagePath.value == null
                     ? const Center(
                         child: Icon(
@@ -84,7 +72,26 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
                           color: AppColors.instPrimaryBlue,
                         ),
                       )
-                    : null,
+                    : ClipRRect(
+                        borderRadius: BorderRadius.circular(32),
+                        child:
+                            controller.profileImagePath.value!.startsWith(
+                                  'http',
+                                ) ||
+                                !controller.profileImagePath.value!.contains(
+                                  '/',
+                                )
+                            ? Image.network(
+                                controller.profileImagePath.value!,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    const Icon(Icons.error),
+                              )
+                            : Image.file(
+                                File(controller.profileImagePath.value!),
+                                fit: BoxFit.cover,
+                              ),
+                      ),
               ),
             ),
             Positioned(

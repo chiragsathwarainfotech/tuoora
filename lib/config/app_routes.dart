@@ -1,4 +1,5 @@
 class AppRoutes {
+  static const String splash = '/';
   static const String roleSelection = '/role-selection';
   static const String login = '/login';
   static const String parentDashboard = '/parent/dashboard';

@@ -14,10 +14,15 @@ class InstituteProfileViewScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<InstituteProfileController>();
 
-    return SingleChildScrollView(
-      padding: AppSpacing.x24.add(AppSpacing.y20),
-      child: Obx(
-        () => Column(
+    return Obx(() {
+      if (controller.isLoading.value) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+      return SingleChildScrollView(
+        padding: AppSpacing.x24.add(AppSpacing.y20),
+        child: Column(
           children: [
             _buildInstituteIdentityCard(controller),
             AppSpacing.v24,
@@ -27,8 +32,8 @@ class InstituteProfileViewScreen extends StatelessWidget {
             AppSpacing.v40,
           ],
         ),
-      ),
-    );
+      );
+    });
   }
 
   Widget _buildInstituteIdentityCard(InstituteProfileController controller) {

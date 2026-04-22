@@ -28,6 +28,7 @@ import 'package:fee_easy/presentation/parent/view/homework_detail_screen.dart';
 import 'package:fee_easy/presentation/parent/view/attendance_history_screen.dart';
 import 'package:fee_easy/presentation/parent/view/payment_qr_screen.dart';
 import 'package:fee_easy/presentation/parent/bindings/parent_binding.dart';
+import 'package:fee_easy/presentation/shared/bindings/auth_binding.dart';
 import 'package:fee_easy/presentation/shared/view/login_screen.dart';
 import 'package:fee_easy/presentation/shared/view/student_profile_screen.dart'
     as shared;
@@ -37,15 +38,26 @@ import 'package:fee_easy/presentation/student/view/student_main_screen.dart';
 import 'package:fee_easy/presentation/student/bindings/student_binding.dart';
 import 'package:fee_easy/presentation/student/view/homework_detail_screen.dart';
 import 'package:fee_easy/presentation/shared/view/role_selection_screen.dart';
+import 'package:fee_easy/presentation/shared/bindings/splash_binding.dart';
+import 'package:fee_easy/presentation/shared/view/splash_screen.dart';
 import 'package:get/get.dart';
 
 class AppPages {
   static final pages = [
     GetPage(
+      name: AppRoutes.splash,
+      page: () => const SplashScreen(),
+      binding: SplashBinding(),
+    ),
+    GetPage(
       name: AppRoutes.roleSelection,
       page: () => const RoleSelectionScreen(),
     ),
-    GetPage(name: AppRoutes.login, page: () => const LoginScreen()),
+    GetPage(
+      name: AppRoutes.login,
+      page: () => const LoginScreen(),
+      binding: AuthBinding(),
+    ),
     // Parent routes
     GetPage(
       name: AppRoutes.parentDashboard,

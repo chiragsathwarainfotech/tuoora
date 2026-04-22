@@ -143,12 +143,14 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
             label: AppStrings.instStudentNameLabel,
             hint: AppStrings.instNameHint,
             icon: Icons.person,
+            controller: controller.studentNameController,
           ),
           AppSpacing.v20,
           _buildInputField(
             label: AppStrings.instGuardianNameLabel,
             hint: AppStrings.instGuardianHint,
             icon: Icons.group,
+            controller: controller.guardianNameController,
           ),
           AppSpacing.v20,
           _buildInputField(
@@ -156,6 +158,7 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
             hint: AppStrings.instPhoneHint,
             icon: Icons.phone,
             keyboardType: TextInputType.phone,
+            controller: controller.phoneController,
           ),
           AppSpacing.v20,
           Obx(
@@ -220,6 +223,7 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
     required String hint,
     required IconData icon,
     TextInputType keyboardType = TextInputType.text,
+    TextEditingController? controller,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -239,6 +243,7 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
             borderRadius: BorderRadius.circular(8),
           ),
           child: TextField(
+            controller: controller,
             style: AppTextStyles.lexend(
               fontSize: 14,
               color: AppColors.textPrimary,
@@ -534,30 +539,41 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
   Widget _buildActionButtons() {
     return Column(
       children: [
-        GestureDetector(
-          onTap: () => controller.saveStudent(),
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: AppSpacing.s18),
-            decoration: BoxDecoration(
-              color: AppColors.instDarkBtnBlue,
-              borderRadius: BorderRadius.circular(AppSpacing.s12),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.instDarkBtnBlue.withValues(alpha: 0.2),
-                  blurRadius: AppSpacing.s16,
-                  offset: const Offset(0, AppSpacing.s8),
-                ),
-              ],
-            ),
-            child: Center(
-              child: Text(
-                AppStrings.instConfirmBtn,
-                style: AppTextStyles.manrope(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.white,
-                ),
+        Obx(
+          () => GestureDetector(
+            onTap: controller.isLoading.value ? null : () => controller.saveStudent(),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: AppSpacing.s18),
+              decoration: BoxDecoration(
+                color: AppColors.instDarkBtnBlue,
+                borderRadius: BorderRadius.circular(AppSpacing.s12),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.instDarkBtnBlue.withValues(alpha: 0.2),
+                    blurRadius: AppSpacing.s16,
+                    offset: const Offset(0, AppSpacing.s8),
+                  ),
+                ],
+              ),
+              child: Center(
+                child: controller.isLoading.value
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : Text(
+                        AppStrings.instConfirmBtn,
+                        style: AppTextStyles.manrope(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white,
+                        ),
+                      ),
               ),
             ),
           ),

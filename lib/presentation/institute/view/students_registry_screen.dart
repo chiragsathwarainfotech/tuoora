@@ -13,18 +13,30 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: AppSpacing.x24,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          AppSpacing.v16,
-          _buildSearchBar(),
-          AppSpacing.v20,
-          _buildFilterRow(),
-          AppSpacing.v24,
-          _buildStudentsList(),
-        ],
+    return RefreshIndicator(
+      onRefresh: () => controller.fetchStudents(),
+      color: AppColors.instDarkBtnBlue,
+      child: Obx(
+        () => controller.isLoadingStudents.value && controller.students.isEmpty
+            ? const Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.instDarkBtnBlue,
+                ),
+              )
+            : Padding(
+                padding: AppSpacing.x24,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AppSpacing.v16,
+                    _buildSearchBar(),
+                    AppSpacing.v20,
+                    _buildFilterRow(),
+                    AppSpacing.v24,
+                    _buildStudentsList(),
+                  ],
+                ),
+              ),
       ),
     );
   }
@@ -145,7 +157,20 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
     bool isPending = false,
   }) {
     return GestureDetector(
-      onTap: () => Get.toNamed(AppRoutes.instituteStudentProfile),
+      onTap: () => Get.toNamed(
+        AppRoutes.instituteStudentProfile,
+        arguments: {
+          'studentId': id,
+          'student': {
+            'id': id,
+            'name': name,
+            'grade': grade,
+            'batch': batch,
+            'status': status,
+            'imageUrl': imageUrl,
+          },
+        },
+      ),
       child: Container(
         padding: AppSpacing.all16,
         decoration: BoxDecoration(
@@ -174,13 +199,12 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
               ),
             ),
             AppSpacing.h16,
-
-            // Content Mapping
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         name,
@@ -222,7 +246,7 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
                       color: AppColors.textTertiary,
                     ),
                   ),
-                  AppSpacing.v8,
+                  AppSpacing.v4,
                   Row(
                     children: [
                       Row(
@@ -236,7 +260,7 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
                           Text(
                             grade,
                             style: AppTextStyles.lexend(
-                              fontSize: 11,
+                              fontSize: 10,
                               fontWeight: FontWeight.w500,
                               color: AppColors.textSecondary,
                             ),
@@ -244,35 +268,30 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
                         ],
                       ),
                       AppSpacing.h16,
-                      Row(
-                        children: [
-                          const Icon(
-                            Icons.people_alt_rounded,
-                            size: AppSpacing.s14,
-                            color: AppColors.instPurpleBlue,
-                          ),
-                          AppSpacing.h4,
-                          Text(
-                            batch,
-                            style: AppTextStyles.lexend(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.textSecondary,
+                      Flexible(
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.people_alt_rounded,
+                              size: AppSpacing.s14,
+                              color: AppColors.instPurpleBlue,
                             ),
-                          ),
-                        ],
+                            AppSpacing.h4,
+                            Text(
+                              batch,
+                              style: AppTextStyles.lexend(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.textSecondary,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ],
               ),
-            ),
-
-            // Chevron
-            const Icon(
-              Icons.chevron_right_rounded,
-              color: AppColors.textTertiary,
-              size: AppSpacing.s24,
             ),
           ],
         ),

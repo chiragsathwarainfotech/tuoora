@@ -1,30 +1,12 @@
 import 'package:fee_easy/config/app_routes.dart';
+import 'package:fee_easy/core/constants/app_strings.dart';
+import 'package:fee_easy/data/models/student_model.dart';
+import 'package:fee_easy/data/repositories_impl/student_repository_impl.dart';
+import 'package:fee_easy/presentation/institute/models/fee_record.dart';
 import 'package:fee_easy/presentation/institute/models/fee_record.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:fee_easy/core/constants/app_colors.dart';
-
-class Student {
-  final String name;
-  final String id;
-  final String grade;
-  final String batch;
-  final String status;
-  final String imageUrl;
-  final bool showOnlineBadge;
-  final bool isPending;
-
-  Student({
-    required this.name,
-    required this.id,
-    required this.grade,
-    required this.batch,
-    required this.status,
-    required this.imageUrl,
-    this.showOnlineBadge = false,
-    this.isPending = false,
-  });
-}
 
 class InstituteController extends GetxController {
   final _currentIndex = 0.obs;
@@ -33,9 +15,13 @@ class InstituteController extends GetxController {
   late PageController pageController;
 
   // Student Registry Logic
+  final StudentRepositoryImpl _studentRepository =
+      Get.find<StudentRepositoryImpl>();
+  final selectedFilter = AppStrings.instFilterAll.obs;
   final students = <Student>[].obs;
+  final filteredStudents = <Student>[].obs;
+  final isLoadingStudents = false.obs;
 
-  // Fee Registry Logic
   final feeRecords = <FeeRecord>[].obs;
 
   @override
@@ -43,7 +29,7 @@ class InstituteController extends GetxController {
     super.onInit();
     _setInitialIndex();
     pageController = PageController(initialPage: _currentIndex.value);
-    _loadMockStudents();
+    fetchStudents();
     _loadMockFeeRecords();
   }
 
@@ -100,44 +86,44 @@ class InstituteController extends GetxController {
     ]);
   }
 
-  void _loadMockStudents() {
-    students.assignAll([
-      Student(
-        name: 'Arjun Malhotra',
-        id: 'STU-2024-001',
-        grade: '10th Std',
-        batch: 'Evening • Batch A',
-        status: 'Active',
-        imageUrl: 'https://i.pravatar.cc/150?img=11',
-        showOnlineBadge: true,
-      ),
-      Student(
-        name: 'Sarah Jenkins',
-        id: 'STU-2024-042',
-        grade: '12th Std',
-        batch: 'Morning • Advanced',
-        status: 'Pending',
-        imageUrl: 'https://i.pravatar.cc/150?img=32',
-        isPending: true,
-      ),
-      Student(
-        name: 'Rahul Sharma',
-        id: 'STU-2024-105',
-        grade: '10th Std',
-        batch: 'Evening • Batch B',
-        status: 'Active',
-        imageUrl: 'https://i.pravatar.cc/150?img=12',
-      ),
-      Student(
-        name: 'Priya Gupta',
-        id: 'STU-2024-089',
-        grade: '9th Std',
-        batch: 'Evening • Batch A',
-        status: 'Active',
-        imageUrl: 'https://i.pravatar.cc/150?img=44',
-        showOnlineBadge: true,
-      ),
-    ]);
+  Future<void> fetchStudents() async {
+    try {
+      isLoadingStudents.value = true;
+      final result = await _studentRepository.listStudents();
+      students.assignAll(result);
+      _applyFilter();
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Failed to fetch students: $e',
+        backgroundColor: Colors.red.withValues(alpha: 0.7),
+        colorText: Colors.white,
+      );
+    } finally {
+      isLoadingStudents.value = false;
+    }
+  }
+
+  void setFilter(String filter) {
+    selectedFilter.value = filter;
+    _applyFilter();
+  }
+
+  void _applyFilter() {
+    if (selectedFilter.value == AppStrings.instFilterAll) {
+      filteredStudents.assignAll(students);
+    } else if (selectedFilter.value == AppStrings.instFilter10th) {
+      filteredStudents.assignAll(
+        students.where((s) => s.grade.contains('10th')),
+      );
+    } else if (selectedFilter.value == AppStrings.instFilter9th) {
+      filteredStudents.assignAll(
+        students.where((s) => s.grade.contains('9th')),
+      );
+    } else if (selectedFilter.value == AppStrings.instFilterBatches) {
+      // Logic for batches filter if needed
+      filteredStudents.assignAll(students);
+    }
   }
 
   void _setInitialIndex() {

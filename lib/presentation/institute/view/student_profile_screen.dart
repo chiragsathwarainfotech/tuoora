@@ -2,40 +2,64 @@ import 'package:fee_easy/config/app_routes.dart';
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
+import 'package:fee_easy/presentation/institute/controllers/student_controller.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
-import 'package:fee_easy/presentation/institute/view/edit_student_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class StudentProfileScreen extends StatelessWidget {
+class StudentProfileScreen extends GetView<InstituteStudentController> {
   const StudentProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final studentData = Get.arguments?['student'] as Map? ?? {};
+    final name = studentData['name'] ?? 'Student';
+    final id = studentData['id'] ?? 'STU-000';
+    final imageUrl =
+        studentData['imageUrl'] ?? 'https://i.pravatar.cc/150?img=11';
+    final grade = studentData['grade'] ?? '-';
+    final status = studentData['status'] ?? 'Active';
+
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
-        child: Column(
+        child: Stack(
           children: [
-            const InstituteAppBar(title: 'Student Profile'),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: AppSpacing.all24,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _buildProfileHeader(),
-                    AppSpacing.v24,
-                    _buildInformationSection(),
-                    AppSpacing.v24,
-                    _buildFeeBalanceCard(),
-                    AppSpacing.v32,
-                    _buildActionButtons(context),
-                    AppSpacing.v40,
-                  ],
+            Column(
+              children: [
+                const InstituteAppBar(title: 'Student Profile'),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: AppSpacing.all24,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        _buildProfileHeader(name, id, imageUrl, grade, status),
+                        AppSpacing.v24,
+                        _buildInformationSection(studentData),
+                        AppSpacing.v24,
+                        _buildFeeBalanceCard(),
+                        AppSpacing.v32,
+                        _buildActionButtons(context, name),
+                        AppSpacing.v40,
+                      ],
+                    ),
+                  ),
                 ),
-              ),
+              ],
+            ),
+            Obx(
+              () => controller.isLoading.value
+                  ? Container(
+                      color: Colors.black26,
+                      child: const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.instPrimaryBlue,
+                        ),
+                      ),
+                    )
+                  : const SizedBox.shrink(),
             ),
           ],
         ),
@@ -43,7 +67,13 @@ class StudentProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProfileHeader() {
+  Widget _buildProfileHeader(
+    String name,
+    String id,
+    String imageUrl,
+    String grade,
+    String status,
+  ) {
     return Container(
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
@@ -64,10 +94,8 @@ class StudentProfileScreen extends StatelessWidget {
             height: 100,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(24),
-              image: const DecorationImage(
-                image: NetworkImage(
-                  'https://i.pravatar.cc/150?u=student_arjun',
-                ),
+              image: DecorationImage(
+                image: NetworkImage(imageUrl),
                 fit: BoxFit.cover,
               ),
             ),
@@ -77,7 +105,7 @@ class StudentProfileScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Arjun Malhotra',
+                name,
                 style: AppTextStyles.manrope(
                   fontSize: 24,
                   fontWeight: FontWeight.w800,
@@ -86,7 +114,7 @@ class StudentProfileScreen extends StatelessWidget {
               ),
               AppSpacing.h4,
               Text(
-                'ID: STU-2023-0842',
+                'ID: $id',
                 style: AppTextStyles.manrope(
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
@@ -101,7 +129,7 @@ class StudentProfileScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
-                  'Grade 10-A',
+                  grade,
                   style: AppTextStyles.manrope(
                     fontSize: 12,
                     fontWeight: FontWeight.w800,
@@ -116,7 +144,7 @@ class StudentProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildInformationSection() {
+  Widget _buildInformationSection(Map studentData) {
     return Container(
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
@@ -152,11 +180,18 @@ class StudentProfileScreen extends StatelessWidget {
             ],
           ),
           AppSpacing.v24,
-          _buildInfoField(AppStrings.instBatchNameLabel, 'Science Stream 2024'),
+          _buildInfoField(
+            AppStrings.instBatchNameLabel,
+            studentData['batch'] ?? 'Not Assigned',
+          ),
           _buildInfoField(AppStrings.instAdmissionDateLabel, 'August 12, 2023'),
           _buildInfoField(
             AppStrings.instGuardianNameLabel,
-            'Mr. Rajesh Malhotra\n+91 98765-43210',
+            studentData['guardianName'] ?? 'Not Specified',
+          ),
+          _buildInfoField(
+            AppStrings.instProfilePhoneLabel,
+            studentData['phone'] ?? 'Not Available',
           ),
           _buildInfoField(
             AppStrings.instResAddressLabel,
@@ -287,15 +322,17 @@ class StudentProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildActionButtons(BuildContext context) {
+  Widget _buildActionButtons(BuildContext context, String studentName) {
     return Column(
       children: [
         OutlinedButton.icon(
-          onPressed: () => Get.toNamed(AppRoutes.instituteEditStudentProfile, arguments: {
-            'name': 'Arjun Malhotra',
-            'grade': '10th Std',
-            'batch': 'Evening • Batch A'
-          }),
+          onPressed: () => Get.toNamed(
+            AppRoutes.instituteAddStudent,
+            arguments: {
+              'studentId': controller.editingStudentId,
+              'student': Get.arguments?['student'],
+            },
+          ),
           icon: const Icon(
             Icons.edit_outlined,
             size: 20,
@@ -320,7 +357,7 @@ class StudentProfileScreen extends StatelessWidget {
         ),
         AppSpacing.v16,
         OutlinedButton.icon(
-          onPressed: () => _showDeleteConfirmation(context, 'Arjun Malhotra'),
+          onPressed: () => _showDeleteConfirmation(context, studentName),
           icon: const Icon(
             Icons.delete_outline_rounded,
             size: 20,
@@ -419,15 +456,7 @@ class StudentProfileScreen extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () {
                         Get.back(); // close dialog
-                        Get.back(); // return to registery (mock delete)
-                        Get.snackbar(
-                          'Successful',
-                          'Student record for $studentName has been removed.',
-                          backgroundColor: const Color(0xFF039855),
-                          colorText: Colors.white,
-                          snackPosition: SnackPosition.BOTTOM,
-                          margin: AppSpacing.all16,
-                        );
+                        controller.deleteStudent();
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFFD92D20),

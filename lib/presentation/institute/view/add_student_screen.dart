@@ -28,8 +28,8 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
                   children: [
                     _buildMainFormCard(context),
                     AppSpacing.v16,
-                    Obx(() => controller.selectedBatchId.value.isEmpty 
-                      ? const SizedBox.shrink() 
+                    Obx(() => controller.selectedBatchId.value.isEmpty
+                      ? const SizedBox.shrink()
                       : _buildFeeStructureCard()),
                     AppSpacing.v24,
                     _buildActionButtons(),
@@ -540,15 +540,15 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
       children: [
         Obx(
           () => GestureDetector(
-            onTap: controller.isFormValid.value 
-              ? () => controller.saveStudent() 
+            onTap: controller.isFormValid.value
+              ? () => controller.saveStudent()
               : null,
             child: Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: AppSpacing.s18),
               decoration: BoxDecoration(
-                color: controller.isFormValid.value 
-                  ? AppColors.instDarkBtnBlue 
+                color: controller.isFormValid.value
+                  ? AppColors.instDarkBtnBlue
                   : AppColors.textMuted,
                 borderRadius: BorderRadius.circular(AppSpacing.s12),
                 boxShadow: controller.isFormValid.value ? [

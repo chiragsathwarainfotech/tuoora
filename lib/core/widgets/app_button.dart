@@ -13,6 +13,7 @@ class AppButton extends StatelessWidget {
   final double borderRadius;
   final double elevation;
   final bool fullWidth;
+  final bool isLoading;
 
   const AppButton({
     super.key,
@@ -26,12 +27,13 @@ class AppButton extends StatelessWidget {
     this.borderRadius = 16.0,
     this.elevation = 0,
     this.fullWidth = false,
+    this.isLoading = false,
   });
 
   @override
   Widget build(BuildContext context) {
     Widget button = ElevatedButton(
-      onPressed: onPressed,
+      onPressed: isLoading ? () {} : onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: backgroundColor,
         foregroundColor: foregroundColor,
@@ -41,13 +43,22 @@ class AppButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(borderRadius),
         ),
       ),
-      child: Text(
-        label,
-        style: AppTextStyles.manrope(
-          fontSize: fontSize,
-          fontWeight: fontWeight,
-        ),
-      ),
+      child: isLoading
+          ? SizedBox(
+              height: 20,
+              width: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation<Color>(foregroundColor),
+              ),
+            )
+          : Text(
+              label,
+              style: AppTextStyles.manrope(
+                fontSize: fontSize,
+                fontWeight: fontWeight,
+              ),
+            ),
     );
 
     if (fullWidth) {

@@ -1,8 +1,8 @@
 import 'package:fee_easy/core/widgets/app_button.dart';
-import 'package:fee_easy/config/app_routes.dart';
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
+import 'package:fee_easy/presentation/shared/controllers/login_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:get/get.dart';
@@ -15,9 +15,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final controller = Get.find<LoginController>();
   String _selectedRole = 'STUDENT';
-  bool _obscureText = true;
-  bool _stayAuthenticated = false;
 
   @override
   void initState() {
@@ -28,13 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _handleLogin() {
-    if (_selectedRole == 'PARENT') {
-      Get.offAllNamed(AppRoutes.parentDashboard);
-    } else if (_selectedRole == 'INSTITUTE') {
-      Get.offAllNamed(AppRoutes.instituteDashboard);
-    } else {
-      Get.offAllNamed(AppRoutes.studentDashboard);
-    }
+    controller.login(_selectedRole);
   }
 
   @override
@@ -125,7 +118,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // Identifier Field
                     Text(
                       'IDENTIFIER',
                       style: AppTextStyles.manrope(
@@ -137,14 +129,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     AppSpacing.v8,
                     _buildTextField(
+                      controller: controller.emailController,
                       hint: 'Phone or Institutional Email',
                       prefixIcon: Icons.alternate_email,
                       keyboardType: TextInputType.emailAddress,
                     ),
-
                     AppSpacing.v24,
-
-                    // Access Key Field
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -177,79 +167,74 @@ class _LoginScreenState extends State<LoginScreen> {
                       ],
                     ),
                     AppSpacing.v8,
-                    _buildTextField(
-                      hint: '••••••••',
-                      prefixIcon: Icons.lock_outline,
-                      obscureText: _obscureText,
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _obscureText
-                              ? Icons.visibility_outlined
-                              : Icons.visibility_off_outlined,
-                          color: AppColors.textMuted,
-                          size: AppSpacing.s20,
+                    Obx(
+                      () => _buildTextField(
+                        controller: controller.passwordController,
+                        hint: '••••••••',
+                        prefixIcon: Icons.lock_outline,
+                        obscureText: controller.obscurePassword.value,
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            controller.obscurePassword.value
+                                ? Icons.visibility_outlined
+                                : Icons.visibility_off_outlined,
+                            color: AppColors.textMuted,
+                            size: AppSpacing.s20,
+                          ),
+                          onPressed: controller.togglePasswordVisibility,
                         ),
-                        onPressed: () {
-                          setState(() {
-                            _obscureText = !_obscureText;
-                          });
-                        },
                       ),
                     ),
-
                     AppSpacing.v24,
-
-                    // Checkbox
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: AppSpacing.s24,
-                          height: AppSpacing.s24,
-                          child: Checkbox(
-                            value: _stayAuthenticated,
-                            onChanged: (value) {
-                              setState(() {
-                                _stayAuthenticated = value ?? false;
-                              });
-                            },
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                AppSpacing.s6,
+                    Obx(
+                      () => Row(
+                        children: [
+                          SizedBox(
+                            width: AppSpacing.s24,
+                            height: AppSpacing.s24,
+                            child: Checkbox(
+                              value: controller.stayAuthenticated.value,
+                              onChanged: (value) =>
+                                  controller.toggleStayAuthenticated(),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                  AppSpacing.s6,
+                                ),
                               ),
+                              side: BorderSide(
+                                color: AppColors.borderLightGray,
+                                width: 1.5,
+                              ),
+                              activeColor: AppColors.primaryBlue,
                             ),
-                            side: BorderSide(
-                              color: AppColors.borderLightGray,
-                              width: 1.5,
+                          ),
+                          AppSpacing.h12,
+                          Text(
+                            AppStrings.stayAuthenticated,
+                            style: AppTextStyles.lexend(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.textSecondary,
                             ),
-                            activeColor: AppColors.primaryBlue,
                           ),
-                        ),
-                        AppSpacing.h12,
-                        Text(
-                          AppStrings.stayAuthenticated,
-                          style: AppTextStyles.lexend(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                            color: AppColors.textSecondary,
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    AppSpacing.v32,
-
-                    // Login Button using common AppButton
-                    AppButton(
-                      label: AppStrings.signInButton,
-                      onPressed: _handleLogin,
-                      backgroundColor: AppColors.primaryBlue,
-                      foregroundColor: Colors.white,
-                      borderRadius: AppSpacing.s24,
-                      padding: const EdgeInsets.symmetric(
-                        vertical: AppSpacing.s18,
+                        ],
                       ),
-                      fontSize: 16,
-                      fullWidth: true,
+                    ),
+                    AppSpacing.v32,
+                    Obx(
+                      () => AppButton(
+                        label: AppStrings.signInButton,
+                        onPressed: _handleLogin,
+                        isLoading: controller.isLoading.value,
+                        backgroundColor: AppColors.primaryBlue,
+                        foregroundColor: Colors.white,
+                        borderRadius: AppSpacing.s24,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: AppSpacing.s18,
+                        ),
+                        fontSize: 16,
+                        fullWidth: true,
+                      ),
                     ),
                   ],
                 ),
@@ -299,6 +284,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _buildTextField({
+    TextEditingController? controller,
     required String hint,
     required IconData prefixIcon,
     bool obscureText = false,
@@ -311,6 +297,7 @@ class _LoginScreenState extends State<LoginScreen> {
         borderRadius: BorderRadius.circular(AppSpacing.s16),
       ),
       child: TextField(
+        controller: controller,
         obscureText: obscureText,
         keyboardType: keyboardType,
         style: AppTextStyles.lexend(fontSize: 14, color: AppColors.textPrimary),

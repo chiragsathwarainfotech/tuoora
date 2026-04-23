@@ -1,6 +1,7 @@
 import 'package:fee_easy/core/widgets/app_button.dart';
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
+import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/presentation/shared/controllers/signup_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
@@ -16,7 +17,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
       body: SafeArea(
         child: Column(
           children: [
-            _buildAppBar(),
+            const InstituteAppBar(title: 'Setup Profile', isRoot: false),
             Expanded(
               child: SingleChildScrollView(
                 padding: AppSpacing.all24,
@@ -126,46 +127,6 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
     );
   }
 
-  Widget _buildAppBar() {
-    return Container(
-      padding: AppSpacing.all24,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(bottom: Radius.circular(32)),
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              IconButton(
-                onPressed: () => Get.back(),
-                icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
-              ),
-              AppSpacing.h12,
-              Text(
-                'Setup Profile',
-                style: AppTextStyles.manrope(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-            ],
-          ),
-          AppSpacing.v8,
-          Text(
-            'Complete your institute profile to get started with FeeEasy.',
-            style: AppTextStyles.lexend(
-              fontSize: 14,
-              color: AppColors.textTertiary,
-              height: 1.4,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildSectionHeader(String title) {
     return Text(
       title,
@@ -199,12 +160,11 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
         AppSpacing.v8,
         Container(
           decoration: BoxDecoration(
-            color: enabled ? AppColors.inputBg : AppColors.inputBg.withValues(alpha: 0.5),
+            color: enabled
+                ? AppColors.inputBg
+                : AppColors.inputBg.withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: const Color(0xFFE5E7EB),
-              width: 1,
-            ),
+            border: Border.all(color: const Color(0xFFE5E7EB), width: 1),
           ),
           child: TextField(
             controller: controller,
@@ -215,7 +175,11 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
               color: enabled ? AppColors.textPrimary : AppColors.textMuted,
             ),
             decoration: InputDecoration(
-              prefixIcon: Icon(prefixIcon, color: AppColors.textMuted, size: 20),
+              prefixIcon: Icon(
+                prefixIcon,
+                color: AppColors.textMuted,
+                size: 20,
+              ),
               border: InputBorder.none,
               contentPadding: AppSpacing.all16,
             ),

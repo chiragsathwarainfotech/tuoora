@@ -96,6 +96,7 @@ class AppSpacing {
   static const y16 = EdgeInsets.symmetric(vertical: s16);
   static const y18 = EdgeInsets.symmetric(vertical: s18);
   static const y20 = EdgeInsets.symmetric(vertical: s20);
+  static const y24 = EdgeInsets.symmetric(vertical: s24);
   static const y32 = EdgeInsets.symmetric(vertical: s32);
 
   // Bottom Spacing

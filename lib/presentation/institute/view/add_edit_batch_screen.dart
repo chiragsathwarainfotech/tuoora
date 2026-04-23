@@ -20,18 +20,6 @@ class AddEditBatchScreen extends GetView<BatchController> {
               () => InstituteAppBar(
                 title: controller.isEditMode.value ? 'Edit Batch' : 'Add Batch',
                 isRoot: false,
-                actions: [
-                  if (controller.isEditMode.value)
-                    IconButton(
-                      onPressed: () => controller.deleteBatchWithConfirmation(
-                        controller.currentEditingBatchId.value,
-                      ),
-                      icon: const Icon(
-                        Icons.delete_outline_rounded,
-                        color: Colors.redAccent,
-                      ),
-                    ),
-                ],
               ),
             ),
             Expanded(

@@ -18,8 +18,6 @@ class BatchesScreen extends GetView<BatchController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _buildHeader(),
-          AppSpacing.v32,
           Obx(
             () => ListView.separated(
               shrinkWrap: true,
@@ -40,25 +38,10 @@ class BatchesScreen extends GetView<BatchController> {
     );
   }
 
-  Widget _buildHeader() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          AppStrings.instActiveBatchesSubtitle,
-          style: AppTextStyles.lexend(
-            fontSize: 14,
-            fontWeight: FontWeight.w400,
-            color: AppColors.textTertiary,
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget _buildBatchCard(BatchModel batch) {
     return GestureDetector(
-      onTap: () => Get.toNamed(AppRoutes.instituteBatchDetails),
+      onTap: () =>
+          Get.toNamed(AppRoutes.instituteBatchDetails, arguments: batch),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -83,49 +66,13 @@ class BatchesScreen extends GetView<BatchController> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    batch.title,
-                                    style: AppTextStyles.manrope(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w800,
-                                      color: const Color(0xFF1E3A8A),
-                                    ),
-                                  ),
-                                  AppSpacing.v8,
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: AppSpacing.s10,
-                                      vertical: AppSpacing.s6,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: batch.statusBg,
-                                      borderRadius: BorderRadius.circular(
-                                        AppSpacing.s8,
-                                      ),
-                                    ),
-                                    child: Text(
-                                      batch.statusLabel,
-                                      style: AppTextStyles.manrope(
-                                        fontSize: 9,
-                                        fontWeight: FontWeight.w900,
-                                        color: batch.statusTextColor,
-                                        letterSpacing: 0.5,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            AppSpacing.h8,
-                          ],
+                        Text(
+                          batch.title,
+                          style: AppTextStyles.manrope(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w800,
+                            color: const Color(0xFF1E3A8A),
+                          ),
                         ),
                         AppSpacing.v12,
                         Row(
@@ -146,8 +93,6 @@ class BatchesScreen extends GetView<BatchController> {
                             ),
                           ],
                         ),
-                        AppSpacing.v16,
-                        const Divider(color: AppColors.divider),
                         AppSpacing.v12,
                         Row(
                           children: [
@@ -184,63 +129,6 @@ class BatchesScreen extends GetView<BatchController> {
                                 fontSize: 14,
                                 fontWeight: FontWeight.w700,
                                 color: AppColors.textPrimary,
-                              ),
-                            ),
-                          ],
-                        ),
-                        AppSpacing.v20,
-                        Row(
-                          children: [
-                            Expanded(
-                              child: ElevatedButton(
-                                onPressed: () =>
-                                    controller.openAssignStudents(batch),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF004CB2),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                      AppSpacing.s10,
-                                    ),
-                                  ),
-                                  padding: AppSpacing.y12,
-                                  elevation: 0,
-                                ),
-                                child: Text(
-                                  AppStrings.instAssignBtn,
-                                  style: AppTextStyles.manrope(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w800,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            AppSpacing.h12,
-                            Expanded(
-                              child: OutlinedButton(
-                                onPressed: () {
-                                  controller.initEditMode(batch);
-                                  Get.toNamed(AppRoutes.instituteEditBatch);
-                                },
-                                style: OutlinedButton.styleFrom(
-                                  side: const BorderSide(
-                                    color: Color(0xFFD1D5DB),
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                      AppSpacing.s10,
-                                    ),
-                                  ),
-                                  padding: AppSpacing.y12,
-                                ),
-                                child: Text(
-                                  AppStrings.instEditBtn,
-                                  style: AppTextStyles.manrope(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w800,
-                                    color: AppColors.instAccentBlue,
-                                  ),
-                                ),
                               ),
                             ),
                           ],

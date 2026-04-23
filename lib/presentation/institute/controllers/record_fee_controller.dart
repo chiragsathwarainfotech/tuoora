@@ -19,13 +19,15 @@ class RecordFeeController extends GetxController {
 
   // Form state
   final selectedStatus = AppStrings.instStatusPaid.obs;
-  final selectedMonth = 'October 2023'.obs;
+  final selectedMonth = ''.obs;
   final amount = '1500'.obs;
   final paymentMethod = AppStrings.instPaymentCash.obs;
 
   @override
   void onInit() {
     super.onInit();
+    // Set default month
+    selectedMonth.value = DateFormat('MMMM yyyy').format(DateTime.now());
     // Initialize results with all students
     filteredStudents.assignAll(instituteController.students);
 
@@ -125,12 +127,9 @@ class RecordFeeController extends GetxController {
       studentId: selectedStudent.value?.id ?? "",
       batch: selectedStudent.value?.batch ?? "",
       amount: '₹${amount.value}',
-      status: selectedStatus.value,
       month: selectedMonth.value,
       paymentMethod: paymentMethod.value,
       timestamp: DateTime.now(),
-      statusBg: bg,
-      statusText: text,
     );
 
     instituteController.feeRecords.insert(0, newRecord);

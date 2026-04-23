@@ -108,21 +108,7 @@ class InstituteDrawer extends StatelessWidget {
               icon: Icons.bar_chart_rounded,
               label: AppStrings.instDrawerReports,
               isActive: false,
-              onTap: () => Get.toNamed(AppRoutes.instituteFeeReports),
-            ),
-            // _buildDrawerItem(
-            //   icon: Icons.person_outline_rounded,
-            //   label: 'Profile',
-            //   isActive: false,
-            //   onTap: () {
-            //     Get.toNamed(AppRoutes.instituteProfile);
-            //   },
-            // ),
-            _buildDrawerItem(
-              icon: Icons.history_rounded,
-              label: AppStrings.instDrawerUpdates,
-              isActive: false,
-              onTap: () => Get.toNamed(AppRoutes.instituteUpdates),
+              onTap: () => Get.toNamed(AppRoutes.instituteReports),
             ),
             _buildDrawerItem(
               icon: Icons.supervisor_account_rounded,
@@ -130,7 +116,7 @@ class InstituteDrawer extends StatelessWidget {
               isActive: false,
               onTap: () {
                 Get.back();
-                Get.snackbar('Coming Soon', 'Teacher Management feature is under development');
+                Get.snackbar('Coming Soon', 'Teachers feature is under development');
               },
             ),
             _buildDrawerItem(
@@ -139,7 +125,7 @@ class InstituteDrawer extends StatelessWidget {
               isActive: false,
               onTap: () {
                 Get.back();
-                Get.snackbar('Coming Soon', 'Notes Management feature is under development');
+                Get.snackbar('Coming Soon', 'Notes feature is under development');
               },
             ),
             _buildDrawerItem(
@@ -148,7 +134,7 @@ class InstituteDrawer extends StatelessWidget {
               isActive: false,
               onTap: () {
                 Get.back();
-                Get.snackbar('Coming Soon', 'Expense Management feature is under development');
+                Get.snackbar('Coming Soon', 'Expenses feature is under development');
               },
             ),
             _buildDrawerItem(
@@ -157,7 +143,7 @@ class InstituteDrawer extends StatelessWidget {
               isActive: false,
               onTap: () {
                 Get.back();
-                Get.snackbar('Coming Soon', 'Lead Management feature is under development');
+                Get.snackbar('Coming Soon', 'Leads feature is under development');
               },
             ),
             _buildDrawerItem(
@@ -166,8 +152,14 @@ class InstituteDrawer extends StatelessWidget {
               isActive: false,
               onTap: () {
                 Get.back();
-                Get.snackbar('Coming Soon', 'Student Engagement feature is under development');
+                Get.snackbar('Coming Soon', 'Engagement feature is under development');
               },
+            ),
+            _buildDrawerItem(
+              icon: Icons.history_rounded,
+              label: AppStrings.instDrawerUpdates,
+              isActive: false,
+              onTap: () => Get.toNamed(AppRoutes.instituteUpdates),
             ),
 
             const Spacer(),

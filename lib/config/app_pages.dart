@@ -14,16 +14,18 @@ import 'package:fee_easy/presentation/institute/view/edit_profile_screen.dart';
 import 'package:fee_easy/presentation/institute/view/institute_security_screen.dart';
 import 'package:fee_easy/presentation/institute/view/institute_subscription_screen.dart';
 import 'package:fee_easy/presentation/institute/view/institute_whatsapp_screen.dart';
-import 'package:fee_easy/presentation/institute/view/fee_reports_screen.dart';
+import 'package:fee_easy/presentation/institute/view/fee_report_screen.dart';
+import 'package:fee_easy/presentation/institute/view/attendance_report_screen.dart';
+import 'package:fee_easy/presentation/institute/view/performance_report_screen.dart';
+import 'package:fee_easy/presentation/institute/view/reports_screen.dart';
 import 'package:fee_easy/presentation/institute/view/defaulters_list_screen.dart';
 import 'package:fee_easy/presentation/institute/view/institute_updates_screen.dart';
 import 'package:fee_easy/presentation/institute/view/create_update_screen.dart';
+import 'package:fee_easy/presentation/institute/view/batch_report_detail_screen.dart';
 import 'package:fee_easy/presentation/institute/view/institute_notifications_screen.dart';
 import 'package:fee_easy/presentation/institute/view/billing_history_screen.dart';
 import 'package:fee_easy/presentation/institute/view/add_edit_batch_screen.dart';
-import 'package:fee_easy/presentation/institute/view/assign_students_screen.dart';
 import 'package:fee_easy/presentation/parent/view/parent_main_screen.dart';
-
 import 'package:fee_easy/presentation/shared/view/payment_history_screen.dart';
 import 'package:fee_easy/presentation/parent/view/homework_tracker_screen.dart';
 import 'package:fee_easy/presentation/parent/view/homework_detail_screen.dart';
@@ -233,8 +235,20 @@ class AppPages {
       page: () => const InstituteWhatsAppScreen(),
     ),
     GetPage(
-      name: AppRoutes.instituteFeeReports,
-      page: () => const FeeReportsScreen(),
+      name: AppRoutes.instituteReports,
+      page: () => const ReportsScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteFeeReport,
+      page: () => const FeeReportScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteAttendanceReport,
+      page: () => const AttendanceReportScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.institutePerformanceReport,
+      page: () => const PerformanceReportScreen(),
     ),
     GetPage(
       name: AppRoutes.instituteDefaultersList,
@@ -270,11 +284,6 @@ class AppPages {
       binding: InstituteBinding(),
     ),
     GetPage(
-      name: AppRoutes.instituteAssignStudents,
-      page: () => const AssignStudentsScreen(),
-      binding: InstituteBinding(),
-    ),
-    GetPage(
       name: AppRoutes.instituteFeeTransactionHistory,
       page: () => const FeeTransactionHistoryScreen(),
       binding: InstituteBinding(),
@@ -293,6 +302,10 @@ class AppPages {
       name: AppRoutes.instituteProfileSetup,
       page: () => const InstituteProfileSetupScreen(),
       binding: SignupBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteBatchReportDetail,
+      page: () => const BatchReportDetailScreen(),
     ),
   ];
 }

@@ -77,11 +77,11 @@ class AppStrings {
   static const String instDrawerAttendance = 'Attendance';
   static const String instDrawerReports = 'Reports';
   static const String instDrawerUpdates = 'Updates';
-  static const String instDrawerTeacherManagement = 'Teacher Management';
-  static const String instDrawerNotesManagement = 'Notes Management';
-  static const String instDrawerExpenseManagement = 'Expense Management';
-  static const String instDrawerLeadManagement = 'Lead Management';
-  static const String instDrawerStudentEngagement = 'Student Engagement';
+  static const String instDrawerTeacherManagement = 'Teachers';
+  static const String instDrawerNotesManagement = 'Notes';
+  static const String instDrawerExpenseManagement = 'Expenses';
+  static const String instDrawerLeadManagement = 'Leads';
+  static const String instDrawerStudentEngagement = 'Engagement';
   static const String instDrawerAppVersion = 'FeeEasy v2.4.0';
 
   // Institute Students Registry
@@ -131,9 +131,11 @@ class AppStrings {
   // Institute Fees
   static const String instFeesTitle = 'Financial Ledger';
   static const String instTotalCollected = 'TOTAL COLLECTED';
+  static const String instCurrentMonthCollected = 'CURRENT MONTH COLLECTION';
   static const String instTotalCollectedAmount = '\$124,500';
   static const String instCollectedTrend = '12% vs last month';
   static const String instTotalPending = 'TOTAL PENDING';
+  static const String instCurrentMonthPending = 'CURRENT MONTH PENDING';
   static const String instTotalPendingAmount = '\$18,240';
   static const String instOutstandingInvoices = '42 Outstanding Invoices';
   static const String instFinancialReport = 'Financial Report';

@@ -28,7 +28,32 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
           children: [
             Column(
               children: [
-                const InstituteAppBar(title: 'Student Profile'),
+                InstituteAppBar(
+                  title: 'Student Profile',
+                  actions: [
+                    IconButton(
+                      onPressed: () => Get.toNamed(
+                        AppRoutes.instituteEditStudentProfile,
+                        arguments: {
+                          'studentId': id,
+                          'student': studentData,
+                        },
+                      ),
+                      icon: const Icon(
+                        Icons.edit_outlined,
+                        color: AppColors.instAccentBlue,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () => _showDeleteConfirmation(context, name),
+                      icon: const Icon(
+                        Icons.delete_outline_rounded,
+                        color: Color(0xFFD92D20),
+                      ),
+                    ),
+                    AppSpacing.h8,
+                  ],
+                ),
                 Expanded(
                   child: SingleChildScrollView(
                     padding: AppSpacing.all24,
@@ -40,8 +65,6 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
                         _buildInformationSection(studentData),
                         AppSpacing.v24,
                         _buildFeeBalanceCard(),
-                        AppSpacing.v32,
-                        _buildActionButtons(context, name, id, studentData),
                         AppSpacing.v40,
                       ],
                     ),
@@ -326,68 +349,6 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
     );
   }
 
-  Widget _buildActionButtons(
-      BuildContext context, String studentName, String id, Map studentData) {
-    return Column(
-      children: [
-        OutlinedButton.icon(
-          onPressed: () => Get.toNamed(
-            AppRoutes.instituteEditStudentProfile,
-            arguments: {
-              'studentId': id,
-              'student': studentData,
-            },
-          ),
-          icon: const Icon(
-            Icons.edit_outlined,
-            size: 20,
-            color: AppColors.instPrimaryBlue,
-          ),
-          label: Text(
-            AppStrings.instEditProfile,
-            style: AppTextStyles.manrope(
-              fontSize: 16,
-              fontWeight: FontWeight.w800,
-              color: AppColors.instPrimaryBlue,
-            ),
-          ),
-          style: OutlinedButton.styleFrom(
-            side: const BorderSide(color: AppColors.borderGrey),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            minimumSize: const Size(double.infinity, AppSpacing.s56),
-            backgroundColor: const Color(0xFFF9FAFB),
-          ),
-        ),
-        AppSpacing.v16,
-        OutlinedButton.icon(
-          onPressed: () => _showDeleteConfirmation(context, studentName),
-          icon: const Icon(
-            Icons.delete_outline_rounded,
-            size: 20,
-            color: Color(0xFFB42318),
-          ),
-          label: Text(
-            AppStrings.instDeleteStudent,
-            style: AppTextStyles.manrope(
-              fontSize: 16,
-              fontWeight: FontWeight.w800,
-              color: const Color(0xFFB42318),
-            ),
-          ),
-          style: OutlinedButton.styleFrom(
-            side: const BorderSide(color: Color(0xFFFDA29B)),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            minimumSize: const Size(double.infinity, AppSpacing.s56),
-            backgroundColor: Colors.white,
-          ),
-        ),
-      ],
-    );
-  }
 
   void _showDeleteConfirmation(BuildContext context, String studentName) {
     Get.dialog(

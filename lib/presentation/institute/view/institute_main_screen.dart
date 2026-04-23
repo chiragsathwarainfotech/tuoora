@@ -64,14 +64,16 @@ class InstituteMainScreen extends GetView<InstituteController> {
         ),
       ),
       floatingActionButton: Obx(() {
-        if (controller.currentIndex == 1 || controller.currentIndex == 2) {
+        if (controller.currentIndex == 1 || controller.currentIndex == 2 || controller.currentIndex == 3) {
           return FloatingActionButton(
             onPressed: () {
               if (controller.currentIndex == 1) {
                 Get.toNamed(AppRoutes.instituteAddStudent);
-              } else {
+              } else if (controller.currentIndex == 2) {
                 Get.find<BatchController>().initAddMode();
                 Get.toNamed(AppRoutes.instituteAddBatch);
+              } else if (controller.currentIndex == 3) {
+                Get.toNamed(AppRoutes.instituteRecordFee);
               }
             },
             backgroundColor: AppColors.instDarkBtnBlue,

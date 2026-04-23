@@ -230,12 +230,6 @@ class BatchController extends GetxController {
     });
   }
 
-  void openAssignStudents(BatchModel batch) {
-    currentEditingBatchId.value = batch.id;
-    selectedStudentIds.clear();
-    Get.toNamed(AppRoutes.instituteAssignStudents);
-  }
-
   void applyStudentAssignment() {
     final index = batchesList.indexWhere(
       (b) => b.id == currentEditingBatchId.value,

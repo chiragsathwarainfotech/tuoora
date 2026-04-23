@@ -281,40 +281,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ],
               AppSpacing.v32,
-              Padding(
-                padding: AppSpacing.x24,
-                child: RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                    style: AppTextStyles.lexend(
-                      fontSize: 12,
-                      color: AppColors.textTertiary,
-                    ),
-                    children: [
-                      const TextSpan(text: 'By continuing, you agree to our '),
-                      TextSpan(
-                        text: 'Terms of Service',
-                        style: AppTextStyles.lexend(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.textPrimary,
-                        ),
-                      ),
-                      const TextSpan(text: ' and '),
-                      TextSpan(
-                        text: 'Privacy Policy',
-                        style: AppTextStyles.lexend(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.textPrimary,
-                        ),
-                      ),
-                      const TextSpan(text: '.'),
-                    ],
-                  ),
-                ),
-              ),
-              AppSpacing.v32,
             ],
           ),
         ),

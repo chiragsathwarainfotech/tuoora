@@ -40,18 +40,23 @@ class AppRoutes {
   static const String instituteSubscription = '/institute/profile/subscription';
   static const String instituteWhatsApp = '/institute/profile/whatsapp';
   static const String instituteEditStudentProfile = '/institute/students/edit';
-  static const String instituteFeeReports = '/institute/reports/fee';
+  static const String instituteFeeReport = '/institute/reports/fee-main';
+  static const String instituteAttendanceReport = '/institute/reports/attendance';
+  static const String institutePerformanceReport = '/institute/reports/performance';
   static const String instituteDefaultersList = '/institute/reports/defaulters';
   static const String instituteUpdates = '/institute/updates';
   static const String instituteCreateUpdate = '/institute/updates/create';
   static const String instituteNotifications = '/institute/notifications';
   static const String instituteMain = '/institute/main';
-  static const String instituteBillingHistory = '/institute/profile/billing-history';
+  static const String instituteBillingHistory =
+      '/institute/profile/billing-history';
   static const String instituteAddBatch = '/institute/batches/add';
   static const String instituteEditBatch = '/institute/batches/edit';
-  static const String instituteAssignStudents = '/institute/batches/assign-students';
-  static const String instituteFeeTransactionHistory = '/institute/students/transaction-history';
+  static const String instituteFeeTransactionHistory =
+      '/institute/students/transaction-history';
   static const String instituteSignup = '/institute/signup';
   static const String instituteOtp = '/institute/otp';
   static const String instituteProfileSetup = '/institute/profile-setup';
+  static const String instituteBatchReportDetail = '/institute/reports/detail';
+  static const String instituteReports = '/institute/reports';
 }

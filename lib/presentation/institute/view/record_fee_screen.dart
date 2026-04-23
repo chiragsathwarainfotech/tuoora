@@ -27,8 +27,6 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                     children: [
                       _buildStudentSearchSection(),
                       AppSpacing.v16,
-                      _buildStatusSection(),
-                      AppSpacing.v16,
                       _buildFeeDetailsSection(context),
                     ],
                   ),
@@ -206,108 +204,6 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
     );
   }
 
-  Widget _buildStatusSection() {
-    return Container(
-      padding: AppSpacing.all24,
-      decoration: BoxDecoration(
-        color: AppColors.cardBg,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            offset: const Offset(0, AppSpacing.s4),
-            blurRadius: 16,
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const Icon(
-                Icons.info,
-                color: AppColors.instPrimaryBlue,
-                size: 20,
-              ),
-              AppSpacing.h8,
-              Text(
-                AppStrings.instRecordStatusLabel,
-                style: AppTextStyles.lexend(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.instPrimaryBlue,
-                  letterSpacing: 1.2,
-                ),
-              ),
-            ],
-          ),
-          AppSpacing.v16,
-          _buildStatusTile(
-            AppStrings.instStatusPaid,
-            Icons.check_circle,
-            controller.selectedStatus.value == AppStrings.instStatusPaid,
-          ),
-          AppSpacing.v12,
-          _buildStatusTile(
-            AppStrings.instStatusPending,
-            Icons.access_time_filled,
-            controller.selectedStatus.value == AppStrings.instStatusPending,
-          ),
-          AppSpacing.v12,
-          _buildStatusTile(
-            AppStrings.instStatusPartial,
-            Icons.hourglass_bottom,
-            controller.selectedStatus.value == AppStrings.instStatusPartial,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStatusTile(String label, IconData icon, bool isSelected) {
-    return GestureDetector(
-      onTap: () => controller.setStatus(label),
-      child: Container(
-        padding: AppSpacing.x16.add(AppSpacing.y14),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? AppColors.instRecordStatusPaidBg
-              : const Color(0xFFF3F4F6),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: isSelected
-                ? AppColors.instRecordStatusIcon.withValues(alpha: 0.3)
-                : Colors.transparent,
-            width: 1.5,
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              label,
-              style: AppTextStyles.manrope(
-                fontSize: 15,
-                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                color: isSelected
-                    ? AppColors.instRecordStatusIcon
-                    : AppColors.textSecondary,
-              ),
-            ),
-            Icon(
-              icon,
-              color: isSelected
-                  ? AppColors.instRecordStatusIcon
-                  : Colors.black45,
-              size: AppSpacing.s20,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildFeeDetailsSection(BuildContext context) {
     return Container(
       padding: AppSpacing.all24,
@@ -325,46 +221,6 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Fee Month
-          Text(
-            AppStrings.instFeeMonthLabel,
-            style: AppTextStyles.manrope(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: AppColors.textDarkGrey,
-            ),
-          ),
-          AppSpacing.v8,
-          GestureDetector(
-            onTap: () => controller.selectDate(context),
-            child: Container(
-              padding: AppSpacing.all16,
-              decoration: BoxDecoration(
-                color: AppColors.inputSolidGrey,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    controller.selectedMonth.value,
-                    style: AppTextStyles.lexend(
-                      fontSize: 15,
-                      color: AppColors.textPrimary,
-                    ),
-                  ),
-                  const Icon(
-                    Icons.calendar_month,
-                    color: AppColors.textTertiary,
-                    size: AppSpacing.s24,
-                  ),
-                ],
-              ),
-            ),
-          ),
-          AppSpacing.v20,
-
-          // Amount
           Text(
             AppStrings.instAmountLabel,
             style: AppTextStyles.manrope(
@@ -413,8 +269,6 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
             ),
           ),
           AppSpacing.v20,
-
-          // Payment Method
           Text(
             AppStrings.instPaymentMethodLabel,
             style: AppTextStyles.manrope(
@@ -445,8 +299,6 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
             ],
           ),
           AppSpacing.v24,
-
-          // Receipt Preview Box (Dotted)
           _buildReceiptPreview(),
         ],
       ),
@@ -501,7 +353,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
           color: AppColors.divider,
           width: 1.5,
           style: BorderStyle.solid,
-        ), // mockup solid for now
+        ),
       ),
       child: Column(
         children: [
@@ -611,7 +463,6 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
               ),
             ),
             AppSpacing.v24,
-            // Mock dynamic receipt content
             _buildReceiptRow(
               'Student',
               controller.selectedStudent.value?.name ?? '-',
@@ -627,11 +478,6 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
             const Divider(height: 32),
             _buildReceiptRow('Fee Month', controller.selectedMonth.value),
             _buildReceiptRow('Payment Method', controller.paymentMethod.value),
-            _buildReceiptRow(
-              'Status',
-              controller.selectedStatus.value,
-              isStatus: true,
-            ),
             const Divider(height: 32),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -5,7 +5,6 @@ import 'package:fee_easy/data/repositories_impl/student_repository_impl.dart';
 import 'package:fee_easy/presentation/institute/models/fee_record.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:fee_easy/core/constants/app_colors.dart';
 
 class InstituteController extends GetxController {
   final _currentIndex = 0.obs;
@@ -13,7 +12,6 @@ class InstituteController extends GetxController {
 
   late PageController pageController;
 
-  // Student Registry Logic
   final StudentRepositoryImpl _studentRepository =
       Get.find<StudentRepositoryImpl>();
   final selectedFilter = AppStrings.instFilterAll.obs;

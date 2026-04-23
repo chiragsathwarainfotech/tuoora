@@ -1,5 +1,6 @@
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/presentation/institute/controllers/institute_profile_controller.dart';
+import 'package:fee_easy/core/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:fee_easy/config/app_routes.dart';
 import 'package:fee_easy/core/constants/app_colors.dart';
@@ -116,7 +117,10 @@ class InstituteDrawer extends StatelessWidget {
               isActive: false,
               onTap: () {
                 Get.back();
-                Get.snackbar('Coming Soon', 'Teachers feature is under development');
+                Get.snackbar(
+                  'Coming Soon',
+                  'Teachers feature is under development',
+                );
               },
             ),
             _buildDrawerItem(
@@ -125,7 +129,10 @@ class InstituteDrawer extends StatelessWidget {
               isActive: false,
               onTap: () {
                 Get.back();
-                Get.snackbar('Coming Soon', 'Notes feature is under development');
+                Get.snackbar(
+                  'Coming Soon',
+                  'Notes feature is under development',
+                );
               },
             ),
             _buildDrawerItem(
@@ -134,7 +141,10 @@ class InstituteDrawer extends StatelessWidget {
               isActive: false,
               onTap: () {
                 Get.back();
-                Get.snackbar('Coming Soon', 'Expenses feature is under development');
+                Get.snackbar(
+                  'Coming Soon',
+                  'Expenses feature is under development',
+                );
               },
             ),
             _buildDrawerItem(
@@ -143,7 +153,10 @@ class InstituteDrawer extends StatelessWidget {
               isActive: false,
               onTap: () {
                 Get.back();
-                Get.snackbar('Coming Soon', 'Leads feature is under development');
+                Get.snackbar(
+                  'Coming Soon',
+                  'Leads feature is under development',
+                );
               },
             ),
             _buildDrawerItem(
@@ -152,7 +165,10 @@ class InstituteDrawer extends StatelessWidget {
               isActive: false,
               onTap: () {
                 Get.back();
-                Get.snackbar('Coming Soon', 'Engagement feature is under development');
+                Get.snackbar(
+                  'Coming Soon',
+                  'Engagement feature is under development',
+                );
               },
             ),
             _buildDrawerItem(
@@ -164,7 +180,6 @@ class InstituteDrawer extends StatelessWidget {
 
             const Spacer(),
 
-            // Footer
             Container(height: 1, color: const Color(0xFFF3F4F6)),
             Padding(
               padding: AppSpacing.all24,
@@ -180,13 +195,13 @@ class InstituteDrawer extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {
-                      Get.offAllNamed(
-                        '/login',
-                      ); // Assuming logout returns to shared login
+                    onTap: () async {
+                      final authService = Get.find<AuthService>();
+                      await authService.clearSession();
+                      Get.offAllNamed(AppRoutes.roleSelection);
                     },
                     child: const Icon(
-                      Icons.logout_rounded, // or Icons.exit_to_app
+                      Icons.logout_rounded,
                       color: AppColors.textTertiary,
                       size: AppSpacing.s20,
                     ),

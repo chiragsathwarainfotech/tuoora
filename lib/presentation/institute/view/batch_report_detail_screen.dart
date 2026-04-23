@@ -119,27 +119,78 @@ class BatchReportDetailScreen extends StatelessWidget {
 
   Widget _buildStudentList(String reportType) {
     final List<Map<String, String>> allStudents = [
-      {'name': 'Rahul Sharma', 'metric': reportType == 'Fee' ? 'Paid' : reportType == 'Attendance' ? '95%' : 'A', 'pending': '0'},
-      {'name': 'Sneha Patel', 'metric': reportType == 'Fee' ? 'Paid' : reportType == 'Attendance' ? '82%' : 'B+', 'pending': '0'},
-      {'name': 'Amit Kumar', 'metric': reportType == 'Fee' ? 'Pending' : reportType == 'Attendance' ? '70%' : 'B-', 'pending': '1500'},
-      {'name': 'Priya Singh', 'metric': reportType == 'Fee' ? 'Paid' : reportType == 'Attendance' ? '98%' : 'A+', 'pending': '0'},
-      {'name': 'Vikram Mehra', 'metric': reportType == 'Fee' ? 'Pending' : reportType == 'Attendance' ? '60%' : 'C', 'pending': '2400'},
-      {'name': 'Ananya Roy', 'metric': reportType == 'Fee' ? 'Paid' : reportType == 'Attendance' ? '88%' : 'A-', 'pending': '0'},
+      {
+        'name': 'Rahul Sharma',
+        'metric': reportType == 'Fee'
+            ? 'Paid'
+            : reportType == 'Attendance'
+            ? '95%'
+            : 'A',
+        'pending': '0',
+      },
+      {
+        'name': 'Sneha Patel',
+        'metric': reportType == 'Fee'
+            ? 'Paid'
+            : reportType == 'Attendance'
+            ? '82%'
+            : 'B+',
+        'pending': '0',
+      },
+      {
+        'name': 'Amit Kumar',
+        'metric': reportType == 'Fee'
+            ? 'Pending'
+            : reportType == 'Attendance'
+            ? '70%'
+            : 'B-',
+        'pending': '1500',
+      },
+      {
+        'name': 'Priya Singh',
+        'metric': reportType == 'Fee'
+            ? 'Paid'
+            : reportType == 'Attendance'
+            ? '98%'
+            : 'A+',
+        'pending': '0',
+      },
+      {
+        'name': 'Vikram Mehra',
+        'metric': reportType == 'Fee'
+            ? 'Pending'
+            : reportType == 'Attendance'
+            ? '60%'
+            : 'C',
+        'pending': '2400',
+      },
+      {
+        'name': 'Ananya Roy',
+        'metric': reportType == 'Fee'
+            ? 'Paid'
+            : reportType == 'Attendance'
+            ? '88%'
+            : 'A-',
+        'pending': '0',
+      },
     ];
 
-    final students = reportType == 'Fee' 
-        ? allStudents.where((s) => s['metric'] == 'Paid' || s['metric'] == 'Pending').toList()
+    final students = reportType == 'Fee'
+        ? allStudents
+              .where((s) => s['metric'] == 'Paid' || s['metric'] == 'Pending')
+              .toList()
         : allStudents;
 
     return ListView.separated(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: students.length,
-      separatorBuilder: (_, __) => AppSpacing.v12,
+      separatorBuilder: (_, _) => AppSpacing.v12,
       itemBuilder: (context, index) {
         final student = students[index];
-        final bool isFeePending = reportType == 'Fee' && student['metric'] == 'Pending';
-        
+        final bool isFeePending =
+            reportType == 'Fee' && student['metric'] == 'Pending';
+
         return Container(
           padding: AppSpacing.all16,
           decoration: BoxDecoration(
@@ -177,9 +228,15 @@ class BatchReportDetailScreen extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
-                  color: _getMetricColor(student['metric']!, reportType).withValues(alpha: 0.1),
+                  color: _getMetricColor(
+                    student['metric']!,
+                    reportType,
+                  ).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(

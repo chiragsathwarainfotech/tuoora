@@ -12,13 +12,18 @@ class SplashController extends GetxController {
   }
 
   Future<void> _handleNavigation() async {
-    // Add a slight delay for better UX
     await Future.delayed(const Duration(seconds: 2));
+
+    print('SplashController: Checking auth status...');
+    print('SplashController: isAuthenticated: ${_authService.isAuthenticated}');
+    print('SplashController: currentUser: ${_authService.currentUser?.name} (Role: ${_authService.currentUser?.role})');
 
     if (_authService.isAuthenticated) {
       final role = _authService.currentUser?.role;
+      print('SplashController: Navigating to dashboard for role: $role');
       _navigateToDashboard(role);
     } else {
+      print('SplashController: Not authenticated. Navigating to role selection.');
       Get.offAllNamed(AppRoutes.roleSelection);
     }
   }

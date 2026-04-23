@@ -1,4 +1,3 @@
-import 'package:fee_easy/config/app_routes.dart';
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/presentation/institute/models/batch_model.dart';
@@ -8,7 +7,6 @@ import 'package:get/get.dart';
 class BatchController extends GetxController {
   final batchesList = <BatchModel>[].obs;
 
-  // Form State
   final isEditMode = false.obs;
   final batchNameController = TextEditingController();
   final descriptionController = TextEditingController();

@@ -1,4 +1,5 @@
 import 'package:fee_easy/config/app_routes.dart';
+import 'package:fee_easy/core/services/auth_service.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
@@ -461,7 +462,11 @@ class StudentProfileScreen extends StatelessWidget {
 
   Widget _buildSignOutSection() {
     return InkWell(
-      onTap: () => Get.offAllNamed(AppRoutes.login),
+      onTap: () async {
+        final authService = Get.find<AuthService>();
+        await authService.clearSession();
+        Get.offAllNamed(AppRoutes.roleSelection);
+      },
       child: Container(
         padding: AppSpacing.all24,
         decoration: BoxDecoration(

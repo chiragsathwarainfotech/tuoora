@@ -21,12 +21,12 @@ class AuthService extends GetxService {
     try {
       final userData = _storage.read('user');
       final savedToken = _storage.read('token');
-      
+
       print('AuthService: Loading session. Token: $savedToken');
-      
+
       if (userData != null && savedToken != null) {
         _token.value = savedToken;
-        final role = userData['role'] ?? 'INSTITUTE'; // Default if missing
+        final role = userData['role'] ?? 'INSTITUTE';
         _currentUser.value = User.fromJson(userData, savedToken, role);
         print('AuthService: Session loaded for role: $role');
       } else {
@@ -47,7 +47,14 @@ class AuthService extends GetxService {
   Future<void> clearSession() async {
     _currentUser.value = null;
     _token.value = '';
+    
+    // Explicitly remove keys first
     await _storage.remove('user');
     await _storage.remove('token');
+    
+    // Then erase all to be sure
+    await _storage.erase();
+    
+    print('AuthService: Session cleared and storage erased.');
   }
 }

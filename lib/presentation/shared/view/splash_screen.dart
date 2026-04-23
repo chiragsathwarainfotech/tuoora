@@ -17,7 +17,6 @@ class SplashScreen extends GetView<SplashController> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // App Logo
             Container(
               width: 100,
               height: 100,
@@ -41,7 +40,6 @@ class SplashScreen extends GetView<SplashController> {
               ),
             ),
             AppSpacing.v24,
-            // App Name
             Text(
               AppStrings.appName,
               style: AppTextStyles.manrope(
@@ -61,7 +59,6 @@ class SplashScreen extends GetView<SplashController> {
               ),
             ),
             const SizedBox(height: 100),
-            // Loading Indicator
             const SizedBox(
               width: 24,
               height: 24,

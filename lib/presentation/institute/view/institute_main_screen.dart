@@ -1,3 +1,4 @@
+import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/presentation/institute/controllers/batch_controller.dart';
 import 'package:fee_easy/presentation/institute/controllers/institute_controller.dart';
 import 'package:fee_easy/presentation/institute/view/dashboard.dart';
@@ -25,19 +26,19 @@ class InstituteMainScreen extends GetView<InstituteController> {
         child: Column(
           children: [
             Obx(() {
-              String title = 'Fee Easy';
+              String title = AppStrings.appName;
               switch (controller.currentIndex) {
                 case 0:
-                  title = 'Dashboard';
+                  title = AppStrings.instNavDashboard;
                   break;
                 case 1:
-                  title = 'Students';
+                  title = AppStrings.instNavStudents;
                   break;
                 case 2:
-                  title = 'Batches';
+                  title = AppStrings.instNavBatches;
                   break;
                 case 3:
-                  title = 'Fees';
+                  title = AppStrings.instFeesTitle;
                   break;
               }
               return InstituteAppBar(title: title, isRoot: true);

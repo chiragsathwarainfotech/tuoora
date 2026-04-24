@@ -63,8 +63,6 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
                         _buildProfileHeader(name, id, imageUrl, grade, status),
                         AppSpacing.v24,
                         _buildInformationSection(studentData),
-                        AppSpacing.v24,
-                        _buildFeeBalanceCard(),
                         AppSpacing.v40,
                       ],
                     ),
@@ -203,10 +201,6 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
             ],
           ),
           AppSpacing.v24,
-          _buildInfoField(
-            AppStrings.instBatchNameLabel,
-            studentData['batch'] ?? 'Not Assigned',
-          ),
           _buildInfoField(AppStrings.instAdmissionDateLabel, 'August 12, 2023'),
           _buildInfoField(
             AppStrings.instGuardianNameLabel,
@@ -258,97 +252,6 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
       ),
     );
   }
-
-  Widget _buildFeeBalanceCard() {
-    return Container(
-      padding: AppSpacing.all24,
-      decoration: BoxDecoration(
-        color: AppColors.instFeeBalanceBg,
-        borderRadius: BorderRadius.circular(24),
-      ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    AppStrings.instFeeBalanceHeading,
-                    style: AppTextStyles.manrope(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
-                  ),
-                  Text(
-                    AppStrings.instCurrentAcadYear,
-                    style: AppTextStyles.manrope(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white70,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          AppSpacing.v24,
-          Row(
-            children: [
-              Text(
-                '₹0.00',
-                style: AppTextStyles.manrope(
-                  fontSize: 32,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.white,
-                ),
-              ),
-              AppSpacing.h12,
-              Container(
-                padding: AppSpacing.x10.add(AppSpacing.y4),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  AppStrings.instAllDuesCleared,
-                  style: AppTextStyles.manrope(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          AppSpacing.v24,
-          ElevatedButton(
-            onPressed: () =>
-                Get.toNamed(AppRoutes.instituteFeeTransactionHistory),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              minimumSize: const Size(double.infinity, AppSpacing.s48),
-              elevation: 0,
-            ),
-            child: Text(
-              AppStrings.instViewReceipts,
-              style: AppTextStyles.manrope(
-                fontSize: 14,
-                fontWeight: FontWeight.w800,
-                color: AppColors.instFeeBalanceBg,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
 
   void _showDeleteConfirmation(BuildContext context, String studentName) {
     Get.dialog(

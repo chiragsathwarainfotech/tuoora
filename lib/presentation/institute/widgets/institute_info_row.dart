@@ -1,0 +1,48 @@
+import 'package:fee_easy/core/constants/app_colors.dart';
+import 'package:fee_easy/core/constants/app_text_styles.dart';
+import 'package:fee_easy/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
+
+class InstituteInfoRow extends StatelessWidget {
+  final IconData icon;
+  final String text;
+  final Color? iconColor;
+
+  const InstituteInfoRow({
+    super.key,
+    required this.icon,
+    required this.text,
+    this.iconColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: AppSpacing.all16,
+      decoration: BoxDecoration(
+        color: const Color(0xFFF3F7FF),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            icon,
+            color: iconColor ?? AppColors.instPrimaryBlue,
+            size: 20,
+          ),
+          AppSpacing.h16,
+          Expanded(
+            child: Text(
+              text,
+              style: AppTextStyles.manrope(
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+                color: AppColors.textPrimary,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

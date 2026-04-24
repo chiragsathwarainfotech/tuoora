@@ -30,7 +30,6 @@ class AttendanceReportScreen extends StatelessWidget {
                     _buildBatchSummaryItem(
                       name: 'Advanced Physics (A1)',
                       strength: 42,
-                      tag: 'MORNING',
                       collected: '92%',
                       pending: '4 Absentees',
                       progress: 0.92,
@@ -42,7 +41,6 @@ class AttendanceReportScreen extends StatelessWidget {
                     _buildBatchSummaryItem(
                       name: 'Data Structures (DS2)',
                       strength: 30,
-                      tag: 'EVENING',
                       collected: '85%',
                       pending: '5 Absentees',
                       progress: 0.85,
@@ -100,7 +98,11 @@ class AttendanceReportScreen extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.trending_up, size: 14, color: Color(0xFF10B981)),
+                    const Icon(
+                      Icons.trending_up,
+                      size: 14,
+                      color: Color(0xFF10B981),
+                    ),
                     AppSpacing.h4,
                     Text(
                       '8.5%',
@@ -129,7 +131,9 @@ class AttendanceReportScreen extends StatelessWidget {
                       width: 24,
                       height: 100 * data[index],
                       decoration: BoxDecoration(
-                        color: index == 3 ? const Color(0xFF003D99) : const Color(0xFFDBEAFE),
+                        color: index == 3
+                            ? const Color(0xFF003D99)
+                            : const Color(0xFFDBEAFE),
                         borderRadius: BorderRadius.circular(6),
                       ),
                     ),
@@ -198,7 +202,6 @@ class AttendanceReportScreen extends StatelessWidget {
   Widget _buildBatchSummaryItem({
     required String name,
     required int strength,
-    required String tag,
     required String collected,
     required String pending,
     required double progress,
@@ -210,10 +213,7 @@ class AttendanceReportScreen extends StatelessWidget {
       onTap: () {
         Get.toNamed(
           AppRoutes.instituteBatchReportDetail,
-          arguments: {
-            'batchName': name,
-            'reportType': 'Attendance',
-          },
+          arguments: {'batchName': name, 'reportType': 'Attendance'},
         );
       },
       child: Container(
@@ -256,24 +256,6 @@ class AttendanceReportScreen extends StatelessWidget {
                         ),
                       ),
                     ],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFDBEAFE),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    tag,
-                    style: AppTextStyles.manrope(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w800,
-                      color: const Color(0xFF003D99),
-                    ),
                   ),
                 ),
               ],

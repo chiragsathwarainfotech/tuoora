@@ -3,25 +3,20 @@ import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/data/repositories_impl/student_repository_impl.dart';
 import 'package:fee_easy/presentation/institute/controllers/institute_controller.dart';
 import 'package:fee_easy/core/utils/validation_utils.dart';
-import 'package:fee_easy/presentation/institute/controllers/batch_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:fee_easy/data/models/student_model.dart';
 
 class InstituteStudentController extends GetxController {
-  final StudentRepositoryImpl _studentRepository = Get.find<StudentRepositoryImpl>();
+  final StudentRepositoryImpl _studentRepository =
+      Get.find<StudentRepositoryImpl>();
 
-  // Rx Fields
   final selectedGrade = AppStrings.instGradeHint.obs;
-  final selectedBatchId = ''.obs;
-  final isFeeStructureExpanded = false.obs;
   final selectedImagePath = Rxn<String>();
   final isLoading = false.obs;
   final isFormValid = false.obs;
-  final totalMonthlyFee = '₹0.00'.obs;
 
-  // Controllers
   final nameController = TextEditingController();
   final parentNameController = TextEditingController();
   final phoneController = TextEditingController();
@@ -29,31 +24,18 @@ class InstituteStudentController extends GetxController {
   final dobController = TextEditingController();
   final addressController = TextEditingController();
 
-  final feeBreakdown = {
-    'Tuition Fee': '0'.obs,
-    'Lab Fee': '0'.obs,
-    'Activities': '0'.obs,
-  };
-
   String? editingStudentId;
 
   @override
   void onInit() {
     super.onInit();
-    calculateTotal();
-    
-    // Add listeners for validation
     nameController.addListener(validateForm);
     parentNameController.addListener(validateForm);
     phoneController.addListener(validateForm);
     emailController.addListener(validateForm);
     dobController.addListener(validateForm);
     addressController.addListener(validateForm);
-    
     ever(selectedGrade, (_) => validateForm());
-    ever(selectedBatchId, (_) => validateForm());
-
-    // Handle Arguments (Add/Edit/Profile Mode)
     _handleArguments();
   }
 
@@ -62,7 +44,8 @@ class InstituteStudentController extends GetxController {
       final args = Get.arguments as Map;
 
       // Set editing student ID from various possible argument keys
-      editingStudentId = args['studentId'] ??
+      editingStudentId =
+          args['studentId'] ??
           (args['student'] is Map
               ? args['student']['id']
               : (args['student'] is Student ? args['student'].id : null));
@@ -90,10 +73,8 @@ class InstituteStudentController extends GetxController {
     dobController.clear();
     addressController.clear();
     selectedGrade.value = AppStrings.instGradeHint;
-    selectedBatchId.value = '';
+    selectedGrade.value = AppStrings.instGradeHint;
     selectedImagePath.value = null;
-    feeBreakdown.forEach((key, value) => value.value = '0');
-    calculateTotal();
     validateForm();
   }
 
@@ -109,12 +90,13 @@ class InstituteStudentController extends GetxController {
   }
 
   void validateForm() {
-    bool isValid = nameController.text.isNotEmpty &&
+    bool isValid =
+        nameController.text.isNotEmpty &&
         parentNameController.text.isNotEmpty &&
         phoneController.text.length >= 10 &&
         ValidationUtils.validateEmail(emailController.text) == null &&
         dobController.text.isNotEmpty &&
-        selectedBatchId.value.isNotEmpty &&
+        dobController.text.isNotEmpty &&
         selectedGrade.value != AppStrings.instGradeHint;
 
     isFormValid.value = isValid;
@@ -139,16 +121,6 @@ class InstituteStudentController extends GetxController {
     phoneController.text = student.phone ?? '';
     selectedGrade.value = student.grade;
 
-    final batchController = Get.find<BatchController>();
-    final batch = batchController.batchesList.firstWhereOrNull(
-      (b) => student.batch.contains(b.title),
-    );
-    if (batch != null) {
-      selectedBatchId.value = batch.id;
-      feeBreakdown['Tuition Fee']!.value = batch.baseFee.toStringAsFixed(0);
-    }
-
-    calculateTotal();
     validateForm();
   }
 
@@ -160,16 +132,6 @@ class InstituteStudentController extends GetxController {
     selectedGrade.value = student['grade'] ?? AppStrings.instGradeHint;
 
     // Use default fees if not in student map
-    final batchController = Get.find<BatchController>();
-    final batch = batchController.batchesList.firstWhereOrNull(
-      (b) => (student['batch'] ?? '').contains(b.title),
-    );
-    if (batch != null) {
-      selectedBatchId.value = batch.id;
-      feeBreakdown['Tuition Fee']!.value = batch.baseFee.toStringAsFixed(0);
-    }
-
-    calculateTotal();
     validateForm();
   }
 
@@ -177,15 +139,11 @@ class InstituteStudentController extends GetxController {
     selectedGrade.value = grade;
   }
 
-  void setBatchById(String id, double baseFee) {
-    selectedBatchId.value = id;
-    feeBreakdown['Tuition Fee']!.value = baseFee.toStringAsFixed(0);
-    calculateTotal();
-  }
-
   Future<void> selectDOB(BuildContext context) async {
-    DateTime initialDate = DateTime.now().subtract(const Duration(days: 365 * 10)); // Default to 10 years ago
-    
+    DateTime initialDate = DateTime.now().subtract(
+      const Duration(days: 365 * 10),
+    ); // Default to 10 years ago
+
     // Try to parse existing DOB if available
     if (dobController.text.isNotEmpty) {
       try {
@@ -211,31 +169,10 @@ class InstituteStudentController extends GetxController {
       lastDate: DateTime.now(),
     );
     if (picked != null) {
-      dobController.text = "${picked.day.toString().padLeft(2, '0')}/${picked.month.toString().padLeft(2, '0')}/${picked.year}";
+      dobController.text =
+          "${picked.day.toString().padLeft(2, '0')}/${picked.month.toString().padLeft(2, '0')}/${picked.year}";
       validateForm();
     }
-  }
-
-  void toggleFeeStructure() {
-    isFeeStructureExpanded.value = !isFeeStructureExpanded.value;
-  }
-
-  void updateFee(String key, String value) {
-    if (feeBreakdown.containsKey(key)) {
-      feeBreakdown[key]!.value = value;
-      calculateTotal();
-    }
-  }
-
-  void calculateTotal() {
-    double total = 0;
-    feeBreakdown.forEach((key, value) {
-      double? amount = double.tryParse(value.value.replaceAll(',', ''));
-      if (amount != null) {
-        total += amount;
-      }
-    });
-    totalMonthlyFee.value = '₹${total.toStringAsFixed(2)}';
   }
 
   Future<void> pickImage(ImageSource source) async {
@@ -268,12 +205,18 @@ class InstituteStudentController extends GetxController {
             ListTile(
               leading: const Icon(Icons.camera_alt),
               title: const Text('Camera'),
-              onTap: () { Get.back(); pickImage(ImageSource.camera); },
+              onTap: () {
+                Get.back();
+                pickImage(ImageSource.camera);
+              },
             ),
             ListTile(
               leading: const Icon(Icons.photo_library),
               title: const Text('Gallery'),
-              onTap: () { Get.back(); pickImage(ImageSource.gallery); },
+              onTap: () {
+                Get.back();
+                pickImage(ImageSource.gallery);
+              },
             ),
           ],
         ),
@@ -286,7 +229,7 @@ class InstituteStudentController extends GetxController {
 
     try {
       isLoading.value = true;
-      
+
       final studentData = {
         'name': nameController.text,
         'guardian_name': parentNameController.text,
@@ -294,8 +237,6 @@ class InstituteStudentController extends GetxController {
         'email': emailController.text,
         'dob': dobController.text,
         'grade': selectedGrade.value,
-        'batch_id': selectedBatchId.value,
-        'fee_breakdown': feeBreakdown.map((key, value) => MapEntry(key, value.value)),
       };
 
       if (isEdit && editingStudentId != null) {
@@ -329,12 +270,21 @@ class InstituteStudentController extends GetxController {
             children: [
               const Icon(Icons.check_circle, color: Colors.green, size: 64),
               AppSpacing.v24,
-              Text(isEdit ? 'Updated' : 'Added', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              Text(
+                isEdit ? 'Updated' : 'Added',
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               AppSpacing.v32,
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () { Get.back(); Get.back(); },
+                  onPressed: () {
+                    Get.back();
+                    Get.back();
+                  },
                   child: const Text('Done'),
                 ),
               ),
@@ -362,11 +312,6 @@ class InstituteStudentController extends GetxController {
     }
   }
 
-  void applyFeeChanges() {
-    calculateTotal();
-    isFeeStructureExpanded.value = false;
-  }
-
   void discardChanges() {
     Get.back();
   }
@@ -375,14 +320,22 @@ class InstituteStudentController extends GetxController {
     Get.bottomSheet(
       Container(
         padding: AppSpacing.all24,
-        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            ...grades.map((grade) => ListTile(
-              title: Text(grade),
-              onTap: () { selectedGrade.value = grade; Get.back(); },
-            )),
+            ...grades.map(
+              (grade) => ListTile(
+                title: Text(grade),
+                onTap: () {
+                  selectedGrade.value = grade;
+                  Get.back();
+                },
+              ),
+            ),
           ],
         ),
       ),

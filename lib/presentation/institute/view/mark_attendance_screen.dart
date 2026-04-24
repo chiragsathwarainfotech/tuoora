@@ -1,40 +1,49 @@
 import 'package:fee_easy/core/constants/app_colors.dart';
-import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/presentation/institute/controllers/attendance_controller.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
+import 'package:fee_easy/presentation/institute/widgets/institute_bottom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class MarkAttendanceScreen extends GetView<AttendanceController> {
+class MarkAttendanceScreen extends StatelessWidget {
   const MarkAttendanceScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(AttendanceController());
+
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
         child: Column(
           children: [
-            const InstituteAppBar(title: 'Mark Attendance'),
+            InstituteAppBar(
+              title: 'Mark Attendance',
+              onBackTap: () => Get.back(),
+            ),
             Expanded(
               child: SingleChildScrollView(
-                padding: AppSpacing.x24.add(const EdgeInsets.only(top: 8, bottom: 16)),
+                padding: AppSpacing.x24.add(
+                  const EdgeInsets.only(top: 8, bottom: 16),
+                ),
                 child: Obx(
                   () => Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      _buildBatchHeader(),
+                      _buildBatchHeader(controller, context),
                       AppSpacing.v24,
-                      _buildBulkActionButtons(),
-                      AppSpacing.v24,
-                      _buildSearchBar(),
+                      if (controller.isEditable) ...[
+                        _buildBulkActionButtons(controller),
+                        AppSpacing.v24,
+                      ],
+                      _buildSearchBar(controller),
                       AppSpacing.v24,
                       ...controller.filteredStudents.map(
                         (student) => Padding(
                           padding: AppSpacing.bottom16,
-                          child: _buildStudentCard(student),
+                          child: _buildStudentCard(controller, student),
                         ),
                       ),
                       if (controller.filteredStudents.isEmpty)
@@ -55,39 +64,79 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
                 ),
               ),
             ),
-            _buildSubmitButton(),
           ],
         ),
+      ),
+      bottomNavigationBar: Obx(
+        () => controller.isEditable
+            ? InstituteBottomButton(
+                label: 'Submit Attendance',
+                onTap: () {
+                  Get.back();
+                  Get.snackbar('Success', 'Attendance submitted successfully');
+                },
+              )
+            : const SizedBox.shrink(),
       ),
     );
   }
 
-  Widget _buildBatchHeader() {
+  Widget _buildBatchHeader(
+    AttendanceController controller,
+    BuildContext context,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          AppStrings.instBatchPhysics,
+          controller.batch.title,
           style: AppTextStyles.manrope(
-            fontSize: 22,
+            fontSize: 24,
             fontWeight: FontWeight.w800,
             color: AppColors.textPrimary,
           ),
         ),
-        AppSpacing.v4,
-        Text(
-          controller.formattedDate,
-          style: AppTextStyles.manrope(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: AppColors.textSecondary,
+        AppSpacing.v12,
+        GestureDetector(
+          onTap: () => controller.selectDate(context),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              color: const Color(0xFFEAECF0),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.calendar_today_outlined,
+                  size: 18,
+                  color: AppColors.textPrimary,
+                ),
+                AppSpacing.h12,
+                Text(
+                  controller.formattedDate,
+                  style: AppTextStyles.manrope(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                AppSpacing.h12,
+                const Icon(
+                  Icons.keyboard_arrow_down_rounded,
+                  size: 20,
+                  color: AppColors.textPrimary,
+                ),
+              ],
+            ),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildBulkActionButtons() {
+  Widget _buildBulkActionButtons(AttendanceController controller) {
     return Row(
       children: [
         Expanded(
@@ -122,7 +171,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
       style: OutlinedButton.styleFrom(
         side: BorderSide(color: color.withValues(alpha: 0.3)),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        padding: const EdgeInsets.symmetric(vertical: 14),
+        padding: const EdgeInsets.symmetric(vertical: 16),
         backgroundColor: Colors.white,
       ),
       child: Row(
@@ -134,7 +183,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
             label,
             style: AppTextStyles.manrope(
               fontSize: 14,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w700,
               color: color,
             ),
           ),
@@ -143,22 +192,22 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
     );
   }
 
-  Widget _buildSearchBar() {
+  Widget _buildSearchBar(AttendanceController controller) {
     return Container(
       padding: AppSpacing.x16,
       decoration: BoxDecoration(
-        color: const Color(0xFFE5E7EB).withValues(alpha: 0.5),
+        color: const Color(0xFFF2F4F7),
         borderRadius: BorderRadius.circular(12),
       ),
       child: TextField(
         onChanged: (value) => controller.searchQuery.value = value,
         decoration: InputDecoration(
           border: InputBorder.none,
-          icon: const Icon(Icons.search, color: AppColors.textMuted),
-          hintText: AppStrings.instSearchStudentHintAlt,
+          icon: const Icon(Icons.search, color: AppColors.textMuted, size: 20),
+          hintText: 'Search student by name or ID...',
           hintStyle: AppTextStyles.manrope(
             fontSize: 14,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w500,
             color: AppColors.textMuted,
           ),
         ),
@@ -166,30 +215,30 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
     );
   }
 
-  Widget _buildStudentCard(Map<String, dynamic> student) {
+  Widget _buildStudentCard(
+    AttendanceController controller,
+    Map<String, dynamic> student,
+  ) {
     return Container(
       padding: AppSpacing.all16,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: const Color(0xFFE5E7EB).withValues(alpha: 0.5),
-        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
             blurRadius: 10,
-            offset: const Offset(0, AppSpacing.s4),
+            offset: const Offset(0, 4),
           ),
         ],
       ),
       child: Row(
         children: [
           CircleAvatar(
-            radius: 20,
+            radius: 24,
             backgroundImage: NetworkImage(student['avatar']),
           ),
-          AppSpacing.h12,
+          AppSpacing.h16,
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -213,101 +262,70 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
               ],
             ),
           ),
-          _buildStatusToggle(student),
+          _buildStatusToggle(controller, student),
         ],
       ),
     );
   }
 
-  Widget _buildStatusToggle(Map<String, dynamic> student) {
+  Widget _buildStatusToggle(
+    AttendanceController controller,
+    Map<String, dynamic> student,
+  ) {
     bool isPresent = student['isPresent'];
+    final isEditable = controller.isEditable;
+
     return Container(
-      height: AppSpacing.s36,
+      height: 36,
       decoration: BoxDecoration(
-        color: AppColors.instStatusPickerBg,
+        color: const Color(0xFFF2F4F7),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
         children: [
-          GestureDetector(
-            onTap: () => controller.toggleStatus(student, true),
-            child: Container(
-              padding: AppSpacing.x12,
-              decoration: BoxDecoration(
-                color: isPresent ? const Color(0xFF1E3A8A) : Colors.transparent,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              alignment: Alignment.center,
-              child: Text(
-                AppStrings.instStatusPresentRaw,
-                style: AppTextStyles.manrope(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w900,
-                  color: isPresent ? Colors.white : AppColors.textSecondary,
-                  letterSpacing: 0.5,
-                ),
-              ),
-            ),
+          _buildToggleOption(
+            label: 'PRESENT',
+            isSelected: isPresent,
+            color: const Color(0xFF1E3A8A),
+            onTap: isEditable
+                ? () => controller.toggleStatus(student, true)
+                : null,
           ),
-          GestureDetector(
-            onTap: () => controller.toggleStatus(student, false),
-            child: Container(
-              padding: AppSpacing.x12,
-              decoration: BoxDecoration(
-                color: !isPresent
-                    ? const Color(0xFF7C2D12)
-                    : Colors.transparent,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              alignment: Alignment.center,
-              child: Text(
-                AppStrings.instStatusAbsentRaw,
-                style: AppTextStyles.manrope(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w900,
-                  color: !isPresent ? Colors.white : AppColors.textSecondary,
-                  letterSpacing: 0.5,
-                ),
-              ),
-            ),
+          _buildToggleOption(
+            label: 'ABSENT',
+            isSelected: !isPresent,
+            color: const Color(0xFF7C2D12),
+            onTap: isEditable
+                ? () => controller.toggleStatus(student, false)
+                : null,
           ),
         ],
       ),
     );
   }
 
-  Widget _buildSubmitButton() {
-    return Container(
-      padding: AppSpacing.all24,
-      decoration: BoxDecoration(
-        color: AppColors.scaffoldBg,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, -AppSpacing.s4),
-          ),
-        ],
-      ),
-      child: ElevatedButton(
-        onPressed: () {
-          Get.back();
-          Get.snackbar('Success', 'Attendance submitted successfully');
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF005AC1),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          minimumSize: const Size(double.infinity, AppSpacing.s56),
-          elevation: 0,
+  Widget _buildToggleOption({
+    required String label,
+    required bool isSelected,
+    required Color color,
+    required VoidCallback? onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        decoration: BoxDecoration(
+          color: isSelected ? color : Colors.transparent,
+          borderRadius: BorderRadius.circular(8),
         ),
+        alignment: Alignment.center,
         child: Text(
-          AppStrings.instSubmitAttendance,
+          label,
           style: AppTextStyles.manrope(
-            fontSize: 18,
-            fontWeight: FontWeight.w800,
-            color: Colors.white,
+            fontSize: 10,
+            fontWeight: FontWeight.w900,
+            color: isSelected ? Colors.white : AppColors.textSecondary,
+            letterSpacing: 0.5,
           ),
         ),
       ),

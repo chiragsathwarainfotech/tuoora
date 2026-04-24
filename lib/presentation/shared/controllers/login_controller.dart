@@ -12,13 +12,15 @@ class LoginController extends GetxController {
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  
+
   final isLoading = false.obs;
   final obscurePassword = true.obs;
   final stayAuthenticated = false.obs;
 
-  void togglePasswordVisibility() => obscurePassword.value = !obscurePassword.value;
-  void toggleStayAuthenticated() => stayAuthenticated.value = !stayAuthenticated.value;
+  void togglePasswordVisibility() =>
+      obscurePassword.value = !obscurePassword.value;
+  void toggleStayAuthenticated() =>
+      stayAuthenticated.value = !stayAuthenticated.value;
 
   Future<void> login(String role) async {
     final email = emailController.text.trim();

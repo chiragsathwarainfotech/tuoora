@@ -36,7 +36,6 @@ class FeeReportScreen extends StatelessWidget {
                     _buildBatchSummaryItem(
                       name: 'Advanced Physics (A1)',
                       strength: 42,
-                      tag: 'MORNING',
                       collected: '₹8,400',
                       pending: '',
                       progress: 0.85,
@@ -46,7 +45,6 @@ class FeeReportScreen extends StatelessWidget {
                     _buildBatchSummaryItem(
                       name: 'Data Structures (DS2)',
                       strength: 30,
-                      tag: 'EVENING',
                       collected: '₹12,000',
                       pending: '',
                       progress: 0.6,
@@ -56,7 +54,6 @@ class FeeReportScreen extends StatelessWidget {
                     _buildBatchSummaryItem(
                       name: 'Web Architecture (W4)',
                       strength: 18,
-                      tag: 'WEEKEND',
                       collected: '₹9,500',
                       pending: '',
                       progress: 0.95,
@@ -66,7 +63,6 @@ class FeeReportScreen extends StatelessWidget {
                     _buildBatchSummaryItem(
                       name: 'Graphic Design (GD1)',
                       strength: 25,
-                      tag: 'MORNING',
                       collected: '₹6,250',
                       pending: '',
                       progress: 0.5,
@@ -204,7 +200,6 @@ class FeeReportScreen extends StatelessWidget {
   Widget _buildBatchSummaryItem({
     required String name,
     required int strength,
-    required String tag,
     required String collected,
     required String pending,
     required double progress,
@@ -216,10 +211,7 @@ class FeeReportScreen extends StatelessWidget {
       onTap: () {
         Get.toNamed(
           AppRoutes.instituteBatchReportDetail,
-          arguments: {
-            'batchName': name,
-            'reportType': 'Fee',
-          },
+          arguments: {'batchName': name, 'reportType': 'Fee'},
         );
       },
       child: Container(
@@ -262,24 +254,6 @@ class FeeReportScreen extends StatelessWidget {
                         ),
                       ),
                     ],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFDBEAFE),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    tag,
-                    style: AppTextStyles.manrope(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w800,
-                      color: const Color(0xFF003D99),
-                    ),
                   ),
                 ),
               ],

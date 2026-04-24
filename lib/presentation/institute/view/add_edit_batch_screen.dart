@@ -1,7 +1,10 @@
+import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/presentation/institute/controllers/batch_controller.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
+import 'package:fee_easy/presentation/institute/widgets/institute_label.dart';
+import 'package:fee_easy/presentation/institute/widgets/institute_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -18,7 +21,7 @@ class AddEditBatchScreen extends GetView<BatchController> {
           children: [
             Obx(
               () => InstituteAppBar(
-                title: controller.isEditMode.value ? 'Edit Batch' : 'Add Batch',
+                title: controller.isEditMode.value ? AppStrings.instEditBatchTitle : AppStrings.instAddBatchTitle,
                 isRoot: false,
               ),
             ),
@@ -28,42 +31,41 @@ class AddEditBatchScreen extends GetView<BatchController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildLabel('Batch Name'),
-                    AppSpacing.v12,
-                    _buildTextField(
+                    InstituteTextField(
+                      label: AppStrings.instBatchNameLabelAlt,
                       controller: controller.batchNameController,
-                      hint: 'e.g., Advanced Algebra - Section A',
+                      hint: AppStrings.instBatchNameHint,
                     ),
                     AppSpacing.v24,
-                    _buildLabel('Subject'),
-                    AppSpacing.v12,
-                    _buildDropdown(),
+                    InstituteTextField(
+                      label: AppStrings.instBatchSubjectLabel,
+                      controller: controller.subjectController,
+                      hint: AppStrings.instBatchSubjectHint,
+                    ),
                     AppSpacing.v24,
-                    _buildLabel('Batch Description'),
-                    AppSpacing.v12,
-                    _buildTextField(
+                    InstituteTextField(
+                      label: AppStrings.instBatchDescLabel,
                       controller: controller.descriptionController,
-                      hint: 'Enter batch details or topics covered...',
+                      hint: AppStrings.instBatchDescHint,
                       maxLines: 3,
                     ),
                     AppSpacing.v24,
-                    _buildLabel('Batch Fee (₹)'),
-                    AppSpacing.v12,
-                    _buildTextField(
+                    InstituteTextField(
+                      label: AppStrings.instBatchFeeLabelAlt,
                       controller: controller.batchFeeController,
-                      hint: 'e.g., 2500',
+                      hint: AppStrings.instBatchFeeHint,
                       keyboardType: TextInputType.number,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     ),
                     AppSpacing.v32,
                     _buildSectionHeader(
                       Icons.access_time_filled_rounded,
-                      'Schedule Settings',
+                      AppStrings.instScheduleSettings,
                     ),
                     AppSpacing.v20,
                     _buildScheduleCard(context),
                     AppSpacing.v24,
-                    _buildLabel('ACTIVE DAYS'),
+                    const InstituteLabel(AppStrings.instActiveDaysLabel),
                     AppSpacing.v16,
                     _buildDaysSelection(),
                     AppSpacing.v32,
@@ -78,78 +80,6 @@ class AddEditBatchScreen extends GetView<BatchController> {
     );
   }
 
-  Widget _buildLabel(String text) {
-    return Text(
-      text,
-      style: AppTextStyles.manrope(
-        fontSize: 14,
-        fontWeight: FontWeight.w600,
-        color: const Color(0xFF4B5563),
-      ),
-    );
-  }
-
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String hint,
-    int maxLines = 1,
-    TextInputType keyboardType = TextInputType.text,
-    List<TextInputFormatter>? inputFormatters,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xFFE5E7EB).withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: TextField(
-        controller: controller,
-        maxLines: maxLines,
-        keyboardType: keyboardType,
-        inputFormatters: inputFormatters,
-        style: AppTextStyles.manrope(fontSize: 14, fontWeight: FontWeight.w600),
-        decoration: InputDecoration(
-          hintText: hint,
-          hintStyle: AppTextStyles.manrope(fontSize: 14, color: Colors.grey),
-          border: InputBorder.none,
-          contentPadding: AppSpacing.all16,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDropdown() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        color: const Color(0xFFE5E7EB).withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Obx(
-        () => DropdownButtonHideUnderline(
-          child: DropdownButton<String>(
-            value: controller.selectedSubject.value,
-            isExpanded: true,
-            icon: const Icon(Icons.keyboard_arrow_down_rounded),
-            items: controller.subjects.map((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(
-                  value,
-                  style: AppTextStyles.manrope(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              );
-            }).toList(),
-            onChanged: (val) {
-              if (val != null) controller.selectedSubject.value = val;
-            },
-          ),
-        ),
-      ),
-    );
-  }
 
   Widget _buildSectionHeader(IconData icon, String title) {
     return Row(
@@ -186,7 +116,7 @@ class AddEditBatchScreen extends GetView<BatchController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'TIME SLOT',
+            AppStrings.instTimeSlot,
             style: AppTextStyles.manrope(
               fontSize: 12,
               fontWeight: FontWeight.w800,
@@ -224,7 +154,7 @@ class AddEditBatchScreen extends GetView<BatchController> {
                 TextButton(
                   onPressed: () => _showTimeRangePicker(context),
                   child: Text(
-                    'Change',
+                    AppStrings.instChangeBtn,
                     style: AppTextStyles.manrope(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
@@ -302,7 +232,7 @@ class AddEditBatchScreen extends GetView<BatchController> {
             const Icon(Icons.save_rounded, color: Colors.white, size: 20),
             AppSpacing.h12,
             Text(
-              'Save Batch Details',
+              AppStrings.instSaveBatchBtn,
               style: AppTextStyles.manrope(
                 fontSize: 16,
                 fontWeight: FontWeight.w800,

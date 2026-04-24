@@ -124,7 +124,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Target Audience',
+                'Recipient',
                 style: AppTextStyles.manrope(
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
@@ -148,44 +148,43 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
             child: Obx(
               () => DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
-                  value: controller.selectedAudience.value,
+                  value: controller.selectedRecipient.value,
                   isExpanded: true,
                   icon: const Icon(
                     Icons.keyboard_arrow_down_rounded,
                     color: AppColors.textPrimary,
                   ),
-                  items: ['All Students', 'Specific Batch', 'Specific Grade']
-                      .map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(
-                            value,
-                            style: AppTextStyles.manrope(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.textPrimary,
-                            ),
-                          ),
-                        );
-                      })
-                      .toList(),
+                  items: ['Student', 'Parent', 'Both'].map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(
+                        value,
+                        style: AppTextStyles.manrope(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                    );
+                  }).toList(),
                   onChanged: (val) {
-                    if (val != null) controller.selectedAudience.value = val;
+                    if (val != null) {
+                      controller.selectedRecipient.value = val;
+                    }
                   },
                 ),
               ),
             ),
           ),
           Obx(() {
-            if (controller.selectedAudience.value == 'Specific Grade') {
+            if (controller.selectedRecipient.value == 'Student' ||
+                controller.selectedRecipient.value == 'Both') {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  AppSpacing.v16,
-                  const Divider(color: Color(0xFFE5E7EB), thickness: 1),
-                  AppSpacing.v16,
+                  AppSpacing.v24,
                   Text(
-                    'Select Grade',
+                    'Target Audience',
                     style: AppTextStyles.manrope(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
@@ -194,23 +193,22 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                   ),
                   AppSpacing.v12,
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 4,
-                    ),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                     decoration: BoxDecoration(
                       color: const Color(0xFFE5E7EB),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
-                        value: controller.selectedGrade.value,
+                        value: controller.selectedAudience.value,
                         isExpanded: true,
                         icon: const Icon(
                           Icons.keyboard_arrow_down_rounded,
                           color: AppColors.textPrimary,
                         ),
-                        items: controller.availableGrades.map((String value) {
+                        items: ['All Students', 'Specific Batch']
+                            .map((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(
@@ -224,65 +222,64 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                           );
                         }).toList(),
                         onChanged: (val) {
-                          if (val != null) controller.selectedGrade.value = val;
+                          if (val != null) {
+                            controller.selectedAudience.value = val;
+                          }
                         },
                       ),
                     ),
                   ),
-                ],
-              );
-            } else if (controller.selectedAudience.value == 'Specific Batch') {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AppSpacing.v16,
-                  const Divider(color: Color(0xFFE5E7EB), thickness: 1),
-                  AppSpacing.v16,
-                  Text(
-                    'Select Batch',
-                    style: AppTextStyles.manrope(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.textSecondary,
+                  if (controller.selectedAudience.value == 'Specific Batch') ...[
+                    AppSpacing.v24,
+                    Text(
+                      'Select Batch',
+                      style: AppTextStyles.manrope(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.textSecondary,
+                      ),
                     ),
-                  ),
-                  AppSpacing.v12,
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFE5E7EB),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        value: controller.selectedBatch.value,
-                        isExpanded: true,
-                        icon: const Icon(
-                          Icons.keyboard_arrow_down_rounded,
-                          color: AppColors.textPrimary,
-                        ),
-                        items: controller.availableBatches.map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(
-                              value,
-                              style: AppTextStyles.manrope(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.textPrimary,
+                    AppSpacing.v12,
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFE5E7EB),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: controller.selectedBatch.value,
+                          isExpanded: true,
+                          icon: const Icon(
+                            Icons.keyboard_arrow_down_rounded,
+                            color: AppColors.textPrimary,
+                          ),
+                          items:
+                              controller.availableBatches.map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                value,
+                                style: AppTextStyles.manrope(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.textPrimary,
+                                ),
                               ),
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (val) {
-                          if (val != null) controller.selectedBatch.value = val;
-                        },
+                            );
+                          }).toList(),
+                          onChanged: (val) {
+                            if (val != null) {
+                              controller.selectedBatch.value = val;
+                            }
+                          },
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ],
               );
             }

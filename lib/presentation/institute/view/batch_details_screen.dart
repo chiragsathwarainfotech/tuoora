@@ -6,6 +6,8 @@ import 'package:fee_easy/presentation/institute/controllers/batch_details_contro
 import 'package:fee_easy/presentation/institute/models/batch_model.dart';
 import 'package:fee_easy/presentation/institute/controllers/batch_controller.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
+import 'package:fee_easy/presentation/institute/widgets/institute_info_row.dart';
+import 'package:fee_easy/presentation/institute/widgets/institute_metric_card.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -36,7 +38,7 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
         child: Column(
           children: [
             InstituteAppBar(
-              title: 'Batch Details',
+              title: AppStrings.instBatchDetailsTitle,
               actions: [
                 IconButton(
                   onPressed: () {
@@ -66,11 +68,7 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
                   children: [
                     _buildBatchHeader(),
                     AppSpacing.v32,
-                    _buildStudentListHeader(),
-                    AppSpacing.v16,
-                    _buildAssignedSearchBar(),
-                    AppSpacing.v16,
-                    _buildStudentList(),
+                    _buildCourseManagementSection(),
                     AppSpacing.v32,
                   ],
                 ),
@@ -154,133 +152,139 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
           AppSpacing.v24,
           Row(
             children: [
-              Expanded(
-                child: _buildMetricMiniCard(
-                  AppStrings.instStudentsCountLabel,
-                  '${controller.assignedStudents.length}',
-                ),
-              ),
-              AppSpacing.h16,
-              Expanded(
-                child: _buildMetricMiniCard(
-                  'Batch Fee',
-                  '₹${batch.baseFee.toStringAsFixed(0)}',
-                ),
-              ),
+              const Expanded(child: InstituteMetricCard(label: AppStrings.instStudentsCountLabel, value: '24')),
+              AppSpacing.h12,
+              const Expanded(child: InstituteMetricCard(label: AppStrings.instFeesPaidLabel, value: '85%')),
+              AppSpacing.h12,
+              const Expanded(child: InstituteMetricCard(label: AppStrings.instTotalCollectionLabel, value: '₹60k')),
             ],
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMetricMiniCard(String label, String value) {
-    return Container(
-      padding: AppSpacing.all16,
-      decoration: BoxDecoration(
-        color: const Color(0xFFF8F9FB),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        children: [
-          Text(
-            label,
-            style: AppTextStyles.manrope(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: AppColors.textTertiary,
-            ),
+          AppSpacing.v24,
+          const InstituteInfoRow(
+            icon: Icons.access_time_filled_rounded,
+            text: '04:00 PM - 05:30 PM',
           ),
-          AppSpacing.v4,
-          Text(
-            value,
-            style: AppTextStyles.manrope(
-              fontSize: 20,
-              fontWeight: FontWeight.w800,
-              color: AppColors.instAccentBlue,
-            ),
+          AppSpacing.v12,
+          const InstituteInfoRow(
+            icon: Icons.calendar_month_rounded,
+            text: 'Mon, Wed, Fri',
+          ),
+          AppSpacing.v12,
+          const InstituteInfoRow(
+            icon: Icons.person_rounded,
+            text: 'Prof. Julian Archer',
           ),
         ],
       ),
     );
   }
 
-  Widget _buildStudentListHeader() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+  Widget _buildCourseManagementSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          AppStrings.instStudentListLabel,
+          AppStrings.instCourseManagementHeader,
           style: AppTextStyles.manrope(
             fontSize: 20,
             fontWeight: FontWeight.w800,
             color: AppColors.textPrimary,
           ),
         ),
-        GestureDetector(
-          onTap: () => _showAddStudentDialog(context),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            decoration: BoxDecoration(
-              color: AppColors.instPrimaryBlue,
-              borderRadius: BorderRadius.circular(12),
+        AppSpacing.v20,
+        GridView.count(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          crossAxisCount: 3,
+          mainAxisSpacing: 16,
+          crossAxisSpacing: 16,
+          childAspectRatio: 0.85,
+          children: [
+            _buildManagementTile(
+              icon: Icons.people_alt_rounded,
+              title: AppStrings.instNavStudents,
+              onTap: () => Get.toNamed(
+                AppRoutes.instituteBatchStudents,
+                arguments: controller.batch,
+              ),
             ),
-            child: Row(
-              children: [
-                const Icon(
-                  Icons.add,
-                  color: Colors.white,
-                  size: 18,
-                ),
-                AppSpacing.h8,
-                Text(
-                  'Add',
-                  style: AppTextStyles.manrope(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
+            _buildManagementTile(
+              icon: Icons.assignment_rounded,
+              title: 'Homework',
+              onTap: () => Get.toNamed(
+                AppRoutes.instituteBatchHomework,
+                arguments: controller.batch,
+              ),
             ),
-          ),
+            _buildManagementTile(
+              icon: Icons.menu_book_rounded,
+              title: 'Resources',
+              onTap: () => Get.toNamed(
+                AppRoutes.instituteBatchResources,
+                arguments: controller.batch,
+              ),
+            ),
+          ],
+        ),
+        AppSpacing.v16,
+        GridView.count(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          crossAxisCount: 3,
+          mainAxisSpacing: 16,
+          crossAxisSpacing: 16,
+          childAspectRatio: 0.85,
+          children: [
+            _buildManagementTile(
+              icon: Icons.checklist_rtl_rounded,
+              title: AppStrings.instAttendanceTitle,
+              onTap: () => Get.toNamed(
+                AppRoutes.instituteMarkAttendance,
+                arguments: controller.batch,
+              ),
+            ),
+          ],
         ),
       ],
     );
   }
 
-  Widget _buildAssignedSearchBar() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.borderGrey),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: TextField(
-        controller: controller.assignedSearchController,
-        onChanged: (val) => controller.assignedSearchQuery.value = val,
-        decoration: InputDecoration(
-          hintText: 'Search assigned students...',
-          hintStyle: AppTextStyles.lexend(fontSize: 14, color: AppColors.textMuted),
-          prefixIcon: const Icon(Icons.search, color: AppColors.textMuted, size: 20),
-          suffixIcon: Obx(() => controller.assignedSearchQuery.isNotEmpty
-              ? IconButton(
-                  icon: const Icon(Icons.clear, size: 18),
-                  onPressed: () {
-                    controller.assignedSearchController.clear();
-                    controller.assignedSearchQuery.value = '';
-                  },
-                )
-              : const SizedBox.shrink()),
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(vertical: 14),
+  Widget _buildManagementTile({
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: AppSpacing.all12,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.03),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: AppColors.instPrimaryBlue, size: 28),
+            AppSpacing.v12,
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: AppTextStyles.manrope(
+                fontSize: 14,
+                fontWeight: FontWeight.w800,
+                color: AppColors.textPrimary,
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -313,7 +317,7 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
               ),
               AppSpacing.v24,
               Text(
-                'Delete Batch',
+                AppStrings.instDeleteBatchTitle,
                 style: AppTextStyles.manrope(
                   fontSize: 20,
                   fontWeight: FontWeight.w800,
@@ -322,7 +326,7 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
               ),
               AppSpacing.v12,
               Text(
-                'Are you sure you want to delete\n${controller.batch.title}?',
+                AppStrings.instDeleteBatchConfirm,
                 textAlign: TextAlign.center,
                 style: AppTextStyles.lexend(
                   fontSize: 14,
@@ -344,7 +348,7 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
                         side: BorderSide(color: Colors.grey.shade300),
                       ),
                       child: Text(
-                        'Cancel',
+                        AppStrings.instCancelBtn,
                         style: AppTextStyles.manrope(
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
@@ -357,9 +361,9 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        Get.back(); // close dialog
+                        Get.back();
                         batchController.deleteBatch(controller.batch.id);
-                        Get.back(); // go back from screen
+                        Get.back();
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFFD92D20),
@@ -370,7 +374,7 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
                         ),
                       ),
                       child: Text(
-                        'Yes, Delete',
+                        AppStrings.instDeleteConfirmBtn,
                         style: AppTextStyles.manrope(
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
@@ -384,267 +388,6 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  void _showAddStudentDialog(BuildContext context) {
-    controller.clearSearch();
-    Get.dialog(
-      Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-        child: Container(
-          width: double.infinity,
-          padding: AppSpacing.all24,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(24),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                'Add Student to Batch',
-                style: AppTextStyles.manrope(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-              AppSpacing.v20,
-              _buildSearchField(),
-              AppSpacing.v16,
-              ConstrainedBox(
-                constraints: const BoxConstraints(maxHeight: 300),
-                child: Obx(() {
-                  if (controller.searchResults.isNotEmpty) {
-                    return _buildSearchResults();
-                  }
-                  if (controller.selectedStudent.value != null) {
-                    return _buildFeeEntryForm();
-                  }
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 40),
-                    child: Column(
-                      children: [
-                        Icon(Icons.search, size: 48, color: Colors.grey.shade300),
-                        AppSpacing.v12,
-                        Text(
-                          'Search students by name or ID',
-                          style: AppTextStyles.lexend(
-                            fontSize: 14,
-                            color: AppColors.textTertiary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSearchField() {
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xFFF3F4F6),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: TextField(
-        controller: controller.searchController,
-        onChanged: controller.searchStudents,
-        decoration: InputDecoration(
-          hintText: 'Search student by name or ID...',
-          hintStyle: AppTextStyles.lexend(fontSize: 14, color: AppColors.textMuted),
-          prefixIcon: const Icon(Icons.search, color: AppColors.textMuted),
-          border: InputBorder.none,
-          contentPadding: AppSpacing.all16,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSearchResults() {
-    return Container(
-      constraints: const BoxConstraints(maxHeight: 200),
-      margin: const EdgeInsets.only(top: 8),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.divider),
-      ),
-      child: ListView.builder(
-        shrinkWrap: true,
-        itemCount: controller.searchResults.length,
-        itemBuilder: (context, index) {
-          final student = controller.searchResults[index];
-          return ListTile(
-            title: Text(student.name, style: AppTextStyles.manrope(fontWeight: FontWeight.w700)),
-            subtitle: Text(student.id, style: AppTextStyles.lexend(fontSize: 12)),
-            onTap: () => controller.selectStudent(student),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildFeeEntryForm() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        AppSpacing.v20,
-        const Divider(),
-        AppSpacing.v16,
-        Text(
-          'Set Batch Fee for ${controller.selectedStudent.value!.name}',
-          style: AppTextStyles.manrope(fontSize: 14, fontWeight: FontWeight.w700),
-        ),
-        AppSpacing.v12,
-        Container(
-          decoration: BoxDecoration(
-            color: const Color(0xFFF3F4F6),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: TextField(
-            controller: controller.feeController,
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(
-              prefixText: '₹ ',
-              border: InputBorder.none,
-              contentPadding: AppSpacing.all16,
-            ),
-          ),
-        ),
-        AppSpacing.v20,
-        ElevatedButton(
-          onPressed: controller.addStudentToBatch,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.instPrimaryBlue,
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          ),
-          child: Text(
-            'Confirm Add to Batch',
-            style: AppTextStyles.manrope(fontWeight: FontWeight.w700, color: Colors.white),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildStudentList() {
-    return Obx(() {
-      if (controller.assignedStudents.isEmpty) {
-        return Container(
-          padding: AppSpacing.all32,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Column(
-            children: [
-              const Icon(Icons.group_off_rounded, size: 48, color: AppColors.textMuted),
-              AppSpacing.v16,
-              Text(
-                'No students assigned to this batch yet.',
-                textAlign: TextAlign.center,
-                style: AppTextStyles.lexend(color: AppColors.textTertiary),
-              ),
-            ],
-          ),
-        );
-      }
-      
-      final filteredList = controller.filteredAssignedStudents;
-      if (filteredList.isEmpty) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 40),
-          child: Center(
-            child: Text(
-              'No matching students found.',
-              style: AppTextStyles.lexend(color: AppColors.textTertiary),
-            ),
-          ),
-        );
-      }
-
-      return Column(
-        children: filteredList.map((bs) => _buildStudentItem(bs)).toList(),
-      );
-    });
-  }
-
-  Widget _buildStudentItem(BatchStudent bs) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: AppSpacing.all16,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          CircleAvatar(
-            radius: 24,
-            backgroundColor: AppColors.instFeesAvatarBg,
-            child: Text(bs.student.name[0], style: const TextStyle(fontWeight: FontWeight.bold)),
-          ),
-          AppSpacing.h16,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  bs.student.name,
-                  style: AppTextStyles.manrope(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-                Text(
-                  bs.student.id,
-                  style: AppTextStyles.lexend(
-                    fontSize: 12,
-                    color: AppColors.textTertiary,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                '₹${bs.assignedFee.toStringAsFixed(0)}',
-                style: AppTextStyles.manrope(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.instAccentBlue,
-                ),
-              ),
-              Text(
-                'Batch Fee',
-                style: AppTextStyles.lexend(
-                  fontSize: 10,
-                  color: AppColors.textMuted,
-                ),
-              ),
-            ],
-          ),
-        ],
       ),
     );
   }

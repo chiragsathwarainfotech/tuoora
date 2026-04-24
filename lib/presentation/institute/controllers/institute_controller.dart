@@ -76,7 +76,6 @@ class InstituteController extends GetxController {
       isLoadingStudents.value = true;
       final result = await _studentRepository.listStudents();
       students.assignAll(result);
-      _applyFilter();
     } catch (e) {
       Get.snackbar(
         'Error',
@@ -86,28 +85,6 @@ class InstituteController extends GetxController {
       );
     } finally {
       isLoadingStudents.value = false;
-    }
-  }
-
-  void setFilter(String filter) {
-    selectedFilter.value = filter;
-    _applyFilter();
-  }
-
-  void _applyFilter() {
-    if (selectedFilter.value == AppStrings.instFilterAll) {
-      filteredStudents.assignAll(students);
-    } else if (selectedFilter.value == AppStrings.instFilter10th) {
-      filteredStudents.assignAll(
-        students.where((s) => s.grade.contains('10th')),
-      );
-    } else if (selectedFilter.value == AppStrings.instFilter9th) {
-      filteredStudents.assignAll(
-        students.where((s) => s.grade.contains('9th')),
-      );
-    } else if (selectedFilter.value == AppStrings.instFilterBatches) {
-      // Logic for batches filter if needed
-      filteredStudents.assignAll(students);
     }
   }
 

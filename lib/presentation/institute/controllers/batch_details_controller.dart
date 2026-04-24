@@ -18,12 +18,7 @@ class BatchDetailsController extends GetxController {
 
   final assignedStudents = <BatchStudent>[].obs;
 
-  final isSearching = false.obs;
-  final searchController = TextEditingController();
   final assignedSearchController = TextEditingController();
-  final searchResults = <Student>[].obs;
-  final selectedStudent = Rxn<Student>();
-  final feeController = TextEditingController();
   final assignedSearchQuery = ''.obs;
 
   List<BatchStudent> get filteredAssignedStudents {
@@ -49,7 +44,6 @@ class BatchDetailsController extends GetxController {
   }
 
   void _loadMockAssignedStudents() {
-    // In a real app, this would come from a database based on batch.id
     if (instituteController.students.isNotEmpty) {
       assignedStudents.assignAll([
         BatchStudent(
@@ -65,70 +59,18 @@ class BatchDetailsController extends GetxController {
     }
   }
 
-  void toggleSearch() {
-    isSearching.value = !isSearching.value;
-    if (!isSearching.value) {
-      clearSearch();
-    }
-  }
-
-  void clearSearch() {
-    searchController.clear();
-    searchResults.clear();
-    selectedStudent.value = null;
-    feeController.clear();
-  }
-
-  void searchStudents(String query) {
-    if (query.isEmpty) {
-      searchResults.clear();
-      return;
-    }
-
-    searchResults.assignAll(
-      instituteController.students
-          .where(
-            (s) =>
-                s.name.toLowerCase().contains(query.toLowerCase()) ||
-                s.id.toLowerCase().contains(query.toLowerCase()),
-          )
-          .toList(),
-    );
-  }
-
-  void selectStudent(Student student) {
-    selectedStudent.value = student;
-    feeController.text = batch.baseFee.toStringAsFixed(0);
-    searchResults.clear();
-    searchController.text = student.name;
-  }
-
-  void addStudentToBatch() {
-    if (selectedStudent.value == null) return;
-
-    double fee = double.tryParse(feeController.text) ?? batch.baseFee;
-
-    // Check if already assigned
-    if (assignedStudents.any(
-      (s) => s.student.id == selectedStudent.value!.id,
-    )) {
-      Get.snackbar('Already Assigned', 'This student is already in the batch.');
-      return;
-    }
-
-    assignedStudents.add(
-      BatchStudent(student: selectedStudent.value!, assignedFee: fee),
-    );
-
-    Get.back(); // Close dialog
-    Get.snackbar('Success', '${selectedStudent.value!.name} added to batch.');
+  void removeStudentFromBatch(String studentId) {
+    final studentName = assignedStudents
+        .firstWhereOrNull((s) => s.student.id == studentId)
+        ?.student
+        .name;
+    assignedStudents.removeWhere((s) => s.student.id == studentId);
+    Get.snackbar('Removed', '$studentName removed from batch successfully.');
   }
 
   @override
   void onClose() {
-    searchController.dispose();
     assignedSearchController.dispose();
-    feeController.dispose();
     super.onClose();
   }
 }

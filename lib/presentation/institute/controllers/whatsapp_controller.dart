@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 class WhatsAppController extends GetxController {
   final accessTokenController = TextEditingController();
+  final phoneNumberController = TextEditingController();
   final phoneNumberIdController = TextEditingController();
   final businessAccountIdController = TextEditingController();
 
@@ -13,10 +14,14 @@ class WhatsAppController extends GetxController {
 
   void verifyApi() {
     final token = accessTokenController.text;
+    final phoneNumber = phoneNumberController.text;
     final phoneId = phoneNumberIdController.text;
     final accountId = businessAccountIdController.text;
 
-    if (token.isEmpty || phoneId.isEmpty || accountId.isEmpty) {
+    if (token.isEmpty ||
+        phoneNumber.isEmpty ||
+        phoneId.isEmpty ||
+        accountId.isEmpty) {
       Get.snackbar(
         'Incomplete Configuration',
         'Please provide all Meta API credentials to continue.',
@@ -41,6 +46,7 @@ class WhatsAppController extends GetxController {
   @override
   void onClose() {
     accessTokenController.dispose();
+    phoneNumberController.dispose();
     phoneNumberIdController.dispose();
     businessAccountIdController.dispose();
     super.onClose();

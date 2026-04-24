@@ -1,0 +1,162 @@
+import 'package:fee_easy/core/constants/app_colors.dart';
+import 'package:fee_easy/core/constants/app_strings.dart';
+import 'package:fee_easy/core/constants/app_text_styles.dart';
+import 'package:fee_easy/core/theme/app_spacing.dart';
+import 'package:fee_easy/presentation/institute/controllers/homework_controller.dart';
+import 'package:fee_easy/presentation/institute/models/batch_model.dart';
+import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
+import 'package:fee_easy/presentation/institute/widgets/institute_bottom_button.dart';
+import 'package:fee_easy/presentation/institute/widgets/institute_label.dart';
+import 'package:fee_easy/presentation/institute/widgets/institute_text_field.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+
+class AddHomeworkScreen extends StatelessWidget {
+  const AddHomeworkScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final BatchModel batch = Get.arguments;
+    final controller = Get.find<HomeworkController>(tag: batch.id);
+
+    return Scaffold(
+      backgroundColor: AppColors.scaffoldBg,
+      body: SafeArea(
+        child: Column(
+          children: [
+            InstituteAppBar(
+              title: AppStrings.instAddHomeworkTitle,
+              onBackTap: () => Get.back(),
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: AppSpacing.x24.add(AppSpacing.y16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    InstituteTextField(
+                      label: AppStrings.instHomeworkSubjectLabel,
+                      controller: controller.titleController,
+                      hint: AppStrings.instHomeworkSubjectHint,
+                    ),
+                    AppSpacing.v24,
+                    const InstituteLabel(AppStrings.instDueDateLabel),
+                    _buildDatePicker(context, controller),
+                    AppSpacing.v24,
+                    InstituteTextField(
+                      label: AppStrings.instInstructionDetailsLabel,
+                      controller: controller.descriptionController,
+                      hint: AppStrings.instInstructionDetailsHint,
+                      maxLines: 5,
+                    ),
+                    AppSpacing.v24,
+                    const InstituteLabel(AppStrings.instResourceMaterialsLabel),
+                    _buildResourceUpload(),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: InstituteBottomButton(
+        label: AppStrings.instCreateHomeworkBtn,
+        onTap: () => controller.createHomework(),
+      ),
+    );
+  }
+
+  Widget _buildDatePicker(BuildContext context, HomeworkController controller) {
+    return GestureDetector(
+      onTap: () async {
+        final date = await showDatePicker(
+          context: context,
+          initialDate: DateTime.now().add(const Duration(days: 1)),
+          firstDate: DateTime.now(),
+          lastDate: DateTime.now().add(const Duration(days: 365)),
+        );
+        if (date != null) {
+          controller.dueDate.value = date;
+        }
+      },
+      child: Container(
+        padding: AppSpacing.all16,
+        decoration: BoxDecoration(
+          color: const Color(0xFFF2F4F7),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          children: [
+            const Icon(
+              Icons.calendar_month_outlined,
+              color: AppColors.textMuted,
+            ),
+            AppSpacing.h12,
+            Obx(
+              () => Text(
+                controller.dueDate.value == null
+                    ? AppStrings.instDueDateHint
+                    : DateFormat(
+                        'MM/dd/yyyy',
+                      ).format(controller.dueDate.value!),
+                style: AppTextStyles.manrope(
+                  fontSize: 14,
+                  color: controller.dueDate.value == null
+                      ? AppColors.textMuted
+                      : AppColors.textPrimary,
+                  fontWeight: controller.dueDate.value == null
+                      ? FontWeight.w500
+                      : FontWeight.w700,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildResourceUpload() {
+    return Container(
+      padding: AppSpacing.all32,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: const Color(0xFFD0D5DD),
+          style: BorderStyle.solid,
+        ),
+      ),
+      child: Column(
+        children: [
+          Container(
+            padding: AppSpacing.all12,
+            decoration: const BoxDecoration(
+              color: AppColors.instPrimaryBlue,
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(Icons.add, color: Colors.white),
+          ),
+          AppSpacing.v12,
+          Text(
+            AppStrings.instAddAttachmentBtn,
+            style: AppTextStyles.manrope(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              color: const Color(0xFF101828),
+            ),
+          ),
+          AppSpacing.v4,
+          Text(
+            AppStrings.instAddAttachmentDesc,
+            style: AppTextStyles.lexend(
+              fontSize: 12,
+              color: AppColors.textTertiary,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

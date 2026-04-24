@@ -50,6 +50,7 @@ class AppSpacing {
   static const v32 = SizedBox(height: s32);
   static const v40 = SizedBox(height: s40);
   static const v48 = SizedBox(height: s48);
+  static const v80 = SizedBox(height: s80);
   static const v100 = SizedBox(height: s100);
 
   // Horizontal Spacing (SizedBox widgets)
@@ -59,6 +60,7 @@ class AppSpacing {
   static const h12 = SizedBox(width: s12);
   static const h16 = SizedBox(width: s16);
   static const h20 = SizedBox(width: s20);
+  static const h24 = SizedBox(width: s24);
   static const h32 = SizedBox(width: s32);
 
   // EdgeInsets (Common Padding & Margins)

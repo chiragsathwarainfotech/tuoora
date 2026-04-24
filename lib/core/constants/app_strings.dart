@@ -15,6 +15,13 @@ class AppStrings {
   // Dashboards
   static const String studentOverviewLabel = 'STUDENT OVERVIEW';
   static const String parentDashboardLabel = 'PARENT DASHBOARD';
+
+  static const String instCourseManagementHeader = 'Course Management';
+  static const String instDeleteBatchTitle = 'Delete Batch';
+  static const String instDeleteBatchConfirm =
+      'Are you sure you want to delete this batch?';
+  static const String instDeleteConfirmBtn = 'Yes, Delete';
+
   static const String currentHomework = 'Current Homework';
   static const String homeworkTracker = 'Homework Tracker';
   static const String latestNews = 'Latest News';
@@ -89,10 +96,6 @@ class AppStrings {
   static const String instStudentSearchHint = 'Search by name or student ID';
   static const String instBadgeActive = 'ACTIVE';
   static const String instBadgePending = 'PENDING';
-  static const String instFilterAll = 'All Students';
-  static const String instFilter10th = '10th Standard';
-  static const String instFilter9th = '9th Standard';
-  static const String instFilterBatches = 'By Batches';
 
   // Institute Add Student
   static const String instAddStudentTitle = 'Add Student';
@@ -167,12 +170,77 @@ class AppStrings {
   static const String instActiveBatchTag = 'ACTIVE BATCH';
   static const String instStudentsCountLabel = 'Students';
   static const String instFeesPaidLabel = 'Fees Paid';
+  static const String instTotalCollectionLabel = 'Total Coll.';
   static const String instStudentEnrollmentLabel = 'Student Enrollment';
   static const String instAddStudentToBatch = 'Add Student to Batch';
   static const String instAttendanceRateLabel = 'Attendance';
   static const String instAverageAttendance =
       'Average attendance for this batch over\nthe last 30 days.';
   static const String instStudentListLabel = 'Student List';
+
+  // Institute Add/Edit Batch
+  static const String instEditBatchTitle = 'Edit Batch';
+  static const String instAddBatchTitle = 'Add Batch';
+  static const String instBatchNameLabelAlt = 'Batch Name';
+  static const String instBatchNameHint = 'e.g., Advanced Algebra - Section A';
+  static const String instBatchSubjectLabel = 'Subject';
+  static const String instBatchSubjectHint = 'e.g., Advanced Mathematics';
+  static const String instBatchDescLabel = 'Batch Description';
+  static const String instBatchDescHint =
+      'Enter batch details or topics covered...';
+  static const String instBatchFeeLabelAlt = 'Batch Fee (₹)';
+  static const String instBatchFeeHint = 'e.g., 2500';
+  static const String instScheduleSettings = 'Schedule Settings';
+  static const String instTimeSlot = 'TIME SLOT';
+  static const String instChangeBtn = 'Change';
+  static const String instActiveDaysLabel = 'ACTIVE DAYS';
+  static const String instSaveBatchBtn = 'Save Batch Details';
+
+  // Institute Batch Resources
+  static const String instBatchResourcesTitle = 'Batch Resources';
+  static const String instNoResources = 'No resources found';
+  static const String instUploadContentHeader = 'Upload Content';
+  static const String instResourceSubjectLabel = 'Subject';
+  static const String instResourceDescriptionLabel = 'Description';
+  static const String instAttachmentLabel = 'Attachment';
+  static const String instAttachFileHint = 'Attach Image, Video or Document';
+  static const String instCancelBtn = 'Cancel';
+  static const String instUploadBtn = 'Upload';
+  static const String instResourceDetailTitle = 'Resource View';
+  static const String instDownloadResourceBtn = 'Download Resource';
+  static const String instPreviewNotAvailable =
+      'Preview not available for this document';
+
+  // Institute Add Homework
+  static const String instAddHomeworkTitle = 'Add Homework';
+  static const String instHomeworkSubjectLabel = 'Subject Title';
+  static const String instHomeworkSubjectHint = 'e.g., Advanced Physics';
+  static const String instDueDateLabel = 'Due Date';
+  static const String instDueDateHint = 'mm/dd/yyyy';
+  static const String instInstructionDetailsLabel = 'Instruction Details';
+  static const String instInstructionDetailsHint =
+      'Please complete the problems...';
+  static const String instResourceMaterialsLabel = 'Resource Materials';
+  static const String instAddAttachmentBtn = 'Add Attachment';
+  static const String instAddAttachmentDesc = 'Image or PDF documents';
+  static const String instCreateHomeworkBtn = 'Create Homework';
+  static const String instSearchAssignmentsHint = 'Search assignments...';
+  static const String instActiveLabel = 'ACTIVE';
+  static const String instClosedLabel = 'CLOSED';
+  static const String instDueLabel = 'Due';
+  static const String instEndedLabel = 'Ended';
+  static const String instSubmissionsLabel = 'Submissions';
+  static const String instHomeworkRatingTitle = 'Homework Rating';
+  static const String instSaveAllRatingsBtn = 'Save All Ratings';
+  static const String instGradingProgressLabel = 'Grading Progress';
+  static const String instSubmittedTag = 'SUBMITTED';
+  static const String instFilterAll = 'All';
+  static const String instBatchHomeworkTitle = 'Batch Homework';
+  static const String instFilterSubmitted = 'Submitted';
+  static const String instFilterMissing = 'Missing';
+  static const String instFilterLate = 'Late';
+  static const String instScoreLabel = 'Score';
+  static const String instSendReminderBtn = 'Send Reminder';
 
   // Institute Batches Overview
   static const String instActiveBatchesTitle = 'Active Batches';

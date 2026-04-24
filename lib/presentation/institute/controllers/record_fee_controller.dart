@@ -22,6 +22,7 @@ class RecordFeeController extends GetxController {
   final selectedMonth = ''.obs;
   final amount = '1500'.obs;
   final paymentMethod = AppStrings.instPaymentCash.obs;
+  final selectedRecordDate = DateTime.now().obs;
 
   @override
   void onInit() {
@@ -82,10 +83,10 @@ class RecordFeeController extends GetxController {
     selectedMonth.value = month;
   }
 
-  Future<void> selectDate(BuildContext context) async {
+  Future<void> selectRecordDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: selectedRecordDate.value,
       firstDate: DateTime(2020),
       lastDate: DateTime(2101),
       builder: (context, child) {
@@ -102,7 +103,7 @@ class RecordFeeController extends GetxController {
       },
     );
     if (picked != null) {
-      selectedMonth.value = DateFormat('MMMM yyyy').format(picked);
+      selectedRecordDate.value = picked;
     }
   }
 
@@ -129,7 +130,7 @@ class RecordFeeController extends GetxController {
       amount: '₹${amount.value}',
       month: selectedMonth.value,
       paymentMethod: paymentMethod.value,
-      timestamp: DateTime.now(),
+      timestamp: selectedRecordDate.value,
     );
 
     instituteController.feeRecords.insert(0, newRecord);

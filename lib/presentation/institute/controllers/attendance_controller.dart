@@ -1,3 +1,4 @@
+import 'package:fee_easy/presentation/institute/models/batch_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -5,7 +6,24 @@ import 'package:intl/intl.dart';
 class AttendanceController extends GetxController {
   final selectedDate = DateTime.now().obs;
   final searchQuery = ''.obs;
-  
+  late BatchModel batch;
+
+  bool get isToday {
+    final now = DateTime.now();
+    return selectedDate.value.year == now.year &&
+           selectedDate.value.month == now.month &&
+           selectedDate.value.day == now.day;
+  }
+
+  bool get isPastDate {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final selected = DateTime(selectedDate.value.year, selectedDate.value.month, selectedDate.value.day);
+    return selected.isBefore(today);
+  }
+
+  bool get isEditable => !isPastDate;
+
   // Mock student list for attendance
   final allStudents = <Map<String, dynamic>>[
     {
@@ -42,36 +60,11 @@ class AttendanceController extends GetxController {
 
   final filteredStudents = <Map<String, dynamic>>[].obs;
 
-  final batches = <Map<String, dynamic>>[
-    {
-      'title': 'Physics Batch A',
-      'time': '09:00 AM - 10:30 AM',
-      'date': DateTime.now(),
-    },
-    {
-      'title': 'Chemistry Batch B',
-      'time': '11:00 AM - 12:30 PM',
-      'date': DateTime.now(),
-    },
-    {
-      'title': 'Maths Batch C',
-      'time': '02:00 PM - 03:30 PM',
-      'date': DateTime.now().subtract(const Duration(days: 1)),
-    },
-    {
-      'title': 'History Batch D',
-      'time': '04:00 PM - 05:30 PM',
-      'date': DateTime.now().add(const Duration(days: 1)),
-    },
-  ].obs;
-
-  final filteredBatches = <Map<String, dynamic>>[].obs;
-
   @override
   void onInit() {
     super.onInit();
+    batch = Get.arguments;
     filteredStudents.assignAll(allStudents);
-    filterBatches();
     
     // Setup search listener
     debounce(searchQuery, (_) => filterStudents(), time: const Duration(milliseconds: 300));
@@ -85,23 +78,28 @@ class AttendanceController extends GetxController {
       context: context,
       initialDate: selectedDate.value,
       firstDate: DateTime(2020),
-      lastDate: DateTime.now().add(const Duration(days: 365)),
+      lastDate: DateTime.now(), // Restrict to today/past as requested
     );
     if (picked != null && picked != selectedDate.value) {
       selectedDate.value = picked;
-      filterBatches();
+      // In a real app, you would fetch attendance for this date here
+      _loadAttendanceForDate(picked);
     }
   }
 
-  void filterBatches() {
-    filteredBatches.assignAll(
-      batches.where((batch) {
-        final batchDate = batch['date'] as DateTime;
-        return batchDate.year == selectedDate.value.year &&
-               batchDate.month == selectedDate.value.month &&
-               batchDate.day == selectedDate.value.day;
-      }).toList()
-    );
+  void _loadAttendanceForDate(DateTime date) {
+    // Mock logic: if it's a past date, show some random data
+    // If it's today, show all present as default
+    if (isToday) {
+      markAllPresent();
+    } else {
+      // Past date mock: randomize some data
+      for (var s in allStudents) {
+        s['isPresent'] = (allStudents.indexOf(s) % 3 != 0);
+      }
+      allStudents.refresh();
+      filterStudents();
+    }
   }
 
   void filterStudents() {
@@ -118,12 +116,14 @@ class AttendanceController extends GetxController {
   }
 
   void toggleStatus(Map<String, dynamic> student, bool isPresent) {
+    if (!isEditable) return;
     student['isPresent'] = isPresent;
     allStudents.refresh();
     filterStudents();
   }
 
   void markAllPresent() {
+    if (!isEditable) return;
     for (var s in allStudents) {
       s['isPresent'] = true;
     }
@@ -132,6 +132,7 @@ class AttendanceController extends GetxController {
   }
 
   void markAllAbsent() {
+    if (!isEditable) return;
     for (var s in allStudents) {
       s['isPresent'] = false;
     }

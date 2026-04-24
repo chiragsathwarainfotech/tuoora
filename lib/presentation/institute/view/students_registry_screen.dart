@@ -76,7 +76,6 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
                   id: student.id,
                   grade: student.grade,
                   batch: student.batch,
-                  status: student.status,
                   imageUrl: student.imageUrl,
                   showOnlineBadge: student.showOnlineBadge,
                   isPending: student.isPending,
@@ -93,7 +92,6 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
     required String id,
     required String grade,
     required String batch,
-    required String status,
     required String imageUrl,
     required bool showOnlineBadge,
     bool isPending = false,
@@ -108,7 +106,6 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
             'name': name,
             'grade': grade,
             'batch': batch,
-            'status': status,
             'imageUrl': imageUrl,
           },
         },
@@ -145,39 +142,13 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        name,
-                        style: AppTextStyles.manrope(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
-                          color: AppColors.textPrimary,
-                        ),
-                      ),
-                      AppSpacing.h8,
-                      Container(
-                        padding: AppSpacing.x8.add(AppSpacing.y4),
-                        decoration: BoxDecoration(
-                          color: isPending
-                              ? AppColors.instBadgePendingBg
-                              : AppColors.instLightBlueBg,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          status,
-                          style: AppTextStyles.manrope(
-                            fontSize: 8,
-                            fontWeight: FontWeight.w800,
-                            color: isPending
-                                ? AppColors.instBadgePendingText
-                                : AppColors.instPurpleBlue,
-                            letterSpacing: 0.5,
-                          ),
-                        ),
-                      ),
-                    ],
+                  Text(
+                    name,
+                    style: AppTextStyles.manrope(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.textPrimary,
+                    ),
                   ),
                   AppSpacing.v4,
                   Text(
@@ -208,27 +179,6 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
                             ),
                           ),
                         ],
-                      ),
-                      AppSpacing.h16,
-                      Flexible(
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.people_alt_rounded,
-                              size: AppSpacing.s14,
-                              color: AppColors.instPurpleBlue,
-                            ),
-                            AppSpacing.h4,
-                            Text(
-                              batch,
-                              style: AppTextStyles.lexend(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.textSecondary,
-                              ),
-                            ),
-                          ],
-                        ),
                       ),
                     ],
                   ),

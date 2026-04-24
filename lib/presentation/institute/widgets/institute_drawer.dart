@@ -98,14 +98,6 @@ class InstituteDrawer extends StatelessWidget {
               },
             ),
             _buildDrawerItem(
-              icon: Icons.fact_check_outlined,
-              label: AppStrings.instDrawerAttendance,
-              isActive: false,
-              onTap: () {
-                Get.toNamed(AppRoutes.instituteAttendanceMarking);
-              },
-            ),
-            _buildDrawerItem(
               icon: Icons.bar_chart_rounded,
               label: AppStrings.instDrawerReports,
               isActive: false,

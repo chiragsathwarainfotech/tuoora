@@ -9,27 +9,15 @@ class BatchController extends GetxController {
 
   final isEditMode = false.obs;
   final batchNameController = TextEditingController();
+  final subjectController = TextEditingController();
   final descriptionController = TextEditingController();
   final batchFeeController = TextEditingController();
-  final selectedSubject = 'Mathematics'.obs;
   final startTime = const TimeOfDay(hour: 8, minute: 0).obs;
   final endTime = const TimeOfDay(hour: 9, minute: 30).obs;
   final selectedDays = <String>['Mon', 'Wed', 'Fri'].obs;
   final selectedStudentIds = <String>[].obs;
-  final searchController = TextEditingController();
   final searchQuery = ''.obs;
   final currentEditingBatchId = ''.obs;
-
-  final subjects = [
-    'Mathematics',
-    'Physics',
-    'Chemistry',
-    'Biology',
-    'English',
-    'History',
-    'Geography',
-    'Algebra',
-  ];
   final allDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
   @override
@@ -59,7 +47,7 @@ class BatchController extends GetxController {
         description:
             'Foundational physics concepts and advanced problem solving.',
         time: '10:30 AM - 12:00 PM',
-        subject: 'Mathematics',
+        subject: 'Physics',
         studentCount: '50 Students',
         location: 'Hall 3',
         statusLabel: AppStrings.instStatusFull,
@@ -72,7 +60,7 @@ class BatchController extends GetxController {
         title: 'Literature 101',
         description: 'Introduction to world literature and creative writing.',
         time: '02:00 PM - 03:30 PM',
-        subject: 'Mathematics',
+        subject: 'English Literature',
         studentCount: '18 Students',
         location: 'Room 12',
         statusLabel: AppStrings.instStatusOpen,
@@ -87,28 +75,26 @@ class BatchController extends GetxController {
   void initAddMode() {
     isEditMode.value = false;
     batchNameController.clear();
+    subjectController.clear();
     descriptionController.clear();
     batchFeeController.clear();
-    selectedSubject.value = subjects[0];
     startTime.value = const TimeOfDay(hour: 8, minute: 0);
     endTime.value = const TimeOfDay(hour: 9, minute: 30);
     selectedDays.assignAll(['Mon', 'Wed', 'Fri']);
     selectedStudentIds.clear();
     searchQuery.value = '';
     currentEditingBatchId.value = '';
-    searchController.clear();
   }
 
   void initEditMode(BatchModel batch) {
     isEditMode.value = true;
     currentEditingBatchId.value = batch.id;
     batchNameController.text = batch.title;
+    subjectController.text = batch.subject;
     descriptionController.text = batch.description;
     batchFeeController.text = batch.baseFee.toStringAsFixed(0);
-    selectedSubject.value = batch.subject;
     selectedDays.assignAll(['Mon', 'Wed', 'Fri']);
     searchQuery.value = '';
-    searchController.clear();
   }
 
   void toggleDay(String day) {
@@ -192,7 +178,7 @@ class BatchController extends GetxController {
       baseFee: double.tryParse(batchFeeController.text) ?? 0.0,
       time:
           '${startTime.value.format(context)} - ${endTime.value.format(context)}',
-      subject: selectedSubject.value,
+      subject: subjectController.text.trim(),
       studentCount:
           '0 Students', // Student management is now handled separately
       location: 'TBD',
@@ -277,9 +263,9 @@ class BatchController extends GetxController {
   @override
   void onClose() {
     batchNameController.dispose();
+    subjectController.dispose();
     descriptionController.dispose();
     batchFeeController.dispose();
-    searchController.dispose();
     super.onClose();
   }
 }

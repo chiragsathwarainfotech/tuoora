@@ -198,7 +198,7 @@ class InstituteDashboard extends StatelessWidget {
           GestureDetector(
             onTap: () => Get.offAllNamed(AppRoutes.instituteBatches),
             child: Text(
-              'View All',
+              AppStrings.viewAllAlt,
               style: AppTextStyles.manrope(
                 fontSize: 14,
                 fontWeight: FontWeight.w700,

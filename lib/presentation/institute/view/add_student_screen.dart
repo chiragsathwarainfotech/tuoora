@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
-import 'package:fee_easy/presentation/institute/controllers/batch_controller.dart';
 import 'package:fee_easy/presentation/institute/controllers/student_controller.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
@@ -27,12 +26,6 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     _buildMainFormCard(context),
-                    AppSpacing.v16,
-                    Obx(
-                      () => controller.selectedBatchId.value.isEmpty
-                          ? const SizedBox.shrink()
-                          : _buildFeeStructureCard(),
-                    ),
                     AppSpacing.v24,
                     _buildActionButtons(),
                     AppSpacing.v32,
@@ -193,72 +186,7 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
               ]),
             ),
           ),
-          AppSpacing.v32,
-          Obx(() {
-            final batchController = Get.find<BatchController>();
-            final selectedBatch = batchController.batchesList.firstWhereOrNull(
-              (b) => b.id == controller.selectedBatchId.value,
-            );
-            return _buildDropdownField(
-              label: AppStrings.instSelectBatchLabel,
-              hint: selectedBatch?.title ?? 'Select a Batch',
-              icon: Icons.access_time_filled_rounded,
-              onTap: () {
-                Get.bottomSheet(
-                  Container(
-                    padding: AppSpacing.all24,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(24),
-                        topRight: Radius.circular(24),
-                      ),
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'Select Batch',
-                          style: AppTextStyles.manrope(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.textPrimary,
-                          ),
-                        ),
-                        AppSpacing.v16,
-                        ...batchController.batchesList.map(
-                          (batch) => ListTile(
-                            title: Text(
-                              batch.title,
-                              style: AppTextStyles.lexend(fontSize: 16),
-                            ),
-                            subtitle: Text(
-                              batch.time,
-                              style: AppTextStyles.lexend(
-                                fontSize: 12,
-                                color: AppColors.textDarkGrey,
-                              ),
-                            ),
-                            trailing: Text(
-                              '₹${batch.baseFee.toStringAsFixed(0)}',
-                              style: AppTextStyles.manrope(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            onTap: () {
-                              controller.setBatchById(batch.id, batch.baseFee);
-                              Get.back();
-                            },
-                          ),
-                        ),
-                        AppSpacing.v24,
-                      ],
-                    ),
-                  ),
-                );
-              },
-            );
-          }),
+          AppSpacing.v12,
         ],
       ),
     );
@@ -368,172 +296,6 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildFeeStructureCard() {
-    return Container(
-      padding: AppSpacing.all24,
-      decoration: BoxDecoration(
-        color: AppColors.cardBg,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            offset: const Offset(0, AppSpacing.s4),
-            blurRadius: 16,
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            AppStrings.instFeeStructureLabel,
-            style: AppTextStyles.manrope(
-              fontSize: 14,
-              fontWeight: FontWeight.w800,
-              color: AppColors.textPrimary,
-            ),
-          ),
-          AppSpacing.v16,
-          Obx(
-            () => Container(
-              padding: AppSpacing.all16,
-              decoration: BoxDecoration(
-                color: AppColors.scaffoldBg,
-                borderRadius: BorderRadius.circular(AppSpacing.s12),
-              ),
-              child: Column(
-                children: [
-                  GestureDetector(
-                    onTap: () => controller.toggleFeeStructure(),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                AppStrings.instMonthlyFeeLabel,
-                                style: AppTextStyles.manrope(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w400,
-                                  color: AppColors.textSecondary,
-                                  height: 1.4,
-                                ),
-                              ),
-                              AppSpacing.v4,
-                              Text(
-                                controller.totalMonthlyFee.value,
-                                style: AppTextStyles.manrope(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w800,
-                                  color: AppColors.instDarkBtnBlue,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Text(
-                          controller.isFeeStructureExpanded.value
-                              ? 'Close'
-                              : AppStrings.instEditStructureBtn,
-                          textAlign: TextAlign.center,
-                          style: AppTextStyles.manrope(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.instDarkBtnBlue,
-                            height: 1.4,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  if (controller.isFeeStructureExpanded.value) ...[
-                    AppSpacing.v16,
-                    const Divider(),
-                    AppSpacing.v12,
-                    ...controller.feeBreakdown.entries.map(
-                      (entry) => Padding(
-                        padding: AppSpacing.bottom12,
-                        child: _buildEditableFeeRow(entry.key, entry.value),
-                      ),
-                    ),
-                    AppSpacing.v8,
-                    GestureDetector(
-                      onTap: () => controller.applyFeeChanges(),
-                      child: Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        decoration: BoxDecoration(
-                          color: AppColors.instDarkBtnBlue,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Save Fee Changes',
-                            style: AppTextStyles.manrope(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildEditableFeeRow(String label, RxString amount) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          child: Text(
-            label,
-            style: AppTextStyles.lexend(
-              fontSize: 14,
-              color: AppColors.textSecondary,
-            ),
-          ),
-        ),
-        SizedBox(
-          width: 100,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: AppColors.borderGrey),
-            ),
-            child: TextField(
-              controller: TextEditingController(text: amount.value),
-              keyboardType: TextInputType.number,
-              textAlign: TextAlign.right,
-              onChanged: (val) => amount.value = val,
-              style: AppTextStyles.manrope(
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-                color: AppColors.instDarkBtnBlue,
-              ),
-              decoration: const InputDecoration(
-                prefixText: '₹',
-                border: InputBorder.none,
-                isDense: true,
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 

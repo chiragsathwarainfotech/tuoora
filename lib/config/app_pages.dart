@@ -5,7 +5,6 @@ import 'package:fee_easy/presentation/institute/view/institute_main_screen.dart'
 import 'package:fee_easy/presentation/institute/view/edit_student_profile_screen.dart';
 import 'package:fee_easy/presentation/institute/view/add_student_screen.dart';
 import 'package:fee_easy/presentation/institute/view/batch_details_screen.dart';
-import 'package:fee_easy/presentation/institute/view/attendance_marking_screen.dart';
 import 'package:fee_easy/presentation/institute/view/institute_profile_view_screen.dart';
 import 'package:fee_easy/presentation/institute/view/mark_attendance_screen.dart';
 import 'package:fee_easy/presentation/institute/view/student_profile_screen.dart';
@@ -25,6 +24,13 @@ import 'package:fee_easy/presentation/institute/view/batch_report_detail_screen.
 import 'package:fee_easy/presentation/institute/view/institute_notifications_screen.dart';
 import 'package:fee_easy/presentation/institute/view/billing_history_screen.dart';
 import 'package:fee_easy/presentation/institute/view/add_edit_batch_screen.dart';
+import 'package:fee_easy/presentation/institute/view/batch_students_screen.dart';
+import 'package:fee_easy/presentation/institute/view/assign_to_batch_screen.dart';
+import 'package:fee_easy/presentation/institute/view/batch_homework_screen.dart';
+import 'package:fee_easy/presentation/institute/view/add_homework_screen.dart';
+import 'package:fee_easy/presentation/institute/view/homework_rating_screen.dart';
+import 'package:fee_easy/presentation/institute/view/batch_resources_screen.dart';
+import 'package:fee_easy/presentation/institute/view/resource_detail_screen.dart';
 import 'package:fee_easy/presentation/parent/view/parent_main_screen.dart';
 import 'package:fee_easy/presentation/shared/view/payment_history_screen.dart';
 import 'package:fee_easy/presentation/parent/view/homework_tracker_screen.dart';
@@ -202,10 +208,6 @@ class AppPages {
       binding: InstituteBinding(),
     ),
     GetPage(
-      name: AppRoutes.instituteAttendanceMarking,
-      page: () => const AttendanceMarkingScreen(),
-    ),
-    GetPage(
       name: AppRoutes.instituteMarkAttendance,
       page: () => const MarkAttendanceScreen(),
     ),
@@ -306,6 +308,34 @@ class AppPages {
     GetPage(
       name: AppRoutes.instituteBatchReportDetail,
       page: () => const BatchReportDetailScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteBatchStudents,
+      page: () => const BatchStudentsScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteAssignToBatch,
+      page: () => const AssignToBatchScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteBatchHomework,
+      page: () => const BatchHomeworkScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteAddHomework,
+      page: () => const AddHomeworkScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteHomeworkRating,
+      page: () => const HomeworkRatingScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteBatchResources,
+      page: () => const BatchResourcesScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteResourceDetail,
+      page: () => const ResourceDetailScreen(),
     ),
   ];
 }

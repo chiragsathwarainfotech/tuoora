@@ -1,4 +1,5 @@
 import 'package:fee_easy/core/constants/app_colors.dart';
+import 'package:intl/intl.dart';
 import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
@@ -270,6 +271,47 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
           ),
           AppSpacing.v20,
           Text(
+            'Record Date',
+            style: AppTextStyles.manrope(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: AppColors.textDarkGrey,
+            ),
+          ),
+          AppSpacing.v8,
+          GestureDetector(
+            onTap: () => controller.selectRecordDate(context),
+            child: Container(
+              padding: AppSpacing.all16,
+              decoration: BoxDecoration(
+                color: AppColors.inputSolidGrey,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Obx(
+                    () => Text(
+                      DateFormat('dd MMM, yyyy')
+                          .format(controller.selectedRecordDate.value),
+                      style: AppTextStyles.lexend(
+                        fontSize: 15,
+                        color: AppColors.textPrimary,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  const Icon(
+                    Icons.calendar_today_rounded,
+                    color: AppColors.textTertiary,
+                    size: AppSpacing.s22,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          AppSpacing.v20,
+          Text(
             AppStrings.instPaymentMethodLabel,
             style: AppTextStyles.manrope(
               fontSize: 14,
@@ -477,6 +519,11 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
             ),
             const Divider(height: 32),
             _buildReceiptRow('Fee Month', controller.selectedMonth.value),
+            _buildReceiptRow(
+              'Record Date',
+              DateFormat('dd MMM, yyyy')
+                  .format(controller.selectedRecordDate.value),
+            ),
             _buildReceiptRow('Payment Method', controller.paymentMethod.value),
             const Divider(height: 32),
             Row(

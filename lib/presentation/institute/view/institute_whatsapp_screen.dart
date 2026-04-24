@@ -122,6 +122,13 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
             controller: controller.accessTokenController,
           ),
           AppSpacing.v24,
+          _buildInputLabel(AppStrings.instPhoneLabel),
+          AppSpacing.v12,
+          _buildTextField(
+            hint: '1234567890',
+            controller: controller.phoneNumberController,
+          ),
+          AppSpacing.v24,
           _buildInputLabel(AppStrings.instPhoneNumberId),
           AppSpacing.v12,
           _buildTextField(

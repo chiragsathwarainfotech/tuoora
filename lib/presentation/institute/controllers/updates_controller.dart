@@ -8,6 +8,7 @@ class UpdatesController extends GetxController {
 
   // Create Update State
   final selectedCategory = 'Fee Reminder'.obs;
+  final selectedRecipient = 'Student'.obs;
   final selectedAudience = 'All Students'.obs;
   final selectedGrade = 'Grade 9'.obs;
   final selectedBatch = 'Evening • Batch A'.obs;
@@ -90,11 +91,14 @@ class UpdatesController extends GetxController {
       return;
     }
 
-    String audienceLabel = selectedAudience.value;
-    if (selectedAudience.value == 'Specific Grade') {
-      audienceLabel = selectedGrade.value;
-    } else if (selectedAudience.value == 'Specific Batch') {
-      audienceLabel = selectedBatch.value;
+    String audienceLabel = selectedRecipient.value;
+    if (selectedRecipient.value == 'Student' || selectedRecipient.value == 'Both') {
+      String prefix = selectedRecipient.value == 'Both' ? 'Students & Parents' : 'Students';
+      if (selectedAudience.value == 'All Students') {
+        audienceLabel = 'All $prefix';
+      } else if (selectedAudience.value == 'Specific Batch') {
+        audienceLabel = '$prefix - ${selectedBatch.value}';
+      }
     }
 
     final newUpdate = UpdateModel(
@@ -116,6 +120,7 @@ class UpdatesController extends GetxController {
     messageController.clear();
     attachments.clear();
     selectedCategory.value = 'Fee Reminder';
+    selectedRecipient.value = 'Student';
     selectedAudience.value = 'All Students';
     selectedGrade.value = 'Grade 9';
     selectedBatch.value = 'Evening • Batch A';

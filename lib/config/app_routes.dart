@@ -31,7 +31,6 @@ class AppRoutes {
   static const String instituteFees = '/institute/fees';
   static const String instituteRecordFee = '/institute/fees/record';
   static const String instituteBatches = '/institute/batches';
-  static const String instituteAttendanceMarking = '/institute/batches/marking';
   static const String instituteMarkAttendance = '/institute/batches/mark';
   static const String instituteBatchDetails = '/institute/batches/details';
   static const String instituteEditProfile = '/institute/edit-profile';
@@ -59,4 +58,11 @@ class AppRoutes {
   static const String instituteProfileSetup = '/institute/profile-setup';
   static const String instituteBatchReportDetail = '/institute/reports/detail';
   static const String instituteReports = '/institute/reports';
+  static const String instituteBatchStudents = '/institute/batches/students';
+  static const String instituteAssignToBatch = '/institute/batches/assign';
+  static const String instituteBatchHomework = '/institute/batches/homework';
+  static const String instituteAddHomework = '/institute/batches/homework/add';
+  static const String instituteHomeworkRating = '/institute/batches/homework/rating';
+  static const String instituteBatchResources = '/institute/batches/resources';
+  static const String instituteResourceDetail = '/institute/batches/resources/detail';
 }

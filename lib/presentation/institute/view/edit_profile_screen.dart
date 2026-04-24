@@ -198,6 +198,7 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
             icon: Icons.phone_iphone_rounded,
             keyboardType: TextInputType.number,
           ),
+          AppSpacing.v20,
           _buildInputField(
             label: 'Address Line 1',
             textController: controller.addressLine1Controller,

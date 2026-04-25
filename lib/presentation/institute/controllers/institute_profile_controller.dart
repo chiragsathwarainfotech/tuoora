@@ -19,7 +19,7 @@ class InstituteProfileController extends GetxController {
   final city = "".obs;
   final state = "".obs;
   final country = "".obs;
-  final pincode = "".obs;
+  final pinCode = "".obs;
 
   final isLoading = false.obs;
 
@@ -54,7 +54,7 @@ class InstituteProfileController extends GetxController {
     cityController = TextEditingController(text: city.value);
     stateController = TextEditingController(text: state.value);
     countryController = TextEditingController(text: country.value);
-    pincodeController = TextEditingController(text: pincode.value);
+    pincodeController = TextEditingController(text: pinCode.value);
   }
 
   Future<void> fetchProfile() async {
@@ -71,7 +71,7 @@ class InstituteProfileController extends GetxController {
       city.value = user.city ?? '';
       state.value = user.state ?? '';
       country.value = 'India'; // Default or from user model
-      pincode.value = user.pincode ?? '';
+      pinCode.value = user.pincode ?? '';
 
       if (user.logo != null) {
         profileImagePath.value = user.logo;
@@ -138,7 +138,7 @@ class InstituteProfileController extends GetxController {
     city.value = cityController.text;
     state.value = stateController.text;
     country.value = countryController.text;
-    pincode.value = pincodeController.text;
+    pinCode.value = pincodeController.text;
 
     Get.back();
     Get.snackbar(

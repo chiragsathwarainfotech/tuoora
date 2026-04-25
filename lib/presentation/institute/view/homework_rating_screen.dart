@@ -84,7 +84,7 @@ class HomeworkRatingScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: const Color(0xFFE0E7FF),
+                color: AppColors.indigoLight,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
@@ -409,7 +409,7 @@ class HomeworkRatingScreen extends StatelessWidget {
       case 'SUBMITTED':
         return const Color(0xFF12B76A);
       case 'LATE':
-        return const Color(0xFFF79009);
+        return AppColors.warningAmber;
       case 'PENDING':
         return const Color(0xFFF04438);
       default:

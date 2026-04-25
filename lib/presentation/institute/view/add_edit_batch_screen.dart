@@ -1,4 +1,5 @@
 import 'package:fee_easy/core/constants/app_strings.dart';
+import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/presentation/institute/controllers/batch_controller.dart';
@@ -15,13 +16,15 @@ class AddEditBatchScreen extends GetView<BatchController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA),
+      backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
         child: Column(
           children: [
             Obx(
               () => InstituteAppBar(
-                title: controller.isEditMode.value ? AppStrings.instEditBatchTitle : AppStrings.instAddBatchTitle,
+                title: controller.isEditMode.value
+                    ? AppStrings.instEditBatchTitle
+                    : AppStrings.instAddBatchTitle,
                 isRoot: false,
               ),
             ),
@@ -80,18 +83,17 @@ class AddEditBatchScreen extends GetView<BatchController> {
     );
   }
 
-
   Widget _buildSectionHeader(IconData icon, String title) {
     return Row(
       children: [
-        Icon(icon, color: const Color(0xFF1E3A8A), size: 20),
+        Icon(icon, color: AppColors.deepBlue, size: 20),
         AppSpacing.h12,
         Text(
           title,
           style: AppTextStyles.manrope(
             fontSize: 16,
             fontWeight: FontWeight.w800,
-            color: const Color(0xFF1E3A8A),
+            color: AppColors.deepBlue,
           ),
         ),
       ],
@@ -120,7 +122,7 @@ class AddEditBatchScreen extends GetView<BatchController> {
             style: AppTextStyles.manrope(
               fontSize: 12,
               fontWeight: FontWeight.w800,
-              color: const Color(0xFF6B7280),
+              color: AppColors.textTertiary,
               letterSpacing: 0.5,
             ),
           ),
@@ -128,14 +130,14 @@ class AddEditBatchScreen extends GetView<BatchController> {
           Container(
             padding: AppSpacing.all16,
             decoration: BoxDecoration(
-              color: const Color(0xFFF9FAFB),
+              color: AppColors.scaffoldBg,
               borderRadius: BorderRadius.circular(16),
             ),
             child: Row(
               children: [
                 const Icon(
                   Icons.access_time_filled,
-                  color: Color(0xFF1E3A8A),
+                  color: AppColors.deepBlue,
                   size: 24,
                 ),
                 AppSpacing.h16,
@@ -146,7 +148,7 @@ class AddEditBatchScreen extends GetView<BatchController> {
                       style: AppTextStyles.manrope(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
-                        color: const Color(0xFF111827),
+                        color: AppColors.textPrimary,
                       ),
                     ),
                   ),
@@ -158,7 +160,7 @@ class AddEditBatchScreen extends GetView<BatchController> {
                     style: AppTextStyles.manrope(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
-                      color: const Color(0xFF1E3A8A),
+                      color: AppColors.deepBlue,
                     ),
                   ),
                 ),
@@ -189,9 +191,7 @@ class AddEditBatchScreen extends GetView<BatchController> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               decoration: BoxDecoration(
-                color: isSelected
-                    ? const Color(0xFF003D82)
-                    : const Color(0xFFE5E7EB),
+                color: isSelected ? Color(0xFF003D82) : AppColors.borderGrey,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
@@ -199,7 +199,7 @@ class AddEditBatchScreen extends GetView<BatchController> {
                 style: AppTextStyles.manrope(
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
-                  color: isSelected ? Colors.white : const Color(0xFF4B5563),
+                  color: isSelected ? Colors.white : AppColors.textSecondary,
                 ),
               ),
             ),

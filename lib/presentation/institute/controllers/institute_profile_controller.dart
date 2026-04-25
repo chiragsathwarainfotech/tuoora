@@ -1,4 +1,5 @@
 import 'package:fee_easy/data/repositories_impl/auth_repository_impl.dart';
+import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -144,7 +145,7 @@ class InstituteProfileController extends GetxController {
     Get.snackbar(
       'Profile Updated',
       'Institute details have been successfully saved.',
-      backgroundColor: const Color(0xFF027A48),
+      backgroundColor: AppColors.darkGreen,
       colorText: Colors.white,
       snackPosition: SnackPosition.BOTTOM,
       margin: const EdgeInsets.all(16),

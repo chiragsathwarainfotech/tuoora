@@ -2,6 +2,7 @@ import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_bottom_nav.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:fee_easy/core/constants/app_colors.dart';
 
 class InstituteRootScaffold extends StatelessWidget {
   final String title;
@@ -23,7 +24,7 @@ class InstituteRootScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundColor ?? const Color(0xFFF8F9FA),
+      backgroundColor: backgroundColor ?? AppColors.scaffoldBg,
       drawer: const InstituteDrawer(),
       body: SafeArea(
         child: Column(

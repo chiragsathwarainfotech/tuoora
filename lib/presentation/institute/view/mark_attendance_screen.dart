@@ -143,7 +143,7 @@ class MarkAttendanceScreen extends StatelessWidget {
           child: _buildBulkButton(
             label: 'All Present',
             icon: Icons.done_all_rounded,
-            color: const Color(0xFF1E3A8A),
+            color: AppColors.deepBlue,
             onTap: () => controller.markAllPresent(),
           ),
         ),
@@ -286,7 +286,7 @@ class MarkAttendanceScreen extends StatelessWidget {
           _buildToggleOption(
             label: 'PRESENT',
             isSelected: isPresent,
-            color: const Color(0xFF1E3A8A),
+            color: AppColors.deepBlue,
             onTap: isEditable
                 ? () => controller.toggleStatus(student, true)
                 : null,

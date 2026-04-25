@@ -60,7 +60,10 @@ class InstituteOtpScreen extends GetView<SignupController> {
                     Center(
                       child: TextButton(
                         onPressed: () {
-                          Get.snackbar('Success', 'A new OTP has been sent to your email.');
+                          Get.snackbar(
+                            'Success',
+                            'A new OTP has been sent to your email.',
+                          );
                         },
                         child: Text(
                           'Resend Code',
@@ -92,7 +95,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
             Container(
               width: AppSpacing.s40,
               height: AppSpacing.s40,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: AppColors.iconBgLightBlue,
                 shape: BoxShape.circle,
               ),
@@ -147,7 +150,9 @@ class InstituteOtpScreen extends GetView<SignupController> {
                 height: 1.5,
               ),
               children: [
-                const TextSpan(text: 'We have sent a 6-digit verification code to '),
+                const TextSpan(
+                  text: 'We have sent a 6-digit verification code to ',
+                ),
                 TextSpan(
                   text: controller.emailController.text,
                   style: AppTextStyles.lexend(

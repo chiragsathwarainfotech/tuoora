@@ -73,7 +73,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
                 style: AppTextStyles.manrope(
                   fontSize: 22,
                   fontWeight: FontWeight.w800,
-                  color: const Color(0xFF003082),
+                  color: AppColors.primaryBlue,
                 ),
               ),
               AppSpacing.v6,
@@ -96,7 +96,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: const Color(0xFFE5E7EB), width: 1.5),
+            border: Border.all(color: AppColors.borderGrey, width: 1.5),
           ),
           child: controller.profileImagePath.value == null
               ? const Center(
@@ -116,7 +116,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
             child: Container(
               padding: AppSpacing.all6,
               decoration: const BoxDecoration(
-                color: Color(0xFF003082),
+                color: AppColors.primaryBlue,
                 shape: BoxShape.circle,
               ),
               child: const Icon(
@@ -135,7 +135,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, size: AppSpacing.s18, color: const Color(0xFF003082)),
+        Icon(icon, size: AppSpacing.s18, color: AppColors.primaryBlue),
         AppSpacing.h12,
         Text(
           text,
@@ -155,7 +155,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: const Color(0xFFF3F4F6)),
+        border: Border.all(color: AppColors.divider),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -165,7 +165,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
             style: AppTextStyles.manrope(
               fontSize: 16,
               fontWeight: FontWeight.w800,
-              color: const Color(0xFF003D99),
+              color: AppColors.primaryBlueDark,
             ),
           ),
           AppSpacing.v24,
@@ -178,7 +178,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
               iconColor: const Color(0xFFB4C7F2),
             ),
           ),
-          const Divider(height: AppSpacing.s40, color: Color(0xFFF9FAFB)),
+          const Divider(height: AppSpacing.s40, color: AppColors.scaffoldBg),
           GestureDetector(
             onTap: () => Get.toNamed(AppRoutes.instituteSubscription),
             child: _buildManagementItem(
@@ -188,7 +188,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
               iconColor: const Color(0xFFFEF08A),
             ),
           ),
-          const Divider(height: AppSpacing.s40, color: Color(0xFFF9FAFB)),
+          const Divider(height: AppSpacing.s40, color: AppColors.scaffoldBg),
           GestureDetector(
             onTap: () => Get.toNamed(AppRoutes.instituteWhatsApp),
             child: _buildManagementItem(
@@ -198,17 +198,17 @@ class InstituteProfileViewScreen extends StatelessWidget {
               iconColor: const Color(0xFFDCFCE7),
             ),
           ),
-          const Divider(height: AppSpacing.s40, color: Color(0xFFF9FAFB)),
+          const Divider(height: AppSpacing.s40, color: AppColors.scaffoldBg),
           GestureDetector(
             onTap: () => Get.snackbar('Coming Soon', 'Terms & Conditions will be available soon.'),
             child: _buildManagementItem(
               icon: Icons.description_rounded,
               title: 'Terms & Conditions',
               subtitle: 'Read our terms of service',
-              iconColor: const Color(0xFFE0E7FF),
+              iconColor: AppColors.indigoLight,
             ),
           ),
-          const Divider(height: AppSpacing.s40, color: Color(0xFFF9FAFB)),
+          const Divider(height: AppSpacing.s40, color: AppColors.scaffoldBg),
           GestureDetector(
             onTap: () => Get.snackbar('Coming Soon', 'Privacy Policy will be available soon.'),
             child: _buildManagementItem(
@@ -218,7 +218,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
               iconColor: const Color(0xFFFCE7F3),
             ),
           ),
-          const Divider(height: AppSpacing.s40, color: Color(0xFFF9FAFB)),
+          const Divider(height: AppSpacing.s40, color: AppColors.scaffoldBg),
           GestureDetector(
             onTap: () => Get.snackbar('Coming Soon', 'Help Center will be available soon.'),
             child: _buildManagementItem(
@@ -249,7 +249,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
           ),
           child: Icon(
             icon,
-            color: const Color(0xFF1E40AF),
+            color: AppColors.oceanBlue,
             size: AppSpacing.s20,
           ),
         ),

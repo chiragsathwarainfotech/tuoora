@@ -134,7 +134,7 @@ class InstituteSignupScreen extends GetView<SignupController> {
             Container(
               width: AppSpacing.s40,
               height: AppSpacing.s40,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: AppColors.iconBgLightBlue,
                 shape: BoxShape.circle,
               ),

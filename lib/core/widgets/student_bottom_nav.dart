@@ -1,4 +1,5 @@
 import 'package:fee_easy/config/app_routes.dart';
+import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -75,10 +76,10 @@ class StudentBottomNav extends StatelessWidget {
   Widget _buildNavItem(int index, IconData icon, String label, String route) {
     final bool isSelected = currentIndex == index;
 
-    final Color activeBgColor = const Color(0xFFB9EFFF);
+    final Color activeBgColor = AppColors.skyBlueLight;
     final Color itemColor = isSelected
-        ? const Color(0xFF003781)
-        : const Color(0xFF8F9BB3);
+        ? AppColors.primaryBlueDark
+        : AppColors.navyMuted;
 
     return Expanded(
       child: GestureDetector(

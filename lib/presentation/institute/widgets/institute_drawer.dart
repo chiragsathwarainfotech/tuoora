@@ -172,7 +172,7 @@ class InstituteDrawer extends StatelessWidget {
 
             const Spacer(),
 
-            Container(height: 1, color: const Color(0xFFF3F4F6)),
+            Container(height: 1, color: AppColors.divider),
             Padding(
               padding: AppSpacing.all24,
               child: Row(

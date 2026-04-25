@@ -389,7 +389,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
     return Container(
       padding: AppSpacing.all20,
       decoration: BoxDecoration(
-        color: const Color(0xFFF9FAFB),
+        color: AppColors.scaffoldBg,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: AppColors.divider,

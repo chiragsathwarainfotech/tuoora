@@ -30,7 +30,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
                       style: AppTextStyles.manrope(
                         fontSize: AppSpacing.s28,
                         fontWeight: FontWeight.w800,
-                        color: const Color(0xFF003082),
+                        color: AppColors.primaryBlue,
                       ),
                     ),
                     AppSpacing.v12,
@@ -80,7 +80,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
               Container(
                 padding: AppSpacing.all10,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFE0E7FF),
+                  color: AppColors.indigoLight,
                   borderRadius: BorderRadius.circular(AppSpacing.s10),
                 ),
                 child: const Icon(
@@ -193,7 +193,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
     return Container(
       padding: AppSpacing.x16.add(AppSpacing.y2),
       decoration: BoxDecoration(
-        color: const Color(0xFFF3F4F6),
+        color: AppColors.divider,
         borderRadius: BorderRadius.circular(AppSpacing.s12),
       ),
       child: TextField(
@@ -230,7 +230,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
         children: [
           const Icon(
             Icons.info_rounded,
-            color: Color(0xFF1E40AF),
+            color: AppColors.oceanBlue,
             size: AppSpacing.s20,
           ),
           AppSpacing.h16,
@@ -243,7 +243,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
                   style: AppTextStyles.manrope(
                     fontSize: AppSpacing.s16,
                     fontWeight: FontWeight.w800,
-                    color: const Color(0xFF1E40AF),
+                    color: AppColors.oceanBlue,
                   ),
                 ),
                 AppSpacing.v8,
@@ -252,7 +252,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
                   style: AppTextStyles.lexend(
                     fontSize: AppSpacing.s14,
                     height: 1.5,
-                    color: const Color(0xFF1E40AF).withValues(alpha: 0.8),
+                    color: AppColors.oceanBlue.withValues(alpha: 0.8),
                   ),
                 ),
               ],
@@ -271,7 +271,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
           children: [
             const Icon(
               Icons.notification_add_rounded,
-              color: Color(0xFF003082),
+              color: AppColors.primaryBlue,
               size: AppSpacing.s24,
             ),
             AppSpacing.h12,
@@ -280,7 +280,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
               style: AppTextStyles.manrope(
                 fontSize: AppSpacing.s20,
                 fontWeight: FontWeight.w800,
-                color: const Color(0xFF003082),
+                color: AppColors.primaryBlue,
               ),
             ),
           ],
@@ -291,7 +291,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(AppSpacing.s24),
-            border: Border.all(color: const Color(0xFFF3F4F6)),
+            border: Border.all(color: AppColors.divider),
           ),
           child: Column(
             children: [
@@ -309,7 +309,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
               Obx(
                 () => _buildToggleItem(
                   Icons.person_outline_rounded,
-                  const Color(0xFFE0E7FF),
+                  AppColors.indigoLight,
                   const Color(0xFF4338CA),
                   AppStrings.instAttendanceAlerts,
                   AppStrings.instAttendanceAlertsDesc,
@@ -332,8 +332,8 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
               Obx(
                 () => _buildToggleItem(
                   Icons.campaign_rounded,
-                  const Color(0xFFF3F4F6),
-                  const Color(0xFF4B5563),
+                  AppColors.divider,
+                  AppColors.textSecondary,
                   AppStrings.instHolidayNotices,
                   AppStrings.instHolidayNoticesDesc,
                   controller.holidayNotices.value,
@@ -399,7 +399,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
                 value: value,
                 onChanged: onChanged,
                 activeThumbColor: Colors.white,
-                activeTrackColor: const Color(0xFF1E40AF),
+                activeTrackColor: AppColors.oceanBlue,
               ),
             ],
           ),
@@ -408,7 +408,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
           const Divider(
             height: AppSpacing.s2,
             indent: AppSpacing.s88,
-            color: Color(0xFFF3F4F6),
+            color: AppColors.divider,
           ),
       ],
     );

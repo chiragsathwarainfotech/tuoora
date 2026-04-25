@@ -80,7 +80,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     );
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FB),
+      backgroundColor: AppColors.scaffoldBg,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -102,7 +102,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
               style: AppTextStyles.manrope(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
-                color: const Color(0xFF1E3A8A),
+                color: AppColors.deepBlue,
               ),
             ),
           ],
@@ -112,7 +112,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             onPressed: () => Get.toNamed(_getUpdatesRoute()),
             icon: const Icon(
               Icons.notifications_none_rounded,
-              color: Color(0xFF111827),
+              color: AppColors.textPrimary,
               size: AppSpacing.s26,
             ),
           ),
@@ -134,7 +134,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       padding: AppSpacing.all32,
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF0056D2), Color(0xFF003781)],
+          colors: [Color(0xFF0056D2), AppColors.primaryBlueDark],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -265,7 +265,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
               AppSpacing.v20,
               _buildCalendarGrid(),
               AppSpacing.v24,
-              const Divider(color: Color(0xFFF3F4F6)),
+              const Divider(color: AppColors.divider),
               AppSpacing.v24,
               _buildLegendRow(),
             ],
@@ -282,10 +282,10 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         width: AppSpacing.s40,
         height: AppSpacing.s40,
         decoration: BoxDecoration(
-          color: const Color(0xFFF1F5F9),
+          color: AppColors.reportBorder,
           borderRadius: BorderRadius.circular(AppSpacing.s12),
         ),
-        child: Icon(icon, color: const Color(0xFF64748B), size: AppSpacing.s20),
+        child: Icon(icon, color: AppColors.textTertiary, size: AppSpacing.s20),
       ),
     );
   }
@@ -303,7 +303,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                   style: AppTextStyles.manrope(
                     fontSize: 10,
                     fontWeight: FontWeight.w800,
-                    color: const Color(0xFF94A3B8),
+                    color: AppColors.textMuted,
                     letterSpacing: 0.5,
                   ),
                 ),
@@ -430,7 +430,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         return _dateBubble(
           day,
           const Color(0xFFEFF6FF),
-          const Color(0xFF1E40AF),
+          AppColors.oceanBlue,
         );
       case 'a': // Absent
         return _dateBubble(
@@ -445,15 +445,15 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           const Color(0xFF92400E),
         );
       case 't': // Today
-        return _dateBubble(day, const Color(0xFF1E3A8A), Colors.white);
+        return _dateBubble(day, AppColors.deepBlue, Colors.white);
       case 'i': // Pending / Future
         return _dateBubble(
           day,
-          const Color(0xFFF8FAFC),
-          const Color(0xFF64748B),
+          AppColors.scaffoldBg,
+          AppColors.textTertiary,
         );
       default:
-        return _dateBubble(day, Colors.transparent, const Color(0xFF1E293B));
+        return _dateBubble(day, Colors.transparent, AppColors.darkSlate);
     }
   }
 
@@ -463,10 +463,10 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       runSpacing: AppSpacing.s12,
       alignment: WrapAlignment.center,
       children: [
-        _legendItem(const Color(0xFF1E3A8A), 'PRESENT'),
+        _legendItem(AppColors.deepBlue, 'PRESENT'),
         _legendItem(const Color(0xFFB91C1C), 'ABSENT'),
         _legendItem(const Color(0xFF92400E), 'HOLIDAY'),
-        _legendItem(const Color(0xFF94A3B8), 'PENDING'),
+        _legendItem(AppColors.textMuted, 'PENDING'),
       ],
     );
   }
@@ -486,7 +486,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           style: AppTextStyles.manrope(
             fontSize: 10,
             fontWeight: FontWeight.w800,
-            color: const Color(0xFF64748B),
+            color: AppColors.textTertiary,
             letterSpacing: 0.5,
           ),
         ),
@@ -544,7 +544,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFFD3E3FD),
-              foregroundColor: const Color(0xFF003781),
+              foregroundColor: AppColors.primaryBlueDark,
               elevation: 0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(AppSpacing.s20),
@@ -604,7 +604,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             child: Icon(
               isPresent ? Icons.check_circle_rounded : Icons.cancel_rounded,
               color: isPresent
-                  ? const Color(0xFF1E3A8A)
+                  ? AppColors.deepBlue
                   : const Color(0xFFB91C1C),
               size: AppSpacing.s24,
             ),
@@ -640,7 +640,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
               fontSize: 12,
               fontWeight: FontWeight.w800,
               color: isPresent
-                  ? const Color(0xFF1E3A8A)
+                  ? AppColors.deepBlue
                   : const Color(0xFFB91C1C),
             ),
           ),

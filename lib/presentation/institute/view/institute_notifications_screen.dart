@@ -1,4 +1,5 @@
 import 'package:fee_easy/core/constants/app_text_styles.dart';
+import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,7 @@ class _InstituteNotificationsScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FB),
+      backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,7 +52,7 @@ class _InstituteNotificationsScreenState
                       description:
                           'You can now export detailed monthly attendance reports in PDF format.',
                       icon: Icons.update_rounded,
-                      iconBg: const Color(0xFFDBEAFE),
+                      iconBg: AppColors.lightBlueBg,
                       iconColor: const Color(0xFF2563EB),
                       imageUrl:
                           'https://img.freepik.com/free-vector/data-report-concept-illustration_114360-883.jpg',
@@ -59,14 +60,14 @@ class _InstituteNotificationsScreenState
                     AppSpacing.v16,
                     _buildNotificationCard(
                       badge: 'INFO',
-                      badgeColor: const Color(0xFF64748B),
+                      badgeColor: AppColors.textTertiary,
                       badgeTextColor: Colors.white,
                       time: 'Mar 15',
                       title: 'System Maintenance',
                       description:
                           'Scheduled maintenance on Sunday, March 20, from 2 AM to 4 AM IST. The platform will be temporarily inaccessible.',
                       icon: Icons.info_outline_rounded,
-                      iconBg: const Color(0xFFF1F5F9),
+                      iconBg: AppColors.reportBorder,
                       iconColor: const Color(0xFF475569),
                     ),
                     AppSpacing.v16,
@@ -79,7 +80,7 @@ class _InstituteNotificationsScreenState
                       description:
                           'Congratulations! You\'ve reached 90% fee collection for the current quarter.',
                       icon: Icons.check_circle_outline_rounded,
-                      iconBg: const Color(0xFFF1F5F9),
+                      iconBg: AppColors.reportBorder,
                       iconColor: const Color(0xFF475569),
                     ),
                     AppSpacing.v40,
@@ -161,7 +162,7 @@ class _InstituteNotificationsScreenState
                       time,
                       style: AppTextStyles.manrope(
                         fontSize: 12,
-                        color: const Color(0xFF94A3B8),
+                        color: AppColors.textMuted,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -173,7 +174,7 @@ class _InstituteNotificationsScreenState
                   style: AppTextStyles.manrope(
                     fontSize: 18,
                     fontWeight: FontWeight.w800,
-                    color: const Color(0xFF1E293B),
+                    color: AppColors.darkSlate,
                     height: 1.2,
                   ),
                 ),

@@ -67,7 +67,7 @@ class BatchesScreen extends GetView<BatchController> {
                           style: AppTextStyles.manrope(
                             fontSize: 18,
                             fontWeight: FontWeight.w800,
-                            color: const Color(0xFF1E3A8A),
+                            color: AppColors.deepBlue,
                           ),
                         ),
                         AppSpacing.v4,

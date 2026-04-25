@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:get/get.dart';
 
 class SecurityController extends GetxController {
@@ -57,7 +58,7 @@ class SecurityController extends GetxController {
     Get.snackbar(
       'Success',
       'Your password has been updated securely.',
-      backgroundColor: const Color(0xFF027A48),
+      backgroundColor: AppColors.darkGreen,
       colorText: Colors.white,
       snackPosition: SnackPosition.BOTTOM,
       margin: const EdgeInsets.all(16),

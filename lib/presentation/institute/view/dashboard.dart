@@ -202,7 +202,7 @@ class InstituteDashboard extends StatelessWidget {
               style: AppTextStyles.manrope(
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
-                color: const Color(0xFF2B5BCC),
+                color: AppColors.instAccentBlue,
               ),
             ),
           ),
@@ -217,7 +217,7 @@ class InstituteDashboard extends StatelessWidget {
       child: Container(
         padding: AppSpacing.all16,
         decoration: BoxDecoration(
-          color: const Color(0xFFF8F9FB),
+          color: AppColors.reportScaffoldBg,
           borderRadius: BorderRadius.circular(16),
           border: Border(
             left: BorderSide(color: batch.leftBorderColor, width: 4),
@@ -293,7 +293,7 @@ class InstituteDashboard extends StatelessWidget {
             style: AppTextStyles.manrope(
               fontSize: 14,
               fontWeight: FontWeight.w700,
-              color: const Color(0xFF2B5BCC),
+              color: AppColors.instAccentBlue,
             ),
           ),
         ),

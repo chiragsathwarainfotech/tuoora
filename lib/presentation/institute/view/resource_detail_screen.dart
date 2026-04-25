@@ -125,7 +125,7 @@ class ResourceDetailScreen extends StatelessWidget {
         );
       case ResourceType.document:
         return Container(
-          color: const Color(0xFFF9FAFB),
+          color: AppColors.scaffoldBg,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

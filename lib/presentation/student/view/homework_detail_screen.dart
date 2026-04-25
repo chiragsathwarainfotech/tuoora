@@ -28,12 +28,12 @@ class _StudentHomeworkDetailScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF9FAFC),
+      backgroundColor: AppColors.scaffoldBg,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF1E3A8A)),
+          icon: const Icon(Icons.arrow_back, color: AppColors.deepBlue),
           onPressed: () => Get.back(),
         ),
         title: Text(
@@ -41,7 +41,7 @@ class _StudentHomeworkDetailScreenState
           style: AppTextStyles.manrope(
             fontSize: 18,
             fontWeight: FontWeight.w800,
-            color: const Color(0xFF1E3A8A),
+            color: AppColors.deepBlue,
           ),
         ),
       ),
@@ -78,7 +78,7 @@ class _StudentHomeworkDetailScreenState
         borderRadius: BorderRadius.circular(AppSpacing.s32),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF003781).withValues(alpha: 0.2),
+            color: AppColors.primaryBlueDark.withValues(alpha: 0.2),
             blurRadius: AppSpacing.s20,
             offset: const Offset(0, AppSpacing.s10),
           ),
@@ -129,7 +129,7 @@ class _StudentHomeworkDetailScreenState
                 Icons.access_time_rounded,
                 _isSubmitted ? 'Status: Submitted' : 'Status: Pending',
                 _isSubmitted
-                    ? const Color(0xFF027A48).withValues(alpha: 0.8)
+                    ? AppColors.darkGreen.withValues(alpha: 0.8)
                     : const Color(0xFF8B4513).withValues(alpha: 0.8),
               ),
             ],
@@ -188,12 +188,12 @@ class _StudentHomeworkDetailScreenState
               Container(
                 padding: AppSpacing.all10,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFE5E9EF),
+                  color: AppColors.divider,
                   borderRadius: BorderRadius.circular(AppSpacing.s10),
                 ),
                 child: const Icon(
                   Icons.description,
-                  color: Color(0xFF003781),
+                  color: AppColors.primaryBlueDark,
                   size: AppSpacing.s18,
                 ),
               ),
@@ -203,7 +203,7 @@ class _StudentHomeworkDetailScreenState
                 style: AppTextStyles.manrope(
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
-                  color: const Color(0xFF1E293B),
+                  color: AppColors.darkSlate,
                   height: 1.2,
                 ),
               ),
@@ -225,7 +225,7 @@ class _StudentHomeworkDetailScreenState
             style: AppTextStyles.manrope(
               fontSize: 14,
               fontWeight: FontWeight.w800,
-              color: const Color(0xFF1E293B),
+              color: AppColors.darkSlate,
             ),
           ),
           AppSpacing.v12,
@@ -246,7 +246,7 @@ class _StudentHomeworkDetailScreenState
               borderRadius: BorderRadius.circular(AppSpacing.s16),
               border: const Border(
                 left: BorderSide(
-                  color: Color(0xFF003781),
+                  color: AppColors.primaryBlueDark,
                   width: AppSpacing.s4,
                 ),
               ),
@@ -257,7 +257,7 @@ class _StudentHomeworkDetailScreenState
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
                 fontStyle: FontStyle.italic,
-                color: const Color(0xFF1E3A8A),
+                color: AppColors.deepBlue,
                 height: 1.5,
               ),
             ),
@@ -278,7 +278,7 @@ class _StudentHomeworkDetailScreenState
             child: Icon(
               Icons.circle,
               size: AppSpacing.s6,
-              color: Color(0xFF94A3B8),
+              color: AppColors.textMuted,
             ),
           ),
           AppSpacing.h12,
@@ -302,7 +302,7 @@ class _StudentHomeworkDetailScreenState
     return Container(
       padding: AppSpacing.all16,
       decoration: BoxDecoration(
-        color: const Color(0xFFF1F5F9),
+        color: AppColors.reportBorder,
         borderRadius: BorderRadius.circular(AppSpacing.s20),
       ),
       child: Row(
@@ -320,7 +320,7 @@ class _StudentHomeworkDetailScreenState
                 style: AppTextStyles.manrope(
                   fontSize: 9,
                   fontWeight: FontWeight.w800,
-                  color: const Color(0xFF94A3B8),
+                  color: AppColors.textMuted,
                   letterSpacing: 0.8,
                 ),
               ),
@@ -330,7 +330,7 @@ class _StudentHomeworkDetailScreenState
                 style: AppTextStyles.manrope(
                   fontSize: 15,
                   fontWeight: FontWeight.w800,
-                  color: const Color(0xFF1E293B),
+                  color: AppColors.darkSlate,
                 ),
               ),
             ],
@@ -348,7 +348,7 @@ class _StudentHomeworkDetailScreenState
           children: [
             const Icon(
               Icons.link_rounded,
-              color: Color(0xFF003781),
+              color: AppColors.primaryBlueDark,
               size: AppSpacing.s24,
             ),
             AppSpacing.h12,
@@ -357,7 +357,7 @@ class _StudentHomeworkDetailScreenState
               style: AppTextStyles.manrope(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
-                color: const Color(0xFF111827),
+                color: AppColors.textPrimary,
               ),
             ),
           ],
@@ -412,7 +412,7 @@ class _StudentHomeworkDetailScreenState
       child: Container(
         padding: AppSpacing.all16,
         decoration: BoxDecoration(
-          color: const Color(0xFFF8FAFC),
+          color: AppColors.scaffoldBg,
           borderRadius: BorderRadius.circular(AppSpacing.s16),
           border: Border.all(color: const Color(0xFFEDF2F7)),
         ),
@@ -426,7 +426,7 @@ class _StudentHomeworkDetailScreenState
               ),
               child: Icon(
                 icon,
-                color: const Color(0xFF991B1B),
+                color: AppColors.redDot,
                 size: AppSpacing.s18,
               ),
             ),
@@ -440,7 +440,7 @@ class _StudentHomeworkDetailScreenState
                     style: AppTextStyles.manrope(
                       fontSize: 14,
                       fontWeight: FontWeight.w800,
-                      color: const Color(0xFF1E293B),
+                      color: AppColors.darkSlate,
                     ),
                   ),
                   Text(
@@ -448,7 +448,7 @@ class _StudentHomeworkDetailScreenState
                     style: AppTextStyles.manrope(
                       fontSize: 9,
                       fontWeight: FontWeight.w800,
-                      color: const Color(0xFF94A3B8),
+                      color: AppColors.textMuted,
                       letterSpacing: 0.5,
                     ),
                   ),
@@ -457,7 +457,7 @@ class _StudentHomeworkDetailScreenState
             ),
             const Icon(
               Icons.file_download_outlined,
-              color: Color(0xFF64748B),
+              color: AppColors.textTertiary,
               size: AppSpacing.s22,
             ),
           ],
@@ -470,7 +470,7 @@ class _StudentHomeworkDetailScreenState
     return Container(
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
-        color: const Color(0xFFE5E9EF),
+        color: AppColors.divider,
         borderRadius: BorderRadius.circular(AppSpacing.s20),
       ),
       child: Column(
@@ -483,7 +483,7 @@ class _StudentHomeworkDetailScreenState
                 style: AppTextStyles.manrope(
                   fontSize: 10,
                   fontWeight: FontWeight.w800,
-                  color: const Color(0xFF64748B),
+                  color: AppColors.textTertiary,
                   letterSpacing: 1.0,
                 ),
               ),
@@ -492,7 +492,7 @@ class _StudentHomeworkDetailScreenState
                 style: AppTextStyles.manrope(
                   fontSize: 12,
                   fontWeight: FontWeight.w800,
-                  color: const Color(0xFF111827),
+                  color: AppColors.textPrimary,
                 ),
               ),
             ],
@@ -505,7 +505,7 @@ class _StudentHomeworkDetailScreenState
               minHeight: AppSpacing.s12,
               backgroundColor: const Color(0xFFD1D9E4),
               valueColor: const AlwaysStoppedAnimation<Color>(
-                Color(0xFF003781),
+                AppColors.primaryBlueDark,
               ),
             ),
           ),
@@ -523,7 +523,7 @@ class _StudentHomeworkDetailScreenState
         boxShadow: isEnabled
             ? [
                 BoxShadow(
-                  color: const Color(0xFF003781).withValues(alpha: 0.3),
+                  color: AppColors.primaryBlueDark.withValues(alpha: 0.3),
                   blurRadius: AppSpacing.s20,
                   offset: const Offset(0, AppSpacing.s10),
                 ),
@@ -537,7 +537,7 @@ class _StudentHomeworkDetailScreenState
                 Get.snackbar(
                   'Success',
                   'Homework submitted successfully!',
-                  backgroundColor: const Color(0xFF027A48),
+                  backgroundColor: AppColors.darkGreen,
                   colorText: Colors.white,
                   snackPosition: SnackPosition.BOTTOM,
                   margin: const EdgeInsets.all(16),
@@ -545,8 +545,8 @@ class _StudentHomeworkDetailScreenState
               }
             : null,
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF003781),
-          disabledBackgroundColor: const Color(0xFFD1D5DB),
+          backgroundColor: AppColors.primaryBlueDark,
+          disabledBackgroundColor: AppColors.borderLightGray,
           padding: const EdgeInsets.symmetric(vertical: AppSpacing.s12),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppSpacing.s20),

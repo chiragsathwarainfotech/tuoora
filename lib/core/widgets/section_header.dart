@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../core/constants/app_colors.dart';
+import 'package:fee_easy/core/constants/app_colors.dart';
 import '../../core/constants/app_text_styles.dart';
 import '../../core/theme/app_spacing.dart';
 
@@ -43,14 +43,14 @@ class SectionHeader extends StatelessWidget {
                     style: AppTextStyles.manrope(
                       fontSize: 14,
                       fontWeight: FontWeight.w800,
-                      color: const Color(0xFF2B5CCB),
+                      color: AppColors.accentBlue,
                     ),
                   ),
                   AppSpacing.h4,
                   const Icon(
                     Icons.chevron_right,
                     size: AppSpacing.s16,
-                    color: Color(0xFF2B5CCB),
+                    color: AppColors.accentBlue,
                   ),
                 ],
               ),

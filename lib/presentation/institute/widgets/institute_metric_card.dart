@@ -22,7 +22,7 @@ class InstituteMetricCard extends StatelessWidget {
     return Container(
       padding: AppSpacing.all16,
       decoration: BoxDecoration(
-        color: const Color(0xFFF8F9FB),
+        color: AppColors.scaffoldBg,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(

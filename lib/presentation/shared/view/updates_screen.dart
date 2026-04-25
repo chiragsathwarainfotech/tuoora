@@ -1,4 +1,5 @@
 import 'package:fee_easy/core/constants/app_text_styles.dart';
+import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -47,7 +48,7 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
     _UpdateData(
       icon: Icons.account_balance_wallet_outlined,
       iconColor: const Color(0xFF92400E),
-      iconBg: const Color(0xFFFFEADC),
+      iconBg: AppColors.amberLight,
       title: 'Fee Reminder',
       time: '10:45 AM',
       description:
@@ -60,22 +61,22 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
     ),
     _UpdateData(
       icon: Icons.edit_note_rounded,
-      iconColor: const Color(0xFF1E40AF),
-      iconBg: const Color(0xFFDBEAFE),
+      iconColor: AppColors.oceanBlue,
+      iconBg: AppColors.lightBlueBg,
       title: 'Homework Alert',
       time: '08:20 AM',
       description:
           'Advanced Calculus: Assignment #4 has been posted. Submission deadline: Oct 24th.',
       category: 'Academic',
       badgeText: 'Math Dept.',
-      badgeColor: const Color(0xFF1E3A8A),
+      badgeColor: AppColors.deepBlue,
       badgeBg: const Color(0xFFEFF6FF),
       section: 'Today',
     ),
     _UpdateData(
       icon: Icons.calendar_today_outlined,
       iconColor: const Color(0xFF475569),
-      iconBg: const Color(0xFFF1F5F9),
+      iconBg: AppColors.reportBorder,
       title: 'Attendance Update',
       time: 'Yesterday',
       description:
@@ -104,12 +105,12 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
         : allUpdates.where((u) => u.category == selectedFilter).toList();
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA),
+      backgroundColor: AppColors.scaffoldBg,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF1E3A8A)),
+          icon: const Icon(Icons.arrow_back, color: AppColors.deepBlue),
           onPressed: () => Get.back(),
         ),
         title: Text(
@@ -117,7 +118,7 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
           style: AppTextStyles.manrope(
             fontSize: 18,
             fontWeight: FontWeight.w800,
-            color: const Color(0xFF1E3A8A),
+            color: AppColors.deepBlue,
           ),
         ),
         centerTitle: false,
@@ -184,8 +185,8 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
                 padding: AppSpacing.x24.add(AppSpacing.y12),
                 decoration: BoxDecoration(
                   color: isSelected
-                      ? const Color(0xFF003781)
-                      : const Color(0xFFEFF3F8),
+                      ? AppColors.primaryBlueDark
+                      : AppColors.reportBorder,
                   borderRadius: BorderRadius.circular(AppSpacing.s16),
                 ),
                 child: Text(
@@ -193,7 +194,7 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
                   style: AppTextStyles.manrope(
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
-                    color: isSelected ? Colors.white : const Color(0xFF64748B),
+                    color: isSelected ? Colors.white : AppColors.textTertiary,
                   ),
                 ),
               ),
@@ -214,7 +215,7 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
             style: AppTextStyles.manrope(
               fontSize: 18,
               fontWeight: FontWeight.w800,
-              color: const Color(0xFF111827),
+              color: AppColors.textPrimary,
             ),
           ),
           AppSpacing.h16,
@@ -268,7 +269,7 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
                           style: AppTextStyles.manrope(
                             fontSize: 16,
                             fontWeight: FontWeight.w800,
-                            color: const Color(0xFF1E293B),
+                            color: AppColors.darkSlate,
                           ),
                         ),
                         Text(
@@ -276,7 +277,7 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
                           style: AppTextStyles.lexend(
                             fontSize: 11,
                             fontWeight: FontWeight.w400,
-                            color: const Color(0xFF94A3B8),
+                            color: AppColors.textMuted,
                           ),
                         ),
                       ],

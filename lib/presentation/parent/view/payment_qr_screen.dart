@@ -1,4 +1,5 @@
 import 'package:fee_easy/core/constants/app_text_styles.dart';
+import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,12 +13,12 @@ class PaymentQRScreen extends StatelessWidget {
     const upiId = 'julian.sterling@okaxis';
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FB),
+      backgroundColor: AppColors.scaffoldBg,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF1E3A8A)),
+          icon: const Icon(Icons.arrow_back, color: AppColors.deepBlue),
           onPressed: () => Get.back(),
         ),
         title: Text(
@@ -25,12 +26,12 @@ class PaymentQRScreen extends StatelessWidget {
           style: AppTextStyles.manrope(
             fontSize: 18,
             fontWeight: FontWeight.w800,
-            color: const Color(0xFF1E3A8A),
+            color: AppColors.deepBlue,
           ),
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.download, color: Color(0xFF1E3A8A)),
+            icon: const Icon(Icons.download, color: AppColors.deepBlue),
             onPressed: () => Get.snackbar(
               'Success',
               'QR Code saved to gallery',
@@ -63,7 +64,7 @@ class PaymentQRScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: const Color(0xFFE0E7FF),
+                      color: AppColors.indigoLight,
                       width: 3,
                     ),
                     image: const DecorationImage(
@@ -78,7 +79,7 @@ class PaymentQRScreen extends StatelessWidget {
                   style: AppTextStyles.manrope(
                     fontSize: 22,
                     fontWeight: FontWeight.w800,
-                    color: const Color(0xFF111827),
+                    color: AppColors.textPrimary,
                   ),
                 ),
                 AppSpacing.v4,
@@ -87,7 +88,7 @@ class PaymentQRScreen extends StatelessWidget {
                   style: AppTextStyles.lexend(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
-                    color: const Color(0xFF6B7280),
+                    color: AppColors.textTertiary,
                   ),
                 ),
               ],
@@ -119,7 +120,7 @@ class PaymentQRScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       border: Border.all(
-                        color: const Color(0xFFF1F5F9),
+                        color: AppColors.reportBorder,
                         width: 1.5,
                       ),
                       borderRadius: BorderRadius.circular(16),
@@ -149,7 +150,7 @@ class PaymentQRScreen extends StatelessWidget {
                           ),
                           child: const Icon(
                             Icons.account_balance_wallet_rounded,
-                            color: Color(0xFF1E3A8A),
+                            color: AppColors.deepBlue,
                             size: 32,
                           ),
                         ),
@@ -162,7 +163,7 @@ class PaymentQRScreen extends StatelessWidget {
                     style: AppTextStyles.manrope(
                       fontSize: 12,
                       fontWeight: FontWeight.w800,
-                      color: const Color(0xFF94A3B8),
+                      color: AppColors.textMuted,
                       letterSpacing: 1.5,
                     ),
                   ),
@@ -180,7 +181,7 @@ class PaymentQRScreen extends StatelessWidget {
                   'Copied',
                   'UPI ID copied to clipboard',
                   snackPosition: SnackPosition.BOTTOM,
-                  backgroundColor: const Color(0xFF1E293B),
+                  backgroundColor: AppColors.darkSlate,
                   colorText: Colors.white,
                   margin: const EdgeInsets.all(20),
                   borderRadius: 16,
@@ -193,9 +194,9 @@ class PaymentQRScreen extends StatelessWidget {
                   vertical: 14,
                 ),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFE0E7FF).withValues(alpha: 0.4),
+                  color: AppColors.indigoLight.withValues(alpha: 0.4),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: const Color(0xFFDBEAFE)),
+                  border: Border.all(color: AppColors.lightBlueBg),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -205,13 +206,13 @@ class PaymentQRScreen extends StatelessWidget {
                       style: AppTextStyles.manrope(
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
-                        color: const Color(0xFF1E40AF),
+                        color: AppColors.oceanBlue,
                       ),
                     ),
                     AppSpacing.h12,
                     const Icon(
                       Icons.copy_rounded,
-                      color: Color(0xFF1E40AF),
+                      color: AppColors.oceanBlue,
                       size: 18,
                     ),
                   ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:get/get.dart';
 
 class WhatsAppController extends GetxController {
@@ -36,7 +37,7 @@ class WhatsAppController extends GetxController {
     Get.snackbar(
       'Verified',
       'Meta API connection established successfully.',
-      backgroundColor: const Color(0xFF027A48),
+      backgroundColor: AppColors.darkGreen,
       colorText: Colors.white,
       snackPosition: SnackPosition.BOTTOM,
       margin: const EdgeInsets.all(16),

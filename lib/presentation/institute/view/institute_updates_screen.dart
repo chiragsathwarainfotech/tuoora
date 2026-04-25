@@ -78,13 +78,13 @@ class InstituteUpdatesScreen extends GetView<UpdatesController> {
 
           switch (update.category) {
             case 'Fee Reminder':
-              iconBg = const Color(0xFFDBEAFE);
-              iconColor = const Color(0xFF1E40AF);
+              iconBg = AppColors.lightBlueBg;
+              iconColor = AppColors.oceanBlue;
               icon = Icons.request_quote_rounded;
               break;
             case 'Holiday':
               iconBg = const Color(0xFFFFEDD5);
-              iconColor = const Color(0xFFC2410C);
+              iconColor = AppColors.orangeTag;
               icon = Icons.beach_access_rounded;
               break;
             case 'Event':
@@ -94,7 +94,7 @@ class InstituteUpdatesScreen extends GetView<UpdatesController> {
               break;
             case 'Notice':
             default:
-              iconBg = const Color(0xFFF1F5F9);
+              iconBg = AppColors.reportBorder;
               iconColor = const Color(0xFF475569);
               icon = Icons.info_outline_rounded;
               break;
@@ -156,7 +156,7 @@ class InstituteUpdatesScreen extends GetView<UpdatesController> {
                   child: Container(
                     width: 2,
                     margin: const EdgeInsets.symmetric(vertical: 8),
-                    color: const Color(0xFFE5E7EB),
+                    color: AppColors.borderGrey,
                   ),
                 ),
             ],
@@ -173,7 +173,7 @@ class InstituteUpdatesScreen extends GetView<UpdatesController> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20),
                     border: hasCardBorder
-                        ? Border.all(color: const Color(0xFFDBEAFE), width: 2)
+                        ? Border.all(color: AppColors.lightBlueBg, width: 2)
                         : null,
                     boxShadow: [
                       BoxShadow(

@@ -1,4 +1,5 @@
 import 'package:fee_easy/core/widgets/parent_bottom_nav.dart';
+import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/widgets/student_bottom_nav.dart';
 import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
@@ -42,7 +43,7 @@ class InstituteScreen extends StatelessWidget {
     );
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA),
+      backgroundColor: AppColors.scaffoldBg,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -64,7 +65,7 @@ class InstituteScreen extends StatelessWidget {
               style: AppTextStyles.manrope(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
-                color: const Color(0xFF1E3A8A),
+                color: AppColors.deepBlue,
               ),
             ),
           ],
@@ -74,7 +75,7 @@ class InstituteScreen extends StatelessWidget {
             onPressed: () => Get.toNamed(_getUpdatesRoute()),
             icon: const Icon(
               Icons.notifications_none_rounded,
-              color: Color(0xFF111827),
+              color: AppColors.textPrimary,
               size: AppSpacing.s26,
             ),
           ),
@@ -127,20 +128,20 @@ class InstituteScreen extends StatelessWidget {
             style: AppTextStyles.manrope(
               fontSize: 24,
               fontWeight: FontWeight.w800,
-              color: const Color(0xFF111827),
+              color: AppColors.textPrimary,
             ),
           ),
           AppSpacing.v4,
           const Divider(
             height: AppSpacing.s48,
             thickness: 1,
-            color: Color(0xFFF3F4F6),
+            color: AppColors.divider,
           ),
           _buildInfoTile(
             icon: Icons.person_outline_rounded,
             label: 'Owner & Founder',
             value: 'Dr. Alistair Aeon',
-            iconColor: Color(0xFF2B5BCC),
+            iconColor: AppColors.accentBlue,
             bgColor: Color(0xFFEFF6FF),
           ),
           AppSpacing.v16,
@@ -148,7 +149,7 @@ class InstituteScreen extends StatelessWidget {
             icon: Icons.email_outlined,
             label: 'Email Address',
             value: 'info@aeon.edu',
-            iconColor: Color(0xFF2B5BCC),
+            iconColor: AppColors.accentBlue,
             bgColor: Color(0xFFEFF6FF),
           ),
           AppSpacing.v16,
@@ -156,7 +157,7 @@ class InstituteScreen extends StatelessWidget {
             icon: Icons.phone_outlined,
             label: 'Phone Number',
             value: '+1 (555) 0100',
-            iconColor: Color(0xFF2B5BCC),
+            iconColor: AppColors.accentBlue,
             bgColor: Color(0xFFEFF6FF),
           ),
           AppSpacing.v16,
@@ -183,7 +184,7 @@ class InstituteScreen extends StatelessWidget {
     return Container(
       padding: AppSpacing.all16,
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FAFC),
+        color: AppColors.scaffoldBg,
         borderRadius: BorderRadius.circular(AppSpacing.s20),
       ),
       child: Row(
@@ -204,7 +205,7 @@ class InstituteScreen extends StatelessWidget {
                   style: AppTextStyles.lexend(
                     fontSize: 11,
                     fontWeight: FontWeight.w400,
-                    color: const Color(0xFF64748B),
+                    color: AppColors.textTertiary,
                   ),
                 ),
                 AppSpacing.v2,
@@ -213,7 +214,7 @@ class InstituteScreen extends StatelessWidget {
                   style: AppTextStyles.manrope(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
-                    color: const Color(0xFF1E293B),
+                    color: AppColors.darkSlate,
                     height: 1.4,
                   ),
                 ),
@@ -241,7 +242,7 @@ class InstituteScreen extends StatelessWidget {
             style: AppTextStyles.manrope(
               fontSize: 18,
               fontWeight: FontWeight.w800,
-              color: const Color(0xFF1E293B),
+              color: AppColors.darkSlate,
             ),
           ),
           AppSpacing.v20,
@@ -285,11 +286,11 @@ class InstituteScreen extends StatelessWidget {
       margin: AppSpacing.x20,
       padding: AppSpacing.all32,
       decoration: BoxDecoration(
-        color: const Color(0xFF003781),
+        color: AppColors.primaryBlueDark,
         borderRadius: BorderRadius.circular(AppSpacing.s32),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF003781).withValues(alpha: 0.25),
+            color: AppColors.primaryBlueDark.withValues(alpha: 0.25),
             blurRadius: AppSpacing.s20,
             offset: const Offset(0, AppSpacing.s10),
           ),

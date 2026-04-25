@@ -1,4 +1,5 @@
 import 'package:fee_easy/config/app_routes.dart';
+import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/services/auth_service.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
@@ -11,12 +12,12 @@ class StudentProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA),
+      backgroundColor: AppColors.scaffoldBg,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF1E3A8A)),
+          icon: const Icon(Icons.arrow_back, color: AppColors.deepBlue),
           onPressed: () => Get.back(),
         ),
         title: Text(
@@ -24,7 +25,7 @@ class StudentProfileScreen extends StatelessWidget {
           style: AppTextStyles.manrope(
             fontSize: 18,
             fontWeight: FontWeight.w800,
-            color: const Color(0xFF1E3A8A),
+            color: AppColors.deepBlue,
           ),
         ),
         centerTitle: false,
@@ -55,7 +56,7 @@ class StudentProfileScreen extends StatelessWidget {
       padding: AppSpacing.all32,
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF0056D2), Color(0xFF003781)],
+          colors: [Color(0xFF0056D2), AppColors.primaryBlueDark],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -189,7 +190,7 @@ class StudentProfileScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFFEFF6FF),
         borderRadius: BorderRadius.circular(AppSpacing.s16),
-        border: Border.all(color: const Color(0xFFDBEAFE)),
+        border: Border.all(color: AppColors.lightBlueBg),
       ),
       child: Row(
         children: [
@@ -205,7 +206,7 @@ class StudentProfileScreen extends StatelessWidget {
               style: AppTextStyles.lexend(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
-                color: const Color(0xFF1E40AF),
+                color: AppColors.oceanBlue,
               ),
             ),
           ),
@@ -223,7 +224,7 @@ class StudentProfileScreen extends StatelessWidget {
           style: AppTextStyles.manrope(
             fontSize: 18,
             fontWeight: FontWeight.w800,
-            color: const Color(0xFF111827),
+            color: AppColors.textPrimary,
           ),
         ),
         AppSpacing.v20,
@@ -251,7 +252,7 @@ class StudentProfileScreen extends StatelessWidget {
               const Divider(
                 height: AppSpacing.s48,
                 thickness: 1,
-                color: Color(0xFFF1F5F9),
+                color: AppColors.reportBorder,
               ),
               Row(
                 children: [
@@ -273,7 +274,7 @@ class StudentProfileScreen extends StatelessWidget {
               const Divider(
                 height: AppSpacing.s48,
                 thickness: 1,
-                color: Color(0xFFF1F5F9),
+                color: AppColors.reportBorder,
               ),
               _buildPersonalInfoRow(
                 'RESIDENTIAL ADDRESS',
@@ -298,13 +299,13 @@ class StudentProfileScreen extends StatelessWidget {
               style: AppTextStyles.manrope(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
-                color: const Color(0xFF111827),
+                color: AppColors.textPrimary,
               ),
             ),
             Container(
               padding: AppSpacing.x12.add(AppSpacing.y6),
               decoration: BoxDecoration(
-                color: const Color(0xFFE0E7FF),
+                color: AppColors.indigoLight,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: const Text(
@@ -313,7 +314,7 @@ class StudentProfileScreen extends StatelessWidget {
                   fontFamily: 'Manrope',
                   fontSize: 8,
                   fontWeight: FontWeight.w800,
-                  color: Color(0xFF0D47A1),
+                  color: AppColors.intenseBlue,
                 ),
               ),
             ),
@@ -374,7 +375,7 @@ class StudentProfileScreen extends StatelessWidget {
               ? Container(
                   padding: AppSpacing.all12,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF1F5F9),
+                    color: AppColors.reportBorder,
                     borderRadius: BorderRadius.circular(AppSpacing.s16),
                   ),
                   child: Icon(
@@ -394,7 +395,7 @@ class StudentProfileScreen extends StatelessWidget {
                   style: AppTextStyles.lexend(
                     fontSize: 11,
                     fontWeight: FontWeight.w400,
-                    color: const Color(0xFF64748B),
+                    color: AppColors.textTertiary,
                   ),
                 ),
                 AppSpacing.v4,
@@ -403,7 +404,7 @@ class StudentProfileScreen extends StatelessWidget {
                   style: AppTextStyles.manrope(
                     fontSize: small ? 14 : 16,
                     fontWeight: FontWeight.w800,
-                    color: const Color(0xFF1E293B),
+                    color: AppColors.darkSlate,
                   ),
                 ),
               ],
@@ -433,7 +434,7 @@ class StudentProfileScreen extends StatelessWidget {
               style: AppTextStyles.manrope(
                 fontSize: 9,
                 fontWeight: FontWeight.w800,
-                color: const Color(0xFF94A3B8),
+                color: AppColors.textMuted,
                 letterSpacing: 0.5,
               ),
             ),
@@ -449,7 +450,7 @@ class StudentProfileScreen extends StatelessWidget {
           style: AppTextStyles.manrope(
             fontSize: 16,
             fontWeight: FontWeight.w800,
-            color: const Color(0xFF1E293B),
+            color: AppColors.darkSlate,
             height: 1.4,
           ),
           textAlign: alignment == CrossAxisAlignment.start
@@ -484,7 +485,7 @@ class StudentProfileScreen extends StatelessWidget {
               ),
               child: const Icon(
                 Icons.logout_rounded,
-                color: Color(0xFF991B1B),
+                color: AppColors.redDot,
                 size: AppSpacing.s20,
               ),
             ),
@@ -498,14 +499,14 @@ class StudentProfileScreen extends StatelessWidget {
                     style: AppTextStyles.manrope(
                       fontSize: 16,
                       fontWeight: FontWeight.w800,
-                      color: const Color(0xFF991B1B),
+                      color: AppColors.redDot,
                     ),
                   ),
                   Text(
                     'Securely terminate session',
                     style: AppTextStyles.lexend(
                       fontSize: 12,
-                      color: const Color(0xFFEF4444).withValues(alpha: 0.7),
+                      color: AppColors.errorRed.withValues(alpha: 0.7),
                     ),
                   ),
                 ],

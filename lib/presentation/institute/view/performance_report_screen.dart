@@ -1,6 +1,7 @@
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
+import 'package:fee_easy/presentation/institute/controllers/reports_controller.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,53 +12,53 @@ class PerformanceReportScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<ReportsController>();
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FB),
+      backgroundColor: AppColors.reportScaffoldBg,
       body: SafeArea(
         child: Column(
           children: [
             const InstituteAppBar(title: 'Performance Report', isRoot: false),
             Expanded(
-              child: SingleChildScrollView(
-                padding: AppSpacing.all24,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildSummaryCard(
-                      title: 'Average Batch Performance',
-                      amount: '84.5%',
-                      trend: '5.2% increase from last term',
-                      trendColor: const Color(0xFF10B981),
-                      isPrimary: false,
-                    ),
-                    AppSpacing.v32,
-                    _buildSectionHeader('Performance Summary'),
-                    AppSpacing.v16,
-                    _buildBatchSummaryItem(
-                      name: 'Advanced Physics (A1)',
-                      strength: 42,
-                      tag: 'MORNING',
-                      collected: '88%',
-                      pending: '2 Below Avg',
-                      progress: 0.88,
-                      labelType: 'Average Grade',
-                      pendingLabel: 'CONCERNS',
-                    ),
-                    AppSpacing.v12,
-                    _buildBatchSummaryItem(
-                      name: 'Data Structures (DS2)',
-                      strength: 30,
-                      tag: 'EVENING',
-                      collected: '76%',
-                      pending: '6 Below Avg',
-                      progress: 0.76,
-                      labelType: 'Average Grade',
-                      pendingLabel: 'CONCERNS',
-                    ),
-                    AppSpacing.v32,
-                  ],
-                ),
-              ),
+              child: Obx(() {
+                if (controller.isPerformanceLoading.value) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                return SingleChildScrollView(
+                  padding: AppSpacing.all24,
+                  child: Column(
+                    children: [
+                      _buildPerformanceGraph(),
+                      AppSpacing.v32,
+                      _buildSectionHeader('Batch Performance Summary'),
+                      AppSpacing.v16,
+                      ...controller.batchPerformances.map((batchPerf) {
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                            bottom: AppSpacing.s12,
+                          ),
+                          child: _buildBatchSummaryItem(
+                            batchId: batchPerf.batchId,
+                            name: batchPerf.batchName,
+                            strength: batchPerf.totalStudents,
+                            collected:
+                                '${(batchPerf.averageRating * 10).toStringAsFixed(1)}%',
+                            pending:
+                                '${batchPerf.studentPerformances.where((s) => s.averageRating < 7.5).length} Concerns',
+                            progress: batchPerf.averageRating / 10,
+                            labelType: 'Average Grade',
+                            pendingLabel: 'ACADEMIC CONCERNS',
+                            showFooter: false,
+                          ),
+                        );
+                      }),
+                      AppSpacing.v32,
+                    ],
+                  ),
+                );
+              }),
             ),
           ],
         ),
@@ -65,16 +66,11 @@ class PerformanceReportScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSummaryCard({
-    required String title,
-    required String amount,
-    String? trend,
-    Color? trendColor,
-    Color? amountColor,
-    required bool isPrimary,
-  }) {
+  Widget _buildPerformanceGraph() {
+    final List<double> data = [0.78, 0.85, 0.82, 0.88, 0.84, 0.90, 0.86];
+    final List<String> weeks = ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7'];
+
     return Container(
-      width: double.infinity,
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
         color: Colors.white,
@@ -90,50 +86,77 @@ class PerformanceReportScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: AppTextStyles.manrope(
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
-              color: AppColors.textPrimary,
-            ),
-          ),
-          AppSpacing.v8,
-          Text(
-            amount,
-            style: AppTextStyles.manrope(
-              fontSize: 32,
-              fontWeight: FontWeight.w800,
-              color: amountColor ?? const Color(0xFF003D99),
-            ),
-          ),
-          if (trend != null) ...[
-            AppSpacing.v8,
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: (trendColor ?? const Color(0xFF10B981)).withValues(
-                  alpha: 0.1,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Performance Trends',
+                style: AppTextStyles.manrope(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.textPrimary,
                 ),
-                borderRadius: BorderRadius.circular(12),
               ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.trending_up_rounded, size: 14, color: trendColor),
-                  AppSpacing.h4,
-                  Text(
-                    trend,
-                    style: AppTextStyles.manrope(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w800,
-                      color: trendColor,
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppColors.successGreen.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.trending_up,
+                      size: 14,
+                      color: AppColors.successGreen,
                     ),
-                  ),
-                ],
+                    AppSpacing.h4,
+                    Text(
+                      '5.2%',
+                      style: AppTextStyles.manrope(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.successGreen,
+                      ),
+                    ),
+                  ],
+                ),
               ),
+            ],
+          ),
+          AppSpacing.v24,
+          SizedBox(
+            height: 150,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: List.generate(data.length, (index) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      width: 24,
+                      height: 100 * data[index],
+                      decoration: BoxDecoration(
+                        color: index == 5
+                            ? AppColors.primaryBlueDark
+                            : AppColors.lightBlueBg,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                    ),
+                    AppSpacing.v8,
+                    Text(
+                      weeks[index],
+                      style: AppTextStyles.lexend(
+                        fontSize: 10,
+                        color: AppColors.textTertiary,
+                      ),
+                    ),
+                  ],
+                );
+              }),
             ),
-          ],
+          ),
         ],
       ),
     );
@@ -157,7 +180,7 @@ class PerformanceReportScreen extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           decoration: BoxDecoration(
-            color: const Color(0xFF003D99),
+            color: AppColors.primaryBlueDark,
             borderRadius: BorderRadius.circular(10),
           ),
           child: Row(
@@ -184,9 +207,9 @@ class PerformanceReportScreen extends StatelessWidget {
   }
 
   Widget _buildBatchSummaryItem({
+    required String batchId,
     required String name,
     required int strength,
-    required String tag,
     required String collected,
     required String pending,
     required double progress,
@@ -199,6 +222,7 @@ class PerformanceReportScreen extends StatelessWidget {
         Get.toNamed(
           AppRoutes.instituteBatchReportDetail,
           arguments: {
+            'batchId': batchId,
             'batchName': name,
             'reportType': 'Performance',
           },
@@ -246,24 +270,6 @@ class PerformanceReportScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFDBEAFE),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    tag,
-                    style: AppTextStyles.manrope(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w800,
-                      color: const Color(0xFF003D99),
-                    ),
-                  ),
-                ),
               ],
             ),
             AppSpacing.v20,
@@ -283,7 +289,7 @@ class PerformanceReportScreen extends StatelessWidget {
                   style: AppTextStyles.manrope(
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
-                    color: const Color(0xFF003D99),
+                    color: AppColors.primaryBlueDark,
                   ),
                 ),
               ],
@@ -294,8 +300,8 @@ class PerformanceReportScreen extends StatelessWidget {
               child: LinearProgressIndicator(
                 value: progress,
                 minHeight: 6,
-                backgroundColor: const Color(0xFFF1F5F9),
-                color: const Color(0xFF003D99),
+                backgroundColor: AppColors.reportProgressBg,
+                color: AppColors.primaryBlueDark,
               ),
             ),
             if (showFooter) ...[
@@ -321,7 +327,7 @@ class PerformanceReportScreen extends StatelessWidget {
                           style: AppTextStyles.manrope(
                             fontSize: 16,
                             fontWeight: FontWeight.w800,
-                            color: const Color(0xFF991B1B),
+                            color: AppColors.darkRedText,
                           ),
                         ),
                       ],

@@ -350,7 +350,7 @@ class ParentDashboard extends StatelessWidget {
               completed: true,
             ),
             AppSpacing.v12,
-            const TaskCard(
+            TaskCard(
               icon: Icons.menu_book,
               iconColor: AppColors.primaryBlue,
               iconBgColor: AppColors.iconBgLightBlue,

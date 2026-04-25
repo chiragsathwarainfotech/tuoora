@@ -12,7 +12,7 @@ class ReportsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FB),
+      backgroundColor: AppColors.reportScaffoldBg,
       body: SafeArea(
         child: Column(
           children: [
@@ -25,7 +25,7 @@ class ReportsScreen extends StatelessWidget {
                     title: 'Fee Reports',
                     subtitle: 'Collection summaries, pending dues, and batch-wise financial insights.',
                     icon: Icons.account_balance_wallet_rounded,
-                    color: const Color(0xFF003D99),
+                    color: AppColors.primaryBlueDark,
                     onTap: () => Get.toNamed(AppRoutes.instituteFeeReport),
                   ),
                   AppSpacing.v16,
@@ -33,7 +33,7 @@ class ReportsScreen extends StatelessWidget {
                     title: 'Attendance Reports',
                     subtitle: 'Daily attendance rates, absentee tracking, and batch consistency trends.',
                     icon: Icons.calendar_today_rounded,
-                    color: const Color(0xFF10B981),
+                    color: AppColors.successGreen,
                     onTap: () => Get.toNamed(AppRoutes.instituteAttendanceReport),
                   ),
                   AppSpacing.v16,
@@ -41,7 +41,7 @@ class ReportsScreen extends StatelessWidget {
                     title: 'Performance Reports',
                     subtitle: 'Academic progress, average grades, and performance analysis across batches.',
                     icon: Icons.insights_rounded,
-                    color: const Color(0xFFF59E0B),
+                    color: AppColors.warningAmber,
                     onTap: () => Get.toNamed(AppRoutes.institutePerformanceReport),
                   ),
                 ],

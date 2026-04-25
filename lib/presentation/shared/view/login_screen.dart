@@ -46,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Container(
                     width: AppSpacing.s40,
                     height: AppSpacing.s40,
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       color: AppColors.iconBgLightBlue,
                       shape: BoxShape.circle,
                     ),
@@ -269,8 +269,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: () => Get.toNamed(AppRoutes.instituteSignup),
                     icon: Icons.storefront_outlined,
                     backgroundColor: Colors.white,
-                    foregroundColor: const Color(0xFF003082),
-                    borderColor: const Color(0xFFE5E7EB),
+                    foregroundColor: AppColors.primaryBlue,
+                    borderColor: AppColors.borderGrey,
                     borderRadius: AppSpacing.s16,
                     padding: const EdgeInsets.symmetric(
                       vertical: AppSpacing.s18,

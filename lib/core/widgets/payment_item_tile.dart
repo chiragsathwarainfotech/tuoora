@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_images.dart';
 import '../../core/constants/app_text_styles.dart';
 import '../../core/theme/app_spacing.dart';
@@ -51,7 +51,7 @@ class PaymentItemTile extends StatelessWidget {
             ),
             child: const Icon(
               Icons.check_circle,
-              color: Color(0xFF10B981),
+              color: AppColors.successGreen,
               size: AppSpacing.s24,
             ),
           ),
@@ -99,14 +99,14 @@ class PaymentItemTile extends StatelessWidget {
                   child: Container(
                     padding: AppSpacing.all6,
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF1F5F9),
+                      color: AppColors.reportBorder,
                       borderRadius: BorderRadius.circular(AppSpacing.s8),
                     ),
                     child: SvgPicture.asset(
                       AppImages.icDownload,
                       height: AppSpacing.s14,
                       colorFilter: const ColorFilter.mode(
-                        Color(0xFF64748B),
+                        AppColors.textTertiary,
                         BlendMode.srcIn,
                       ),
                     ),

@@ -208,7 +208,7 @@ class BatchController extends GetxController {
       Get.snackbar(
         isEditMode.value ? 'Batch Updated' : 'Batch Created',
         'Successfully saved ${batchNameController.text}',
-        backgroundColor: const Color(0xFF027A48),
+        backgroundColor: AppColors.darkGreen,
         colorText: Colors.white,
       );
     });
@@ -242,7 +242,7 @@ class BatchController extends GetxController {
       Get.snackbar(
         'Success',
         'Students assigned successfully',
-        backgroundColor: const Color(0xFF027A48),
+        backgroundColor: AppColors.darkGreen,
         colorText: Colors.white,
       );
     }
@@ -253,7 +253,7 @@ class BatchController extends GetxController {
     Get.snackbar(
       'Batch Deleted',
       'The batch has been removed successfully.',
-      backgroundColor: const Color(0xFF027A48),
+      backgroundColor: AppColors.darkGreen,
       colorText: Colors.white,
       snackPosition: SnackPosition.BOTTOM,
       margin: const EdgeInsets.all(16),

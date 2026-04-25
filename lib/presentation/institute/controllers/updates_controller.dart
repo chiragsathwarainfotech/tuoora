@@ -1,4 +1,5 @@
 import 'package:fee_easy/presentation/institute/models/update_model.dart';
+import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -92,8 +93,11 @@ class UpdatesController extends GetxController {
     }
 
     String audienceLabel = selectedRecipient.value;
-    if (selectedRecipient.value == 'Student' || selectedRecipient.value == 'Both') {
-      String prefix = selectedRecipient.value == 'Both' ? 'Students & Parents' : 'Students';
+    if (selectedRecipient.value == 'Student' ||
+        selectedRecipient.value == 'Both') {
+      String prefix = selectedRecipient.value == 'Both'
+          ? 'Students & Parents'
+          : 'Students';
       if (selectedAudience.value == 'All Students') {
         audienceLabel = 'All $prefix';
       } else if (selectedAudience.value == 'Specific Batch') {
@@ -129,7 +133,7 @@ class UpdatesController extends GetxController {
     Get.snackbar(
       'Update Broadcasted',
       'Your message has been sent to $audienceLabel.',
-      backgroundColor: const Color(0xFF027A48),
+      backgroundColor: AppColors.darkGreen,
       colorText: Colors.white,
       snackPosition: SnackPosition.BOTTOM,
       margin: const EdgeInsets.all(16),

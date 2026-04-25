@@ -127,7 +127,7 @@ class InstituteSecurityScreen extends GetView<SecurityController> {
           () => Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             decoration: BoxDecoration(
-              color: const Color(0xFFF3F4F6),
+              color: AppColors.divider,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(

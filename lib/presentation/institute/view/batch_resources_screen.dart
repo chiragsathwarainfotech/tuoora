@@ -269,7 +269,7 @@ class BatchResourcesScreen extends StatelessWidget {
         child: Container(
           padding: AppSpacing.all16,
           decoration: BoxDecoration(
-            color: const Color(0xFFF9FAFB),
+            color: AppColors.scaffoldBg,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: const Color(0xFFD0D5DD),

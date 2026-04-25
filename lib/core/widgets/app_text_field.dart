@@ -24,7 +24,7 @@ class AppTextField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: AppTextStyles.body.copyWith(
-          color: AppColors.onBackground.withValues(alpha: 0.5),
+          color: AppColors.background.withValues(alpha: 0.5),
         ),
         filled: true,
         fillColor: AppColors.surface,

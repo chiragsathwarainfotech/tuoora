@@ -84,7 +84,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                 decoration: BoxDecoration(
                   color: isSelected
                       ? const Color(0xFF003D82)
-                      : const Color(0xFFE5E7EB),
+                      : AppColors.borderGrey,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
@@ -142,7 +142,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             decoration: BoxDecoration(
-              color: const Color(0xFFE5E7EB),
+              color: AppColors.borderGrey,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Obx(
@@ -196,7 +196,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFE5E7EB),
+                      color: AppColors.borderGrey,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: DropdownButtonHideUnderline(
@@ -246,7 +246,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFE5E7EB),
+                        color: AppColors.borderGrey,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: DropdownButtonHideUnderline(
@@ -323,7 +323,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
               color: AppColors.textTertiary,
             ),
             filled: true,
-            fillColor: const Color(0xFFE5E7EB),
+            fillColor: AppColors.borderGrey,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide.none,
@@ -346,14 +346,14 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
             padding: AppSpacing.y20,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: const Color(0xFF94A3B8), width: 1),
+              border: Border.all(color: AppColors.textMuted, width: 1),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Icon(
                   Icons.attach_file_rounded,
-                  color: Color(0xFF003082),
+                  color: AppColors.primaryBlue,
                   size: 20,
                 ),
                 AppSpacing.h12,
@@ -362,7 +362,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                   style: AppTextStyles.manrope(
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
-                    color: const Color(0xFF003082),
+                    color: AppColors.primaryBlue,
                   ),
                 ),
               ],
@@ -396,7 +396,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                             ? Icons.picture_as_pdf
                             : Icons.image,
                         size: 20,
-                        color: const Color(0xFF003082),
+                        color: AppColors.primaryBlue,
                       ),
                       AppSpacing.h12,
                       Expanded(
@@ -493,7 +493,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
               color: const Color(0xFFEFF6FF),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(icon, color: const Color(0xFF1E40AF), size: 20),
+            child: Icon(icon, color: AppColors.oceanBlue, size: 20),
           ),
           AppSpacing.h16,
           Expanded(
@@ -521,7 +521,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
           Switch.adaptive(
             value: value,
             onChanged: onChanged,
-            activeThumbColor: const Color(0xFF003082),
+            activeThumbColor: AppColors.primaryBlue,
           ),
         ],
       ),

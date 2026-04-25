@@ -20,7 +20,7 @@ class InstituteMainScreen extends GetView<InstituteController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA),
+      backgroundColor: AppColors.scaffoldBg,
       drawer: const InstituteDrawer(),
       body: SafeArea(
         child: Column(

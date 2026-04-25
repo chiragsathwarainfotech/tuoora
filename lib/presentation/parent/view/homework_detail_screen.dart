@@ -16,7 +16,7 @@ class HomeworkDetailScreen extends StatelessWidget {
     final Color statusColor = Get.arguments?['statusColor'] ?? AppColors.checkGreen;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FB),
+      backgroundColor: AppColors.scaffoldBg,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -95,7 +95,7 @@ class HomeworkDetailScreen extends StatelessWidget {
                     ],
                   ),
                   AppSpacing.v24,
-                  const Divider(color: Color(0xFFF3F4F6)),
+                  const Divider(color: AppColors.divider),
                   AppSpacing.v24,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -188,11 +188,11 @@ class HomeworkDetailScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(AppSpacing.s16),
-                border: Border.all(color: const Color(0xFFE5E7EB)),
+                border: Border.all(color: AppColors.borderGrey),
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.picture_as_pdf, color: Color(0xFFEF4444), size: 28),
+                  const Icon(Icons.picture_as_pdf, color: AppColors.errorRed, size: 28),
                   AppSpacing.h12,
                   Expanded(
                     child: Column(

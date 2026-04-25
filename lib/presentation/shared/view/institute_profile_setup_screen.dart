@@ -164,7 +164,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                 ? AppColors.inputBg
                 : AppColors.inputBg.withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: const Color(0xFFE5E7EB), width: 1),
+            border: Border.all(color: AppColors.borderGrey, width: 1),
           ),
           child: TextField(
             controller: controller,

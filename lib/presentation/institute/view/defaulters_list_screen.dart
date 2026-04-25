@@ -52,7 +52,7 @@ class DefaultersListScreen extends GetView<ReportsController> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFF3F4F6)),
+        border: Border.all(color: AppColors.divider),
       ),
       child: Row(
         children: [
@@ -97,7 +97,7 @@ class DefaultersListScreen extends GetView<ReportsController> {
                 style: AppTextStyles.manrope(
                   fontSize: 15,
                   fontWeight: FontWeight.w800,
-                  color: const Color(0xFFEF4444),
+                  color: AppColors.errorRed,
                 ),
               ),
               Text(

@@ -55,7 +55,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppSpacing.s24),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF003D99).withValues(alpha: 0.2),
+            color: AppColors.primaryBlueDark.withValues(alpha: 0.2),
             blurRadius: AppSpacing.s20,
             offset: const Offset(0, AppSpacing.s10),
           ),
@@ -163,7 +163,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(AppSpacing.s20),
-        border: Border.all(color: const Color(0xFFF3F4F6)),
+        border: Border.all(color: AppColors.divider),
       ),
       child: Column(
         children: [
@@ -183,7 +183,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
                 style: AppTextStyles.manrope(
                   fontSize: AppSpacing.s16,
                   fontWeight: FontWeight.w800,
-                  color: const Color(0xFF1E40AF),
+                  color: AppColors.oceanBlue,
                 ),
               ),
             ],
@@ -194,8 +194,8 @@ class InstituteSubscriptionScreen extends StatelessWidget {
             child: const LinearProgressIndicator(
               value: 0.84,
               minHeight: AppSpacing.s12,
-              backgroundColor: Color(0xFFF3F4F6),
-              color: Color(0xFF1E40AF),
+              backgroundColor: AppColors.divider,
+              color: AppColors.oceanBlue,
             ),
           ),
           AppSpacing.v20,
@@ -277,7 +277,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(AppSpacing.s24),
-        border: Border.all(color: const Color(0xFFF3F4F6)),
+        border: Border.all(color: AppColors.divider),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -328,7 +328,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
                 children: [
                   const Icon(
                     Icons.check_circle_rounded,
-                    color: Color(0xFF003082),
+                    color: AppColors.primaryBlue,
                     size: AppSpacing.s18,
                   ),
                   AppSpacing.h12,
@@ -413,7 +413,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(AppSpacing.s16),
-        border: Border.all(color: const Color(0xFFF3F4F6)),
+        border: Border.all(color: AppColors.divider),
       ),
       child: Row(
         children: [
@@ -425,7 +425,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
             ),
             child: Icon(
               icon,
-              color: const Color(0xFF1E40AF),
+              color: AppColors.oceanBlue,
               size: AppSpacing.s24,
             ),
           ),
@@ -478,7 +478,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
                 style: AppTextStyles.manrope(
                   fontSize: AppSpacing.s12,
                   fontWeight: FontWeight.w900,
-                  color: const Color(0xFF1E40AF),
+                  color: AppColors.oceanBlue,
                   letterSpacing: AppSpacing.s2,
                 ),
               ),
@@ -499,14 +499,14 @@ class InstituteSubscriptionScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(AppSpacing.s16),
-        border: Border.all(color: const Color(0xFFF3F4F6)),
+        border: Border.all(color: AppColors.divider),
       ),
       child: Row(
         children: [
           Container(
             padding: AppSpacing.all10,
             decoration: BoxDecoration(
-              color: const Color(0xFFF9FAFB),
+              color: AppColors.scaffoldBg,
               borderRadius: BorderRadius.circular(AppSpacing.s10),
             ),
             child: const Icon(
@@ -576,7 +576,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
       width: double.infinity,
       padding: AppSpacing.all20,
       decoration: BoxDecoration(
-        color: const Color(0xFF003D99),
+        color: AppColors.primaryBlueDark,
         borderRadius: BorderRadius.circular(AppSpacing.s16),
       ),
       child: Row(

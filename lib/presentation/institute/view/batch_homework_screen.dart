@@ -62,7 +62,7 @@ class BatchHomeworkScreen extends StatelessWidget {
     return Container(
       padding: AppSpacing.x16,
       decoration: BoxDecoration(
-        color: const Color(0xFFE5E7EB).withValues(alpha: 0.5),
+        color: AppColors.borderGrey.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(12),
       ),
       child: TextField(
@@ -107,7 +107,7 @@ class BatchHomeworkScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 color: isActive
                     ? AppColors.instPrimaryBlue
-                    : const Color(0xFFD1D5DB),
+                    : AppColors.borderLightGray,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -137,7 +137,7 @@ class BatchHomeworkScreen extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: isActive
                               ? const Color(0xFFE0F2FE)
-                              : const Color(0xFFF3F4F6),
+                              : AppColors.divider,
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(

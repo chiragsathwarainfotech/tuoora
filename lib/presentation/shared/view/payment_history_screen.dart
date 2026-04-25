@@ -2,6 +2,7 @@ import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/widgets/payment_item_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:get/get.dart';
 
 class PaymentHistoryScreen extends StatelessWidget {
@@ -11,7 +12,7 @@ class PaymentHistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FB),
+      backgroundColor: AppColors.scaffoldBg,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -94,7 +95,7 @@ class PaymentHistoryScreen extends StatelessWidget {
         style: AppTextStyles.manrope(
           fontSize: 12,
           fontWeight: FontWeight.w800,
-          color: const Color(0xFF6B7280),
+          color: AppColors.textTertiary,
           letterSpacing: 1.2,
         ),
       ),

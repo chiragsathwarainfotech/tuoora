@@ -1,4 +1,5 @@
 import 'package:fee_easy/core/constants/app_text_styles.dart';
+import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -42,7 +43,7 @@ class PortalAppBar extends StatelessWidget implements PreferredSizeWidget {
             style: AppTextStyles.manrope(
               fontSize: 18,
               fontWeight: FontWeight.w800,
-              color: const Color(0xFF1E3A8A),
+              color: AppColors.deepBlue,
             ),
           ),
         ],
@@ -54,7 +55,7 @@ class PortalAppBar extends StatelessWidget implements PreferredSizeWidget {
               notificationIcon ??
               const Icon(
                 Icons.notifications_none_rounded,
-                color: Color(0xFF111827),
+                color: AppColors.textPrimary,
                 size: AppSpacing.s26,
               ),
         ),

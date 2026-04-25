@@ -1,9 +1,11 @@
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
+import 'package:fee_easy/presentation/institute/models/batch_performance_model.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:fee_easy/presentation/institute/controllers/reports_controller.dart';
 
 class BatchReportDetailScreen extends StatelessWidget {
   const BatchReportDetailScreen({super.key});
@@ -12,9 +14,15 @@ class BatchReportDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final String batchName = Get.arguments['batchName'] ?? 'Batch Details';
     final String reportType = Get.arguments['reportType'] ?? 'Fee';
+    final String? batchId = Get.arguments['batchId'];
+
+    final reportsController = Get.find<ReportsController>();
+    final batchPerf = (reportType == 'Performance' && batchId != null)
+        ? reportsController.getBatchPerformance(batchId)
+        : null;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FB),
+      backgroundColor: AppColors.reportScaffoldBg,
       body: SafeArea(
         child: Column(
           children: [
@@ -25,7 +33,7 @@ class BatchReportDetailScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildOverviewCard(reportType),
+                    _buildOverviewCard(reportType, batchPerf: batchPerf),
                     AppSpacing.v32,
                     Text(
                       'Student Breakdown',
@@ -36,7 +44,7 @@ class BatchReportDetailScreen extends StatelessWidget {
                       ),
                     ),
                     AppSpacing.v16,
-                    _buildStudentList(reportType),
+                    _buildStudentList(reportType, batchPerf: batchPerf),
                   ],
                 ),
               ),
@@ -47,7 +55,7 @@ class BatchReportDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildOverviewCard(String reportType) {
+  Widget _buildOverviewCard(String reportType, {BatchPerformance? batchPerf}) {
     String label1 = '';
     String value1 = '';
     String label2 = '';
@@ -64,20 +72,24 @@ class BatchReportDetailScreen extends StatelessWidget {
       label2 = 'Total Sessions';
       value2 = '24';
     } else {
-      label1 = 'Avg Grade';
-      value1 = 'A-';
-      label2 = 'Pass Rate';
-      value2 = '96%';
+      label1 = 'Overall Rating';
+      value1 = batchPerf != null
+          ? '${(batchPerf.averageRating).toStringAsFixed(1)} / 10'
+          : 'A-';
+      label2 = 'Performance';
+      value2 = batchPerf != null
+          ? '${(batchPerf.averageRating * 10).toStringAsFixed(1)}%'
+          : '96%';
     }
 
     return Container(
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
-        color: const Color(0xFF003D99),
+        color: AppColors.primaryBlueDark,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF003D99).withValues(alpha: 0.2),
+            color: AppColors.primaryBlueDark.withValues(alpha: 0.2),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -117,69 +129,68 @@ class BatchReportDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStudentList(String reportType) {
-    final List<Map<String, String>> allStudents = [
-      {
-        'name': 'Rahul Sharma',
-        'metric': reportType == 'Fee'
-            ? 'Paid'
-            : reportType == 'Attendance'
-            ? '95%'
-            : 'A',
-        'pending': '0',
-      },
-      {
-        'name': 'Sneha Patel',
-        'metric': reportType == 'Fee'
-            ? 'Paid'
-            : reportType == 'Attendance'
-            ? '82%'
-            : 'B+',
-        'pending': '0',
-      },
-      {
-        'name': 'Amit Kumar',
-        'metric': reportType == 'Fee'
-            ? 'Pending'
-            : reportType == 'Attendance'
-            ? '70%'
-            : 'B-',
-        'pending': '1500',
-      },
-      {
-        'name': 'Priya Singh',
-        'metric': reportType == 'Fee'
-            ? 'Paid'
-            : reportType == 'Attendance'
-            ? '98%'
-            : 'A+',
-        'pending': '0',
-      },
-      {
-        'name': 'Vikram Mehra',
-        'metric': reportType == 'Fee'
-            ? 'Pending'
-            : reportType == 'Attendance'
-            ? '60%'
-            : 'C',
-        'pending': '2400',
-      },
-      {
-        'name': 'Ananya Roy',
-        'metric': reportType == 'Fee'
-            ? 'Paid'
-            : reportType == 'Attendance'
-            ? '88%'
-            : 'A-',
-        'pending': '0',
-      },
-    ];
+  Widget _buildStudentList(String reportType, {BatchPerformance? batchPerf}) {
+    // Standardize data for all report types
+    final List<Map<String, String>> students = [];
 
-    final students = reportType == 'Fee'
-        ? allStudents
-              .where((s) => s['metric'] == 'Paid' || s['metric'] == 'Pending')
-              .toList()
-        : allStudents;
+    if (reportType == 'Performance' && batchPerf != null) {
+      for (var p in batchPerf.studentPerformances) {
+        students.add({
+          'name': p.studentName,
+          'metric': p.averageRating.toStringAsFixed(1),
+          'subtitle':
+              'Performance: ${(p.averageRating * 10).toStringAsFixed(0)}%',
+          'color_value': p.averageRating.toString(),
+        });
+      }
+    } else {
+      final List<Map<String, String>> mockStudents = [
+        {
+          'name': 'Rahul Sharma',
+          'metric': reportType == 'Fee' ? 'Paid' : '95%',
+          'subtitle': reportType == 'Fee' ? '' : 'Attendance Rate',
+        },
+        {
+          'name': 'Sneha Patel',
+          'metric': reportType == 'Fee' ? 'Paid' : '82%',
+          'subtitle': reportType == 'Fee' ? '' : 'Attendance Rate',
+        },
+        {
+          'name': 'Amit Kumar',
+          'metric': reportType == 'Fee' ? 'Pending' : '70%',
+          'subtitle': reportType == 'Fee'
+              ? 'Pending: ₹1500'
+              : 'Attendance Rate',
+        },
+        {
+          'name': 'Priya Singh',
+          'metric': reportType == 'Fee' ? 'Paid' : '98%',
+          'subtitle': reportType == 'Fee' ? '' : 'Attendance Rate',
+        },
+        {
+          'name': 'Vikram Mehra',
+          'metric': reportType == 'Fee' ? 'Pending' : '60%',
+          'subtitle': reportType == 'Fee'
+              ? 'Pending: ₹2400'
+              : 'Attendance Rate',
+        },
+        {
+          'name': 'Ananya Roy',
+          'metric': reportType == 'Fee' ? 'Paid' : '88%',
+          'subtitle': reportType == 'Fee' ? '' : 'Attendance Rate',
+        },
+      ];
+
+      if (reportType == 'Fee') {
+        students.addAll(
+          mockStudents.where(
+            (s) => s['metric'] == 'Paid' || s['metric'] == 'Pending',
+          ),
+        );
+      } else {
+        students.addAll(mockStudents);
+      }
+    }
 
     return ListView.separated(
       shrinkWrap: true,
@@ -188,15 +199,16 @@ class BatchReportDetailScreen extends StatelessWidget {
       separatorBuilder: (_, _) => AppSpacing.v12,
       itemBuilder: (context, index) {
         final student = students[index];
-        final bool isFeePending =
-            reportType == 'Fee' && student['metric'] == 'Pending';
+        final String metric = student['metric']!;
+        final String subtitle = student['subtitle'] ?? '';
+        final bool hasSubtitle = subtitle.isNotEmpty;
 
         return Container(
           padding: AppSpacing.all16,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: const Color(0xFFF1F5F9)),
+            border: Border.all(color: AppColors.reportBorder),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -213,14 +225,18 @@ class BatchReportDetailScreen extends StatelessWidget {
                         color: AppColors.textPrimary,
                       ),
                     ),
-                    if (isFeePending) ...[
+                    if (hasSubtitle) ...[
                       AppSpacing.v4,
                       Text(
-                        'Pending: ₹${student['pending']}',
+                        subtitle,
                         style: AppTextStyles.lexend(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
-                          color: const Color(0xFFEF4444),
+                          color: _getMetricColor(
+                            metric,
+                            reportType,
+                            student['color_value'],
+                          ),
                         ),
                       ),
                     ],
@@ -234,17 +250,22 @@ class BatchReportDetailScreen extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   color: _getMetricColor(
-                    student['metric']!,
+                    metric,
                     reportType,
+                    student['color_value'],
                   ).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
-                  student['metric']!,
+                  metric,
                   style: AppTextStyles.manrope(
                     fontSize: 12,
                     fontWeight: FontWeight.w800,
-                    color: _getMetricColor(student['metric']!, reportType),
+                    color: _getMetricColor(
+                      metric,
+                      reportType,
+                      student['color_value'],
+                    ),
                   ),
                 ),
               ),
@@ -255,20 +276,30 @@ class BatchReportDetailScreen extends StatelessWidget {
     );
   }
 
-  Color _getMetricColor(String metric, String type) {
+  Color _getMetricColor(String metric, String type, String? colorValue) {
+    if (type == 'Performance' && colorValue != null) {
+      double rating = double.parse(colorValue);
+      if (rating >= 8.5) return AppColors.successGreen;
+      if (rating >= 7.0) return AppColors.warningAmber;
+      return AppColors.errorRed;
+    }
     if (type == 'Fee') {
-      if (metric == 'Paid') return const Color(0xFF10B981);
-      if (metric == 'Partial') return const Color(0xFFF59E0B);
-      return const Color(0xFFEF4444);
+      if (metric == 'Paid') return AppColors.successGreen;
+      if (metric == 'Partial') return AppColors.warningAmber;
+      return AppColors.errorRed;
     }
     if (type == 'Attendance') {
-      double val = double.parse(metric.replaceAll('%', ''));
-      if (val >= 90) return const Color(0xFF10B981);
-      if (val >= 75) return const Color(0xFFF59E0B);
-      return const Color(0xFFEF4444);
+      double val = double.tryParse(metric.replaceAll('%', '')) ?? 0.0;
+      if (val >= 90) return AppColors.successGreen;
+      if (val >= 75) return AppColors.warningAmber;
+      return AppColors.errorRed;
     }
-    if (metric.startsWith('A')) return const Color(0xFF10B981);
-    if (metric.startsWith('B')) return const Color(0xFFF59E0B);
-    return const Color(0xFFEF4444);
+    // Fallback for letters A, B, C etc.
+    if (metric.startsWith('A')) return AppColors.successGreen;
+    if (metric.startsWith('B')) return AppColors.warningAmber;
+    if (metric.startsWith('C') || metric.startsWith('D'))
+      return AppColors.errorRed;
+
+    return AppColors.successGreen;
   }
 }

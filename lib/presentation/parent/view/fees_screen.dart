@@ -34,7 +34,7 @@ class ParentFeesScreen extends StatelessWidget {
       );
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FB),
+      backgroundColor: AppColors.scaffoldBg,
       appBar: PortalAppBar(
         title: AppStrings.appName,
         profileRoute: AppRoutes.parentStudentProfile,
@@ -43,7 +43,7 @@ class ParentFeesScreen extends StatelessWidget {
           AppImages.icBell,
           height: AppSpacing.s24,
           colorFilter: const ColorFilter.mode(
-            Color(0xFF2B5BCC),
+            AppColors.accentBlue,
             BlendMode.srcIn,
           ),
         ),
@@ -59,7 +59,7 @@ class ParentFeesScreen extends StatelessWidget {
       padding: AppSpacing.all32,
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF0056D2), Color(0xFF003781)],
+          colors: [Color(0xFF0056D2), AppColors.primaryBlueDark],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -131,14 +131,14 @@ class ParentFeesScreen extends StatelessWidget {
                     style: AppTextStyles.manrope(
                       fontSize: 18,
                       fontWeight: FontWeight.w800,
-                      color: const Color(0xFF003781),
+                      color: AppColors.primaryBlueDark,
                     ),
                   ),
                   AppSpacing.h12,
                   const Icon(
                     Icons.arrow_forward,
                     size: AppSpacing.s20,
-                    color: Color(0xFF003781),
+                    color: AppColors.primaryBlueDark,
                   ),
                 ],
               ),
@@ -176,7 +176,7 @@ class ParentFeesScreen extends StatelessWidget {
           title: 'Transport',
           subtitle: 'Quarterly Route A2',
           amount: '\$450',
-          iconBgColor: const Color(0xFFF1F5F9),
+          iconBgColor: AppColors.reportBorder,
           iconColor: const Color(0xFF475569),
         ),
         AppSpacing.v16,
@@ -271,7 +271,7 @@ class ParentFeesScreen extends StatelessWidget {
                   vertical: AppSpacing.s4,
                 ),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF1F5F9),
+                  color: AppColors.reportBorder,
                   borderRadius: BorderRadius.circular(AppSpacing.s8),
                 ),
                 child: Text(
@@ -279,7 +279,7 @@ class ParentFeesScreen extends StatelessWidget {
                   style: AppTextStyles.manrope(
                     fontSize: 9,
                     fontWeight: FontWeight.w800,
-                    color: const Color(0xFF64748B),
+                    color: AppColors.textTertiary,
                     letterSpacing: 0.5,
                   ),
                 ),

@@ -11,7 +11,7 @@ class AttendanceHistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FB),
+      backgroundColor: AppColors.scaffoldBg,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -147,7 +147,7 @@ class AttendanceHistoryScreen extends StatelessWidget {
             ),
             child: Icon(
               customIcon ?? (isPresent ? Icons.check_circle_rounded : Icons.cancel_rounded),
-              color: customStatusColor ?? (isPresent ? const Color(0xFF1E3A8A) : const Color(0xFFB91C1C)),
+              color: customStatusColor ?? (isPresent ? AppColors.deepBlue : const Color(0xFFB91C1C)),
               size: AppSpacing.s24,
             ),
           ),
@@ -181,7 +181,7 @@ class AttendanceHistoryScreen extends StatelessWidget {
             style: AppTextStyles.manrope(
               fontSize: 12,
               fontWeight: FontWeight.w800,
-              color: customStatusColor ?? (isPresent ? const Color(0xFF1E3A8A) : const Color(0xFFB91C1C)),
+              color: customStatusColor ?? (isPresent ? AppColors.deepBlue : const Color(0xFFB91C1C)),
             ),
           ),
         ],

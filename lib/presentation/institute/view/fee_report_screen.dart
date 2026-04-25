@@ -6,72 +6,52 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:fee_easy/config/app_routes.dart';
 
+import 'package:fee_easy/presentation/institute/controllers/reports_controller.dart';
+
 class FeeReportScreen extends StatelessWidget {
   const FeeReportScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<ReportsController>();
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FB),
+      backgroundColor: AppColors.reportScaffoldBg,
       body: SafeArea(
         child: Column(
           children: [
             const InstituteAppBar(title: 'Fee Report', isRoot: false),
             Expanded(
-              child: SingleChildScrollView(
+              child: Obx(() => SingleChildScrollView(
                 padding: AppSpacing.all24,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildSummaryCard(
                       title: 'Total Collection Across Batches',
-                      amount: '₹42,850.00',
-                      trend: '12.5% increase from last month',
-                      trendColor: const Color(0xFF10B981),
+                      amount: controller.totalFeeCollection.value,
+                      trend: controller.feeTrend.value,
+                      trendColor: AppColors.successGreen,
                       isPrimary: false,
                     ),
                     AppSpacing.v32,
                     _buildSectionHeader('Batch Summaries'),
                     AppSpacing.v16,
-                    _buildBatchSummaryItem(
-                      name: 'Advanced Physics (A1)',
-                      strength: 42,
-                      collected: '₹8,400',
-                      pending: '',
-                      progress: 0.85,
-                      showFooter: false,
-                    ),
-                    AppSpacing.v12,
-                    _buildBatchSummaryItem(
-                      name: 'Data Structures (DS2)',
-                      strength: 30,
-                      collected: '₹12,000',
-                      pending: '',
-                      progress: 0.6,
-                      showFooter: false,
-                    ),
-                    AppSpacing.v12,
-                    _buildBatchSummaryItem(
-                      name: 'Web Architecture (W4)',
-                      strength: 18,
-                      collected: '₹9,500',
-                      pending: '',
-                      progress: 0.95,
-                      showFooter: false,
-                    ),
-                    AppSpacing.v12,
-                    _buildBatchSummaryItem(
-                      name: 'Graphic Design (GD1)',
-                      strength: 25,
-                      collected: '₹6,250',
-                      pending: '',
-                      progress: 0.5,
-                      showFooter: false,
-                    ),
+                    ...controller.feeBatches.map((batch) => Padding(
+                      padding: const EdgeInsets.only(bottom: AppSpacing.s12),
+                      child: _buildBatchSummaryItem(
+                        name: batch['name'],
+                        strength: batch['strength'],
+                        collected: batch['collected'],
+                        pending: '',
+                        progress: batch['progress'],
+                        showFooter: false,
+                      ),
+                    )),
                     AppSpacing.v32,
                   ],
                 ),
-              ),
+              )),
             ),
           ],
         ),
@@ -118,7 +98,7 @@ class FeeReportScreen extends StatelessWidget {
             style: AppTextStyles.manrope(
               fontSize: 32,
               fontWeight: FontWeight.w800,
-              color: amountColor ?? const Color(0xFF003D99),
+              color: amountColor ?? AppColors.primaryBlueDark,
             ),
           ),
           if (trend != null) ...[
@@ -126,7 +106,7 @@ class FeeReportScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: (trendColor ?? const Color(0xFF10B981)).withValues(
+                color: (trendColor ?? AppColors.successGreen).withValues(
                   alpha: 0.1,
                 ),
                 borderRadius: BorderRadius.circular(12),
@@ -171,7 +151,7 @@ class FeeReportScreen extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           decoration: BoxDecoration(
-            color: const Color(0xFF003D99),
+            color: AppColors.primaryBlueDark,
             borderRadius: BorderRadius.circular(10),
           ),
           child: Row(
@@ -275,7 +255,7 @@ class FeeReportScreen extends StatelessWidget {
                   style: AppTextStyles.manrope(
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
-                    color: const Color(0xFF003D99),
+                    color: AppColors.primaryBlueDark,
                   ),
                 ),
               ],
@@ -286,8 +266,8 @@ class FeeReportScreen extends StatelessWidget {
               child: LinearProgressIndicator(
                 value: progress,
                 minHeight: 6,
-                backgroundColor: const Color(0xFFF1F5F9),
-                color: const Color(0xFF003D99),
+                backgroundColor: AppColors.reportProgressBg,
+                color: AppColors.primaryBlueDark,
               ),
             ),
             if (showFooter) ...[
@@ -313,7 +293,7 @@ class FeeReportScreen extends StatelessWidget {
                           style: AppTextStyles.manrope(
                             fontSize: 16,
                             fontWeight: FontWeight.w800,
-                            color: const Color(0xFF991B1B),
+                            color: AppColors.darkRedText,
                           ),
                         ),
                       ],

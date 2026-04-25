@@ -1,4 +1,5 @@
 import 'package:fee_easy/config/app_routes.dart';
+import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
@@ -73,7 +74,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
     );
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA),
+      backgroundColor: AppColors.scaffoldBg,
       appBar: PortalAppBar(
         title: AppStrings.appName,
         profileRoute: AppRoutes.studentSettings,
@@ -100,7 +101,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
             style: AppTextStyles.manrope(
               fontSize: 32,
               fontWeight: FontWeight.w800,
-              color: const Color(0xFF111827),
+              color: AppColors.textPrimary,
             ),
           ),
           AppSpacing.v8,
@@ -109,7 +110,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
             style: AppTextStyles.lexend(
               fontSize: 16,
               fontWeight: FontWeight.w400,
-              color: const Color(0xFF64748B),
+              color: AppColors.textTertiary,
             ),
           ),
         ],
@@ -142,7 +143,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                 style: AppTextStyles.manrope(
                   fontSize: 10,
                   fontWeight: FontWeight.w800,
-                  color: const Color(0xFF1E3A8A),
+                  color: AppColors.deepBlue,
                   letterSpacing: 1.0,
                 ),
               ),
@@ -151,7 +152,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                 style: AppTextStyles.manrope(
                   fontSize: 10,
                   fontWeight: FontWeight.w800,
-                  color: const Color(0xFF111827),
+                  color: AppColors.textPrimary,
                 ),
               ),
             ],
@@ -162,9 +163,9 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
             child: LinearProgressIndicator(
               value: 0.68,
               minHeight: AppSpacing.s12,
-              backgroundColor: const Color(0xFFEFF3F8),
+              backgroundColor: AppColors.reportBorder,
               valueColor: const AlwaysStoppedAnimation<Color>(
-                Color(0xFF003781),
+                AppColors.primaryBlueDark,
               ),
             ),
           ),
@@ -178,7 +179,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
       margin: AppSpacing.x28,
       padding: AppSpacing.all6,
       decoration: BoxDecoration(
-        color: const Color(0xFFEDF1F7),
+        color: AppColors.divider,
         borderRadius: BorderRadius.circular(AppSpacing.s20),
       ),
       child: Row(
@@ -219,8 +220,8 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
               fontSize: 14,
               fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
               color: isSelected
-                  ? const Color(0xFF111827)
-                  : const Color(0xFF64748B),
+                  ? AppColors.textPrimary
+                  : AppColors.textTertiary,
             ),
           ),
         ),
@@ -274,14 +275,14 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                   vertical: AppSpacing.s6,
                 ),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFFFEADC),
+                  color: AppColors.amberLight,
                   borderRadius: BorderRadius.circular(AppSpacing.s10),
                 ),
                 child: Row(
                   children: [
                     const Icon(
                       Icons.timer_outlined,
-                      color: Color(0xFF991B1B),
+                      color: AppColors.redDot,
                       size: AppSpacing.s12,
                     ),
                     AppSpacing.h4,
@@ -290,7 +291,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                       style: AppTextStyles.manrope(
                         fontSize: 9,
                         fontWeight: FontWeight.w800,
-                        color: const Color(0xFF991B1B),
+                        color: AppColors.redDot,
                       ),
                     ),
                   ],
@@ -385,7 +386,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                     style: AppTextStyles.manrope(
                       fontSize: 14,
                       fontWeight: FontWeight.w800,
-                      color: const Color(0xFF003781),
+                      color: AppColors.primaryBlueDark,
                     ),
                   ),
                 ),
@@ -434,7 +435,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                 style: AppTextStyles.manrope(
                   fontSize: 10,
                   fontWeight: FontWeight.w800,
-                  color: const Color(0xFF991B1B),
+                  color: AppColors.redDot,
                   letterSpacing: 1.0,
                 ),
               ),
@@ -446,7 +447,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                     style: AppTextStyles.manrope(
                       fontSize: 8,
                       fontWeight: FontWeight.w800,
-                      color: const Color(0xFF64748B),
+                      color: AppColors.textTertiary,
                       letterSpacing: 0.5,
                     ),
                   ),
@@ -455,7 +456,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                     style: AppTextStyles.manrope(
                       fontSize: 13,
                       fontWeight: FontWeight.w800,
-                      color: const Color(0xFF111827),
+                      color: AppColors.textPrimary,
                     ),
                   ),
                 ],
@@ -468,7 +469,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
             style: AppTextStyles.manrope(
               fontSize: 17,
               fontWeight: FontWeight.w800,
-              color: const Color(0xFF1E293B),
+              color: AppColors.darkSlate,
               height: 1.2,
             ),
           ),
@@ -478,14 +479,14 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
             style: AppTextStyles.lexend(
               fontSize: 11,
               fontWeight: FontWeight.w400,
-              color: const Color(0xFF94A3B8),
+              color: AppColors.textMuted,
             ),
           ),
           AppSpacing.v20,
           Container(
             padding: AppSpacing.all16,
             decoration: BoxDecoration(
-              color: const Color(0xFFF1F5F9),
+              color: AppColors.reportBorder,
               borderRadius: BorderRadius.circular(AppSpacing.s16),
             ),
             child: Row(
@@ -494,9 +495,9 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                   padding: AppSpacing.all8,
                   decoration: BoxDecoration(
                     color: isActive
-                        ? const Color(0xFFB9EFFF)
+                        ? AppColors.skyBlueLight
                         : (isDeadlineStyle
-                              ? const Color(0xFFFFEADC)
+                              ? AppColors.amberLight
                               : Colors.white),
                     borderRadius: BorderRadius.circular(AppSpacing.s10),
                   ),
@@ -507,9 +508,9 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                               ? Icons.sticky_note_2_rounded
                               : Icons.chat_bubble_rounded),
                     color: isDeadlineStyle
-                        ? const Color(0xFF991B1B)
+                        ? AppColors.redDot
                         : (isActive
-                              ? const Color(0xFF003781)
+                              ? AppColors.primaryBlueDark
                               : const Color(0xFF475569)),
                     size: AppSpacing.s16,
                   ),
@@ -524,7 +525,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                         style: AppTextStyles.manrope(
                           fontSize: 9,
                           fontWeight: FontWeight.w800,
-                          color: const Color(0xFF94A3B8),
+                          color: AppColors.textMuted,
                           letterSpacing: 0.5,
                         ),
                       ),
@@ -534,8 +535,8 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                           fontSize: 12,
                           fontWeight: FontWeight.w800,
                           color: isDeadlineStyle
-                              ? const Color(0xFF111827)
-                              : const Color(0xFF1E3A8A),
+                              ? AppColors.textPrimary
+                              : AppColors.deepBlue,
                         ),
                       ),
                     ],
@@ -553,7 +554,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
               decoration: BoxDecoration(
                 color: isActive
                     ? const Color(0xFF0052C2)
-                    : const Color(0xFFEDF1F7),
+                    : AppColors.divider,
                 borderRadius: BorderRadius.circular(AppSpacing.s16),
               ),
               child: Center(
@@ -562,7 +563,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                   style: AppTextStyles.manrope(
                     fontSize: 13,
                     fontWeight: FontWeight.w800,
-                    color: isActive ? Colors.white : const Color(0xFF1E3A8A),
+                    color: isActive ? Colors.white : AppColors.deepBlue,
                   ),
                 ),
               ),
@@ -578,7 +579,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
       margin: AppSpacing.x28,
       padding: AppSpacing.all32,
       decoration: BoxDecoration(
-        color: const Color(0xFFE5E9EF),
+        color: AppColors.divider,
         borderRadius: BorderRadius.circular(AppSpacing.s32),
       ),
       child: Column(
@@ -591,7 +592,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
             ),
             child: const Icon(
               Icons.file_copy_rounded,
-              color: Color(0xFF003781),
+              color: AppColors.primaryBlueDark,
               size: AppSpacing.s32,
             ),
           ),
@@ -601,7 +602,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
             style: AppTextStyles.manrope(
               fontSize: 20,
               fontWeight: FontWeight.w800,
-              color: const Color(0xFF111827),
+              color: AppColors.textPrimary,
             ),
           ),
           AppSpacing.v8,
@@ -610,7 +611,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
             style: AppTextStyles.lexend(
               fontSize: 13,
               fontWeight: FontWeight.w400,
-              color: const Color(0xFF64748B),
+              color: AppColors.textTertiary,
               height: 1.5,
             ),
             textAlign: TextAlign.center,
@@ -629,7 +630,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                 style: AppTextStyles.manrope(
                   fontSize: 13,
                   fontWeight: FontWeight.w800,
-                  color: const Color(0xFF1E3A8A),
+                  color: AppColors.deepBlue,
                 ),
               ),
             ),

@@ -3,6 +3,7 @@ import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
+import 'package:fee_easy/core/widgets/app_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -47,7 +48,11 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
                 ],
               ),
               if (controller.isLoading.value)
-                const Center(child: CircularProgressIndicator()),
+                const Center(
+                  child: CircularProgressIndicator(
+                    color: AppColors.primaryBlue,
+                  ),
+                ),
             ],
           ),
         ),
@@ -348,33 +353,10 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
   Widget _buildActionButtons() {
     return Column(
       children: [
-        GestureDetector(
-          onTap: () => controller.saveProfile(),
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: AppSpacing.s18),
-            decoration: BoxDecoration(
-              color: AppColors.instDarkBtnBlue,
-              borderRadius: BorderRadius.circular(AppSpacing.s12),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.instDarkBtnBlue.withValues(alpha: 0.2),
-                  blurRadius: AppSpacing.s16,
-                  offset: const Offset(0, AppSpacing.s8),
-                ),
-              ],
-            ),
-            child: Center(
-              child: Text(
-                'Save Profile Changes',
-                style: AppTextStyles.manrope(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
+        AppButton(
+          label: 'Save Profile Changes',
+          icon: Icons.check_circle_outline_rounded,
+          onPressed: () => controller.saveProfile(),
         ),
         AppSpacing.v16,
         GestureDetector(

@@ -2,10 +2,10 @@ import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
+import 'package:fee_easy/core/widgets/app_button.dart';
 import 'package:fee_easy/presentation/institute/controllers/homework_controller.dart';
 import 'package:fee_easy/presentation/institute/models/batch_model.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
-import 'package:fee_easy/presentation/institute/widgets/institute_bottom_button.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_label.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_text_field.dart';
 import 'package:flutter/material.dart';
@@ -60,9 +60,14 @@ class AddHomeworkScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: InstituteBottomButton(
-        label: AppStrings.instCreateHomeworkBtn,
-        onTap: () => controller.createHomework(),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: AppSpacing.all24,
+          child: AppButton(
+            label: AppStrings.instCreateHomeworkBtn,
+            onPressed: () => controller.createHomework(),
+          ),
+        ),
       ),
     );
   }

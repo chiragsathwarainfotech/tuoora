@@ -1,6 +1,7 @@
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
+import 'package:fee_easy/core/widgets/app_button.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
@@ -15,15 +16,29 @@ class InstituteSecurityScreen extends GetView<SecurityController> {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
-        child: Column(
+        child: Stack(
           children: [
-            const InstituteAppBar(title: 'Security', isRoot: false),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: AppSpacing.all24,
-                child: _buildUpdatePasswordCard(),
-              ),
+            Column(
+              children: [
+                const InstituteAppBar(title: 'Security', isRoot: false),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: AppSpacing.all24,
+                    child: _buildUpdatePasswordCard(),
+                  ),
+                ),
+              ],
             ),
+            Obx(() => controller.isLoading.value
+                ? Container(
+                    color: Colors.black.withValues(alpha: 0.3),
+                    child: const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.primaryBlue,
+                      ),
+                    ),
+                  )
+                : const SizedBox.shrink()),
           ],
         ),
       ),
@@ -66,7 +81,7 @@ class InstituteSecurityScreen extends GetView<SecurityController> {
           AppSpacing.v24,
           _buildPasswordField(
             label: AppStrings.instNewPasswordLabel,
-            hint: 'Min. 8 characters',
+            hint: 'Min. 6 characters',
             controller: controller.newPasswordController,
             isVisible: controller.isNewPasswordVisible,
             onToggle: controller.toggleNewPasswordVisibility,
@@ -80,24 +95,10 @@ class InstituteSecurityScreen extends GetView<SecurityController> {
             onToggle: controller.toggleConfirmPasswordVisibility,
           ),
           AppSpacing.v32,
-          ElevatedButton(
-            onPressed: controller.updatePassword,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF004CB3),
-              foregroundColor: Colors.white,
-              padding: AppSpacing.x28.add(AppSpacing.y18),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              elevation: 0,
-            ),
-            child: Text(
-              AppStrings.instUpdatePasswordBtn,
-              style: AppTextStyles.manrope(
-                fontSize: 15,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
+          AppButton(
+            label: AppStrings.instUpdatePasswordBtn,
+            icon: Icons.lock_reset_rounded,
+            onPressed: () => controller.updatePassword(),
           ),
         ],
       ),

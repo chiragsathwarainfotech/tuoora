@@ -2,6 +2,7 @@ import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
+import 'package:fee_easy/core/widgets/app_button.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
 
@@ -16,41 +17,60 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
-        child: Column(
+        child: Stack(
           children: [
-            const InstituteAppBar(title: 'WhatsApp Integration', isRoot: false),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: AppSpacing.all24,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      AppStrings.instWhatsAppIntegration,
-                      style: AppTextStyles.manrope(
-                        fontSize: AppSpacing.s28,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.primaryBlue,
-                      ),
-                    ),
-                    AppSpacing.v12,
-                    Text(
-                      AppStrings.instWhatsAppConfigDesc,
-                      style: AppTextStyles.lexend(
-                        fontSize: 14,
-                        height: 1.6,
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
-                    AppSpacing.v32,
-                    _buildMetaConfigCard(),
-                    AppSpacing.v24,
-                    _buildHowToFindBox(),
-                    AppSpacing.v48,
-                    _buildAutomatedAlertsSection(),
-                  ],
+            Column(
+              children: [
+                const InstituteAppBar(
+                  title: 'WhatsApp Integration',
+                  isRoot: false,
                 ),
-              ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: AppSpacing.all24,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          AppStrings.instWhatsAppIntegration,
+                          style: AppTextStyles.manrope(
+                            fontSize: AppSpacing.s28,
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.primaryBlue,
+                          ),
+                        ),
+                        AppSpacing.v12,
+                        Text(
+                          AppStrings.instWhatsAppConfigDesc,
+                          style: AppTextStyles.lexend(
+                            fontSize: 14,
+                            height: 1.6,
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                        AppSpacing.v32,
+                        _buildMetaConfigCard(),
+                        AppSpacing.v24,
+                        _buildHowToFindBox(),
+                        AppSpacing.v48,
+                        _buildAutomatedAlertsSection(),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Obx(
+              () => controller.isLoading.value
+                  ? Container(
+                      color: Colors.black.withValues(alpha: 0.3),
+                      child: const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.primaryBlue,
+                        ),
+                      ),
+                    )
+                  : const SizedBox.shrink(),
             ),
           ],
         ),
@@ -127,6 +147,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
           _buildTextField(
             hint: '1234567890',
             controller: controller.phoneNumberController,
+            keyboardType: TextInputType.phone,
           ),
           AppSpacing.v24,
           _buildInputLabel(AppStrings.instPhoneNumberId),
@@ -134,6 +155,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
           _buildTextField(
             hint: '1059...',
             controller: controller.phoneNumberIdController,
+            keyboardType: TextInputType.number,
           ),
           AppSpacing.v24,
           _buildInputLabel(AppStrings.instBusinessAccountId),
@@ -141,32 +163,16 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
           _buildTextField(
             hint: '2941...',
             controller: controller.businessAccountIdController,
+            keyboardType: TextInputType.number,
           ),
           AppSpacing.v32,
-          ElevatedButton(
-            onPressed: controller.verifyApi,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF0055BB),
-              foregroundColor: Colors.white,
-              padding: AppSpacing.y20,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(AppSpacing.s12),
-              ),
-              elevation: 0,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.verified_user_rounded, size: AppSpacing.s18),
-                AppSpacing.h8,
-                Text(
-                  AppStrings.instVerifyApiBtn,
-                  style: AppTextStyles.manrope(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-              ],
+          Obx(
+            () => AppButton(
+              label: controller.currentSettings.value != null
+                  ? 'Update Settings'
+                  : AppStrings.instVerifyApiBtn,
+              icon: Icons.verified_user_rounded,
+              onPressed: () => controller.saveSettings(),
             ),
           ),
         ],
@@ -189,6 +195,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
   Widget _buildTextField({
     required String hint,
     required TextEditingController controller,
+    TextInputType keyboardType = TextInputType.text,
   }) {
     return Container(
       padding: AppSpacing.x16.add(AppSpacing.y2),
@@ -198,6 +205,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
       ),
       child: TextField(
         controller: controller,
+        keyboardType: keyboardType,
         style: AppTextStyles.lexend(
           fontSize: AppSpacing.s14,
           color: AppColors.textPrimary,

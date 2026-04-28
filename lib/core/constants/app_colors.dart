@@ -95,4 +95,5 @@ class AppColors {
   static const Color checkGreen = successGreen;
   static const Color error = Color(0xFFB00020);
   static const Color onPrimary = Colors.white;
+  static const Color brandAppBarColor = Color(0xFF9D4513);
 }

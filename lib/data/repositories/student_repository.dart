@@ -2,6 +2,7 @@ import 'package:fee_easy/core/api/api_client.dart';
 import 'package:fee_easy/core/constants/api_constants.dart';
 import 'package:fee_easy/data/models/student_model.dart';
 import 'package:fee_easy/data/repositories_impl/student_repository_impl.dart';
+import 'package:get/get.dart';
 
 class StudentRepository implements StudentRepositoryImpl {
   final ApiClient _apiClient;
@@ -33,9 +34,26 @@ class StudentRepository implements StudentRepositoryImpl {
 
   @override
   Future<Student> createStudent(Map<String, dynamic> data) async {
+    final formData = FormData(data);
+
+    if (data['profile_image_url'] != null &&
+        data['profile_image_url'].toString().isNotEmpty &&
+        !data['profile_image_url'].toString().startsWith('http')) {
+      formData.files.add(
+        MapEntry(
+          'profile_image_url',
+          MultipartFile(
+            data['profile_image_url'],
+            filename: 'student_profile.jpg',
+          ),
+        ),
+      );
+      data.remove('profile_image_url');
+    }
+
     final response = await _apiClient.post(
       ApiConstants.instituteStudents,
-      data,
+      formData,
     );
     if (response.status.hasError) {
       throw Exception('Failed to create student: ${response.statusText}');
@@ -56,10 +74,30 @@ class StudentRepository implements StudentRepositoryImpl {
 
   @override
   Future<Student> updateStudent(dynamic id, Map<String, dynamic> data) async {
-    final response = await _apiClient.put(
+    final formData = FormData(data);
+
+    if (data['profile_image_url'] != null &&
+        data['profile_image_url'].toString().isNotEmpty &&
+        !data['profile_image_url'].toString().startsWith('http')) {
+      formData.files.add(
+        MapEntry(
+          'profile_image_url',
+          MultipartFile(
+            data['profile_image_url'],
+            filename: 'student_profile.jpg',
+          ),
+        ),
+      );
+      data.remove('profile_image_url');
+    }
+
+    formData.fields.add(const MapEntry('_method', 'PUT'));
+
+    final response = await _apiClient.post(
       '${ApiConstants.instituteStudents}/$id',
-      data,
+      formData,
     );
+
     if (response.status.hasError) {
       throw Exception('Failed to update student: ${response.statusText}');
     }

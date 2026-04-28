@@ -44,6 +44,14 @@ class InstituteDrawer extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: AppColors.inputSolidGrey,
                           borderRadius: BorderRadius.circular(12),
+                          image: profileController.profileImagePath.value != null
+                              ? DecorationImage(
+                                  image: NetworkImage(
+                                    profileController.profileImagePath.value!,
+                                  ),
+                                  fit: BoxFit.cover,
+                                )
+                              : null,
                         ),
                         child: profileController.profileImagePath.value == null
                             ? const Center(

@@ -142,9 +142,8 @@ class InstituteStudentController extends GetxController {
   Future<void> selectDOB(BuildContext context) async {
     DateTime initialDate = DateTime.now().subtract(
       const Duration(days: 365 * 10),
-    ); // Default to 10 years ago
+    );
 
-    // Try to parse existing DOB if available
     if (dobController.text.isNotEmpty) {
       try {
         final parts = dobController.text.split('-');
@@ -237,6 +236,8 @@ class InstituteStudentController extends GetxController {
         'guardian_name': parentNameController.text,
         'dob': dobController.text,
         'standard': standardController.text,
+        if (selectedImagePath.value != null)
+          'profile_image_url': selectedImagePath.value,
       };
 
       if (isEdit && editingStudentId.value != null) {
@@ -248,20 +249,17 @@ class InstituteStudentController extends GetxController {
         await _studentRepository.createStudent(studentData);
       }
 
-      // Refresh list
       if (Get.isRegistered<InstituteController>()) {
         Get.find<InstituteController>().fetchStudents(reset: true);
       }
 
-      // Navigate back to registry first
       if (isEdit) {
-        Get.back(); // Back from Edit
-        Get.back(); // Back from Profile to Registry
+        Get.back();
+        Get.back();
       } else {
-        Get.back(); // Back from Add to Registry
+        Get.back();
       }
 
-      // Success UI logic - Show AFTER navigation to avoid "disposed snackbar" error
       Future.delayed(const Duration(milliseconds: 300), () {
         Get.snackbar(
           'Success',

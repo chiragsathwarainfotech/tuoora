@@ -86,6 +86,7 @@ class AppSpacing {
   static const x20 = EdgeInsets.symmetric(horizontal: s20);
   static const x24 = EdgeInsets.symmetric(horizontal: s24);
   static const x28 = EdgeInsets.symmetric(horizontal: s28);
+  static const x32 = EdgeInsets.symmetric(horizontal: s32);
 
   // Vertical Symmetric
   static const y2 = EdgeInsets.symmetric(vertical: s2);

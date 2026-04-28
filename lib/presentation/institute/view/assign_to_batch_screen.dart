@@ -4,7 +4,7 @@ import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/presentation/institute/controllers/batch_details_controller.dart';
 import 'package:fee_easy/presentation/institute/models/batch_model.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
-import 'package:fee_easy/presentation/institute/widgets/institute_bottom_button.dart';
+import 'package:fee_easy/core/widgets/app_button.dart';
 import 'package:fee_easy/data/models/student_model.dart';
 import 'package:fee_easy/presentation/institute/controllers/institute_controller.dart';
 import 'package:flutter/material.dart';
@@ -122,13 +122,19 @@ class AssignToBatchScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: Obx(
-        () => InstituteBottomButton(
-          label: 'Confirm & Save Assignment',
-          icon: Icons.check_circle_rounded,
-          onTap: controller.selectedStudents.isEmpty
-              ? null
-              : controller.confirmAssignment,
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: AppSpacing.all24,
+          child: Obx(
+            () => AppButton(
+              label: 'Confirm & Save Assignment',
+              icon: Icons.check_circle_rounded,
+              isDisabled: controller.selectedStudents.isEmpty,
+              onPressed: controller.selectedStudents.isEmpty
+                  ? null
+                  : controller.confirmAssignment,
+            ),
+          ),
         ),
       ),
     );

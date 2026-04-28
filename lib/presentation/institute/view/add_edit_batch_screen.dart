@@ -2,6 +2,7 @@ import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
+import 'package:fee_easy/core/widgets/app_button.dart';
 import 'package:fee_easy/presentation/institute/controllers/batch_controller.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_label.dart';
@@ -213,34 +214,13 @@ class AddEditBatchScreen extends GetView<BatchController> {
     return Container(
       padding: AppSpacing.all24,
       width: double.infinity,
-      child: ElevatedButton(
+      child: AppButton(
+        label: AppStrings.instSaveBatchBtn,
+        icon: Icons.save_rounded,
         onPressed: () {
           FocusScope.of(context).unfocus();
           controller.saveBatch(context);
         },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF0051B3),
-          padding: AppSpacing.y20,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          elevation: 0,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.save_rounded, color: Colors.white, size: 20),
-            AppSpacing.h12,
-            Text(
-              AppStrings.instSaveBatchBtn,
-              style: AppTextStyles.manrope(
-                fontSize: 16,
-                fontWeight: FontWeight.w800,
-                color: Colors.white,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

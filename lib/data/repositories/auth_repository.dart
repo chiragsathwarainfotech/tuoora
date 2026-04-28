@@ -35,17 +35,6 @@ class AuthRepository implements AuthRepositoryImpl {
     return _handleResponse(response, 'PARENT');
   }
 
-  @override
-  Future<User> getInstituteProfile() async {
-    final response = await _apiClient.get(ApiConstants.instituteProfile);
-    if (response.status.hasError) {
-      throw Exception(response.statusText ?? 'Failed to fetch profile');
-    }
-    final data = response.body['data'];
-    // Profile API might not return token again, so we pass empty string if missing
-    return User.fromJson(data, data['token'] ?? '', 'INSTITUTE');
-  }
-
   User _handleResponse(dynamic response, String role) {
     if (response.status.hasError) {
       throw Exception(response.body?['message'] ?? 'Login failed');

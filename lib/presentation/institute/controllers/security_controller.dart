@@ -1,8 +1,13 @@
+import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:get/get.dart';
 
 class SecurityController extends GetxController {
+  final InstituteRepositoryImpl _instituteRepository;
+
+  SecurityController(this._instituteRepository);
+
   final currentPasswordController = TextEditingController();
   final newPasswordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
@@ -10,6 +15,7 @@ class SecurityController extends GetxController {
   final isCurrentPasswordVisible = false.obs;
   final isNewPasswordVisible = false.obs;
   final isConfirmPasswordVisible = false.obs;
+  final isLoading = false.obs;
 
   void toggleCurrentPasswordVisibility() =>
       isCurrentPasswordVisible.value = !isCurrentPasswordVisible.value;
@@ -18,10 +24,10 @@ class SecurityController extends GetxController {
   void toggleConfirmPasswordVisibility() =>
       isConfirmPasswordVisible.value = !isConfirmPasswordVisible.value;
 
-  void updatePassword() {
-    final current = currentPasswordController.text;
-    final newPass = newPasswordController.text;
-    final confirm = confirmPasswordController.text;
+  Future<void> updatePassword() async {
+    final current = currentPasswordController.text.trim();
+    final newPass = newPasswordController.text.trim();
+    final confirm = confirmPasswordController.text.trim();
 
     if (current.isEmpty || newPass.isEmpty || confirm.isEmpty) {
       Get.snackbar(
@@ -33,10 +39,10 @@ class SecurityController extends GetxController {
       return;
     }
 
-    if (newPass.length < 8) {
+    if (newPass.length < 6) {
       Get.snackbar(
         'Weak Password',
-        'New password must be at least 8 characters long.',
+        'New password must be at least 6 characters long.',
         backgroundColor: Colors.redAccent,
         colorText: Colors.white,
       );
@@ -53,18 +59,40 @@ class SecurityController extends GetxController {
       return;
     }
 
-    // Success simulation
-    Get.back();
-    Get.snackbar(
-      'Success',
-      'Your password has been updated securely.',
-      backgroundColor: AppColors.darkGreen,
-      colorText: Colors.white,
-      snackPosition: SnackPosition.BOTTOM,
-      margin: const EdgeInsets.all(16),
-    );
+    try {
+      isLoading.value = true;
+      final data = {
+        'current_password': current,
+        'new_password': newPass,
+        'new_password_confirmation': confirm,
+      };
 
-    // Clear fields
+      await _instituteRepository.changePassword(data);
+
+      Get.back();
+      Get.snackbar(
+        'Success',
+        'Your password has been updated securely.',
+        backgroundColor: AppColors.darkGreen,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+        margin: const EdgeInsets.all(16),
+      );
+
+      _clearFields();
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        e.toString().replaceAll('Exception: ', ''),
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void _clearFields() {
     currentPasswordController.clear();
     newPasswordController.clear();
     confirmPasswordController.clear();

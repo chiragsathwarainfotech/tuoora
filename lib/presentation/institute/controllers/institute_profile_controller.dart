@@ -1,15 +1,21 @@
-import 'package:fee_easy/data/repositories_impl/auth_repository_impl.dart';
+import 'package:fee_easy/config/app_routes.dart';
 import 'package:fee_easy/core/constants/app_colors.dart';
+import 'package:fee_easy/core/services/auth_service.dart';
+import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
+import 'package:fee_easy/data/models/institute_profile_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class InstituteProfileController extends GetxController {
-  final AuthRepositoryImpl _authRepository;
+  final InstituteRepositoryImpl _instituteRepository;
 
-  InstituteProfileController(this._authRepository);
+  InstituteProfileController(this._instituteRepository);
 
-  // Current values (for display)
+  // Current Profile Model
+  final profile = Rxn<InstituteProfile>();
+
+  // Observable fields for UI display
   final instituteName = "".obs;
   final profileImagePath = RxnString();
   final ownerName = "".obs;
@@ -20,11 +26,11 @@ class InstituteProfileController extends GetxController {
   final city = "".obs;
   final state = "".obs;
   final country = "".obs;
-  final pinCode = "".obs;
+  final pincode = "".obs;
 
   final isLoading = false.obs;
 
-  // Controllers for text fields
+  // Controllers for text fields (for editing)
   late TextEditingController nameController;
   late TextEditingController ownerController;
   late TextEditingController emailController;
@@ -55,32 +61,38 @@ class InstituteProfileController extends GetxController {
     cityController = TextEditingController(text: city.value);
     stateController = TextEditingController(text: state.value);
     countryController = TextEditingController(text: country.value);
-    pincodeController = TextEditingController(text: pinCode.value);
+    pincodeController = TextEditingController(text: pincode.value);
   }
 
   Future<void> fetchProfile() async {
     try {
       isLoading.value = true;
-      final user = await _authRepository.getInstituteProfile();
+      final data = await _instituteRepository.getProfile();
+      profile.value = data;
 
-      instituteName.value = user.instituteName ?? '';
-      ownerName.value = user.name;
-      email.value = user.email;
-      phone.value = user.phone ?? '';
-      addressLine1.value = user.address ?? '';
-      addressLine2.value = ''; // Map as needed from backend
-      city.value = user.city ?? '';
-      state.value = user.state ?? '';
-      country.value = 'India'; // Default or from user model
-      pinCode.value = user.pincode ?? '';
+      instituteName.value = data.instituteName ?? '';
+      ownerName.value = data.name;
+      email.value = data.email;
+      phone.value = data.phone;
+      addressLine1.value = data.address ?? '';
+      addressLine2.value = data.addressLine2 ?? '';
+      city.value = data.city ?? '';
+      state.value = data.state ?? '';
+      country.value = data.country ?? 'India';
+      pincode.value = data.pincode ?? '';
 
-      if (user.logo != null) {
-        profileImagePath.value = user.logo;
+      if (data.logoUrl != null) {
+        profileImagePath.value = data.logoUrl;
       }
 
       _initializeControllers();
     } catch (e) {
-      Get.snackbar('Error', 'Failed to load profile: $e');
+      Get.snackbar(
+        'Error',
+        'Failed to load profile: $e',
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
     } finally {
       isLoading.value = false;
     }
@@ -129,32 +141,58 @@ class InstituteProfileController extends GetxController {
     );
   }
 
-  void saveProfile() {
-    instituteName.value = nameController.text;
-    ownerName.value = ownerController.text;
-    email.value = emailController.text;
-    phone.value = phoneController.text;
-    addressLine1.value = addressLine1Controller.text;
-    addressLine2.value = addressLine2Controller.text;
-    city.value = cityController.text;
-    state.value = stateController.text;
-    country.value = countryController.text;
-    pinCode.value = pincodeController.text;
+  Future<void> saveProfile() async {
+    try {
+      isLoading.value = true;
+      final updateData = {
+        'name': ownerController.text,
+        'institute_name': nameController.text,
+        'email': emailController.text,
+        'phone': phoneController.text,
+        'address': addressLine1Controller.text,
+        'address_line_2': addressLine2Controller.text,
+        'city': cityController.text,
+        'state': stateController.text,
+        'country': countryController.text,
+        'pincode': pincodeController.text,
+        if (profileImagePath.value != null)
+          'logo_url': profileImagePath.value,
+      };
 
-    Get.back();
-    Get.snackbar(
-      'Profile Updated',
-      'Institute details have been successfully saved.',
-      backgroundColor: AppColors.darkGreen,
-      colorText: Colors.white,
-      snackPosition: SnackPosition.BOTTOM,
-      margin: const EdgeInsets.all(16),
-    );
+      await _instituteRepository.updateProfile(updateData);
+
+      await fetchProfile();
+
+      Get.back();
+      Get.snackbar(
+        'Profile Updated',
+        'Institute details have been successfully saved.',
+        backgroundColor: AppColors.darkGreen,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+        margin: const EdgeInsets.all(16),
+      );
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Failed to update profile: $e',
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   void discardChanges() {
     _initializeControllers();
     Get.back();
+  }
+
+  void logout() async {
+    final authService = Get.find<AuthService>();
+    await authService.clearSession();
+    Get.offAllNamed(AppRoutes.roleSelection);
   }
 
   @override

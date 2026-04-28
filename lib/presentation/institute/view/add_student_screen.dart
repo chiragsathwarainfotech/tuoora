@@ -4,6 +4,7 @@ import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/presentation/institute/controllers/student_controller.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
+import 'package:fee_easy/core/widgets/app_button.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -96,13 +97,27 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
                                   ),
                                   fit: BoxFit.cover,
                                 )
-                              : const DecorationImage(
-                                  image: NetworkImage(
-                                    'https://i.pravatar.cc/150?img=11',
-                                  ),
-                                  opacity: 0.5,
-                                ),
+                              : (controller.currentStudent.value?.profileImageUrl != null &&
+                                      controller.currentStudent.value!.profileImageUrl.isNotEmpty)
+                                  ? DecorationImage(
+                                      image: NetworkImage(
+                                        controller.currentStudent.value!.profileImageUrl,
+                                      ),
+                                      fit: BoxFit.cover,
+                                    )
+                                  : null,
                         ),
+                        child: (controller.selectedImagePath.value == null &&
+                                (controller.currentStudent.value?.profileImageUrl == null ||
+                                    controller.currentStudent.value!.profileImageUrl.isEmpty))
+                            ? const Center(
+                                child: Icon(
+                                  Icons.person_rounded,
+                                  size: 40,
+                                  color: AppColors.textTertiary,
+                                ),
+                              )
+                            : null,
                       ),
                     ),
                     Positioned(
@@ -264,44 +279,13 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
     return Column(
       children: [
         Obx(
-          () => GestureDetector(
-            onTap: controller.isFormValid.value
-                ? () => controller.saveStudent(
-                    isEdit: controller.editingStudentId.value != null,
-                  )
-                : null,
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: AppSpacing.s18),
-              decoration: BoxDecoration(
-                color: controller.isFormValid.value
-                    ? AppColors.instDarkBtnBlue
-                    : AppColors.textMuted,
-                borderRadius: BorderRadius.circular(AppSpacing.s12),
-                boxShadow: controller.isFormValid.value
-                    ? [
-                        BoxShadow(
-                          color: AppColors.instDarkBtnBlue.withValues(
-                            alpha: 0.2,
-                          ),
-                          blurRadius: AppSpacing.s16,
-                          offset: const Offset(0, AppSpacing.s8),
-                        ),
-                      ]
-                    : [],
-              ),
-              child: Center(
-                child: Text(
-                  controller.editingStudentId.value != null
-                      ? 'Update Student'
-                      : AppStrings.instConfirmBtn,
-                  style: AppTextStyles.manrope(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w800,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
+          () => AppButton(
+            label: controller.editingStudentId.value != null
+                ? 'Update Student'
+                : AppStrings.instConfirmBtn,
+            isDisabled: !controller.isFormValid.value,
+            onPressed: () => controller.saveStudent(
+              isEdit: controller.editingStudentId.value != null,
             ),
           ),
         ),

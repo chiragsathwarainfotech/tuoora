@@ -1,4 +1,5 @@
 import 'package:fee_easy/core/constants/app_colors.dart';
+import 'package:fee_easy/core/widgets/app_button.dart';
 import 'package:intl/intl.dart';
 import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
@@ -16,26 +17,42 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
-        child: Obx(
-          () => Column(
-            children: [
-              const InstituteAppBar(title: 'Record Fee'),
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: AppSpacing.x24.add(AppSpacing.y16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      _buildStudentSearchSection(),
-                      AppSpacing.v16,
-                      _buildFeeDetailsSection(context),
-                    ],
+        child: Stack(
+          children: [
+            Obx(
+              () => Column(
+                children: [
+                  const InstituteAppBar(title: 'Record Fee'),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: AppSpacing.x24.add(AppSpacing.y16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          _buildStudentSearchSection(),
+                          AppSpacing.v16,
+                          _buildFeeDetailsSection(context),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
+                  _buildFixedFooterButton(),
+                ],
               ),
-              _buildFixedFooterButton(),
-            ],
-          ),
+            ),
+            Obx(
+              () => controller.isLoading.value
+                  ? Container(
+                      color: Colors.black.withValues(alpha: 0.3),
+                      child: const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.instPrimaryBlue,
+                        ),
+                      ),
+                    )
+                  : const SizedBox.shrink(),
+            ),
+          ],
         ),
       ),
     );
@@ -514,10 +531,6 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
               'Student ID',
               controller.selectedStudent.value?.id.toString() ?? '-',
             ),
-            _buildReceiptRow(
-              'Batch',
-              controller.selectedStudent.value?.batch ?? '-',
-            ),
             const Divider(height: 32),
             _buildReceiptRow('Fee Month', controller.selectedMonth.value),
             _buildReceiptRow(
@@ -632,26 +645,9 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
         color: Colors.white,
         border: Border(top: BorderSide(color: AppColors.divider, width: 1)),
       ),
-      child: GestureDetector(
-        onTap: () => controller.saveRecord(),
-        child: Container(
-          width: double.infinity,
-          padding: AppSpacing.y18,
-          decoration: BoxDecoration(
-            color: AppColors.instPrimaryBlue,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Center(
-            child: Text(
-              AppStrings.instSaveFeeBtn,
-              style: AppTextStyles.manrope(
-                fontSize: 16,
-                fontWeight: FontWeight.w800,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ),
+      child: AppButton(
+        label: AppStrings.instSaveFeeBtn,
+        onPressed: () => controller.saveRecord(),
       ),
     );
   }

@@ -43,7 +43,7 @@ class PortalAppBar extends StatelessWidget implements PreferredSizeWidget {
             style: AppTextStyles.manrope(
               fontSize: 18,
               fontWeight: FontWeight.w800,
-              color: AppColors.deepBlue,
+              color: AppColors.brandAppBarColor,
             ),
           ),
         ],
@@ -55,7 +55,7 @@ class PortalAppBar extends StatelessWidget implements PreferredSizeWidget {
               notificationIcon ??
               const Icon(
                 Icons.notifications_none_rounded,
-                color: AppColors.textPrimary,
+                color: AppColors.brandAppBarColor,
                 size: AppSpacing.s26,
               ),
         ),

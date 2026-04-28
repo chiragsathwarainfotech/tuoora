@@ -4,105 +4,66 @@ import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class UpdatesScreen extends StatefulWidget {
+class UpdatesScreen extends StatelessWidget {
   const UpdatesScreen({super.key});
 
   @override
-  State<UpdatesScreen> createState() => _UpdatesScreenState();
-}
-
-class _UpdateData {
-  final IconData icon;
-  final Color iconColor;
-  final Color iconBg;
-  final String title;
-  final String time;
-  final String description;
-  final String category;
-  final String? badgeText;
-  final Color? badgeColor;
-  final Color? badgeBg;
-  final String? imageUrl;
-  final String section;
-
-  _UpdateData({
-    required this.icon,
-    required this.iconColor,
-    required this.iconBg,
-    required this.title,
-    required this.time,
-    required this.description,
-    required this.category,
-    this.badgeText,
-    this.badgeColor,
-    this.badgeBg,
-    this.imageUrl,
-    required this.section,
-  });
-}
-
-class _UpdatesScreenState extends State<UpdatesScreen> {
-  String selectedFilter = 'All';
-
-  final List<_UpdateData> allUpdates = [
-    _UpdateData(
-      icon: Icons.account_balance_wallet_outlined,
-      iconColor: const Color(0xFF92400E),
-      iconBg: AppColors.amberLight,
-      title: 'Fee Reminder',
-      time: '10:45 AM',
-      description:
-          'Second quarter tuition fee payment is due by next Friday. Please review your statement in the Fees section.',
-      category: 'Fees',
-      badgeText: 'Immediate Action Required',
-      badgeColor: const Color(0xFF7F1D1D),
-      badgeBg: const Color(0xFFFEF2F2),
-      section: 'Today',
-    ),
-    _UpdateData(
-      icon: Icons.edit_note_rounded,
-      iconColor: AppColors.oceanBlue,
-      iconBg: AppColors.lightBlueBg,
-      title: 'Homework Alert',
-      time: '08:20 AM',
-      description:
-          'Advanced Calculus: Assignment #4 has been posted. Submission deadline: Oct 24th.',
-      category: 'Academic',
-      badgeText: 'Math Dept.',
-      badgeColor: AppColors.deepBlue,
-      badgeBg: const Color(0xFFEFF6FF),
-      section: 'Today',
-    ),
-    _UpdateData(
-      icon: Icons.calendar_today_outlined,
-      iconColor: const Color(0xFF475569),
-      iconBg: AppColors.reportBorder,
-      title: 'Attendance Update',
-      time: 'Yesterday',
-      description:
-          "Weekly attendance report: 98.5%. You've maintained a perfect record for the Physics module this month.",
-      category: 'Academic',
-      section: 'Earlier',
-    ),
-    _UpdateData(
-      icon: Icons.campaign_outlined,
-      iconColor: const Color(0xFF0369A1),
-      iconBg: const Color(0xFFE0F2FE),
-      title: 'Science Fair 2024',
-      time: 'Oct 19',
-      description:
-          "The annual 'Aeon Innovate' science fair registration is now open for all senior students.",
-      category: 'Events',
-      imageUrl: 'assets/science_fair.png',
-      section: 'Earlier',
-    ),
-  ];
-
-  @override
   Widget build(BuildContext context) {
-    List<_UpdateData> filteredUpdates = selectedFilter == 'All'
-        ? allUpdates
-        : allUpdates.where((u) => u.category == selectedFilter).toList();
+    final selectedFilter = 'All'.obs;
+
+    final List<_UpdateData> allUpdates = [
+      _UpdateData(
+        icon: Icons.account_balance_wallet_outlined,
+        iconColor: const Color(0xFF92400E),
+        iconBg: AppColors.amberLight,
+        title: 'Fee Reminder',
+        time: '10:45 AM',
+        description:
+            'Second quarter tuition fee payment is due by next Friday. Please review your statement in the Fees section.',
+        category: 'Fees',
+        badgeText: 'Immediate Action Required',
+        badgeColor: const Color(0xFF7F1D1D),
+        badgeBg: const Color(0xFFFEF2F2),
+        section: 'Today',
+      ),
+      _UpdateData(
+        icon: Icons.edit_note_rounded,
+        iconColor: AppColors.oceanBlue,
+        iconBg: AppColors.lightBlueBg,
+        title: 'Homework Alert',
+        time: '08:20 AM',
+        description:
+            'Advanced Calculus: Assignment #4 has been posted. Submission deadline: Oct 24th.',
+        category: 'Academic',
+        badgeText: 'Math Dept.',
+        badgeColor: AppColors.deepBlue,
+        badgeBg: const Color(0xFFEFF6FF),
+        section: 'Today',
+      ),
+      _UpdateData(
+        icon: Icons.calendar_today_outlined,
+        iconColor: const Color(0xFF475569),
+        iconBg: AppColors.reportBorder,
+        title: 'Attendance Update',
+        time: 'Yesterday',
+        description:
+            "Weekly attendance report: 98.5%. You've maintained a perfect record for the Physics module this month.",
+        category: 'Academic',
+        section: 'Earlier',
+      ),
+      _UpdateData(
+        icon: Icons.campaign_outlined,
+        iconColor: const Color(0xFF0369A1),
+        iconBg: const Color(0xFFE0F2FE),
+        title: 'Science Fair 2024',
+        time: 'Oct 19',
+        description:
+            "The annual 'Aeon Innovate' science fair registration is now open for all senior students.",
+        category: 'Events',
+        imageUrl: 'assets/science_fair.png',
+        section: 'Earlier',
+      ),
+    ];
 
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
@@ -123,83 +84,96 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
         ),
         centerTitle: false,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AppSpacing.v32,
-            _buildFilterTabs(),
-            AppSpacing.v32,
-            if (filteredUpdates.isEmpty)
-              Padding(
-                padding: const EdgeInsets.all(AppSpacing.s48),
-                child: Center(
-                  child: Column(
-                    children: [
-                      Icon(Icons.filter_list_off_rounded,
-                          size: 64, color: Colors.grey.shade300),
-                      AppSpacing.v16,
-                      Text('No updates in this category',
+      body: Obx(() {
+        List<_UpdateData> filteredUpdates = selectedFilter.value == 'All'
+            ? allUpdates
+            : allUpdates.where((u) => u.category == selectedFilter.value).toList();
+
+        return SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              AppSpacing.v32,
+              _buildFilterTabs(selectedFilter),
+              AppSpacing.v32,
+              if (filteredUpdates.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.all(AppSpacing.s48),
+                  child: Center(
+                    child: Column(
+                      children: [
+                        Icon(
+                          Icons.filter_list_off_rounded,
+                          size: 64,
+                          color: Colors.grey.shade300,
+                        ),
+                        AppSpacing.v16,
+                        Text(
+                          'No updates in this category',
                           style: AppTextStyles.lexend(
-                              fontSize: 14, color: Colors.grey.shade500)),
-                    ],
+                            fontSize: 14,
+                            color: Colors.grey.shade500,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            if (filteredUpdates.any((u) => u.section == 'Today')) ...[
-              _buildSectionHeader('Today'),
-              AppSpacing.v16,
-              ...filteredUpdates
-                  .where((u) => u.section == 'Today')
-                  .map((u) => _buildUpdateCard(u)),
-            ],
-            if (filteredUpdates.any((u) => u.section == 'Earlier')) ...[
+              if (filteredUpdates.any((u) => u.section == 'Today')) ...[
+                _buildSectionHeader('Today'),
+                AppSpacing.v16,
+                ...filteredUpdates
+                    .where((u) => u.section == 'Today')
+                    .map((u) => _buildUpdateCard(u)),
+              ],
+              if (filteredUpdates.any((u) => u.section == 'Earlier')) ...[
+                AppSpacing.v40,
+                _buildSectionHeader('Earlier'),
+                AppSpacing.v16,
+                ...filteredUpdates
+                    .where((u) => u.section == 'Earlier')
+                    .map((u) => _buildUpdateCard(u)),
+              ],
               AppSpacing.v40,
-              _buildSectionHeader('Earlier'),
-              AppSpacing.v16,
-              ...filteredUpdates
-                  .where((u) => u.section == 'Earlier')
-                  .map((u) => _buildUpdateCard(u)),
             ],
-            AppSpacing.v40,
-          ],
-        ),
-      ),
+          ),
+        );
+      }),
     );
   }
 
-  Widget _buildFilterTabs() {
+  Widget _buildFilterTabs(RxString selectedFilter) {
     final filters = ['All', 'Fees', 'Academic', 'Events'];
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       padding: AppSpacing.x24,
       child: Row(
         children: filters.map((filter) {
-          final isSelected = selectedFilter == filter;
-          return Padding(
-            padding: EdgeInsets.only(right: AppSpacing.s12),
-            child: InkWell(
-              onTap: () => setState(() => selectedFilter = filter),
-              borderRadius: BorderRadius.circular(AppSpacing.s16),
-              child: Container(
-                padding: AppSpacing.x24.add(AppSpacing.y12),
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? AppColors.primaryBlueDark
-                      : AppColors.reportBorder,
-                  borderRadius: BorderRadius.circular(AppSpacing.s16),
-                ),
-                child: Text(
-                  filter,
-                  style: AppTextStyles.manrope(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w800,
-                    color: isSelected ? Colors.white : AppColors.textTertiary,
+          return Obx(() {
+            final isSelected = selectedFilter.value == filter;
+            return Padding(
+              padding: EdgeInsets.only(right: AppSpacing.s12),
+              child: InkWell(
+                onTap: () => selectedFilter.value = filter,
+                borderRadius: BorderRadius.circular(AppSpacing.s16),
+                child: Container(
+                  padding: AppSpacing.x24.add(AppSpacing.y12),
+                  decoration: BoxDecoration(
+                    color: isSelected ? AppColors.primaryBlueDark : AppColors.reportBorder,
+                    borderRadius: BorderRadius.circular(AppSpacing.s16),
+                  ),
+                  child: Text(
+                    filter,
+                    style: AppTextStyles.manrope(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w800,
+                      color: isSelected ? Colors.white : AppColors.textTertiary,
+                    ),
                   ),
                 ),
               ),
-            ),
-          );
+            );
+          });
         }).toList(),
       ),
     );
@@ -254,7 +228,11 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
                   color: data.iconBg,
                   borderRadius: BorderRadius.circular(AppSpacing.s16),
                 ),
-                child: Icon(data.icon, color: data.iconColor, size: AppSpacing.s24),
+                child: Icon(
+                  data.icon,
+                  color: data.iconColor,
+                  size: AppSpacing.s24,
+                ),
               ),
               AppSpacing.h16,
               Expanded(
@@ -331,4 +309,34 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
       ),
     );
   }
+}
+
+class _UpdateData {
+  final IconData icon;
+  final Color iconColor;
+  final Color iconBg;
+  final String title;
+  final String time;
+  final String description;
+  final String category;
+  final String? badgeText;
+  final Color? badgeColor;
+  final Color? badgeBg;
+  final String? imageUrl;
+  final String section;
+
+  _UpdateData({
+    required this.icon,
+    required this.iconColor,
+    required this.iconBg,
+    required this.title,
+    required this.time,
+    required this.description,
+    required this.category,
+    this.badgeText,
+    this.badgeColor,
+    this.badgeBg,
+    this.imageUrl,
+    required this.section,
+  });
 }

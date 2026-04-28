@@ -16,14 +16,15 @@ class ReportsScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const InstituteAppBar(title: 'Reports Dashboard', isRoot: false),
+            const InstituteAppBar(title: 'Reports', isRoot: false),
             Expanded(
               child: ListView(
                 padding: AppSpacing.all24,
                 children: [
                   _buildReportCard(
                     title: 'Fee Reports',
-                    subtitle: 'Collection summaries, pending dues, and batch-wise financial insights.',
+                    subtitle:
+                        'Collection summaries, pending dues, and batch-wise financial insights.',
                     icon: Icons.account_balance_wallet_rounded,
                     color: AppColors.primaryBlueDark,
                     onTap: () => Get.toNamed(AppRoutes.instituteFeeReport),
@@ -31,18 +32,22 @@ class ReportsScreen extends StatelessWidget {
                   AppSpacing.v16,
                   _buildReportCard(
                     title: 'Attendance Reports',
-                    subtitle: 'Daily attendance rates, absentee tracking, and batch consistency trends.',
+                    subtitle:
+                        'Daily attendance rates, absentee tracking, and batch consistency trends.',
                     icon: Icons.calendar_today_rounded,
                     color: AppColors.successGreen,
-                    onTap: () => Get.toNamed(AppRoutes.instituteAttendanceReport),
+                    onTap: () =>
+                        Get.toNamed(AppRoutes.instituteAttendanceReport),
                   ),
                   AppSpacing.v16,
                   _buildReportCard(
                     title: 'Performance Reports',
-                    subtitle: 'Academic progress, average grades, and performance analysis across batches.',
+                    subtitle:
+                        'Academic progress, average grades, and performance analysis across batches.',
                     icon: Icons.insights_rounded,
                     color: AppColors.warningAmber,
-                    onTap: () => Get.toNamed(AppRoutes.institutePerformanceReport),
+                    onTap: () =>
+                        Get.toNamed(AppRoutes.institutePerformanceReport),
                   ),
                 ],
               ),

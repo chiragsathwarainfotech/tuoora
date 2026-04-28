@@ -43,7 +43,7 @@ class InstituteAppBar extends StatelessWidget implements PreferredSizeWidget {
                     style: AppTextStyles.manrope(
                       fontSize: 18,
                       fontWeight: FontWeight.w800,
-                      color: AppColors.instAccentBlue,
+                      color: AppColors.brandAppBarColor,
                     ),
                   ),
                 ),
@@ -73,7 +73,7 @@ class InstituteAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: Center(
           child: Icon(
             isRoot ? Icons.menu_rounded : Icons.arrow_back_ios_new_rounded,
-            color: AppColors.instAccentBlue,
+            color: AppColors.brandAppBarColor,
             size: isRoot ? AppSpacing.s22 : AppSpacing.s18,
           ),
         ),
@@ -91,7 +91,7 @@ class InstituteAppBar extends StatelessWidget implements PreferredSizeWidget {
           },
           child: const Icon(
             Icons.chat_bubble_outline_rounded,
-            color: AppColors.instAccentBlue,
+            color: AppColors.brandAppBarColor,
             size: AppSpacing.s24,
           ),
         ),
@@ -100,7 +100,7 @@ class InstituteAppBar extends StatelessWidget implements PreferredSizeWidget {
           onTap: () => Get.toNamed(AppRoutes.instituteNotifications),
           child: const Icon(
             Icons.notifications_none_rounded,
-            color: AppColors.instAccentBlue,
+            color: AppColors.brandAppBarColor,
             size: AppSpacing.s26,
           ),
         ),

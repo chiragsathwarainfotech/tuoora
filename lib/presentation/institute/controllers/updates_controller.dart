@@ -1,17 +1,24 @@
-import 'package:fee_easy/presentation/institute/models/update_model.dart';
 import 'package:fee_easy/core/constants/app_colors.dart';
+import 'package:fee_easy/core/enums/update_enums.dart';
+import 'package:fee_easy/data/models/daily_update_model.dart';
+import 'package:fee_easy/data/repositories_impl/daily_update_repository_impl.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class UpdatesController extends GetxController {
-  final updatesList = <UpdateModel>[].obs;
+  final DailyUpdateRepositoryImpl _updateRepository;
+
+  UpdatesController(this._updateRepository);
+
+  final updatesList = <DailyUpdate>[].obs;
+  final isLoading = false.obs;
+  final isCreating = false.obs;
 
   // Create Update State
-  final selectedCategory = 'Fee Reminder'.obs;
-  final selectedRecipient = 'Student'.obs;
-  final selectedAudience = 'All Students'.obs;
-  final selectedGrade = 'Grade 9'.obs;
+  final selectedCategory = UpdateCategory.Academic.obs;
+  final selectedRecipient = UpdateRecipient.students.obs;
+  final selectedAudience = UpdateTargetType.all.obs;
   final selectedBatch = 'Evening • Batch A'.obs;
 
   final subjectController = TextEditingController();
@@ -20,7 +27,6 @@ class UpdatesController extends GetxController {
   final appNotificationEnabled = true.obs;
   final whatsappEnabled = false.obs;
 
-  final availableGrades = ['Grade 9', 'Grade 10', 'Grade 11', 'Grade 12'];
   final availableBatches = [
     'Evening • Batch A',
     'Morning • Advanced',
@@ -30,30 +36,24 @@ class UpdatesController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _loadMockUpdates();
+    fetchUpdates();
   }
 
-  void _loadMockUpdates() {
-    updatesList.assignAll([
-      UpdateModel(
-        id: '1',
-        category: 'Fee Reminder',
-        audience: 'All Students',
-        subject: 'March Tuition Fee Reminder',
-        message:
-            'Kindly clear the dues for March 2024 by 20th to avoid late fees.',
-        date: DateTime.now().subtract(const Duration(hours: 2)),
-      ),
-      UpdateModel(
-        id: '2',
-        category: 'Holiday',
-        audience: 'Grade 10',
-        subject: 'Eid-ul-Fitr Holiday Notice',
-        message:
-            'The institute will remain closed on April 10th and 11th on account of Eid.',
-        date: DateTime.now().subtract(const Duration(days: 1)),
-      ),
-    ]);
+  Future<void> fetchUpdates() async {
+    isLoading.value = true;
+    try {
+      final updates = await _updateRepository.listDailyUpdates();
+      updatesList.assignAll(updates);
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Failed to load updates: $e',
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   Future<void> pickAttachments() async {
@@ -81,7 +81,7 @@ class UpdatesController extends GetxController {
     attachments.removeAt(index);
   }
 
-  void broadcastUpdate() {
+  Future<void> broadcastUpdate() async {
     if (subjectController.text.isEmpty || messageController.text.isEmpty) {
       Get.snackbar(
         'Error',
@@ -92,52 +92,53 @@ class UpdatesController extends GetxController {
       return;
     }
 
-    String audienceLabel = selectedRecipient.value;
-    if (selectedRecipient.value == 'Student' ||
-        selectedRecipient.value == 'Both') {
-      String prefix = selectedRecipient.value == 'Both'
-          ? 'Students & Parents'
-          : 'Students';
-      if (selectedAudience.value == 'All Students') {
-        audienceLabel = 'All $prefix';
-      } else if (selectedAudience.value == 'Specific Batch') {
-        audienceLabel = '$prefix - ${selectedBatch.value}';
-      }
+    try {
+      isCreating.value = true;
+      final dailyUpdate = DailyUpdate(
+        recipient: selectedRecipient.value,
+        targetType: selectedAudience.value,
+        topic: subjectController.text,
+        description: messageController.text,
+        category: selectedCategory.value,
+        studentId: selectedAudience.value == UpdateTargetType.all
+            ? 7
+            : null, // Mock ID
+        batchId: selectedAudience.value == UpdateTargetType.batch
+            ? 4
+            : null, // Mock ID
+      );
+
+      await _updateRepository.createDailyUpdate(dailyUpdate.toJson());
+
+      await fetchUpdates();
+
+      // Reset fields
+      subjectController.clear();
+      messageController.clear();
+      attachments.clear();
+      selectedCategory.value = UpdateCategory.Academic;
+      selectedRecipient.value = UpdateRecipient.students;
+      selectedAudience.value = UpdateTargetType.all;
+      selectedBatch.value = 'Evening • Batch A';
+
+      Get.back();
+      Get.snackbar(
+        'Success',
+        'Update broadcasted successfully',
+        backgroundColor: AppColors.darkGreen,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Failed to broadcast update: $e',
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
+    } finally {
+      isCreating.value = false;
     }
-
-    final newUpdate = UpdateModel(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
-      category: selectedCategory.value,
-      audience: audienceLabel,
-      subject: subjectController.text,
-      message: messageController.text,
-      date: DateTime.now(),
-      attachments: List.from(attachments),
-      appNotification: appNotificationEnabled.value,
-      whatsapp: whatsappEnabled.value,
-    );
-
-    updatesList.insert(0, newUpdate);
-
-    // Clear fields
-    subjectController.clear();
-    messageController.clear();
-    attachments.clear();
-    selectedCategory.value = 'Fee Reminder';
-    selectedRecipient.value = 'Student';
-    selectedAudience.value = 'All Students';
-    selectedGrade.value = 'Grade 9';
-    selectedBatch.value = 'Evening • Batch A';
-
-    Get.back();
-    Get.snackbar(
-      'Update Broadcasted',
-      'Your message has been sent to $audienceLabel.',
-      backgroundColor: AppColors.darkGreen,
-      colorText: Colors.white,
-      snackPosition: SnackPosition.BOTTOM,
-      margin: const EdgeInsets.all(16),
-    );
   }
 
   @override

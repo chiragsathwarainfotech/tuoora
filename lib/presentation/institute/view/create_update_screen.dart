@@ -1,77 +1,94 @@
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
+import 'package:fee_easy/core/enums/update_enums.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
+import 'package:fee_easy/core/widgets/app_button.dart';
 import 'package:flutter/material.dart';
-
 import 'package:fee_easy/presentation/institute/controllers/updates_controller.dart';
 import 'package:get/get.dart';
 
-class CreateUpdateScreen extends GetView<UpdatesController> {
+class CreateUpdateScreen extends StatelessWidget {
   const CreateUpdateScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.scaffoldBg,
-      body: SafeArea(
-        child: Column(
-          children: [
-            const InstituteAppBar(title: 'Create Update', isRoot: false),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: AppSpacing.all24,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Select Category',
-                      style: AppTextStyles.manrope(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.textSecondary,
-                      ),
+    final controller = Get.find<UpdatesController>();
+
+    return Stack(
+      children: [
+        Scaffold(
+          backgroundColor: AppColors.scaffoldBg,
+          body: SafeArea(
+            child: Column(
+              children: [
+                const InstituteAppBar(title: 'Create Update', isRoot: false),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: AppSpacing.all24,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Select Category',
+                          style: AppTextStyles.manrope(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                        AppSpacing.v16,
+                        _buildCategorySelection(controller),
+                        AppSpacing.v32,
+                        _buildTargetAudienceCard(controller),
+                        AppSpacing.v32,
+                        _buildInputField(
+                          'Topic',
+                          'e.g., Q3 Fee Installment Reminder',
+                          controller.subjectController,
+                        ),
+                        AppSpacing.v32,
+                        _buildInputField(
+                          'Message Content',
+                          'Write your message here...',
+                          controller.messageController,
+                          maxLines: 6,
+                        ),
+                        AppSpacing.v32,
+                        _buildAttachmentSection(controller),
+                        AppSpacing.v32,
+                        _buildBroadcastChannels(controller),
+                        AppSpacing.v40,
+                      ],
                     ),
-                    AppSpacing.v16,
-                    _buildCategorySelection(),
-                    AppSpacing.v32,
-                    _buildTargetAudienceCard(),
-                    AppSpacing.v32,
-                    _buildInputField(
-                      'Subject',
-                      'e.g., Q3 Fee Installment Reminder',
-                      controller.subjectController,
-                    ),
-                    AppSpacing.v32,
-                    _buildInputField(
-                      'Message Content',
-                      'Write your message here...',
-                      controller.messageController,
-                      maxLines: 6,
-                    ),
-                    AppSpacing.v32,
-                    _buildAttachmentSection(),
-                    AppSpacing.v32,
-                    _buildBroadcastChannels(),
-                    AppSpacing.v40,
-                  ],
+                  ),
                 ),
-              ),
+                _buildBroadcastButton(controller),
+              ],
             ),
-            _buildBroadcastButton(),
-          ],
+          ),
         ),
-      ),
+        Obx(() {
+          if (controller.isCreating.value) {
+            return Container(
+              color: Colors.black.withValues(alpha: 0.3),
+              child: const Center(
+                child: CircularProgressIndicator(color: AppColors.primaryBlue),
+              ),
+            );
+          }
+          return const SizedBox.shrink();
+        }),
+      ],
     );
   }
 
-  Widget _buildCategorySelection() {
-    final categories = ['Fee Reminder', 'Event', 'Holiday', 'Notice'];
+  Widget _buildCategorySelection(UpdatesController controller) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Obx(
         () => Row(
-          children: categories.map((cat) {
+          children: UpdateCategory.values.map((cat) {
             final isSelected = controller.selectedCategory.value == cat;
             return GestureDetector(
               onTap: () => controller.selectedCategory.value = cat,
@@ -88,7 +105,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
-                  cat,
+                  cat.name,
                   style: AppTextStyles.manrope(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
@@ -103,7 +120,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
     );
   }
 
-  Widget _buildTargetAudienceCard() {
+  Widget _buildTargetAudienceCard(UpdatesController controller) {
     return Container(
       padding: AppSpacing.all20,
       decoration: BoxDecoration(
@@ -147,18 +164,18 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
             ),
             child: Obx(
               () => DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
+                child: DropdownButton<UpdateRecipient>(
                   value: controller.selectedRecipient.value,
                   isExpanded: true,
                   icon: const Icon(
                     Icons.keyboard_arrow_down_rounded,
                     color: AppColors.textPrimary,
                   ),
-                  items: ['Student', 'Parent', 'Both'].map((String value) {
-                    return DropdownMenuItem<String>(
+                  items: UpdateRecipient.values.map((UpdateRecipient value) {
+                    return DropdownMenuItem<UpdateRecipient>(
                       value: value,
                       child: Text(
-                        value,
+                        value.name.capitalizeFirst!,
                         style: AppTextStyles.manrope(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
@@ -167,18 +184,15 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                       ),
                     );
                   }).toList(),
-                  onChanged: (val) {
-                    if (val != null) {
-                      controller.selectedRecipient.value = val;
-                    }
-                  },
+                  onChanged: (val) => val != null
+                      ? controller.selectedRecipient.value = val
+                      : null,
                 ),
               ),
             ),
           ),
           Obx(() {
-            if (controller.selectedRecipient.value == 'Student' ||
-                controller.selectedRecipient.value == 'Both') {
+            if (controller.selectedRecipient.value != UpdateRecipient.parents) {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -193,26 +207,32 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                   ),
                   AppSpacing.v12,
                   Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: AppColors.borderGrey,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
+                      child: DropdownButton<UpdateTargetType>(
                         value: controller.selectedAudience.value,
                         isExpanded: true,
                         icon: const Icon(
                           Icons.keyboard_arrow_down_rounded,
                           color: AppColors.textPrimary,
                         ),
-                        items: ['All Students', 'Specific Batch']
-                            .map((String value) {
-                          return DropdownMenuItem<String>(
+                        items: UpdateTargetType.values.map((
+                          UpdateTargetType value,
+                        ) {
+                          String label = value == UpdateTargetType.all
+                              ? 'All Students'
+                              : 'Specific Batch';
+                          return DropdownMenuItem<UpdateTargetType>(
                             value: value,
                             child: Text(
-                              value,
+                              label,
                               style: AppTextStyles.manrope(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
@@ -221,15 +241,14 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                             ),
                           );
                         }).toList(),
-                        onChanged: (val) {
-                          if (val != null) {
-                            controller.selectedAudience.value = val;
-                          }
-                        },
+                        onChanged: (val) => val != null
+                            ? controller.selectedAudience.value = val
+                            : null,
                       ),
                     ),
                   ),
-                  if (controller.selectedAudience.value == 'Specific Batch') ...[
+                  if (controller.selectedAudience.value ==
+                      UpdateTargetType.batch) ...[
                     AppSpacing.v24,
                     Text(
                       'Select Batch',
@@ -257,8 +276,9 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                             Icons.keyboard_arrow_down_rounded,
                             color: AppColors.textPrimary,
                           ),
-                          items:
-                              controller.availableBatches.map((String value) {
+                          items: controller.availableBatches.map((
+                            String value,
+                          ) {
                             return DropdownMenuItem<String>(
                               value: value,
                               child: Text(
@@ -271,11 +291,9 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                               ),
                             );
                           }).toList(),
-                          onChanged: (val) {
-                            if (val != null) {
-                              controller.selectedBatch.value = val;
-                            }
-                          },
+                          onChanged: (val) => val != null
+                              ? controller.selectedBatch.value = val
+                              : null,
                         ),
                       ),
                     ),
@@ -335,7 +353,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
     );
   }
 
-  Widget _buildAttachmentSection() {
+  Widget _buildAttachmentSection(UpdatesController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -376,8 +394,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
               AppSpacing.v16,
               ...controller.attachments.asMap().entries.map((entry) {
                 final index = entry.key;
-                final path = entry.value;
-                final fileName = path.split('/').last;
+                final fileName = entry.value.split('/').last;
                 return Container(
                   margin: const EdgeInsets.only(bottom: 8),
                   padding: const EdgeInsets.symmetric(
@@ -429,7 +446,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
     );
   }
 
-  Widget _buildBroadcastChannels() {
+  Widget _buildBroadcastChannels(UpdatesController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -446,7 +463,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
           () => _buildChannelItem(
             icon: Icons.notifications_rounded,
             title: 'App Notification',
-            subtitle: 'Push to student devices',
+            subtitle: 'Push to devices',
             value: controller.appNotificationEnabled.value,
             onChanged: (val) => controller.appNotificationEnabled.value = val,
           ),
@@ -456,7 +473,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
           () => _buildChannelItem(
             icon: Icons.chat_bubble_rounded,
             title: 'WhatsApp Message',
-            subtitle: 'Direct to registered number',
+            subtitle: 'Direct message',
             value: controller.whatsappEnabled.value,
             onChanged: (val) => controller.whatsappEnabled.value = val,
           ),
@@ -528,35 +545,11 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
     );
   }
 
-  Widget _buildBroadcastButton() {
-    return Container(
-      padding: AppSpacing.all24,
-      width: double.infinity,
-      child: ElevatedButton(
-        onPressed: () => controller.broadcastUpdate(),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF0051B3),
-          padding: AppSpacing.y20,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.send_rounded, color: Colors.white, size: 20),
-            AppSpacing.h12,
-            Text(
-              'Broadcast Update',
-              style: AppTextStyles.manrope(
-                fontSize: 16,
-                fontWeight: FontWeight.w800,
-                color: Colors.white,
-              ),
-            ),
-          ],
-        ),
-      ),
+  Widget _buildBroadcastButton(UpdatesController controller) {
+    return AppButton(
+      label: 'Broadcast Update',
+      icon: Icons.send_rounded,
+      onPressed: () => controller.broadcastUpdate(),
     );
   }
 }

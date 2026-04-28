@@ -1,5 +1,7 @@
 import 'package:fee_easy/data/repositories/auth_repository.dart';
 import 'package:fee_easy/data/repositories_impl/auth_repository_impl.dart';
+import 'package:fee_easy/data/repositories/institute_repository.dart';
+import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
 import 'package:fee_easy/data/repositories_impl/student_repository_impl.dart';
 import 'package:fee_easy/presentation/institute/controllers/institute_controller.dart';
 import 'package:fee_easy/presentation/institute/controllers/record_fee_controller.dart';
@@ -13,6 +15,9 @@ import 'package:fee_easy/presentation/institute/controllers/security_controller.
 import 'package:fee_easy/presentation/institute/controllers/whatsapp_controller.dart';
 import 'package:fee_easy/core/api/api_client.dart';
 import 'package:fee_easy/data/repositories/student_repository.dart';
+import 'package:fee_easy/data/repositories/daily_update_repository.dart';
+import 'package:fee_easy/data/repositories_impl/daily_update_repository_impl.dart';
+import 'package:fee_easy/core/services/download_service.dart';
 import 'package:get/get.dart';
 
 class InstituteBinding extends Bindings {
@@ -30,12 +35,18 @@ class InstituteBinding extends Bindings {
     );
     Get.lazyPut<ReportsController>(() => ReportsController(), fenix: true);
     Get.lazyPut<InstituteProfileController>(
-      () => InstituteProfileController(Get.find<AuthRepositoryImpl>()),
+      () => InstituteProfileController(Get.find<InstituteRepositoryImpl>()),
       fenix: true,
     );
-    Get.lazyPut<UpdatesController>(() => UpdatesController(), fenix: true);
+    Get.lazyPut<UpdatesController>(
+      () => UpdatesController(Get.find<DailyUpdateRepositoryImpl>()),
+      fenix: true,
+    );
     Get.put<BatchController>(BatchController(), permanent: true);
-    Get.lazyPut<SecurityController>(() => SecurityController(), fenix: true);
+    Get.lazyPut<SecurityController>(
+      () => SecurityController(Get.find<InstituteRepositoryImpl>()),
+      fenix: true,
+    );
     Get.lazyPut<WhatsAppController>(() => WhatsAppController(), fenix: true);
 
     // API Dependencies
@@ -46,5 +57,12 @@ class InstituteBinding extends Bindings {
     Get.lazyPut<AuthRepositoryImpl>(
       () => AuthRepository(Get.find<ApiClient>()),
     );
+    Get.lazyPut<InstituteRepositoryImpl>(
+      () => InstituteRepository(Get.find<ApiClient>()),
+    );
+    Get.lazyPut<DailyUpdateRepositoryImpl>(
+      () => DailyUpdateRepository(Get.find<ApiClient>()),
+    );
+    Get.put<DownloadService>(DownloadService(), permanent: true);
   }
 }

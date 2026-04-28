@@ -329,7 +329,7 @@ class HomeworkRatingScreen extends StatelessWidget {
                     children: [
                       IconButton(
                         onPressed: () => controller.updateScore(
-                          sub.student.id,
+                          sub.student.id.toString(),
                           (sub.score ?? 0) - 1,
                         ),
                         icon: const Icon(Icons.remove, size: 16),
@@ -348,7 +348,7 @@ class HomeworkRatingScreen extends StatelessWidget {
                       AppSpacing.h12,
                       IconButton(
                         onPressed: () => controller.updateScore(
-                          sub.student.id,
+                          sub.student.id.toString(),
                           (sub.score ?? 0) + 1,
                         ),
                         icon: const Icon(Icons.add, size: 16),
@@ -370,7 +370,8 @@ class HomeworkRatingScreen extends StatelessWidget {
             )
           else
             ElevatedButton(
-              onPressed: () => controller.sendReminder(sub.student.id),
+              onPressed: () =>
+                  controller.sendReminder(sub.student.id.toString()),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF667085),
                 minimumSize: const Size(double.infinity, 44),

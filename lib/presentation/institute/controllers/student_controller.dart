@@ -16,6 +16,7 @@ class InstituteStudentController extends GetxController {
   final selectedImagePath = Rxn<String>();
   final isLoading = false.obs;
   final isFormValid = false.obs;
+  final currentStudent = Rxn<Student>();
 
   final nameController = TextEditingController();
   final parentNameController = TextEditingController();
@@ -23,8 +24,9 @@ class InstituteStudentController extends GetxController {
   final emailController = TextEditingController();
   final dobController = TextEditingController();
   final addressController = TextEditingController();
+  final standardController = TextEditingController();
 
-  String? editingStudentId;
+  final editingStudentId = Rxn<dynamic>();
 
   @override
   void onInit() {
@@ -35,45 +37,51 @@ class InstituteStudentController extends GetxController {
     emailController.addListener(validateForm);
     dobController.addListener(validateForm);
     addressController.addListener(validateForm);
-    ever(selectedGrade, (_) => validateForm());
-    _handleArguments();
+    standardController.addListener(validateForm);
+    handleArguments();
   }
 
-  void _handleArguments() {
+  void handleArguments() {
     if (Get.arguments != null && Get.arguments is Map) {
       final args = Get.arguments as Map;
 
-      // Set editing student ID from various possible argument keys
-      editingStudentId =
-          args['studentId'] ??
-          (args['student'] is Map
-              ? args['student']['id']
-              : (args['student'] is Student ? args['student'].id : null));
-
-      if (editingStudentId != null) {
-        if (args['student'] is Map) {
-          // If full map was passed (from mock profile), use it directly
-          _preFillFromMap(args['student'] as Map);
-        } else {
-          fetchStudentDetails(editingStudentId!);
+      if (args['student'] != null) {
+        if (args['student'] is Student) {
+          final student = args['student'] as Student;
+          editingStudentId.value = student.id;
+          currentStudent.value = student;
+          preFillData(student);
+          return;
+        } else if (args['student'] is Map) {
+          final student = Student.fromJson(args['student']);
+          editingStudentId.value = student.id;
+          currentStudent.value = student;
+          preFillData(student);
+          return;
         }
       }
+
+      editingStudentId.value = args['studentId'];
+
+      if (editingStudentId.value != null) {
+        currentStudent.value = null;
+        fetchStudentDetails(editingStudentId.value!);
+      }
     } else {
-      // Clear form if no arguments (Add mode)
       clearForm();
     }
   }
 
   void clearForm() {
-    editingStudentId = null;
+    editingStudentId.value = null;
+    currentStudent.value = null;
     nameController.clear();
     parentNameController.clear();
     phoneController.clear();
     emailController.clear();
     dobController.clear();
     addressController.clear();
-    selectedGrade.value = AppStrings.instGradeHint;
-    selectedGrade.value = AppStrings.instGradeHint;
+    standardController.clear();
     selectedImagePath.value = null;
     validateForm();
   }
@@ -86,6 +94,7 @@ class InstituteStudentController extends GetxController {
     emailController.dispose();
     dobController.dispose();
     addressController.dispose();
+    standardController.dispose();
     super.onClose();
   }
 
@@ -96,16 +105,16 @@ class InstituteStudentController extends GetxController {
         phoneController.text.length >= 10 &&
         ValidationUtils.validateEmail(emailController.text) == null &&
         dobController.text.isNotEmpty &&
-        dobController.text.isNotEmpty &&
-        selectedGrade.value != AppStrings.instGradeHint;
+        standardController.text.isNotEmpty;
 
     isFormValid.value = isValid;
   }
 
-  Future<void> fetchStudentDetails(String id) async {
+  Future<void> fetchStudentDetails(dynamic id) async {
     try {
       isLoading.value = true;
       final student = await _studentRepository.getStudentById(id);
+      currentStudent.value = student;
       preFillData(student);
     } catch (e) {
       debugPrint('Error fetching student: $e');
@@ -115,23 +124,14 @@ class InstituteStudentController extends GetxController {
   }
 
   void preFillData(Student student) {
-    editingStudentId = student.id;
+    editingStudentId.value = student.id;
     nameController.text = student.name;
+    emailController.text = student.email;
+    dobController.text = student.dob;
     parentNameController.text = student.guardianName ?? '';
-    phoneController.text = student.phone ?? '';
-    selectedGrade.value = student.grade;
+    phoneController.text = student.phone;
+    standardController.text = student.standard;
 
-    validateForm();
-  }
-
-  void _preFillFromMap(Map student) {
-    editingStudentId = student['id'];
-    nameController.text = student['name'] ?? '';
-    parentNameController.text = student['guardianName'] ?? '';
-    phoneController.text = student['phone'] ?? '';
-    selectedGrade.value = student['grade'] ?? AppStrings.instGradeHint;
-
-    // Use default fees if not in student map
     validateForm();
   }
 
@@ -147,11 +147,11 @@ class InstituteStudentController extends GetxController {
     // Try to parse existing DOB if available
     if (dobController.text.isNotEmpty) {
       try {
-        final parts = dobController.text.split('/');
+        final parts = dobController.text.split('-');
         if (parts.length == 3) {
-          final day = int.parse(parts[0]);
+          final year = int.parse(parts[0]);
           final month = int.parse(parts[1]);
-          final year = int.parse(parts[2]);
+          final day = int.parse(parts[2]);
           final existingDate = DateTime(year, month, day);
           if (existingDate.isBefore(DateTime.now())) {
             initialDate = existingDate;
@@ -170,7 +170,7 @@ class InstituteStudentController extends GetxController {
     );
     if (picked != null) {
       dobController.text =
-          "${picked.day.toString().padLeft(2, '0')}/${picked.month.toString().padLeft(2, '0')}/${picked.year}";
+          "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
       validateForm();
     }
   }
@@ -232,26 +232,48 @@ class InstituteStudentController extends GetxController {
 
       final studentData = {
         'name': nameController.text,
-        'guardian_name': parentNameController.text,
-        'phone': phoneController.text,
         'email': emailController.text,
+        'phone': phoneController.text,
+        'guardian_name': parentNameController.text,
         'dob': dobController.text,
-        'grade': selectedGrade.value,
+        'standard': standardController.text,
       };
 
-      if (isEdit && editingStudentId != null) {
-        await _studentRepository.updateStudent(editingStudentId!, studentData);
+      if (isEdit && editingStudentId.value != null) {
+        await _studentRepository.updateStudent(
+          editingStudentId.value!,
+          studentData,
+        );
       } else {
         await _studentRepository.createStudent(studentData);
       }
 
-      // Success UI logic
-      _showSuccessDialog(isEdit);
-
       // Refresh list
       if (Get.isRegistered<InstituteController>()) {
-        Get.find<InstituteController>().fetchStudents();
+        Get.find<InstituteController>().fetchStudents(reset: true);
       }
+
+      // Navigate back to registry first
+      if (isEdit) {
+        Get.back(); // Back from Edit
+        Get.back(); // Back from Profile to Registry
+      } else {
+        Get.back(); // Back from Add to Registry
+      }
+
+      // Success UI logic - Show AFTER navigation to avoid "disposed snackbar" error
+      Future.delayed(const Duration(milliseconds: 300), () {
+        Get.snackbar(
+          'Success',
+          isEdit
+              ? 'Student updated successfully'
+              : 'Student added successfully',
+          backgroundColor: Colors.green.withValues(alpha: 0.7),
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM,
+          margin: AppSpacing.all16,
+        );
+      });
     } catch (e) {
       Get.snackbar('Error', 'Failed to save student: $e');
     } finally {
@@ -259,51 +281,25 @@ class InstituteStudentController extends GetxController {
     }
   }
 
-  void _showSuccessDialog(bool isEdit) {
-    Get.dialog(
-      Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        child: Padding(
-          padding: AppSpacing.all32,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.check_circle, color: Colors.green, size: 64),
-              AppSpacing.v24,
-              Text(
-                isEdit ? 'Updated' : 'Added',
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              AppSpacing.v32,
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Get.back();
-                    Get.back();
-                  },
-                  child: const Text('Done'),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      barrierDismissible: false,
-    );
-  }
-
   Future<void> deleteStudent() async {
-    if (editingStudentId == null) return;
+    if (editingStudentId.value == null) return;
     try {
       isLoading.value = true;
-      final success = await _studentRepository.deleteStudent(editingStudentId!);
+      final success = await _studentRepository.deleteStudent(
+        editingStudentId.value!,
+      );
       if (success) {
-        Get.find<InstituteController>().fetchStudents();
-        Get.back();
+        // Locally remove to show immediate update
+        final instController = Get.find<InstituteController>();
+        instController.students.removeWhere(
+          (s) => s.id == editingStudentId.value,
+        );
+        instController.students.refresh();
+
+        Get.back(); // Return to registry screen
+
+        // Refresh from server to ensure sync
+        instController.fetchStudents(reset: true);
       }
     } catch (e) {
       Get.snackbar('Error', 'Delete failed: $e');

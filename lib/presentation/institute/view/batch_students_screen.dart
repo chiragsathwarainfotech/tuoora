@@ -6,6 +6,7 @@ import 'package:fee_easy/presentation/institute/controllers/batch_details_contro
 import 'package:fee_easy/presentation/institute/models/batch_model.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_bottom_button.dart';
+import 'package:fee_easy/core/widgets/common_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -15,16 +16,16 @@ class BatchStudentsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final BatchModel batch = Get.arguments;
-    final BatchDetailsController controller = Get.find<BatchDetailsController>(tag: batch.id);
+    final BatchDetailsController controller = Get.find<BatchDetailsController>(
+      tag: batch.id,
+    );
 
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
         child: Column(
           children: [
-            const InstituteAppBar(
-              title: 'Batch Students',
-            ),
+            const InstituteAppBar(title: 'Batch Students'),
             Expanded(
               child: SingleChildScrollView(
                 padding: AppSpacing.x24.add(AppSpacing.y16),
@@ -45,7 +46,10 @@ class BatchStudentsScreen extends StatelessWidget {
       bottomNavigationBar: InstituteBottomButton(
         label: 'Assign Student',
         icon: Icons.person_add_alt_1_rounded,
-        onTap: () => Get.toNamed(AppRoutes.instituteAssignToBatch, arguments: controller.batch),
+        onTap: () => Get.toNamed(
+          AppRoutes.instituteAssignToBatch,
+          arguments: controller.batch,
+        ),
       ),
     );
   }
@@ -80,14 +84,16 @@ class BatchStudentsScreen extends StatelessWidget {
                 ),
               ),
               AppSpacing.v4,
-              Obx(() => Text(
-                '${controller.assignedStudents.length}',
-                style: AppTextStyles.manrope(
-                  fontSize: 32,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.instPrimaryBlue,
+              Obx(
+                () => Text(
+                  '${controller.assignedStudents.length}',
+                  style: AppTextStyles.manrope(
+                    fontSize: 32,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.instPrimaryBlue,
+                  ),
                 ),
-              )),
+              ),
             ],
           ),
           _buildAvatarStack(controller),
@@ -103,7 +109,9 @@ class BatchStudentsScreen extends StatelessWidget {
       child: Stack(
         children: [
           ...List.generate(
-            controller.assignedStudents.length > 3 ? 3 : controller.assignedStudents.length,
+            controller.assignedStudents.length > 3
+                ? 3
+                : controller.assignedStudents.length,
             (index) => Positioned(
               left: index * 25.0,
               child: Container(
@@ -169,8 +177,15 @@ class BatchStudentsScreen extends StatelessWidget {
         onChanged: (val) => controller.assignedSearchQuery.value = val,
         decoration: InputDecoration(
           hintText: 'Search enrolled students...',
-          hintStyle: AppTextStyles.lexend(fontSize: 14, color: AppColors.textMuted),
-          prefixIcon: const Icon(Icons.search, color: AppColors.textMuted, size: 20),
+          hintStyle: AppTextStyles.lexend(
+            fontSize: 14,
+            color: AppColors.textMuted,
+          ),
+          prefixIcon: const Icon(
+            Icons.search,
+            color: AppColors.textMuted,
+            size: 20,
+          ),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(vertical: 14),
         ),
@@ -178,7 +193,10 @@ class BatchStudentsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildAssignedStudentList(BatchDetailsController controller, BuildContext context) {
+  Widget _buildAssignedStudentList(
+    BatchDetailsController controller,
+    BuildContext context,
+  ) {
     return Obx(() {
       final students = controller.filteredAssignedStudents;
       if (students.isEmpty) {
@@ -224,7 +242,10 @@ class BatchStudentsScreen extends StatelessWidget {
                     child: Center(
                       child: Text(
                         bs.student.name[0],
-                        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
@@ -253,7 +274,8 @@ class BatchStudentsScreen extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  onPressed: () => _showRemoveConfirmation(context, controller, bs),
+                  onPressed: () =>
+                      _showRemoveConfirmation(context, controller, bs),
                   icon: Icon(
                     Icons.delete_outline_rounded,
                     color: Colors.red.shade300,
@@ -268,104 +290,17 @@ class BatchStudentsScreen extends StatelessWidget {
     });
   }
 
-  void _showRemoveConfirmation(BuildContext context, BatchDetailsController controller, BatchStudent bs) {
-    Get.dialog(
-      Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-        child: Container(
-          padding: AppSpacing.all32,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(24),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                padding: AppSpacing.all16,
-                decoration: const BoxDecoration(
-                  color: Color(0xFFFEF3F2),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.person_remove_rounded,
-                  color: Color(0xFFD92D20),
-                  size: 32,
-                ),
-              ),
-              AppSpacing.v24,
-              Text(
-                'Remove Student',
-                style: AppTextStyles.manrope(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-              AppSpacing.v12,
-              Text(
-                'Are you sure you want to remove\n${bs.student.name} from this batch?',
-                textAlign: TextAlign.center,
-                style: AppTextStyles.lexend(
-                  fontSize: 14,
-                  height: 1.5,
-                  color: AppColors.textTertiary,
-                ),
-              ),
-              AppSpacing.v32,
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () => Get.back(),
-                      style: OutlinedButton.styleFrom(
-                        padding: AppSpacing.y16,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        side: BorderSide(color: Colors.grey.shade300),
-                      ),
-                      child: Text(
-                        'Cancel',
-                        style: AppTextStyles.manrope(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.textSecondary,
-                        ),
-                      ),
-                    ),
-                  ),
-                  AppSpacing.h12,
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Get.back();
-                        controller.removeStudentFromBatch(bs.student.id);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFD92D20),
-                        padding: AppSpacing.y16,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: Text(
-                        'Remove',
-                        style: AppTextStyles.manrope(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
+  void _showRemoveConfirmation(
+    BuildContext context,
+    BatchDetailsController controller,
+    BatchStudent bs,
+  ) {
+    CommonDialog.show(
+      title: 'Remove Student',
+      description: 'Are you sure you want to remove\n${bs.student.name} from this batch?',
+      icon: Icons.person_remove_rounded,
+      confirmText: 'Remove',
+      onConfirm: () => controller.removeStudentFromBatch(bs.student.id.toString()),
     );
   }
 }

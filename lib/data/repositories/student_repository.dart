@@ -9,8 +9,19 @@ class StudentRepository implements StudentRepositoryImpl {
   StudentRepository(this._apiClient);
 
   @override
-  Future<List<Student>> listStudents() async {
-    final response = await _apiClient.get(ApiConstants.instituteStudents);
+  Future<List<Student>> listStudents({String? search, int? page}) async {
+    final Map<String, dynamic> query = {};
+    if (search != null && search.isNotEmpty) {
+      query['search'] = search;
+    }
+    if (page != null) {
+      query['page'] = page.toString();
+    }
+
+    final response = await _apiClient.get(
+      ApiConstants.instituteStudents,
+      query: query,
+    );
     if (response.status.hasError) {
       throw Exception('Failed to load students: ${response.statusText}');
     }
@@ -33,7 +44,7 @@ class StudentRepository implements StudentRepositoryImpl {
   }
 
   @override
-  Future<Student> getStudentById(String id) async {
+  Future<Student> getStudentById(dynamic id) async {
     final response = await _apiClient.get(
       '${ApiConstants.instituteStudents}/$id',
     );
@@ -44,7 +55,7 @@ class StudentRepository implements StudentRepositoryImpl {
   }
 
   @override
-  Future<Student> updateStudent(String id, Map<String, dynamic> data) async {
+  Future<Student> updateStudent(dynamic id, Map<String, dynamic> data) async {
     final response = await _apiClient.put(
       '${ApiConstants.instituteStudents}/$id',
       data,
@@ -56,7 +67,7 @@ class StudentRepository implements StudentRepositoryImpl {
   }
 
   @override
-  Future<bool> deleteStudent(String id) async {
+  Future<bool> deleteStudent(dynamic id) async {
     final response = await _apiClient.delete(
       '${ApiConstants.instituteStudents}/$id',
     );

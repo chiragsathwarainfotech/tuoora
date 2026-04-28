@@ -38,7 +38,9 @@ class AssignToBatchController extends GetxController {
           .where(
             (s) =>
                 (s.name.toLowerCase().contains(query.toLowerCase()) ||
-                    s.id.toLowerCase().contains(query.toLowerCase())) &&
+                    s.id.toString().toLowerCase().contains(
+                      query.toLowerCase(),
+                    )) &&
                 !existingIds.contains(s.id) &&
                 !selectedIds.contains(s.id),
           )
@@ -192,7 +194,7 @@ class AssignToBatchScreen extends StatelessWidget {
                     style: AppTextStyles.manrope(fontWeight: FontWeight.w700),
                   ),
                   subtitle: Text(
-                    student.id,
+                    student.id.toString(),
                     style: AppTextStyles.lexend(fontSize: 12),
                   ),
                   trailing: const Icon(
@@ -316,7 +318,7 @@ class AssignToBatchScreen extends StatelessWidget {
                             child: TextFormField(
                               initialValue: bs.assignedFee.toStringAsFixed(0),
                               onChanged: (val) => controller.updateStudentFee(
-                                bs.student.id,
+                                bs.student.id.toString(),
                                 val,
                               ),
                               keyboardType: TextInputType.number,

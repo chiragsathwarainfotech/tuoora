@@ -24,13 +24,11 @@ class BatchDetailsController extends GetxController {
   List<BatchStudent> get filteredAssignedStudents {
     if (assignedSearchQuery.isEmpty) return assignedStudents;
     return assignedStudents
-        .where((bs) =>
-            bs.student.name
-                .toLowerCase()
-                .contains(assignedSearchQuery.value.toLowerCase()) ||
-            bs.student.id
-                .toLowerCase()
-                .contains(assignedSearchQuery.value.toLowerCase()))
+        .where(
+          (bs) => bs.student.name.toLowerCase().contains(
+            assignedSearchQuery.value.toLowerCase(),
+          ),
+        )
         .toList();
   }
 

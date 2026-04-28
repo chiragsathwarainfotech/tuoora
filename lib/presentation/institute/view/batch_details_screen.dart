@@ -9,6 +9,7 @@ import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_info_row.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_metric_card.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
+import 'package:fee_easy/core/widgets/common_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -291,104 +292,15 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
   }
 
   void _showDeleteBatchConfirmation(BuildContext context) {
-    Get.dialog(
-      Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-        child: Container(
-          padding: AppSpacing.all32,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(24),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                padding: AppSpacing.all16,
-                decoration: const BoxDecoration(
-                  color: Color(0xFFFEF3F2),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.delete_forever_rounded,
-                  color: Color(0xFFD92D20),
-                  size: 32,
-                ),
-              ),
-              AppSpacing.v24,
-              Text(
-                AppStrings.instDeleteBatchTitle,
-                style: AppTextStyles.manrope(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-              AppSpacing.v12,
-              Text(
-                AppStrings.instDeleteBatchConfirm,
-                textAlign: TextAlign.center,
-                style: AppTextStyles.lexend(
-                  fontSize: 14,
-                  height: 1.5,
-                  color: AppColors.textTertiary,
-                ),
-              ),
-              AppSpacing.v32,
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () => Get.back(),
-                      style: OutlinedButton.styleFrom(
-                        padding: AppSpacing.y16,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        side: BorderSide(color: Colors.grey.shade300),
-                      ),
-                      child: Text(
-                        AppStrings.instCancelBtn,
-                        style: AppTextStyles.manrope(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.textSecondary,
-                        ),
-                      ),
-                    ),
-                  ),
-                  AppSpacing.h12,
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Get.back();
-                        batchController.deleteBatch(controller.batch.id);
-                        Get.back();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFD92D20),
-                        padding: AppSpacing.y16,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: Text(
-                        AppStrings.instDeleteConfirmBtn,
-                        style: AppTextStyles.manrope(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
+    CommonDialog.show(
+      title: AppStrings.instDeleteBatchTitle,
+      description: AppStrings.instDeleteBatchConfirm,
+      icon: Icons.delete_forever_rounded,
+      confirmText: AppStrings.instDeleteConfirmBtn,
+      onConfirm: () {
+        batchController.deleteBatch(controller.batch.id);
+        Get.back(); // go back from details screen
+      },
     );
   }
 }

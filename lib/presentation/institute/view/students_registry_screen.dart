@@ -4,6 +4,7 @@ import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/config/app_routes.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/presentation/institute/controllers/institute_controller.dart';
+import 'package:fee_easy/presentation/institute/controllers/student_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -13,7 +14,7 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: () => controller.fetchStudents(),
+      onRefresh: () => controller.fetchStudents(reset: true),
       color: AppColors.instDarkBtnBlue,
       child: Obx(
         () => controller.isLoadingStudents.value && controller.students.isEmpty
@@ -30,7 +31,7 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
                     AppSpacing.v16,
                     _buildSearchBar(),
                     AppSpacing.v20,
-                    _buildStudentsList(),
+                    Expanded(child: _buildStudentsList()),
                   ],
                 ),
               ),
@@ -45,6 +46,7 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
         borderRadius: BorderRadius.circular(12),
       ),
       child: TextField(
+        onChanged: controller.onSearchChanged,
         style: AppTextStyles.lexend(fontSize: 16, color: AppColors.textPrimary),
         decoration: InputDecoration(
           hintText: AppStrings.instStudentSearchHint,
@@ -65,51 +67,116 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
   }
 
   Widget _buildStudentsList() {
-    return Obx(
-      () => Column(
-        children: controller.students
-            .map(
-              (student) => Padding(
-                padding: AppSpacing.bottom16,
-                child: _buildStudentCard(
-                  name: student.name,
-                  id: student.id,
-                  grade: student.grade,
-                  batch: student.batch,
-                  imageUrl: student.imageUrl,
-                  showOnlineBadge: student.showOnlineBadge,
-                  isPending: student.isPending,
+    return Obx(() {
+      if (controller.students.isEmpty && !controller.isLoadingStudents.value) {
+        return _buildEmptyState();
+      }
+
+      return NotificationListener<ScrollNotification>(
+        onNotification: (ScrollNotification scrollInfo) {
+          if (scrollInfo.metrics.pixels >=
+                  scrollInfo.metrics.maxScrollExtent - 200 &&
+              !controller.isLoadingStudents.value &&
+              !controller.isLoadMore.value) {
+            controller.loadMoreStudents();
+          }
+          return true;
+        },
+        child: ListView.builder(
+          itemCount:
+              controller.students.length +
+              (controller.isLoadMore.value ? 1 : 0),
+          padding: EdgeInsets.zero,
+          physics: const AlwaysScrollableScrollPhysics(),
+          itemBuilder: (context, index) {
+            if (index == controller.students.length) {
+              return const Center(
+                child: Padding(
+                  padding: AppSpacing.all16,
+                  child: CircularProgressIndicator(
+                    color: AppColors.instDarkBtnBlue,
+                  ),
                 ),
+              );
+            }
+            final student = controller.students[index];
+            return Padding(
+              padding: AppSpacing.bottom16,
+              child: _buildStudentCard(
+                name: student.name,
+                id: student.id,
+                grade: student.grade,
+                imageUrl: student.imageUrl,
               ),
-            )
-            .toList(),
+            );
+          },
+        ),
+      );
+    });
+  }
+
+  Widget _buildEmptyState() {
+    final isSearching = controller.searchQuery.value.isNotEmpty;
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            padding: AppSpacing.all24,
+            decoration: BoxDecoration(
+              color: AppColors.borderGrey.withValues(alpha: 0.3),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              isSearching
+                  ? Icons.search_off_rounded
+                  : Icons.people_outline_rounded,
+              size: 64,
+              color: AppColors.textMuted,
+            ),
+          ),
+          AppSpacing.v24,
+          Text(
+            isSearching ? 'No students found' : 'No students available',
+            style: AppTextStyles.manrope(
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              color: AppColors.textPrimary,
+            ),
+          ),
+          AppSpacing.v8,
+          Text(
+            isSearching
+                ? 'Try searching with a different name'
+                : 'Start by adding a new student to the registry',
+            textAlign: TextAlign.center,
+            style: AppTextStyles.lexend(
+              fontSize: 14,
+              color: AppColors.textTertiary,
+            ),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildStudentCard({
     required String name,
-    required String id,
+    required int id,
     required String grade,
-    required String batch,
     required String imageUrl,
-    required bool showOnlineBadge,
-    bool isPending = false,
   }) {
     return GestureDetector(
-      onTap: () => Get.toNamed(
-        AppRoutes.instituteStudentProfile,
-        arguments: {
-          'studentId': id,
-          'student': {
-            'id': id,
-            'name': name,
-            'grade': grade,
-            'batch': batch,
-            'imageUrl': imageUrl,
+      onTap: () {
+        Get.delete<InstituteStudentController>();
+        Get.toNamed(
+          AppRoutes.instituteStudentProfile,
+          arguments: {
+            'studentId': id,
+            'student': controller.students.firstWhere((s) => s.id == id),
           },
-        },
-      ),
+        );
+      },
       child: Container(
         padding: AppSpacing.all16,
         decoration: BoxDecoration(
@@ -151,29 +218,20 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
                     ),
                   ),
                   AppSpacing.v4,
-                  Text(
-                    id,
-                    style: AppTextStyles.lexend(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      color: AppColors.textTertiary,
-                    ),
-                  ),
-                  AppSpacing.v4,
                   Row(
                     children: [
                       Row(
                         children: [
                           const Icon(
                             Icons.school_rounded,
-                            size: AppSpacing.s14,
+                            size: AppSpacing.s18,
                             color: AppColors.instDarkBtnBlue,
                           ),
                           AppSpacing.h4,
                           Text(
                             grade,
                             style: AppTextStyles.lexend(
-                              fontSize: 10,
+                              fontSize: 16,
                               fontWeight: FontWeight.w500,
                               color: AppColors.textSecondary,
                             ),

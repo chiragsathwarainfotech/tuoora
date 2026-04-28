@@ -1,54 +1,76 @@
 class Student {
-  final String id;
+  final int id;
   final String name;
+  final String email;
+  final String phone;
+  final int instituteId;
+  final int? parentId;
+  final int? batchId;
+  final String standard;
+  final String dob;
   final String? guardianName;
-  final String? phone;
-  final String grade;
-  final String batch;
+  final String? monthlyFee;
+  final String? schoolName;
   final String status;
-  final String imageUrl;
-  final bool showOnlineBadge;
-  final bool isPending;
-  final Map<String, String>? feeBreakdown;
+  final String idHash;
+  final String createdAt;
+  final String updatedAt;
+  final String profileImageUrl;
+  final dynamic batch;
 
   const Student({
     required this.id,
     required this.name,
+    required this.email,
+    required this.phone,
+    required this.instituteId,
+    this.parentId,
+    this.batchId,
+    required this.standard,
+    required this.dob,
     this.guardianName,
-    this.phone,
-    required this.grade,
-    required this.batch,
+    this.monthlyFee,
+    this.schoolName,
     required this.status,
-    required this.imageUrl,
-    this.showOnlineBadge = false,
-    this.isPending = false,
-    this.feeBreakdown,
+    required this.idHash,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.profileImageUrl,
+    this.batch,
   });
 
   factory Student.fromJson(Map<String, dynamic> json) {
-    String batchName = 'Not Assigned';
-    if (json['batch'] != null) {
-      if (json['batch'] is Map) {
-        batchName = json['batch']['name'] ?? 'Not Assigned';
-      } else {
-        batchName = json['batch'].toString();
-      }
+    int safeInt(dynamic value, {int fallback = 0}) {
+      if (value == null) return fallback;
+      if (value is int) return value;
+      return int.tryParse(value.toString()) ?? fallback;
+    }
+
+    int? safeNullableInt(dynamic value) {
+      if (value == null) return null;
+      if (value is int) return value;
+      return int.tryParse(value.toString());
     }
 
     return Student(
-      id: json['id']?.toString() ?? '',
-      name: json['name'] ?? '',
-      guardianName: json['guardian_name'],
-      phone: json['phone'],
-      grade: json['standard'] ?? 'Not Specified',
-      batch: batchName,
-      status: json['status'] == '1' ? 'Active' : 'Inactive',
-      imageUrl: json['image_url'] ?? 'https://i.pravatar.cc/150?img=11',
-      showOnlineBadge: json['show_online_badge'] ?? false,
-      isPending: json['is_pending'] ?? false,
-      feeBreakdown: json['fee_breakdown'] != null
-          ? Map<String, String>.from(json['fee_breakdown'])
-          : null,
+      id: safeInt(json['id']),
+      name: json['name']?.toString() ?? '',
+      email: json['email']?.toString() ?? '',
+      phone: json['phone']?.toString() ?? '',
+      instituteId: safeInt(json['institute_id']),
+      parentId: safeNullableInt(json['parent_id']),
+      batchId: safeNullableInt(json['batch_id']),
+      standard: json['standard']?.toString() ?? '',
+      dob: json['dob']?.toString() ?? '',
+      guardianName: json['guardian_name']?.toString(),
+      monthlyFee: json['monthly_fee']?.toString(),
+      schoolName: json['school_name']?.toString(),
+      status: json['status']?.toString() ?? '1',
+      idHash: json['id_hash']?.toString() ?? '',
+      createdAt: json['created_at']?.toString() ?? '',
+      updatedAt: json['updated_at']?.toString() ?? '',
+      profileImageUrl: json['profile_image_url']?.toString() ?? '',
+      batch: json['batch'],
     );
   }
 
@@ -56,15 +78,32 @@ class Student {
     return {
       'id': id,
       'name': name,
-      'guardian_name': guardianName,
+      'email': email,
       'phone': phone,
-      'grade': grade,
-      'batch': batch,
+      'institute_id': instituteId,
+      'parent_id': parentId,
+      'batch_id': batchId,
+      'standard': standard,
+      'dob': dob,
+      'guardian_name': guardianName,
+      'monthly_fee': monthlyFee,
+      'school_name': schoolName,
       'status': status,
-      'image_url': imageUrl,
-      'show_online_badge': showOnlineBadge,
-      'is_pending': isPending,
-      'fee_breakdown': feeBreakdown,
+      'id_hash': idHash,
+      'created_at': createdAt,
+      'updated_at': updatedAt,
+      'profile_image_url': profileImageUrl,
+      'batch': batch,
     };
+  }
+
+  // Helper getters for UI compatibility
+  String get grade => standard;
+  String get imageUrl => profileImageUrl;
+  String get currentBatchName {
+    if (batch != null && batch is Map) {
+      return batch['name'] ?? 'Not Assigned';
+    }
+    return 'Not Assigned';
   }
 }

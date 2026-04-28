@@ -51,7 +51,9 @@ class RecordFeeController extends GetxController {
                   s.name.toLowerCase().contains(
                     searchQuery.value.toLowerCase(),
                   ) ||
-                  s.id.toLowerCase().contains(searchQuery.value.toLowerCase()),
+                  s.id.toString().toLowerCase().contains(
+                    searchQuery.value.toLowerCase(),
+                  ),
             )
             .toList(),
       );
@@ -125,7 +127,7 @@ class RecordFeeController extends GetxController {
 
     final newRecord = FeeRecord(
       studentName: selectedStudent.value?.name ?? "",
-      studentId: selectedStudent.value?.id ?? "",
+      studentId: selectedStudent.value?.id.toString() ?? "",
       batch: selectedStudent.value?.batch ?? "",
       amount: '₹${amount.value}',
       month: selectedMonth.value,

@@ -15,26 +15,46 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
-      body: SafeArea(
-        child: Column(
-          children: [
-            const InstituteAppBar(title: 'Add New Student'),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: AppSpacing.x24.add(AppSpacing.y16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _buildMainFormCard(context),
-                    AppSpacing.v24,
-                    _buildActionButtons(),
-                    AppSpacing.v32,
-                  ],
+      body: Stack(
+        children: [
+          SafeArea(
+            child: Column(
+              children: [
+                Obx(
+                  () => InstituteAppBar(
+                    title: controller.editingStudentId.value != null
+                        ? 'Edit Student'
+                        : 'Add New Student',
+                  ),
                 ),
-              ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: AppSpacing.x24.add(AppSpacing.y16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        _buildMainFormCard(context),
+                        AppSpacing.v24,
+                        _buildActionButtons(),
+                        AppSpacing.v32,
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+          Obx(() => controller.isLoading.value
+              ? Container(
+                  color: Colors.black.withValues(alpha: 0.3),
+                  child: const Center(
+                    child: CircularProgressIndicator(
+                      color: AppColors.instPrimaryBlue,
+                    ),
+                  ),
+                )
+              : const SizedBox.shrink()),
+        ],
       ),
     );
   }
@@ -151,7 +171,7 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
           AppSpacing.v20,
           _buildInputField(
             label: AppStrings.instStudentDobLabel,
-            hint: 'DD/MM/YYYY',
+            hint: 'YYYY-MM-DD',
             icon: Icons.calendar_today_rounded,
             controller: controller.dobController,
             readOnly: true,
@@ -173,18 +193,11 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
             keyboardType: TextInputType.phone,
           ),
           AppSpacing.v20,
-          Obx(
-            () => _buildDropdownField(
-              label: AppStrings.instGradeLabel,
-              hint: controller.selectedGrade.value,
-              icon: Icons.school,
-              onTap: () => controller.showGradeSelection(context, [
-                '9th Std',
-                '10th Std',
-                '11th Std',
-                '12th Std',
-              ]),
-            ),
+          _buildInputField(
+            label: AppStrings.instGradeLabel,
+            hint: AppStrings.instGradeHint,
+            icon: Icons.school,
+            controller: controller.standardController,
           ),
           AppSpacing.v12,
         ],
@@ -247,65 +260,15 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
     );
   }
 
-  Widget _buildDropdownField({
-    required String label,
-    required String hint,
-    required IconData icon,
-    VoidCallback? onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: AppTextStyles.manrope(
-              fontSize: 14,
-              fontWeight: FontWeight.w800,
-              color: AppColors.textDarkGrey,
-            ),
-          ),
-          AppSpacing.v8,
-          Container(
-            decoration: BoxDecoration(
-              color: AppColors.inputSolidGrey,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            padding: AppSpacing.all16,
-            child: Row(
-              children: [
-                Icon(icon, color: AppColors.textTertiary, size: AppSpacing.s20),
-                AppSpacing.h12,
-                Expanded(
-                  child: Text(
-                    hint,
-                    style: AppTextStyles.lexend(
-                      fontSize: 14,
-                      color: AppColors.textPrimary,
-                    ),
-                  ),
-                ),
-                const Icon(
-                  Icons.keyboard_arrow_down_rounded,
-                  color: AppColors.textTertiary,
-                  size: AppSpacing.s20,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildActionButtons() {
     return Column(
       children: [
         Obx(
           () => GestureDetector(
             onTap: controller.isFormValid.value
-                ? () => controller.saveStudent()
+                ? () => controller.saveStudent(
+                    isEdit: controller.editingStudentId.value != null,
+                  )
                 : null,
             child: Container(
               width: double.infinity,
@@ -329,7 +292,9 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
               ),
               child: Center(
                 child: Text(
-                  AppStrings.instConfirmBtn,
+                  controller.editingStudentId.value != null
+                      ? 'Update Student'
+                      : AppStrings.instConfirmBtn,
                   style: AppTextStyles.manrope(
                     fontSize: 14,
                     fontWeight: FontWeight.w800,

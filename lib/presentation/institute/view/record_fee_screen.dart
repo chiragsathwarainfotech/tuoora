@@ -131,7 +131,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                         ),
                       ),
                       subtitle: Text(
-                        student.id,
+                        student.id.toString(),
                         style: AppTextStyles.lexend(
                           fontSize: 12,
                           color: AppColors.textTertiary,
@@ -292,8 +292,9 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                 children: [
                   Obx(
                     () => Text(
-                      DateFormat('dd MMM, yyyy')
-                          .format(controller.selectedRecordDate.value),
+                      DateFormat(
+                        'dd MMM, yyyy',
+                      ).format(controller.selectedRecordDate.value),
                       style: AppTextStyles.lexend(
                         fontSize: 15,
                         color: AppColors.textPrimary,
@@ -511,7 +512,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
             ),
             _buildReceiptRow(
               'Student ID',
-              controller.selectedStudent.value?.id ?? '-',
+              controller.selectedStudent.value?.id.toString() ?? '-',
             ),
             _buildReceiptRow(
               'Batch',
@@ -521,8 +522,9 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
             _buildReceiptRow('Fee Month', controller.selectedMonth.value),
             _buildReceiptRow(
               'Record Date',
-              DateFormat('dd MMM, yyyy')
-                  .format(controller.selectedRecordDate.value),
+              DateFormat(
+                'dd MMM, yyyy',
+              ).format(controller.selectedRecordDate.value),
             ),
             _buildReceiptRow('Payment Method', controller.paymentMethod.value),
             const Divider(height: 32),

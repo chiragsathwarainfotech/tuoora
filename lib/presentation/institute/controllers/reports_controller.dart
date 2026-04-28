@@ -138,7 +138,7 @@ class ReportsController extends GetxController {
             final index = instituteController.students.indexOf(s);
             final rating = 7.0 + (index % 4) * 0.75;
             return StudentPerformance(
-              studentId: s.id,
+              studentId: s.id.toString(),
               studentName: s.name,
               averageRating: rating,
             );

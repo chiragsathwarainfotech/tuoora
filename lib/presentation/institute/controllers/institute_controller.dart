@@ -16,8 +16,13 @@ class InstituteController extends GetxController {
       Get.find<StudentRepositoryImpl>();
   final selectedFilter = AppStrings.instFilterAll.obs;
   final students = <Student>[].obs;
-  final filteredStudents = <Student>[].obs;
   final isLoadingStudents = false.obs;
+
+  // Pagination & Search
+  final searchQuery = ''.obs;
+  final currentPage = 1.obs;
+  final hasMore = true.obs;
+  final isLoadMore = false.obs;
 
   final feeRecords = <FeeRecord>[].obs;
 
@@ -26,56 +31,45 @@ class InstituteController extends GetxController {
     super.onInit();
     _setInitialIndex();
     pageController = PageController(initialPage: _currentIndex.value);
+    debounce(
+      searchQuery,
+      (_) => fetchStudents(reset: true),
+      time: const Duration(milliseconds: 500),
+    );
     fetchStudents();
-    _loadMockFeeRecords();
   }
 
-  void _loadMockFeeRecords() {
-    feeRecords.assignAll([
-      FeeRecord(
-        studentName: 'Arjun Malhotra',
-        studentId: 'STU-2024-001',
-        batch: 'Evening • Batch A',
-        amount: '₹2,500',
-        month: 'October 2023',
-        paymentMethod: 'Online',
-        timestamp: DateTime.now(),
-      ),
-      FeeRecord(
-        studentName: 'Sarah Jenkins',
-        studentId: 'STU-2024-042',
-        batch: 'Morning • Advanced',
-        amount: '₹2,500',
-        month: 'October 2023',
-        paymentMethod: 'Cash',
-        timestamp: DateTime.now(),
-      ),
-      FeeRecord(
-        studentName: 'Rahul Sharma',
-        studentId: 'STU-2024-105',
-        batch: 'Evening • Batch B',
-        amount: '₹2,500',
-        month: 'October 2023',
-        paymentMethod: 'Online',
-        timestamp: DateTime.now(),
-      ),
-      FeeRecord(
-        studentName: 'Priya Gupta',
-        studentId: 'STU-2024-089',
-        batch: 'Evening • Batch A',
-        amount: '₹2,500',
-        month: 'October 2023',
-        paymentMethod: 'Cash',
-        timestamp: DateTime.now(),
-      ),
-    ]);
-  }
+  Future<void> fetchStudents({bool reset = false}) async {
+    if (reset) {
+      currentPage.value = 1;
+      hasMore.value = true;
+    }
 
-  Future<void> fetchStudents() async {
+    if (isLoadingStudents.value || (!hasMore.value && !reset)) return;
+
     try {
-      isLoadingStudents.value = true;
-      final result = await _studentRepository.listStudents();
-      students.assignAll(result);
+      if (reset) {
+        isLoadingStudents.value = true;
+      } else {
+        isLoadMore.value = true;
+      }
+
+      final result = await _studentRepository.listStudents(
+        search: searchQuery.value,
+        page: currentPage.value,
+      );
+
+      if (reset) {
+        students.assignAll(result);
+      } else {
+        students.addAll(result);
+      }
+
+      if (result.isEmpty || result.length < 10) {
+        hasMore.value = false;
+      } else {
+        currentPage.value++;
+      }
     } catch (e) {
       Get.snackbar(
         'Error',
@@ -85,6 +79,17 @@ class InstituteController extends GetxController {
       );
     } finally {
       isLoadingStudents.value = false;
+      isLoadMore.value = false;
+    }
+  }
+
+  void onSearchChanged(String query) {
+    searchQuery.value = query;
+  }
+
+  void loadMoreStudents() {
+    if (hasMore.value && !isLoadingStudents.value && !isLoadMore.value) {
+      fetchStudents();
     }
   }
 

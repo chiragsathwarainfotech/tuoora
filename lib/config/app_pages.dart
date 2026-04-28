@@ -2,7 +2,7 @@ import 'package:fee_easy/config/app_routes.dart';
 import 'package:fee_easy/presentation/institute/bindings/institute_binding.dart';
 import 'package:fee_easy/presentation/institute/view/fee_transaction_history_screen.dart';
 import 'package:fee_easy/presentation/institute/view/institute_main_screen.dart';
-import 'package:fee_easy/presentation/institute/view/edit_student_profile_screen.dart';
+
 import 'package:fee_easy/presentation/institute/view/add_student_screen.dart';
 import 'package:fee_easy/presentation/institute/view/batch_details_screen.dart';
 import 'package:fee_easy/presentation/institute/view/institute_profile_view_screen.dart';
@@ -185,11 +185,6 @@ class AppPages {
       binding: InstituteBinding(),
     ),
     GetPage(
-      name: AppRoutes.instituteEditStudentProfile,
-      page: () => const EditStudentProfileScreen(),
-      binding: InstituteBinding(),
-    ),
-    GetPage(
       name: AppRoutes.instituteFees,
       page: () => const InstituteMainScreen(),
       binding: InstituteBinding(),
@@ -214,6 +209,7 @@ class AppPages {
     GetPage(
       name: AppRoutes.instituteStudentProfile,
       page: () => const StudentProfileScreen(),
+      binding: InstituteBinding(),
     ),
     GetPage(
       name: AppRoutes.instituteEditProfile,

@@ -1,6 +1,7 @@
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/presentation/institute/models/batch_model.dart';
+import 'package:fee_easy/core/widgets/common_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -130,31 +131,21 @@ class BatchController extends GetxController {
   }
 
   void deleteBatchWithConfirmation(String id) {
-    Get.dialog(
-      AlertDialog(
-        title: const Text('Delete Batch'),
-        content: const Text('Are you sure you want to delete this batch?'),
-        actions: [
-          TextButton(onPressed: () => Get.back(), child: const Text('Cancel')),
-          TextButton(
-            onPressed: () {
-              batchesList.removeWhere((batch) => batch.id == id);
-              Get.back(); // close dialog
-              Get.back(); // go back from screen
-              Get.snackbar(
-                'Deleted',
-                'Batch deleted successfully',
-                backgroundColor: Colors.redAccent,
-                colorText: Colors.white,
-              );
-            },
-            child: const Text(
-              'Delete',
-              style: TextStyle(color: Colors.redAccent),
-            ),
-          ),
-        ],
-      ),
+    CommonDialog.show(
+      title: 'Delete Batch',
+      description: 'Are you sure you want to delete this batch?',
+      icon: Icons.delete_forever_rounded,
+      confirmText: 'Delete',
+      onConfirm: () {
+        batchesList.removeWhere((batch) => batch.id == id);
+        Get.back(); // go back from screen
+        Get.snackbar(
+          'Deleted',
+          'Batch deleted successfully',
+          backgroundColor: Colors.redAccent,
+          colorText: Colors.white,
+        );
+      },
     );
   }
 

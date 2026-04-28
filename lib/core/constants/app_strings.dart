@@ -93,7 +93,7 @@ class AppStrings {
 
   // Institute Students Registry
   static const String instStudentRegistry = 'Student Registry';
-  static const String instStudentSearchHint = 'Search by name or student ID';
+  static const String instStudentSearchHint = 'Search by student name';
   static const String instBadgeActive = 'ACTIVE';
   static const String instBadgePending = 'PENDING';
 

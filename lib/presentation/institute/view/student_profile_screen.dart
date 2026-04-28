@@ -2,9 +2,11 @@ import 'package:fee_easy/config/app_routes.dart';
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
+import 'package:fee_easy/data/models/student_model.dart';
 import 'package:fee_easy/presentation/institute/controllers/student_controller.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
+import 'package:fee_easy/core/widgets/common_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -13,63 +15,62 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
 
   @override
   Widget build(BuildContext context) {
-    final studentData = Get.arguments?['student'] as Map? ?? {};
-    final name = studentData['name'] ?? 'Student';
-    final id = studentData['id'] ?? 'STU-000';
-    final imageUrl =
-        studentData['imageUrl'] ?? 'https://i.pravatar.cc/150?img=11';
-    final grade = studentData['grade'] ?? '-';
-    final status = studentData['status'] ?? 'Active';
-
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
         child: Stack(
           children: [
-            Column(
-              children: [
-                InstituteAppBar(
-                  title: 'Student Profile',
-                  actions: [
-                    IconButton(
-                      onPressed: () => Get.toNamed(
-                        AppRoutes.instituteEditStudentProfile,
-                        arguments: {
-                          'studentId': id,
-                          'student': studentData,
-                        },
+            Obx(() {
+              final student = controller.currentStudent.value;
+              final name = student?.name ?? "";
+              final id = student?.id.toString() ?? "";
+              final imageUrl = student?.imageUrl ?? "";
+              final grade = student?.grade ?? '-';
+              return Column(
+                children: [
+                  InstituteAppBar(
+                    title: 'Student Profile',
+                    actions: [
+                      IconButton(
+                        onPressed: () => Get.toNamed(
+                          AppRoutes.instituteAddStudent,
+                          arguments: {
+                            'studentId': id,
+                            'student': student?.toJson(),
+                          },
+                        ),
+                        icon: const Icon(
+                          Icons.edit_outlined,
+                          color: AppColors.instAccentBlue,
+                        ),
                       ),
-                      icon: const Icon(
-                        Icons.edit_outlined,
-                        color: AppColors.instAccentBlue,
+                      IconButton(
+                        onPressed: () => _showDeleteConfirmation(context, name),
+                        icon: const Icon(
+                          Icons.delete_outline_rounded,
+                          color: Color(0xFFD92D20),
+                        ),
                       ),
-                    ),
-                    IconButton(
-                      onPressed: () => _showDeleteConfirmation(context, name),
-                      icon: const Icon(
-                        Icons.delete_outline_rounded,
-                        color: Color(0xFFD92D20),
+                      AppSpacing.h8,
+                    ],
+                  ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: AppSpacing.all24,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          _buildProfileHeader(name, id, imageUrl, grade),
+                          AppSpacing.v24,
+                          _buildInformationSection(student),
+                          AppSpacing.v40,
+                        ],
                       ),
-                    ),
-                    AppSpacing.h8,
-                  ],
-                ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    padding: AppSpacing.all24,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        _buildProfileHeader(name, id, imageUrl, grade, status),
-                        AppSpacing.v24,
-                        _buildInformationSection(studentData),
-                        AppSpacing.v40,
-                      ],
                     ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              );
+            }),
             Obx(
               () => controller.isLoading.value
                   ? Container(
@@ -93,7 +94,6 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
     String id,
     String imageUrl,
     String grade,
-    String status,
   ) {
     return Container(
       padding: AppSpacing.all24,
@@ -111,8 +111,8 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
       child: Row(
         children: [
           Container(
-            width: 100,
-            height: 100,
+            width: 80,
+            height: 80,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(24),
               image: DecorationImage(
@@ -128,34 +128,25 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
               Text(
                 name,
                 style: AppTextStyles.manrope(
-                  fontSize: 24,
+                  fontSize: 18,
                   fontWeight: FontWeight.w800,
                   color: AppColors.instPrimaryBlue,
                 ),
               ),
-              AppSpacing.h4,
               Text(
                 'ID: $id',
                 style: AppTextStyles.manrope(
-                  fontSize: 15,
+                  fontSize: 14,
                   fontWeight: FontWeight.w600,
                   color: AppColors.instAccentBlue,
                 ),
               ),
-              AppSpacing.v4,
-              Container(
-                padding: AppSpacing.x16.add(AppSpacing.y8),
-                decoration: BoxDecoration(
-                  color: AppColors.instProfileTagBlueBg,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  grade,
-                  style: AppTextStyles.manrope(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.instAccentBlue,
-                  ),
+              Text(
+                'Standard: $grade',
+                style: AppTextStyles.manrope(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.instAccentBlue,
                 ),
               ),
             ],
@@ -165,7 +156,7 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
     );
   }
 
-  Widget _buildInformationSection(Map studentData) {
+  Widget _buildInformationSection(Student? student) {
     return Container(
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
@@ -193,7 +184,7 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
               Text(
                 AppStrings.instAcademicContactInfo,
                 style: AppTextStyles.manrope(
-                  fontSize: 14,
+                  fontSize: 16,
                   fontWeight: FontWeight.w800,
                   color: AppColors.instPrimaryBlue,
                 ),
@@ -201,24 +192,16 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
             ],
           ),
           AppSpacing.v24,
-          _buildInfoField(AppStrings.instAdmissionDateLabel, 'August 12, 2023'),
+          _buildInfoField('Date of Birth', student?.dob ?? 'Not Specified'),
           _buildInfoField(
             AppStrings.instGuardianNameLabel,
-            studentData['guardianName'] ?? 'Not Specified',
-          ),
-          _buildInfoField(
-            AppStrings.instGuardianPhoneLabel,
-            studentData['guardianName'] ?? 'Not Specified',
+            student?.guardianName ?? 'Not Specified',
           ),
           _buildInfoField(
             AppStrings.instProfilePhoneLabel,
-            studentData['phone'] ?? 'Not Available',
+            student?.phone ?? 'Not Available',
           ),
-          _buildInfoField(
-            AppStrings.instResAddressLabel,
-            '42, Emerald Heights, Sector 18, Gurgaon, Haryana - 122001',
-            isLast: true,
-          ),
+          _buildInfoField('Email', student?.email ?? 'Not Available'),
         ],
       ),
     );
@@ -226,24 +209,23 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
 
   Widget _buildInfoField(String label, String value, {bool isLast = false}) {
     return Padding(
-      padding: EdgeInsets.only(bottom: isLast ? 0 : AppSpacing.s20),
+      padding: EdgeInsets.only(bottom: isLast ? 0 : AppSpacing.s10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             label,
             style: AppTextStyles.manrope(
-              fontSize: 12,
+              fontSize: 16,
               fontWeight: FontWeight.w800,
               color: AppColors.textMuted,
-              letterSpacing: 0.5,
             ),
           ),
           AppSpacing.v4,
           Text(
             value,
             style: AppTextStyles.manrope(
-              fontSize: 14,
+              fontSize: 18,
               fontWeight: FontWeight.w700,
               color: AppColors.textPrimary,
             ),
@@ -254,103 +236,12 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
   }
 
   void _showDeleteConfirmation(BuildContext context, String studentName) {
-    Get.dialog(
-      Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-        child: Container(
-          padding: AppSpacing.all32,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(24),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                padding: AppSpacing.all16,
-                decoration: const BoxDecoration(
-                  color: Color(0xFFFEF3F2),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.delete_forever_rounded,
-                  color: Color(0xFFD92D20),
-                  size: 32,
-                ),
-              ),
-              AppSpacing.v24,
-              Text(
-                'Delete Student',
-                style: AppTextStyles.manrope(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-              AppSpacing.v12,
-              Text(
-                'Are you sure you want to delete\n$studentName?',
-                textAlign: TextAlign.center,
-                style: AppTextStyles.lexend(
-                  fontSize: 14,
-                  height: 1.5,
-                  color: AppColors.textTertiary,
-                ),
-              ),
-              AppSpacing.v32,
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () => Get.back(),
-                      style: OutlinedButton.styleFrom(
-                        padding: AppSpacing.y16,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        side: BorderSide(color: Colors.grey.shade300),
-                      ),
-                      child: Text(
-                        'Cancel',
-                        style: AppTextStyles.manrope(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.textSecondary,
-                        ),
-                      ),
-                    ),
-                  ),
-                  AppSpacing.h12,
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Get.back(); // close dialog
-                        controller.deleteStudent();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFD92D20),
-                        padding: AppSpacing.y16,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: Text(
-                        'Yes, Delete',
-                        style: AppTextStyles.manrope(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
+    CommonDialog.show(
+      title: 'Delete Student',
+      description: 'Are you sure you want to delete\n$studentName?',
+      icon: Icons.delete_forever_rounded,
+      confirmText: 'Yes, Delete',
+      onConfirm: () => controller.deleteStudent(),
     );
   }
 }

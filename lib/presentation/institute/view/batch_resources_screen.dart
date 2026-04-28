@@ -7,6 +7,7 @@ import 'package:fee_easy/presentation/institute/controllers/resources_controller
 import 'package:fee_easy/presentation/institute/models/batch_model.dart';
 import 'package:fee_easy/presentation/institute/models/resource_model.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
+import 'package:fee_easy/core/widgets/common_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -133,85 +134,28 @@ class BatchResourcesScreen extends StatelessWidget {
   }
 
   void _showUploadDialog(BuildContext context, ResourcesController controller) {
-    Get.dialog(
-      Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        child: Padding(
-          padding: AppSpacing.all24,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                AppStrings.instUploadContentHeader,
-                style: AppTextStyles.manrope(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-              AppSpacing.v24,
-              _buildDialogField(
-                AppStrings.instResourceSubjectLabel,
-                controller.subjectController,
-                'e.g., Physics Notes',
-              ),
-              AppSpacing.v16,
-              _buildDialogField(
-                AppStrings.instResourceDescriptionLabel,
-                controller.descriptionController,
-                'e.g., Chapter 1 derivation',
-                maxLines: 3,
-              ),
-              AppSpacing.v24,
-              _buildAttachmentButton(controller),
-              AppSpacing.v32,
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () => Get.back(),
-                      style: OutlinedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                      ),
-                      child: Text(
-                        AppStrings.instCancelBtn,
-                        style: AppTextStyles.manrope(
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.textSecondary,
-                        ),
-                      ),
-                    ),
-                  ),
-                  AppSpacing.h16,
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () => controller.uploadResource(),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.instPrimaryBlue,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        elevation: 0,
-                      ),
-                      child: Text(
-                        AppStrings.instUploadBtn,
-                        style: AppTextStyles.manrope(
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+    CommonDialog.show(
+      title: AppStrings.instUploadContentHeader,
+      confirmText: AppStrings.instUploadBtn,
+      onConfirm: () => controller.uploadResource(),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _buildDialogField(
+            AppStrings.instResourceSubjectLabel,
+            controller.subjectController,
+            'e.g., Physics Notes',
           ),
-        ),
+          AppSpacing.v16,
+          _buildDialogField(
+            AppStrings.instResourceDescriptionLabel,
+            controller.descriptionController,
+            'e.g., Chapter 1 derivation',
+            maxLines: 3,
+          ),
+          AppSpacing.v24,
+          _buildAttachmentButton(controller),
+        ],
       ),
     );
   }

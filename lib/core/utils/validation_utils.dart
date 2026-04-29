@@ -26,4 +26,31 @@ class ValidationUtils {
     }
     return null;
   }
+
+  static bool isPasswordValid(String password) {
+    if (password.length < 8 || password.length > 15) return false;
+    
+    bool hasLetter = password.contains(RegExp(r'[a-zA-Z]'));
+    bool hasDigit = password.contains(RegExp(r'[0-9]'));
+    bool hasSpecial = password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
+    
+    return hasLetter && hasDigit && hasSpecial;
+  }
+
+  static String? validatePassword(String? value) {
+    if (value == null || value.isEmpty) return 'Password is required';
+    if (value.length < 8 || value.length > 15) {
+      return 'Password must be between 8 and 15 characters';
+    }
+    if (!value.contains(RegExp(r'[a-zA-Z]'))) {
+      return 'Password must contain at least one letter';
+    }
+    if (!value.contains(RegExp(r'[0-9]'))) {
+      return 'Password must contain at least one digit';
+    }
+    if (!value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+      return 'Password must contain at least one special character';
+    }
+    return null;
+  }
 }

@@ -1,10 +1,15 @@
 import 'package:fee_easy/data/models/institute_profile_model.dart';
 import 'package:fee_easy/data/models/whatsapp_settings_model.dart';
 import 'package:fee_easy/presentation/institute/models/fee_record.dart';
+import 'package:fee_easy/presentation/institute/models/report_models.dart';
 
 abstract class InstituteRepositoryImpl {
   Future<InstituteProfile> getProfile();
   Future<void> updateProfile(Map<String, dynamic> data);
+
+  // Authentication
+  Future<String> registerInstitute(Map<String, dynamic> data);
+  Future<String> verifyOtp(Map<String, dynamic> data);
 
   // WhatsApp Settings
   Future<WhatsAppSettings?> getWhatsAppSettings();
@@ -18,4 +23,19 @@ abstract class InstituteRepositoryImpl {
   Future<FeeListResponse> listFees({int page = 1});
   Future<FeeRecord> createFee(Map<String, dynamic> data);
   Future<List<int>> exportFees();
+
+  // Reports
+  Future<FeeReportResponse> getFeeReport();
+  Future<BatchFeeDetailResponse> getBatchFeeReport(int batchId);
+  Future<List<int>> exportFeeReport();
+
+  // Attendance Reports
+  Future<AttendanceReportResponse> getAttendanceReport();
+  Future<BatchAttendanceDetailResponse> getBatchAttendanceReport(int batchId);
+  Future<List<int>> exportAttendanceReport();
+
+  // Performance Reports
+  Future<PerformanceReportResponse> getPerformanceReport();
+  Future<BatchPerformanceDetailResponse> getBatchPerformanceReport(int batchId);
+  Future<List<int>> exportPerformanceReport();
 }

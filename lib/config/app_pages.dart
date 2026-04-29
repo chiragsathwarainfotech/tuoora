@@ -17,7 +17,6 @@ import 'package:fee_easy/presentation/institute/view/fee_report_screen.dart';
 import 'package:fee_easy/presentation/institute/view/attendance_report_screen.dart';
 import 'package:fee_easy/presentation/institute/view/performance_report_screen.dart';
 import 'package:fee_easy/presentation/institute/view/reports_screen.dart';
-import 'package:fee_easy/presentation/institute/view/defaulters_list_screen.dart';
 import 'package:fee_easy/presentation/institute/view/institute_updates_screen.dart';
 import 'package:fee_easy/presentation/institute/view/create_update_screen.dart';
 import 'package:fee_easy/presentation/institute/view/batch_report_detail_screen.dart';
@@ -247,10 +246,6 @@ class AppPages {
     GetPage(
       name: AppRoutes.institutePerformanceReport,
       page: () => const PerformanceReportScreen(),
-    ),
-    GetPage(
-      name: AppRoutes.instituteDefaultersList,
-      page: () => const DefaultersListScreen(),
     ),
     GetPage(
       name: AppRoutes.instituteUpdates,

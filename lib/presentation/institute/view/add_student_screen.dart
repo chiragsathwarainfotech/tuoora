@@ -182,6 +182,7 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
             icon: Icons.email_rounded,
             controller: controller.emailController,
             keyboardType: TextInputType.emailAddress,
+            enabled: controller.editingStudentId.value == null,
           ),
           AppSpacing.v20,
           _buildInputField(
@@ -227,6 +228,7 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
     TextEditingController? controller,
     TextInputType keyboardType = TextInputType.text,
     bool readOnly = false,
+    bool enabled = true,
     VoidCallback? onTap,
   }) {
     return Column(
@@ -243,12 +245,13 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
         AppSpacing.v8,
         Container(
           decoration: BoxDecoration(
-            color: AppColors.inputSolidGrey,
+            color: enabled ? AppColors.inputSolidGrey : AppColors.inputSolidGrey.withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(8),
           ),
           child: TextField(
             controller: controller,
             readOnly: readOnly,
+            enabled: enabled,
             onTap: onTap,
             style: AppTextStyles.lexend(
               fontSize: 14,

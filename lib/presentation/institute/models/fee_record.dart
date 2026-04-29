@@ -26,28 +26,6 @@ class FeeRecord {
   });
 
   factory FeeRecord.fromJson(Map<String, dynamic> json) {
-    int safeInt(dynamic value) {
-      if (value == null) return 0;
-      if (value is int) return value;
-      return int.tryParse(value.toString()) ?? 0;
-    }
-
-    double safeDouble(dynamic value) {
-      if (value == null) return 0.0;
-      if (value is double) return value;
-      if (value is int) return value.toDouble();
-      return double.tryParse(value.toString()) ?? 0.0;
-    }
-
-    String safeString(dynamic value) {
-      return value?.toString() ?? "";
-    }
-
-    DateTime safeDate(dynamic value) {
-      if (value == null) return DateTime.now();
-      return DateTime.tryParse(value.toString()) ?? DateTime.now();
-    }
-
     return FeeRecord(
       id: safeInt(json['id']),
       studentId: safeInt(json['student_id']),
@@ -60,6 +38,28 @@ class FeeRecord {
       updatedAt: safeDate(json['updated_at']),
       student: json['student'] != null ? Student.fromJson(json['student']) : null,
     );
+  }
+
+  static int safeInt(dynamic value) {
+    if (value == null) return 0;
+    if (value is int) return value;
+    return int.tryParse(value.toString()) ?? 0;
+  }
+
+  static double safeDouble(dynamic value) {
+    if (value == null) return 0.0;
+    if (value is double) return value;
+    if (value is int) return value.toDouble();
+    return double.tryParse(value.toString()) ?? 0.0;
+  }
+
+  static String safeString(dynamic value) {
+    return value?.toString() ?? "";
+  }
+
+  static DateTime safeDate(dynamic value) {
+    if (value == null) return DateTime.now();
+    return DateTime.tryParse(value.toString()) ?? DateTime.now();
   }
 
   Map<String, dynamic> toJson() {
@@ -96,29 +96,16 @@ class FeeListResponse {
   });
 
   factory FeeListResponse.fromJson(Map<String, dynamic> json) {
-    double safeDouble(dynamic value) {
-      if (value == null) return 0.0;
-      if (value is double) return value;
-      if (value is int) return value.toDouble();
-      return double.tryParse(value.toString()) ?? 0.0;
-    }
-
-    int safeInt(dynamic value) {
-      if (value == null) return 0;
-      if (value is int) return value;
-      return int.tryParse(value.toString()) ?? 0;
-    }
-
     return FeeListResponse(
       items: (json['items'] as List?)
               ?.map((i) => FeeRecord.fromJson(i))
               .toList() ??
           [],
-      total: safeInt(json['total']),
-      currentPage: safeInt(json['current_page']),
-      lastPage: safeInt(json['last_page']),
-      perPage: safeInt(json['per_page']),
-      currentMonthTotal: safeDouble(json['current_month_total']),
+      total: FeeRecord.safeInt(json['total']),
+      currentPage: FeeRecord.safeInt(json['current_page']),
+      lastPage: FeeRecord.safeInt(json['last_page']),
+      perPage: FeeRecord.safeInt(json['per_page']),
+      currentMonthTotal: FeeRecord.safeDouble(json['current_month_total']),
     );
   }
 }

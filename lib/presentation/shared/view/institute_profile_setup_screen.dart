@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:fee_easy/core/widgets/app_button.dart';
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
@@ -24,12 +25,73 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    Center(
+                      child: GestureDetector(
+                        onTap: controller.pickLogo,
+                        child: Obx(
+                          () => Stack(
+                            children: [
+                              Container(
+                                width: 100,
+                                height: 100,
+                                decoration: BoxDecoration(
+                                  color: AppColors.iconBgLightBlue,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: AppColors.primaryBlue,
+                                    width: 2,
+                                  ),
+                                  image: controller.selectedLogoPath.value != null
+                                      ? DecorationImage(
+                                          image: FileImage(
+                                            File(controller.selectedLogoPath.value!),
+                                          ),
+                                          fit: BoxFit.cover,
+                                        )
+                                      : null,
+                                ),
+                                child: controller.selectedLogoPath.value == null
+                                    ? const Icon(
+                                        Icons.add_a_photo_outlined,
+                                        color: AppColors.primaryBlue,
+                                        size: 32,
+                                      )
+                                    : null,
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: const BoxDecoration(
+                                    color: AppColors.primaryBlue,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(
+                                    Icons.edit,
+                                    color: Colors.white,
+                                    size: 14,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    AppSpacing.v32,
                     _buildSectionHeader('BASIC INFORMATION'),
                     AppSpacing.v16,
                     _buildTextField(
                       label: 'Institute Name',
                       controller: controller.instituteNameController,
                       prefixIcon: Icons.business_outlined,
+                    ),
+                    AppSpacing.v20,
+                    _buildTextField(
+                      label: 'Owner Name',
+                      controller: controller.instituteOwnerNameController,
+                      prefixIcon: Icons.person,
                     ),
                     AppSpacing.v20,
                     _buildTextField(
@@ -55,7 +117,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                     ),
                     AppSpacing.v20,
                     _buildTextField(
-                      label: 'Address Line 2 (Optional)',
+                      label: 'Address Line 2',
                       controller: controller.addressLine2Controller,
                       prefixIcon: Icons.add_location_outlined,
                     ),

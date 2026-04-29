@@ -195,6 +195,7 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
             textController: controller.emailController,
             icon: Icons.alternate_email_rounded,
             keyboardType: TextInputType.emailAddress,
+            enabled: false,
           ),
           AppSpacing.v20,
           _buildInputField(
@@ -252,6 +253,7 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
     required IconData icon,
     TextInputType keyboardType = TextInputType.text,
     bool isLast = false,
+    bool enabled = true,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -269,7 +271,7 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
         Container(
           padding: AppSpacing.x16,
           decoration: BoxDecoration(
-            color: AppColors.inputBg,
+            color: enabled ? AppColors.inputBg : AppColors.inputBg.withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: AppColors.borderGrey.withValues(alpha: 0.5),
@@ -282,6 +284,7 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
               Expanded(
                 child: TextField(
                   controller: textController,
+                  enabled: enabled,
                   keyboardType: keyboardType,
                   style: AppTextStyles.manrope(
                     fontSize: 14,

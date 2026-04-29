@@ -2,6 +2,7 @@ import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:get/get.dart';
+import 'package:fee_easy/core/utils/validation_utils.dart';
 
 class SecurityController extends GetxController {
   final InstituteRepositoryImpl _instituteRepository;
@@ -39,10 +40,11 @@ class SecurityController extends GetxController {
       return;
     }
 
-    if (newPass.length < 6) {
+    final passwordError = ValidationUtils.validatePassword(newPass);
+    if (passwordError != null) {
       Get.snackbar(
-        'Weak Password',
-        'New password must be at least 6 characters long.',
+        'Invalid New Password',
+        passwordError,
         backgroundColor: Colors.redAccent,
         colorText: Colors.white,
       );

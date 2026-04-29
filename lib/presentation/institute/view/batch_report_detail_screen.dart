@@ -1,11 +1,11 @@
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
-import 'package:fee_easy/presentation/institute/models/batch_performance_model.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:fee_easy/presentation/institute/controllers/reports_controller.dart';
+import 'package:fee_easy/presentation/institute/widgets/report_widgets.dart';
 
 class BatchReportDetailScreen extends StatelessWidget {
   const BatchReportDetailScreen({super.key});
@@ -14,12 +14,20 @@ class BatchReportDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final String batchName = Get.arguments['batchName'] ?? 'Batch Details';
     final String reportType = Get.arguments['reportType'] ?? 'Fee';
-    final String? batchId = Get.arguments['batchId'];
+    final int? batchId = Get.arguments['batchId'] is int
+        ? Get.arguments['batchId']
+        : int.tryParse(Get.arguments['batchId']?.toString() ?? '');
 
     final reportsController = Get.find<ReportsController>();
-    final batchPerf = (reportType == 'Performance' && batchId != null)
-        ? reportsController.getBatchPerformance(batchId)
-        : null;
+
+    if (batchId != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (reportsController.selectedBatchId.value != batchId ||
+            reportsController.selectedReportType.value != reportType) {
+          reportsController.loadBatchDetail(batchId, reportType);
+        }
+      });
+    }
 
     return Scaffold(
       backgroundColor: AppColors.reportScaffoldBg,
@@ -28,26 +36,32 @@ class BatchReportDetailScreen extends StatelessWidget {
           children: [
             InstituteAppBar(title: batchName, isRoot: false),
             Expanded(
-              child: SingleChildScrollView(
-                padding: AppSpacing.all24,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildOverviewCard(reportType, batchPerf: batchPerf),
-                    AppSpacing.v32,
-                    Text(
-                      'Student Breakdown',
-                      style: AppTextStyles.manrope(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.textPrimary,
+              child: Obx(() {
+                if (reportsController.isBatchDetailLoading.value) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                return SingleChildScrollView(
+                  padding: AppSpacing.all24,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildOverviewCard(reportType, reportsController),
+                      AppSpacing.v32,
+                      Text(
+                        'Student Breakdown',
+                        style: AppTextStyles.manrope(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.textPrimary,
+                        ),
                       ),
-                    ),
-                    AppSpacing.v16,
-                    _buildStudentList(reportType, batchPerf: batchPerf),
-                  ],
-                ),
-              ),
+                      AppSpacing.v16,
+                      _buildStudentList(reportType, reportsController),
+                    ],
+                  ),
+                );
+              }),
             ),
           ],
         ),
@@ -55,251 +69,92 @@ class BatchReportDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildOverviewCard(String reportType, {BatchPerformance? batchPerf}) {
-    String label1 = '';
-    String value1 = '';
-    String label2 = '';
-    String value2 = '';
+  Widget _buildOverviewCard(String reportType, ReportsController controller) {
+    String title = '';
+    String value = '';
 
     if (reportType == 'Fee') {
-      label1 = 'Total Collected';
-      value1 = '₹12,400';
-      label2 = 'Collected %';
-      value2 = '92%';
+      final summary = controller.batchFeeDetail.value?.summary;
+      title = 'Batch Collected Total';
+      value = '₹${summary?.totalAmount.toStringAsFixed(0) ?? '0'}';
     } else if (reportType == 'Attendance') {
-      label1 = 'Avg Attendance';
-      value1 = '88%';
-      label2 = 'Total Sessions';
-      value2 = '24';
-    } else {
-      label1 = 'Overall Rating';
-      value1 = batchPerf != null
-          ? '${(batchPerf.averageRating).toStringAsFixed(1)} / 10'
-          : 'A-';
-      label2 = 'Performance';
-      value2 = batchPerf != null
-          ? '${(batchPerf.averageRating * 10).toStringAsFixed(1)}%'
-          : '96%';
+      final summary = controller.batchAttendanceDetail.value?.summary;
+      final total = summary?.total ?? 1;
+      final present = summary?.present ?? 0;
+      title = 'Batch Attendance Percentage';
+      value = '${((present / total) * 100).toStringAsFixed(1)}%';
+    } else if (reportType == 'Performance') {
+      final summary = controller.batchPerformanceDetail.value?.summary;
+      title = 'Average Performance Percentage';
+      value = summary?.averagePerformance ?? '0%';
     }
 
-    return Container(
-      padding: AppSpacing.all24,
-      decoration: BoxDecoration(
-        color: AppColors.primaryBlueDark,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.primaryBlueDark.withValues(alpha: 0.2),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Expanded(child: _buildStatItem(label1, value1)),
-          Container(height: 40, width: 1, color: Colors.white24),
-          Expanded(child: _buildStatItem(label2, value2)),
-        ],
-      ),
-    );
+    return ReportSummaryCard(title: title, value: value);
   }
 
-  Widget _buildStatItem(String label, String value) {
-    return Column(
-      children: [
-        Text(
-          label,
-          style: AppTextStyles.manrope(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-            color: Colors.white70,
-          ),
-        ),
-        AppSpacing.v4,
-        Text(
-          value,
-          style: AppTextStyles.manrope(
-            fontSize: 24,
-            fontWeight: FontWeight.w800,
-            color: Colors.white,
-          ),
-        ),
-      ],
-    );
-  }
+  Widget _buildStudentList(String reportType, ReportsController controller) {
+    final List<Widget> items = [];
 
-  Widget _buildStudentList(String reportType, {BatchPerformance? batchPerf}) {
-    // Standardize data for all report types
-    final List<Map<String, String>> students = [];
-
-    if (reportType == 'Performance' && batchPerf != null) {
-      for (var p in batchPerf.studentPerformances) {
-        students.add({
-          'name': p.studentName,
-          'metric': p.averageRating.toStringAsFixed(1),
-          'subtitle':
-              'Performance: ${(p.averageRating * 10).toStringAsFixed(0)}%',
-          'color_value': p.averageRating.toString(),
-        });
-      }
-    } else {
-      final List<Map<String, String>> mockStudents = [
-        {
-          'name': 'Rahul Sharma',
-          'metric': reportType == 'Fee' ? 'Paid' : '95%',
-          'subtitle': reportType == 'Fee' ? '' : 'Attendance Rate',
-        },
-        {
-          'name': 'Sneha Patel',
-          'metric': reportType == 'Fee' ? 'Paid' : '82%',
-          'subtitle': reportType == 'Fee' ? '' : 'Attendance Rate',
-        },
-        {
-          'name': 'Amit Kumar',
-          'metric': reportType == 'Fee' ? 'Pending' : '70%',
-          'subtitle': reportType == 'Fee'
-              ? 'Pending: ₹1500'
-              : 'Attendance Rate',
-        },
-        {
-          'name': 'Priya Singh',
-          'metric': reportType == 'Fee' ? 'Paid' : '98%',
-          'subtitle': reportType == 'Fee' ? '' : 'Attendance Rate',
-        },
-        {
-          'name': 'Vikram Mehra',
-          'metric': reportType == 'Fee' ? 'Pending' : '60%',
-          'subtitle': reportType == 'Fee'
-              ? 'Pending: ₹2400'
-              : 'Attendance Rate',
-        },
-        {
-          'name': 'Ananya Roy',
-          'metric': reportType == 'Fee' ? 'Paid' : '88%',
-          'subtitle': reportType == 'Fee' ? '' : 'Attendance Rate',
-        },
-      ];
-
-      if (reportType == 'Fee') {
-        students.addAll(
-          mockStudents.where(
-            (s) => s['metric'] == 'Paid' || s['metric'] == 'Pending',
+    if (reportType == 'Fee') {
+      final fees = controller.batchFeeDetail.value?.fees ?? [];
+      for (var f in fees) {
+        items.add(
+          Padding(
+            padding: const EdgeInsets.only(bottom: AppSpacing.s12),
+            child: ReportStudentItemCard(
+              name: f.student?.name ?? '',
+              metric: 'Paid',
+              metricColor: AppColors.successGreen,
+              subtitle: 'Collected: ₹${f.totalAmount.toStringAsFixed(0)}',
+            ),
           ),
         );
-      } else {
-        students.addAll(mockStudents);
+      }
+    } else if (reportType == 'Attendance') {
+      final detail = controller.batchAttendanceDetail.value;
+      final attendance = detail?.attendance ?? [];
+      final total = detail?.summary.total ?? 1;
+
+      for (var a in attendance) {
+        final percentage = (a.presentDays / total) * 100;
+        items.add(
+          Padding(
+            padding: const EdgeInsets.only(bottom: AppSpacing.s12),
+            child: ReportStudentItemCard(
+              name: a.studentName,
+              metric: '${percentage.toStringAsFixed(1)}%',
+              metricColor: _getMetricColor(percentage),
+              subtitle: 'Attendance Rate',
+            ),
+          ),
+        );
+      }
+    } else if (reportType == 'Performance') {
+      final detail = controller.batchPerformanceDetail.value;
+      final students = detail?.students ?? [];
+
+      for (var s in students) {
+        final score = double.tryParse(s.avgScore.replaceAll('%', '')) ?? 0.0;
+        items.add(
+          Padding(
+            padding: const EdgeInsets.only(bottom: AppSpacing.s12),
+            child: ReportStudentItemCard(
+              name: s.studentName,
+              metric: s.avgScore,
+              metricColor: _getMetricColor(score),
+              subtitle: 'Average Score',
+            ),
+          ),
+        );
       }
     }
 
-    return ListView.separated(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: students.length,
-      separatorBuilder: (_, _) => AppSpacing.v12,
-      itemBuilder: (context, index) {
-        final student = students[index];
-        final String metric = student['metric']!;
-        final String subtitle = student['subtitle'] ?? '';
-        final bool hasSubtitle = subtitle.isNotEmpty;
-
-        return Container(
-          padding: AppSpacing.all16,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.reportBorder),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      student['name']!,
-                      style: AppTextStyles.manrope(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.textPrimary,
-                      ),
-                    ),
-                    if (hasSubtitle) ...[
-                      AppSpacing.v4,
-                      Text(
-                        subtitle,
-                        style: AppTextStyles.lexend(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: _getMetricColor(
-                            metric,
-                            reportType,
-                            student['color_value'],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: _getMetricColor(
-                    metric,
-                    reportType,
-                    student['color_value'],
-                  ).withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  metric,
-                  style: AppTextStyles.manrope(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w800,
-                    color: _getMetricColor(
-                      metric,
-                      reportType,
-                      student['color_value'],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
+    return Column(children: items);
   }
 
-  Color _getMetricColor(String metric, String type, String? colorValue) {
-    if (type == 'Performance' && colorValue != null) {
-      double rating = double.parse(colorValue);
-      if (rating >= 8.5) return AppColors.successGreen;
-      if (rating >= 7.0) return AppColors.warningAmber;
-      return AppColors.errorRed;
-    }
-    if (type == 'Fee') {
-      if (metric == 'Paid') return AppColors.successGreen;
-      if (metric == 'Partial') return AppColors.warningAmber;
-      return AppColors.errorRed;
-    }
-    if (type == 'Attendance') {
-      double val = double.tryParse(metric.replaceAll('%', '')) ?? 0.0;
-      if (val >= 90) return AppColors.successGreen;
-      if (val >= 75) return AppColors.warningAmber;
-      return AppColors.errorRed;
-    }
-    // Fallback for letters A, B, C etc.
-    if (metric.startsWith('A')) return AppColors.successGreen;
-    if (metric.startsWith('B')) return AppColors.warningAmber;
-    if (metric.startsWith('C') || metric.startsWith('D'))
-      return AppColors.errorRed;
-
-    return AppColors.successGreen;
+  Color _getMetricColor(double value) {
+    if (value >= 70) return AppColors.successGreen;
+    if (value >= 30) return AppColors.warningAmber;
+    return AppColors.errorRed;
   }
 }

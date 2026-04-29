@@ -39,9 +39,10 @@ class AppRoutes {
   static const String instituteSubscription = '/institute/profile/subscription';
   static const String instituteWhatsApp = '/institute/profile/whatsapp';
   static const String instituteFeeReport = '/institute/reports/fee-main';
-  static const String instituteAttendanceReport = '/institute/reports/attendance';
-  static const String institutePerformanceReport = '/institute/reports/performance';
-  static const String instituteDefaultersList = '/institute/reports/defaulters';
+  static const String instituteAttendanceReport =
+      '/institute/reports/attendance';
+  static const String institutePerformanceReport =
+      '/institute/reports/performance';
   static const String instituteUpdates = '/institute/updates';
   static const String instituteCreateUpdate = '/institute/updates/create';
   static const String instituteNotifications = '/institute/notifications';
@@ -61,7 +62,9 @@ class AppRoutes {
   static const String instituteAssignToBatch = '/institute/batches/assign';
   static const String instituteBatchHomework = '/institute/batches/homework';
   static const String instituteAddHomework = '/institute/batches/homework/add';
-  static const String instituteHomeworkRating = '/institute/batches/homework/rating';
+  static const String instituteHomeworkRating =
+      '/institute/batches/homework/rating';
   static const String instituteBatchResources = '/institute/batches/resources';
-  static const String instituteResourceDetail = '/institute/batches/resources/detail';
+  static const String instituteResourceDetail =
+      '/institute/batches/resources/detail';
 }

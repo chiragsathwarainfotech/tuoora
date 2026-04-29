@@ -201,7 +201,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
         ),
         decoration: const InputDecoration(
           counterText: '',
-          hintText: '000000',
+          hintText: 'XXXXXX',
           hintStyle: TextStyle(color: AppColors.textMuted, letterSpacing: 8.0),
           border: InputBorder.none,
           contentPadding: AppSpacing.all16,

@@ -3,6 +3,8 @@ class ApiConstants {
   
   // Auth Endpoints
   static const String instituteLogin = '/institute/login';
+  static const String instituteRegister = '/institute/register';
+  static const String instituteVerifyOtp = '/institute/verify-otp';
   static const String studentLogin = '/student/login';
   static const String parentLogin = '/parent/login';
   
@@ -15,4 +17,16 @@ class ApiConstants {
   static const String instituteFees = '/institute/fees';
   static const String instituteFeesExport = '/institute/fees/export';
   static const String instituteDailyUpdates = '/institute/daily-updates';
+  
+  // Reports Endpoints
+  static const String instituteReportFee = '/institute/reports/fee';
+  static const String instituteReportFeeExport = '/institute/reports/fee/export';
+
+  // Attendance Reports
+  static const String instituteReportAttendance = '/institute/reports/attendance';
+  static const String instituteReportAttendanceExport = '/institute/reports/attendance/export';
+
+  // Performance Reports
+  static const String instituteReportPerformance = '/institute/reports/performance';
+  static const String instituteReportPerformanceExport = '/institute/reports/performance/export';
 }

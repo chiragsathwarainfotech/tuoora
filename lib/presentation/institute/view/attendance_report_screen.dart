@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:fee_easy/config/app_routes.dart';
 
 import 'package:fee_easy/presentation/institute/controllers/reports_controller.dart';
+import 'package:fee_easy/presentation/institute/widgets/report_widgets.dart';
 
 class AttendanceReportScreen extends StatelessWidget {
   const AttendanceReportScreen({super.key});
@@ -22,38 +23,64 @@ class AttendanceReportScreen extends StatelessWidget {
           children: [
             const InstituteAppBar(title: 'Attendance Report', isRoot: false),
             Expanded(
-              child: Obx(
-                () => SingleChildScrollView(
+              child: Obx(() {
+                if (controller.isAttendanceLoading.value) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                final report = controller.attendanceReport.value;
+                if (report == null) {
+                  return const Center(
+                    child: Text('No attendance data available'),
+                  );
+                }
+
+                final double attendancePercentage = report.summary.total > 0
+                    ? (report.summary.present / report.summary.total) * 100
+                    : 0.0;
+
+                return SingleChildScrollView(
                   padding: AppSpacing.all24,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildAttendanceGraph(),
+                      ReportSummaryCard(
+                        title: 'Overall Attendance Percentage',
+                        value: '${attendancePercentage.toStringAsFixed(1)}%',
+                      ),
                       AppSpacing.v32,
-                      _buildSectionHeader('Attendance Summary'),
+                      _buildSectionHeader('Attendance Summary', controller),
                       AppSpacing.v16,
-                      ...controller.attendanceBatches.map(
+                      ...report.batches.map(
                         (batch) => Padding(
                           padding: const EdgeInsets.only(
                             bottom: AppSpacing.s12,
                           ),
-                          child: _buildBatchSummaryItem(
-                            name: batch['name'],
-                            strength: batch['strength'],
-                            collected: batch['rate'],
-                            pending: '${batch['absentees']} Absentees',
-                            progress: batch['progress'],
-                            labelType: 'Attendance Rate',
-                            pendingLabel: 'ABSENTEES',
-                            showFooter: false,
+                          child: ReportBatchItemCard(
+                            name: batch.batchName,
+                            strength: batch.studentsCount,
+                            metricLabel: 'Attendance Rate',
+                            metricValue:
+                                '${batch.avgAttendance.toStringAsFixed(1)}%',
+                            progress: batch.avgAttendance / 100,
+                            onTap: () {
+                              Get.toNamed(
+                                AppRoutes.instituteBatchReportDetail,
+                                arguments: {
+                                  'batchId': batch.batchId,
+                                  'batchName': batch.batchName,
+                                  'reportType': 'Attendance',
+                                },
+                              );
+                            },
                           ),
                         ),
                       ),
                       AppSpacing.v32,
                     ],
                   ),
-                ),
-              ),
+                );
+              }),
             ),
           ],
         ),
@@ -61,103 +88,7 @@ class AttendanceReportScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildAttendanceGraph() {
-    final List<double> data = [0.85, 0.92, 0.88, 0.95, 0.90, 0.93, 0.91];
-    final List<String> days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-
-    return Container(
-      padding: AppSpacing.all24,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Weekly Overview',
-                style: AppTextStyles.manrope(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppColors.successGreen.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.trending_up,
-                      size: 14,
-                      color: AppColors.successGreen,
-                    ),
-                    AppSpacing.h4,
-                    Text(
-                      '8.5%',
-                      style: AppTextStyles.manrope(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.successGreen,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          AppSpacing.v24,
-          SizedBox(
-            height: 150,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: List.generate(data.length, (index) {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                      width: 24,
-                      height: 100 * data[index],
-                      decoration: BoxDecoration(
-                        color: index == 3
-                            ? AppColors.primaryBlueDark
-                            : AppColors.lightBlueBg,
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                    ),
-                    AppSpacing.v8,
-                    Text(
-                      days[index],
-                      style: AppTextStyles.lexend(
-                        fontSize: 10,
-                        color: AppColors.textTertiary,
-                      ),
-                    ),
-                  ],
-                );
-              }),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSectionHeader(String title) {
+  Widget _buildSectionHeader(String title, ReportsController controller) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -172,167 +103,35 @@ class AttendanceReportScreen extends StatelessWidget {
           ),
         ),
         AppSpacing.h16,
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          decoration: BoxDecoration(
-            color: AppColors.primaryBlueDark,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Row(
-            children: [
-              const Icon(
-                Icons.file_download_outlined,
-                color: Colors.white,
-                size: 16,
-              ),
-              AppSpacing.h8,
-              Text(
-                'Export',
-                style: AppTextStyles.manrope(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w800,
+        GestureDetector(
+          onTap: () => controller.exportReport('Attendance'),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: AppColors.primaryBlueDark,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.file_download_outlined,
                   color: Colors.white,
+                  size: 16,
                 ),
-              ),
-            ],
+                AppSpacing.h8,
+                Text(
+                  'Export',
+                  style: AppTextStyles.manrope(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w800,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildBatchSummaryItem({
-    required String name,
-    required int strength,
-    required String collected,
-    required String pending,
-    required double progress,
-    String labelType = 'Total Collected',
-    String pendingLabel = 'PENDING',
-    bool showFooter = true,
-  }) {
-    return GestureDetector(
-      onTap: () {
-        Get.toNamed(
-          AppRoutes.instituteBatchReportDetail,
-          arguments: {'batchName': name, 'reportType': 'Attendance'},
-        );
-      },
-      child: Container(
-        padding: AppSpacing.all20,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(24),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.03),
-              blurRadius: 20,
-              offset: const Offset(0, 10),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        name,
-                        style: AppTextStyles.manrope(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
-                          color: AppColors.textPrimary,
-                        ),
-                      ),
-                      Text(
-                        'Batch Strength: $strength Students',
-                        style: AppTextStyles.manrope(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.textTertiary,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            AppSpacing.v20,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  labelType,
-                  style: AppTextStyles.manrope(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.textTertiary,
-                  ),
-                ),
-                Text(
-                  collected,
-                  style: AppTextStyles.manrope(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.primaryBlueDark,
-                  ),
-                ),
-              ],
-            ),
-            AppSpacing.v8,
-            ClipRRect(
-              borderRadius: BorderRadius.circular(4),
-              child: LinearProgressIndicator(
-                value: progress,
-                minHeight: 6,
-                backgroundColor: AppColors.reportProgressBg,
-                color: AppColors.primaryBlueDark,
-              ),
-            ),
-            if (showFooter) ...[
-              AppSpacing.v16,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          pendingLabel,
-                          style: AppTextStyles.manrope(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.textTertiary,
-                            letterSpacing: 0.5,
-                          ),
-                        ),
-                        Text(
-                          pending,
-                          style: AppTextStyles.manrope(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.darkRedText,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Icon(
-                    Icons.chevron_right_rounded,
-                    color: AppColors.textTertiary,
-                  ),
-                ],
-              ),
-            ],
-          ],
-        ),
-      ),
     );
   }
 }

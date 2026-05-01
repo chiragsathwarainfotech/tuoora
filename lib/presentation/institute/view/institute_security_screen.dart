@@ -34,7 +34,7 @@ class InstituteSecurityScreen extends GetView<SecurityController> {
                     color: Colors.black.withValues(alpha: 0.3),
                     child: const Center(
                       child: CircularProgressIndicator(
-                        color: AppColors.primaryBlue,
+                        color: AppColors.primaryBrand,
                       ),
                     ),
                   )
@@ -67,7 +67,7 @@ class InstituteSecurityScreen extends GetView<SecurityController> {
             style: AppTextStyles.manrope(
               fontSize: 18,
               fontWeight: FontWeight.w800,
-              color: AppColors.textPrimary,
+              color: const Color(0xFF663322),
             ),
           ),
           AppSpacing.v24,
@@ -128,7 +128,7 @@ class InstituteSecurityScreen extends GetView<SecurityController> {
           () => Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             decoration: BoxDecoration(
-              color: AppColors.divider,
+              color: const Color(0xFFEBEBEB),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
@@ -145,7 +145,7 @@ class InstituteSecurityScreen extends GetView<SecurityController> {
                       hintText: hint,
                       hintStyle: AppTextStyles.lexend(
                         fontSize: 14,
-                        color: AppColors.textMuted,
+                        color: const Color(0xFF917B6B),
                       ),
                       border: InputBorder.none,
                       contentPadding: const EdgeInsets.symmetric(vertical: 14),
@@ -158,7 +158,7 @@ class InstituteSecurityScreen extends GetView<SecurityController> {
                     isVisible.value
                         ? Icons.visibility_off_outlined
                         : Icons.visibility_outlined,
-                    color: AppColors.textTertiary,
+                    color: const Color(0xFF917B6B),
                     size: AppSpacing.s20,
                   ),
                   constraints: const BoxConstraints(),

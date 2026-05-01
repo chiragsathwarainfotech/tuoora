@@ -42,7 +42,7 @@ class AppButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool effectivelyDisabled = isDisabled || isLoading || onPressed == null;
-    final Color bgColor = backgroundColor ?? AppColors.instDarkBtnBlue;
+    final Color bgColor = backgroundColor ?? AppColors.primaryBrand;
     final Color contentColor = foregroundColor ?? Colors.white;
 
     return GestureDetector(
@@ -54,15 +54,6 @@ class AppButton extends StatelessWidget {
           color: effectivelyDisabled ? AppColors.textMuted : bgColor,
           borderRadius: BorderRadius.circular(borderRadius),
           border: borderColor != null ? Border.all(color: borderColor!) : null,
-          boxShadow: (hasShadow && !effectivelyDisabled)
-              ? [
-                  BoxShadow(
-                    color: bgColor.withValues(alpha: 0.2),
-                    blurRadius: AppSpacing.s16,
-                    offset: const Offset(0, AppSpacing.s8),
-                  ),
-                ]
-              : [],
         ),
         child: Center(
           child: isLoading

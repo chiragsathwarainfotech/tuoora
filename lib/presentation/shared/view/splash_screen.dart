@@ -12,7 +12,7 @@ class SplashScreen extends GetView<SplashController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.primaryBlue,
+      backgroundColor: AppColors.primaryBrand,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -34,7 +34,7 @@ class SplashScreen extends GetView<SplashController> {
               child: const Center(
                 child: Icon(
                   Icons.school_rounded,
-                  color: AppColors.primaryBlue,
+                  color: AppColors.primaryBrand,
                   size: 60,
                 ),
               ),

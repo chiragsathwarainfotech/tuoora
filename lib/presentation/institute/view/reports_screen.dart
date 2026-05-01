@@ -33,7 +33,7 @@ class ReportsScreen extends StatelessWidget {
                     subtitle:
                         'Collection summaries, pending dues, and batch-wise financial insights.',
                     icon: Icons.account_balance_wallet_rounded,
-                    color: AppColors.primaryBlueDark,
+                    color: AppColors.primaryBrand,
                     onTap: () => Get.toNamed(AppRoutes.instituteFeeReport),
                   ),
                   AppSpacing.v16,
@@ -42,7 +42,7 @@ class ReportsScreen extends StatelessWidget {
                     subtitle:
                         'Daily attendance rates, absentee tracking, and batch consistency trends.',
                     icon: Icons.calendar_today_rounded,
-                    color: AppColors.successGreen,
+                    color: AppColors.primaryBrand,
                     onTap: () =>
                         Get.toNamed(AppRoutes.instituteAttendanceReport),
                   ),
@@ -52,7 +52,7 @@ class ReportsScreen extends StatelessWidget {
                     subtitle:
                         'Academic progress, average grades, and performance analysis across batches.',
                     icon: Icons.insights_rounded,
-                    color: AppColors.warningAmber,
+                    color: AppColors.primaryBrand,
                     onTap: () =>
                         Get.toNamed(AppRoutes.institutePerformanceReport),
                   ),
@@ -107,7 +107,7 @@ class ReportsScreen extends StatelessWidget {
                     style: AppTextStyles.manrope(
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
-                      color: AppColors.textPrimary,
+                      color: const Color(0xFF663322),
                     ),
                   ),
                   AppSpacing.v4,

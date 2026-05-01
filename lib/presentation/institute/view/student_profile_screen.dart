@@ -29,7 +29,7 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
               return Column(
                 children: [
                   InstituteAppBar(
-                    title: 'Student Profile',
+                    title: AppStrings.instStudentProfileTitle,
                     actions: [
                       IconButton(
                         onPressed: () => Get.toNamed(
@@ -110,48 +110,87 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
       ),
       child: Row(
         children: [
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(24),
-              image: DecorationImage(
-                image: NetworkImage(imageUrl),
-                fit: BoxFit.cover,
-              ),
+          _buildStudentAvatar(imageUrl, name),
+          AppSpacing.h16,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name,
+                  style: AppTextStyles.manrope(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.primaryBrand,
+                  ),
+                ),
+                Text(
+                  'ID: $id',
+                  style: AppTextStyles.manrope(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.primaryBrand,
+                  ),
+                ),
+                Text(
+                  'Standard: $grade',
+                  style: AppTextStyles.manrope(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.primaryBrand,
+                  ),
+                ),
+              ],
             ),
           ),
-          AppSpacing.h8,
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                name,
-                style: AppTextStyles.manrope(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.instPrimaryBlue,
-                ),
-              ),
-              Text(
-                'ID: $id',
-                style: AppTextStyles.manrope(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.instAccentBlue,
-                ),
-              ),
-              Text(
-                'Standard: $grade',
-                style: AppTextStyles.manrope(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.instAccentBlue,
-                ),
-              ),
-            ],
-          ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildStudentAvatar(String imageUrl, String name) {
+    if (imageUrl.isNotEmpty &&
+        imageUrl.startsWith('http') &&
+        !imageUrl.contains('ui-avatars.com')) {
+      return Container(
+        width: 80,
+        height: 80,
+        decoration: BoxDecoration(
+          color: AppColors.primaryBrandLight,
+          shape: BoxShape.circle,
+          image: DecorationImage(
+            image: NetworkImage(imageUrl),
+            fit: BoxFit.cover,
+          ),
+        ),
+      );
+    }
+
+    final names = name.trim().split(' ');
+    String initials = '';
+    if (names.isNotEmpty) {
+      initials += names[0][0].toUpperCase();
+      if (names.length > 1) {
+        initials += names[names.length - 1][0].toUpperCase();
+      }
+    }
+
+    return Container(
+      width: 80,
+      height: 80,
+      decoration: const BoxDecoration(
+        color: AppColors.primaryBrandLight,
+        shape: BoxShape.circle,
+      ),
+      child: Center(
+        child: Text(
+          initials,
+          style: AppTextStyles.manrope(
+            fontSize: 24,
+            fontWeight: FontWeight.w800,
+            color: AppColors.primaryBrand,
+          ),
+        ),
       ),
     );
   }

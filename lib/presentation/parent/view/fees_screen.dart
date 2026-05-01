@@ -43,7 +43,7 @@ class ParentFeesScreen extends StatelessWidget {
           AppImages.icBell,
           height: AppSpacing.s24,
           colorFilter: const ColorFilter.mode(
-            AppColors.accentBlue,
+            AppColors.primaryBrand,
             BlendMode.srcIn,
           ),
         ),
@@ -59,7 +59,7 @@ class ParentFeesScreen extends StatelessWidget {
       padding: AppSpacing.all32,
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF0056D2), AppColors.primaryBlueDark],
+          colors: [Color(0xFF0056D2), AppColors.primaryBrand],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -131,14 +131,14 @@ class ParentFeesScreen extends StatelessWidget {
                     style: AppTextStyles.manrope(
                       fontSize: 18,
                       fontWeight: FontWeight.w800,
-                      color: AppColors.primaryBlueDark,
+                      color: AppColors.primaryBrand,
                     ),
                   ),
                   AppSpacing.h12,
                   const Icon(
                     Icons.arrow_forward,
                     size: AppSpacing.s20,
-                    color: AppColors.primaryBlueDark,
+                    color: AppColors.primaryBrand,
                   ),
                 ],
               ),

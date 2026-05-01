@@ -7,15 +7,7 @@ import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_bottom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-class ResourceDetailController extends GetxController {
-  final isPlaying = false.obs;
-  final progress = 0.3.obs;
-
-  void togglePlay() {
-    isPlaying.value = !isPlaying.value;
-  }
-}
+import 'package:fee_easy/presentation/institute/controllers/resource_detail_controller.dart';
 
 class ResourceDetailScreen extends StatelessWidget {
   const ResourceDetailScreen({super.key});
@@ -70,8 +62,10 @@ class ResourceDetailScreen extends StatelessWidget {
       bottomNavigationBar: InstituteBottomButton(
         label: AppStrings.instDownloadResourceBtn,
         icon: Icons.download_rounded,
-        onTap: () =>
-            Get.snackbar('Success', 'Downloading ${resource.fileName}...'),
+        onTap: () => Get.snackbar(
+          'Success',
+          'Downloading ${resource.displayFileName}...',
+        ),
       ),
     );
   }
@@ -135,12 +129,18 @@ class ResourceDetailScreen extends StatelessWidget {
                 color: AppColors.instPrimaryBlue,
               ),
               AppSpacing.v16,
-              Text(
-                resource.fileName,
-                style: AppTextStyles.manrope(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.textSecondary,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  resource.displayFileName,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTextStyles.manrope(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.textSecondary,
+                  ),
                 ),
               ),
               AppSpacing.v8,

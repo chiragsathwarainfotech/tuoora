@@ -1,4 +1,6 @@
+import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_strings.dart';
+import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/data/repositories_impl/student_repository_impl.dart';
 import 'package:fee_easy/presentation/institute/controllers/institute_controller.dart';
@@ -7,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:fee_easy/data/models/student_model.dart';
+import 'package:fee_easy/presentation/institute/controllers/batch_controller.dart';
+import 'package:fee_easy/presentation/institute/models/batch_model.dart';
 
 class InstituteStudentController extends GetxController {
   final StudentRepositoryImpl _studentRepository =
@@ -27,6 +31,8 @@ class InstituteStudentController extends GetxController {
   final standardController = TextEditingController();
 
   final editingStudentId = Rxn<dynamic>();
+  final selectedBatchId = RxnString();
+  final availableBatches = <BatchModel>[].obs;
 
   @override
   void onInit() {
@@ -39,6 +45,20 @@ class InstituteStudentController extends GetxController {
     addressController.addListener(validateForm);
     standardController.addListener(validateForm);
     handleArguments();
+    fetchAvailableBatches();
+  }
+
+  void fetchAvailableBatches() {
+    if (Get.isRegistered<BatchController>()) {
+      final batchController = Get.find<BatchController>();
+      if (batchController.batchesList.isEmpty) {
+        batchController.loadBatches();
+      }
+      ever(batchController.batchesList, (batches) {
+        availableBatches.assignAll(batches);
+      });
+      availableBatches.assignAll(batchController.batchesList);
+    }
   }
 
   void handleArguments() {
@@ -83,6 +103,7 @@ class InstituteStudentController extends GetxController {
     addressController.clear();
     standardController.clear();
     selectedImagePath.value = null;
+    selectedBatchId.value = null;
     validateForm();
   }
 
@@ -193,30 +214,52 @@ class InstituteStudentController extends GetxController {
   void showImagePickerSourceSheet(BuildContext context) {
     Get.bottomSheet(
       Container(
-        padding: AppSpacing.all24,
-        decoration: BoxDecoration(
+        padding: AppSpacing.all32,
+        decoration: const BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              leading: const Icon(Icons.camera_alt),
-              title: const Text('Camera'),
+              leading: const Icon(
+                Icons.camera_alt_rounded,
+                color: AppColors.primaryBrand,
+              ),
+              title: Text(
+                'Camera',
+                style: AppTextStyles.manrope(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textPrimary,
+                ),
+              ),
               onTap: () {
                 Get.back();
                 pickImage(ImageSource.camera);
               },
             ),
+            AppSpacing.v8,
             ListTile(
-              leading: const Icon(Icons.photo_library),
-              title: const Text('Gallery'),
+              leading: const Icon(
+                Icons.photo_library_rounded,
+                color: AppColors.primaryBrand,
+              ),
+              title: Text(
+                'Gallery',
+                style: AppTextStyles.manrope(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textPrimary,
+                ),
+              ),
               onTap: () {
                 Get.back();
                 pickImage(ImageSource.gallery);
               },
             ),
+            AppSpacing.v16,
           ],
         ),
       ),
@@ -236,6 +279,7 @@ class InstituteStudentController extends GetxController {
         'guardian_name': parentNameController.text,
         'dob': dobController.text,
         'standard': standardController.text,
+        if (selectedBatchId.value != null) 'batch_id': selectedBatchId.value,
         if (selectedImagePath.value != null)
           'profile_image_url': selectedImagePath.value,
       };

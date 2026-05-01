@@ -36,7 +36,7 @@ class RoleSelectionScreen extends StatelessWidget {
                 title: 'Login as Institute',
                 subtitle: 'Manage students, batches, and academic operations.',
                 icon: Icons.business_rounded,
-                iconColor: AppColors.primaryBlue,
+                iconColor: AppColors.primaryBrand,
                 onTap: () =>
                     Get.toNamed(AppRoutes.login, arguments: 'INSTITUTE'),
               ),
@@ -46,7 +46,7 @@ class RoleSelectionScreen extends StatelessWidget {
                 subtitle:
                     "Monitor your child's progress and manage fee payments.",
                 icon: Icons.family_restroom_rounded,
-                iconColor: AppColors.primaryBlue,
+                iconColor: AppColors.primaryBrand,
                 onTap: () => Get.toNamed(AppRoutes.login, arguments: 'PARENT'),
               ),
               AppSpacing.v16,
@@ -54,7 +54,7 @@ class RoleSelectionScreen extends StatelessWidget {
                 title: 'Login as Student',
                 subtitle: 'View your classes, fees, homework and more.',
                 icon: Icons.school_rounded,
-                iconColor: AppColors.primaryBlue,
+                iconColor: AppColors.primaryBrand,
                 onTap: () => Get.toNamed(AppRoutes.login, arguments: 'STUDENT'),
               ),
             ],
@@ -88,7 +88,7 @@ class RoleSelectionScreen extends StatelessWidget {
             fit: BoxFit.cover,
             errorBuilder: (context, error, stackTrace) {
               return Container(
-                color: AppColors.primaryBlue,
+                color: AppColors.primaryBrand,
                 child: const Center(
                   child: Icon(Icons.school, color: Colors.white, size: 64),
                 ),

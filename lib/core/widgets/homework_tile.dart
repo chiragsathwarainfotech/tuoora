@@ -49,7 +49,7 @@ class HomeworkTile extends StatelessWidget {
               ),
               child: Icon(
                 icon,
-                color: AppColors.primaryBlue,
+                color: AppColors.primaryBrand,
                 size: AppSpacing.s20,
               ),
             ),
@@ -96,7 +96,7 @@ class HomeworkTile extends StatelessWidget {
                     style: AppTextStyles.manrope(
                       fontSize: 10,
                       fontWeight: FontWeight.w800,
-                      color: AppColors.accentBlue,
+                      color: AppColors.primaryBrand,
                     ),
                   ),
                 ],

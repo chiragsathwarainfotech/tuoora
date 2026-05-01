@@ -50,7 +50,7 @@ class InstituteMetricCard extends StatelessWidget {
             style: AppTextStyles.manrope(
               fontSize: 20,
               fontWeight: FontWeight.w800,
-              color: valueColor ?? AppColors.instAccentBlue,
+              color: valueColor ?? AppColors.primaryBrand,
             ),
           ),
         ],

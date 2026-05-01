@@ -43,14 +43,14 @@ class SectionHeader extends StatelessWidget {
                     style: AppTextStyles.manrope(
                       fontSize: 14,
                       fontWeight: FontWeight.w800,
-                      color: AppColors.accentBlue,
+                      color: AppColors.primaryBrand,
                     ),
                   ),
                   AppSpacing.h4,
                   const Icon(
                     Icons.chevron_right,
                     size: AppSpacing.s16,
-                    color: AppColors.accentBlue,
+                    color: AppColors.primaryBrand,
                   ),
                 ],
               ),

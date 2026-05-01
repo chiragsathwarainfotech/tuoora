@@ -30,7 +30,7 @@ class StudentDashboard extends StatelessWidget {
               style: AppTextStyles.manrope(
                 fontSize: 10,
                 fontWeight: FontWeight.w800,
-                color: AppColors.primaryBlue,
+                color: AppColors.primaryBrand,
                 letterSpacing: 1.5,
               ),
             ),
@@ -81,7 +81,7 @@ class StudentDashboard extends StatelessWidget {
                           strokeWidth: AppSpacing.s12,
                           backgroundColor: AppColors.divider,
                           valueColor: AlwaysStoppedAnimation<Color>(
-                            AppColors.primaryBlue,
+                            AppColors.primaryBrand,
                           ),
                           strokeCap: StrokeCap.round,
                         ),
@@ -130,7 +130,7 @@ class StudentDashboard extends StatelessWidget {
                       const AppStatusBadge(
                         text: 'TOP\n5%',
                         textColor: Colors.white,
-                        backgroundColor: AppColors.intenseBlue,
+                        backgroundColor: AppColors.primaryBrand,
                       ),
                     ],
                   ),
@@ -176,7 +176,7 @@ class StudentDashboard extends StatelessWidget {
                                 style: AppTextStyles.manrope(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w800,
-                                  color: AppColors.primaryBlue,
+                                  color: AppColors.primaryBrand,
                                 ),
                               ),
                             ],
@@ -209,7 +209,7 @@ class StudentDashboard extends StatelessWidget {
                                 style: AppTextStyles.manrope(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w800,
-                                  color: AppColors.primaryBlue,
+                                  color: AppColors.primaryBrand,
                                 ),
                               ),
                             ],
@@ -225,11 +225,11 @@ class StudentDashboard extends StatelessWidget {
             Container(
               padding: AppSpacing.all24,
               decoration: BoxDecoration(
-                color: AppColors.primaryBlue,
+                color: AppColors.primaryBrand,
                 borderRadius: BorderRadius.circular(AppSpacing.s24),
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.primaryBlue.withValues(alpha: 0.2),
+                    color: AppColors.primaryBrand.withValues(alpha: 0.2),
                     blurRadius: AppSpacing.s16,
                     offset: const Offset(0, AppSpacing.s8),
                   ),
@@ -308,7 +308,7 @@ class StudentDashboard extends StatelessWidget {
                     label: AppStrings.viewFeeHistory,
                     onPressed: () => Get.toNamed(AppRoutes.studentFeeHistory),
                     backgroundColor: Colors.white,
-                    foregroundColor: AppColors.primaryBlue,
+                    foregroundColor: AppColors.primaryBrand,
                     fullWidth: true,
                   ),
                 ],

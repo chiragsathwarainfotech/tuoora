@@ -78,7 +78,7 @@ class ParentBottomNav extends StatelessWidget {
   Widget _buildNavItem(int index, IconData icon, String label, String route) {
     final bool isSelected = currentIndex == index;
     final Color itemColor = isSelected
-        ? AppColors.primaryBlueDark
+        ? AppColors.primaryBrand
         : AppColors.navyMuted;
 
     return Expanded(
@@ -121,7 +121,7 @@ class ParentBottomNav extends StatelessWidget {
   Widget _buildCenterNavItem(int index, IconData icon, String route) {
     final bool isSelected = currentIndex == index;
     final Color itemColor = isSelected
-        ? AppColors.primaryBlueDark
+        ? AppColors.primaryBrand
         : Color(0xFF475569);
 
     return Expanded(

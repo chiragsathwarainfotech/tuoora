@@ -47,13 +47,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: AppSpacing.s40,
                     height: AppSpacing.s40,
                     decoration: BoxDecoration(
-                      color: AppColors.iconBgLightBlue,
+                      color: AppColors.primaryBrandLight,
                       shape: BoxShape.circle,
                     ),
                     child: const Center(
                       child: Icon(
                         Icons.school,
-                        color: AppColors.primaryBlue,
+                        color: AppColors.primaryBrand,
                         size: AppSpacing.s24,
                       ),
                     ),
@@ -64,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: AppTextStyles.manrope(
                       fontSize: 22,
                       fontWeight: FontWeight.w800,
-                      color: AppColors.primaryBlue,
+                      color: AppColors.primaryBrand,
                     ),
                   ),
                 ],
@@ -75,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 style: AppTextStyles.manrope(
                   fontSize: 12,
                   fontWeight: FontWeight.w800,
-                  color: AppColors.primaryBlue,
+                  color: AppColors.primaryBrand,
                   letterSpacing: 1.5,
                 ),
               ),
@@ -85,7 +85,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 style: AppTextStyles.manrope(
                   fontSize: 28,
                   fontWeight: FontWeight.w800,
-                  color: AppColors.textPrimary,
+                  color: const Color(0xFF917B6B),
+                  height: 1.5,
                 ),
               ),
               AppSpacing.v8,
@@ -95,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 style: AppTextStyles.lexend(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
-                  color: AppColors.textTertiary,
+                  color: const Color(0xFF917B6B),
                   height: 1.5,
                 ),
               ),
@@ -122,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: AppTextStyles.manrope(
                         fontSize: 10,
                         fontWeight: FontWeight.w800,
-                        color: AppColors.textDarkGrey,
+                        color: const Color(0xFF663322),
                         letterSpacing: 1.0,
                       ),
                     ),
@@ -142,12 +143,21 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: AppTextStyles.manrope(
                             fontSize: 10,
                             fontWeight: FontWeight.w800,
-                            color: AppColors.textDarkGrey,
+                            color: const Color(0xFF663322),
                             letterSpacing: 1.0,
                           ),
                         ),
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            if (_selectedRole == 'INSTITUTE') {
+                              Get.toNamed(AppRoutes.instituteForgotPassword);
+                            } else {
+                              Get.snackbar(
+                                'Coming Soon',
+                                'Recovery for this role will be available soon.',
+                              );
+                            }
+                          },
                           style: TextButton.styleFrom(
                             padding: EdgeInsets.zero,
                             minimumSize: Size.zero,
@@ -158,7 +168,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             style: AppTextStyles.manrope(
                               fontSize: 10,
                               fontWeight: FontWeight.w800,
-                              color: AppColors.primaryBlue,
+                              color: AppColors.primaryBrand,
                               letterSpacing: 1.0,
                             ),
                           ),
@@ -204,7 +214,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 color: AppColors.borderLightGray,
                                 width: 1.5,
                               ),
-                              activeColor: AppColors.primaryBlue,
+                              activeColor: AppColors.primaryBrand,
                             ),
                           ),
                           AppSpacing.h12,
@@ -213,7 +223,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             style: AppTextStyles.lexend(
                               fontSize: 13,
                               fontWeight: FontWeight.w500,
-                              color: AppColors.textSecondary,
+                              color: const Color(0xFF917B6B),
                             ),
                           ),
                         ],
@@ -225,7 +235,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         label: AppStrings.signInButton,
                         onPressed: _handleLogin,
                         isLoading: controller.isLoading.value,
-                        backgroundColor: AppColors.primaryBlue,
+                        backgroundColor: AppColors.primaryBrand,
                         foregroundColor: Colors.white,
                         borderRadius: AppSpacing.s24,
                         padding: const EdgeInsets.symmetric(
@@ -252,7 +262,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: AppTextStyles.manrope(
                             fontSize: 10,
                             fontWeight: FontWeight.w800,
-                            color: AppColors.textDarkGrey,
+                            color: const Color(0xFF663322),
                             letterSpacing: 1.0,
                           ),
                         ),
@@ -269,7 +279,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: () => Get.toNamed(AppRoutes.instituteSignup),
                     icon: Icons.storefront_outlined,
                     backgroundColor: Colors.white,
-                    foregroundColor: AppColors.primaryBlue,
+                    foregroundColor: AppColors.primaryBrand,
                     borderColor: AppColors.borderGrey,
                     borderRadius: AppSpacing.s16,
                     padding: const EdgeInsets.symmetric(
@@ -298,7 +308,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.inputBg,
+        color: const Color(0xFFEBEBEB),
         borderRadius: BorderRadius.circular(AppSpacing.s16),
       ),
       child: TextField(
@@ -310,11 +320,11 @@ class _LoginScreenState extends State<LoginScreen> {
           hintText: hint,
           hintStyle: AppTextStyles.lexend(
             fontSize: 14,
-            color: AppColors.textMuted,
+            color: const Color(0xFF917B6B),
           ),
           prefixIcon: Icon(
             prefixIcon,
-            color: AppColors.textMuted,
+            color: const Color(0xFF917B6B),
             size: AppSpacing.s20,
           ),
           suffixIcon: suffixIcon,

@@ -1,6 +1,8 @@
 import 'package:fee_easy/config/app_routes.dart';
 import 'package:fee_easy/core/constants/app_colors.dart';
+import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/services/auth_service.dart';
+import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
 import 'package:fee_easy/data/models/institute_profile_model.dart';
 import 'package:flutter/material.dart';
@@ -101,17 +103,34 @@ class InstituteProfileController extends GetxController {
   Future<void> pickImage() async {
     Get.bottomSheet(
       Container(
-        padding: const EdgeInsets.all(20),
+        padding: AppSpacing.all32,
         decoration: const BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              leading: const Icon(Icons.camera_alt),
-              title: const Text('Camera'),
+              leading: Container(
+                padding: AppSpacing.all8,
+                decoration: const BoxDecoration(
+                  color: AppColors.primaryBrandLight,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.camera_alt_rounded,
+                  color: AppColors.primaryBrand,
+                ),
+              ),
+              title: Text(
+                'Camera',
+                style: AppTextStyles.manrope(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textPrimary,
+                ),
+              ),
               onTap: () async {
                 Get.back();
                 final XFile? image = await _picker.pickImage(
@@ -122,9 +141,27 @@ class InstituteProfileController extends GetxController {
                 }
               },
             ),
+            AppSpacing.v8,
             ListTile(
-              leading: const Icon(Icons.photo_library),
-              title: const Text('Gallery'),
+              leading: Container(
+                padding: AppSpacing.all8,
+                decoration: const BoxDecoration(
+                  color: AppColors.primaryBrandLight,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.photo_library_rounded,
+                  color: AppColors.primaryBrand,
+                ),
+              ),
+              title: Text(
+                'Gallery',
+                style: AppTextStyles.manrope(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textPrimary,
+                ),
+              ),
               onTap: () async {
                 Get.back();
                 final XFile? image = await _picker.pickImage(
@@ -135,6 +172,7 @@ class InstituteProfileController extends GetxController {
                 }
               },
             ),
+            AppSpacing.v16,
           ],
         ),
       ),
@@ -155,8 +193,7 @@ class InstituteProfileController extends GetxController {
         'state': stateController.text,
         'country': countryController.text,
         'pincode': pincodeController.text,
-        if (profileImagePath.value != null)
-          'logo_url': profileImagePath.value,
+        if (profileImagePath.value != null) 'logo_url': profileImagePath.value,
       };
 
       await _instituteRepository.updateProfile(updateData);

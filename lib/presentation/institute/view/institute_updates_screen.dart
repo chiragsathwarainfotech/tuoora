@@ -26,7 +26,7 @@ class InstituteUpdatesScreen extends StatelessWidget {
             Expanded(
               child: RefreshIndicator(
                 onRefresh: () => controller.fetchUpdates(),
-                color: AppColors.primaryBlue,
+                color: AppColors.primaryBrand,
                 child: Obx(() {
                   return CommonStateWidget(
                     isLoading: controller.isLoading.value,
@@ -106,7 +106,7 @@ class InstituteUpdatesScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Get.to(() => const CreateUpdateScreen()),
-        backgroundColor: AppColors.primaryBlue,
+        backgroundColor: AppColors.primaryBrand,
         child: const Icon(Icons.add, color: Colors.white),
       ),
     );

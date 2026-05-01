@@ -8,6 +8,8 @@ import 'package:get/get.dart';
 class InstituteAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final bool isRoot;
+  final bool hideLeading;
+  final bool showDefaultActions;
   final VoidCallback? onBackTap;
   final VoidCallback? onMenuTap;
   final List<Widget>? actions;
@@ -16,6 +18,8 @@ class InstituteAppBar extends StatelessWidget implements PreferredSizeWidget {
     super.key,
     required this.title,
     this.isRoot = false,
+    this.hideLeading = false,
+    this.showDefaultActions = true,
     this.onBackTap,
     this.onMenuTap,
     this.actions,
@@ -33,8 +37,8 @@ class InstituteAppBar extends StatelessWidget implements PreferredSizeWidget {
           Expanded(
             child: Row(
               children: [
-                _buildLeadingButton(context),
-                AppSpacing.h16,
+                if (!hideLeading) _buildLeadingButton(context),
+                if (!hideLeading) AppSpacing.h16,
                 Expanded(
                   child: Text(
                     title,
@@ -51,7 +55,8 @@ class InstituteAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
           if (actions != null) Row(children: actions!),
-          if (isRoot && actions == null) _buildDefaultRootActions(),
+          if (isRoot && actions == null && showDefaultActions)
+            _buildDefaultRootActions(),
         ],
       ),
     );

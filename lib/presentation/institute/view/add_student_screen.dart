@@ -45,16 +45,18 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
               ],
             ),
           ),
-          Obx(() => controller.isLoading.value
-              ? Container(
-                  color: Colors.black.withValues(alpha: 0.3),
-                  child: const Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.instPrimaryBlue,
+          Obx(
+            () => controller.isLoading.value
+                ? Container(
+                    color: Colors.black.withValues(alpha: 0.3),
+                    child: const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.primaryBrand,
+                      ),
                     ),
-                  ),
-                )
-              : const SizedBox.shrink()),
+                  )
+                : const SizedBox.shrink(),
+          ),
         ],
       ),
     );
@@ -88,8 +90,8 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
                         width: AppSpacing.s80,
                         height: AppSpacing.s80,
                         decoration: BoxDecoration(
-                          color: const Color(0xFFF0F5F6),
-                          borderRadius: BorderRadius.circular(AppSpacing.s16),
+                          color: AppColors.primaryBrandLight,
+                          shape: BoxShape.circle,
                           image: controller.selectedImagePath.value != null
                               ? DecorationImage(
                                   image: FileImage(
@@ -97,24 +99,59 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
                                   ),
                                   fit: BoxFit.cover,
                                 )
-                              : (controller.currentStudent.value?.profileImageUrl != null &&
-                                      controller.currentStudent.value!.profileImageUrl.isNotEmpty)
-                                  ? DecorationImage(
-                                      image: NetworkImage(
-                                        controller.currentStudent.value!.profileImageUrl,
-                                      ),
-                                      fit: BoxFit.cover,
-                                    )
-                                  : null,
+                              : (controller
+                                            .currentStudent
+                                            .value
+                                            ?.profileImageUrl !=
+                                        null &&
+                                    controller
+                                        .currentStudent
+                                        .value!
+                                        .profileImageUrl
+                                        .isNotEmpty &&
+                                    !controller
+                                        .currentStudent
+                                        .value!
+                                        .profileImageUrl
+                                        .contains('ui-avatars.com'))
+                              ? DecorationImage(
+                                  image: NetworkImage(
+                                    controller
+                                        .currentStudent
+                                        .value!
+                                        .profileImageUrl,
+                                  ),
+                                  fit: BoxFit.cover,
+                                )
+                              : null,
                         ),
-                        child: (controller.selectedImagePath.value == null &&
-                                (controller.currentStudent.value?.profileImageUrl == null ||
-                                    controller.currentStudent.value!.profileImageUrl.isEmpty))
-                            ? const Center(
-                                child: Icon(
-                                  Icons.person_rounded,
-                                  size: 40,
-                                  color: AppColors.textTertiary,
+                        child:
+                            (controller.selectedImagePath.value == null &&
+                                (controller
+                                            .currentStudent
+                                            .value
+                                            ?.profileImageUrl ==
+                                        null ||
+                                    controller
+                                        .currentStudent
+                                        .value!
+                                        .profileImageUrl
+                                        .isEmpty ||
+                                    controller
+                                        .currentStudent
+                                        .value!
+                                        .profileImageUrl
+                                        .contains('ui-avatars.com')))
+                            ? Center(
+                                child: Text(
+                                  _getInitials(
+                                    controller.currentStudent.value?.name ?? "",
+                                  ),
+                                  style: AppTextStyles.manrope(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w800,
+                                    color: AppColors.primaryBrand,
+                                  ),
                                 ),
                               )
                             : null,
@@ -126,7 +163,7 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
                       child: Container(
                         padding: const EdgeInsets.all(6),
                         decoration: BoxDecoration(
-                          color: AppColors.instDarkBtnBlue,
+                          color: AppColors.primaryBrand,
                           shape: BoxShape.circle,
                           border: Border.all(color: Colors.white, width: 2),
                         ),
@@ -215,9 +252,104 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
             icon: Icons.school,
             controller: controller.standardController,
           ),
+          AppSpacing.v24,
+          _buildBatchAssignmentSection(),
           AppSpacing.v12,
         ],
       ),
+    );
+  }
+
+  Widget _buildBatchAssignmentSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Batch Assignment',
+          style: AppTextStyles.manrope(
+            fontSize: 14,
+            fontWeight: FontWeight.w800,
+            color: const Color(0xFF663322),
+          ),
+        ),
+        AppSpacing.v12,
+        Obx(() {
+          if (controller.availableBatches.isEmpty) {
+            return Container(
+              padding: AppSpacing.all16,
+              decoration: BoxDecoration(
+                color: const Color(0xFFEBEBEB),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Center(
+                child: Text(
+                  'No batches available',
+                  style: AppTextStyles.lexend(
+                    fontSize: 13,
+                    color: const Color(0xFF917B6B),
+                  ),
+                ),
+              ),
+            );
+          }
+          return SizedBox(
+            height: 110,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: controller.availableBatches.length,
+              separatorBuilder: (context, index) => AppSpacing.h12,
+              itemBuilder: (context, index) {
+                final batch = controller.availableBatches[index];
+                final isSelected = controller.selectedBatchId.value == batch.id;
+                return GestureDetector(
+                  onTap: () => controller.selectedBatchId.value = batch.id,
+                  child: Container(
+                    width: 150,
+                    padding: AppSpacing.all16,
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? AppColors.primaryBrandLight.withValues(alpha: 0.5)
+                          : Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: isSelected
+                            ? AppColors.primaryBrand
+                            : const Color(0xFFEBEBEB),
+                        width: 1.5,
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          batch.title,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTextStyles.manrope(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.textPrimary,
+                          ),
+                        ),
+                        AppSpacing.v4,
+                        Text(
+                          batch.time,
+                          style: AppTextStyles.lexend(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: const Color(0xFF917B6B),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        }),
+      ],
     );
   }
 
@@ -239,14 +371,16 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
           style: AppTextStyles.manrope(
             fontSize: 14,
             fontWeight: FontWeight.w800,
-            color: AppColors.textDarkGrey,
+            color: const Color(0xFF663322),
           ),
         ),
         AppSpacing.v8,
         Container(
           decoration: BoxDecoration(
-            color: enabled ? AppColors.inputSolidGrey : AppColors.inputSolidGrey.withValues(alpha: 0.5),
-            borderRadius: BorderRadius.circular(8),
+            color: enabled
+                ? const Color(0xFFEBEBEB)
+                : const Color(0xFFEBEBEB).withValues(alpha: 0.5),
+            borderRadius: BorderRadius.circular(12),
           ),
           child: TextField(
             controller: controller,
@@ -256,17 +390,18 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
             style: AppTextStyles.lexend(
               fontSize: 14,
               color: AppColors.textPrimary,
+              fontWeight: FontWeight.w500,
             ),
             keyboardType: keyboardType,
             decoration: InputDecoration(
               hintText: hint,
               hintStyle: AppTextStyles.lexend(
                 fontSize: 14,
-                color: AppColors.textMuted,
+                color: const Color(0xFF917B6B),
               ),
               prefixIcon: Icon(
                 icon,
-                color: AppColors.textTertiary,
+                color: const Color(0xFF917B6B),
                 size: AppSpacing.s20,
               ),
               border: InputBorder.none,
@@ -309,7 +444,7 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
                 style: AppTextStyles.manrope(
                   fontSize: 14,
                   fontWeight: FontWeight.w800,
-                  color: AppColors.instDarkBtnBlue,
+                  color: AppColors.primaryBrand,
                 ),
               ),
             ),
@@ -317,5 +452,17 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
         ),
       ],
     );
+  }
+
+  String _getInitials(String name) {
+    final names = name.trim().split(' ');
+    String initials = '';
+    if (names.isNotEmpty && names[0].isNotEmpty) {
+      initials += names[0][0].toUpperCase();
+      if (names.length > 1 && names[names.length - 1].isNotEmpty) {
+        initials += names[names.length - 1][0].toUpperCase();
+      }
+    }
+    return initials.isEmpty ? '?' : initials;
   }
 }

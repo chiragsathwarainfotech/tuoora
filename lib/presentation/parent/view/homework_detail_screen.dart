@@ -217,7 +217,7 @@ class HomeworkDetailScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const Icon(Icons.download_rounded, color: AppColors.primaryBlue),
+                  const Icon(Icons.download_rounded, color: AppColors.primaryBrand),
                 ],
               ),
             ),
@@ -263,7 +263,7 @@ class HomeworkDetailScreen extends StatelessWidget {
             width: 24,
             height: 24,
             decoration: const BoxDecoration(
-              color: AppColors.primaryBlue,
+              color: AppColors.primaryBrand,
               shape: BoxShape.circle,
             ),
             child: Center(

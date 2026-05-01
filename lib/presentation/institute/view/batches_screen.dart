@@ -1,35 +1,128 @@
 import 'package:fee_easy/core/constants/app_colors.dart';
+import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/presentation/institute/controllers/batch_controller.dart';
 import 'package:fee_easy/presentation/institute/models/batch_model.dart';
+import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
+import 'package:fee_easy/presentation/shared/widgets/common_state_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:fee_easy/config/app_routes.dart';
 
-class BatchesScreen extends GetView<BatchController> {
+class BatchesScreen extends StatefulWidget {
   const BatchesScreen({super.key});
 
   @override
+  State<BatchesScreen> createState() => _BatchesScreenState();
+}
+
+class _BatchesScreenState extends State<BatchesScreen> {
+  final controller = Get.find<BatchController>();
+  final _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (controller.batchesList.isEmpty) {
+        controller.loadBatches(isRefresh: true);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      controller.loadBatches(isRefresh: false);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: AppSpacing.all24,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+    return Scaffold(
+      backgroundColor: AppColors.scaffoldBg,
+      body: Stack(
         children: [
-          Obx(
-            () => ListView.separated(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: controller.batchesList.length,
-              separatorBuilder: (context, index) => AppSpacing.v16,
-              itemBuilder: (context, index) {
-                final batch = controller.batchesList[index];
-                return _buildBatchCard(batch);
-              },
+          SafeArea(
+            child: Column(
+              children: [
+                InstituteAppBar(
+                  title: AppStrings.instNavBatches,
+                  onBackTap: () => Get.back(),
+                ),
+                Expanded(
+                  child: RefreshIndicator(
+                    onRefresh: () => controller.loadBatches(isRefresh: true),
+                    color: AppColors.primaryBrand,
+                    child: Obx(() {
+                      return CommonStateWidget(
+                        isLoading: controller.isLoading.value,
+                        isEmpty: controller.batchesList.isEmpty,
+                        emptyTitle: 'No Batches Found',
+                        emptySubtitle:
+                            'Tap the + button to create your first batch and start managing students.',
+                        emptyIcon: Icons.school_outlined,
+                        child: ListView.separated(
+                          controller: _scrollController,
+                          padding: AppSpacing.all24,
+                          itemCount:
+                              controller.batchesList.length +
+                              (controller.isMoreLoading.value ? 1 : 0),
+                          separatorBuilder: (context, index) => AppSpacing.v16,
+                          itemBuilder: (context, index) {
+                            if (index < controller.batchesList.length) {
+                              final batch = controller.batchesList[index];
+                              return _buildBatchCard(batch);
+                            } else {
+                              return const Center(
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: CircularProgressIndicator(
+                                    color: AppColors.primaryBrand,
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                        ),
+                      );
+                    }),
+                  ),
+                ),
+              ],
             ),
           ),
+          Obx(
+            () => controller.isLoading.value
+                ? Positioned.fill(
+                    child: Container(
+                      color: Colors.black.withValues(alpha: 0.1),
+                      child: const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.primaryBrand,
+                        ),
+                      ),
+                    ),
+                  )
+                : const SizedBox.shrink(),
+          ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          controller.initAddMode();
+          Get.toNamed(AppRoutes.instituteAddBatch);
+        },
+        backgroundColor: AppColors.primaryBrand,
+        child: const Icon(Icons.add, color: Colors.white, size: 28),
       ),
     );
   }
@@ -62,13 +155,38 @@ class BatchesScreen extends GetView<BatchController> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          batch.title,
-                          style: AppTextStyles.manrope(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.deepBlue,
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                batch.title,
+                                style: AppTextStyles.manrope(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w800,
+                                  color: AppColors.primaryBrand,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: batch.statusBg.withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                batch.statusLabel,
+                                style: AppTextStyles.manrope(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w800,
+                                  color: batch.statusBg,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                         AppSpacing.v4,
                         Text(
@@ -122,18 +240,12 @@ class BatchesScreen extends GetView<BatchController> {
                               color: AppColors.divider,
                             ),
                             AppSpacing.h16,
-                            Icon(
-                              Icons.location_on_outlined,
-                              size: AppSpacing.s18,
-                              color: AppColors.instAccentBlue,
-                            ),
-                            AppSpacing.h8,
                             Text(
-                              batch.location,
+                              '₹${batch.baseFee.toStringAsFixed(0)}',
                               style: AppTextStyles.manrope(
                                 fontSize: 14,
-                                fontWeight: FontWeight.w700,
-                                color: AppColors.textPrimary,
+                                fontWeight: FontWeight.w800,
+                                color: AppColors.primaryBrand,
                               ),
                             ),
                           ],

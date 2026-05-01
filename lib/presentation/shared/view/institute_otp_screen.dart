@@ -46,7 +46,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
                         label: 'Verify OTP',
                         onPressed: controller.verifyOtp,
                         isLoading: controller.isLoading.value,
-                        backgroundColor: AppColors.primaryBlue,
+                        backgroundColor: AppColors.primaryBrand,
                         foregroundColor: Colors.white,
                         borderRadius: AppSpacing.s24,
                         padding: const EdgeInsets.symmetric(
@@ -57,21 +57,32 @@ class InstituteOtpScreen extends GetView<SignupController> {
                       ),
                     ),
                     AppSpacing.v24,
-                    Center(
-                      child: TextButton(
-                        onPressed: () {
-                          Get.snackbar(
-                            'Success',
-                            'A new OTP has been sent to your email.',
-                          );
-                        },
-                        child: Text(
-                          'Resend Code',
-                          style: AppTextStyles.manrope(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.primaryBlue,
-                          ),
+                    Obx(
+                      () => Center(
+                        child: Column(
+                          children: [
+                            if (!controller.canResend.value)
+                              Text(
+                                'Resend code in 00:${controller.timerSeconds.value.toString().padLeft(2, '0')}',
+                                style: AppTextStyles.manrope(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: const Color(0xFF917B6B),
+                                ),
+                              ),
+                            if (controller.canResend.value)
+                              TextButton(
+                                onPressed: controller.resendOtp,
+                                child: Text(
+                                  'Resend Code',
+                                  style: AppTextStyles.manrope(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.primaryBrand,
+                                  ),
+                                ),
+                              ),
+                          ],
                         ),
                       ),
                     ),
@@ -96,13 +107,13 @@ class InstituteOtpScreen extends GetView<SignupController> {
               width: AppSpacing.s40,
               height: AppSpacing.s40,
               decoration: BoxDecoration(
-                color: AppColors.iconBgLightBlue,
+                color: AppColors.primaryBrandLight,
                 shape: BoxShape.circle,
               ),
               child: const Center(
                 child: Icon(
                   Icons.lock_person_outlined,
-                  color: AppColors.primaryBlue,
+                  color: const Color(0xFF663322),
                   size: AppSpacing.s24,
                 ),
               ),
@@ -113,7 +124,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
               style: AppTextStyles.manrope(
                 fontSize: 22,
                 fontWeight: FontWeight.w800,
-                color: AppColors.primaryBlue,
+                color: AppColors.primaryBrand,
               ),
             ),
           ],
@@ -124,7 +135,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
           style: AppTextStyles.manrope(
             fontSize: 12,
             fontWeight: FontWeight.w800,
-            color: AppColors.primaryBlue,
+            color: const Color(0xFF663322),
             letterSpacing: 1.5,
           ),
         ),
@@ -134,7 +145,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
           style: AppTextStyles.manrope(
             fontSize: 28,
             fontWeight: FontWeight.w800,
-            color: AppColors.textPrimary,
+            color: const Color(0xFF663322),
           ),
         ),
         AppSpacing.v8,
@@ -146,7 +157,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
               style: AppTextStyles.lexend(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
-                color: AppColors.textTertiary,
+                color: const Color(0xFF917B6B),
                 height: 1.5,
               ),
               children: [
@@ -158,7 +169,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
                   style: AppTextStyles.lexend(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
-                    color: AppColors.textPrimary,
+                    color: const Color(0xFF663322),
                   ),
                 ),
               ],
@@ -176,7 +187,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
       style: AppTextStyles.manrope(
         fontSize: 10,
         fontWeight: FontWeight.w800,
-        color: AppColors.textDarkGrey,
+        color: const Color(0xFF663322),
         letterSpacing: 1.0,
       ),
     );
@@ -185,7 +196,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
   Widget _buildOtpField() {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.inputBg,
+        color: const Color(0xFFEBEBEB),
         borderRadius: BorderRadius.circular(AppSpacing.s16),
       ),
       child: TextField(
@@ -196,13 +207,13 @@ class InstituteOtpScreen extends GetView<SignupController> {
         style: AppTextStyles.manrope(
           fontSize: 24,
           fontWeight: FontWeight.w800,
-          color: AppColors.textPrimary,
+          color: const Color(0xFF663322),
           letterSpacing: 8.0,
         ),
         decoration: const InputDecoration(
           counterText: '',
           hintText: 'XXXXXX',
-          hintStyle: TextStyle(color: AppColors.textMuted, letterSpacing: 8.0),
+          hintStyle: TextStyle(color: Color(0xFF917B6B), letterSpacing: 8.0),
           border: InputBorder.none,
           contentPadding: AppSpacing.all16,
         ),

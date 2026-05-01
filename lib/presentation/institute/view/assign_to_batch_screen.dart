@@ -7,6 +7,8 @@ import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/core/widgets/app_button.dart';
 import 'package:fee_easy/data/models/student_model.dart';
 import 'package:fee_easy/presentation/institute/controllers/institute_controller.dart';
+import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
+import 'package:fee_easy/presentation/institute/controllers/batch_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -15,10 +17,12 @@ class AssignToBatchController extends GetxController {
   final InstituteController instituteController =
       Get.find<InstituteController>();
   final BatchDetailsController batchDetailsController;
+  final InstituteRepositoryImpl _repository = Get.find<InstituteRepositoryImpl>();
 
   final searchController = TextEditingController();
   final searchResults = <Student>[].obs;
   final selectedStudents = <BatchStudent>[].obs;
+  final isLoading = false.obs;
 
   AssignToBatchController(this.batch, this.batchDetailsController);
 
@@ -56,11 +60,11 @@ class AssignToBatchController extends GetxController {
     searchResults.clear();
   }
 
-  void removeStudentFromSelection(String studentId) {
+  void removeStudentFromSelection(int studentId) {
     selectedStudents.removeWhere((s) => s.student.id == studentId);
   }
 
-  void updateStudentFee(String studentId, String feeStr) {
+  void updateStudentFee(int studentId, String feeStr) {
     final index = selectedStudents.indexWhere((s) => s.student.id == studentId);
     if (index != -1) {
       double fee = double.tryParse(feeStr) ?? batch.baseFee;
@@ -68,15 +72,40 @@ class AssignToBatchController extends GetxController {
     }
   }
 
-  void confirmAssignment() {
+  Future<void> confirmAssignment() async {
     if (selectedStudents.isEmpty) return;
 
-    batchDetailsController.assignedStudents.addAll(selectedStudents);
-    Get.back();
-    Get.snackbar(
-      'Success',
-      '${selectedStudents.length} students assigned to batch.',
-    );
+    try {
+      isLoading.value = true;
+      
+      final List<Map<String, dynamic>> studentsData = selectedStudents.map((bs) => {
+        'id': bs.student.id,
+        'fee': bs.assignedFee.toInt(),
+      }).toList();
+
+      await _repository.assignStudentsToBatch(
+        int.parse(batch.id),
+        studentsData,
+      );
+
+      // Refresh the batches list in BatchController
+      if (Get.isRegistered<BatchController>()) {
+        Get.find<BatchController>().loadBatches(isRefresh: true);
+      }
+
+      batchDetailsController.assignedStudents.addAll(selectedStudents);
+      batchDetailsController.studentCount.value = batchDetailsController.assignedStudents.length;
+      batchDetailsController.assignedStudents.refresh();
+      Get.back();
+      Get.snackbar(
+        'Success',
+        '${selectedStudents.length} students assigned to batch successfully.',
+      );
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to assign students: ${e.toString()}');
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   @override
@@ -108,33 +137,54 @@ class AssignToBatchScreen extends StatelessWidget {
               onBackTap: () => Get.back(),
             ),
             Expanded(
-              child: SingleChildScrollView(
-                padding: AppSpacing.x24.add(AppSpacing.y16),
-                child: Column(
-                  children: [
-                    _buildSearchSection(controller),
-                    AppSpacing.v24,
-                    Obx(() => _buildSelectionList(controller)),
-                  ],
-                ),
+              child: Stack(
+                children: [
+                  SingleChildScrollView(
+                    padding: AppSpacing.x24.add(AppSpacing.y16),
+                    child: Column(
+                      children: [
+                        _buildSearchSection(controller),
+                        AppSpacing.v24,
+                        Obx(() => _buildSelectionList(controller)),
+                        const SizedBox(height: 120), // Space for the pinned button
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      padding: AppSpacing.all24,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            AppColors.scaffoldBg.withValues(alpha: 0.0),
+                            AppColors.scaffoldBg.withValues(alpha: 0.9),
+                            AppColors.scaffoldBg,
+                          ],
+                          stops: const [0.0, 0.3, 1.0],
+                        ),
+                      ),
+                      child: Obx(
+                        () => AppButton(
+                          label: 'Confirm & Save Assignment',
+                          icon: Icons.check_circle_rounded,
+                          isLoading: controller.isLoading.value,
+                          isDisabled: controller.selectedStudents.isEmpty,
+                          onPressed: controller.selectedStudents.isEmpty
+                              ? null
+                              : controller.confirmAssignment,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
-        ),
-      ),
-      bottomNavigationBar: SafeArea(
-        child: Padding(
-          padding: AppSpacing.all24,
-          child: Obx(
-            () => AppButton(
-              label: 'Confirm & Save Assignment',
-              icon: Icons.check_circle_rounded,
-              isDisabled: controller.selectedStudents.isEmpty,
-              onPressed: controller.selectedStudents.isEmpty
-                  ? null
-                  : controller.confirmAssignment,
-            ),
-          ),
         ),
       ),
     );
@@ -192,7 +242,7 @@ class AssignToBatchScreen extends StatelessWidget {
                 final student = controller.searchResults[index];
                 return ListTile(
                   leading: CircleAvatar(
-                    backgroundColor: AppColors.instFeesAvatarBg,
+                    backgroundColor: AppColors.primaryBrandLight,
                     child: Text(student.name[0]),
                   ),
                   title: Text(
@@ -263,7 +313,7 @@ class AssignToBatchScreen extends StatelessWidget {
                     child: Container(
                       width: 48,
                       height: 48,
-                      color: AppColors.instFeesAvatarBg,
+                      color: AppColors.primaryBrandLight,
                       child: Center(
                         child: Text(
                           bs.student.name[0],
@@ -295,6 +345,10 @@ class AssignToBatchScreen extends StatelessWidget {
                       ],
                     ),
                   ),
+                  IconButton(
+                    onPressed: () => controller.removeStudentFromSelection(bs.student.id),
+                    icon: const Icon(Icons.close_rounded, color: AppColors.textMuted),
+                  ),
                 ],
               ),
               AppSpacing.v16,
@@ -324,7 +378,7 @@ class AssignToBatchScreen extends StatelessWidget {
                             child: TextFormField(
                               initialValue: bs.assignedFee.toStringAsFixed(0),
                               onChanged: (val) => controller.updateStudentFee(
-                                bs.student.id.toString(),
+                                bs.student.id,
                                 val,
                               ),
                               keyboardType: TextInputType.number,

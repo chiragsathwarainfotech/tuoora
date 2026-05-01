@@ -10,16 +10,10 @@ class AppColors {
   static const Color surface = Color(0xFFFFFFFF);
 
   // --- Brand & Primary Colors ---
-  static const Color primaryBlue = Color(0xFF003082);
-  static const Color primaryBlueDark = Color(0xFF003D99);
-  static const Color accentBlue = Color(0xFF2B5BCC);
-  static const Color intenseBlue = Color(0xFF0D47A1);
-  static const Color instCardBlue = Color(0xFF1363C6);
-  static const Color primary = Color(0xFF0066FF);
-  static const Color deepBlue = Color(0xFF1E3A8A);
+  static const Color primaryBrand = Color(0xFFB45309);
+  static const Color primaryBrandLight = Color(0xFFFEF4E8);
   static const Color darkSlate = Color(0xFF1E293B);
-  static const Color oceanBlue = Color(0xFF1E40AF);
-  
+
   // --- Typography ---
   static const Color textPrimary = Color(0xFF111827);
   static const Color textSecondary = Color(0xFF4B5563);
@@ -46,48 +40,48 @@ class AppColors {
   static const Color darkGreen = Color(0xFF027A48);
   static const Color skyBlueLight = Color(0xFFB9EFFF);
   static const Color navyMuted = Color(0xFF8F9BB3);
-  
+
   // --- Specific Module Highlights ---
-  static const Color lightBlueBg = Color(0xFFDBEAFE);
+  static const Color lightBlueBg = primaryBrandLight;
   static const Color orangeTag = Color(0xFFC2410C);
   static const Color orangeDue = Color(0xFFD97706);
   static const Color amberDark = Color(0xFFB45309);
   static const Color amberLight = Color(0xFFFEF3C7);
-  static const Color indigoDark = Color(0xFF6366F1);
-  static const Color indigoLight = Color(0xFFE0E7FF);
-  
+  static const Color indigoDark = primaryBrand;
+  static const Color brandLightBg = primaryBrandLight;
+
   // --- Semantic Aliases (Legacy/Compatibility) ---
-  static const Color instPrimaryBlue = primaryBlue;
-  static const Color instAccentBlue = accentBlue;
-  static const Color instSendBtnBlue = primaryBlueDark;
-  static const Color instDarkBtnBlue = primaryBlueDark;
-  static const Color instLightBlueBg = Color(0xFFE8F0FC);
-  
+  static const Color instPrimaryBlue = primaryBrand;
+  static const Color instAccentBlue = primaryBrand;
+  static const Color instSendBtnBlue = primaryBrand;
+  static const Color instDarkBtnBlue = primaryBrand;
+  static const Color instLightBlueBg = brandLightBg;
+
   static const Color instStatusOpenBg = successBg;
   static const Color instStatusOpenText = greenText;
   static const Color instBorderOpen = successGreen;
-  
+
   static const Color instStatusHighCapacityBg = amberLight;
   static const Color instBorderHighCapacity = warningAmber;
-  
+
   static const Color instStatusFullBg = errorBg;
   static const Color instBorderFull = errorRed;
-  
+
   static const Color instFeesPaidBadgeBg = successBg;
   static const Color instFeesPaidText = greenText;
   static const Color instFeesDueBadgeBg = warningBg;
   static const Color instFeesDueText = amberDark;
-  
-  static const Color instFeesAvatarBg = indigoLight;
-  static const Color instBatchTagBg = lightBlueBg;
-  static const Color instBatchTagText = accentBlue;
-  
+
+  static const Color instFeesAvatarBg = brandLightBg;
+  static const Color instBatchTagBg = brandLightBg;
+  static const Color instBatchTagText = primaryBrand;
+
   static const Color inputSolidGrey = borderGrey;
   static const Color instFeesCollectedBg = successBg;
-  static const Color instProfileTagBlueBg = lightBlueBg;
-  static const Color instNavActive = primaryBlueDark;
+  static const Color instProfileTagBlueBg = brandLightBg;
+  static const Color instNavActive = primaryBrand;
   static const Color instNavInactive = textMuted;
-  static const Color iconBgLightBlue = Color(0xFFEFF6FF);
+  static const Color iconBgLightBlue = brandLightBg;
 
   static const Color reportScaffoldBg = scaffoldBg;
   static const Color reportProgressBg = reportBorder;
@@ -95,5 +89,11 @@ class AppColors {
   static const Color checkGreen = successGreen;
   static const Color error = Color(0xFFB00020);
   static const Color onPrimary = Colors.white;
-  static const Color brandAppBarColor = Color(0xFF9D4513);
+  static const Color brandAppBarColor = Color(0xFF663322);
+
+  // --- Dashboard ---
+  static const Color instDashboardIconBg = Color(0xFFFEF4E8);
+  static const Color instDashboardIcon = Color(0xFFB45309);
+  static const Color instBrandOrange = Color(0xFFFF6600);
+  static const Color instBrandOrangeLight = Color(0xFFFF8800);
 }

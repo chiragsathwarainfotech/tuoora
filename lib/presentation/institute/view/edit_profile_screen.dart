@@ -50,7 +50,7 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
               if (controller.isLoading.value)
                 const Center(
                   child: CircularProgressIndicator(
-                    color: AppColors.primaryBlue,
+                    color: AppColors.primaryBrand,
                   ),
                 ),
             ],

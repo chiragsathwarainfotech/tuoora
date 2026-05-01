@@ -33,7 +33,7 @@ class _StudentHomeworkDetailScreenState
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.deepBlue),
+          icon: const Icon(Icons.arrow_back, color: AppColors.primaryBrand),
           onPressed: () => Get.back(),
         ),
         title: Text(
@@ -41,7 +41,7 @@ class _StudentHomeworkDetailScreenState
           style: AppTextStyles.manrope(
             fontSize: 18,
             fontWeight: FontWeight.w800,
-            color: AppColors.deepBlue,
+            color: AppColors.primaryBrand,
           ),
         ),
       ),
@@ -78,7 +78,7 @@ class _StudentHomeworkDetailScreenState
         borderRadius: BorderRadius.circular(AppSpacing.s32),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primaryBlueDark.withValues(alpha: 0.2),
+            color: AppColors.primaryBrand.withValues(alpha: 0.2),
             blurRadius: AppSpacing.s20,
             offset: const Offset(0, AppSpacing.s10),
           ),
@@ -193,7 +193,7 @@ class _StudentHomeworkDetailScreenState
                 ),
                 child: const Icon(
                   Icons.description,
-                  color: AppColors.primaryBlueDark,
+                  color: AppColors.primaryBrand,
                   size: AppSpacing.s18,
                 ),
               ),
@@ -246,7 +246,7 @@ class _StudentHomeworkDetailScreenState
               borderRadius: BorderRadius.circular(AppSpacing.s16),
               border: const Border(
                 left: BorderSide(
-                  color: AppColors.primaryBlueDark,
+                  color: AppColors.primaryBrand,
                   width: AppSpacing.s4,
                 ),
               ),
@@ -257,7 +257,7 @@ class _StudentHomeworkDetailScreenState
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
                 fontStyle: FontStyle.italic,
-                color: AppColors.deepBlue,
+                color: AppColors.primaryBrand,
                 height: 1.5,
               ),
             ),
@@ -348,7 +348,7 @@ class _StudentHomeworkDetailScreenState
           children: [
             const Icon(
               Icons.link_rounded,
-              color: AppColors.primaryBlueDark,
+              color: AppColors.primaryBrand,
               size: AppSpacing.s24,
             ),
             AppSpacing.h12,
@@ -505,7 +505,7 @@ class _StudentHomeworkDetailScreenState
               minHeight: AppSpacing.s12,
               backgroundColor: const Color(0xFFD1D9E4),
               valueColor: const AlwaysStoppedAnimation<Color>(
-                AppColors.primaryBlueDark,
+                AppColors.primaryBrand,
               ),
             ),
           ),
@@ -523,7 +523,7 @@ class _StudentHomeworkDetailScreenState
         boxShadow: isEnabled
             ? [
                 BoxShadow(
-                  color: AppColors.primaryBlueDark.withValues(alpha: 0.3),
+                  color: AppColors.primaryBrand.withValues(alpha: 0.3),
                   blurRadius: AppSpacing.s20,
                   offset: const Offset(0, AppSpacing.s10),
                 ),
@@ -545,7 +545,7 @@ class _StudentHomeworkDetailScreenState
               }
             : null,
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primaryBlueDark,
+          backgroundColor: AppColors.primaryBrand,
           disabledBackgroundColor: AppColors.borderLightGray,
           padding: const EdgeInsets.symmetric(vertical: AppSpacing.s12),
           shape: RoundedRectangleBorder(

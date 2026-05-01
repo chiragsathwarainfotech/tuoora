@@ -18,7 +18,12 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
       body: SafeArea(
         child: Column(
           children: [
-            const InstituteAppBar(title: 'Setup Profile', isRoot: false),
+            const InstituteAppBar(
+              title: 'Setup Profile',
+              isRoot: true,
+              hideLeading: true,
+              showDefaultActions: false,
+            ),
             Expanded(
               child: SingleChildScrollView(
                 padding: AppSpacing.all24,
@@ -35,10 +40,10 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                                 width: 100,
                                 height: 100,
                                 decoration: BoxDecoration(
-                                  color: AppColors.iconBgLightBlue,
+                                  color: AppColors.primaryBrandLight,
                                   shape: BoxShape.circle,
                                   border: Border.all(
-                                    color: AppColors.primaryBlue,
+                                    color: const Color(0xFF663322),
                                     width: 2,
                                   ),
                                   image: controller.selectedLogoPath.value != null
@@ -53,7 +58,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                                 child: controller.selectedLogoPath.value == null
                                     ? const Icon(
                                         Icons.add_a_photo_outlined,
-                                        color: AppColors.primaryBlue,
+                                        color: const Color(0xFF663322),
                                         size: 32,
                                       )
                                     : null,
@@ -64,7 +69,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                                 child: Container(
                                   padding: const EdgeInsets.all(4),
                                   decoration: const BoxDecoration(
-                                    color: AppColors.primaryBlue,
+                                    color: AppColors.primaryBrand,
                                     shape: BoxShape.circle,
                                   ),
                                   child: const Icon(
@@ -168,7 +173,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                         label: 'Complete Setup',
                         onPressed: controller.completeProfile,
                         isLoading: controller.isLoading.value,
-                        backgroundColor: AppColors.primaryBlue,
+                        backgroundColor: AppColors.primaryBrand,
                         foregroundColor: Colors.white,
                         borderRadius: AppSpacing.s16,
                         padding: const EdgeInsets.symmetric(
@@ -195,7 +200,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
       style: AppTextStyles.manrope(
         fontSize: 12,
         fontWeight: FontWeight.w800,
-        color: AppColors.primaryBlue,
+        color: const Color(0xFF663322),
         letterSpacing: 1.2,
       ),
     );
@@ -216,17 +221,16 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
           style: AppTextStyles.manrope(
             fontSize: 12,
             fontWeight: FontWeight.w700,
-            color: AppColors.textSecondary,
+            color: const Color(0xFF663322),
           ),
         ),
         AppSpacing.v8,
         Container(
           decoration: BoxDecoration(
             color: enabled
-                ? AppColors.inputBg
-                : AppColors.inputBg.withValues(alpha: 0.5),
+                ? const Color(0xFFEBEBEB)
+                : const Color(0xFFEBEBEB).withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.borderGrey, width: 1),
           ),
           child: TextField(
             controller: controller,
@@ -239,7 +243,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
             decoration: InputDecoration(
               prefixIcon: Icon(
                 prefixIcon,
-                color: AppColors.textMuted,
+                color: const Color(0xFF917B6B),
                 size: 20,
               ),
               border: InputBorder.none,

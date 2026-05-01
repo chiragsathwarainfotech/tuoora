@@ -28,7 +28,7 @@ class UpdatesScreen extends StatelessWidget {
       ),
       _UpdateData(
         icon: Icons.edit_note_rounded,
-        iconColor: AppColors.oceanBlue,
+        iconColor: AppColors.primaryBrand,
         iconBg: AppColors.lightBlueBg,
         title: 'Homework Alert',
         time: '08:20 AM',
@@ -36,7 +36,7 @@ class UpdatesScreen extends StatelessWidget {
             'Advanced Calculus: Assignment #4 has been posted. Submission deadline: Oct 24th.',
         category: 'Academic',
         badgeText: 'Math Dept.',
-        badgeColor: AppColors.deepBlue,
+        badgeColor: AppColors.primaryBrand,
         badgeBg: const Color(0xFFEFF6FF),
         section: 'Today',
       ),
@@ -71,7 +71,7 @@ class UpdatesScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.deepBlue),
+          icon: const Icon(Icons.arrow_back, color: AppColors.primaryBrand),
           onPressed: () => Get.back(),
         ),
         title: Text(
@@ -79,7 +79,7 @@ class UpdatesScreen extends StatelessWidget {
           style: AppTextStyles.manrope(
             fontSize: 18,
             fontWeight: FontWeight.w800,
-            color: AppColors.deepBlue,
+            color: AppColors.primaryBrand,
           ),
         ),
         centerTitle: false,
@@ -159,7 +159,7 @@ class UpdatesScreen extends StatelessWidget {
                 child: Container(
                   padding: AppSpacing.x24.add(AppSpacing.y12),
                   decoration: BoxDecoration(
-                    color: isSelected ? AppColors.primaryBlueDark : AppColors.reportBorder,
+                    color: isSelected ? AppColors.primaryBrand : AppColors.reportBorder,
                     borderRadius: BorderRadius.circular(AppSpacing.s16),
                   ),
                   child: Text(

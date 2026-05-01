@@ -3,88 +3,81 @@ import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/presentation/institute/controllers/attendance_controller.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
-import 'package:fee_easy/core/widgets/app_button.dart';
+import 'package:fee_easy/presentation/institute/widgets/institute_bottom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class MarkAttendanceScreen extends StatelessWidget {
+class MarkAttendanceScreen extends GetView<AttendanceController> {
   const MarkAttendanceScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(AttendanceController());
-
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
-        child: Column(
-          children: [
-            InstituteAppBar(
-              title: 'Mark Attendance',
-              onBackTap: () => Get.back(),
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: AppSpacing.x24.add(
-                  const EdgeInsets.only(top: 8, bottom: 16),
-                ),
-                child: Obx(
-                  () => Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      _buildBatchHeader(controller, context),
-                      AppSpacing.v24,
-                      if (controller.isEditable) ...[
-                        _buildBulkActionButtons(controller),
-                        AppSpacing.v24,
-                      ],
-                      _buildSearchBar(controller),
-                      AppSpacing.v24,
-                      ...controller.filteredStudents.map(
-                        (student) => Padding(
-                          padding: AppSpacing.bottom16,
-                          child: _buildStudentCard(controller, student),
-                        ),
+        child: Obx(
+          () => Stack(
+            children: [
+              Column(
+                children: [
+                  InstituteAppBar(
+                    title: 'Mark Attendance',
+                    onBackTap: () => Get.back(),
+                  ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: AppSpacing.x24.add(
+                        const EdgeInsets.only(top: 8, bottom: 16),
                       ),
-                      if (controller.filteredStudents.isEmpty)
-                        Center(
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 40),
-                            child: Text(
-                              'No students found',
-                              style: AppTextStyles.manrope(
-                                fontSize: 16,
-                                color: AppColors.textTertiary,
-                              ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          _buildBatchHeader(controller, context),
+                          AppSpacing.v24,
+                          if (controller.isEditable) ...[
+                            _buildBulkActionButtons(controller),
+                            AppSpacing.v24,
+                          ],
+                          _buildSearchBar(controller),
+                          AppSpacing.v24,
+                          ...controller.filteredStudents.map(
+                            (student) => Padding(
+                              padding: AppSpacing.bottom16,
+                              child: _buildStudentCard(controller, student),
                             ),
                           ),
-                        ),
-                    ],
+                          if (controller.filteredStudents.isEmpty &&
+                              !controller.isLoading.value)
+                            Center(
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 40),
+                                child: Text(
+                                  'No students found',
+                                  style: AppTextStyles.manrope(
+                                    fontSize: 16,
+                                    color: AppColors.textTertiary,
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
-            ),
-          ],
+              if (controller.isLoading.value && controller.allStudents.isEmpty)
+                const Center(child: CircularProgressIndicator()),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: Obx(
-        () => controller.isEditable
-            ? SafeArea(
-                child: Padding(
-                  padding: AppSpacing.all24,
-                  child: AppButton(
-                    label: 'Submit Attendance',
-                    onPressed: () {
-                      Get.back();
-                      Get.snackbar(
-                        'Success',
-                        'Attendance submitted successfully',
-                        backgroundColor: AppColors.darkGreen,
-                        colorText: Colors.white,
-                      );
-                    },
-                  ),
-                ),
+        () => (controller.isEditable && controller.allStudents.isNotEmpty)
+            ? InstituteBottomButton(
+                label: 'Submit Attendance',
+                icon: Icons.check_circle_rounded,
+                onTap: () => controller.submitAttendance(),
               )
             : const SizedBox.shrink(),
       ),
@@ -153,7 +146,7 @@ class MarkAttendanceScreen extends StatelessWidget {
           child: _buildBulkButton(
             label: 'All Present',
             icon: Icons.done_all_rounded,
-            color: AppColors.deepBlue,
+            color: AppColors.primaryBrand,
             onTap: () => controller.markAllPresent(),
           ),
         ),
@@ -206,19 +199,23 @@ class MarkAttendanceScreen extends StatelessWidget {
     return Container(
       padding: AppSpacing.x16,
       decoration: BoxDecoration(
-        color: const Color(0xFFF2F4F7),
-        borderRadius: BorderRadius.circular(12),
+        color: const Color(0xFFEBEBEB),
+        borderRadius: BorderRadius.circular(16),
       ),
       child: TextField(
         onChanged: (value) => controller.searchQuery.value = value,
         decoration: InputDecoration(
           border: InputBorder.none,
-          icon: const Icon(Icons.search, color: AppColors.textMuted, size: 20),
+          icon: const Icon(
+            Icons.search,
+            color: const Color(0xFF917B6B),
+            size: 20,
+          ),
           hintText: 'Search student by name or ID...',
-          hintStyle: AppTextStyles.manrope(
+          hintStyle: AppTextStyles.lexend(
             fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: AppColors.textMuted,
+            color: const Color(0xFF917B6B),
           ),
         ),
       ),
@@ -227,7 +224,7 @@ class MarkAttendanceScreen extends StatelessWidget {
 
   Widget _buildStudentCard(
     AttendanceController controller,
-    Map<String, dynamic> student,
+    AttendanceStudent student,
   ) {
     return Container(
       padding: AppSpacing.all16,
@@ -244,17 +241,14 @@ class MarkAttendanceScreen extends StatelessWidget {
       ),
       child: Row(
         children: [
-          CircleAvatar(
-            radius: 24,
-            backgroundImage: NetworkImage(student['avatar']),
-          ),
+          _buildStudentAvatar(student.profileImageUrl, student.name),
           AppSpacing.h16,
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  student['name'],
+                  student.name,
                   style: AppTextStyles.manrope(
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
@@ -262,7 +256,7 @@ class MarkAttendanceScreen extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'ID: ${student['id']}',
+                  'ID: ${student.id}',
                   style: AppTextStyles.manrope(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
@@ -280,9 +274,9 @@ class MarkAttendanceScreen extends StatelessWidget {
 
   Widget _buildStatusToggle(
     AttendanceController controller,
-    Map<String, dynamic> student,
+    AttendanceStudent student,
   ) {
-    bool isPresent = student['isPresent'];
+    bool isPresent = student.isPresent;
     final isEditable = controller.isEditable;
 
     return Container(
@@ -296,7 +290,7 @@ class MarkAttendanceScreen extends StatelessWidget {
           _buildToggleOption(
             label: 'PRESENT',
             isSelected: isPresent,
-            color: AppColors.deepBlue,
+            color: AppColors.primaryBrand,
             onTap: isEditable
                 ? () => controller.toggleStatus(student, true)
                 : null,
@@ -336,6 +330,54 @@ class MarkAttendanceScreen extends StatelessWidget {
             fontWeight: FontWeight.w900,
             color: isSelected ? Colors.white : AppColors.textSecondary,
             letterSpacing: 0.5,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStudentAvatar(String? imageUrl, String name) {
+    if (imageUrl != null &&
+        imageUrl.isNotEmpty &&
+        imageUrl.startsWith('http') &&
+        !imageUrl.contains('ui-avatars.com')) {
+      return Container(
+        width: 48,
+        height: 48,
+        decoration: BoxDecoration(
+          color: AppColors.primaryBrandLight,
+          shape: BoxShape.circle,
+          image: DecorationImage(
+            image: NetworkImage(imageUrl),
+            fit: BoxFit.cover,
+          ),
+        ),
+      );
+    }
+
+    final names = name.trim().split(' ');
+    String initials = '';
+    if (names.isNotEmpty) {
+      initials += names[0][0].toUpperCase();
+      if (names.length > 1) {
+        initials += names[names.length - 1][0].toUpperCase();
+      }
+    }
+
+    return Container(
+      width: 48,
+      height: 48,
+      decoration: BoxDecoration(
+        color: AppColors.primaryBrandLight,
+        shape: BoxShape.circle,
+      ),
+      child: Center(
+        child: Text(
+          initials,
+          style: AppTextStyles.manrope(
+            fontSize: 16,
+            fontWeight: FontWeight.w800,
+            color: AppColors.primaryBrand,
           ),
         ),
       ),

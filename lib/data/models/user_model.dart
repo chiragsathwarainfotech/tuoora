@@ -27,6 +27,8 @@ class User {
   // Parent specific
   final String? relation;
 
+  final bool isProfileSetup;
+
   const User({
     required this.id,
     required this.name,
@@ -48,6 +50,7 @@ class User {
     this.youtube,
     this.instagram,
     this.relation,
+    this.isProfileSetup = true,
   });
 
   factory User.fromJson(Map<String, dynamic> json, String token, String role) {
@@ -72,6 +75,7 @@ class User {
       youtube: json['youtube'],
       instagram: json['instagram'],
       relation: json['relation'],
+      isProfileSetup: json['is_profile_setup'] ?? true,
     );
   }
 
@@ -97,6 +101,7 @@ class User {
       'youtube': youtube,
       'instagram': instagram,
       'relation': relation,
+      'is_profile_setup': isProfileSetup,
     };
   }
 }

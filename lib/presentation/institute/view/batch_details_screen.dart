@@ -9,7 +9,6 @@ import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_info_row.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_metric_card.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
-import 'package:fee_easy/core/widgets/common_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -48,11 +47,13 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
                   },
                   icon: const Icon(
                     Icons.edit_outlined,
-                    color: AppColors.instAccentBlue,
+                    color: AppColors.primaryBrand,
                   ),
                 ),
                 IconButton(
-                  onPressed: () => _showDeleteBatchConfirmation(context),
+                  onPressed: () => batchController.deleteBatchWithConfirmation(
+                    controller.batch.id,
+                  ),
                   icon: const Icon(
                     Icons.delete_outline_rounded,
                     color: Color(0xFFD92D20),
@@ -107,7 +108,7 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
                   vertical: AppSpacing.s6,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.instBatchTagBg,
+                  color: AppColors.primaryBrandLight,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
@@ -115,7 +116,7 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
                   style: AppTextStyles.manrope(
                     fontSize: 9,
                     fontWeight: FontWeight.w800,
-                    color: AppColors.instBatchTagText,
+                    color: AppColors.primaryBrand,
                     letterSpacing: 0.5,
                   ),
                 ),
@@ -137,7 +138,7 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
             style: AppTextStyles.manrope(
               fontSize: 24,
               fontWeight: FontWeight.w800,
-              color: AppColors.instPrimaryBlue,
+              color: AppColors.primaryBrand,
             ),
           ),
           AppSpacing.v8,
@@ -151,24 +152,50 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
             ),
           ),
           AppSpacing.v24,
-          Row(
-            children: [
-              const Expanded(child: InstituteMetricCard(label: AppStrings.instStudentsCountLabel, value: '24')),
-              AppSpacing.h12,
-              const Expanded(child: InstituteMetricCard(label: AppStrings.instFeesPaidLabel, value: '85%')),
-              AppSpacing.h12,
-              const Expanded(child: InstituteMetricCard(label: AppStrings.instTotalCollectionLabel, value: '₹60k')),
-            ],
+          Obx(
+            () => Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: InstituteMetricCard(
+                        label: AppStrings.instStudentsCountLabel,
+                        value: '${controller.studentCount.value}',
+                      ),
+                    ),
+                    AppSpacing.h12,
+                    Expanded(
+                      child: InstituteMetricCard(
+                        label: AppStrings.instFeesPaidLabel,
+                        value: batch.totalExpected != null &&
+                                double.tryParse(batch.totalExpected.toString()) !=
+                                    0
+                            ? '${((double.tryParse(batch.totalPaid?.toString() ?? '0') ?? 0) / (double.tryParse(batch.totalExpected.toString()) ?? 1) * 100).toStringAsFixed(0)}%'
+                            : '0%',
+                      ),
+                    ),
+                  ],
+                ),
+                AppSpacing.v12,
+                SizedBox(
+                  width: double.infinity,
+                  child: InstituteMetricCard(
+                    label: AppStrings.instTotalCollectionLabel,
+                    value: '₹${batch.totalExpected?.toString() ?? '0'}',
+                  ),
+                ),
+              ],
+            ),
           ),
           AppSpacing.v24,
-          const InstituteInfoRow(
+          InstituteInfoRow(
             icon: Icons.access_time_filled_rounded,
-            text: '04:00 PM - 05:30 PM',
+            text: batch.time,
           ),
           AppSpacing.v12,
-          const InstituteInfoRow(
+          InstituteInfoRow(
             icon: Icons.calendar_month_rounded,
-            text: 'Mon, Wed, Fri',
+            text: batch.days.join(', '),
           ),
           AppSpacing.v12,
           const InstituteInfoRow(
@@ -179,7 +206,6 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
       ),
     );
   }
-
 
   Widget _buildCourseManagementSection() {
     return Column(
@@ -274,7 +300,7 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, color: AppColors.instPrimaryBlue, size: 28),
+            Icon(icon, color: AppColors.primaryBrand, size: 28),
             AppSpacing.v12,
             Text(
               title,
@@ -288,19 +314,6 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
           ],
         ),
       ),
-    );
-  }
-
-  void _showDeleteBatchConfirmation(BuildContext context) {
-    CommonDialog.show(
-      title: AppStrings.instDeleteBatchTitle,
-      description: AppStrings.instDeleteBatchConfirm,
-      icon: Icons.delete_forever_rounded,
-      confirmText: AppStrings.instDeleteConfirmBtn,
-      onConfirm: () {
-        batchController.deleteBatch(controller.batch.id);
-        Get.back(); // go back from details screen
-      },
     );
   }
 }

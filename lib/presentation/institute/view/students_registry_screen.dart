@@ -5,6 +5,7 @@ import 'package:fee_easy/config/app_routes.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/presentation/institute/controllers/institute_controller.dart';
 import 'package:fee_easy/presentation/institute/controllers/student_controller.dart';
+import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -13,28 +14,58 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () => controller.fetchStudents(reset: true),
-      color: AppColors.instDarkBtnBlue,
-      child: Obx(
-        () => controller.isLoadingStudents.value && controller.students.isEmpty
-            ? const Center(
-                child: CircularProgressIndicator(
-                  color: AppColors.instDarkBtnBlue,
+    return Scaffold(
+      backgroundColor: AppColors.scaffoldBg,
+      body: Stack(
+        children: [
+          SafeArea(
+            child: Column(
+              children: [
+                InstituteAppBar(
+                  title: AppStrings.instNavStudents,
+                  onBackTap: () => Get.back(),
                 ),
-              )
-            : Padding(
-                padding: AppSpacing.x24,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    AppSpacing.v16,
-                    _buildSearchBar(),
-                    AppSpacing.v20,
-                    Expanded(child: _buildStudentsList()),
-                  ],
+                Expanded(
+                  child: RefreshIndicator(
+                    onRefresh: () => controller.fetchStudents(reset: true),
+                    color: AppColors.primaryBrand,
+                    child: Padding(
+                      padding: AppSpacing.x24,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          AppSpacing.v16,
+                          _buildSearchBar(),
+                          AppSpacing.v20,
+                          Expanded(child: _buildStudentsList()),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+              ],
+            ),
+          ),
+          Obx(
+            () => controller.isLoadingStudents.value
+                ? Positioned.fill(
+                    child: Container(
+                      color: Colors.black.withValues(alpha: 0.1),
+                      child: const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.primaryBrand,
+                        ),
+                      ),
+                    ),
+                  )
+                : const SizedBox.shrink(),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Get.toNamed(AppRoutes.instituteAddStudent),
+        backgroundColor: AppColors.primaryBrand,
+        child: const Icon(Icons.add, color: Colors.white, size: 28),
       ),
     );
   }
@@ -42,8 +73,8 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
   Widget _buildSearchBar() {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.inputSolidGrey,
-        borderRadius: BorderRadius.circular(12),
+        color: const Color(0xFFEBEBEB),
+        borderRadius: BorderRadius.circular(16),
       ),
       child: TextField(
         onChanged: controller.onSearchChanged,
@@ -52,11 +83,11 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
           hintText: AppStrings.instStudentSearchHint,
           hintStyle: AppTextStyles.lexend(
             fontSize: 14,
-            color: AppColors.textTertiary,
+            color: const Color(0xFF917B6B),
           ),
           prefixIcon: const Icon(
             Icons.search,
-            color: AppColors.textTertiary,
+            color: const Color(0xFF917B6B),
             size: AppSpacing.s24,
           ),
           border: InputBorder.none,
@@ -94,7 +125,7 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
                 child: Padding(
                   padding: AppSpacing.all16,
                   child: CircularProgressIndicator(
-                    color: AppColors.instDarkBtnBlue,
+                    color: AppColors.primaryBrand,
                   ),
                 ),
               );
@@ -123,8 +154,8 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
         children: [
           Container(
             padding: AppSpacing.all24,
-            decoration: BoxDecoration(
-              color: AppColors.borderGrey.withValues(alpha: 0.3),
+            decoration: const BoxDecoration(
+              color: AppColors.primaryBrandLight,
               shape: BoxShape.circle,
             ),
             child: Icon(
@@ -132,7 +163,7 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
                   ? Icons.search_off_rounded
                   : Icons.people_outline_rounded,
               size: 64,
-              color: AppColors.textMuted,
+              color: AppColors.primaryBrand,
             ),
           ),
           AppSpacing.v24,
@@ -140,8 +171,8 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
             isSearching ? 'No students found' : 'No students available',
             style: AppTextStyles.manrope(
               fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: AppColors.textPrimary,
+              fontWeight: FontWeight.w800,
+              color: const Color(0xFF663322),
             ),
           ),
           AppSpacing.v8,
@@ -193,17 +224,7 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              width: AppSpacing.s64,
-              height: AppSpacing.s64,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                image: DecorationImage(
-                  image: NetworkImage(imageUrl),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
+            _buildStudentAvatar(imageUrl, name),
             AppSpacing.h16,
             Expanded(
               child: Column(
@@ -225,13 +246,13 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
                           const Icon(
                             Icons.school_rounded,
                             size: AppSpacing.s18,
-                            color: AppColors.instDarkBtnBlue,
+                            color: AppColors.primaryBrand,
                           ),
                           AppSpacing.h4,
                           Text(
                             grade,
                             style: AppTextStyles.lexend(
-                              fontSize: 16,
+                              fontSize: AppSpacing.s16,
                               fontWeight: FontWeight.w500,
                               color: AppColors.textSecondary,
                             ),
@@ -244,6 +265,53 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStudentAvatar(String imageUrl, String name) {
+    if (imageUrl.isNotEmpty &&
+        imageUrl.startsWith('http') &&
+        !imageUrl.contains('ui-avatars.com')) {
+      return Container(
+        width: AppSpacing.s64,
+        height: AppSpacing.s64,
+        decoration: BoxDecoration(
+          color: AppColors.primaryBrandLight,
+          shape: BoxShape.circle,
+          image: DecorationImage(
+            image: NetworkImage(imageUrl),
+            fit: BoxFit.cover,
+          ),
+        ),
+      );
+    }
+
+    final names = name.trim().split(' ');
+    String initials = '';
+    if (names.isNotEmpty) {
+      initials += names[0][0].toUpperCase();
+      if (names.length > 1) {
+        initials += names[names.length - 1][0].toUpperCase();
+      }
+    }
+
+    return Container(
+      width: AppSpacing.s64,
+      height: AppSpacing.s64,
+      decoration: const BoxDecoration(
+        color: AppColors.primaryBrandLight,
+        shape: BoxShape.circle,
+      ),
+      child: Center(
+        child: Text(
+          initials,
+          style: AppTextStyles.manrope(
+            fontSize: 20,
+            fontWeight: FontWeight.w800,
+            color: AppColors.primaryBrand,
+          ),
         ),
       ),
     );

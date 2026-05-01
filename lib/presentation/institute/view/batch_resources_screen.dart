@@ -30,14 +30,41 @@ class BatchResourcesScreen extends StatelessWidget {
               onBackTap: () => Get.back(),
             ),
             Expanded(
-              child: Obx(
-                () => ListView.builder(
+              child: Obx(() {
+                if (controller.isLoading.value &&
+                    controller.resources.isEmpty) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (controller.resources.isEmpty) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.folder_open_outlined,
+                          size: 64,
+                          color: AppColors.textMuted.withValues(alpha: 0.5),
+                        ),
+                        AppSpacing.v16,
+                        Text(
+                          'No resources found',
+                          style: AppTextStyles.manrope(
+                            fontSize: 16,
+                            color: AppColors.textMuted,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+                return ListView.builder(
                   padding: AppSpacing.all24,
                   itemCount: controller.resources.length,
                   itemBuilder: (context, index) =>
                       _buildResourceItem(controller.resources[index]),
-                ),
-              ),
+                );
+              }),
             ),
           ],
         ),
@@ -138,24 +165,31 @@ class BatchResourcesScreen extends StatelessWidget {
       title: AppStrings.instUploadContentHeader,
       confirmText: AppStrings.instUploadBtn,
       onConfirm: () => controller.uploadResource(),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          _buildDialogField(
-            AppStrings.instResourceSubjectLabel,
-            controller.subjectController,
-            'e.g., Physics Notes',
-          ),
-          AppSpacing.v16,
-          _buildDialogField(
-            AppStrings.instResourceDescriptionLabel,
-            controller.descriptionController,
-            'e.g., Chapter 1 derivation',
-            maxLines: 3,
-          ),
-          AppSpacing.v24,
-          _buildAttachmentButton(controller),
-        ],
+      body: Obx(
+        () => Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (controller.isLoading.value)
+              const Padding(
+                padding: EdgeInsets.only(bottom: 16),
+                child: LinearProgressIndicator(),
+              ),
+            _buildDialogField(
+              AppStrings.instResourceSubjectLabel,
+              controller.subjectController,
+              'e.g., Physics Notes',
+            ),
+            AppSpacing.v16,
+            _buildDialogField(
+              AppStrings.instResourceDescriptionLabel,
+              controller.descriptionController,
+              'e.g., Chapter 1 derivation',
+              maxLines: 3,
+            ),
+            AppSpacing.v24,
+            _buildAttachmentButton(controller),
+          ],
+        ),
       ),
     );
   }
@@ -205,11 +239,7 @@ class BatchResourcesScreen extends StatelessWidget {
     return Obx(() {
       final fileName = controller.selectedFileName.value;
       return GestureDetector(
-        onTap: () {
-          // Mocking file selection
-          controller.selectedFileName.value = 'resource_file.pdf';
-          controller.selectedType.value = ResourceType.document;
-        },
+        onTap: () => controller.pickFile(),
         child: Container(
           padding: AppSpacing.all16,
           decoration: BoxDecoration(
@@ -229,9 +259,7 @@ class BatchResourcesScreen extends StatelessWidget {
               AppSpacing.h12,
               Expanded(
                 child: Text(
-                  fileName.isEmpty
-                      ? AppStrings.instAttachFileHint
-                      : fileName,
+                  fileName.isEmpty ? AppStrings.instAttachFileHint : fileName,
                   style: AppTextStyles.manrope(
                     fontSize: 14,
                     fontWeight: fileName.isEmpty

@@ -23,33 +23,7 @@ import 'package:get/get.dart';
 class InstituteBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<InstituteController>(() => InstituteController());
-    Get.lazyPut<InstituteStudentController>(
-      () => InstituteStudentController(),
-      fenix: true,
-    );
-    Get.lazyPut<RecordFeeController>(() => RecordFeeController(), fenix: true);
-    Get.lazyPut<AttendanceController>(
-      () => AttendanceController(),
-      fenix: true,
-    );
-    Get.lazyPut<ReportsController>(() => ReportsController(), fenix: true);
-    Get.lazyPut<InstituteProfileController>(
-      () => InstituteProfileController(Get.find<InstituteRepositoryImpl>()),
-      fenix: true,
-    );
-    Get.lazyPut<UpdatesController>(
-      () => UpdatesController(Get.find<DailyUpdateRepositoryImpl>()),
-      fenix: true,
-    );
-    Get.put<BatchController>(BatchController(), permanent: true);
-    Get.lazyPut<SecurityController>(
-      () => SecurityController(Get.find<InstituteRepositoryImpl>()),
-      fenix: true,
-    );
-    Get.lazyPut<WhatsAppController>(() => WhatsAppController(), fenix: true);
-
-    // API Dependencies
+    // API Dependencies FIRST
     Get.lazyPut<ApiClient>(() => ApiClient());
     Get.lazyPut<StudentRepositoryImpl>(
       () => StudentRepository(Get.find<ApiClient>()),
@@ -63,6 +37,40 @@ class InstituteBinding extends Bindings {
     Get.lazyPut<DailyUpdateRepositoryImpl>(
       () => DailyUpdateRepository(Get.find<ApiClient>()),
     );
+
+    // Controllers
+    Get.lazyPut<InstituteController>(() => InstituteController());
+    Get.lazyPut<InstituteStudentController>(
+      () => InstituteStudentController(),
+      fenix: true,
+    );
+    Get.lazyPut<RecordFeeController>(() => RecordFeeController(), fenix: true);
+    Get.lazyPut<AttendanceController>(
+      () => AttendanceController(Get.find<InstituteRepositoryImpl>()),
+      fenix: true,
+    );
+    Get.lazyPut<ReportsController>(() => ReportsController(), fenix: true);
+    Get.lazyPut<InstituteProfileController>(
+      () => InstituteProfileController(Get.find<InstituteRepositoryImpl>()),
+      fenix: true,
+    );
+    Get.lazyPut<UpdatesController>(
+      () => UpdatesController(Get.find<DailyUpdateRepositoryImpl>()),
+      fenix: true,
+    );
+    
+    // BatchController depends on InstituteRepositoryImpl
+    Get.put<BatchController>(
+      BatchController(Get.find<InstituteRepositoryImpl>()),
+      permanent: true,
+    );
+    
+    Get.lazyPut<SecurityController>(
+      () => SecurityController(Get.find<InstituteRepositoryImpl>()),
+      fenix: true,
+    );
+    Get.lazyPut<WhatsAppController>(() => WhatsAppController(), fenix: true);
+
     Get.put<DownloadService>(DownloadService(), permanent: true);
   }
 }

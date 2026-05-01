@@ -57,11 +57,16 @@ class HomeworkRatingScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: InstituteBottomButton(
-        label: AppStrings.instSaveAllRatingsBtn,
-        icon: Icons.save_outlined,
-        onTap: () => controller.saveAllRatings(),
-      ),
+      bottomNavigationBar: !controller.canEdit
+          ? const SizedBox.shrink()
+          : Obx(
+              () => InstituteBottomButton(
+                label: 'Submit Ratings',
+                icon: Icons.check_circle_rounded,
+                isLoading: controller.isLoading.value,
+                onTap: () => controller.submitRatings(),
+              ),
+            ),
     );
   }
 
@@ -84,11 +89,11 @@ class HomeworkRatingScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: AppColors.indigoLight,
+                color: AppColors.primaryBrandLight,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
-                'BATCH B-12', // Placeholder batch name
+                'BATCH ${hw.batchId}',
                 style: AppTextStyles.manrope(
                   fontSize: 10,
                   fontWeight: FontWeight.w800,
@@ -104,6 +109,14 @@ class HomeworkRatingScreen extends StatelessWidget {
           style: AppTextStyles.manrope(
             fontSize: 28,
             fontWeight: FontWeight.w800,
+            color: AppColors.textPrimary,
+          ),
+        ),
+        AppSpacing.v8,
+        Text(
+          hw.description,
+          style: AppTextStyles.manrope(
+            fontSize: 16,
             color: AppColors.textPrimary,
           ),
         ),
@@ -194,9 +207,7 @@ class HomeworkRatingScreen extends StatelessWidget {
           AppSpacing.h12,
           _buildFilterChip(controller, AppStrings.instFilterSubmitted, 1),
           AppSpacing.h12,
-          _buildFilterChip(controller, AppStrings.instFilterMissing, 2),
-          AppSpacing.h12,
-          _buildFilterChip(controller, AppStrings.instFilterLate, 3),
+          _buildFilterChip(controller, 'Pending', 2),
         ],
       ),
     );
@@ -258,18 +269,14 @@ class HomeworkRatingScreen extends StatelessWidget {
         children: [
           Row(
             children: [
-              CircleAvatar(
-                radius: 24,
-                backgroundColor: AppColors.instFeesAvatarBg,
-                child: Text(sub.student.name[0]),
-              ),
+              _buildStudentAvatar(sub.profileImageUrl, sub.studentName),
               AppSpacing.h16,
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      sub.student.name,
+                      sub.studentName,
                       style: AppTextStyles.manrope(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
@@ -277,7 +284,7 @@ class HomeworkRatingScreen extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      'ID: #${sub.student.id}',
+                      'ID: #${sub.studentId}',
                       style: AppTextStyles.lexend(
                         fontSize: 12,
                         color: AppColors.textTertiary,
@@ -328,17 +335,19 @@ class HomeworkRatingScreen extends StatelessWidget {
                   child: Row(
                     children: [
                       IconButton(
-                        onPressed: () => controller.updateScore(
-                          sub.student.id.toString(),
-                          (sub.score ?? 0) - 1,
-                        ),
+                        onPressed: controller.canEdit
+                            ? () => controller.updateScore(
+                                sub.studentId.toString(),
+                                sub.score - 1,
+                              )
+                            : null,
                         icon: const Icon(Icons.remove, size: 16),
                         padding: EdgeInsets.zero,
                         constraints: const BoxConstraints(),
                       ),
                       AppSpacing.h12,
                       Text(
-                        sub.score?.toStringAsFixed(0) ?? '-',
+                        sub.score.toStringAsFixed(0),
                         style: AppTextStyles.manrope(
                           fontSize: 16,
                           fontWeight: FontWeight.w800,
@@ -347,10 +356,12 @@ class HomeworkRatingScreen extends StatelessWidget {
                       ),
                       AppSpacing.h12,
                       IconButton(
-                        onPressed: () => controller.updateScore(
-                          sub.student.id.toString(),
-                          (sub.score ?? 0) + 1,
-                        ),
+                        onPressed: controller.canEdit
+                            ? () => controller.updateScore(
+                                sub.studentId.toString(),
+                                sub.score + 1,
+                              )
+                            : null,
                         icon: const Icon(Icons.add, size: 16),
                         padding: EdgeInsets.zero,
                         constraints: const BoxConstraints(),
@@ -371,7 +382,7 @@ class HomeworkRatingScreen extends StatelessWidget {
           else
             ElevatedButton(
               onPressed: () =>
-                  controller.sendReminder(sub.student.id.toString()),
+                  controller.sendReminder(sub.studentId.toString()),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF667085),
                 minimumSize: const Size(double.infinity, 44),
@@ -405,12 +416,58 @@ class HomeworkRatingScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildStudentAvatar(String? imageUrl, String name) {
+    if (imageUrl != null &&
+        imageUrl.isNotEmpty &&
+        imageUrl.startsWith('http') &&
+        !imageUrl.contains('ui-avatars.com')) {
+      return Container(
+        width: 48,
+        height: 48,
+        decoration: BoxDecoration(
+          color: AppColors.primaryBrandLight,
+          shape: BoxShape.circle,
+          image: DecorationImage(
+            image: NetworkImage(imageUrl),
+            fit: BoxFit.cover,
+          ),
+        ),
+      );
+    }
+
+    final names = name.trim().split(' ');
+    String initials = '';
+    if (names.isNotEmpty) {
+      initials += names[0][0].toUpperCase();
+      if (names.length > 1) {
+        initials += names[names.length - 1][0].toUpperCase();
+      }
+    }
+
+    return Container(
+      width: 48,
+      height: 48,
+      decoration: BoxDecoration(
+        color: AppColors.primaryBrandLight,
+        shape: BoxShape.circle,
+      ),
+      child: Center(
+        child: Text(
+          initials,
+          style: AppTextStyles.manrope(
+            fontSize: 16,
+            fontWeight: FontWeight.w800,
+            color: AppColors.primaryBrand,
+          ),
+        ),
+      ),
+    );
+  }
+
   Color _getStatusColor(String status) {
-    switch (status) {
+    switch (status.toUpperCase()) {
       case 'SUBMITTED':
         return const Color(0xFF12B76A);
-      case 'LATE':
-        return AppColors.warningAmber;
       case 'PENDING':
         return const Color(0xFFF04438);
       default:

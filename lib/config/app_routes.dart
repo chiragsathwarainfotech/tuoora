@@ -58,6 +58,8 @@ class AppRoutes {
   static const String instituteProfileSetup = '/institute/profile-setup';
   static const String instituteBatchReportDetail = '/institute/reports/detail';
   static const String instituteReports = '/institute/reports';
+  static const String instituteForgotPassword = '/institute/forgot-password';
+  static const String instituteResetPassword = '/institute/reset-password';
   static const String instituteBatchStudents = '/institute/batches/students';
   static const String instituteAssignToBatch = '/institute/batches/assign';
   static const String instituteBatchHomework = '/institute/batches/homework';

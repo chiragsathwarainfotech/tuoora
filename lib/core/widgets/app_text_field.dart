@@ -1,4 +1,4 @@
-﻿// Core text field widget following app theme
+// Core text field widget following app theme
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';

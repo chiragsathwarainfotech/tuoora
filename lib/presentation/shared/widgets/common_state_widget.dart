@@ -26,7 +26,7 @@ class CommonStateWidget extends StatelessWidget {
     if (isLoading && isEmpty) {
       return const Center(
         child: CircularProgressIndicator(
-          color: AppColors.instDarkBtnBlue,
+          color: AppColors.primaryBrand,
         ),
       );
     }
@@ -38,14 +38,14 @@ class CommonStateWidget extends StatelessWidget {
           children: [
             Container(
               padding: AppSpacing.all24,
-              decoration: BoxDecoration(
-                color: AppColors.borderGrey.withValues(alpha: 0.3),
+              decoration: const BoxDecoration(
+                color: AppColors.primaryBrandLight,
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 emptyIcon,
                 size: 64,
-                color: AppColors.textMuted,
+                color: AppColors.primaryBrand,
               ),
             ),
             AppSpacing.v24,
@@ -53,8 +53,8 @@ class CommonStateWidget extends StatelessWidget {
               emptyTitle,
               style: AppTextStyles.manrope(
                 fontSize: 18,
-                fontWeight: FontWeight.w700,
-                color: AppColors.textPrimary,
+                fontWeight: FontWeight.w800,
+                color: const Color(0xFF663322),
               ),
             ),
             AppSpacing.v8,

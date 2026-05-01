@@ -1,3 +1,6 @@
+import 'package:fee_easy/core/constants/app_colors.dart';
+import 'package:fee_easy/core/constants/app_text_styles.dart';
+import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:fee_easy/config/app_routes.dart';
@@ -5,13 +8,34 @@ import 'package:fee_easy/data/repositories/institute_repository.dart';
 import 'package:fee_easy/core/services/auth_service.dart';
 import 'package:fee_easy/data/models/user_model.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:fee_easy/data/repositories/auth_repository.dart';
 import 'package:fee_easy/core/utils/validation_utils.dart';
+import 'dart:async';
 
 class SignupController extends GetxController {
-  final InstituteRepository _repository;
+  final _repository = Get.find<InstituteRepository>();
+  final _authRepository = Get.find<AuthRepository>();
   final _authService = Get.find<AuthService>();
 
-  SignupController(this._repository);
+  SignupController();
+
+  @override
+  void onInit() {
+    super.onInit();
+    _prefillFromSession();
+  }
+
+  void _prefillFromSession() {
+    final user = _authService.currentUser;
+    if (user != null && user.role == 'INSTITUTE') {
+      if (emailController.text.isEmpty) {
+        emailController.text = user.email;
+      }
+      if (instituteNameController.text.isEmpty) {
+        instituteNameController.text = user.instituteName ?? '';
+      }
+    }
+  }
 
   final instituteNameController = TextEditingController();
   final instituteOwnerNameController = TextEditingController();
@@ -30,6 +54,9 @@ class SignupController extends GetxController {
 
   final isLoading = false.obs;
   final obscurePassword = true.obs;
+  final timerSeconds = 60.obs;
+  final canResend = false.obs;
+  Timer? _timer;
 
   final selectedLogoPath = Rxn<String>();
   final _picker = ImagePicker();
@@ -38,9 +65,82 @@ class SignupController extends GetxController {
       obscurePassword.value = !obscurePassword.value;
 
   Future<void> pickLogo() async {
+    Get.bottomSheet(
+      Container(
+        padding: AppSpacing.all32,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Select Logo Source',
+              style: AppTextStyles.manrope(
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+                color: AppColors.textPrimary,
+              ),
+            ),
+            AppSpacing.v24,
+            ListTile(
+              leading: Container(
+                padding: AppSpacing.all8,
+                decoration: const BoxDecoration(
+                  color: AppColors.primaryBrandLight,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.camera_alt_rounded,
+                  color: AppColors.primaryBrand,
+                ),
+              ),
+              title: Text(
+                'Camera',
+                style: AppTextStyles.manrope(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+              onTap: () => _handleImageSelection(ImageSource.camera),
+            ),
+            AppSpacing.v8,
+            ListTile(
+              leading: Container(
+                padding: AppSpacing.all8,
+                decoration: const BoxDecoration(
+                  color: AppColors.primaryBrandLight,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.photo_library_rounded,
+                  color: AppColors.primaryBrand,
+                ),
+              ),
+              title: Text(
+                'Gallery',
+                style: AppTextStyles.manrope(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+              onTap: () => _handleImageSelection(ImageSource.gallery),
+            ),
+            AppSpacing.v16,
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _handleImageSelection(ImageSource source) async {
+    Get.back();
     try {
       final XFile? image = await _picker.pickImage(
-        source: ImageSource.gallery,
+        source: source,
         imageQuality: 70,
       );
       if (image != null) {
@@ -103,6 +203,7 @@ class SignupController extends GetxController {
       );
 
       Get.toNamed(AppRoutes.instituteOtp);
+      startTimer();
     } catch (e) {
       Get.snackbar(
         'Registration Failed',
@@ -140,6 +241,7 @@ class SignupController extends GetxController {
         token: token,
         role: 'INSTITUTE',
         instituteName: instituteNameController.text,
+        isProfileSetup: false,
       );
 
       await _authService.saveSession(user);
@@ -202,6 +304,26 @@ class SignupController extends GetxController {
 
       await _repository.updateProfile(data);
 
+      // Update local session with isProfileSetup = true
+      final currentUser = _authService.currentUser;
+      if (currentUser != null) {
+        final updatedUser = User(
+          id: currentUser.id,
+          name: data['name'],
+          email: currentUser.email,
+          token: currentUser.token,
+          role: currentUser.role,
+          instituteName: data['institute_name'],
+          phone: data['phone'],
+          address: data['address'],
+          city: data['city'],
+          state: data['state'],
+          pincode: data['pincode'],
+          isProfileSetup: true,
+        );
+        await _authService.saveSession(updatedUser);
+      }
+
       Get.offAllNamed(AppRoutes.instituteDashboard);
       Get.snackbar(
         'Success',
@@ -221,8 +343,44 @@ class SignupController extends GetxController {
     }
   }
 
+  void startTimer() {
+    canResend.value = false;
+    timerSeconds.value = 60;
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (timerSeconds.value > 0) {
+        timerSeconds.value--;
+      } else {
+        canResend.value = true;
+        _timer?.cancel();
+      }
+    });
+  }
+
+  Future<void> resendOtp() async {
+    final email = emailController.text.trim();
+    if (email.isEmpty) return;
+
+    isLoading.value = true;
+    try {
+      await _authRepository.forgotPassword(email);
+      Get.snackbar(
+        'Success',
+        'OTP resend successfully',
+        backgroundColor: Colors.green.withValues(alpha: 0.1),
+        colorText: Colors.green,
+      );
+      startTimer();
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   @override
   void onClose() {
+    _timer?.cancel();
     instituteNameController.dispose();
     instituteOwnerNameController.dispose();
     emailController.dispose();

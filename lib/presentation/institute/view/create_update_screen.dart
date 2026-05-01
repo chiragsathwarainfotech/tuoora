@@ -33,8 +33,8 @@ class CreateUpdateScreen extends StatelessWidget {
                           'Select Category',
                           style: AppTextStyles.manrope(
                             fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.textSecondary,
+                            fontWeight: FontWeight.w800,
+                            color: const Color(0xFF663322),
                           ),
                         ),
                         AppSpacing.v16,
@@ -63,7 +63,10 @@ class CreateUpdateScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                _buildBroadcastButton(controller),
+                Padding(
+                  padding: AppSpacing.all24,
+                  child: _buildBroadcastButton(controller),
+                ),
               ],
             ),
           ),
@@ -73,7 +76,7 @@ class CreateUpdateScreen extends StatelessWidget {
             return Container(
               color: Colors.black.withValues(alpha: 0.3),
               child: const Center(
-                child: CircularProgressIndicator(color: AppColors.primaryBlue),
+                child: CircularProgressIndicator(color: AppColors.primaryBrand),
               ),
             );
           }
@@ -100,8 +103,8 @@ class CreateUpdateScreen extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   color: isSelected
-                      ? const Color(0xFF003D82)
-                      : AppColors.borderGrey,
+                      ? AppColors.primaryBrand
+                      : const Color(0xFFEBEBEB),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
@@ -145,7 +148,7 @@ class CreateUpdateScreen extends StatelessWidget {
                 style: AppTextStyles.manrope(
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
-                  color: const Color(0xFF003D82),
+                  color: const Color(0xFF663322),
                 ),
               ),
               const Icon(
@@ -159,7 +162,7 @@ class CreateUpdateScreen extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             decoration: BoxDecoration(
-              color: AppColors.borderGrey,
+              color: const Color(0xFFEBEBEB),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Obx(
@@ -201,8 +204,8 @@ class CreateUpdateScreen extends StatelessWidget {
                     'Target Audience',
                     style: AppTextStyles.manrope(
                       fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.textSecondary,
+                      fontWeight: FontWeight.w800,
+                      color: const Color(0xFF663322),
                     ),
                   ),
                   AppSpacing.v12,
@@ -212,7 +215,7 @@ class CreateUpdateScreen extends StatelessWidget {
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: AppColors.borderGrey,
+                      color: const Color(0xFFEBEBEB),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: DropdownButtonHideUnderline(
@@ -254,8 +257,8 @@ class CreateUpdateScreen extends StatelessWidget {
                       'Select Batch',
                       style: AppTextStyles.manrope(
                         fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.textSecondary,
+                        fontWeight: FontWeight.w800,
+                        color: const Color(0xFF663322),
                       ),
                     ),
                     AppSpacing.v12,
@@ -265,7 +268,7 @@ class CreateUpdateScreen extends StatelessWidget {
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.borderGrey,
+                        color: const Color(0xFFEBEBEB),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: DropdownButtonHideUnderline(
@@ -321,8 +324,8 @@ class CreateUpdateScreen extends StatelessWidget {
           label,
           style: AppTextStyles.manrope(
             fontSize: 14,
-            fontWeight: FontWeight.w700,
-            color: AppColors.textSecondary,
+            fontWeight: FontWeight.w800,
+            color: const Color(0xFF663322),
           ),
         ),
         AppSpacing.v12,
@@ -338,10 +341,10 @@ class CreateUpdateScreen extends StatelessWidget {
             hintText: hint,
             hintStyle: AppTextStyles.lexend(
               fontSize: 14,
-              color: AppColors.textTertiary,
+              color: const Color(0xFF917B6B),
             ),
             filled: true,
-            fillColor: AppColors.borderGrey,
+            fillColor: const Color(0xFFEBEBEB),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide.none,
@@ -371,7 +374,7 @@ class CreateUpdateScreen extends StatelessWidget {
               children: [
                 const Icon(
                   Icons.attach_file_rounded,
-                  color: AppColors.primaryBlue,
+                  color: AppColors.primaryBrand,
                   size: 20,
                 ),
                 AppSpacing.h12,
@@ -380,7 +383,7 @@ class CreateUpdateScreen extends StatelessWidget {
                   style: AppTextStyles.manrope(
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
-                    color: AppColors.primaryBlue,
+                    color: AppColors.primaryBrand,
                   ),
                 ),
               ],
@@ -413,7 +416,7 @@ class CreateUpdateScreen extends StatelessWidget {
                             ? Icons.picture_as_pdf
                             : Icons.image,
                         size: 20,
-                        color: AppColors.primaryBlue,
+                        color: AppColors.primaryBrand,
                       ),
                       AppSpacing.h12,
                       Expanded(
@@ -454,8 +457,8 @@ class CreateUpdateScreen extends StatelessWidget {
           'Broadcast Channels',
           style: AppTextStyles.manrope(
             fontSize: 14,
-            fontWeight: FontWeight.w700,
-            color: AppColors.textSecondary,
+            fontWeight: FontWeight.w800,
+            color: const Color(0xFF663322),
           ),
         ),
         AppSpacing.v16,
@@ -510,7 +513,7 @@ class CreateUpdateScreen extends StatelessWidget {
               color: const Color(0xFFEFF6FF),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(icon, color: AppColors.oceanBlue, size: 20),
+            child: Icon(icon, color: AppColors.primaryBrand, size: 20),
           ),
           AppSpacing.h16,
           Expanded(
@@ -538,7 +541,7 @@ class CreateUpdateScreen extends StatelessWidget {
           Switch.adaptive(
             value: value,
             onChanged: onChanged,
-            activeThumbColor: AppColors.primaryBlue,
+            activeThumbColor: AppColors.primaryBrand,
           ),
         ],
       ),

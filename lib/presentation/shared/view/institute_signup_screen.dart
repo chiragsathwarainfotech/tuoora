@@ -80,7 +80,7 @@ class InstituteSignupScreen extends GetView<SignupController> {
                         label: 'Create Account',
                         onPressed: controller.register,
                         isLoading: controller.isLoading.value,
-                        backgroundColor: AppColors.primaryBlue,
+                        backgroundColor: AppColors.primaryBrand,
                         foregroundColor: Colors.white,
                         borderRadius: AppSpacing.s24,
                         padding: const EdgeInsets.symmetric(
@@ -101,7 +101,7 @@ class InstituteSignupScreen extends GetView<SignupController> {
                     'Already have an account? ',
                     style: AppTextStyles.lexend(
                       fontSize: 14,
-                      color: AppColors.textTertiary,
+                      color: const Color(0xFF917B6B),
                     ),
                   ),
                   GestureDetector(
@@ -111,7 +111,7 @@ class InstituteSignupScreen extends GetView<SignupController> {
                       style: AppTextStyles.lexend(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
-                        color: AppColors.primaryBlue,
+                        color: AppColors.primaryBrand,
                       ),
                     ),
                   ),
@@ -135,24 +135,24 @@ class InstituteSignupScreen extends GetView<SignupController> {
               width: AppSpacing.s40,
               height: AppSpacing.s40,
               decoration: BoxDecoration(
-                color: AppColors.iconBgLightBlue,
+                color: AppColors.primaryBrandLight,
                 shape: BoxShape.circle,
               ),
               child: const Center(
                 child: Icon(
                   Icons.school,
-                  color: AppColors.primaryBlue,
+                  color: AppColors.primaryBrand,
                   size: AppSpacing.s24,
                 ),
               ),
             ),
             AppSpacing.h12,
             Text(
-              'FeeEasy',
+              'Tuoora',
               style: AppTextStyles.manrope(
                 fontSize: 22,
                 fontWeight: FontWeight.w800,
-                color: AppColors.primaryBlue,
+                color: AppColors.primaryBrand,
               ),
             ),
           ],
@@ -163,17 +163,8 @@ class InstituteSignupScreen extends GetView<SignupController> {
           style: AppTextStyles.manrope(
             fontSize: 12,
             fontWeight: FontWeight.w800,
-            color: AppColors.primaryBlue,
+            color: AppColors.primaryBrand,
             letterSpacing: 1.5,
-          ),
-        ),
-        AppSpacing.v8,
-        Text(
-          'Join FeeEasy',
-          style: AppTextStyles.manrope(
-            fontSize: 28,
-            fontWeight: FontWeight.w800,
-            color: AppColors.textPrimary,
           ),
         ),
         AppSpacing.v8,
@@ -183,7 +174,7 @@ class InstituteSignupScreen extends GetView<SignupController> {
           style: AppTextStyles.lexend(
             fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: AppColors.textTertiary,
+            color: const Color(0xFF917B6B),
             height: 1.5,
           ),
         ),
@@ -197,7 +188,7 @@ class InstituteSignupScreen extends GetView<SignupController> {
       style: AppTextStyles.manrope(
         fontSize: 10,
         fontWeight: FontWeight.w800,
-        color: AppColors.textDarkGrey,
+        color: const Color(0xFF663322),
         letterSpacing: 1.0,
       ),
     );
@@ -213,7 +204,7 @@ class InstituteSignupScreen extends GetView<SignupController> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.inputBg,
+        color: const Color(0xFFEBEBEB),
         borderRadius: BorderRadius.circular(AppSpacing.s16),
       ),
       child: TextField(
@@ -225,11 +216,11 @@ class InstituteSignupScreen extends GetView<SignupController> {
           hintText: hint,
           hintStyle: AppTextStyles.lexend(
             fontSize: 14,
-            color: AppColors.textMuted,
+            color: const Color(0xFF917B6B),
           ),
           prefixIcon: Icon(
             prefixIcon,
-            color: AppColors.textMuted,
+            color: const Color(0xFF917B6B),
             size: AppSpacing.s20,
           ),
           suffixIcon: suffixIcon,

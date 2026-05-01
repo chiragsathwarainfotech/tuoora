@@ -18,19 +18,28 @@ class SplashController extends GetxController {
     print('SplashController: isAuthenticated: ${_authService.isAuthenticated}');
     print('SplashController: currentUser: ${_authService.currentUser?.name} (Role: ${_authService.currentUser?.role})');
 
-    if (_authService.isAuthenticated) {
+    if (_authService.isAuthenticated && _authService.shouldStayAuthenticated) {
       final role = _authService.currentUser?.role;
       print('SplashController: Navigating to dashboard for role: $role');
       _navigateToDashboard(role);
     } else {
-      print('SplashController: Not authenticated. Navigating to role selection.');
+      if (_authService.isAuthenticated && !_authService.shouldStayAuthenticated) {
+        print('SplashController: User opted out of persistent login. Clearing session.');
+        await _authService.clearSession();
+      }
+      print('SplashController: Not authenticated or persistence disabled. Navigating to role selection.');
       Get.offAllNamed(AppRoutes.roleSelection);
     }
   }
 
   void _navigateToDashboard(String? role) {
     if (role == 'INSTITUTE') {
-      Get.offAllNamed(AppRoutes.instituteDashboard);
+      final user = _authService.currentUser;
+      if (user?.isProfileSetup == false) {
+        Get.offAllNamed(AppRoutes.instituteProfileSetup);
+      } else {
+        Get.offAllNamed(AppRoutes.instituteDashboard);
+      }
     } else if (role == 'STUDENT') {
       Get.offAllNamed(AppRoutes.studentDashboard);
     } else if (role == 'PARENT') {

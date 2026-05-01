@@ -48,7 +48,7 @@ class ReportSummaryCard extends StatelessWidget {
             style: AppTextStyles.manrope(
               fontSize: 32,
               fontWeight: FontWeight.w800,
-              color: valueColor ?? AppColors.primaryBlueDark,
+              color: valueColor ?? AppColors.primaryBrand,
             ),
           ),
         ],
@@ -128,7 +128,7 @@ class ReportBatchItemCard extends StatelessWidget {
                   style: AppTextStyles.manrope(
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
-                    color: AppColors.primaryBlueDark,
+                    color: AppColors.primaryBrand,
                   ),
                 ),
               ],
@@ -140,7 +140,7 @@ class ReportBatchItemCard extends StatelessWidget {
                 value: progress,
                 minHeight: 6,
                 backgroundColor: AppColors.reportProgressBg,
-                color: AppColors.primaryBlueDark,
+                color: AppColors.primaryBrand,
               ),
             ),
           ],

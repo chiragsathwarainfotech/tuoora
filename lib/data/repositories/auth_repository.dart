@@ -39,9 +39,39 @@ class AuthRepository implements AuthRepositoryImpl {
     if (response.status.hasError) {
       throw Exception(response.body?['message'] ?? 'Login failed');
     }
-    
+
     final data = response.body['data'];
     final token = data['token'];
     return User.fromJson(data, token, role);
+  }
+
+  @override
+  Future<String> forgotPassword(String email) async {
+    final response = await _apiClient.post(
+      ApiConstants.instituteForgotPassword,
+      {'email': email},
+    );
+
+    if (response.status.hasError) {
+      final message = response.body?['message'] ?? 'Failed to send reset OTP';
+      throw Exception(message);
+    }
+
+    return response.body['message'] ?? 'Success';
+  }
+
+  @override
+  Future<String> resetPassword(Map<String, dynamic> data) async {
+    final response = await _apiClient.post(
+      ApiConstants.instituteResetPassword,
+      data,
+    );
+
+    if (response.status.hasError) {
+      final message = response.body?['message'] ?? 'Failed to reset password';
+      throw Exception(message);
+    }
+
+    return response.body['message'] ?? 'Success';
   }
 }

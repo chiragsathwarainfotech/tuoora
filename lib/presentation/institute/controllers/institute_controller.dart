@@ -131,7 +131,7 @@ class InstituteController extends GetxController {
     if (isLoadingStudents.value || (!hasMore.value && !reset)) return;
 
     try {
-      if (reset) {
+      if (reset || students.isEmpty) {
         isLoadingStudents.value = true;
       } else {
         isLoadMore.value = true;

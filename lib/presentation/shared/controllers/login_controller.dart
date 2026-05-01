@@ -43,7 +43,7 @@ class LoginController extends GetxController {
       }
 
       if (user != null) {
-        await _authService.saveSession(user);
+        await _authService.saveSession(user, stayAuthenticated: stayAuthenticated.value);
         _navigateToDashboard(role);
       }
     } catch (e) {
@@ -60,6 +60,16 @@ class LoginController extends GetxController {
       Get.offAllNamed(AppRoutes.studentDashboard);
     } else if (role == 'PARENT') {
       Get.offAllNamed(AppRoutes.parentDashboard);
+    }
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    final remembered = _authService.rememberedEmail;
+    if (remembered != null) {
+      emailController.text = remembered;
+      stayAuthenticated.value = true;
     }
   }
 

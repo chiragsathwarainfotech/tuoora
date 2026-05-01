@@ -13,6 +13,10 @@ class BatchModel {
   final double baseFee;
   final String description;
   final Color statusTextColor;
+  final dynamic totalExpected;
+  final dynamic totalPaid;
+  final List<String> days;
+  final List<dynamic>? students;
 
   BatchModel({
     required this.id,
@@ -27,5 +31,9 @@ class BatchModel {
     this.baseFee = 0.0,
     this.description = '',
     this.statusTextColor = Colors.white,
+    this.totalExpected,
+    this.totalPaid,
+    this.days = const ['Mon', 'Wed', 'Fri'],
+    this.students,
   });
 }

@@ -29,7 +29,7 @@ class ParentDashboard extends StatelessWidget {
               style: AppTextStyles.manrope(
                 fontSize: AppSpacing.s10,
                 fontWeight: FontWeight.w800,
-                color: AppColors.primaryBlue,
+                color: AppColors.primaryBrand,
               ),
             ),
             AppSpacing.v8,
@@ -106,7 +106,7 @@ class ParentDashboard extends StatelessWidget {
                         ),
                         child: const Icon(
                           Icons.calendar_today,
-                          color: AppColors.primaryBlue,
+                          color: AppColors.primaryBrand,
                           size: AppSpacing.s24,
                         ),
                       ),
@@ -204,7 +204,7 @@ class ParentDashboard extends StatelessWidget {
                             style: AppTextStyles.manrope(
                               fontSize: AppSpacing.s24,
                               fontWeight: FontWeight.w800,
-                              color: AppColors.primaryBlue,
+                              color: AppColors.primaryBrand,
                             ),
                           ),
                         ],
@@ -221,11 +221,11 @@ class ParentDashboard extends StatelessWidget {
             Container(
               padding: AppSpacing.all24,
               decoration: BoxDecoration(
-                color: AppColors.primaryBlue,
+                color: AppColors.primaryBrand,
                 borderRadius: BorderRadius.circular(AppSpacing.s24),
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.primaryBlue.withValues(alpha: 0.2),
+                    color: AppColors.primaryBrand.withValues(alpha: 0.2),
                     blurRadius: AppSpacing.s16,
                     offset: const Offset(0, AppSpacing.s8),
                   ),
@@ -269,7 +269,7 @@ class ParentDashboard extends StatelessWidget {
                         label: AppStrings.payNow,
                         onPressed: () {},
                         backgroundColor: Colors.white,
-                        foregroundColor: AppColors.primaryBlue,
+                        foregroundColor: AppColors.primaryBrand,
                         padding: AppSpacing.x16.add(AppSpacing.y8),
                         borderRadius: AppSpacing.s12,
                         fontSize: AppSpacing.s12,
@@ -322,7 +322,7 @@ class ParentDashboard extends StatelessWidget {
               ),
               icon: Icons.functions,
               iconColor: AppColors.indigoDark,
-              iconBgColor: AppColors.indigoLight,
+              iconBgColor: AppColors.primaryBrandLight,
               title: 'Advanced Calculus: PS4',
               subject: 'Mathematics',
               statusText: 'Due in 2 days',
@@ -352,8 +352,8 @@ class ParentDashboard extends StatelessWidget {
             AppSpacing.v12,
             TaskCard(
               icon: Icons.menu_book,
-              iconColor: AppColors.primaryBlue,
-              iconBgColor: AppColors.iconBgLightBlue,
+              iconColor: AppColors.primaryBrand,
+              iconBgColor: AppColors.primaryBrandLight,
               title: 'Modern Literature Analysis',
               subject: 'English',
               statusText: 'Due Tomorrow',
@@ -368,7 +368,7 @@ class ParentDashboard extends StatelessWidget {
               children: [
                 const Icon(
                   Icons.history,
-                  color: AppColors.primaryBlue,
+                  color: AppColors.primaryBrand,
                   size: AppSpacing.s24,
                 ),
                 AppSpacing.h8,
@@ -410,10 +410,10 @@ class ParentDashboard extends StatelessWidget {
                                   top: AppSpacing.s2,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: AppColors.primaryBlue,
+                                  color: AppColors.primaryBrand,
                                   shape: BoxShape.circle,
                                   border: Border.all(
-                                    color: AppColors.iconBgLightBlue,
+                                    color: AppColors.primaryBrandLight,
                                     width: AppSpacing.s4,
                                   ),
                                 ),
@@ -436,7 +436,7 @@ class ParentDashboard extends StatelessWidget {
                                   style: AppTextStyles.manrope(
                                     fontSize: AppSpacing.s10,
                                     fontWeight: FontWeight.w800,
-                                    color: AppColors.primaryBlue,
+                                    color: AppColors.primaryBrand,
                                     letterSpacing: AppSpacing.s2,
                                   ),
                                 ),

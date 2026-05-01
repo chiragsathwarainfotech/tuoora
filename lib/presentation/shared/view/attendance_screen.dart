@@ -102,7 +102,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
               style: AppTextStyles.manrope(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
-                color: AppColors.deepBlue,
+                color: AppColors.primaryBrand,
               ),
             ),
           ],
@@ -134,7 +134,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       padding: AppSpacing.all32,
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF0056D2), AppColors.primaryBlueDark],
+          colors: [Color(0xFF0056D2), AppColors.primaryBrand],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -430,7 +430,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         return _dateBubble(
           day,
           const Color(0xFFEFF6FF),
-          AppColors.oceanBlue,
+          AppColors.primaryBrand,
         );
       case 'a': // Absent
         return _dateBubble(
@@ -445,7 +445,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           const Color(0xFF92400E),
         );
       case 't': // Today
-        return _dateBubble(day, AppColors.deepBlue, Colors.white);
+        return _dateBubble(day, AppColors.primaryBrand, Colors.white);
       case 'i': // Pending / Future
         return _dateBubble(
           day,
@@ -463,7 +463,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       runSpacing: AppSpacing.s12,
       alignment: WrapAlignment.center,
       children: [
-        _legendItem(AppColors.deepBlue, 'PRESENT'),
+        _legendItem(AppColors.primaryBrand, 'PRESENT'),
         _legendItem(const Color(0xFFB91C1C), 'ABSENT'),
         _legendItem(const Color(0xFF92400E), 'HOLIDAY'),
         _legendItem(AppColors.textMuted, 'PENDING'),
@@ -544,7 +544,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFFD3E3FD),
-              foregroundColor: AppColors.primaryBlueDark,
+              foregroundColor: AppColors.primaryBrand,
               elevation: 0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(AppSpacing.s20),
@@ -604,7 +604,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             child: Icon(
               isPresent ? Icons.check_circle_rounded : Icons.cancel_rounded,
               color: isPresent
-                  ? AppColors.deepBlue
+                  ? AppColors.primaryBrand
                   : const Color(0xFFB91C1C),
               size: AppSpacing.s24,
             ),
@@ -640,7 +640,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
               fontSize: 12,
               fontWeight: FontWeight.w800,
               color: isPresent
-                  ? AppColors.deepBlue
+                  ? AppColors.primaryBrand
                   : const Color(0xFFB91C1C),
             ),
           ),

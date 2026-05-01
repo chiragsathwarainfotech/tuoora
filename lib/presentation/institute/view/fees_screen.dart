@@ -4,6 +4,7 @@ import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/presentation/institute/controllers/institute_controller.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
+import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -17,34 +18,46 @@ class InstituteFeesScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
-      body: RefreshIndicator(
-        onRefresh: () => controller.refreshFees(),
-        color: AppColors.instPrimaryBlue,
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          padding: AppSpacing.x24,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              AppSpacing.v16,
-              Obx(
-                () => _buildTotalCollectedCard(
-                  controller.currentMonthTotal.value,
+      body: SafeArea(
+        child: Column(
+          children: [
+            InstituteAppBar(
+              title: AppStrings.instFeesTitle,
+              onBackTap: () => Get.back(),
+            ),
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: () => controller.refreshFees(),
+                color: AppColors.primaryBrand,
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: AppSpacing.x24,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      AppSpacing.v16,
+                      Obx(
+                        () => _buildTotalCollectedCard(
+                          controller.currentMonthTotal.value,
+                        ),
+                      ),
+                      AppSpacing.v32,
+                      _buildRegistryHeader(controller),
+                      AppSpacing.v16,
+                      _buildRegistryList(controller),
+                      AppSpacing.v32,
+                    ],
+                  ),
                 ),
               ),
-              AppSpacing.v32,
-              _buildRegistryHeader(controller),
-              AppSpacing.v16,
-              _buildRegistryList(controller),
-              AppSpacing.v32,
-            ],
-          ),
+            ),
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         heroTag: 'fees_fab_unique_tag',
         onPressed: () => Get.toNamed(AppRoutes.instituteRecordFee),
-        backgroundColor: AppColors.instPrimaryBlue,
+        backgroundColor: AppColors.primaryBrand,
         child: const Icon(Icons.add, color: Colors.white, size: 28),
       ),
     );
@@ -55,7 +68,7 @@ class InstituteFeesScreen extends StatelessWidget {
       padding: AppSpacing.all24,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: AppColors.instPrimaryBlue,
+        color: AppColors.primaryBrand,
         borderRadius: BorderRadius.circular(24),
       ),
       child: Column(
@@ -102,7 +115,7 @@ class InstituteFeesScreen extends StatelessWidget {
           child: Container(
             padding: AppSpacing.all8,
             decoration: BoxDecoration(
-              color: AppColors.instPrimaryBlue,
+              color: AppColors.primaryBrand,
               borderRadius: BorderRadius.circular(8),
             ),
             child: const Icon(Icons.download, color: Colors.white, size: 26),
@@ -118,7 +131,7 @@ class InstituteFeesScreen extends StatelessWidget {
         return const Center(
           child: Padding(
             padding: EdgeInsets.all(32.0),
-            child: CircularProgressIndicator(color: AppColors.instPrimaryBlue),
+            child: CircularProgressIndicator(color: AppColors.primaryBrand),
           ),
         );
       }
@@ -131,15 +144,15 @@ class InstituteFeesScreen extends StatelessWidget {
               Icon(
                 Icons.receipt_long_outlined,
                 size: 64,
-                color: AppColors.textTertiary.withValues(alpha: 0.5),
+                color: AppColors.primaryBrand,
               ),
               AppSpacing.v16,
               Text(
                 'No fee records found',
                 style: AppTextStyles.manrope(
-                  fontSize: 16,
-                  color: AppColors.textTertiary,
-                  fontWeight: FontWeight.w600,
+                  fontSize: 18,
+                  color: const Color(0xFF663322),
+                  fontWeight: FontWeight.w800,
                 ),
               ),
             ],
@@ -187,13 +200,13 @@ class InstituteFeesScreen extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 24,
-            backgroundColor: AppColors.instFeesAvatarBg,
+            backgroundColor: AppColors.primaryBrandLight,
             child: Text(
               name.isNotEmpty ? name[0] : '?',
               style: AppTextStyles.manrope(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
-                color: AppColors.instPrimaryBlue,
+                color: AppColors.primaryBrand,
               ),
             ),
           ),
@@ -218,7 +231,7 @@ class InstituteFeesScreen extends StatelessWidget {
                       style: AppTextStyles.manrope(
                         fontSize: 16,
                         fontWeight: FontWeight.w800,
-                        color: AppColors.instPrimaryBlue,
+                        color: AppColors.primaryBrand,
                       ),
                     ),
                   ],

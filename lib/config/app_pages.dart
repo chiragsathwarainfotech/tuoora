@@ -1,6 +1,8 @@
 import 'package:fee_easy/config/app_routes.dart';
 import 'package:fee_easy/presentation/institute/bindings/institute_binding.dart';
+import 'package:fee_easy/presentation/institute/view/batches_screen.dart';
 import 'package:fee_easy/presentation/institute/view/fee_transaction_history_screen.dart';
+import 'package:fee_easy/presentation/institute/view/fees_screen.dart';
 import 'package:fee_easy/presentation/institute/view/institute_main_screen.dart';
 
 import 'package:fee_easy/presentation/institute/view/add_student_screen.dart';
@@ -30,6 +32,7 @@ import 'package:fee_easy/presentation/institute/view/add_homework_screen.dart';
 import 'package:fee_easy/presentation/institute/view/homework_rating_screen.dart';
 import 'package:fee_easy/presentation/institute/view/batch_resources_screen.dart';
 import 'package:fee_easy/presentation/institute/view/resource_detail_screen.dart';
+import 'package:fee_easy/presentation/institute/view/students_registry_screen.dart';
 import 'package:fee_easy/presentation/parent/view/parent_main_screen.dart';
 import 'package:fee_easy/presentation/shared/view/payment_history_screen.dart';
 import 'package:fee_easy/presentation/parent/view/homework_tracker_screen.dart';
@@ -38,7 +41,10 @@ import 'package:fee_easy/presentation/parent/view/attendance_history_screen.dart
 import 'package:fee_easy/presentation/parent/view/payment_qr_screen.dart';
 import 'package:fee_easy/presentation/parent/bindings/parent_binding.dart';
 import 'package:fee_easy/presentation/shared/bindings/auth_binding.dart';
+import 'package:fee_easy/presentation/shared/bindings/forgot_password_binding.dart';
 import 'package:fee_easy/presentation/shared/view/login_screen.dart';
+import 'package:fee_easy/presentation/shared/view/forgot_password_screen.dart';
+import 'package:fee_easy/presentation/shared/view/reset_password_screen.dart';
 import 'package:fee_easy/presentation/shared/view/student_profile_screen.dart'
     as shared;
 import 'package:fee_easy/presentation/shared/view/updates_screen.dart'
@@ -175,7 +181,7 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.instituteStudents,
-      page: () => const InstituteMainScreen(),
+      page: () => const StudentsRegistryScreen(),
       binding: InstituteBinding(),
     ),
     GetPage(
@@ -185,25 +191,28 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.instituteFees,
-      page: () => const InstituteMainScreen(),
+      page: () => const InstituteFeesScreen(),
       binding: InstituteBinding(),
     ),
     GetPage(
       name: AppRoutes.instituteRecordFee,
       page: () => const RecordFeeScreen(),
+      binding: InstituteBinding(),
     ),
     GetPage(
       name: AppRoutes.instituteBatchDetails,
       page: () => const BatchDetailsScreen(),
+      binding: InstituteBinding(),
     ),
     GetPage(
       name: AppRoutes.instituteBatches,
-      page: () => const InstituteMainScreen(),
+      page: () => const BatchesScreen(),
       binding: InstituteBinding(),
     ),
     GetPage(
       name: AppRoutes.instituteMarkAttendance,
       page: () => const MarkAttendanceScreen(),
+      binding: InstituteBinding(),
     ),
     GetPage(
       name: AppRoutes.instituteStudentProfile,
@@ -213,6 +222,7 @@ class AppPages {
     GetPage(
       name: AppRoutes.instituteEditProfile,
       page: () => const InstituteEditProfileScreen(),
+      binding: InstituteBinding(),
     ),
     GetPage(
       name: AppRoutes.instituteProfile,
@@ -222,30 +232,37 @@ class AppPages {
     GetPage(
       name: AppRoutes.instituteSecurity,
       page: () => const InstituteSecurityScreen(),
+      binding: InstituteBinding(),
     ),
     GetPage(
       name: AppRoutes.instituteSubscription,
       page: () => const InstituteSubscriptionScreen(),
+      binding: InstituteBinding(),
     ),
     GetPage(
       name: AppRoutes.instituteWhatsApp,
       page: () => const InstituteWhatsAppScreen(),
+      binding: InstituteBinding(),
     ),
     GetPage(
       name: AppRoutes.instituteReports,
       page: () => const ReportsScreen(),
+      binding: InstituteBinding(),
     ),
     GetPage(
       name: AppRoutes.instituteFeeReport,
       page: () => const FeeReportScreen(),
+      binding: InstituteBinding(),
     ),
     GetPage(
       name: AppRoutes.instituteAttendanceReport,
       page: () => const AttendanceReportScreen(),
+      binding: InstituteBinding(),
     ),
     GetPage(
       name: AppRoutes.institutePerformanceReport,
       page: () => const PerformanceReportScreen(),
+      binding: InstituteBinding(),
     ),
     GetPage(
       name: AppRoutes.instituteUpdates,
@@ -299,6 +316,16 @@ class AppPages {
     GetPage(
       name: AppRoutes.instituteBatchReportDetail,
       page: () => const BatchReportDetailScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteForgotPassword,
+      page: () => const ForgotPasswordScreen(),
+      binding: ForgotPasswordBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteResetPassword,
+      page: () => const ResetPasswordScreen(),
+      binding: ForgotPasswordBinding(),
     ),
     GetPage(
       name: AppRoutes.instituteBatchStudents,

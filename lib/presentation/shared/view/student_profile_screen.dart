@@ -17,7 +17,7 @@ class StudentProfileScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.deepBlue),
+          icon: const Icon(Icons.arrow_back, color: AppColors.primaryBrand),
           onPressed: () => Get.back(),
         ),
         title: Text(
@@ -25,7 +25,7 @@ class StudentProfileScreen extends StatelessWidget {
           style: AppTextStyles.manrope(
             fontSize: 18,
             fontWeight: FontWeight.w800,
-            color: AppColors.deepBlue,
+            color: AppColors.primaryBrand,
           ),
         ),
         centerTitle: false,
@@ -55,15 +55,18 @@ class StudentProfileScreen extends StatelessWidget {
       width: double.infinity,
       padding: AppSpacing.all32,
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF0056D2), AppColors.primaryBlueDark],
+        gradient: LinearGradient(
+          colors: [
+            AppColors.primaryBrand,
+            AppColors.primaryBrand.withValues(alpha: 0.8),
+          ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(32),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF0056D2).withValues(alpha: 0.25),
+            color: AppColors.primaryBrand.withValues(alpha: 0.25),
             blurRadius: 20,
             offset: const Offset(0, AppSpacing.s10),
           ),
@@ -188,15 +191,15 @@ class StudentProfileScreen extends StatelessWidget {
     return Container(
       padding: AppSpacing.all16,
       decoration: BoxDecoration(
-        color: const Color(0xFFEFF6FF),
+        color: AppColors.primaryBrandLight,
         borderRadius: BorderRadius.circular(AppSpacing.s16),
-        border: Border.all(color: AppColors.lightBlueBg),
+        border: Border.all(color: AppColors.primaryBrand.withValues(alpha: 0.2)),
       ),
       child: Row(
         children: [
           const Icon(
             Icons.lock_person_outlined,
-            color: Color(0xFF2563EB),
+            color: AppColors.primaryBrand,
             size: AppSpacing.s20,
           ),
           AppSpacing.h12,
@@ -206,7 +209,7 @@ class StudentProfileScreen extends StatelessWidget {
               style: AppTextStyles.lexend(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
-                color: AppColors.oceanBlue,
+                color: AppColors.primaryBrand,
               ),
             ),
           ),
@@ -305,7 +308,7 @@ class StudentProfileScreen extends StatelessWidget {
             Container(
               padding: AppSpacing.x12.add(AppSpacing.y6),
               decoration: BoxDecoration(
-                color: AppColors.indigoLight,
+                color: AppColors.primaryBrandLight,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: const Text(
@@ -314,7 +317,7 @@ class StudentProfileScreen extends StatelessWidget {
                   fontFamily: 'Manrope',
                   fontSize: 8,
                   fontWeight: FontWeight.w800,
-                  color: AppColors.intenseBlue,
+                  color: AppColors.primaryBrand,
                 ),
               ),
             ),

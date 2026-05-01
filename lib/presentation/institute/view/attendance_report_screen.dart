@@ -108,7 +108,7 @@ class AttendanceReportScreen extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
-              color: AppColors.primaryBlueDark,
+              color: AppColors.primaryBrand,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Row(

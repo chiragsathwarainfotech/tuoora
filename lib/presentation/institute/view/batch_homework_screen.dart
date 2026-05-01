@@ -29,20 +29,43 @@ class BatchHomeworkScreen extends StatelessWidget {
               onBackTap: () => Get.back(),
             ),
             Expanded(
-              child: SingleChildScrollView(
-                padding: AppSpacing.x24.add(AppSpacing.y16),
-                child: Column(
-                  children: [
-                    _buildSearchBar(controller),
-                    AppSpacing.v24,
-                    Obx(
-                      () => Column(
-                        children: controller.filteredHomeworks
-                            .map((hw) => _buildHomeworkItem(hw))
-                            .toList(),
-                      ),
-                    ),
-                  ],
+              child: RefreshIndicator(
+                onRefresh: () => controller.fetchHomeworks(),
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: AppSpacing.x24.add(AppSpacing.y16),
+                  child: Column(
+                    children: [
+                      _buildSearchBar(controller),
+                      AppSpacing.v24,
+                      Obx(() {
+                        if (controller.isLoading.value && controller.homeworks.isEmpty) {
+                          return const Center(child: CircularProgressIndicator());
+                        }
+                        
+                        if (controller.filteredHomeworks.isEmpty) {
+                          return Center(
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 40),
+                              child: Text(
+                                'No homework assignments found',
+                                style: AppTextStyles.manrope(
+                                  fontSize: 16,
+                                  color: AppColors.textTertiary,
+                                ),
+                              ),
+                            ),
+                          );
+                        }
+
+                        return Column(
+                          children: controller.filteredHomeworks
+                              .map((hw) => _buildHomeworkItem(hw))
+                              .toList(),
+                        );
+                      }),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -62,18 +85,21 @@ class BatchHomeworkScreen extends StatelessWidget {
     return Container(
       padding: AppSpacing.x16,
       decoration: BoxDecoration(
-        color: AppColors.borderGrey.withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(12),
+        color: const Color(0xFFEBEBEB),
+        borderRadius: BorderRadius.circular(16),
       ),
       child: TextField(
         onChanged: (val) => controller.searchQuery.value = val,
         decoration: InputDecoration(
           border: InputBorder.none,
-          icon: const Icon(Icons.search, color: AppColors.textMuted),
+          icon: const Icon(
+            Icons.search,
+            color: const Color(0xFF917B6B),
+          ),
           hintText: AppStrings.instSearchAssignmentsHint,
-          hintStyle: AppTextStyles.manrope(
+          hintStyle: AppTextStyles.lexend(
             fontSize: 14,
-            color: AppColors.textMuted,
+            color: const Color(0xFF917B6B),
           ),
         ),
       ),
@@ -121,7 +147,7 @@ class BatchHomeworkScreen extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          '${hw.subject}: ${hw.title}',
+                          hw.title,
                           style: AppTextStyles.manrope(
                             fontSize: 16,
                             fontWeight: FontWeight.w700,

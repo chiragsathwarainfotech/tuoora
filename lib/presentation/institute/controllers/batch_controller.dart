@@ -1,76 +1,69 @@
 import 'package:fee_easy/core/constants/app_colors.dart';
-import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/presentation/institute/models/batch_model.dart';
 import 'package:fee_easy/core/widgets/common_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
 
 class BatchController extends GetxController {
+  final InstituteRepositoryImpl _repository;
+
+  BatchController(this._repository);
+
   final batchesList = <BatchModel>[].obs;
+  final isLoading = false.obs;
+  final isMoreLoading = false.obs;
+  final currentPage = 1.obs;
+  final lastPage = 1.obs;
 
   final isEditMode = false.obs;
   final batchNameController = TextEditingController();
   final subjectController = TextEditingController();
   final descriptionController = TextEditingController();
   final batchFeeController = TextEditingController();
-  final startTime = const TimeOfDay(hour: 8, minute: 0).obs;
-  final endTime = const TimeOfDay(hour: 9, minute: 30).obs;
-  final selectedDays = <String>['Mon', 'Wed', 'Fri'].obs;
+  final startTime = const TimeOfDay(hour: 0, minute: 0).obs;
+  final endTime = const TimeOfDay(hour: 0, minute: 0).obs;
+  final selectedDays = <String>[].obs;
   final selectedStudentIds = <String>[].obs;
   final searchQuery = ''.obs;
   final currentEditingBatchId = ''.obs;
   final allDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
-  @override
-  void onInit() {
-    super.onInit();
-    _loadMockBatches();
-  }
+  Future<void> loadBatches({bool isRefresh = true}) async {
+    if (isRefresh) {
+      currentPage.value = 1;
+      batchesList.clear();
+      isLoading.value = true;
+    } else {
+      if (currentPage.value >= lastPage.value) return;
+      isMoreLoading.value = true;
+    }
 
-  void _loadMockBatches() {
-    batchesList.assignAll([
-      BatchModel(
-        id: '1',
-        title: 'Mathematics - 10th Std',
-        description: 'Advanced mathematics for 10th standard students.',
-        time: '08:00 AM - 09:30 AM',
-        subject: 'Mathematics',
-        studentCount: '42 Students',
-        location: 'Lab A',
-        statusLabel: AppStrings.instStatusHighCapacity,
-        statusBg: AppColors.instStatusHighCapacityBg,
-        leftBorderColor: AppColors.instBorderHighCapacity,
-        baseFee: 2500,
-      ),
-      BatchModel(
-        id: '2',
-        title: 'Physics - Advanced',
-        description:
-            'Foundational physics concepts and advanced problem solving.',
-        time: '10:30 AM - 12:00 PM',
-        subject: 'Physics',
-        studentCount: '50 Students',
-        location: 'Hall 3',
-        statusLabel: AppStrings.instStatusFull,
-        statusBg: AppColors.instStatusFullBg,
-        leftBorderColor: AppColors.instBorderFull,
-        baseFee: 3000,
-      ),
-      BatchModel(
-        id: '3',
-        title: 'Literature 101',
-        description: 'Introduction to world literature and creative writing.',
-        time: '02:00 PM - 03:30 PM',
-        subject: 'English Literature',
-        studentCount: '18 Students',
-        location: 'Room 12',
-        statusLabel: AppStrings.instStatusOpen,
-        statusBg: AppColors.instStatusOpenBg,
-        leftBorderColor: AppColors.instBorderOpen,
-        statusTextColor: AppColors.instStatusOpenText,
-        baseFee: 1800,
-      ),
-    ]);
+    try {
+      final response = await _repository.listBatches(page: currentPage.value);
+      final uiBatches = response.items.map((b) => b.toUIModel()).toList();
+
+      if (isRefresh) {
+        batchesList.assignAll(uiBatches);
+      } else {
+        batchesList.addAll(uiBatches);
+      }
+
+      lastPage.value = response.lastPage;
+      if (currentPage.value < lastPage.value) {
+        currentPage.value++;
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Failed to load batches: ${e.toString()}',
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
+    } finally {
+      isLoading.value = false;
+      isMoreLoading.value = false;
+    }
   }
 
   void initAddMode() {
@@ -79,9 +72,9 @@ class BatchController extends GetxController {
     subjectController.clear();
     descriptionController.clear();
     batchFeeController.clear();
-    startTime.value = const TimeOfDay(hour: 8, minute: 0);
-    endTime.value = const TimeOfDay(hour: 9, minute: 30);
-    selectedDays.assignAll(['Mon', 'Wed', 'Fri']);
+    startTime.value = const TimeOfDay(hour: 0, minute: 0);
+    endTime.value = const TimeOfDay(hour: 0, minute: 0);
+    selectedDays.clear();
     selectedStudentIds.clear();
     searchQuery.value = '';
     currentEditingBatchId.value = '';
@@ -94,8 +87,46 @@ class BatchController extends GetxController {
     subjectController.text = batch.subject;
     descriptionController.text = batch.description;
     batchFeeController.text = batch.baseFee.toStringAsFixed(0);
-    selectedDays.assignAll(['Mon', 'Wed', 'Fri']);
+
+    final times = batch.time.split(' - ');
+    if (times.length == 2) {
+      startTime.value = _parseTime(times[0]);
+      endTime.value = _parseTime(times[1]);
+    }
+
+    selectedDays.assignAll(batch.days);
     searchQuery.value = '';
+  }
+
+  TimeOfDay _parseTime(String timeStr) {
+    try {
+      // Handle "18:00" or "06:00 PM" etc.
+      final cleanTime = timeStr.trim();
+      final hasAmPm =
+          cleanTime.toUpperCase().contains('AM') ||
+          cleanTime.toUpperCase().contains('PM');
+
+      if (hasAmPm) {
+        final timeParts = cleanTime.split(' ');
+        final hourMin = timeParts[0].split(':');
+        int hour = int.parse(hourMin[0]);
+        int minute = int.parse(hourMin[1]);
+
+        if (cleanTime.toUpperCase().contains('PM') && hour < 12) hour += 12;
+        if (cleanTime.toUpperCase().contains('AM') && hour == 12) hour = 0;
+
+        return TimeOfDay(hour: hour, minute: minute);
+      } else {
+        final parts = cleanTime.split(':');
+        if (parts.length >= 2) {
+          return TimeOfDay(
+            hour: int.parse(parts[0]),
+            minute: int.parse(parts[1]),
+          );
+        }
+      }
+    } catch (_) {}
+    return const TimeOfDay(hour: 8, minute: 0);
   }
 
   void toggleDay(String day) {
@@ -136,20 +167,34 @@ class BatchController extends GetxController {
       description: 'Are you sure you want to delete this batch?',
       icon: Icons.delete_forever_rounded,
       confirmText: 'Delete',
-      onConfirm: () {
-        batchesList.removeWhere((batch) => batch.id == id);
-        Get.back(); // go back from screen
-        Get.snackbar(
-          'Deleted',
-          'Batch deleted successfully',
-          backgroundColor: Colors.redAccent,
-          colorText: Colors.white,
-        );
+      onConfirm: () async {
+        try {
+          Get.back(); // Close dialog
+          isLoading.value = true;
+          await _repository.deleteBatch(int.parse(id));
+          batchesList.removeWhere((batch) => batch.id == id);
+          Get.back(); // Go back from details screen to BatchesScreen
+          Get.snackbar(
+            'Deleted',
+            'Batch deleted successfully',
+            backgroundColor: AppColors.darkGreen,
+            colorText: Colors.white,
+          );
+        } catch (e) {
+          Get.snackbar(
+            'Error',
+            e.toString(),
+            backgroundColor: Colors.redAccent,
+            colorText: Colors.white,
+          );
+        } finally {
+          isLoading.value = false;
+        }
       },
     );
   }
 
-  void saveBatch(BuildContext context) {
+  Future<void> saveBatch(BuildContext context) async {
     if (batchNameController.text.trim().isEmpty) {
       Get.snackbar(
         'Error',
@@ -160,94 +205,74 @@ class BatchController extends GetxController {
       return;
     }
 
-    final newBatch = BatchModel(
-      id: isEditMode.value
-          ? currentEditingBatchId.value
-          : DateTime.now().millisecondsSinceEpoch.toString(),
-      title: batchNameController.text.trim(),
-      description: descriptionController.text.trim(),
-      baseFee: double.tryParse(batchFeeController.text) ?? 0.0,
-      time:
-          '${startTime.value.format(context)} - ${endTime.value.format(context)}',
-      subject: subjectController.text.trim(),
-      studentCount:
-          '0 Students', // Student management is now handled separately
-      location: 'TBD',
-      statusLabel: 'Active',
-      statusBg: AppColors.instStatusOpenBg,
-      leftBorderColor: AppColors.instBorderOpen,
-      statusTextColor: AppColors.instStatusOpenText,
-    );
+    final data = {
+      'name': batchNameController.text.trim(),
+      'subject': subjectController.text.trim(),
+      'description': descriptionController.text.trim(),
+      'fees': batchFeeController.text.trim(),
+      'start_time':
+          '${startTime.value.hour.toString().padLeft(2, '0')}:${startTime.value.minute.toString().padLeft(2, '0')}',
+      'end_time':
+          '${endTime.value.hour.toString().padLeft(2, '0')}:${endTime.value.minute.toString().padLeft(2, '0')}',
+      'days': selectedDays.toList(),
+    };
 
-    if (isEditMode.value) {
-      final index = batchesList.indexWhere(
-        (b) => b.id == currentEditingBatchId.value,
-      );
-
-      if (index != -1) {
-        batchesList[index] = newBatch;
+    try {
+      isLoading.value = true;
+      if (isEditMode.value) {
+        final updatedBatch = await _repository.updateBatch(
+          int.parse(currentEditingBatchId.value),
+          data,
+        );
+        final index = batchesList.indexWhere(
+          (b) => b.id == currentEditingBatchId.value,
+        );
+        if (index != -1) {
+          batchesList[index] = updatedBatch.toUIModel();
+        }
+      } else {
+        final newBatch = await _repository.createBatch(data);
+        batchesList.insert(0, newBatch.toUIModel());
       }
-    } else {
-      batchesList.add(newBatch);
-    }
 
-    batchesList.refresh();
+      batchesList.refresh();
 
-    Get.back(); // go back FIRST
+      if (isEditMode.value) {
+        // If editing, go back twice: EditScreen -> DetailsScreen -> BatchesScreen
+        Get.back();
+        Get.back();
+      } else {
+        // If adding, just go back once to BatchesScreen
+        Get.back();
+      }
 
-    Future.delayed(const Duration(milliseconds: 200), () {
       Get.snackbar(
         isEditMode.value ? 'Batch Updated' : 'Batch Created',
         'Successfully saved ${batchNameController.text}',
         backgroundColor: AppColors.darkGreen,
         colorText: Colors.white,
       );
-    });
-  }
-
-  void applyStudentAssignment() {
-    final index = batchesList.indexWhere(
-      (b) => b.id == currentEditingBatchId.value,
-    );
-
-    if (index != -1) {
-      final batch = batchesList[index];
-
-      batchesList[index] = BatchModel(
-        id: batch.id,
-        title: batch.title,
-        description: batch.description,
-        baseFee: batch.baseFee,
-        subject: batch.subject,
-        time: batch.time,
-        studentCount: '${selectedStudentIds.length} Students',
-        location: batch.location,
-        statusLabel: batch.statusLabel,
-        statusBg: batch.statusBg,
-        leftBorderColor: batch.leftBorderColor,
-        statusTextColor: batch.statusTextColor,
-      );
-
-      batchesList.refresh();
-      Get.back();
+    } catch (e) {
       Get.snackbar(
-        'Success',
-        'Students assigned successfully',
-        backgroundColor: AppColors.darkGreen,
+        'Error',
+        e.toString(),
+        backgroundColor: Colors.redAccent,
         colorText: Colors.white,
       );
+    } finally {
+      isLoading.value = false;
     }
   }
 
-  void deleteBatch(String id) {
-    batchesList.removeWhere((batch) => batch.id == id);
+  void applyStudentAssignment() {
+    // This part might need API support for assigning students to batch
+    // For now keeping it local or showing a placeholder message
+    Get.back();
     Get.snackbar(
-      'Batch Deleted',
-      'The batch has been removed successfully.',
-      backgroundColor: AppColors.darkGreen,
+      'Notice',
+      'Student assignment is currently managed via Student Profile',
+      backgroundColor: AppColors.instPrimaryBlue,
       colorText: Colors.white,
-      snackPosition: SnackPosition.BOTTOM,
-      margin: const EdgeInsets.all(16),
     );
   }
 

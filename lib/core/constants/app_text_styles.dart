@@ -75,7 +75,7 @@ class AppTextStyles {
     fontSize: 10,
     fontWeight: FontWeight.w800,
     letterSpacing: 1.5,
-    color: AppColors.primaryBlue,
+    color: AppColors.primaryBrand,
   );
 
   static TextStyle get overlineMuted => manrope(

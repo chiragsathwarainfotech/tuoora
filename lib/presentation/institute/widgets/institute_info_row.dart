@@ -20,14 +20,14 @@ class InstituteInfoRow extends StatelessWidget {
     return Container(
       padding: AppSpacing.all16,
       decoration: BoxDecoration(
-        color: const Color(0xFFF3F7FF),
+        color: AppColors.primaryBrandLight,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
         children: [
           Icon(
             icon,
-            color: iconColor ?? AppColors.instPrimaryBlue,
+            color: iconColor ?? AppColors.primaryBrand,
             size: 20,
           ),
           AppSpacing.h16,

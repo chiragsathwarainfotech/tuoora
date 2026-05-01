@@ -73,6 +73,8 @@ class AddEditBatchScreen extends GetView<BatchController> {
                     AppSpacing.v16,
                     _buildDaysSelection(),
                     AppSpacing.v32,
+                    _buildSaveButton(context),
+                    AppSpacing.v24,
                   ],
                 ),
               ),
@@ -80,21 +82,20 @@ class AddEditBatchScreen extends GetView<BatchController> {
           ],
         ),
       ),
-      bottomNavigationBar: SafeArea(child: _buildSaveButton(context)),
     );
   }
 
   Widget _buildSectionHeader(IconData icon, String title) {
     return Row(
       children: [
-        Icon(icon, color: AppColors.deepBlue, size: 20),
+        Icon(icon, color: AppColors.primaryBrand, size: 20),
         AppSpacing.h12,
         Text(
           title,
           style: AppTextStyles.manrope(
             fontSize: 16,
             fontWeight: FontWeight.w800,
-            color: AppColors.deepBlue,
+            color: AppColors.primaryBrand,
           ),
         ),
       ],
@@ -131,14 +132,14 @@ class AddEditBatchScreen extends GetView<BatchController> {
           Container(
             padding: AppSpacing.all16,
             decoration: BoxDecoration(
-              color: AppColors.scaffoldBg,
+              color: const Color(0xFFEBEBEB),
               borderRadius: BorderRadius.circular(16),
             ),
             child: Row(
               children: [
                 const Icon(
                   Icons.access_time_filled,
-                  color: AppColors.deepBlue,
+                  color: AppColors.primaryBrand,
                   size: 24,
                 ),
                 AppSpacing.h16,
@@ -161,7 +162,7 @@ class AddEditBatchScreen extends GetView<BatchController> {
                     style: AppTextStyles.manrope(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.deepBlue,
+                      color: AppColors.primaryBrand,
                     ),
                   ),
                 ),
@@ -192,7 +193,9 @@ class AddEditBatchScreen extends GetView<BatchController> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               decoration: BoxDecoration(
-                color: isSelected ? Color(0xFF003D82) : AppColors.borderGrey,
+                color: isSelected
+                    ? AppColors.primaryBrand
+                    : const Color(0xFFEBEBEB),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
@@ -211,12 +214,11 @@ class AddEditBatchScreen extends GetView<BatchController> {
   }
 
   Widget _buildSaveButton(BuildContext context) {
-    return Container(
-      padding: AppSpacing.all24,
-      width: double.infinity,
-      child: AppButton(
+    return Obx(
+      () => AppButton(
         label: AppStrings.instSaveBatchBtn,
         icon: Icons.save_rounded,
+        isLoading: controller.isLoading.value,
         onPressed: () {
           FocusScope.of(context).unfocus();
           controller.saveBatch(context);

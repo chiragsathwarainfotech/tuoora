@@ -117,7 +117,7 @@ class ReportsScreen extends StatelessWidget {
                 style: AppTextStyles.manrope(
                   fontSize: 11,
                   fontWeight: FontWeight.w800,
-                  color: AppColors.deepBlue,
+                  color: AppColors.primaryBrand,
                   letterSpacing: 1.0,
                 ),
               ),
@@ -180,7 +180,7 @@ class ReportsScreen extends StatelessWidget {
                 style: AppTextStyles.manrope(
                   fontSize: 14,
                   fontWeight: FontWeight.w800,
-                  color: AppColors.deepBlue,
+                  color: AppColors.primaryBrand,
                 ),
               ),
             ],
@@ -193,7 +193,7 @@ class ReportsScreen extends StatelessWidget {
               minHeight: AppSpacing.s10,
               backgroundColor: AppColors.reportBorder,
               valueColor: const AlwaysStoppedAnimation<Color>(
-                AppColors.primaryBlueDark,
+                AppColors.primaryBrand,
               ),
             ),
           ),
@@ -262,7 +262,7 @@ class ReportsScreen extends StatelessWidget {
             style: AppTextStyles.manrope(
               fontSize: 11,
               fontWeight: FontWeight.w800,
-              color: AppColors.deepBlue,
+              color: AppColors.primaryBrand,
               letterSpacing: 1.0,
             ),
           ),
@@ -288,7 +288,7 @@ class ReportsScreen extends StatelessWidget {
                     strokeWidth: AppSpacing.s14,
                     backgroundColor: AppColors.reportBorder,
                     valueColor: const AlwaysStoppedAnimation<Color>(
-                      AppColors.primaryBlueDark,
+                      AppColors.primaryBrand,
                     ),
                     strokeCap: StrokeCap.round,
                   ),
@@ -337,7 +337,7 @@ class ReportsScreen extends StatelessWidget {
               children: [
                 const Icon(
                   Icons.show_chart,
-                  color: AppColors.intenseBlue,
+                  color: AppColors.primaryBrand,
                   size: AppSpacing.s16,
                 ),
                 AppSpacing.h8,
@@ -346,7 +346,7 @@ class ReportsScreen extends StatelessWidget {
                   style: AppTextStyles.manrope(
                     fontSize: 12,
                     fontWeight: FontWeight.w800,
-                    color: AppColors.intenseBlue,
+                    color: AppColors.primaryBrand,
                   ),
                 ),
               ],
@@ -372,7 +372,7 @@ class ReportsScreen extends StatelessWidget {
             style: AppTextStyles.manrope(
               fontSize: 11,
               fontWeight: FontWeight.w800,
-              color: AppColors.deepBlue,
+              color: AppColors.primaryBrand,
               letterSpacing: 1.0,
             ),
           ),
@@ -415,7 +415,7 @@ class ReportsScreen extends StatelessWidget {
                         width: AppSpacing.s8,
                         height: AppSpacing.s8,
                         decoration: const BoxDecoration(
-                          color: AppColors.deepBlue,
+                          color: AppColors.primaryBrand,
                           shape: BoxShape.circle,
                         ),
                       ),
@@ -449,7 +449,7 @@ class ReportsScreen extends StatelessWidget {
   Widget _buildMiniStat(IconData icon, String label) {
     return Column(
       children: [
-        Icon(icon, color: AppColors.deepBlue, size: AppSpacing.s18),
+        Icon(icon, color: AppColors.primaryBrand, size: AppSpacing.s18),
         AppSpacing.v6,
         Text(
           label.split(' ')[0],
@@ -477,7 +477,7 @@ class ReportsScreen extends StatelessWidget {
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [AppColors.primaryBlueDark, Color(0xFF001F4E)],
+          colors: [AppColors.primaryBrand, Color(0xFF001F4E)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -550,7 +550,7 @@ class ReportsScreen extends StatelessWidget {
         color: AppColors.reportBorder,
         borderRadius: BorderRadius.circular(AppSpacing.s24),
         border: const Border(
-          left: BorderSide(color: AppColors.intenseBlue, width: AppSpacing.s6),
+          left: BorderSide(color: AppColors.primaryBrand, width: AppSpacing.s6),
         ),
       ),
       child: Row(
@@ -558,7 +558,7 @@ class ReportsScreen extends StatelessWidget {
         children: [
           const Icon(
             Icons.lightbulb_outline,
-            color: AppColors.primaryBlueDark,
+            color: AppColors.primaryBrand,
             size: AppSpacing.s28,
           ),
           AppSpacing.h16,

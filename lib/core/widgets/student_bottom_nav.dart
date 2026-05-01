@@ -78,7 +78,7 @@ class StudentBottomNav extends StatelessWidget {
 
     final Color activeBgColor = AppColors.skyBlueLight;
     final Color itemColor = isSelected
-        ? AppColors.primaryBlueDark
+        ? AppColors.primaryBrand
         : AppColors.navyMuted;
 
     return Expanded(

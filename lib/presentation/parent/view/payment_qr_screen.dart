@@ -18,7 +18,7 @@ class PaymentQRScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.deepBlue),
+          icon: const Icon(Icons.arrow_back, color: AppColors.primaryBrand),
           onPressed: () => Get.back(),
         ),
         title: Text(
@@ -26,12 +26,12 @@ class PaymentQRScreen extends StatelessWidget {
           style: AppTextStyles.manrope(
             fontSize: 18,
             fontWeight: FontWeight.w800,
-            color: AppColors.deepBlue,
+            color: AppColors.primaryBrand,
           ),
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.download, color: AppColors.deepBlue),
+            icon: const Icon(Icons.download, color: AppColors.primaryBrand),
             onPressed: () => Get.snackbar(
               'Success',
               'QR Code saved to gallery',
@@ -64,7 +64,7 @@ class PaymentQRScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: AppColors.indigoLight,
+                      color: AppColors.primaryBrandLight,
                       width: 3,
                     ),
                     image: const DecorationImage(
@@ -150,7 +150,7 @@ class PaymentQRScreen extends StatelessWidget {
                           ),
                           child: const Icon(
                             Icons.account_balance_wallet_rounded,
-                            color: AppColors.deepBlue,
+                            color: AppColors.primaryBrand,
                             size: 32,
                           ),
                         ),
@@ -194,7 +194,7 @@ class PaymentQRScreen extends StatelessWidget {
                   vertical: 14,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.indigoLight.withValues(alpha: 0.4),
+                  color: AppColors.primaryBrandLight.withValues(alpha: 0.4),
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(color: AppColors.lightBlueBg),
                 ),
@@ -206,13 +206,13 @@ class PaymentQRScreen extends StatelessWidget {
                       style: AppTextStyles.manrope(
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
-                        color: AppColors.oceanBlue,
+                        color: AppColors.primaryBrand,
                       ),
                     ),
                     AppSpacing.h12,
                     const Icon(
                       Icons.copy_rounded,
-                      color: AppColors.oceanBlue,
+                      color: AppColors.primaryBrand,
                       size: 18,
                     ),
                   ],

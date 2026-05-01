@@ -147,7 +147,7 @@ class AttendanceHistoryScreen extends StatelessWidget {
             ),
             child: Icon(
               customIcon ?? (isPresent ? Icons.check_circle_rounded : Icons.cancel_rounded),
-              color: customStatusColor ?? (isPresent ? AppColors.deepBlue : const Color(0xFFB91C1C)),
+              color: customStatusColor ?? (isPresent ? AppColors.primaryBrand : const Color(0xFFB91C1C)),
               size: AppSpacing.s24,
             ),
           ),
@@ -181,7 +181,7 @@ class AttendanceHistoryScreen extends StatelessWidget {
             style: AppTextStyles.manrope(
               fontSize: 12,
               fontWeight: FontWeight.w800,
-              color: customStatusColor ?? (isPresent ? AppColors.deepBlue : const Color(0xFFB91C1C)),
+              color: customStatusColor ?? (isPresent ? AppColors.primaryBrand : const Color(0xFFB91C1C)),
             ),
           ),
         ],

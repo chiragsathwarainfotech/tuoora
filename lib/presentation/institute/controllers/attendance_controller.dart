@@ -1,12 +1,46 @@
 import 'package:fee_easy/presentation/institute/models/batch_model.dart';
+import 'package:fee_easy/presentation/institute/models/attendance_record_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
+import 'package:fee_easy/core/constants/app_colors.dart';
+
+class AttendanceStudent {
+  final int id;
+  final String name;
+  final String? profileImageUrl;
+  String status; // 'present' or 'absent'
+
+  AttendanceStudent({
+    required this.id,
+    required this.name,
+    this.profileImageUrl,
+    this.status = 'present',
+  });
+
+  bool get isPresent => status == 'present';
+
+  Map<String, dynamic> toMap() {
+    return {
+      'student_id': id,
+      'status': status,
+    };
+  }
+}
 
 class AttendanceController extends GetxController {
+  final InstituteRepositoryImpl _repository;
+  
   final selectedDate = DateTime.now().obs;
   final searchQuery = ''.obs;
+  final isLoading = false.obs;
   late BatchModel batch;
+
+  final allStudents = <AttendanceStudent>[].obs;
+  final filteredStudents = <AttendanceStudent>[].obs;
+
+  AttendanceController(this._repository);
 
   bool get isToday {
     final now = DateTime.now();
@@ -22,83 +56,85 @@ class AttendanceController extends GetxController {
     return selected.isBefore(today);
   }
 
-  bool get isEditable => !isPastDate;
-
-  // Mock student list for attendance
-  final allStudents = <Map<String, dynamic>>[
-    {
-      'name': 'Aria Smith',
-      'id': 'PHY-2023-001',
-      'isPresent': true,
-      'avatar': 'https://i.pravatar.cc/150?u=aria',
-    },
-    {
-      'name': 'Julian Chen',
-      'id': 'PHY-2023-042',
-      'isPresent': true,
-      'avatar': 'https://i.pravatar.cc/150?u=julian',
-    },
-    {
-      'name': 'Elena Rodriguez',
-      'id': 'PHY-2023-115',
-      'isPresent': false,
-      'avatar': 'https://i.pravatar.cc/150?u=elena',
-    },
-    {
-      'name': 'Marcus Wright',
-      'id': 'PHY-2023-089',
-      'isPresent': true,
-      'avatar': 'https://i.pravatar.cc/150?u=marcus',
-    },
-    {
-      'name': 'Sarah Jenkins',
-      'id': 'PHY-2023-201',
-      'isPresent': true,
-      'avatar': 'https://i.pravatar.cc/150?u=sarah',
-    },
-  ].obs;
-
-  final filteredStudents = <Map<String, dynamic>>[].obs;
+  // Attendance is only editable for today. Past dates are read-only.
+  bool get isEditable => isToday; 
 
   @override
   void onInit() {
     super.onInit();
     batch = Get.arguments;
-    filteredStudents.assignAll(allStudents);
     
+    fetchAttendance();
+
     // Setup search listener
     debounce(searchQuery, (_) => filterStudents(), time: const Duration(milliseconds: 300));
   }
 
   String get formattedDate => DateFormat('MMMM dd, yyyy • EEEE').format(selectedDate.value);
-  String get shortDate => DateFormat('dd MMMM yyyy').format(selectedDate.value);
+  String get apiDate => DateFormat('yyyy-MM-dd').format(selectedDate.value);
+
+  Future<void> fetchAttendance() async {
+    try {
+      isLoading.value = true;
+      final List<AttendanceRecordModel> response = await _repository.getAttendance(apiDate, int.parse(batch.id));
+      
+      if (response.isNotEmpty) {
+        final students = response.map((record) {
+          return AttendanceStudent(
+            id: record.studentId,
+            name: record.studentName,
+            profileImageUrl: null, // API doesn't provide it in this endpoint
+            status: record.status ?? 'present', // Default to present if not marked
+          );
+        }).toList();
+        allStudents.assignAll(students);
+      } else {
+        allStudents.clear();
+      }
+      
+      filterStudents();
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to fetch attendance: ${e.toString()}');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> submitAttendance() async {
+    try {
+      isLoading.value = true;
+      final data = {
+        'batch_id': int.parse(batch.id),
+        'date': apiDate,
+        'attendance': allStudents.map((s) => s.toMap()).toList(),
+      };
+      
+      await _repository.markAttendance(data);
+      
+      Get.back();
+      Get.snackbar(
+        'Success',
+        'Attendance submitted successfully',
+        backgroundColor: AppColors.darkGreen,
+        colorText: Colors.white,
+      );
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to submit attendance: ${e.toString()}');
+    } finally {
+      isLoading.value = false;
+    }
+  }
 
   Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate.value,
       firstDate: DateTime(2020),
-      lastDate: DateTime.now(), // Restrict to today/past as requested
+      lastDate: DateTime.now(),
     );
     if (picked != null && picked != selectedDate.value) {
       selectedDate.value = picked;
-      // In a real app, you would fetch attendance for this date here
-      _loadAttendanceForDate(picked);
-    }
-  }
-
-  void _loadAttendanceForDate(DateTime date) {
-    // Mock logic: if it's a past date, show some random data
-    // If it's today, show all present as default
-    if (isToday) {
-      markAllPresent();
-    } else {
-      // Past date mock: randomize some data
-      for (var s in allStudents) {
-        s['isPresent'] = (allStudents.indexOf(s) % 3 != 0);
-      }
-      allStudents.refresh();
-      filterStudents();
+      fetchAttendance();
     }
   }
 
@@ -108,16 +144,16 @@ class AttendanceController extends GetxController {
     } else {
       filteredStudents.assignAll(
         allStudents.where((s) => 
-          s['name'].toLowerCase().contains(searchQuery.value.toLowerCase()) ||
-          s['id'].toLowerCase().contains(searchQuery.value.toLowerCase())
+          s.name.toLowerCase().contains(searchQuery.value.toLowerCase()) ||
+          s.id.toString().contains(searchQuery.value)
         ).toList()
       );
     }
   }
 
-  void toggleStatus(Map<String, dynamic> student, bool isPresent) {
+  void toggleStatus(AttendanceStudent student, bool isPresent) {
     if (!isEditable) return;
-    student['isPresent'] = isPresent;
+    student.status = isPresent ? 'present' : 'absent';
     allStudents.refresh();
     filterStudents();
   }
@@ -125,7 +161,7 @@ class AttendanceController extends GetxController {
   void markAllPresent() {
     if (!isEditable) return;
     for (var s in allStudents) {
-      s['isPresent'] = true;
+      s.status = 'present';
     }
     allStudents.refresh();
     filterStudents();
@@ -134,7 +170,7 @@ class AttendanceController extends GetxController {
   void markAllAbsent() {
     if (!isEditable) return;
     for (var s in allStudents) {
-      s['isPresent'] = false;
+      s.status = 'absent';
     }
     allStudents.refresh();
     filterStudents();

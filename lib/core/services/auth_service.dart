@@ -17,6 +17,8 @@ class AuthService extends GetxService {
     return this;
   }
 
+  bool get shouldStayAuthenticated => _storage.read('stay_authenticated') ?? false;
+
   void _loadSession() {
     try {
       final userData = _storage.read('user');
@@ -37,12 +39,20 @@ class AuthService extends GetxService {
     }
   }
 
-  Future<void> saveSession(User user) async {
+  Future<void> saveSession(User user, {bool stayAuthenticated = false}) async {
     _currentUser.value = user;
     _token.value = user.token;
     await _storage.write('user', user.toJson());
     await _storage.write('token', user.token);
+    await _storage.write('stay_authenticated', stayAuthenticated);
+    if (stayAuthenticated) {
+      await _storage.write('remembered_email', user.email);
+    } else {
+      await _storage.remove('remembered_email');
+    }
   }
+
+  String? get rememberedEmail => _storage.read('remembered_email');
 
   Future<void> clearSession() async {
     _currentUser.value = null;

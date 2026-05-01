@@ -52,21 +52,14 @@ class AddHomeworkScreen extends StatelessWidget {
                     ),
                     AppSpacing.v24,
                     const InstituteLabel(AppStrings.instResourceMaterialsLabel),
-                    _buildResourceUpload(),
+                    _buildResourceUpload(controller),
+                    AppSpacing.v32,
+                    _buildSaveButton(context, controller),
                   ],
                 ),
               ),
             ),
           ],
-        ),
-      ),
-      bottomNavigationBar: SafeArea(
-        child: Padding(
-          padding: AppSpacing.all24,
-          child: AppButton(
-            label: AppStrings.instCreateHomeworkBtn,
-            onPressed: () => controller.createHomework(),
-          ),
         ),
       ),
     );
@@ -122,45 +115,97 @@ class AddHomeworkScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildResourceUpload() {
-    return Container(
-      padding: AppSpacing.all32,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: const Color(0xFFD0D5DD),
-          style: BorderStyle.solid,
+  Widget _buildResourceUpload(HomeworkController controller) {
+    return Obx(
+      () => GestureDetector(
+        onTap: controller.selectedAttachment.value == null
+            ? controller.pickAttachment
+            : null,
+        child: Container(
+          padding: AppSpacing.all32,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: const Color(0xFFD0D5DD),
+              style: BorderStyle.solid,
+            ),
+          ),
+          child: controller.selectedAttachment.value == null
+              ? Column(
+                  children: [
+                    Container(
+                      padding: AppSpacing.all12,
+                      decoration: const BoxDecoration(
+                        color: AppColors.instPrimaryBlue,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.add, color: Colors.white),
+                    ),
+                    AppSpacing.v12,
+                    Text(
+                      AppStrings.instAddAttachmentBtn,
+                      style: AppTextStyles.manrope(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: const Color(0xFF101828),
+                      ),
+                    ),
+                    AppSpacing.v4,
+                    Text(
+                      AppStrings.instAddAttachmentDesc,
+                      style: AppTextStyles.lexend(
+                        fontSize: 12,
+                        color: AppColors.textTertiary,
+                      ),
+                    ),
+                  ],
+                )
+              : Column(
+                  children: [
+                    const Icon(
+                      Icons.insert_drive_file_outlined,
+                      color: AppColors.instPrimaryBlue,
+                      size: 40,
+                    ),
+                    AppSpacing.v12,
+                    Text(
+                      controller.selectedAttachment.value!.split('/').last,
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.manrope(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                    AppSpacing.v12,
+                    TextButton.icon(
+                      onPressed: controller.removeAttachment,
+                      icon: const Icon(Icons.delete_outline, color: Colors.red),
+                      label: Text(
+                        'Remove',
+                        style: AppTextStyles.manrope(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
         ),
       ),
-      child: Column(
-        children: [
-          Container(
-            padding: AppSpacing.all12,
-            decoration: const BoxDecoration(
-              color: AppColors.instPrimaryBlue,
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(Icons.add, color: Colors.white),
-          ),
-          AppSpacing.v12,
-          Text(
-            AppStrings.instAddAttachmentBtn,
-            style: AppTextStyles.manrope(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-              color: const Color(0xFF101828),
-            ),
-          ),
-          AppSpacing.v4,
-          Text(
-            AppStrings.instAddAttachmentDesc,
-            style: AppTextStyles.lexend(
-              fontSize: 12,
-              color: AppColors.textTertiary,
-            ),
-          ),
-        ],
+    );
+  }
+
+  Widget _buildSaveButton(BuildContext context, HomeworkController controller) {
+    return Obx(
+      () => AppButton(
+        label: AppStrings.instCreateHomeworkBtn,
+        isLoading: controller.isLoading.value,
+        onPressed: () {
+          controller.createHomework();
+        },
       ),
     );
   }

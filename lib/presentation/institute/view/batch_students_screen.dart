@@ -68,24 +68,24 @@ class BatchStudentsScreen extends StatelessWidget {
           ),
         ],
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'TOTAL ENROLLED',
-                style: AppTextStyles.lexend(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.textMuted,
-                  letterSpacing: 1,
+      child: Obx(
+        () => Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'TOTAL ENROLLED',
+                  style: AppTextStyles.lexend(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textMuted,
+                    letterSpacing: 1,
+                  ),
                 ),
-              ),
-              AppSpacing.v4,
-              Obx(
-                () => Text(
+                AppSpacing.v4,
+                Text(
                   '${controller.assignedStudents.length}',
                   style: AppTextStyles.manrope(
                     fontSize: 32,
@@ -93,11 +93,11 @@ class BatchStudentsScreen extends StatelessWidget {
                     color: AppColors.instPrimaryBlue,
                   ),
                 ),
-              ),
-            ],
-          ),
-          _buildAvatarStack(controller),
-        ],
+              ],
+            ),
+            _buildAvatarStack(controller),
+          ],
+        ),
       ),
     );
   }
@@ -168,9 +168,8 @@ class BatchStudentsScreen extends StatelessWidget {
   Widget _buildSearchBar(BatchDetailsController controller) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.borderGrey),
+        color: const Color(0xFFEBEBEB),
+        borderRadius: BorderRadius.circular(16),
       ),
       child: TextField(
         controller: controller.assignedSearchController,
@@ -179,11 +178,11 @@ class BatchStudentsScreen extends StatelessWidget {
           hintText: 'Search enrolled students...',
           hintStyle: AppTextStyles.lexend(
             fontSize: 14,
-            color: AppColors.textMuted,
+            color: const Color(0xFF917B6B),
           ),
           prefixIcon: const Icon(
             Icons.search,
-            color: AppColors.textMuted,
+            color: const Color(0xFF917B6B),
             size: 20,
           ),
           border: InputBorder.none,
@@ -233,23 +232,7 @@ class BatchStudentsScreen extends StatelessWidget {
             ),
             child: Row(
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Container(
-                    width: 56,
-                    height: 56,
-                    color: AppColors.instFeesAvatarBg,
-                    child: Center(
-                      child: Text(
-                        bs.student.name[0],
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                _buildStudentAvatar(bs.student.profileImageUrl, bs.student.name),
                 AppSpacing.h16,
                 Expanded(
                   child: Column(
@@ -297,10 +280,59 @@ class BatchStudentsScreen extends StatelessWidget {
   ) {
     CommonDialog.show(
       title: 'Remove Student',
-      description: 'Are you sure you want to remove\n${bs.student.name} from this batch?',
+      description:
+          'Are you sure you want to remove\n${bs.student.name} from this batch?',
       icon: Icons.person_remove_rounded,
       confirmText: 'Remove',
-      onConfirm: () => controller.removeStudentFromBatch(bs.student.id.toString()),
+      onConfirm: () => controller.removeStudentFromBatch(bs.student.id),
+    );
+  }
+
+  Widget _buildStudentAvatar(String? imageUrl, String name) {
+    if (imageUrl != null &&
+        imageUrl.isNotEmpty &&
+        imageUrl.startsWith('http') &&
+        !imageUrl.contains('ui-avatars.com')) {
+      return Container(
+        width: 56,
+        height: 56,
+        decoration: BoxDecoration(
+          color: AppColors.primaryBrandLight,
+          shape: BoxShape.circle,
+          image: DecorationImage(
+            image: NetworkImage(imageUrl),
+            fit: BoxFit.cover,
+          ),
+        ),
+      );
+    }
+
+    final names = name.trim().split(' ');
+    String initials = '';
+    if (names.isNotEmpty) {
+      initials += names[0][0].toUpperCase();
+      if (names.length > 1) {
+        initials += names[names.length - 1][0].toUpperCase();
+      }
+    }
+
+    return Container(
+      width: 56,
+      height: 56,
+      decoration: const BoxDecoration(
+        color: AppColors.primaryBrandLight,
+        shape: BoxShape.circle,
+      ),
+      child: Center(
+        child: Text(
+          initials,
+          style: AppTextStyles.manrope(
+            fontSize: 18,
+            fontWeight: FontWeight.w800,
+            color: AppColors.primaryBrand,
+          ),
+        ),
+      ),
     );
   }
 }

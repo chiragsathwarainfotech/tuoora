@@ -31,14 +31,14 @@ class InstituteTextField extends StatelessWidget {
           label,
           style: AppTextStyles.manrope(
             fontSize: 14,
-            fontWeight: FontWeight.w700,
-            color: AppColors.textSecondary,
+            fontWeight: FontWeight.w800,
+            color: const Color(0xFF663322),
           ),
         ),
         AppSpacing.v8,
         Container(
           decoration: BoxDecoration(
-            color: const Color(0xFFF2F4F7),
+            color: const Color(0xFFEBEBEB),
             borderRadius: BorderRadius.circular(12),
           ),
           child: TextField(
@@ -55,7 +55,7 @@ class InstituteTextField extends StatelessWidget {
               hintText: hint,
               hintStyle: AppTextStyles.manrope(
                 fontSize: 14,
-                color: AppColors.textMuted,
+                color: const Color(0xFF917B6B),
               ),
               border: InputBorder.none,
               contentPadding: AppSpacing.all16,

@@ -42,11 +42,13 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
             ),
             Obx(
               () => controller.isLoading.value
-                  ? Container(
-                      color: Colors.black.withValues(alpha: 0.3),
-                      child: const Center(
-                        child: CircularProgressIndicator(
-                          color: AppColors.instPrimaryBlue,
+                  ? Positioned.fill(
+                      child: Container(
+                        color: Colors.black.withValues(alpha: 0.1),
+                        child: const Center(
+                          child: CircularProgressIndicator(
+                            color: AppColors.primaryBrand,
+                          ),
                         ),
                       ),
                     )
@@ -79,7 +81,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
             children: [
               const Icon(
                 Icons.person,
-                color: AppColors.instPrimaryBlue,
+                color: AppColors.primaryBrand,
                 size: AppSpacing.s20,
               ),
               AppSpacing.h8,
@@ -87,8 +89,8 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                 AppStrings.instStudentInfoLabel,
                 style: AppTextStyles.lexend(
                   fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.instPrimaryBlue,
+                  fontWeight: FontWeight.w800,
+                  color: const Color(0xFF663322),
                   letterSpacing: 1.2,
                 ),
               ),
@@ -98,7 +100,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
           if (!controller.isStudentSelected.value) ...[
             Container(
               decoration: BoxDecoration(
-                color: AppColors.inputSolidGrey,
+                color: const Color(0xFFEBEBEB),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: TextField(
@@ -107,7 +109,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                   hintText: AppStrings.instSearchStudentHint,
                   hintStyle: AppTextStyles.lexend(
                     fontSize: 14,
-                    color: AppColors.textTertiary,
+                    color: const Color(0xFF917B6B),
                   ),
                   suffixIcon: const Icon(
                     Icons.search,
@@ -137,8 +139,10 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                     final student = controller.filteredStudents[index];
                     return ListTile(
                       onTap: () => controller.selectStudent(student),
-                      leading: CircleAvatar(
-                        backgroundImage: NetworkImage(student.imageUrl),
+                      leading: _buildStudentAvatar(
+                        student.imageUrl,
+                        student.name,
+                        size: 40,
                       ),
                       title: Text(
                         student.name,
@@ -162,23 +166,15 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
             Container(
               padding: AppSpacing.all12,
               decoration: BoxDecoration(
-                color: const Color(0xFFF3F7FF),
+                color: AppColors.primaryBrandLight,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
                 children: [
-                  Container(
-                    width: AppSpacing.s48,
-                    height: AppSpacing.s48,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                        image: NetworkImage(
-                          controller.selectedStudent.value!.imageUrl,
-                        ),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                  _buildStudentAvatar(
+                    controller.selectedStudent.value!.imageUrl,
+                    controller.selectedStudent.value!.name,
+                    size: 48,
                   ),
                   AppSpacing.h16,
                   Expanded(
@@ -194,7 +190,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                           ),
                         ),
                         Text(
-                          'Batch: ${controller.selectedStudent.value!.batch}',
+                          'Batch: ${controller.selectedStudent.value!.currentBatchName}',
                           style: AppTextStyles.lexend(
                             fontSize: 12,
                             color: AppColors.textSecondary,
@@ -210,7 +206,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                       style: AppTextStyles.lexend(
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.instPrimaryBlue,
+                        color: AppColors.primaryBrand,
                       ),
                     ),
                   ),
@@ -243,15 +239,15 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
             AppStrings.instAmountLabel,
             style: AppTextStyles.manrope(
               fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: AppColors.textDarkGrey,
+              fontWeight: FontWeight.w800,
+              color: const Color(0xFF663322),
             ),
           ),
           AppSpacing.v8,
           Container(
             padding: AppSpacing.all16,
             decoration: BoxDecoration(
-              color: AppColors.inputSolidGrey,
+              color: const Color(0xFFEBEBEB),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
@@ -268,7 +264,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                       contentPadding: EdgeInsets.zero,
                       hintStyle: AppTextStyles.lexend(
                         fontSize: 15,
-                        color: AppColors.textTertiary,
+                        color: const Color(0xFF917B6B),
                       ),
                     ),
                     style: AppTextStyles.lexend(
@@ -291,8 +287,8 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
             'Record Date',
             style: AppTextStyles.manrope(
               fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: AppColors.textDarkGrey,
+              fontWeight: FontWeight.w800,
+              color: const Color(0xFF663322),
             ),
           ),
           AppSpacing.v8,
@@ -301,7 +297,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
             child: Container(
               padding: AppSpacing.all16,
               decoration: BoxDecoration(
-                color: AppColors.inputSolidGrey,
+                color: const Color(0xFFEBEBEB),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Row(
@@ -333,8 +329,8 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
             AppStrings.instPaymentMethodLabel,
             style: AppTextStyles.manrope(
               fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: AppColors.textDarkGrey,
+              fontWeight: FontWeight.w800,
+              color: const Color(0xFF663322),
             ),
           ),
           AppSpacing.v8,
@@ -371,10 +367,12 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
       child: Container(
         padding: AppSpacing.y16,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: isActive
+              ? AppColors.primaryBrandLight.withValues(alpha: 0.5)
+              : Colors.white,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: isActive ? AppColors.instPrimaryBlue : AppColors.divider,
+            color: isActive ? AppColors.primaryBrand : const Color(0xFFEBEBEB),
             width: 1.5,
           ),
         ),
@@ -383,18 +381,17 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
           children: [
             Icon(
               icon,
-              color: isActive
-                  ? AppColors.instPrimaryBlue
-                  : AppColors.textPrimary,
-              size: AppSpacing.s22,
+              color: isActive ? AppColors.primaryBrand : const Color(0xFF663322),
+              size: 20,
             ),
-            AppSpacing.h8,
+            AppSpacing.h12,
             Text(
               label,
               style: AppTextStyles.manrope(
-                fontSize: 15,
-                fontWeight: FontWeight.w700,
-                color: AppColors.textPrimary,
+                fontSize: 14,
+                fontWeight: FontWeight.w800,
+                color:
+                    isActive ? AppColors.primaryBrand : const Color(0xFF663322),
               ),
             ),
           ],
@@ -431,7 +428,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
             ),
             child: const Icon(
               Icons.description,
-              color: AppColors.instPrimaryBlue,
+              color: AppColors.primaryBrand,
               size: AppSpacing.s28,
             ),
           ),
@@ -465,13 +462,13 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                   style: AppTextStyles.lexend(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
-                    color: AppColors.instPrimaryBlue,
+                    color: AppColors.primaryBrand,
                   ),
                 ),
                 AppSpacing.h8,
                 const Icon(
                   Icons.open_in_new,
-                  color: AppColors.instPrimaryBlue,
+                  color: AppColors.primaryBrand,
                   size: AppSpacing.s16,
                 ),
               ],
@@ -557,7 +554,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                   style: AppTextStyles.manrope(
                     fontSize: 24,
                     fontWeight: FontWeight.w800,
-                    color: AppColors.instAccentBlue,
+                    color: AppColors.primaryBrand,
                   ),
                 ),
               ],
@@ -566,7 +563,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
             ElevatedButton(
               onPressed: () => Get.back(),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.instPrimaryBlue,
+                backgroundColor: AppColors.primaryBrand,
                 padding: AppSpacing.y16,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -634,6 +631,53 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
               ),
             ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildStudentAvatar(String imageUrl, String name, {double size = 48}) {
+    if (imageUrl.isNotEmpty &&
+        imageUrl.startsWith('http') &&
+        !imageUrl.contains('ui-avatars.com')) {
+      return Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          color: AppColors.primaryBrandLight,
+          borderRadius: BorderRadius.circular(size / 3),
+          image: DecorationImage(
+            image: NetworkImage(imageUrl),
+            fit: BoxFit.cover,
+          ),
+        ),
+      );
+    }
+
+    final names = name.trim().split(' ');
+    String initials = '';
+    if (names.isNotEmpty) {
+      initials += names[0][0].toUpperCase();
+      if (names.length > 1 && names.last.isNotEmpty) {
+        initials += names.last[0].toUpperCase();
+      }
+    }
+
+    return Container(
+      width: size,
+      height: size,
+      decoration: const BoxDecoration(
+        color: AppColors.primaryBrandLight,
+        shape: BoxShape.circle,
+      ),
+      child: Center(
+        child: Text(
+          initials,
+          style: AppTextStyles.manrope(
+            fontSize: size * 0.4,
+            fontWeight: FontWeight.w800,
+            color: AppColors.primaryBrand,
+          ),
+        ),
       ),
     );
   }

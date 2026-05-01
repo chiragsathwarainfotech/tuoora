@@ -26,7 +26,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
                     controller.profile.value == null) {
                   return const Center(
                     child: CircularProgressIndicator(
-                      color: AppColors.primaryBlue,
+                      color: AppColors.primaryBrand,
                     ),
                   );
                 }
@@ -56,7 +56,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
 
                 return RefreshIndicator(
                   onRefresh: () => controller.fetchProfile(),
-                  color: AppColors.primaryBlue,
+                  color: AppColors.primaryBrand,
                   child: SingleChildScrollView(
                     padding: AppSpacing.all24,
                     physics: const AlwaysScrollableScrollPhysics(),
@@ -115,7 +115,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
                         ? const Icon(
                             Icons.school_rounded,
                             size: 48,
-                            color: AppColors.primaryBlue,
+                            color: AppColors.primaryBrand,
                           )
                         : null,
                   ),
@@ -127,7 +127,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
                       child: Container(
                         padding: AppSpacing.all8,
                         decoration: const BoxDecoration(
-                          color: AppColors.primaryBlue,
+                          color: AppColors.primaryBrand,
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(
@@ -149,7 +149,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
                     style: AppTextStyles.manrope(
                       fontSize: 22,
                       fontWeight: FontWeight.w800,
-                      color: AppColors.primaryBlue,
+                      color: AppColors.primaryBrand,
                     ),
                   ),
                   AppSpacing.v4,
@@ -292,14 +292,14 @@ class InstituteProfileViewScreen extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
       child: Row(
         children: [
-          Icon(icon, size: 18, color: AppColors.primaryBlue),
+          Icon(icon, size: 18, color: AppColors.primaryBrand),
           AppSpacing.h12,
           Text(
             title.toUpperCase(),
             style: AppTextStyles.manrope(
               fontSize: 11,
               fontWeight: FontWeight.w900,
-              color: AppColors.primaryBlue,
+              color: AppColors.primaryBrand,
               letterSpacing: 1.1,
             ),
           ),
@@ -369,7 +369,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
             Container(
               padding: AppSpacing.all10,
               decoration: BoxDecoration(
-                color: (iconColor ?? AppColors.primaryBlue).withValues(
+                color: (iconColor ?? AppColors.primaryBrand).withValues(
                   alpha: 0.1,
                 ),
                 borderRadius: BorderRadius.circular(12),
@@ -377,7 +377,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
               child: Icon(
                 icon,
                 size: 20,
-                color: iconColor ?? AppColors.primaryBlue,
+                color: iconColor ?? AppColors.primaryBrand,
               ),
             ),
             AppSpacing.h16,

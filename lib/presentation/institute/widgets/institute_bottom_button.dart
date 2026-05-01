@@ -9,12 +9,15 @@ class InstituteBottomButton extends StatelessWidget {
   final IconData? icon;
   final Color? backgroundColor;
 
+  final bool isLoading;
+
   const InstituteBottomButton({
     super.key,
     required this.label,
     this.onTap,
     this.icon,
     this.backgroundColor,
+    this.isLoading = false,
   });
 
   @override
@@ -32,31 +35,42 @@ class InstituteBottomButton extends StatelessWidget {
         ],
       ),
       child: ElevatedButton(
-        onPressed: onTap,
+        onPressed: isLoading ? null : onTap,
         style: ElevatedButton.styleFrom(
-          backgroundColor: backgroundColor ?? AppColors.instPrimaryBlue,
-          disabledBackgroundColor: Colors.grey.shade300,
+          backgroundColor: backgroundColor ?? AppColors.primaryBrand,
+          disabledBackgroundColor: backgroundColor?.withValues(alpha: 0.6) ??
+              AppColors.primaryBrand.withValues(alpha: 0.6),
           minimumSize: const Size(double.infinity, 56),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           elevation: 0,
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (icon != null) ...[
-              Icon(icon, color: Colors.white, size: 20),
-              AppSpacing.h12,
-            ],
-            Text(
-              label,
-              style: AppTextStyles.manrope(
-                fontSize: 18,
-                fontWeight: FontWeight.w800,
-                color: Colors.white,
+        child: isLoading
+            ? const SizedBox(
+                height: 24,
+                width: 24,
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                  strokeWidth: 2,
+                ),
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (icon != null) ...[
+                    Icon(icon, color: Colors.white, size: 20),
+                    AppSpacing.h12,
+                  ],
+                  Text(
+                    label,
+                    style: AppTextStyles.manrope(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
       ),
     );
   }

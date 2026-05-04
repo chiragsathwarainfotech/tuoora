@@ -51,11 +51,15 @@ class InstituteSubscriptionScreen extends StatelessWidget {
     return Container(
       padding: AppSpacing.all28,
       decoration: BoxDecoration(
-        color: const Color(0xFF004494),
+        gradient: const LinearGradient(
+          colors: [AppColors.brandAppBarColor, AppColors.primaryBrand],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         borderRadius: BorderRadius.circular(AppSpacing.s24),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primaryBrand.withValues(alpha: 0.2),
+            color: AppColors.primaryBrand.withValues(alpha: 0.3),
             blurRadius: AppSpacing.s20,
             offset: const Offset(0, AppSpacing.s10),
           ),
@@ -287,7 +291,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
             style: AppTextStyles.manrope(
               fontSize: AppSpacing.s22,
               fontWeight: FontWeight.w800,
-              color: const Color(0xFF663322),
+              color: AppColors.brandAppBarColor,
             ),
           ),
           AppSpacing.v4,
@@ -307,7 +311,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
                   style: AppTextStyles.manrope(
                     fontSize: 32,
                     fontWeight: FontWeight.w800,
-                    color: const Color(0xFF663322),
+                    color: AppColors.brandAppBarColor,
                   ),
                 ),
                 TextSpan(
@@ -350,9 +354,9 @@ class InstituteSubscriptionScreen extends StatelessWidget {
               onPressed: () {},
               style: OutlinedButton.styleFrom(
                 backgroundColor: isPremium
-                    ? const Color(0xFF004494)
+                    ? AppColors.primaryBrand
                     : Colors.transparent,
-                side: const BorderSide(color: Color(0xFF004494)),
+                side: const BorderSide(color: AppColors.primaryBrand),
                 padding: AppSpacing.y14,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(AppSpacing.s10),
@@ -363,7 +367,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
                 style: AppTextStyles.manrope(
                   fontSize: AppSpacing.s14,
                   fontWeight: FontWeight.w800,
-                  color: isPremium ? Colors.white : const Color(0xFF004494),
+                  color: isPremium ? Colors.white : AppColors.primaryBrand,
                 ),
               ),
             ),
@@ -420,7 +424,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
           Container(
             padding: AppSpacing.all10,
             decoration: BoxDecoration(
-              color: const Color(0xFFF3F9FF),
+              color: AppColors.primaryBrandLight,
               borderRadius: BorderRadius.circular(AppSpacing.s10),
             ),
             child: Icon(
@@ -439,7 +443,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
                   style: AppTextStyles.manrope(
                     fontSize: AppSpacing.s16,
                     fontWeight: FontWeight.w800,
-                    color: const Color(0xFF663322),
+                    color: AppColors.brandAppBarColor,
                   ),
                 ),
                 Text(
@@ -506,12 +510,12 @@ class InstituteSubscriptionScreen extends StatelessWidget {
           Container(
             padding: AppSpacing.all10,
             decoration: BoxDecoration(
-              color: AppColors.scaffoldBg,
+              color: AppColors.primaryBrandLight,
               borderRadius: BorderRadius.circular(AppSpacing.s10),
             ),
             child: const Icon(
               Icons.assignment_rounded,
-              color: AppColors.textTertiary,
+              color: AppColors.primaryBrand,
               size: AppSpacing.s20,
             ),
           ),
@@ -525,7 +529,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
                   style: AppTextStyles.manrope(
                     fontSize: AppSpacing.s14,
                     fontWeight: FontWeight.w800,
-                    color: const Color(0xFF663322),
+                    color: AppColors.brandAppBarColor,
                   ),
                 ),
                 Text(
@@ -546,7 +550,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
                 style: AppTextStyles.manrope(
                   fontSize: AppSpacing.s14,
                   fontWeight: FontWeight.w800,
-                  color: const Color(0xFF663322),
+                  color: AppColors.brandAppBarColor,
                 ),
               ),
               Container(

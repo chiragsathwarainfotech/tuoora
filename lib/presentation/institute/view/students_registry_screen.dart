@@ -6,6 +6,7 @@ import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/presentation/institute/controllers/institute_controller.dart';
 import 'package:fee_easy/presentation/institute/controllers/student_controller.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
+import 'package:fee_easy/presentation/shared/widgets/common_state_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -46,24 +47,10 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
               ],
             ),
           ),
-          Obx(
-            () => controller.isLoadingStudents.value
-                ? Positioned.fill(
-                    child: Container(
-                      color: Colors.black.withValues(alpha: 0.1),
-                      child: const Center(
-                        child: CircularProgressIndicator(
-                          color: AppColors.primaryBrand,
-                        ),
-                      ),
-                    ),
-                  )
-                : const SizedBox.shrink(),
-          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Get.toNamed(AppRoutes.instituteAddStudent),
+        onPressed: () => Get.toNamed(AppRoutes.instituteAddEditStudent),
         backgroundColor: AppColors.primaryBrand,
         child: const Icon(Icons.add, color: Colors.white, size: 28),
       ),
@@ -99,96 +86,59 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
 
   Widget _buildStudentsList() {
     return Obx(() {
-      if (controller.students.isEmpty && !controller.isLoadingStudents.value) {
-        return _buildEmptyState();
-      }
-
-      return NotificationListener<ScrollNotification>(
-        onNotification: (ScrollNotification scrollInfo) {
-          if (scrollInfo.metrics.pixels >=
-                  scrollInfo.metrics.maxScrollExtent - 200 &&
-              !controller.isLoadingStudents.value &&
-              !controller.isLoadMore.value) {
-            controller.loadMoreStudents();
-          }
-          return true;
-        },
-        child: ListView.builder(
-          itemCount:
-              controller.students.length +
-              (controller.isLoadMore.value ? 1 : 0),
-          padding: EdgeInsets.zero,
-          physics: const AlwaysScrollableScrollPhysics(),
-          itemBuilder: (context, index) {
-            if (index == controller.students.length) {
-              return const Center(
-                child: Padding(
-                  padding: AppSpacing.all16,
-                  child: CircularProgressIndicator(
-                    color: AppColors.primaryBrand,
+      return CommonStateWidget(
+        isLoading: controller.isLoadingStudents.value,
+        isEmpty: controller.students.isEmpty,
+        emptyTitle: controller.searchQuery.value.isNotEmpty
+            ? 'No students found'
+            : 'No students available',
+        emptySubtitle: controller.searchQuery.value.isNotEmpty
+            ? 'Try searching with a different name'
+            : 'Start by adding a new student to the registry',
+        emptyIcon: controller.searchQuery.value.isNotEmpty
+            ? Icons.search_off_rounded
+            : Icons.people_outline_rounded,
+        child: NotificationListener<ScrollNotification>(
+          onNotification: (ScrollNotification scrollInfo) {
+            if (scrollInfo.metrics.pixels >=
+                    scrollInfo.metrics.maxScrollExtent - 200 &&
+                !controller.isLoadingStudents.value &&
+                !controller.isLoadMore.value) {
+              controller.loadMoreStudents();
+            }
+            return true;
+          },
+          child: ListView.builder(
+            itemCount: controller.students.length +
+                (controller.isLoadMore.value ? 1 : 0),
+            padding: EdgeInsets.zero,
+            physics: const AlwaysScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              if (index == controller.students.length) {
+                return const Center(
+                  child: Padding(
+                    padding: AppSpacing.all16,
+                    child: CircularProgressIndicator(
+                      color: AppColors.primaryBrand,
+                    ),
                   ),
+                );
+              }
+              final student = controller.students[index];
+              return Padding(
+                padding: AppSpacing.bottom16,
+                child: _buildStudentCard(
+                  name: student.name,
+                  id: student.id,
+                  grade: student.grade,
+                  imageUrl: student.imageUrl,
                 ),
               );
-            }
-            final student = controller.students[index];
-            return Padding(
-              padding: AppSpacing.bottom16,
-              child: _buildStudentCard(
-                name: student.name,
-                id: student.id,
-                grade: student.grade,
-                imageUrl: student.imageUrl,
-              ),
-            );
-          },
+            },
+          ),
         ),
       );
     });
-  }
-
-  Widget _buildEmptyState() {
-    final isSearching = controller.searchQuery.value.isNotEmpty;
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            padding: AppSpacing.all24,
-            decoration: const BoxDecoration(
-              color: AppColors.primaryBrandLight,
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              isSearching
-                  ? Icons.search_off_rounded
-                  : Icons.people_outline_rounded,
-              size: 64,
-              color: AppColors.primaryBrand,
-            ),
-          ),
-          AppSpacing.v24,
-          Text(
-            isSearching ? 'No students found' : 'No students available',
-            style: AppTextStyles.manrope(
-              fontSize: 18,
-              fontWeight: FontWeight.w800,
-              color: const Color(0xFF663322),
-            ),
-          ),
-          AppSpacing.v8,
-          Text(
-            isSearching
-                ? 'Try searching with a different name'
-                : 'Start by adding a new student to the registry',
-            textAlign: TextAlign.center,
-            style: AppTextStyles.lexend(
-              fontSize: 14,
-              color: AppColors.textTertiary,
-            ),
-          ),
-        ],
-      ),
-    );
   }
 
   Widget _buildStudentCard({

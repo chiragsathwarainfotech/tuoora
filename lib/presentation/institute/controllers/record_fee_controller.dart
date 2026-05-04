@@ -79,7 +79,7 @@ class RecordFeeController extends GetxController {
       context: context,
       initialDate: selectedRecordDate.value,
       firstDate: DateTime(2020),
-      lastDate: DateTime(2101),
+      lastDate: DateTime.now(),
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(

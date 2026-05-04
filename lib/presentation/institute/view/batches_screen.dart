@@ -100,20 +100,6 @@ class _BatchesScreenState extends State<BatchesScreen> {
               ],
             ),
           ),
-          Obx(
-            () => controller.isLoading.value
-                ? Positioned.fill(
-                    child: Container(
-                      color: Colors.black.withValues(alpha: 0.1),
-                      child: const Center(
-                        child: CircularProgressIndicator(
-                          color: AppColors.primaryBrand,
-                        ),
-                      ),
-                    ),
-                  )
-                : const SizedBox.shrink(),
-          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(

@@ -383,7 +383,16 @@ class InstituteRepository implements InstituteRepositoryImpl {
       throw Exception('Failed to fetch homeworks: ${response.statusText}');
     }
 
-    final List<dynamic> data = response.body['data'] ?? [];
+    final dynamic bodyData = response.body['data'];
+    List<dynamic> data = [];
+
+    if (bodyData is List) {
+      data = bodyData;
+    } else if (bodyData is Map && bodyData['data'] is List) {
+      // Handle paginated response where the list is nested in another 'data' field
+      data = bodyData['data'];
+    }
+
     return data.map((json) => HomeworkModel.fromJson(json)).toList();
   }
 
@@ -488,7 +497,15 @@ class InstituteRepository implements InstituteRepositoryImpl {
       throw Exception('Failed to fetch resources: ${response.statusText}');
     }
 
-    final List<dynamic> data = response.body['data'] ?? [];
+    final dynamic bodyData = response.body['data'];
+    List<dynamic> data = [];
+
+    if (bodyData is List) {
+      data = bodyData;
+    } else if (bodyData is Map && bodyData['data'] is List) {
+      data = bodyData['data'];
+    }
+
     return data.map((json) => ResourceModel.fromJson(json)).toList();
   }
 

@@ -1,3 +1,4 @@
+import 'package:fee_easy/core/utils/validation_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:fee_easy/data/repositories/auth_repository.dart';
@@ -67,6 +68,17 @@ class ForgotPasswordController extends GetxController {
       Get.snackbar(
         'Error',
         'Please fill in all fields',
+        backgroundColor: AppColors.errorRed.withValues(alpha: 0.1),
+        colorText: AppColors.errorRed,
+      );
+      return;
+    }
+
+    final passwordError = ValidationUtils.validatePassword(password);
+    if (passwordError != null) {
+      Get.snackbar(
+        'Invalid Password',
+        passwordError,
         backgroundColor: AppColors.errorRed.withValues(alpha: 0.1),
         colorText: AppColors.errorRed,
       );

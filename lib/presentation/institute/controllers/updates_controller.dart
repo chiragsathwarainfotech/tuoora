@@ -3,13 +3,16 @@ import 'package:fee_easy/core/enums/update_enums.dart';
 import 'package:fee_easy/data/models/daily_update_model.dart';
 import 'package:fee_easy/data/repositories_impl/daily_update_repository_impl.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:fee_easy/data/models/batch_model.dart';
+import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class UpdatesController extends GetxController {
   final DailyUpdateRepositoryImpl _updateRepository;
+  final InstituteRepositoryImpl _instituteRepository;
 
-  UpdatesController(this._updateRepository);
+  UpdatesController(this._updateRepository, this._instituteRepository);
 
   final updatesList = <DailyUpdate>[].obs;
   final isLoading = false.obs;
@@ -19,7 +22,7 @@ class UpdatesController extends GetxController {
   final selectedCategory = UpdateCategory.Academic.obs;
   final selectedRecipient = UpdateRecipient.students.obs;
   final selectedAudience = UpdateTargetType.all.obs;
-  final selectedBatch = 'Evening • Batch A'.obs;
+  final selectedBatch = Rxn<Batch>();
 
   final subjectController = TextEditingController();
   final messageController = TextEditingController();
@@ -27,16 +30,34 @@ class UpdatesController extends GetxController {
   final appNotificationEnabled = true.obs;
   final whatsappEnabled = false.obs;
 
-  final availableBatches = [
-    'Evening • Batch A',
-    'Morning • Advanced',
-    'Evening • Batch B',
-  ];
+  final availableBatches = <Batch>[].obs;
+  final isLoadingBatches = false.obs;
 
   @override
   void onInit() {
     super.onInit();
     fetchUpdates();
+    fetchBatches();
+  }
+
+  Future<void> fetchBatches() async {
+    try {
+      isLoadingBatches.value = true;
+      final response = await _instituteRepository.listBatches();
+      availableBatches.assignAll(response.items);
+      if (availableBatches.isNotEmpty) {
+        selectedBatch.value = availableBatches.first;
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Failed to load batches: $e',
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
+    } finally {
+      isLoadingBatches.value = false;
+    }
   }
 
   Future<void> fetchUpdates() async {
@@ -104,8 +125,8 @@ class UpdatesController extends GetxController {
             ? 7
             : null, // Mock ID
         batchId: selectedAudience.value == UpdateTargetType.batch
-            ? 4
-            : null, // Mock ID
+            ? selectedBatch.value?.id
+            : null,
       );
 
       await _updateRepository.createDailyUpdate(dailyUpdate.toJson());
@@ -119,7 +140,9 @@ class UpdatesController extends GetxController {
       selectedCategory.value = UpdateCategory.Academic;
       selectedRecipient.value = UpdateRecipient.students;
       selectedAudience.value = UpdateTargetType.all;
-      selectedBatch.value = 'Evening • Batch A';
+      if (availableBatches.isNotEmpty) {
+        selectedBatch.value = availableBatches.first;
+      }
 
       Get.back();
       Get.snackbar(

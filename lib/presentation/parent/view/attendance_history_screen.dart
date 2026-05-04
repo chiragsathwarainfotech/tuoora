@@ -142,12 +142,12 @@ class AttendanceHistoryScreen extends StatelessWidget {
             width: AppSpacing.s44,
             height: AppSpacing.s44,
             decoration: BoxDecoration(
-              color: customBgColor ?? (isPresent ? const Color(0xFFEFF6FF) : const Color(0xFFFEF2F2)),
+              color: customBgColor ?? (isPresent ? const Color(0xFFDCFCE7) : const Color(0xFFFEF2F2)),
               shape: BoxShape.circle,
             ),
             child: Icon(
               customIcon ?? (isPresent ? Icons.check_circle_rounded : Icons.cancel_rounded),
-              color: customStatusColor ?? (isPresent ? AppColors.primaryBrand : const Color(0xFFB91C1C)),
+              color: customStatusColor ?? (isPresent ? const Color(0xFF15803D) : const Color(0xFFB91C1C)),
               size: AppSpacing.s24,
             ),
           ),
@@ -181,7 +181,7 @@ class AttendanceHistoryScreen extends StatelessWidget {
             style: AppTextStyles.manrope(
               fontSize: 12,
               fontWeight: FontWeight.w800,
-              color: customStatusColor ?? (isPresent ? AppColors.primaryBrand : const Color(0xFFB91C1C)),
+              color: customStatusColor ?? (isPresent ? const Color(0xFF15803D) : const Color(0xFFB91C1C)),
             ),
           ),
         ],

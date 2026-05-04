@@ -469,7 +469,7 @@ class StudentProfileScreen extends StatelessWidget {
       onTap: () async {
         final authService = Get.find<AuthService>();
         await authService.clearSession();
-        Get.offAllNamed(AppRoutes.roleSelection);
+        Get.offAllNamed(AppRoutes.login, arguments: 'STUDENT'); // Defaulting to STUDENT role for this screen
       },
       child: Container(
         padding: AppSpacing.all24,

@@ -161,9 +161,7 @@ class InstituteStudentController extends GetxController {
   }
 
   Future<void> selectDOB(BuildContext context) async {
-    DateTime initialDate = DateTime.now().subtract(
-      const Duration(days: 365 * 10),
-    );
+    DateTime initialDate = DateTime.now();
 
     if (dobController.text.isNotEmpty) {
       try {

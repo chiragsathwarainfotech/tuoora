@@ -69,7 +69,7 @@ class HomeworkRatingController extends GetxController {
       final data = {'scores': scores};
       await _repository.submitHomeworkScore(int.parse(homework.id), data);
 
-      Get.back();
+      Get.back(result: true);
       Get.snackbar(
         'Success',
         'Ratings submitted successfully',

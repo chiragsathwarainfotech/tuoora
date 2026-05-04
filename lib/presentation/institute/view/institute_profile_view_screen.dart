@@ -277,7 +277,6 @@ class InstituteProfileViewScreen extends StatelessWidget {
               icon: Icons.logout_rounded,
               title: 'Logout',
               subtitle: 'Sign out of your account',
-              iconColor: Colors.redAccent,
               onTap: () => _showLogoutDialog(context, controller),
             ),
           ),
@@ -446,7 +445,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
               controller.logout();
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.redAccent,
+              backgroundColor: AppColors.primaryBrand,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),

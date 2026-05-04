@@ -18,17 +18,30 @@ class SplashController extends GetxController {
     print('SplashController: isAuthenticated: ${_authService.isAuthenticated}');
     print('SplashController: currentUser: ${_authService.currentUser?.name} (Role: ${_authService.currentUser?.role})');
 
-    if (_authService.isAuthenticated && _authService.shouldStayAuthenticated) {
+    if (_authService.isAuthenticated &&
+        (_authService.shouldStayAuthenticated ||
+            _authService.currentUser?.isProfileSetup == true)) {
       final role = _authService.currentUser?.role;
       print('SplashController: Navigating to dashboard for role: $role');
       _navigateToDashboard(role);
     } else {
-      if (_authService.isAuthenticated && !_authService.shouldStayAuthenticated) {
-        print('SplashController: User opted out of persistent login. Clearing session.');
+      if (_authService.isAuthenticated &&
+          !_authService.shouldStayAuthenticated &&
+          _authService.currentUser?.isProfileSetup != true) {
+        print(
+          'SplashController: User opted out of persistent login and profile not setup. Clearing session.',
+        );
         await _authService.clearSession();
       }
-      print('SplashController: Not authenticated or persistence disabled. Navigating to role selection.');
-      Get.offAllNamed(AppRoutes.roleSelection);
+      
+      final remembered = _authService.rememberedEmail;
+      if (remembered != null) {
+        print('SplashController: Found remembered email. Navigating to login.');
+        Get.offAllNamed(AppRoutes.login, arguments: 'INSTITUTE');
+      } else {
+        print('SplashController: No session or remembered email. Navigating to role selection.');
+        Get.offAllNamed(AppRoutes.roleSelection);
+      }
     }
   }
 

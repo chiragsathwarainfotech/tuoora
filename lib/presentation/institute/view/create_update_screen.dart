@@ -2,19 +2,18 @@ import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/core/enums/update_enums.dart';
+import 'package:fee_easy/data/models/batch_model.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/core/widgets/app_button.dart';
 import 'package:flutter/material.dart';
 import 'package:fee_easy/presentation/institute/controllers/updates_controller.dart';
 import 'package:get/get.dart';
 
-class CreateUpdateScreen extends StatelessWidget {
+class CreateUpdateScreen extends GetView<UpdatesController> {
   const CreateUpdateScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<UpdatesController>();
-
     return Stack(
       children: [
         Scaffold(
@@ -262,44 +261,63 @@ class CreateUpdateScreen extends StatelessWidget {
                       ),
                     ),
                     AppSpacing.v12,
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFEBEBEB),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          value: controller.selectedBatch.value,
-                          isExpanded: true,
-                          icon: const Icon(
-                            Icons.keyboard_arrow_down_rounded,
-                            color: AppColors.textPrimary,
+                    Obx(() {
+                      if (controller.isLoadingBatches.value) {
+                        return const Center(
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        );
+                      }
+                      if (controller.availableBatches.isEmpty) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Text(
+                            'No batches found',
+                            style: AppTextStyles.manrope(
+                              fontSize: 14,
+                              color: Colors.redAccent,
+                            ),
                           ),
-                          items: controller.availableBatches.map((
-                            String value,
-                          ) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(
-                                value,
-                                style: AppTextStyles.manrope(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColors.textPrimary,
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (val) => val != null
-                              ? controller.selectedBatch.value = val
-                              : null,
+                        );
+                      }
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 4,
                         ),
-                      ),
-                    ),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFEBEBEB),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<Batch>(
+                            value: controller.selectedBatch.value,
+                            isExpanded: true,
+                            icon: const Icon(
+                              Icons.keyboard_arrow_down_rounded,
+                              color: AppColors.textPrimary,
+                            ),
+                            items: controller.availableBatches.map((
+                              Batch value,
+                            ) {
+                              return DropdownMenuItem<Batch>(
+                                value: value,
+                                child: Text(
+                                  '${value.name} • ${value.subject}',
+                                  style: AppTextStyles.manrope(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.textPrimary,
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (val) => val != null
+                                ? controller.selectedBatch.value = val
+                                : null,
+                          ),
+                        ),
+                      );
+                    }),
                   ],
                 ],
               );

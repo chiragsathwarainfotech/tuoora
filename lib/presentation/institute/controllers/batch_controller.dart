@@ -32,8 +32,11 @@ class BatchController extends GetxController {
   Future<void> loadBatches({bool isRefresh = true}) async {
     if (isRefresh) {
       currentPage.value = 1;
-      batchesList.clear();
-      isLoading.value = true;
+      // Only show central loading if we don't have ANY data yet
+      // This prevents double loaders (RefreshIndicator + CommonStateWidget)
+      if (batchesList.isEmpty) {
+        isLoading.value = true;
+      }
     } else {
       if (currentPage.value >= lastPage.value) return;
       isMoreLoading.value = true;

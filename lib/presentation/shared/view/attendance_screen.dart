@@ -5,73 +5,23 @@ import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/config/app_routes.dart';
+import 'package:fee_easy/presentation/shared/controllers/attendance_history_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class AttendanceScreen extends StatefulWidget {
+class AttendanceScreen extends GetView<AttendanceHistoryController> {
   final bool showBottomNav;
   const AttendanceScreen({super.key, this.showBottomNav = true});
 
   @override
-  State<AttendanceScreen> createState() => _AttendanceScreenState();
-}
-
-class _AttendanceScreenState extends State<AttendanceScreen> {
-  DateTime _viewDate = DateTime(
-    2024,
-    9,
-  ); // Initializing to September 2024 as per current UI
-
-  final List<String> _months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
-
-  void _prevMonth() {
-    setState(() {
-      _viewDate = DateTime(_viewDate.year, _viewDate.month - 1);
-    });
-  }
-
-  void _nextMonth() {
-    setState(() {
-      _viewDate = DateTime(_viewDate.year, _viewDate.month + 1);
-    });
-  }
-
-  String _getProfileRoute() {
-    return Get.currentRoute.contains('/parent')
-        ? AppRoutes.parentStudentProfile
-        : AppRoutes.studentSettings;
-  }
-
-  String _getUpdatesRoute() {
-    return Get.currentRoute.contains('/parent')
-        ? AppRoutes.parentUpdates
-        : AppRoutes.studentNotifications;
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final bool isParent = Get.currentRoute.contains('/parent');
-
     Widget content = SingleChildScrollView(
       padding: AppSpacing.screenPadding,
       child: Column(
         children: [
           _buildAttendanceHeaderCard(),
           AppSpacing.v32,
-          _buildCalendarSection(),
+          _buildCalendarSection(controller),
           AppSpacing.v32,
           _buildRecentHistorySection(),
           AppSpacing.v24,
@@ -88,7 +38,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         title: Row(
           children: [
             GestureDetector(
-              onTap: () => Get.toNamed(_getProfileRoute()),
+              onTap: () => Get.toNamed(controller.profileRoute),
               child: const CircleAvatar(
                 radius: AppSpacing.s18,
                 backgroundImage: NetworkImage(
@@ -109,7 +59,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: () => Get.toNamed(_getUpdatesRoute()),
+            onPressed: () => Get.toNamed(controller.updatesRoute),
             icon: const Icon(
               Icons.notifications_none_rounded,
               color: AppColors.textPrimary,
@@ -120,8 +70,8 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         ],
       ),
       body: content,
-      bottomNavigationBar: widget.showBottomNav
-          ? (isParent
+      bottomNavigationBar: showBottomNav
+          ? (controller.isParent
                 ? const ParentBottomNav(currentIndex: 3)
                 : const StudentBottomNav(currentIndex: 1))
           : null,
@@ -219,32 +169,37 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     );
   }
 
-  Widget _buildCalendarSection() {
-    final String monthName = _months[_viewDate.month - 1];
-    final String year = _viewDate.year.toString();
-
+  Widget _buildCalendarSection(AttendanceHistoryController controller) {
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              '$monthName $year',
-              style: AppTextStyles.manrope(
-                fontSize: 20,
-                fontWeight: FontWeight.w800,
-                color: AppColors.textPrimary,
+        Obx(() {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '${controller.currentMonthName} ${controller.currentYear}',
+                style: AppTextStyles.manrope(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.textPrimary,
+                ),
               ),
-            ),
-            Row(
-              children: [
-                _buildCircleNavButton(Icons.chevron_left, _prevMonth),
-                AppSpacing.h12,
-                _buildCircleNavButton(Icons.chevron_right, _nextMonth),
-              ],
-            ),
-          ],
-        ),
+              Row(
+                children: [
+                  _buildCircleNavButton(
+                    Icons.chevron_left,
+                    controller.prevMonth,
+                  ),
+                  AppSpacing.h12,
+                  _buildCircleNavButton(
+                    Icons.chevron_right,
+                    controller.nextMonth,
+                  ),
+                ],
+              ),
+            ],
+          );
+        }),
         AppSpacing.v24,
         Container(
           padding: AppSpacing.all24,
@@ -263,7 +218,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             children: [
               _buildDaysHeader(),
               AppSpacing.v20,
-              _buildCalendarGrid(),
+              Obx(() => _buildCalendarGrid(controller)),
               AppSpacing.v24,
               const Divider(color: AppColors.divider),
               AppSpacing.v24,
@@ -314,17 +269,17 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     );
   }
 
-  Widget _buildCalendarGrid() {
+  Widget _buildCalendarGrid(AttendanceHistoryController controller) {
     final now = DateTime.now();
+    final viewDate = controller.viewDate.value;
     final isCurrentMonth =
-        _viewDate.year == now.year && _viewDate.month == now.month;
+        viewDate.year == now.year && viewDate.month == now.month;
 
-    // Find how many days in the current _viewDate month
-    int daysInMonth = DateTime(_viewDate.year, _viewDate.month + 1, 0).day;
+    // Find how many days in the current viewDate month
+    int daysInMonth = DateTime(viewDate.year, viewDate.month + 1, 0).day;
 
     // Find what weekday the 1st of the month is.
-    // DateTime.weekday: Monday=1 ... Sunday=7
-    int firstWeekday = DateTime(_viewDate.year, _viewDate.month, 1).weekday;
+    int firstWeekday = DateTime(viewDate.year, viewDate.month, 1).weekday;
 
     List<Widget> rows = [];
     List<String> currentRow = [];
@@ -338,11 +293,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       String status = 'p'; // default Present
 
       // Determine what day of week this is
-      int currentWeekday = DateTime(
-        _viewDate.year,
-        _viewDate.month,
-        day,
-      ).weekday;
+      int currentWeekday = DateTime(viewDate.year, viewDate.month, day).weekday;
 
       if (currentWeekday == 6 || currentWeekday == 7) {
         status = 'i'; // weekends are usually not in session or pending
@@ -358,7 +309,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             status = 'h';
           }
         }
-      } else if (_viewDate.isAfter(now)) {
+      } else if (viewDate.isAfter(now)) {
         status = 'i'; // entirely in the future
       } else {
         if (day % 8 == 0) {
@@ -429,8 +380,8 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       case 'p': // Present
         return _dateBubble(
           day,
-          const Color(0xFFEFF6FF),
-          AppColors.primaryBrand,
+          const Color(0xFFDCFCE7),
+          const Color(0xFF15803D),
         );
       case 'a': // Absent
         return _dateBubble(
@@ -447,11 +398,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       case 't': // Today
         return _dateBubble(day, AppColors.primaryBrand, Colors.white);
       case 'i': // Pending / Future
-        return _dateBubble(
-          day,
-          AppColors.scaffoldBg,
-          AppColors.textTertiary,
-        );
+        return _dateBubble(day, AppColors.scaffoldBg, AppColors.textTertiary);
       default:
         return _dateBubble(day, Colors.transparent, AppColors.darkSlate);
     }
@@ -463,7 +410,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       runSpacing: AppSpacing.s12,
       alignment: WrapAlignment.center,
       children: [
-        _legendItem(AppColors.primaryBrand, 'PRESENT'),
+        _legendItem(const Color(0xFF15803D), 'PRESENT'),
         _legendItem(const Color(0xFFB91C1C), 'ABSENT'),
         _legendItem(const Color(0xFF92400E), 'HOLIDAY'),
         _legendItem(AppColors.textMuted, 'PENDING'),
@@ -597,14 +544,14 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             height: AppSpacing.s44,
             decoration: BoxDecoration(
               color: isPresent
-                  ? const Color(0xFFEFF6FF)
+                  ? const Color(0xFFDCFCE7)
                   : const Color(0xFFFEF2F2),
               shape: BoxShape.circle,
             ),
             child: Icon(
               isPresent ? Icons.check_circle_rounded : Icons.cancel_rounded,
               color: isPresent
-                  ? AppColors.primaryBrand
+                  ? const Color(0xFF15803D)
                   : const Color(0xFFB91C1C),
               size: AppSpacing.s24,
             ),
@@ -640,7 +587,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
               fontSize: 12,
               fontWeight: FontWeight.w800,
               color: isPresent
-                  ? AppColors.primaryBrand
+                  ? const Color(0xFF15803D)
                   : const Color(0xFFB91C1C),
             ),
           ),

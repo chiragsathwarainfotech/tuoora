@@ -55,7 +55,10 @@ class InstituteBinding extends Bindings {
       fenix: true,
     );
     Get.lazyPut<UpdatesController>(
-      () => UpdatesController(Get.find<DailyUpdateRepositoryImpl>()),
+      () => UpdatesController(
+        Get.find<DailyUpdateRepositoryImpl>(),
+        Get.find<InstituteRepositoryImpl>(),
+      ),
       fenix: true,
     );
     

@@ -96,16 +96,7 @@ class HomeworkController extends GetxController {
         data['attachment'] = selectedAttachment.value;
       }
 
-      final response = await _repository.createHomework(data);
-
-      // If response is the new homework, add it to list
-      if (response != null) {
-        final newHw = HomeworkModel.fromJson(response);
-        homeworks.insert(0, newHw);
-      } else {
-        // Fallback: re-fetch
-        fetchHomeworks();
-      }
+      await fetchHomeworks();
 
       clearForm();
       Get.back();

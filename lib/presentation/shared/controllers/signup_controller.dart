@@ -244,7 +244,7 @@ class SignupController extends GetxController {
         isProfileSetup: false,
       );
 
-      await _authService.saveSession(user);
+      await _authService.saveSession(user, stayAuthenticated: true);
 
       Get.snackbar(
         'Success',
@@ -321,7 +321,7 @@ class SignupController extends GetxController {
           pincode: data['pincode'],
           isProfileSetup: true,
         );
-        await _authService.saveSession(updatedUser);
+        await _authService.saveSession(updatedUser, stayAuthenticated: true);
       }
 
       Get.offAllNamed(AppRoutes.instituteDashboard);

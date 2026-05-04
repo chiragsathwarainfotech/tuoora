@@ -33,7 +33,7 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
                     actions: [
                       IconButton(
                         onPressed: () => Get.toNamed(
-                          AppRoutes.instituteAddStudent,
+                          AppRoutes.instituteAddEditStudent,
                           arguments: {
                             'studentId': id,
                             'student': student?.toJson(),

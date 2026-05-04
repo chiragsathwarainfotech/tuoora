@@ -185,8 +185,8 @@ class AppPages {
       binding: InstituteBinding(),
     ),
     GetPage(
-      name: AppRoutes.instituteAddStudent,
-      page: () => const AddStudentScreen(),
+      name: AppRoutes.instituteAddEditStudent,
+      page: () => const AddEditStudentScreen(),
       binding: InstituteBinding(),
     ),
     GetPage(

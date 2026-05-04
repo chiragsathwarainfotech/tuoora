@@ -39,32 +39,34 @@ class AuthService extends GetxService {
     }
   }
 
-  Future<void> saveSession(User user, {bool stayAuthenticated = false}) async {
+  Future<void> saveSession(User user, {bool stayAuthenticated = false, String? email, String? password}) async {
     _currentUser.value = user;
     _token.value = user.token;
     await _storage.write('user', user.toJson());
     await _storage.write('token', user.token);
     await _storage.write('stay_authenticated', stayAuthenticated);
     if (stayAuthenticated) {
-      await _storage.write('remembered_email', user.email);
+      await _storage.write('remembered_email', email ?? user.email);
+      if (password != null) {
+        await _storage.write('remembered_password', password);
+      }
     } else {
       await _storage.remove('remembered_email');
+      await _storage.remove('remembered_password');
     }
   }
 
   String? get rememberedEmail => _storage.read('remembered_email');
+  String? get rememberedPassword => _storage.read('remembered_password');
 
   Future<void> clearSession() async {
     _currentUser.value = null;
     _token.value = '';
     
-    // Explicitly remove keys first
+    // Selectively remove session data, but preserve preferences like remembered_email
     await _storage.remove('user');
     await _storage.remove('token');
     
-    // Then erase all to be sure
-    await _storage.erase();
-    
-    print('AuthService: Session cleared and storage erased.');
+    print('AuthService: Session cleared (user and token removed). Preferences preserved.');
   }
 }

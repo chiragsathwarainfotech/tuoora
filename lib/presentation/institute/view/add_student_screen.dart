@@ -9,8 +9,8 @@ import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class AddStudentScreen extends GetView<InstituteStudentController> {
-  const AddStudentScreen({super.key});
+class AddEditStudentScreen extends GetView<InstituteStudentController> {
+  const AddEditStudentScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -252,104 +252,8 @@ class AddStudentScreen extends GetView<InstituteStudentController> {
             icon: Icons.school,
             controller: controller.standardController,
           ),
-          AppSpacing.v24,
-          _buildBatchAssignmentSection(),
-          AppSpacing.v12,
         ],
       ),
-    );
-  }
-
-  Widget _buildBatchAssignmentSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Batch Assignment',
-          style: AppTextStyles.manrope(
-            fontSize: 14,
-            fontWeight: FontWeight.w800,
-            color: const Color(0xFF663322),
-          ),
-        ),
-        AppSpacing.v12,
-        Obx(() {
-          if (controller.availableBatches.isEmpty) {
-            return Container(
-              padding: AppSpacing.all16,
-              decoration: BoxDecoration(
-                color: const Color(0xFFEBEBEB),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Center(
-                child: Text(
-                  'No batches available',
-                  style: AppTextStyles.lexend(
-                    fontSize: 13,
-                    color: const Color(0xFF917B6B),
-                  ),
-                ),
-              ),
-            );
-          }
-          return SizedBox(
-            height: 110,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: controller.availableBatches.length,
-              separatorBuilder: (context, index) => AppSpacing.h12,
-              itemBuilder: (context, index) {
-                final batch = controller.availableBatches[index];
-                final isSelected = controller.selectedBatchId.value == batch.id;
-                return GestureDetector(
-                  onTap: () => controller.selectedBatchId.value = batch.id,
-                  child: Container(
-                    width: 150,
-                    padding: AppSpacing.all16,
-                    decoration: BoxDecoration(
-                      color: isSelected
-                          ? AppColors.primaryBrandLight.withValues(alpha: 0.5)
-                          : Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: isSelected
-                            ? AppColors.primaryBrand
-                            : const Color(0xFFEBEBEB),
-                        width: 1.5,
-                      ),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          batch.title,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: AppTextStyles.manrope(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.textPrimary,
-                          ),
-                        ),
-                        AppSpacing.v4,
-                        Text(
-                          batch.time,
-                          style: AppTextStyles.lexend(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            color: const Color(0xFF917B6B),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          );
-        }),
-      ],
     );
   }
 

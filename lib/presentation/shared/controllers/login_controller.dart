@@ -43,7 +43,13 @@ class LoginController extends GetxController {
       }
 
       if (user != null) {
-        await _authService.saveSession(user, stayAuthenticated: stayAuthenticated.value);
+        // Use the actual email/password entered, as user object might not have them
+        await _authService.saveSession(
+          user, 
+          stayAuthenticated: stayAuthenticated.value,
+          email: email,
+          password: stayAuthenticated.value ? password : null,
+        );
         _navigateToDashboard(role);
       }
     } catch (e) {
@@ -64,13 +70,30 @@ class LoginController extends GetxController {
   }
 
   @override
-  void onInit() {
-    super.onInit();
-    final remembered = _authService.rememberedEmail;
-    if (remembered != null) {
-      emailController.text = remembered;
+  void onReady() {
+    super.onReady();
+    _prefillCredentials();
+  }
+
+  void _prefillCredentials() {
+    final rememberedEmail = _authService.rememberedEmail;
+    final rememberedPassword = _authService.rememberedPassword;
+    print('LoginController: Prefilling credentials. Email: $rememberedEmail');
+    
+    if (rememberedEmail != null) {
+      emailController.text = rememberedEmail;
+      if (rememberedPassword != null) {
+        passwordController.text = rememberedPassword;
+      }
       stayAuthenticated.value = true;
     }
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    // Also try onInit just in case
+    _prefillCredentials();
   }
 
   @override

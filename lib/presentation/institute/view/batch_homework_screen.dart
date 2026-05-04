@@ -7,6 +7,7 @@ import 'package:fee_easy/presentation/institute/controllers/homework_controller.
 import 'package:fee_easy/presentation/institute/models/batch_model.dart';
 import 'package:fee_easy/presentation/institute/models/homework_model.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
+import 'package:fee_easy/presentation/shared/widgets/common_state_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -28,45 +29,37 @@ class BatchHomeworkScreen extends StatelessWidget {
               title: AppStrings.instBatchHomeworkTitle,
               onBackTap: () => Get.back(),
             ),
+            Padding(
+              padding: AppSpacing.x24.add(AppSpacing.y16),
+              child: _buildSearchBar(controller),
+            ),
             Expanded(
               child: RefreshIndicator(
                 onRefresh: () => controller.fetchHomeworks(),
-                child: SingleChildScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  padding: AppSpacing.x24.add(AppSpacing.y16),
-                  child: Column(
-                    children: [
-                      _buildSearchBar(controller),
-                      AppSpacing.v24,
-                      Obx(() {
-                        if (controller.isLoading.value && controller.homeworks.isEmpty) {
-                          return const Center(child: CircularProgressIndicator());
-                        }
-                        
-                        if (controller.filteredHomeworks.isEmpty) {
-                          return Center(
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 40),
-                              child: Text(
-                                'No homework assignments found',
-                                style: AppTextStyles.manrope(
-                                  fontSize: 16,
-                                  color: AppColors.textTertiary,
-                                ),
-                              ),
-                            ),
-                          );
-                        }
-
-                        return Column(
-                          children: controller.filteredHomeworks
-                              .map((hw) => _buildHomeworkItem(hw))
-                              .toList(),
-                        );
-                      }),
-                    ],
-                  ),
-                ),
+                child: Obx(() {
+                  return CommonStateWidget(
+                    isLoading: controller.isLoading.value,
+                    isEmpty: controller.filteredHomeworks.isEmpty,
+                    emptyTitle: controller.searchQuery.value.isNotEmpty
+                        ? 'No assignments found'
+                        : 'No homework yet',
+                    emptySubtitle: controller.searchQuery.value.isNotEmpty
+                        ? 'Try searching with a different title'
+                        : 'Start by creating a new homework assignment for this batch',
+                    emptyIcon: controller.searchQuery.value.isNotEmpty
+                        ? Icons.search_off_rounded
+                        : Icons.assignment_outlined,
+                    child: SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      padding: AppSpacing.x24.add(AppSpacing.bottom16),
+                      child: Column(
+                        children: controller.filteredHomeworks
+                            .map((hw) => _buildHomeworkItem(hw, controller))
+                            .toList(),
+                      ),
+                    ),
+                  );
+                }),
               ),
             ),
           ],
@@ -92,10 +85,7 @@ class BatchHomeworkScreen extends StatelessWidget {
         onChanged: (val) => controller.searchQuery.value = val,
         decoration: InputDecoration(
           border: InputBorder.none,
-          icon: const Icon(
-            Icons.search,
-            color: const Color(0xFF917B6B),
-          ),
+          icon: const Icon(Icons.search, color: const Color(0xFF917B6B)),
           hintText: AppStrings.instSearchAssignmentsHint,
           hintStyle: AppTextStyles.lexend(
             fontSize: 14,
@@ -106,11 +96,18 @@ class BatchHomeworkScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHomeworkItem(HomeworkModel hw) {
+  Widget _buildHomeworkItem(HomeworkModel hw, HomeworkController controller) {
     final isActive = hw.isActive;
     return GestureDetector(
-      onTap: () =>
-          Get.toNamed(AppRoutes.instituteHomeworkRating, arguments: hw),
+      onTap: () async {
+        final result = await Get.toNamed(
+          AppRoutes.instituteHomeworkRating,
+          arguments: hw,
+        );
+        if (result == true) {
+          controller.fetchHomeworks();
+        }
+      },
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
         padding: AppSpacing.all16,
@@ -167,7 +164,9 @@ class BatchHomeworkScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
-                          isActive ? AppStrings.instActiveLabel : AppStrings.instClosedLabel,
+                          isActive
+                              ? AppStrings.instActiveLabel
+                              : AppStrings.instClosedLabel,
                           style: AppTextStyles.manrope(
                             fontSize: 10,
                             fontWeight: FontWeight.w800,

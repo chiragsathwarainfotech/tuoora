@@ -52,12 +52,12 @@ class BillingHistoryScreen extends StatelessWidget {
           Container(
             padding: AppSpacing.all12,
             decoration: BoxDecoration(
-              color: AppColors.scaffoldBg,
+              color: AppColors.primaryBrandLight,
               borderRadius: BorderRadius.circular(AppSpacing.s12),
             ),
             child: const Icon(
               Icons.receipt_long_rounded,
-              color: AppColors.textTertiary,
+              color: AppColors.primaryBrand,
               size: AppSpacing.s24,
             ),
           ),
@@ -71,7 +71,7 @@ class BillingHistoryScreen extends StatelessWidget {
                   style: AppTextStyles.manrope(
                     fontSize: AppSpacing.s16,
                     fontWeight: FontWeight.w800,
-                    color: AppColors.textPrimary,
+                    color: AppColors.brandAppBarColor,
                   ),
                 ),
                 Text(
@@ -92,7 +92,7 @@ class BillingHistoryScreen extends StatelessWidget {
                 style: AppTextStyles.manrope(
                   fontSize: AppSpacing.s16,
                   fontWeight: FontWeight.w800,
-                  color: AppColors.textPrimary,
+                  color: AppColors.brandAppBarColor,
                 ),
               ),
               AppSpacing.v4,

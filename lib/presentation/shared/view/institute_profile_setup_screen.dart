@@ -43,7 +43,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                                   color: AppColors.primaryBrandLight,
                                   shape: BoxShape.circle,
                                   border: Border.all(
-                                    color: const Color(0xFF663322),
+                                    color: AppColors.brandAppBarColor,
                                     width: 2,
                                   ),
                                   image: controller.selectedLogoPath.value != null
@@ -58,7 +58,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                                 child: controller.selectedLogoPath.value == null
                                     ? const Icon(
                                         Icons.add_a_photo_outlined,
-                                        color: const Color(0xFF663322),
+                                        color: AppColors.brandAppBarColor,
                                         size: 32,
                                       )
                                     : null,
@@ -200,7 +200,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
       style: AppTextStyles.manrope(
         fontSize: 12,
         fontWeight: FontWeight.w800,
-        color: const Color(0xFF663322),
+        color: AppColors.brandAppBarColor,
         letterSpacing: 1.2,
       ),
     );
@@ -221,7 +221,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
           style: AppTextStyles.manrope(
             fontSize: 12,
             fontWeight: FontWeight.w700,
-            color: const Color(0xFF663322),
+            color: AppColors.brandAppBarColor,
           ),
         ),
         AppSpacing.v8,
@@ -243,7 +243,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
             decoration: InputDecoration(
               prefixIcon: Icon(
                 prefixIcon,
-                color: const Color(0xFF917B6B),
+                color: AppColors.textMuted,
                 size: 20,
               ),
               border: InputBorder.none,

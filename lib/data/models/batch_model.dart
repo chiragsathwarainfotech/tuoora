@@ -50,7 +50,7 @@ class Batch {
       location: classroom ?? 'Main Hall',
       statusLabel: 'Active',
       statusBg: AppColors.instStatusOpenBg,
-      leftBorderColor: AppColors.instBorderOpen,
+      leftBorderColor: AppColors.primaryBrand,
       statusTextColor: AppColors.instStatusOpenText,
       baseFee: double.tryParse(fees.toString()) ?? 0.0,
       description: description,

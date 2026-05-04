@@ -9,13 +9,11 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class InstituteFeesScreen extends StatelessWidget {
+class InstituteFeesScreen extends GetView<InstituteController> {
   const InstituteFeesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<InstituteController>();
-
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(

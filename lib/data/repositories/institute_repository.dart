@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:fee_easy/core/api/api_client.dart';
 import 'package:fee_easy/core/constants/api_constants.dart';
+import 'package:fee_easy/core/services/auth_service.dart';
 import 'package:fee_easy/data/models/batch_model.dart';
 import 'package:fee_easy/data/models/institute_profile_model.dart';
 import 'package:fee_easy/data/models/whatsapp_settings_model.dart';
@@ -9,8 +12,9 @@ import 'package:fee_easy/presentation/institute/models/report_models.dart';
 import 'package:fee_easy/presentation/institute/models/homework_model.dart';
 import 'package:fee_easy/presentation/institute/models/resource_model.dart';
 import 'package:fee_easy/presentation/institute/models/attendance_record_model.dart';
-import 'package:get/get_connect/http/src/multipart/form_data.dart';
-import 'package:get/get_connect/http/src/multipart/multipart_file.dart';
+import 'package:fee_easy/data/models/notification_model.dart';
+import 'package:flutter/foundation.dart';
+import 'package:get/get.dart';
 
 class InstituteRepository implements InstituteRepositoryImpl {
   final ApiClient _apiClient;
@@ -176,14 +180,7 @@ class InstituteRepository implements InstituteRepositoryImpl {
 
   @override
   Future<List<int>> exportFees() async {
-    final response = await _apiClient.get(ApiConstants.instituteFeesExport);
-
-    if (response.status.hasError) {
-      throw Exception('Failed to download report: ${response.statusText}');
-    }
-
-    // Convert Stream<List<int>> to List<int>
-    return _collectBytes(response.bodyBytes);
+    return _downloadPdf(ApiConstants.instituteFeesExport);
   }
 
   @override
@@ -207,17 +204,6 @@ class InstituteRepository implements InstituteRepositoryImpl {
       );
     }
     return BatchFeeDetailResponse.fromJson(response.body['data']);
-  }
-
-  @override
-  Future<List<int>> exportFeeReport() async {
-    final response = await _apiClient.get(
-      ApiConstants.instituteReportFeeExport,
-    );
-    if (response.status.hasError) {
-      throw Exception('Failed to export fee report: ${response.statusText}');
-    }
-    return _collectBytes(response.bodyBytes);
   }
 
   @override
@@ -250,19 +236,6 @@ class InstituteRepository implements InstituteRepositoryImpl {
   }
 
   @override
-  Future<List<int>> exportAttendanceReport() async {
-    final response = await _apiClient.get(
-      ApiConstants.instituteReportAttendanceExport,
-    );
-    if (response.status.hasError) {
-      throw Exception(
-        'Failed to export attendance report: ${response.statusText}',
-      );
-    }
-    return _collectBytes(response.bodyBytes);
-  }
-
-  @override
   Future<PerformanceReportResponse> getPerformanceReport() async {
     final response = await _apiClient.get(
       ApiConstants.instituteReportPerformance,
@@ -292,27 +265,47 @@ class InstituteRepository implements InstituteRepositoryImpl {
   }
 
   @override
-  Future<List<int>> exportPerformanceReport() async {
-    final response = await _apiClient.get(
-      ApiConstants.instituteReportPerformanceExport,
-    );
-    if (response.status.hasError) {
-      throw Exception(
-        'Failed to export performance report: ${response.statusText}',
-      );
-    }
-    return _collectBytes(response.bodyBytes);
+  Future<List<int>> exportFeeReport() async {
+    return _downloadPdf(ApiConstants.instituteReportFeeExport);
   }
 
-  Future<List<int>> _collectBytes(Stream<List<int>>? stream) async {
-    if (stream == null) {
-      throw Exception('Received empty file from server');
+  @override
+  Future<List<int>> exportAttendanceReport() async {
+    return _downloadPdf(ApiConstants.instituteReportAttendanceExport);
+  }
+
+  @override
+  Future<List<int>> exportPerformanceReport() async {
+    return _downloadPdf(ApiConstants.instituteReportPerformanceExport);
+  }
+
+  Future<List<int>> _downloadPdf(String endpoint) async {
+    try {
+      final uri = Uri.parse('${ApiConstants.baseUrl}$endpoint');
+
+      final client = HttpClient();
+      final request = await client.getUrl(uri);
+
+      request.headers.set(HttpHeaders.acceptHeader, 'application/pdf');
+
+      final authService = Get.find<AuthService>();
+      if (authService.isAuthenticated) {
+        request.headers.set(
+          HttpHeaders.authorizationHeader,
+          'Bearer ${authService.token}',
+        );
+      }
+
+      final response = await request.close();
+
+      if (response.statusCode != 200) {
+        throw Exception('Failed: ${response.statusCode}');
+      }
+
+      return await consolidateHttpClientResponseBytes(response);
+    } catch (e) {
+      throw Exception('Download failed: $e');
     }
-    final List<int> allBytes = [];
-    await for (final chunk in stream) {
-      allBytes.addAll(chunk);
-    }
-    return allBytes;
   }
 
   @override
@@ -533,5 +526,16 @@ class InstituteRepository implements InstituteRepositoryImpl {
       throw Exception(message);
     }
     return response.body['data'];
+  }
+
+  @override
+  Future<List<NotificationModel>> getNotifications() async {
+    final response = await _apiClient.get(ApiConstants.instituteNotifications);
+    if (response.status.hasError) {
+      throw Exception('Failed to fetch notifications: ${response.statusText}');
+    }
+
+    final List<dynamic> data = response.body['data'] ?? [];
+    return data.map((json) => NotificationModel.fromJson(json)).toList();
   }
 }

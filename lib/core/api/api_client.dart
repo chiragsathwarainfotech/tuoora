@@ -12,7 +12,12 @@ class ApiClient extends GetConnect {
     // Detailed Request Logging
     httpClient.addRequestModifier<dynamic>((request) {
       final authService = Get.find<AuthService>();
-      request.headers['Accept'] = 'application/json';
+      
+      // Only set application/json if no Accept header is already present
+      if (!request.headers.containsKey('Accept')) {
+        request.headers['Accept'] = 'application/json';
+      }
+      
       if (authService.isAuthenticated) {
         request.headers['Authorization'] = 'Bearer ${authService.token}';
       }
@@ -32,7 +37,11 @@ class ApiClient extends GetConnect {
         print('❌ [API ERROR]');
         print('URL: ${request.url}');
         print('Status: ${response.statusCode} ${response.statusText}');
-        print('Body: ${response.body}');
+        if (response.body is String || response.body is Map) {
+          print('Body: ${response.body}');
+        } else {
+          print('Body: [Binary Data or Unknown Format]');
+        }
         
         // Handle unauthorized globally if needed
         if (response.statusCode == 401) {

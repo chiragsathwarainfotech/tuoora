@@ -4,6 +4,7 @@ import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/core/widgets/app_button.dart';
+import 'package:fee_easy/core/widgets/app_info_box.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -271,7 +272,9 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
         Container(
           padding: AppSpacing.x16,
           decoration: BoxDecoration(
-            color: enabled ? AppColors.inputBg : AppColors.inputBg.withValues(alpha: 0.5),
+            color: enabled
+                ? AppColors.inputBg
+                : AppColors.inputBg.withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: AppColors.borderGrey.withValues(alpha: 0.5),
@@ -308,48 +311,10 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
   }
 
   Widget _buildSecurityNotice() {
-    return Container(
-      padding: AppSpacing.all20,
-      decoration: BoxDecoration(
-        color: const Color(0xFFF0FDF4),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFDCFCE7)),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Icon(
-            Icons.verified_user_rounded,
-            color: Color(0xFF166534),
-            size: 20,
-          ),
-          AppSpacing.h16,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  AppStrings.instSecurityNote,
-                  style: AppTextStyles.manrope(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w800,
-                    color: const Color(0xFF166534),
-                  ),
-                ),
-                AppSpacing.v4,
-                Text(
-                  AppStrings.instSecurityNoteDesc,
-                  style: AppTextStyles.lexend(
-                    fontSize: 12,
-                    color: const Color(0xFF15803D),
-                    height: 1.5,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return const AppInfoBox(
+      icon: Icons.verified_user_rounded,
+      title: AppStrings.instSecurityNote,
+      description: AppStrings.instSecurityNoteDesc,
     );
   }
 

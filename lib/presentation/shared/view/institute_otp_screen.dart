@@ -113,7 +113,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
               child: const Center(
                 child: Icon(
                   Icons.lock_person_outlined,
-                  color: const Color(0xFF663322),
+                  color: AppColors.brandAppBarColor,
                   size: AppSpacing.s24,
                 ),
               ),

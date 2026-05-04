@@ -1,3 +1,4 @@
+import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/presentation/institute/controllers/batch_controller.dart';
 import 'package:fee_easy/presentation/institute/controllers/institute_controller.dart';
 import 'package:fee_easy/presentation/institute/models/batch_performance_model.dart';
@@ -132,7 +133,7 @@ class ReportsController extends GetxController {
       Get.snackbar(
         'Downloading',
         'Preparing $type report...',
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: AppColors.primaryBrand,
         colorText: Colors.white,
         showProgressIndicator: true,
       );

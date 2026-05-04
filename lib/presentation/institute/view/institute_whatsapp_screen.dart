@@ -4,6 +4,7 @@ import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/core/widgets/app_button.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
+import 'package:fee_easy/core/widgets/app_info_box.dart';
 import 'package:flutter/material.dart';
 
 import 'package:fee_easy/presentation/institute/controllers/whatsapp_controller.dart';
@@ -224,50 +225,12 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
   }
 
   Widget _buildHowToFindBox() {
-    return Container(
-      padding: AppSpacing.all20,
-      decoration: BoxDecoration(
-        color: AppColors.instDashboardIconBg,
-        borderRadius: BorderRadius.circular(AppSpacing.s16),
-        border: Border.all(
-          color: AppColors.primaryBrand.withValues(alpha: 0.5),
-        ),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Icon(
-            Icons.info_rounded,
-            color: AppColors.primaryBrand,
-            size: AppSpacing.s20,
-          ),
-          AppSpacing.h16,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  AppStrings.instHowToFindThese,
-                  style: AppTextStyles.manrope(
-                    fontSize: AppSpacing.s16,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.primaryBrand,
-                  ),
-                ),
-                AppSpacing.v8,
-                Text(
-                  AppStrings.instHowToFindDesc,
-                  style: AppTextStyles.lexend(
-                    fontSize: AppSpacing.s14,
-                    height: 1.5,
-                    color: AppColors.primaryBrand.withValues(alpha: 0.8),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return const AppInfoBox(
+      icon: Icons.info_rounded,
+      title: AppStrings.instHowToFindThese,
+      description: AppStrings.instHowToFindDesc,
+      titleFontSize: AppSpacing.s16,
+      descFontSize: AppSpacing.s14,
     );
   }
 

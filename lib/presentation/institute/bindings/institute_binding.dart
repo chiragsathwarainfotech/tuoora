@@ -13,6 +13,7 @@ import 'package:fee_easy/presentation/institute/controllers/updates_controller.d
 import 'package:fee_easy/presentation/institute/controllers/batch_controller.dart';
 import 'package:fee_easy/presentation/institute/controllers/security_controller.dart';
 import 'package:fee_easy/presentation/institute/controllers/whatsapp_controller.dart';
+import 'package:fee_easy/presentation/institute/controllers/notification_controller.dart';
 import 'package:fee_easy/core/api/api_client.dart';
 import 'package:fee_easy/data/repositories/student_repository.dart';
 import 'package:fee_easy/data/repositories/daily_update_repository.dart';
@@ -73,6 +74,12 @@ class InstituteBinding extends Bindings {
       fenix: true,
     );
     Get.lazyPut<WhatsAppController>(() => WhatsAppController(), fenix: true);
+    Get.lazyPut<NotificationController>(
+      () => NotificationController(
+        Get.find<InstituteRepositoryImpl>() as InstituteRepository,
+      ),
+      fenix: true,
+    );
 
     Get.put<DownloadService>(DownloadService(), permanent: true);
   }

@@ -13,18 +13,14 @@ class DownloadService extends GetxService {
       String? filePath;
 
       if (Platform.isAndroid) {
-        // Common download path for Android
         final directory = Directory('/storage/emulated/0/Download');
         if (await directory.exists()) {
           filePath = '${directory.path}/$fileName';
         } else {
-          // Fallback to app-specific external storage if the above doesn't exist
-          // In a real app, we'd use path_provider here.
-          filePath = '/storage/emulated/0/Android/data/com.example.fee_easy/files/$fileName';
+          filePath =
+              '/storage/emulated/0/Android/data/com.example.fee_easy/files/$fileName';
         }
       } else if (Platform.isIOS) {
-        // iOS handling is more restrictive, usually we'd use path_provider's getApplicationDocumentsDirectory
-        // For now, we'll focus on the Android requirement mentioned by the user
         throw Exception('iOS download path requires path_provider package');
       }
 

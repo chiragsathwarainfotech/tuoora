@@ -6,6 +6,7 @@ import 'package:fee_easy/presentation/institute/models/report_models.dart';
 import 'package:fee_easy/presentation/institute/models/homework_model.dart';
 import 'package:fee_easy/presentation/institute/models/resource_model.dart';
 import 'package:fee_easy/presentation/institute/models/attendance_record_model.dart';
+import 'package:fee_easy/data/models/notification_model.dart';
 
 abstract class InstituteRepositoryImpl {
   Future<InstituteProfile> getProfile();
@@ -65,4 +66,7 @@ abstract class InstituteRepositoryImpl {
   // Resources
   Future<List<ResourceModel>> getResources(int batchId);
   Future<dynamic> uploadResource(Map<String, dynamic> data);
+  
+  // Notifications
+  Future<List<NotificationModel>> getNotifications();
 }

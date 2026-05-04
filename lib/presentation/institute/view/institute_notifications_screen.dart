@@ -1,19 +1,16 @@
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
+import 'package:fee_easy/data/models/notification_model.dart';
+import 'package:fee_easy/presentation/institute/controllers/notification_controller.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
-class InstituteNotificationsScreen extends StatefulWidget {
+class InstituteNotificationsScreen extends GetView<NotificationController> {
   const InstituteNotificationsScreen({super.key});
 
-  @override
-  State<InstituteNotificationsScreen> createState() =>
-      _InstituteNotificationsScreenState();
-}
-
-class _InstituteNotificationsScreenState
-    extends State<InstituteNotificationsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,69 +21,71 @@ class _InstituteNotificationsScreenState
           children: [
             const InstituteAppBar(title: 'Notification', isRoot: false),
             Expanded(
-              child: SingleChildScrollView(
-                padding: AppSpacing.x24.add(AppSpacing.y4),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildNotificationCard(
-                      badge: 'URGENT',
-                      badgeColor: const Color(0xFF7C2D12),
-                      badgeTextColor: Colors.white,
-                      time: '3h ago',
-                      title: 'Subscription Expiring Soon',
-                      description:
-                          'Your Premium plan expires in 3 days. Renew now to avoid service interruption.',
-                      icon: Icons.warning_amber_rounded,
-                      iconBg: const Color(0xFFFFEDD5),
-                      iconColor: const Color(0xFFD97706),
-                      actionText: 'Renew Plan',
+              child: Obx(() {
+                if (controller.isLoading.value && controller.notifications.isEmpty) {
+                  return const Center(
+                    child: CircularProgressIndicator(color: AppColors.primaryBrand),
+                  );
+                }
+
+                if (controller.errorMessage.isNotEmpty && controller.notifications.isEmpty) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Error: ${controller.errorMessage.value}',
+                          textAlign: TextAlign.center,
+                          style: AppTextStyles.manrope(color: AppColors.errorRed),
+                        ),
+                        AppSpacing.v16,
+                        ElevatedButton(
+                          onPressed: () => controller.fetchNotifications(),
+                          child: const Text('Retry'),
+                        ),
+                      ],
                     ),
-                    AppSpacing.v16,
-                    _buildNotificationCard(
-                      badge: 'UPDATE',
-                      badgeColor: const Color(0xFF1D4ED8),
-                      badgeTextColor: Colors.white,
-                      time: 'Yesterday',
-                      title: 'New Feature: Attendance Reports',
-                      description:
-                          'You can now export detailed monthly attendance reports in PDF format.',
-                      icon: Icons.update_rounded,
-                      iconBg: AppColors.lightBlueBg,
-                      iconColor: const Color(0xFF2563EB),
-                      imageUrl:
-                          'https://img.freepik.com/free-vector/data-report-concept-illustration_114360-883.jpg',
+                  );
+                }
+
+                if (controller.notifications.isEmpty) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.notifications_none_rounded,
+                          size: 64,
+                          color: AppColors.textMuted,
+                        ),
+                        AppSpacing.v16,
+                        Text(
+                          'No notifications yet',
+                          style: AppTextStyles.manrope(
+                            fontSize: 16,
+                            color: AppColors.textSecondary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
-                    AppSpacing.v16,
-                    _buildNotificationCard(
-                      badge: 'INFO',
-                      badgeColor: AppColors.textTertiary,
-                      badgeTextColor: Colors.white,
-                      time: 'Mar 15',
-                      title: 'System Maintenance',
-                      description:
-                          'Scheduled maintenance on Sunday, March 20, from 2 AM to 4 AM IST. The platform will be temporarily inaccessible.',
-                      icon: Icons.info_outline_rounded,
-                      iconBg: AppColors.reportBorder,
-                      iconColor: const Color(0xFF475569),
-                    ),
-                    AppSpacing.v16,
-                    _buildNotificationCard(
-                      badge: 'SUCCESS',
-                      badgeColor: const Color(0xFFE2E8F0),
-                      badgeTextColor: const Color(0xFF475569),
-                      time: '1w ago',
-                      title: 'Fee Collection Milestone',
-                      description:
-                          'Congratulations! You\'ve reached 90% fee collection for the current quarter.',
-                      icon: Icons.check_circle_outline_rounded,
-                      iconBg: AppColors.reportBorder,
-                      iconColor: const Color(0xFF475569),
-                    ),
-                    AppSpacing.v40,
-                  ],
-                ),
-              ),
+                  );
+                }
+
+                return RefreshIndicator(
+                  onRefresh: () => controller.refreshNotifications(),
+                  color: AppColors.primaryBrand,
+                  child: ListView.separated(
+                    padding: AppSpacing.x24.add(AppSpacing.y16),
+                    itemCount: controller.notifications.length,
+                    separatorBuilder: (context, index) => AppSpacing.v16,
+                    itemBuilder: (context, index) {
+                      final notification = controller.notifications[index];
+                      return _buildNotificationCard(notification);
+                    },
+                  ),
+                );
+              }),
             ),
           ],
         ),
@@ -94,19 +93,44 @@ class _InstituteNotificationsScreenState
     );
   }
 
-  Widget _buildNotificationCard({
-    required String badge,
-    required Color badgeColor,
-    required Color badgeTextColor,
-    required String time,
-    required String title,
-    required String description,
-    required IconData icon,
-    required Color iconBg,
-    required Color iconColor,
-    String? actionText,
-    String? imageUrl,
-  }) {
+  Widget _buildNotificationCard(NotificationModel notification) {
+    // Determine icon and colors based on type
+    IconData icon;
+    Color iconBg;
+    Color iconColor;
+    String badge;
+    Color badgeColor;
+
+    switch (notification.type.toLowerCase()) {
+      case 'announcement':
+        icon = Icons.campaign_rounded;
+        iconBg = const Color(0xFFFEF3C7);
+        iconColor = const Color(0xFFD97706);
+        badge = 'ANNOUNCEMENT';
+        badgeColor = const Color(0xFFD97706);
+        break;
+      case 'urgent':
+        icon = Icons.warning_amber_rounded;
+        iconBg = const Color(0xFFFEE2E2);
+        iconColor = const Color(0xFFEF4444);
+        badge = 'URGENT';
+        badgeColor = const Color(0xFFEF4444);
+        break;
+      case 'update':
+        icon = Icons.update_rounded;
+        iconBg = const Color(0xFFDBEAFE);
+        iconColor = const Color(0xFF2563EB);
+        badge = 'UPDATE';
+        badgeColor = const Color(0xFF2563EB);
+        break;
+      default:
+        icon = Icons.notifications_rounded;
+        iconBg = AppColors.reportBorder;
+        iconColor = AppColors.textSecondary;
+        badge = 'INFO';
+        badgeColor = AppColors.textTertiary;
+    }
+
     return Container(
       width: double.infinity,
       padding: AppSpacing.all24,
@@ -120,6 +144,7 @@ class _InstituteNotificationsScreenState
             offset: const Offset(0, 4),
           ),
         ],
+        border: notification.isRead ? null : Border.all(color: badgeColor.withValues(alpha: 0.2), width: 1),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -141,10 +166,7 @@ class _InstituteNotificationsScreenState
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 4,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
                         color: badgeColor,
                         borderRadius: BorderRadius.circular(6),
@@ -154,12 +176,12 @@ class _InstituteNotificationsScreenState
                         style: AppTextStyles.manrope(
                           fontSize: 10,
                           fontWeight: FontWeight.w900,
-                          color: badgeTextColor,
+                          color: Colors.white,
                         ),
                       ),
                     ),
                     Text(
-                      time,
+                      _getRelativeTime(notification.createdAt),
                       style: AppTextStyles.manrope(
                         fontSize: 12,
                         color: AppColors.textMuted,
@@ -170,7 +192,7 @@ class _InstituteNotificationsScreenState
                 ),
                 AppSpacing.v12,
                 Text(
-                  title,
+                  notification.title,
                   style: AppTextStyles.manrope(
                     fontSize: 18,
                     fontWeight: FontWeight.w800,
@@ -180,46 +202,23 @@ class _InstituteNotificationsScreenState
                 ),
                 AppSpacing.v8,
                 Text(
-                  description,
+                  notification.message,
                   style: AppTextStyles.lexend(
                     fontSize: 13,
                     color: const Color(0xFF475569),
                     height: 1.5,
                   ),
                 ),
-                if (imageUrl != null) ...[
+                if (notification.image != null) ...[
                   AppSpacing.v16,
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: Image.network(
-                      imageUrl,
+                      notification.image!,
                       height: 140,
                       width: double.infinity,
                       fit: BoxFit.cover,
-                    ),
-                  ),
-                ],
-                if (actionText != null) ...[
-                  AppSpacing.v16,
-                  GestureDetector(
-                    onTap: () {},
-                    child: Row(
-                      children: [
-                        Text(
-                          actionText,
-                          style: AppTextStyles.manrope(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w800,
-                            color: const Color(0xFF1D4ED8),
-                          ),
-                        ),
-                        AppSpacing.h8,
-                        const Icon(
-                          Icons.arrow_forward,
-                          color: Color(0xFF1D4ED8),
-                          size: 16,
-                        ),
-                      ],
+                      errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
                     ),
                   ),
                 ],
@@ -229,5 +228,22 @@ class _InstituteNotificationsScreenState
         ],
       ),
     );
+  }
+
+  String _getRelativeTime(DateTime dateTime) {
+    final now = DateTime.now();
+    final difference = now.difference(dateTime);
+
+    if (difference.inSeconds < 60) {
+      return 'Just now';
+    } else if (difference.inMinutes < 60) {
+      return '${difference.inMinutes}m ago';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours}h ago';
+    } else if (difference.inDays < 7) {
+      return '${difference.inDays}d ago';
+    } else {
+      return DateFormat('MMM d').format(dateTime);
+    }
   }
 }

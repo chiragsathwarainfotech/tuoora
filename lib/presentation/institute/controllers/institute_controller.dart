@@ -1,4 +1,5 @@
 import 'package:fee_easy/config/app_routes.dart';
+import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/data/models/student_model.dart';
 import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
@@ -95,7 +96,7 @@ class InstituteController extends GetxController {
       Get.snackbar(
         'Downloading',
         'Preparing your financial report...',
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: AppColors.primaryBrand,
         colorText: Colors.white,
         snackPosition: SnackPosition.BOTTOM,
         showProgressIndicator: true,
@@ -104,7 +105,8 @@ class InstituteController extends GetxController {
       final bytes = await _instituteRepository.exportFees();
 
       final downloadService = Get.find<DownloadService>();
-      final fileName = 'Fee_Report_${DateTime.now().millisecondsSinceEpoch}.pdf';
+      final fileName =
+          'Fee_Report_${DateTime.now().millisecondsSinceEpoch}.pdf';
 
       await downloadService.saveFile(
         bytes: bytes,

@@ -22,13 +22,17 @@ class InstituteNotificationsScreen extends GetView<NotificationController> {
             const InstituteAppBar(title: 'Notification', isRoot: false),
             Expanded(
               child: Obx(() {
-                if (controller.isLoading.value && controller.notifications.isEmpty) {
+                if (controller.isLoading.value &&
+                    controller.notifications.isEmpty) {
                   return const Center(
-                    child: CircularProgressIndicator(color: AppColors.primaryBrand),
+                    child: CircularProgressIndicator(
+                      color: AppColors.primaryBrand,
+                    ),
                   );
                 }
 
-                if (controller.errorMessage.isNotEmpty && controller.notifications.isEmpty) {
+                if (controller.errorMessage.isNotEmpty &&
+                    controller.notifications.isEmpty) {
                   return Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -36,7 +40,9 @@ class InstituteNotificationsScreen extends GetView<NotificationController> {
                         Text(
                           'Error: ${controller.errorMessage.value}',
                           textAlign: TextAlign.center,
-                          style: AppTextStyles.manrope(color: AppColors.errorRed),
+                          style: AppTextStyles.manrope(
+                            color: AppColors.errorRed,
+                          ),
                         ),
                         AppSpacing.v16,
                         ElevatedButton(
@@ -94,7 +100,6 @@ class InstituteNotificationsScreen extends GetView<NotificationController> {
   }
 
   Widget _buildNotificationCard(NotificationModel notification) {
-    // Determine icon and colors based on type
     IconData icon;
     Color iconBg;
     Color iconColor;
@@ -144,7 +149,9 @@ class InstituteNotificationsScreen extends GetView<NotificationController> {
             offset: const Offset(0, 4),
           ),
         ],
-        border: notification.isRead ? null : Border.all(color: badgeColor.withValues(alpha: 0.2), width: 1),
+        border: notification.isRead
+            ? null
+            : Border.all(color: badgeColor.withValues(alpha: 0.2), width: 1),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -166,7 +173,10 @@ class InstituteNotificationsScreen extends GetView<NotificationController> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: badgeColor,
                         borderRadius: BorderRadius.circular(6),
@@ -218,7 +228,8 @@ class InstituteNotificationsScreen extends GetView<NotificationController> {
                       height: 140,
                       width: double.infinity,
                       fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
+                      errorBuilder: (context, error, stackTrace) =>
+                          const SizedBox.shrink(),
                     ),
                   ),
                 ],

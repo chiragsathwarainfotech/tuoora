@@ -25,9 +25,7 @@ class CommonStateWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isLoading && isEmpty) {
-      return const Center(
-      child: const CommonLoading(),
-      );
+      return const Center(child: CommonLoading());
     }
 
     if (isEmpty) {
@@ -41,11 +39,7 @@ class CommonStateWidget extends StatelessWidget {
                 color: AppColors.primaryBrandLight,
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                emptyIcon,
-                size: 64,
-                color: AppColors.primaryBrand,
-              ),
+              child: Icon(emptyIcon, size: 64, color: AppColors.primaryBrand),
             ),
             AppSpacing.v24,
             Text(

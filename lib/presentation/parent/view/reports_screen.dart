@@ -4,8 +4,9 @@ import 'package:fee_easy/core/widgets/portal_app_bar.dart';
 import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/config/app_routes.dart';
-import 'package:flutter/material.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
+import 'package:fee_easy/core/widgets/common_loading.dart';
+import 'package:flutter/material.dart';
 
 class ReportsScreen extends StatelessWidget {
   final bool showBottomNav;
@@ -283,14 +284,9 @@ class ReportsScreen extends StatelessWidget {
                 SizedBox(
                   width: AppSpacing.s140,
                   height: AppSpacing.s140,
-                  child: CircularProgressIndicator(
+                  child: const CommonLoading(
                     value: 0.95,
                     strokeWidth: AppSpacing.s14,
-                    backgroundColor: AppColors.reportBorder,
-                    valueColor: const AlwaysStoppedAnimation<Color>(
-                      AppColors.primaryBrand,
-                    ),
-                    strokeCap: StrokeCap.round,
                   ),
                 ),
                 Column(

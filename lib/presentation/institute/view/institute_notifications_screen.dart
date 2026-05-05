@@ -4,6 +4,7 @@ import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/data/models/notification_model.dart';
 import 'package:fee_easy/presentation/institute/controllers/notification_controller.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
+import 'package:fee_easy/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -24,11 +25,7 @@ class InstituteNotificationsScreen extends GetView<NotificationController> {
               child: Obx(() {
                 if (controller.isLoading.value &&
                     controller.notifications.isEmpty) {
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.primaryBrand,
-                    ),
-                  );
+                  return const CommonLoading();
                 }
 
                 if (controller.errorMessage.isNotEmpty &&

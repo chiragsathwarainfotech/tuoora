@@ -1,3 +1,4 @@
+import 'package:fee_easy/core/widgets/common_loading.dart';
 import 'package:fee_easy/config/app_routes.dart';
 import 'package:fee_easy/core/widgets/student_bottom_nav.dart';
 import 'package:fee_easy/core/widgets/portal_app_bar.dart';
@@ -76,14 +77,11 @@ class StudentDashboard extends StatelessWidget {
                     child: Stack(
                       fit: StackFit.expand,
                       children: [
-                        CircularProgressIndicator(
+                        CommonLoading(
                           value: 0.92,
                           strokeWidth: AppSpacing.s12,
-                          backgroundColor: AppColors.divider,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            AppColors.primaryBrand,
-                          ),
-                          strokeCap: StrokeCap.round,
+                          color: AppColors.primaryBrand,
+                          size: AppSpacing.s140,
                         ),
                         Center(
                           child: Column(

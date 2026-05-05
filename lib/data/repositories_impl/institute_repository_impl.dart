@@ -66,6 +66,7 @@ abstract class InstituteRepositoryImpl {
   // Resources
   Future<List<ResourceModel>> getResources(int batchId);
   Future<dynamic> uploadResource(Map<String, dynamic> data);
+  Future<List<int>> downloadResource(int resourceId, {Function(double)? onProgress});
   
   // Notifications
   Future<List<NotificationModel>> getNotifications();

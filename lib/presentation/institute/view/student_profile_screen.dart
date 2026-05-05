@@ -7,6 +7,7 @@ import 'package:fee_easy/presentation/institute/controllers/student_controller.d
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/core/widgets/common_dialog.dart';
+import 'package:fee_easy/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -75,11 +76,7 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
               () => controller.isLoading.value
                   ? Container(
                       color: Colors.black26,
-                      child: const Center(
-                        child: CircularProgressIndicator(
-                          color: AppColors.instPrimaryBlue,
-                        ),
-                      ),
+                      child: const CommonLoading(color: Colors.white),
                     )
                   : const SizedBox.shrink(),
             ),

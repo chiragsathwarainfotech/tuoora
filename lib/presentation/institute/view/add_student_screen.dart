@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
+import 'package:fee_easy/core/widgets/common_loading.dart';
 import 'package:fee_easy/presentation/institute/controllers/student_controller.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/core/widgets/app_button.dart';
@@ -49,11 +50,7 @@ class AddEditStudentScreen extends GetView<InstituteStudentController> {
             () => controller.isLoading.value
                 ? Container(
                     color: Colors.black.withValues(alpha: 0.3),
-                    child: const Center(
-                      child: CircularProgressIndicator(
-                        color: AppColors.primaryBrand,
-                      ),
-                    ),
+                    child: Center(child: CommonLoading()),
                   )
                 : const SizedBox.shrink(),
           ),

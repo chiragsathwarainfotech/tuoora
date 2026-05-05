@@ -5,6 +5,7 @@ import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/core/widgets/app_button.dart';
 import 'package:fee_easy/core/widgets/app_info_box.dart';
+import 'package:fee_easy/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -49,11 +50,7 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
                 ],
               ),
               if (controller.isLoading.value)
-                const Center(
-                  child: CircularProgressIndicator(
-                    color: AppColors.primaryBrand,
-                  ),
-                ),
+                const CommonLoading(),
             ],
           ),
         ),

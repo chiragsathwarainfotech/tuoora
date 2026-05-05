@@ -7,6 +7,7 @@ import 'package:fee_easy/presentation/institute/controllers/institute_controller
 import 'package:fee_easy/presentation/institute/controllers/student_controller.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/presentation/shared/widgets/common_state_widget.dart';
+import 'package:fee_easy/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -118,9 +119,7 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
                 return const Center(
                   child: Padding(
                     padding: AppSpacing.all16,
-                    child: CircularProgressIndicator(
-                      color: AppColors.primaryBrand,
-                    ),
+                    child: CommonLoading(size: 24, strokeWidth: 2),
                   ),
                 );
               }

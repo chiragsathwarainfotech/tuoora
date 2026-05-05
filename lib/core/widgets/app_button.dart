@@ -1,6 +1,7 @@
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
+import 'package:fee_easy/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
 
 class AppButton extends StatelessWidget {
@@ -57,14 +58,7 @@ class AppButton extends StatelessWidget {
         ),
         child: Center(
           child: isLoading
-              ? SizedBox(
-                  height: 20,
-                  width: 20,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2.5,
-                    color: contentColor,
-                  ),
-                )
+              ? CommonLoading(color: contentColor, size: 20)
               : Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,

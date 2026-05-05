@@ -1,3 +1,4 @@
+import 'package:fee_easy/core/widgets/common_loading.dart';
 import 'package:fee_easy/core/widgets/parent_bottom_nav.dart';
 import 'package:fee_easy/core/widgets/student_bottom_nav.dart';
 import 'package:fee_easy/core/constants/app_colors.dart';
@@ -131,16 +132,11 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          SizedBox(
-            width: AppSpacing.s144,
-            height: AppSpacing.s144,
-            child: CircularProgressIndicator(
-              value: 0.94,
-              strokeWidth: AppSpacing.s12,
-              backgroundColor: Colors.transparent,
-              valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
-              strokeCap: StrokeCap.round,
-            ),
+          CommonLoading(
+            value: 0.94,
+            strokeWidth: AppSpacing.s12,
+            color: Colors.white,
+            size: AppSpacing.s144,
           ),
           Column(
             mainAxisSize: MainAxisSize.min,

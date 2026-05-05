@@ -4,6 +4,7 @@ import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/widgets/app_button.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
+import 'package:fee_easy/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:fee_easy/presentation/institute/controllers/security_controller.dart';
 import 'package:get/get.dart';
@@ -32,11 +33,7 @@ class InstituteSecurityScreen extends GetView<SecurityController> {
             Obx(() => controller.isLoading.value
                 ? Container(
                     color: Colors.black.withValues(alpha: 0.3),
-                    child: const Center(
-                      child: CircularProgressIndicator(
-                        color: AppColors.primaryBrand,
-                      ),
-                    ),
+                      child: const CommonLoading(color: Colors.white),
                   )
                 : const SizedBox.shrink()),
           ],

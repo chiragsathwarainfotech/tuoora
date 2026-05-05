@@ -7,6 +7,7 @@ class ApiClient extends GetConnect {
   @override
   void onInit() {
     httpClient.baseUrl = ApiConstants.baseUrl;
+    httpClient.timeout = const Duration(seconds: 120);
 
     // Add default headers
     // Detailed Request Logging

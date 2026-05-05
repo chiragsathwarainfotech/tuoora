@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:fee_easy/core/api/api_client.dart';
 import 'package:fee_easy/core/constants/api_constants.dart';
 import 'package:fee_easy/core/services/auth_service.dart';
@@ -13,7 +12,6 @@ import 'package:fee_easy/presentation/institute/models/homework_model.dart';
 import 'package:fee_easy/presentation/institute/models/resource_model.dart';
 import 'package:fee_easy/presentation/institute/models/attendance_record_model.dart';
 import 'package:fee_easy/data/models/notification_model.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 class InstituteRepository implements InstituteRepositoryImpl {
@@ -180,7 +178,10 @@ class InstituteRepository implements InstituteRepositoryImpl {
 
   @override
   Future<List<int>> exportFees() async {
-    return _downloadPdf(ApiConstants.instituteFeesExport);
+    return _downloadFile(
+      ApiConstants.instituteFeesExport,
+      acceptHeader: 'application/pdf',
+    );
   }
 
   @override
@@ -266,27 +267,40 @@ class InstituteRepository implements InstituteRepositoryImpl {
 
   @override
   Future<List<int>> exportFeeReport() async {
-    return _downloadPdf(ApiConstants.instituteReportFeeExport);
+    return _downloadFile(
+      ApiConstants.instituteReportFeeExport,
+      acceptHeader: 'application/pdf',
+    );
   }
 
   @override
   Future<List<int>> exportAttendanceReport() async {
-    return _downloadPdf(ApiConstants.instituteReportAttendanceExport);
+    return _downloadFile(
+      ApiConstants.instituteReportAttendanceExport,
+      acceptHeader: 'application/pdf',
+    );
   }
 
   @override
   Future<List<int>> exportPerformanceReport() async {
-    return _downloadPdf(ApiConstants.instituteReportPerformanceExport);
+    return _downloadFile(
+      ApiConstants.instituteReportPerformanceExport,
+      acceptHeader: 'application/pdf',
+    );
   }
 
-  Future<List<int>> _downloadPdf(String endpoint) async {
+  Future<List<int>> _downloadFile(
+    String endpoint, {
+    String acceptHeader = '*/*',
+    Function(double)? onProgress,
+  }) async {
     try {
       final uri = Uri.parse('${ApiConstants.baseUrl}$endpoint');
 
       final client = HttpClient();
       final request = await client.getUrl(uri);
 
-      request.headers.set(HttpHeaders.acceptHeader, 'application/pdf');
+      request.headers.set(HttpHeaders.acceptHeader, acceptHeader);
 
       final authService = Get.find<AuthService>();
       if (authService.isAuthenticated) {
@@ -302,7 +316,19 @@ class InstituteRepository implements InstituteRepositoryImpl {
         throw Exception('Failed: ${response.statusCode}');
       }
 
-      return await consolidateHttpClientResponseBytes(response);
+      final contentLength = response.contentLength;
+      List<int> bytes = [];
+      int downloaded = 0;
+
+      await for (var chunk in response) {
+        bytes.addAll(chunk);
+        downloaded += chunk.length;
+        if (contentLength > 0 && onProgress != null) {
+          onProgress(downloaded / contentLength);
+        }
+      }
+
+      return bytes;
     } catch (e) {
       throw Exception('Download failed: $e');
     }
@@ -504,10 +530,12 @@ class InstituteRepository implements InstituteRepositoryImpl {
 
   @override
   Future<dynamic> uploadResource(Map<String, dynamic> data) async {
-    final formData = FormData(data);
+    final Map<String, dynamic> fields = Map.from(data);
+    final String? filePath = fields.remove('file');
+    
+    final formData = FormData(fields);
 
-    if (data['file'] != null && data['file'] is String) {
-      final String filePath = data['file'];
+    if (filePath != null) {
       formData.files.add(
         MapEntry(
           'file',
@@ -526,6 +554,17 @@ class InstituteRepository implements InstituteRepositoryImpl {
       throw Exception(message);
     }
     return response.body['data'];
+  }
+
+  @override
+  Future<List<int>> downloadResource(
+    int resourceId, {
+    Function(double)? onProgress,
+  }) async {
+    return _downloadFile(
+      ApiConstants.downloadResource(resourceId),
+      onProgress: onProgress,
+    );
   }
 
   @override

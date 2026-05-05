@@ -8,6 +8,7 @@ import 'package:fee_easy/presentation/institute/models/batch_model.dart';
 import 'package:fee_easy/presentation/institute/models/resource_model.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/core/widgets/common_dialog.dart';
+import 'package:fee_easy/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -33,7 +34,7 @@ class BatchResourcesScreen extends StatelessWidget {
               child: Obx(() {
                 if (controller.isLoading.value &&
                     controller.resources.isEmpty) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const CommonLoading();
                 }
                 if (controller.resources.isEmpty) {
                   return Center(
@@ -165,31 +166,24 @@ class BatchResourcesScreen extends StatelessWidget {
       title: AppStrings.instUploadContentHeader,
       confirmText: AppStrings.instUploadBtn,
       onConfirm: () => controller.uploadResource(),
-      body: Obx(
-        () => Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            if (controller.isLoading.value)
-              const Padding(
-                padding: EdgeInsets.only(bottom: 16),
-                child: LinearProgressIndicator(),
-              ),
-            _buildDialogField(
-              AppStrings.instResourceSubjectLabel,
-              controller.subjectController,
-              'e.g., Physics Notes',
-            ),
-            AppSpacing.v16,
-            _buildDialogField(
-              AppStrings.instResourceDescriptionLabel,
-              controller.descriptionController,
-              'e.g., Chapter 1 derivation',
-              maxLines: 3,
-            ),
-            AppSpacing.v24,
-            _buildAttachmentButton(controller),
-          ],
-        ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _buildDialogField(
+            AppStrings.instResourceSubjectLabel,
+            controller.subjectController,
+            'e.g., Physics Notes',
+          ),
+          AppSpacing.v16,
+          _buildDialogField(
+            AppStrings.instResourceDescriptionLabel,
+            controller.descriptionController,
+            'e.g., Chapter 1 derivation',
+            maxLines: 3,
+          ),
+          AppSpacing.v24,
+          _buildAttachmentButton(controller),
+        ],
       ),
     );
   }

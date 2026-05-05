@@ -5,6 +5,7 @@ import 'package:fee_easy/core/enums/update_enums.dart';
 import 'package:fee_easy/data/models/batch_model.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/core/widgets/app_button.dart';
+import 'package:fee_easy/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:fee_easy/presentation/institute/controllers/updates_controller.dart';
 import 'package:get/get.dart';
@@ -75,7 +76,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
             return Container(
               color: Colors.black.withValues(alpha: 0.3),
               child: const Center(
-                child: CircularProgressIndicator(color: AppColors.primaryBrand),
+                child: CommonLoading(),
               ),
             );
           }
@@ -263,9 +264,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                     AppSpacing.v12,
                     Obx(() {
                       if (controller.isLoadingBatches.value) {
-                        return const Center(
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        );
+                        return const CommonLoading(size: 24, strokeWidth: 2);
                       }
                       if (controller.availableBatches.isEmpty) {
                         return Padding(

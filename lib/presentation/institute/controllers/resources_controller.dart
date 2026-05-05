@@ -3,6 +3,7 @@ import 'package:fee_easy/presentation/institute/models/resource_model.dart';
 import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:fee_easy/core/widgets/common_loading.dart';
 import 'package:file_picker/file_picker.dart';
 
 class ResourcesController extends GetxController {
@@ -45,17 +46,30 @@ class ResourcesController extends GetxController {
       FilePickerResult? result = await FilePicker.pickFiles(type: FileType.any);
 
       if (result != null && result.files.single.path != null) {
-        selectedFilePath.value = result.files.single.path!;
-        selectedFileName.value = result.files.single.name;
+        final file = result.files.single;
+        final extension = file.name.split('.').last.toLowerCase();
+        final isVideo = ['mp4', 'mov', 'avi'].contains(extension);
 
-        final extension = selectedFileName.value.split('.').last.toLowerCase();
-        if (['jpg', 'jpeg', 'png'].contains(extension)) {
-          selectedType.value = ResourceType.image;
-        } else if (['mp4', 'mov', 'avi'].contains(extension)) {
+        if (isVideo) {
+          final double sizeInMb = file.size / (1024 * 1024);
+          if (sizeInMb > 50) {
+            Get.snackbar(
+              'File Too Large',
+              'Video files must be under 50 MB. Selected file is ${sizeInMb.toStringAsFixed(2)} MB.',
+              backgroundColor: Colors.redAccent,
+              colorText: Colors.white,
+            );
+            return;
+          }
           selectedType.value = ResourceType.video;
+        } else if (['jpg', 'jpeg', 'png'].contains(extension)) {
+          selectedType.value = ResourceType.image;
         } else {
           selectedType.value = ResourceType.document;
         }
+
+        selectedFilePath.value = file.path!;
+        selectedFileName.value = file.name;
       }
     } catch (e) {
       Get.snackbar('Error', 'Failed to pick file: ${e.toString()}');
@@ -69,7 +83,7 @@ class ResourcesController extends GetxController {
     }
 
     try {
-      isLoading.value = true;
+      CommonLoading.show();
 
       final String typeStr = selectedType.value == ResourceType.image
           ? 'image'
@@ -89,12 +103,17 @@ class ResourcesController extends GetxController {
       resources.insert(0, newResource);
 
       clearForm();
+
+      CommonLoading.dismiss();
+      // Close creation dialog
       Get.back();
+
       Get.snackbar('Success', 'Resource uploaded successfully');
     } catch (e) {
+      // Close loader if open
+      CommonLoading.dismiss();
+
       Get.snackbar('Error', 'Failed to upload resource: ${e.toString()}');
-    } finally {
-      isLoading.value = false;
     }
   }
 

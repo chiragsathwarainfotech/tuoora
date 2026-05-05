@@ -4,6 +4,7 @@ import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:fee_easy/core/widgets/common_loading.dart';
 import 'package:file_picker/file_picker.dart';
 
 class HomeworkController extends GetxController {
@@ -84,7 +85,9 @@ class HomeworkController extends GetxController {
     }
 
     try {
-      isLoading.value = true;
+      // Show full screen non-dismissible loader
+      CommonLoading.show();
+
       final Map<String, dynamic> data = {
         'batch_id': batch.id,
         'title': titleController.text.trim(),
@@ -96,15 +99,22 @@ class HomeworkController extends GetxController {
         data['attachment'] = selectedAttachment.value;
       }
 
+      await _repository.createHomework(data);
       await fetchHomeworks();
 
       clearForm();
+      
+      // Close loader
+      CommonLoading.dismiss();
+      // Close creation dialog
       Get.back();
+      
       Get.snackbar('Success', 'Homework created successfully');
     } catch (e) {
+      // Close loader if open
+      CommonLoading.dismiss();
+      
       Get.snackbar('Error', 'Failed to create homework: ${e.toString()}');
-    } finally {
-      isLoading.value = false;
     }
   }
 

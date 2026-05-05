@@ -6,6 +6,7 @@ import 'package:fee_easy/presentation/institute/controllers/institute_controller
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:get/get.dart';
+import 'package:fee_easy/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -129,7 +130,7 @@ class InstituteFeesScreen extends GetView<InstituteController> {
         return const Center(
           child: Padding(
             padding: EdgeInsets.all(32.0),
-            child: CircularProgressIndicator(color: AppColors.primaryBrand),
+            child: CommonLoading(),
           ),
         );
       }

@@ -1,3 +1,4 @@
+import 'package:fee_easy/core/widgets/common_loading.dart';
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
@@ -59,14 +60,7 @@ class SplashScreen extends GetView<SplashController> {
               ),
             ),
             const SizedBox(height: 100),
-            const SizedBox(
-              width: 24,
-              height: 24,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-              ),
-            ),
+            const CommonLoading(color: Colors.white, size: 24),
           ],
         ),
       ),

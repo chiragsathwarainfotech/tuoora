@@ -1,6 +1,7 @@
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
+import 'package:fee_easy/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
 
 class InstituteBottomButton extends StatelessWidget {
@@ -46,14 +47,7 @@ class InstituteBottomButton extends StatelessWidget {
           elevation: 0,
         ),
         child: isLoading
-            ? const SizedBox(
-                height: 24,
-                width: 24,
-                child: CircularProgressIndicator(
-                  color: Colors.white,
-                  strokeWidth: 2,
-                ),
-              )
+            ? const CommonLoading(color: Colors.white, size: 24)
             : Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

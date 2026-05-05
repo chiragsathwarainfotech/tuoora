@@ -4,6 +4,7 @@ import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/presentation/institute/controllers/institute_profile_controller.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
+import 'package:fee_easy/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -24,11 +25,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
               child: Obx(() {
                 if (controller.isLoading.value &&
                     controller.profile.value == null) {
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.primaryBrand,
-                    ),
-                  );
+                  return const CommonLoading();
                 }
 
                 final p = controller.profile.value;

@@ -6,6 +6,7 @@ import 'package:fee_easy/presentation/institute/controllers/batch_controller.dar
 import 'package:fee_easy/presentation/institute/models/batch_model.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/presentation/shared/widgets/common_state_widget.dart';
+import 'package:fee_easy/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:fee_easy/config/app_routes.dart';
@@ -85,9 +86,7 @@ class _BatchesScreenState extends State<BatchesScreen> {
                               return const Center(
                                 child: Padding(
                                   padding: EdgeInsets.all(8.0),
-                                  child: CircularProgressIndicator(
-                                    color: AppColors.primaryBrand,
-                                  ),
+                                  child: CommonLoading(size: 20, strokeWidth: 2),
                                 ),
                               );
                             }

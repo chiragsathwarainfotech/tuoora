@@ -205,65 +205,88 @@ class AddEditStudentScreen extends GetView<InstituteStudentController> {
             ],
           ),
           AppSpacing.v32,
-          Obx(() => AppInputField(
-            label: AppStrings.instStudentNameLabel,
-            hint: AppStrings.instNameHint,
-            icon: Icons.person,
-            controller: controller.nameController,
-            errorText: controller.triedToSave.value ? controller.nameError.value : null,
-          )),
+          Obx(
+            () => AppInputField(
+              label: AppStrings.instStudentNameLabel,
+              hint: AppStrings.instNameHint,
+              icon: Icons.person,
+              controller: controller.nameController,
+              errorText: controller.triedToSave.value
+                  ? controller.nameError.value
+                  : null,
+            ),
+          ),
           AppSpacing.v20,
-          Obx(() => AppInputField(
-            label: AppStrings.instStudentEmailLabel,
-            hint: 'student@example.com',
-            icon: Icons.email_rounded,
-            controller: controller.emailController,
-            keyboardType: TextInputType.emailAddress,
-            enabled: controller.editingStudentId.value == null,
-            errorText: controller.triedToSave.value ? controller.emailError.value : null,
-          )),
+          Obx(
+            () => AppInputField(
+              label: AppStrings.instStudentEmailLabel,
+              hint: 'student@example.com',
+              icon: Icons.email_rounded,
+              controller: controller.emailController,
+              keyboardType: TextInputType.emailAddress,
+              enabled: controller.editingStudentId.value == null,
+              errorText: controller.triedToSave.value
+                  ? controller.emailError.value
+                  : null,
+            ),
+          ),
           AppSpacing.v20,
-          Obx(() => AppInputField(
-            label: AppStrings.instStudentDobLabel,
-            hint: 'YYYY-MM-DD',
-            icon: Icons.calendar_today_rounded,
-            controller: controller.dobController,
-            readOnly: true,
-            onTap: () => controller.selectDOB(context),
-            errorText: controller.triedToSave.value ? controller.dobError.value : null,
-          )),
+          Obx(
+            () => AppInputField(
+              label: AppStrings.instStudentDobLabel,
+              hint: 'YYYY-MM-DD',
+              icon: Icons.calendar_today_rounded,
+              controller: controller.dobController,
+              readOnly: true,
+              onTap: () => controller.selectDOB(context),
+              errorText: controller.triedToSave.value
+                  ? controller.dobError.value
+                  : null,
+            ),
+          ),
           AppSpacing.v20,
-          Obx(() => AppInputField(
-            label: AppStrings.instGuardianNameLabel,
-            hint: AppStrings.instGuardianHint,
-            icon: Icons.group,
-            controller: controller.parentNameController,
-            errorText: controller.triedToSave.value ? controller.parentNameError.value : null,
-          )),
+          Obx(
+            () => AppInputField(
+              label: AppStrings.instGuardianNameLabel,
+              hint: AppStrings.instGuardianHint,
+              icon: Icons.group,
+              controller: controller.parentNameController,
+              errorText: controller.triedToSave.value
+                  ? controller.parentNameError.value
+                  : null,
+            ),
+          ),
           AppSpacing.v20,
-          Obx(() => AppInputField(
-            label: AppStrings.instPhoneLabel,
-            hint: AppStrings.instPhoneHint,
-            icon: Icons.phone,
-            controller: controller.phoneController,
-            keyboardType: TextInputType.phone,
-            maxLength: 10,
-            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            errorText: controller.triedToSave.value ? controller.phoneError.value : null,
-          )),
+          Obx(
+            () => AppInputField(
+              label: AppStrings.instPhoneLabel,
+              hint: AppStrings.instPhoneHint,
+              icon: Icons.phone,
+              controller: controller.phoneController,
+              keyboardType: TextInputType.phone,
+              maxLength: 10,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              errorText: controller.triedToSave.value
+                  ? controller.phoneError.value
+                  : null,
+            ),
+          ),
           AppSpacing.v20,
-          Obx(() => AppInputField(
-            label: AppStrings.instGradeLabel,
-            hint: AppStrings.instGradeHint,
-            icon: Icons.school,
-            controller: controller.standardController,
-            errorText: controller.triedToSave.value ? controller.standardError.value : null,
-          )),
+          Obx(
+            () => AppInputField(
+              label: AppStrings.instGradeLabel,
+              hint: AppStrings.instGradeHint,
+              icon: Icons.school,
+              controller: controller.standardController,
+              errorText: controller.triedToSave.value
+                  ? controller.standardError.value
+                  : null,
+            ),
+          ),
         ],
       ),
     );
   }
-
 
   Widget _buildActionButtons() {
     return Column(

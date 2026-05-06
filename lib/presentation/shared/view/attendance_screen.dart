@@ -33,7 +33,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
         centerTitle: false,
         title: Row(
@@ -105,7 +105,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
             style: AppTextStyles.manrope(
               fontSize: 32,
               fontWeight: FontWeight.w800,
-              color: Colors.white,
+              color: AppColors.white,
               height: 1.1,
             ),
             textAlign: TextAlign.center,
@@ -125,7 +125,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
-          color: Colors.white.withValues(alpha: 0.1),
+          color: AppColors.white.withValues(alpha: 0.1),
           width: AppSpacing.s12,
         ),
       ),
@@ -135,7 +135,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
           CommonLoading(
             value: 0.94,
             strokeWidth: AppSpacing.s12,
-            color: Colors.white,
+            color: AppColors.white,
             size: AppSpacing.s144,
           ),
           Column(
@@ -146,7 +146,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
                 style: AppTextStyles.manrope(
                   fontSize: 38,
                   fontWeight: FontWeight.w800,
-                  color: Colors.white,
+                  color: AppColors.white,
                 ),
               ),
               Text(
@@ -154,7 +154,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
                 style: AppTextStyles.manrope(
                   fontSize: 10,
                   fontWeight: FontWeight.w800,
-                  color: Colors.white.withValues(alpha: 0.7),
+                  color: AppColors.white.withValues(alpha: 0.7),
                   letterSpacing: 1.0,
                 ),
               ),
@@ -200,7 +200,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
         Container(
           padding: AppSpacing.all24,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             borderRadius: BorderRadius.circular(AppSpacing.s32),
             boxShadow: [
               BoxShadow(
@@ -392,7 +392,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
           const Color(0xFF92400E),
         );
       case 't': // Today
-        return _dateBubble(day, AppColors.primaryBrand, Colors.white);
+        return _dateBubble(day, AppColors.primaryBrand, AppColors.white);
       case 'i': // Pending / Future
         return _dateBubble(day, AppColors.scaffoldBg, AppColors.textTertiary);
       default:
@@ -515,7 +515,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
     return Container(
       padding: AppSpacing.all20,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.s24),
         border: !isPresent
             ? const Border(

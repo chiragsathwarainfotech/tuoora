@@ -79,7 +79,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
     return Container(
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
@@ -129,7 +129,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
                         ),
                         child: const Icon(
                           Icons.edit_rounded,
-                          color: Colors.white,
+                          color: AppColors.white,
                           size: 16,
                         ),
                       ),
@@ -183,7 +183,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: AppColors.reportBorder, width: 1.5),
       ),
@@ -450,7 +450,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
             child: Text(
               'Logout',
               style: AppTextStyles.manrope(
-                color: Colors.white,
+                color: AppColors.white,
                 fontWeight: FontWeight.w800,
               ),
             ),

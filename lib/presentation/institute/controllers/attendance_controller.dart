@@ -116,7 +116,7 @@ class AttendanceController extends GetxController {
         'Success',
         'Attendance submitted successfully',
         backgroundColor: AppColors.darkGreen,
-        colorText: Colors.white,
+        colorText: AppColors.white,
       );
     } catch (e) {
       Get.snackbar('Error', 'Failed to submit attendance: ${e.toString()}');

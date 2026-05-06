@@ -21,7 +21,7 @@ class ReportSummaryCard extends StatelessWidget {
       width: double.infinity,
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
@@ -82,7 +82,7 @@ class ReportBatchItemCard extends StatelessWidget {
       child: Container(
         padding: AppSpacing.all20,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
@@ -139,7 +139,7 @@ class ReportBatchItemCard extends StatelessWidget {
               child: LinearProgressIndicator(
                 value: progress,
                 minHeight: 6,
-                backgroundColor: AppColors.reportProgressBg,
+                backgroundColor: AppColors.reportBorder,
                 color: AppColors.primaryBrand,
               ),
             ),
@@ -169,7 +169,7 @@ class ReportStudentItemCard extends StatelessWidget {
     return Container(
       padding: AppSpacing.all16,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppColors.reportBorder),
       ),
@@ -203,10 +203,7 @@ class ReportStudentItemCard extends StatelessWidget {
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 12,
-              vertical: 6,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
               color: metricColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),

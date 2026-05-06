@@ -53,7 +53,7 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
       floatingActionButton: FloatingActionButton(
         onPressed: () => Get.toNamed(AppRoutes.instituteAddEditStudent),
         backgroundColor: AppColors.primaryBrand,
-        child: const Icon(Icons.add, color: Colors.white, size: 28),
+        child: const Icon(Icons.add, color: AppColors.white, size: 28),
       ),
     );
   }
@@ -61,7 +61,7 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
   Widget _buildSearchBar() {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFFEBEBEB),
+        color: AppColors.paleSilver,
         borderRadius: BorderRadius.circular(16),
       ),
       child: TextField(
@@ -71,11 +71,11 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
           hintText: AppStrings.instStudentSearchHint,
           hintStyle: AppTextStyles.lexend(
             fontSize: 14,
-            color: const Color(0xFF917B6B),
+            color: AppColors.blueSapphire,
           ),
           prefixIcon: const Icon(
             Icons.search,
-            color: const Color(0xFF917B6B),
+            color: AppColors.blueSapphire,
             size: AppSpacing.s24,
           ),
           border: InputBorder.none,
@@ -110,7 +110,8 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
             return true;
           },
           child: ListView.builder(
-            itemCount: controller.students.length +
+            itemCount:
+                controller.students.length +
                 (controller.isLoadMore.value ? 1 : 0),
             padding: EdgeInsets.zero,
             physics: const AlwaysScrollableScrollPhysics(),
@@ -160,7 +161,7 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
       child: Container(
         padding: AppSpacing.all16,
         decoration: BoxDecoration(
-          color: AppColors.cardBg,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(

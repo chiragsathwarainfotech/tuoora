@@ -18,7 +18,7 @@ class FeeReportScreen extends StatelessWidget {
     final controller = Get.find<ReportsController>();
 
     return Scaffold(
-      backgroundColor: AppColors.reportScaffoldBg,
+      backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
         child: Column(
           children: [
@@ -113,7 +113,7 @@ class FeeReportScreen extends StatelessWidget {
               children: [
                 const Icon(
                   Icons.file_download_outlined,
-                  color: Colors.white,
+                  color: AppColors.white,
                   size: 16,
                 ),
                 AppSpacing.h8,
@@ -122,7 +122,7 @@ class FeeReportScreen extends StatelessWidget {
                   style: AppTextStyles.manrope(
                     fontSize: 12,
                     fontWeight: FontWeight.w800,
-                    color: Colors.white,
+                    color: AppColors.white,
                   ),
                 ),
               ],

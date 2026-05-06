@@ -35,7 +35,7 @@ class DownloadService extends GetxService {
         'Success',
         successMessage ?? 'File downloaded successfully to Downloads folder',
         backgroundColor: AppColors.darkGreen,
-        colorText: Colors.white,
+        colorText: AppColors.white,
         snackPosition: SnackPosition.BOTTOM,
         margin: const EdgeInsets.all(16),
         duration: const Duration(seconds: 4),
@@ -46,7 +46,7 @@ class DownloadService extends GetxService {
         'Download Failed',
         'Could not save file: ${e.toString()}',
         backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
+        colorText: AppColors.white,
         snackPosition: SnackPosition.BOTTOM,
       );
     }

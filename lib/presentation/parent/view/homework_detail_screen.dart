@@ -13,15 +13,20 @@ class HomeworkDetailScreen extends StatelessWidget {
     final String title = Get.arguments?['title'] ?? 'Photosynthesis Lab Report';
     final String subject = Get.arguments?['subject'] ?? 'Biology';
     final String status = Get.arguments?['status'] ?? 'Completed Today';
-    final Color statusColor = Get.arguments?['statusColor'] ?? AppColors.checkGreen;
+    final Color statusColor =
+        Get.arguments?['statusColor'] ?? AppColors.successGreen;
 
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: AppColors.textPrimary, size: 20),
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            color: AppColors.textPrimary,
+            size: 20,
+          ),
           onPressed: () => Get.back(),
         ),
         title: Text(
@@ -43,7 +48,7 @@ class HomeworkDetailScreen extends StatelessWidget {
             Container(
               padding: AppSpacing.all24,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.circular(AppSpacing.s32),
                 boxShadow: [
                   BoxShadow(
@@ -64,7 +69,11 @@ class HomeworkDetailScreen extends StatelessWidget {
                           color: const Color(0xFFF0FDF4),
                           borderRadius: BorderRadius.circular(AppSpacing.s12),
                         ),
-                        child: const Icon(Icons.science_outlined, color: Color(0xFF16A34A), size: 24),
+                        child: const Icon(
+                          Icons.science_outlined,
+                          color: Color(0xFF16A34A),
+                          size: 24,
+                        ),
                       ),
                       AppSpacing.h16,
                       Expanded(
@@ -166,10 +175,22 @@ class HomeworkDetailScreen extends StatelessWidget {
               ),
             ),
             AppSpacing.v16,
-            _buildInstructionStep(1, 'Summarize the light-dependent and light-independent reactions.'),
-            _buildInstructionStep(2, 'Include the data table from the class spreadsheet.'),
-            _buildInstructionStep(3, 'Draw or attach a diagram representing the cycle.'),
-            _buildInstructionStep(4, 'Upload the PDF file to the school portal before the deadline.'),
+            _buildInstructionStep(
+              1,
+              'Summarize the light-dependent and light-independent reactions.',
+            ),
+            _buildInstructionStep(
+              2,
+              'Include the data table from the class spreadsheet.',
+            ),
+            _buildInstructionStep(
+              3,
+              'Draw or attach a diagram representing the cycle.',
+            ),
+            _buildInstructionStep(
+              4,
+              'Upload the PDF file to the school portal before the deadline.',
+            ),
 
             AppSpacing.v32,
 
@@ -186,13 +207,17 @@ class HomeworkDetailScreen extends StatelessWidget {
             Container(
               padding: AppSpacing.all16,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.circular(AppSpacing.s16),
                 border: Border.all(color: AppColors.borderGrey),
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.picture_as_pdf, color: AppColors.errorRed, size: 28),
+                  const Icon(
+                    Icons.picture_as_pdf,
+                    color: AppColors.errorRed,
+                    size: 28,
+                  ),
                   AppSpacing.h12,
                   Expanded(
                     child: Column(
@@ -217,7 +242,10 @@ class HomeworkDetailScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const Icon(Icons.download_rounded, color: AppColors.primaryBrand),
+                  const Icon(
+                    Icons.download_rounded,
+                    color: AppColors.primaryBrand,
+                  ),
                 ],
               ),
             ),
@@ -272,7 +300,7 @@ class HomeworkDetailScreen extends StatelessWidget {
                 style: AppTextStyles.manrope(
                   fontSize: 12,
                   fontWeight: FontWeight.w800,
-                  color: Colors.white,
+                  color: AppColors.white,
                 ),
               ),
             ),

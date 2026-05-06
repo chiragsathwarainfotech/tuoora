@@ -42,14 +42,14 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
                         ),
                         icon: const Icon(
                           Icons.edit_outlined,
-                          color: AppColors.instAccentBlue,
+                          color: AppColors.primaryBrand,
                         ),
                       ),
                       IconButton(
                         onPressed: () => _showDeleteConfirmation(context, name),
                         icon: const Icon(
                           Icons.delete_outline_rounded,
-                          color: Color(0xFFD92D20),
+                          color: AppColors.bohoRed,
                         ),
                       ),
                       AppSpacing.h8,
@@ -76,7 +76,7 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
               () => controller.isLoading.value
                   ? Container(
                       color: Colors.black26,
-                      child: const CommonLoading(color: Colors.white),
+                      child: const CommonLoading(color: AppColors.white),
                     )
                   : const SizedBox.shrink(),
             ),
@@ -95,7 +95,7 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
     return Container(
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
@@ -196,7 +196,7 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
     return Container(
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
@@ -213,7 +213,7 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
             children: [
               const Icon(
                 Icons.assignment_ind_rounded,
-                color: AppColors.instPrimaryBlue,
+                color: AppColors.primaryBrand,
                 size: 22,
               ),
               AppSpacing.h12,
@@ -222,7 +222,7 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
                 style: AppTextStyles.manrope(
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
-                  color: AppColors.instPrimaryBlue,
+                  color: AppColors.primaryBrand,
                 ),
               ),
             ],

@@ -1,3 +1,4 @@
+import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/presentation/institute/models/batch_model.dart';
 import 'package:fee_easy/presentation/institute/models/resource_model.dart';
 import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
@@ -57,7 +58,7 @@ class ResourcesController extends GetxController {
               'File Too Large',
               'Video files must be under 50 MB. Selected file is ${sizeInMb.toStringAsFixed(2)} MB.',
               backgroundColor: Colors.redAccent,
-              colorText: Colors.white,
+              colorText: AppColors.white,
             );
             return;
           }

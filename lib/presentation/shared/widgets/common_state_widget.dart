@@ -47,7 +47,7 @@ class CommonStateWidget extends StatelessWidget {
               style: AppTextStyles.manrope(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
-                color: const Color(0xFF663322),
+                color: AppColors.brandAppBarColor,
               ),
             ),
             AppSpacing.v8,

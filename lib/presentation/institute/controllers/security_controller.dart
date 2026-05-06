@@ -35,7 +35,7 @@ class SecurityController extends GetxController {
         'Missing Information',
         'Please fill in all password fields.',
         backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
+        colorText: AppColors.white,
       );
       return;
     }
@@ -46,7 +46,7 @@ class SecurityController extends GetxController {
         'Invalid New Password',
         passwordError,
         backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
+        colorText: AppColors.white,
       );
       return;
     }
@@ -56,7 +56,7 @@ class SecurityController extends GetxController {
         'Mismatch',
         'New password and confirm password do not match.',
         backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
+        colorText: AppColors.white,
       );
       return;
     }
@@ -76,7 +76,7 @@ class SecurityController extends GetxController {
         'Success',
         'Your password has been updated securely.',
         backgroundColor: AppColors.darkGreen,
-        colorText: Colors.white,
+        colorText: AppColors.white,
         snackPosition: SnackPosition.BOTTOM,
         margin: const EdgeInsets.all(16),
       );
@@ -87,7 +87,7 @@ class SecurityController extends GetxController {
         'Error',
         e.toString().replaceAll('Exception: ', ''),
         backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
+        colorText: AppColors.white,
       );
     } finally {
       isLoading.value = false;

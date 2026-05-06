@@ -106,7 +106,7 @@ class AddEditBatchScreen extends GetView<BatchController> {
     return Container(
       padding: AppSpacing.all20,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -132,7 +132,7 @@ class AddEditBatchScreen extends GetView<BatchController> {
           Container(
             padding: AppSpacing.all16,
             decoration: BoxDecoration(
-              color: const Color(0xFFEBEBEB),
+              color: AppColors.paleSilver,
               borderRadius: BorderRadius.circular(16),
             ),
             child: Row(
@@ -195,7 +195,7 @@ class AddEditBatchScreen extends GetView<BatchController> {
               decoration: BoxDecoration(
                 color: isSelected
                     ? AppColors.primaryBrand
-                    : const Color(0xFFEBEBEB),
+                    : AppColors.paleSilver,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
@@ -203,7 +203,7 @@ class AddEditBatchScreen extends GetView<BatchController> {
                 style: AppTextStyles.manrope(
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
-                  color: isSelected ? Colors.white : AppColors.textSecondary,
+                  color: isSelected ? AppColors.white : AppColors.textSecondary,
                 ),
               ),
             ),

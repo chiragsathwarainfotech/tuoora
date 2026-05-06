@@ -24,7 +24,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
                 margin: AppSpacing.x24,
                 padding: const EdgeInsets.all(AppSpacing.s28),
                 decoration: BoxDecoration(
-                  color: AppColors.cardBg,
+                  color: AppColors.white,
                   borderRadius: BorderRadius.circular(AppSpacing.s32),
                   boxShadow: [
                     BoxShadow(
@@ -47,7 +47,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
                         onPressed: controller.verifyOtp,
                         isLoading: controller.isLoading.value,
                         backgroundColor: AppColors.primaryBrand,
-                        foregroundColor: Colors.white,
+                        foregroundColor: AppColors.white,
                         borderRadius: AppSpacing.s24,
                         padding: const EdgeInsets.symmetric(
                           vertical: AppSpacing.s18,
@@ -67,7 +67,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
                                 style: AppTextStyles.manrope(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
-                                  color: const Color(0xFF917B6B),
+                                  color: AppColors.blueSapphire,
                                 ),
                               ),
                             if (controller.canResend.value)
@@ -135,7 +135,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
           style: AppTextStyles.manrope(
             fontSize: 12,
             fontWeight: FontWeight.w800,
-            color: const Color(0xFF663322),
+            color: AppColors.brandAppBarColor,
             letterSpacing: 1.5,
           ),
         ),
@@ -145,7 +145,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
           style: AppTextStyles.manrope(
             fontSize: 28,
             fontWeight: FontWeight.w800,
-            color: const Color(0xFF663322),
+            color: AppColors.brandAppBarColor,
           ),
         ),
         AppSpacing.v8,
@@ -157,7 +157,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
               style: AppTextStyles.lexend(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
-                color: const Color(0xFF917B6B),
+                color: AppColors.blueSapphire,
                 height: 1.5,
               ),
               children: [
@@ -169,7 +169,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
                   style: AppTextStyles.lexend(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
-                    color: const Color(0xFF663322),
+                    color: AppColors.brandAppBarColor,
                   ),
                 ),
               ],
@@ -187,7 +187,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
       style: AppTextStyles.manrope(
         fontSize: 10,
         fontWeight: FontWeight.w800,
-        color: const Color(0xFF663322),
+        color: AppColors.brandAppBarColor,
         letterSpacing: 1.0,
       ),
     );
@@ -196,7 +196,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
   Widget _buildOtpField() {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFFEBEBEB),
+        color: AppColors.paleSilver,
         borderRadius: BorderRadius.circular(AppSpacing.s16),
       ),
       child: TextField(
@@ -207,13 +207,16 @@ class InstituteOtpScreen extends GetView<SignupController> {
         style: AppTextStyles.manrope(
           fontSize: 24,
           fontWeight: FontWeight.w800,
-          color: const Color(0xFF663322),
+          color: AppColors.brandAppBarColor,
           letterSpacing: 8.0,
         ),
         decoration: const InputDecoration(
           counterText: '',
           hintText: 'XXXXXX',
-          hintStyle: TextStyle(color: Color(0xFF917B6B), letterSpacing: 8.0),
+          hintStyle: TextStyle(
+            color: AppColors.blueSapphire,
+            letterSpacing: 8.0,
+          ),
           border: InputBorder.none,
           contentPadding: AppSpacing.all16,
         ),

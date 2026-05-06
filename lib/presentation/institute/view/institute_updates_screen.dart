@@ -107,7 +107,7 @@ class InstituteUpdatesScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () => Get.to(() => const CreateUpdateScreen()),
         backgroundColor: AppColors.primaryBrand,
-        child: const Icon(Icons.add, color: Colors.white),
+        child: const Icon(Icons.add, color: AppColors.white),
       ),
     );
   }
@@ -161,7 +161,7 @@ class InstituteUpdatesScreen extends StatelessWidget {
               margin: const EdgeInsets.only(bottom: 24),
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.circular(24),
                 border: Border.all(color: AppColors.reportBorder, width: 1.5),
                 boxShadow: [

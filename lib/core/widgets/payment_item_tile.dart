@@ -28,7 +28,7 @@ class PaymentItemTile extends StatelessWidget {
     return Container(
       padding: AppSpacing.all16,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.s24),
         boxShadow: showShadow
             ? [

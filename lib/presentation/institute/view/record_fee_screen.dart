@@ -61,7 +61,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
     return Container(
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
-        color: AppColors.cardBg,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -87,7 +87,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                 style: AppTextStyles.lexend(
                   fontSize: 12,
                   fontWeight: FontWeight.w800,
-                  color: const Color(0xFF663322),
+                  color: AppColors.brandAppBarColor,
                   letterSpacing: 1.2,
                 ),
               ),
@@ -97,7 +97,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
           if (!controller.isStudentSelected.value) ...[
             Container(
               decoration: BoxDecoration(
-                color: const Color(0xFFEBEBEB),
+                color: AppColors.paleSilver,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: TextField(
@@ -106,7 +106,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                   hintText: AppStrings.instSearchStudentHint,
                   hintStyle: AppTextStyles.lexend(
                     fontSize: 14,
-                    color: const Color(0xFF917B6B),
+                    color: AppColors.blueSapphire,
                   ),
                   suffixIcon: const Icon(
                     Icons.search,
@@ -123,7 +123,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                 margin: const EdgeInsets.only(top: AppSpacing.s8),
                 constraints: const BoxConstraints(maxHeight: 200),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.white,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: AppColors.divider),
                 ),
@@ -219,7 +219,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
     return Container(
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
-        color: AppColors.cardBg,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -237,14 +237,14 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
             style: AppTextStyles.manrope(
               fontSize: 14,
               fontWeight: FontWeight.w800,
-              color: const Color(0xFF663322),
+              color: AppColors.brandAppBarColor,
             ),
           ),
           AppSpacing.v8,
           Container(
             padding: AppSpacing.all16,
             decoration: BoxDecoration(
-              color: const Color(0xFFEBEBEB),
+              color: AppColors.paleSilver,
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
@@ -261,7 +261,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                       contentPadding: EdgeInsets.zero,
                       hintStyle: AppTextStyles.lexend(
                         fontSize: 15,
-                        color: const Color(0xFF917B6B),
+                        color: AppColors.blueSapphire,
                       ),
                     ),
                     style: AppTextStyles.lexend(
@@ -285,7 +285,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
             style: AppTextStyles.manrope(
               fontSize: 14,
               fontWeight: FontWeight.w800,
-              color: const Color(0xFF663322),
+              color: AppColors.brandAppBarColor,
             ),
           ),
           AppSpacing.v8,
@@ -294,7 +294,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
             child: Container(
               padding: AppSpacing.all16,
               decoration: BoxDecoration(
-                color: const Color(0xFFEBEBEB),
+                color: AppColors.paleSilver,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Row(
@@ -327,7 +327,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
             style: AppTextStyles.manrope(
               fontSize: 14,
               fontWeight: FontWeight.w800,
-              color: const Color(0xFF663322),
+              color: AppColors.brandAppBarColor,
             ),
           ),
           AppSpacing.v8,
@@ -366,10 +366,10 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
         decoration: BoxDecoration(
           color: isActive
               ? AppColors.primaryBrandLight.withValues(alpha: 0.5)
-              : Colors.white,
+              : AppColors.white,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: isActive ? AppColors.primaryBrand : const Color(0xFFEBEBEB),
+            color: isActive ? AppColors.primaryBrand : AppColors.paleSilver,
             width: 1.5,
           ),
         ),
@@ -378,7 +378,9 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
           children: [
             Icon(
               icon,
-              color: isActive ? AppColors.primaryBrand : const Color(0xFF663322),
+              color: isActive
+                  ? AppColors.primaryBrand
+                  : AppColors.brandAppBarColor,
               size: 20,
             ),
             AppSpacing.h12,
@@ -387,8 +389,9 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
               style: AppTextStyles.manrope(
                 fontSize: 14,
                 fontWeight: FontWeight.w800,
-                color:
-                    isActive ? AppColors.primaryBrand : const Color(0xFF663322),
+                color: isActive
+                    ? AppColors.primaryBrand
+                    : AppColors.brandAppBarColor,
               ),
             ),
           ],
@@ -414,7 +417,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
           Container(
             padding: AppSpacing.all12,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.white,
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
@@ -486,7 +489,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
       Container(
         padding: AppSpacing.all24,
         decoration: const BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(32),
             topRight: Radius.circular(32),
@@ -571,7 +574,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                 style: AppTextStyles.manrope(
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
-                  color: Colors.white,
+                  color: AppColors.white,
                 ),
               ),
             ),
@@ -603,8 +606,8 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
               padding: AppSpacing.x10.add(AppSpacing.y4),
               decoration: BoxDecoration(
                 color: value == AppStrings.instStatusPaid
-                    ? AppColors.instFeesPaidBadgeBg
-                    : AppColors.instFeesDueBadgeBg,
+                    ? AppColors.successBg
+                    : AppColors.warningBg,
                 borderRadius: BorderRadius.circular(6),
               ),
               child: Text(
@@ -613,8 +616,8 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
                   color: value == AppStrings.instStatusPaid
-                      ? AppColors.instFeesPaidText
-                      : AppColors.instFeesDueText,
+                      ? AppColors.greenText
+                      : AppColors.primaryBrand,
                 ),
               ),
             )
@@ -683,7 +686,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
     return Container(
       padding: AppSpacing.all24,
       decoration: const BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         border: Border(top: BorderSide(color: AppColors.divider, width: 1)),
       ),
       child: AppButton(

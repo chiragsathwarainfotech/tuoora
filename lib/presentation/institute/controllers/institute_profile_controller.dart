@@ -93,7 +93,7 @@ class InstituteProfileController extends GetxController {
         'Error',
         'Failed to load profile: $e',
         backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
+        colorText: AppColors.white,
       );
     } finally {
       isLoading.value = false;
@@ -105,7 +105,7 @@ class InstituteProfileController extends GetxController {
       Container(
         padding: AppSpacing.all32,
         decoration: const BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
         ),
         child: Column(
@@ -205,7 +205,7 @@ class InstituteProfileController extends GetxController {
         'Profile Updated',
         'Institute details have been successfully saved.',
         backgroundColor: AppColors.darkGreen,
-        colorText: Colors.white,
+        colorText: AppColors.white,
         snackPosition: SnackPosition.BOTTOM,
         margin: const EdgeInsets.all(16),
       );
@@ -214,7 +214,7 @@ class InstituteProfileController extends GetxController {
         'Error',
         'Failed to update profile: $e',
         backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
+        colorText: AppColors.white,
       );
     } finally {
       isLoading.value = false;

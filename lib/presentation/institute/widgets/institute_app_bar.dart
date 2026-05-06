@@ -71,7 +71,7 @@ class InstituteAppBar extends StatelessWidget implements PreferredSizeWidget {
         width: AppSpacing.s40,
         height: AppSpacing.s40,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(color: AppColors.borderGrey),
         ),

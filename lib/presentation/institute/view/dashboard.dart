@@ -13,7 +13,7 @@ class InstituteDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FB),
+      backgroundColor: AppColors.scaffoldBg,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -28,22 +28,13 @@ class InstituteDashboard extends StatelessWidget {
                   Text(
                     'INSTITUTIONAL PORTAL',
                     style: AppTextStyles.lexend(
-                      fontSize: 12,
+                      fontSize: 18,
                       fontWeight: FontWeight.w600,
-                      color: const Color(0xFF663322),
+                      color: AppColors.brandAppBarColor,
                       letterSpacing: 1,
                     ),
                   ),
-                  AppSpacing.v4,
-                  Text(
-                    'Dashboard Overview',
-                    style: AppTextStyles.manrope(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.textPrimary,
-                    ),
-                  ),
-                  AppSpacing.v32,
+                  AppSpacing.v24,
                   _buildModulesGrid(),
                 ],
               ),
@@ -58,7 +49,7 @@ class InstituteDashboard extends StatelessWidget {
     final profileController = Get.find<InstituteProfileController>();
     return Container(
       padding: const EdgeInsets.fromLTRB(24, 16, 24, 16),
-      decoration: const BoxDecoration(color: Colors.white),
+      decoration: const BoxDecoration(color: AppColors.white),
       child: Row(
         children: [
           Obx(
@@ -187,7 +178,7 @@ class InstituteDashboard extends StatelessWidget {
       onTap: item.onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -203,14 +194,10 @@ class InstituteDashboard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: const BoxDecoration(
-                color: AppColors.instDashboardIconBg,
+                color: AppColors.primaryBrandLight,
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                item.icon,
-                color: AppColors.instDashboardIcon,
-                size: 24,
-              ),
+              child: Icon(item.icon, color: AppColors.primaryBrand, size: 24),
             ),
             AppSpacing.v12,
             Text(

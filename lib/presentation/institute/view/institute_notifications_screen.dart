@@ -137,7 +137,7 @@ class InstituteNotificationsScreen extends GetView<NotificationController> {
       width: double.infinity,
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -183,7 +183,7 @@ class InstituteNotificationsScreen extends GetView<NotificationController> {
                         style: AppTextStyles.manrope(
                           fontSize: 10,
                           fontWeight: FontWeight.w900,
-                          color: Colors.white,
+                          color: AppColors.white,
                         ),
                       ),
                     ),

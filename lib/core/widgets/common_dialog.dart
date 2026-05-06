@@ -24,8 +24,8 @@ class CommonDialog extends StatelessWidget {
     this.description,
     this.body,
     this.icon,
-    this.iconColor = const Color(0xFFD92D20),
-    this.iconBgColor = const Color(0xFFFEF3F2),
+    this.iconColor = AppColors.bohoRed,
+    this.iconBgColor = AppColors.errorBg,
     this.confirmText = 'Confirm',
     this.cancelText = 'Cancel',
     required this.onConfirm,
@@ -39,8 +39,8 @@ class CommonDialog extends StatelessWidget {
     String? description,
     Widget? body,
     IconData? icon,
-    Color iconColor = const Color(0xFFD92D20),
-    Color iconBgColor = const Color(0xFFFEF3F2),
+    Color iconColor = AppColors.bohoRed,
+    Color iconBgColor = AppColors.errorBg,
     String confirmText = 'Confirm',
     String cancelText = 'Cancel',
     required VoidCallback onConfirm,
@@ -73,12 +73,14 @@ class CommonDialog extends StatelessWidget {
       child: Container(
         padding: AppSpacing.all32,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(24),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: body != null ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
+          crossAxisAlignment: body != null
+              ? CrossAxisAlignment.stretch
+              : CrossAxisAlignment.center,
           children: [
             if (icon != null) ...[
               Center(
@@ -88,11 +90,7 @@ class CommonDialog extends StatelessWidget {
                     color: iconBgColor,
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(
-                    icon,
-                    color: iconColor,
-                    size: 32,
-                  ),
+                  child: Icon(icon, color: iconColor, size: 32),
                 ),
               ),
               AppSpacing.v24,
@@ -118,10 +116,7 @@ class CommonDialog extends StatelessWidget {
                 ),
               ),
             ],
-            if (body != null) ...[
-              AppSpacing.v24,
-              body!,
-            ],
+            if (body != null) ...[AppSpacing.v24, body!],
             if (showButtons) ...[
               AppSpacing.v32,
               Row(
@@ -150,13 +145,15 @@ class CommonDialog extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        // For confirm, we don't automatically close if it's an input dialog usually, 
+                        // For confirm, we don't automatically close if it's an input dialog usually,
                         // but let's follow the pattern
-                        if (body == null) Get.back(); 
+                        if (body == null) Get.back();
                         onConfirm();
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: confirmButtonColor ?? (icon != null ? iconColor : AppColors.instPrimaryBlue),
+                        backgroundColor:
+                            confirmButtonColor ??
+                            (icon != null ? iconColor : AppColors.primaryBrand),
                         padding: AppSpacing.y16,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
@@ -168,7 +165,7 @@ class CommonDialog extends StatelessWidget {
                         style: AppTextStyles.manrope(
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
-                          color: Colors.white,
+                          color: AppColors.white,
                         ),
                       ),
                     ),

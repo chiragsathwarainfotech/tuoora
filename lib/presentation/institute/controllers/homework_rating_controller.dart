@@ -1,12 +1,11 @@
 import 'package:fee_easy/presentation/institute/models/homework_model.dart';
 import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
 import 'package:fee_easy/core/constants/app_colors.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class HomeworkRatingController extends GetxController {
   final HomeworkModel homework;
-  
+
   final filterIndex = 0.obs; // 0: All, 1: Submitted, 2: Pending
   final submissions = <HomeworkSubmission>[].obs;
   final isLoading = false.obs;
@@ -39,8 +38,9 @@ class HomeworkRatingController extends GetxController {
     // Ensure range 0-10
     if (newScore < 0 || newScore > 10) return;
 
-    final index =
-        submissions.indexWhere((s) => s.studentId.toString() == studentId);
+    final index = submissions.indexWhere(
+      (s) => s.studentId.toString() == studentId,
+    );
     if (index != -1) {
       submissions[index].score = newScore;
       submissions.refresh();
@@ -55,10 +55,7 @@ class HomeworkRatingController extends GetxController {
 
       final scores = submissions
           .where((s) => s.isSubmitted)
-          .map((s) => {
-                'student_id': s.studentId,
-                'score': s.score.toInt(),
-              })
+          .map((s) => {'student_id': s.studentId, 'score': s.score.toInt()})
           .toList();
 
       if (scores.isEmpty) {
@@ -74,7 +71,7 @@ class HomeworkRatingController extends GetxController {
         'Success',
         'Ratings submitted successfully',
         backgroundColor: AppColors.darkGreen,
-        colorText: Colors.white,
+        colorText: AppColors.white,
       );
     } catch (e) {
       Get.snackbar('Error', 'Failed to submit ratings: ${e.toString()}');

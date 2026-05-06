@@ -57,7 +57,7 @@ class InstituteFeesScreen extends GetView<InstituteController> {
         heroTag: 'fees_fab_unique_tag',
         onPressed: () => Get.toNamed(AppRoutes.instituteRecordFee),
         backgroundColor: AppColors.primaryBrand,
-        child: const Icon(Icons.add, color: Colors.white, size: 28),
+        child: const Icon(Icons.add, color: AppColors.white, size: 28),
       ),
     );
   }
@@ -78,7 +78,7 @@ class InstituteFeesScreen extends GetView<InstituteController> {
             style: AppTextStyles.manrope(
               fontSize: 12,
               fontWeight: FontWeight.w800,
-              color: Colors.white.withValues(alpha: 0.7),
+              color: AppColors.white.withValues(alpha: 0.7),
               letterSpacing: 1.2,
             ),
           ),
@@ -88,7 +88,7 @@ class InstituteFeesScreen extends GetView<InstituteController> {
             style: AppTextStyles.manrope(
               fontSize: 32,
               fontWeight: FontWeight.w800,
-              color: Colors.white,
+              color: AppColors.white,
             ),
           ),
         ],
@@ -117,7 +117,7 @@ class InstituteFeesScreen extends GetView<InstituteController> {
               color: AppColors.primaryBrand,
               borderRadius: BorderRadius.circular(8),
             ),
-            child: const Icon(Icons.download, color: Colors.white, size: 26),
+            child: const Icon(Icons.download, color: AppColors.white, size: 26),
           ),
         ),
       ],
@@ -150,7 +150,7 @@ class InstituteFeesScreen extends GetView<InstituteController> {
                 'No fee records found',
                 style: AppTextStyles.manrope(
                   fontSize: 18,
-                  color: const Color(0xFF663322),
+                  color: AppColors.brandAppBarColor,
                   fontWeight: FontWeight.w800,
                 ),
               ),
@@ -184,7 +184,7 @@ class InstituteFeesScreen extends GetView<InstituteController> {
     return Container(
       padding: AppSpacing.all16,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: AppColors.borderGrey),
         boxShadow: [

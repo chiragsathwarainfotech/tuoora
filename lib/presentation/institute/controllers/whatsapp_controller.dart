@@ -59,7 +59,7 @@ class WhatsAppController extends GetxController {
         'Validation Error',
         'Please provide all Meta API credentials to continue.',
         backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
+        colorText: AppColors.white,
       );
       return;
     }
@@ -69,7 +69,7 @@ class WhatsAppController extends GetxController {
         'Validation Error',
         'Please enter a valid phone number.',
         backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
+        colorText: AppColors.white,
       );
       return;
     }
@@ -97,7 +97,7 @@ class WhatsAppController extends GetxController {
         'Success',
         'WhatsApp settings saved successfully.',
         backgroundColor: AppColors.darkGreen,
-        colorText: Colors.white,
+        colorText: AppColors.white,
         snackPosition: SnackPosition.BOTTOM,
         margin: const EdgeInsets.all(16),
       );
@@ -106,7 +106,7 @@ class WhatsAppController extends GetxController {
         'Error',
         'Failed to save settings: $e',
         backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
+        colorText: AppColors.white,
       );
     } finally {
       isLoading.value = false;

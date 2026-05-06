@@ -1,3 +1,4 @@
+import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class BatchModel {
@@ -30,7 +31,7 @@ class BatchModel {
     required this.leftBorderColor,
     this.baseFee = 0.0,
     this.description = '',
-    this.statusTextColor = Colors.white,
+    this.statusTextColor = AppColors.white,
     this.totalExpected,
     this.totalPaid,
     this.days = const ['Mon', 'Wed', 'Fri'],

@@ -93,7 +93,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
                       style: AppTextStyles.manrope(
                         fontSize: AppSpacing.s10,
                         fontWeight: FontWeight.w900,
-                        color: Colors.white,
+                        color: AppColors.white,
                         letterSpacing: AppSpacing.s2,
                       ),
                     ),
@@ -108,7 +108,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
             style: AppTextStyles.manrope(
               fontSize: AppSpacing.s32,
               fontWeight: FontWeight.w800,
-              color: Colors.white,
+              color: AppColors.white,
             ),
           ),
           Text(
@@ -141,7 +141,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
                       style: AppTextStyles.manrope(
                         fontSize: AppSpacing.s24,
                         fontWeight: FontWeight.w800,
-                        color: Colors.white,
+                        color: AppColors.white,
                       ),
                     ),
                     TextSpan(
@@ -165,7 +165,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
     return Container(
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.s20),
         border: Border.all(color: AppColors.divider),
       ),
@@ -215,7 +215,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
                 '8,400 of 10,000 students enrolled',
                 style: AppTextStyles.lexend(
                   fontSize: AppSpacing.s14,
-                  color: const Color(0xFF917B6B),
+                  color: AppColors.blueSapphire,
                 ),
               ),
             ],
@@ -279,7 +279,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
       width: AppSpacing.s260,
       padding: AppSpacing.all28,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.s24),
         border: Border.all(color: AppColors.divider),
       ),
@@ -299,7 +299,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
             desc,
             style: AppTextStyles.lexend(
               fontSize: AppSpacing.s14,
-              color: const Color(0xFF917B6B),
+              color: AppColors.blueSapphire,
             ),
           ),
           AppSpacing.v24,
@@ -318,7 +318,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
                   text: ' /mo',
                   style: AppTextStyles.lexend(
                     fontSize: AppSpacing.s14,
-                    color: const Color(0xFF917B6B),
+                    color: AppColors.blueSapphire,
                   ),
                 ),
               ],
@@ -340,7 +340,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
                     f,
                     style: AppTextStyles.lexend(
                       fontSize: AppSpacing.s14,
-                      color: const Color(0xFF917B6B),
+                      color: AppColors.blueSapphire,
                     ),
                   ),
                 ],
@@ -367,7 +367,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
                 style: AppTextStyles.manrope(
                   fontSize: AppSpacing.s14,
                   fontWeight: FontWeight.w800,
-                  color: isPremium ? Colors.white : AppColors.primaryBrand,
+                  color: isPremium ? AppColors.white : AppColors.primaryBrand,
                 ),
               ),
             ),
@@ -415,7 +415,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
     return Container(
       padding: AppSpacing.all20,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.s16),
         border: Border.all(color: AppColors.divider),
       ),
@@ -450,7 +450,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
                   subtitle,
                   style: AppTextStyles.lexend(
                     fontSize: AppSpacing.s12,
-                    color: const Color(0xFF917B6B),
+                    color: AppColors.blueSapphire,
                   ),
                 ),
               ],
@@ -501,7 +501,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
     return Container(
       padding: AppSpacing.all16,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.s16),
         border: Border.all(color: AppColors.divider),
       ),
@@ -536,7 +536,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
                   date,
                   style: AppTextStyles.lexend(
                     fontSize: AppSpacing.s12,
-                    color: const Color(0xFF917B6B),
+                    color: AppColors.blueSapphire,
                   ),
                 ),
               ],
@@ -588,7 +588,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
         children: [
           const Icon(
             Icons.upgrade_rounded,
-            color: Colors.white,
+            color: AppColors.white,
             size: AppSpacing.s20,
           ),
           AppSpacing.h8,
@@ -597,7 +597,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
             style: AppTextStyles.manrope(
               fontSize: AppSpacing.s16,
               fontWeight: FontWeight.w800,
-              color: Colors.white,
+              color: AppColors.white,
             ),
           ),
         ],

@@ -26,7 +26,7 @@ class InstituteBottomButton extends StatelessWidget {
     return Container(
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
@@ -47,12 +47,12 @@ class InstituteBottomButton extends StatelessWidget {
           elevation: 0,
         ),
         child: isLoading
-            ? const CommonLoading(color: Colors.white, size: 24)
+            ? const CommonLoading(color: AppColors.white, size: 24)
             : Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   if (icon != null) ...[
-                    Icon(icon, color: Colors.white, size: 20),
+                    Icon(icon, color: AppColors.white, size: 20),
                     AppSpacing.h12,
                   ],
                   Text(
@@ -60,7 +60,7 @@ class InstituteBottomButton extends StatelessWidget {
                     style: AppTextStyles.manrope(
                       fontSize: 18,
                       fontWeight: FontWeight.w800,
-                      color: Colors.white,
+                      color: AppColors.white,
                     ),
                   ),
                 ],

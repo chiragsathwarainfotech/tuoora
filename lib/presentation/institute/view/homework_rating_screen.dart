@@ -82,7 +82,7 @@ class HomeworkRatingScreen extends StatelessWidget {
               style: AppTextStyles.lexend(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
-                color: AppColors.instPrimaryBlue,
+                color: AppColors.primaryBrand,
                 letterSpacing: 1,
               ),
             ),
@@ -97,7 +97,7 @@ class HomeworkRatingScreen extends StatelessWidget {
                 style: AppTextStyles.manrope(
                   fontSize: 10,
                   fontWeight: FontWeight.w800,
-                  color: AppColors.instPrimaryBlue,
+                  color: AppColors.primaryBrand,
                 ),
               ),
             ),
@@ -132,7 +132,7 @@ class HomeworkRatingScreen extends StatelessWidget {
     return Container(
       padding: AppSpacing.all20,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: const Color(0xFFEAECF0)),
       ),
@@ -145,7 +145,7 @@ class HomeworkRatingScreen extends StatelessWidget {
                 children: [
                   const Icon(
                     Icons.check_box_outlined,
-                    color: AppColors.instPrimaryBlue,
+                    color: AppColors.primaryBrand,
                     size: 20,
                   ),
                   AppSpacing.h8,
@@ -167,7 +167,7 @@ class HomeworkRatingScreen extends StatelessWidget {
                       style: AppTextStyles.manrope(
                         fontSize: 24,
                         fontWeight: FontWeight.w800,
-                        color: AppColors.instPrimaryBlue,
+                        color: AppColors.primaryBrand,
                       ),
                     ),
                     TextSpan(
@@ -189,7 +189,7 @@ class HomeworkRatingScreen extends StatelessWidget {
             child: LinearProgressIndicator(
               value: progress,
               backgroundColor: const Color(0xFFF2F4F7),
-              color: AppColors.instPrimaryBlue,
+              color: AppColors.primaryBrand,
               minHeight: 8,
             ),
           ),
@@ -225,11 +225,11 @@ class HomeworkRatingScreen extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           decoration: BoxDecoration(
-            color: isSelected ? AppColors.instPrimaryBlue : Colors.white,
+            color: isSelected ? AppColors.primaryBrand : AppColors.white,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
               color: isSelected
-                  ? AppColors.instPrimaryBlue
+                  ? AppColors.primaryBrand
                   : const Color(0xFFD0D5DD),
             ),
           ),
@@ -238,7 +238,7 @@ class HomeworkRatingScreen extends StatelessWidget {
             style: AppTextStyles.manrope(
               fontSize: 14,
               fontWeight: FontWeight.w700,
-              color: isSelected ? Colors.white : AppColors.textSecondary,
+              color: isSelected ? AppColors.white : AppColors.textSecondary,
             ),
           ),
         ),
@@ -255,7 +255,7 @@ class HomeworkRatingScreen extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 16),
       padding: AppSpacing.all16,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -351,7 +351,7 @@ class HomeworkRatingScreen extends StatelessWidget {
                         style: AppTextStyles.manrope(
                           fontSize: 16,
                           fontWeight: FontWeight.w800,
-                          color: AppColors.instPrimaryBlue,
+                          color: AppColors.primaryBrand,
                         ),
                       ),
                       AppSpacing.h12,
@@ -397,7 +397,7 @@ class HomeworkRatingScreen extends StatelessWidget {
                   const Icon(
                     Icons.notifications_outlined,
                     size: 18,
-                    color: Colors.white,
+                    color: AppColors.white,
                   ),
                   AppSpacing.h8,
                   Text(
@@ -405,7 +405,7 @@ class HomeworkRatingScreen extends StatelessWidget {
                     style: AppTextStyles.manrope(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
-                      color: Colors.white,
+                      color: AppColors.white,
                     ),
                   ),
                 ],

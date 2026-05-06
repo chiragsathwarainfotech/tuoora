@@ -14,7 +14,7 @@ class InstituteBottomNav extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(24),
           topRight: Radius.circular(24),
@@ -70,10 +70,14 @@ class InstituteBottomNav extends StatelessWidget {
   Widget _buildNavItem(int index, IconData icon, String label) {
     final bool isSelected = currentIndex == index;
     final Color itemColor = isSelected
-        ? AppColors.instAccentBlue
-        : AppColors.instNavInactive;
+        ? AppColors.primaryBrand
+        : AppColors.textMuted;
 
-    final Widget iconWidget = Icon(icon, color: itemColor, size: AppSpacing.s22);
+    final Widget iconWidget = Icon(
+      icon,
+      color: itemColor,
+      size: AppSpacing.s22,
+    );
 
     return Expanded(
       child: GestureDetector(
@@ -84,7 +88,7 @@ class InstituteBottomNav extends StatelessWidget {
             duration: const Duration(milliseconds: 250),
             padding: AppSpacing.x16.add(AppSpacing.y8),
             decoration: BoxDecoration(
-              color: isSelected ? AppColors.instNavActive : Colors.transparent,
+              color: isSelected ? AppColors.primaryBrand : Colors.transparent,
               borderRadius: BorderRadius.circular(16),
             ),
             child: Column(

@@ -1,3 +1,4 @@
+import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +16,7 @@ class InstituteLabel extends StatelessWidget {
         style: AppTextStyles.manrope(
           fontSize: 14,
           fontWeight: FontWeight.w800,
-          color: const Color(0xFF663322),
+          color: AppColors.brandAppBarColor,
         ),
       ),
     );

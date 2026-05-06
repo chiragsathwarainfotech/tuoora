@@ -60,7 +60,7 @@ class ParentDashboard extends StatelessWidget {
                       width: AppSpacing.s8,
                       height: AppSpacing.s8,
                       decoration: const BoxDecoration(
-                        color: AppColors.redDot, // Dark Red Dot
+                        color: AppColors.error,
                         shape: BoxShape.circle,
                       ),
                     ),
@@ -83,7 +83,7 @@ class ParentDashboard extends StatelessWidget {
             Container(
               padding: AppSpacing.all24,
               decoration: BoxDecoration(
-                color: AppColors.cardBg,
+                color: AppColors.white,
                 borderRadius: BorderRadius.circular(AppSpacing.s24),
                 boxShadow: [
                   BoxShadow(
@@ -243,14 +243,14 @@ class ParentDashboard extends StatelessWidget {
                           Container(
                             padding: AppSpacing.all10,
                             decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.15),
+                              color: AppColors.white.withValues(alpha: 0.15),
                               borderRadius: BorderRadius.circular(
                                 AppSpacing.s12,
                               ),
                             ),
                             child: const Icon(
                               Icons.account_balance_wallet,
-                              color: Colors.white,
+                              color: AppColors.white,
                               size: AppSpacing.s20,
                             ),
                           ),
@@ -260,7 +260,7 @@ class ParentDashboard extends StatelessWidget {
                             style: AppTextStyles.lexend(
                               fontSize: AppSpacing.s16,
                               fontWeight: FontWeight.w500,
-                              color: Colors.white.withValues(alpha: 0.9),
+                              color: AppColors.white.withValues(alpha: 0.9),
                             ),
                           ),
                         ],
@@ -268,7 +268,7 @@ class ParentDashboard extends StatelessWidget {
                       AppButton(
                         label: AppStrings.payNow,
                         onPressed: () {},
-                        backgroundColor: Colors.white,
+                        backgroundColor: AppColors.white,
                         foregroundColor: AppColors.primaryBrand,
                         padding: AppSpacing.x16.add(AppSpacing.y8),
                         borderRadius: AppSpacing.s12,
@@ -282,7 +282,7 @@ class ParentDashboard extends StatelessWidget {
                     style: AppTextStyles.manrope(
                       fontSize: AppSpacing.s32,
                       fontWeight: FontWeight.w800,
-                      color: Colors.white,
+                      color: AppColors.white,
                       height: 1.0,
                     ),
                   ),
@@ -292,7 +292,7 @@ class ParentDashboard extends StatelessWidget {
                     style: AppTextStyles.manrope(
                       fontSize: AppSpacing.s12,
                       fontWeight: FontWeight.w500,
-                      color: Colors.white.withValues(alpha: 0.7),
+                      color: AppColors.white.withValues(alpha: 0.7),
                     ),
                   ),
                 ],
@@ -321,7 +321,7 @@ class ParentDashboard extends StatelessWidget {
                 },
               ),
               icon: Icons.functions,
-              iconColor: AppColors.indigoDark,
+              iconColor: AppColors.primaryBrand,
               iconBgColor: AppColors.primaryBrandLight,
               title: 'Advanced Calculus: PS4',
               subject: 'Mathematics',
@@ -337,16 +337,16 @@ class ParentDashboard extends StatelessWidget {
                   'title': 'Photosynthesis Lab Report',
                   'subject': 'Biology',
                   'status': 'Completed Today',
-                  'statusColor': AppColors.checkGreen,
+                  'statusColor': AppColors.successGreen,
                 },
               ),
               icon: Icons.science_outlined,
-              iconColor: AppColors.amberDark,
+              iconColor: AppColors.primaryBrand,
               iconBgColor: AppColors.amberLight,
               title: 'Photosynthesis Lab Report',
               subject: 'Biology',
               statusText: 'Completed Today',
-              statusColor: AppColors.checkGreen,
+              statusColor: AppColors.successGreen,
               completed: true,
             ),
             AppSpacing.v12,
@@ -472,7 +472,7 @@ class ParentDashboard extends StatelessWidget {
                                   color: AppColors.textMuted,
                                   shape: BoxShape.circle,
                                   border: Border.all(
-                                    color: Colors.white,
+                                    color: AppColors.white,
                                     width: AppSpacing.s4,
                                   ),
                                 ),
@@ -542,7 +542,7 @@ class ParentDashboard extends StatelessWidget {
     return Container(
       padding: AppSpacing.all16,
       decoration: BoxDecoration(
-        color: AppColors.cardBg,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.s16),
         boxShadow: [
           BoxShadow(

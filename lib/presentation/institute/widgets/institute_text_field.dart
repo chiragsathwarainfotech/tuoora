@@ -32,13 +32,13 @@ class InstituteTextField extends StatelessWidget {
           style: AppTextStyles.manrope(
             fontSize: 14,
             fontWeight: FontWeight.w800,
-            color: const Color(0xFF663322),
+            color: AppColors.brandAppBarColor,
           ),
         ),
         AppSpacing.v8,
         Container(
           decoration: BoxDecoration(
-            color: const Color(0xFFEBEBEB),
+            color: AppColors.paleSilver,
             borderRadius: BorderRadius.circular(12),
           ),
           child: TextField(
@@ -55,7 +55,7 @@ class InstituteTextField extends StatelessWidget {
               hintText: hint,
               hintStyle: AppTextStyles.manrope(
                 fontSize: 14,
-                color: const Color(0xFF917B6B),
+                color: AppColors.blueSapphire,
               ),
               border: InputBorder.none,
               contentPadding: AppSpacing.all16,

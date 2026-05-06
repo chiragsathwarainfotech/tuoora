@@ -13,7 +13,7 @@ class AttendanceHistoryScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, color: AppColors.textPrimary, size: 20),
@@ -118,7 +118,7 @@ class AttendanceHistoryScreen extends StatelessWidget {
     return Container(
       padding: AppSpacing.all20,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.s24),
         border: !isPresent && customStatusColor == null
             ? const Border(

@@ -19,19 +19,19 @@ class ParentFeesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget content = SingleChildScrollView(
-        padding: AppSpacing.screenPadding,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildOutstandingBalanceCard(),
-            AppSpacing.v32,
-            _buildFeeBreakdownSection(),
-            AppSpacing.v32,
-            _buildRecentPaymentsSection(),
-            AppSpacing.v24,
-          ],
-        ),
-      );
+      padding: AppSpacing.screenPadding,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildOutstandingBalanceCard(),
+          AppSpacing.v32,
+          _buildFeeBreakdownSection(),
+          AppSpacing.v32,
+          _buildRecentPaymentsSection(),
+          AppSpacing.v24,
+        ],
+      ),
+    );
 
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
@@ -49,7 +49,9 @@ class ParentFeesScreen extends StatelessWidget {
         ),
       ),
       body: content,
-      bottomNavigationBar: showBottomNav ? const ParentBottomNav(currentIndex: 2) : null,
+      bottomNavigationBar: showBottomNav
+          ? const ParentBottomNav(currentIndex: 2)
+          : null,
     );
   }
 
@@ -79,7 +81,7 @@ class ParentFeesScreen extends StatelessWidget {
             style: AppTextStyles.manrope(
               fontSize: 12,
               fontWeight: FontWeight.w800,
-              color: Colors.white.withValues(alpha: 0.8),
+              color: AppColors.white.withValues(alpha: 0.8),
               letterSpacing: 1.2,
             ),
           ),
@@ -89,7 +91,7 @@ class ParentFeesScreen extends StatelessWidget {
             style: AppTextStyles.manrope(
               fontSize: 48,
               fontWeight: FontWeight.w800,
-              color: Colors.white,
+              color: AppColors.white,
             ),
           ),
           AppSpacing.v12,
@@ -107,7 +109,7 @@ class ParentFeesScreen extends StatelessWidget {
                 style: AppTextStyles.lexend(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
-                  color: Colors.white70,
+                  color: AppColors.white.withValues(alpha: 0.7),
                 ),
               ),
             ],
@@ -120,7 +122,7 @@ class ParentFeesScreen extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: AppSpacing.s18),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.circular(AppSpacing.s20),
               ),
               child: Row(
@@ -203,7 +205,7 @@ class ParentFeesScreen extends StatelessWidget {
     return Container(
       padding: AppSpacing.all16,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.s24),
         boxShadow: [
           BoxShadow(

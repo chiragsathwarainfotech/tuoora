@@ -81,7 +81,7 @@ class ReportsScreen extends StatelessWidget {
           ),
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFF0056D2),
-            foregroundColor: Colors.white,
+            foregroundColor: AppColors.white,
             padding: AppSpacing.x20.add(AppSpacing.y12),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(AppSpacing.s12),
@@ -97,7 +97,7 @@ class ReportsScreen extends StatelessWidget {
     return Container(
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.s32),
         boxShadow: [
           BoxShadow(
@@ -252,7 +252,7 @@ class ReportsScreen extends StatelessWidget {
       width: double.infinity,
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(32),
       ),
       child: Column(
@@ -357,7 +357,7 @@ class ReportsScreen extends StatelessWidget {
     return Container(
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(32),
       ),
       child: Column(
@@ -487,7 +487,7 @@ class ReportsScreen extends StatelessWidget {
             style: AppTextStyles.manrope(
               fontSize: 14,
               fontWeight: FontWeight.w800,
-              color: Colors.white,
+              color: AppColors.white,
             ),
           ),
           AppSpacing.v20,
@@ -512,7 +512,7 @@ class ReportsScreen extends StatelessWidget {
               style: AppTextStyles.lexend(
                 fontSize: 12,
                 fontWeight: FontWeight.w300,
-                color: Colors.white,
+                color: AppColors.white,
               ),
             ),
             Text(
@@ -520,7 +520,7 @@ class ReportsScreen extends StatelessWidget {
               style: AppTextStyles.manrope(
                 fontSize: 12,
                 fontWeight: FontWeight.w800,
-                color: Colors.white,
+                color: AppColors.white,
               ),
             ),
           ],
@@ -531,8 +531,8 @@ class ReportsScreen extends StatelessWidget {
           child: LinearProgressIndicator(
             value: value,
             minHeight: AppSpacing.s4,
-            backgroundColor: Colors.white.withValues(alpha: 0.2),
-            valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+            backgroundColor: AppColors.white.withValues(alpha: 0.2),
+            valueColor: const AlwaysStoppedAnimation<Color>(AppColors.white),
           ),
         ),
       ],

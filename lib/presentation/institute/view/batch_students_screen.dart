@@ -58,7 +58,7 @@ class BatchStudentsScreen extends StatelessWidget {
     return Container(
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -90,7 +90,7 @@ class BatchStudentsScreen extends StatelessWidget {
                   style: AppTextStyles.manrope(
                     fontSize: 32,
                     fontWeight: FontWeight.w800,
-                    color: AppColors.instPrimaryBlue,
+                    color: AppColors.primaryBrand,
                   ),
                 ),
               ],
@@ -117,7 +117,7 @@ class BatchStudentsScreen extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white, width: 2),
+                  border: Border.all(color: AppColors.white, width: 2),
                 ),
                 child: CircleAvatar(
                   radius: 18,
@@ -144,7 +144,7 @@ class BatchStudentsScreen extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white, width: 2),
+                  border: Border.all(color: AppColors.white, width: 2),
                 ),
                 child: CircleAvatar(
                   radius: 18,
@@ -168,7 +168,7 @@ class BatchStudentsScreen extends StatelessWidget {
   Widget _buildSearchBar(BatchDetailsController controller) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFFEBEBEB),
+        color: AppColors.paleSilver,
         borderRadius: BorderRadius.circular(16),
       ),
       child: TextField(
@@ -178,11 +178,11 @@ class BatchStudentsScreen extends StatelessWidget {
           hintText: 'Search enrolled students...',
           hintStyle: AppTextStyles.lexend(
             fontSize: 14,
-            color: const Color(0xFF917B6B),
+            color: AppColors.blueSapphire,
           ),
           prefixIcon: const Icon(
             Icons.search,
-            color: const Color(0xFF917B6B),
+            color: AppColors.blueSapphire,
             size: 20,
           ),
           border: InputBorder.none,
@@ -220,7 +220,7 @@ class BatchStudentsScreen extends StatelessWidget {
             margin: const EdgeInsets.only(bottom: 12),
             padding: AppSpacing.all12,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.white,
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
@@ -232,7 +232,10 @@ class BatchStudentsScreen extends StatelessWidget {
             ),
             child: Row(
               children: [
-                _buildStudentAvatar(bs.student.profileImageUrl, bs.student.name),
+                _buildStudentAvatar(
+                  bs.student.profileImageUrl,
+                  bs.student.name,
+                ),
                 AppSpacing.h16,
                 Expanded(
                   child: Column(

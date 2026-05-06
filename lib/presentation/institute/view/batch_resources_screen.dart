@@ -72,8 +72,8 @@ class BatchResourcesScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showUploadDialog(context, controller),
-        backgroundColor: AppColors.instPrimaryBlue,
-        child: const Icon(Icons.add, color: Colors.white),
+        backgroundColor: AppColors.primaryBrand,
+        child: const Icon(Icons.add, color: AppColors.white),
       ),
     );
   }
@@ -86,7 +86,7 @@ class BatchResourcesScreen extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 16),
         padding: AppSpacing.all16,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -248,7 +248,7 @@ class BatchResourcesScreen extends StatelessWidget {
             children: [
               const Icon(
                 Icons.attach_file_rounded,
-                color: AppColors.instPrimaryBlue,
+                color: AppColors.primaryBrand,
               ),
               AppSpacing.h12,
               Expanded(
@@ -290,7 +290,7 @@ class BatchResourcesScreen extends StatelessWidget {
       case ResourceType.video:
         return Colors.orange;
       case ResourceType.document:
-        return AppColors.instPrimaryBlue;
+        return AppColors.primaryBrand;
     }
   }
 }

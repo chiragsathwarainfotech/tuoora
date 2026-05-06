@@ -214,7 +214,7 @@ class InstituteStudentController extends GetxController {
       Container(
         padding: AppSpacing.all32,
         decoration: const BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
         ),
         child: Column(
@@ -309,7 +309,7 @@ class InstituteStudentController extends GetxController {
               ? 'Student updated successfully'
               : 'Student added successfully',
           backgroundColor: Colors.green.withValues(alpha: 0.7),
-          colorText: Colors.white,
+          colorText: AppColors.white,
           snackPosition: SnackPosition.BOTTOM,
           margin: AppSpacing.all16,
         );
@@ -357,7 +357,7 @@ class InstituteStudentController extends GetxController {
       Container(
         padding: AppSpacing.all24,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
         ),
         child: Column(

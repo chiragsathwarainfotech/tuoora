@@ -86,7 +86,10 @@ class _BatchesScreenState extends State<BatchesScreen> {
                               return const Center(
                                 child: Padding(
                                   padding: EdgeInsets.all(8.0),
-                                  child: CommonLoading(size: 20, strokeWidth: 2),
+                                  child: CommonLoading(
+                                    size: 20,
+                                    strokeWidth: 2,
+                                  ),
                                 ),
                               );
                             }
@@ -107,7 +110,7 @@ class _BatchesScreenState extends State<BatchesScreen> {
           Get.toNamed(AppRoutes.instituteAddBatch);
         },
         backgroundColor: AppColors.primaryBrand,
-        child: const Icon(Icons.add, color: Colors.white, size: 28),
+        child: const Icon(Icons.add, color: AppColors.white, size: 28),
       ),
     );
   }
@@ -118,7 +121,7 @@ class _BatchesScreenState extends State<BatchesScreen> {
           Get.toNamed(AppRoutes.instituteBatchDetails, arguments: batch),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(AppSpacing.s16),
           boxShadow: [
             BoxShadow(
@@ -179,7 +182,7 @@ class _BatchesScreenState extends State<BatchesScreen> {
                           style: AppTextStyles.manrope(
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
-                            color: AppColors.instAccentBlue,
+                            color: AppColors.primaryBrand,
                           ),
                         ),
                         AppSpacing.v12,
@@ -207,7 +210,7 @@ class _BatchesScreenState extends State<BatchesScreen> {
                             Icon(
                               Icons.people_outline_rounded,
                               size: AppSpacing.s18,
-                              color: AppColors.instAccentBlue,
+                              color: AppColors.primaryBrand,
                             ),
                             AppSpacing.h8,
                             Text(

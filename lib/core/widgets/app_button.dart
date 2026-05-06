@@ -44,7 +44,7 @@ class AppButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool effectivelyDisabled = isDisabled || isLoading || onPressed == null;
     final Color bgColor = backgroundColor ?? AppColors.primaryBrand;
-    final Color contentColor = foregroundColor ?? Colors.white;
+    final Color contentColor = foregroundColor ?? AppColors.white;
 
     return GestureDetector(
       onTap: effectivelyDisabled ? null : onPressed,

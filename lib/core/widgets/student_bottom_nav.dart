@@ -13,7 +13,7 @@ class StudentBottomNav extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(AppSpacing.s24),
           topRight: Radius.circular(AppSpacing.s24),

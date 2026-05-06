@@ -99,7 +99,7 @@ class ResourceDetailScreen extends StatelessWidget {
           ? 240
           : (resource.type == ResourceType.image ? 400 : 200),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -152,7 +152,7 @@ class ResourceDetailScreen extends StatelessWidget {
               const Icon(
                 Icons.description_rounded,
                 size: 80,
-                color: AppColors.instPrimaryBlue,
+                color: AppColors.primaryBrand,
               ),
               AppSpacing.v16,
               Padding(
@@ -188,8 +188,8 @@ class ResourceDetailScreen extends StatelessWidget {
                   icon: const Icon(Icons.visibility),
                   label: const Text('View Document'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.instPrimaryBlue,
-                    foregroundColor: Colors.white,
+                    backgroundColor: AppColors.primaryBrand,
+                    foregroundColor: AppColors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -207,7 +207,7 @@ class ResourceDetailScreen extends StatelessWidget {
         backgroundColor: Colors.black,
         appBar: AppBar(
           backgroundColor: Colors.black,
-          iconTheme: const IconThemeData(color: Colors.white),
+          iconTheme: const IconThemeData(color: AppColors.white),
         ),
         body: Center(
           child: InteractiveViewer(

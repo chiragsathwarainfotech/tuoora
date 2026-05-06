@@ -29,7 +29,7 @@ class UpdatesScreen extends StatelessWidget {
       _UpdateData(
         icon: Icons.edit_note_rounded,
         iconColor: AppColors.primaryBrand,
-        iconBg: AppColors.lightBlueBg,
+        iconBg: AppColors.primaryBrandLight,
         title: 'Homework Alert',
         time: '08:20 AM',
         description:
@@ -68,7 +68,7 @@ class UpdatesScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.primaryBrand),
@@ -87,7 +87,9 @@ class UpdatesScreen extends StatelessWidget {
       body: Obx(() {
         List<_UpdateData> filteredUpdates = selectedFilter.value == 'All'
             ? allUpdates
-            : allUpdates.where((u) => u.category == selectedFilter.value).toList();
+            : allUpdates
+                  .where((u) => u.category == selectedFilter.value)
+                  .toList();
 
         return SingleChildScrollView(
           child: Column(
@@ -159,7 +161,9 @@ class UpdatesScreen extends StatelessWidget {
                 child: Container(
                   padding: AppSpacing.x24.add(AppSpacing.y12),
                   decoration: BoxDecoration(
-                    color: isSelected ? AppColors.primaryBrand : AppColors.reportBorder,
+                    color: isSelected
+                        ? AppColors.primaryBrand
+                        : AppColors.reportBorder,
                     borderRadius: BorderRadius.circular(AppSpacing.s16),
                   ),
                   child: Text(
@@ -167,7 +171,7 @@ class UpdatesScreen extends StatelessWidget {
                     style: AppTextStyles.manrope(
                       fontSize: 14,
                       fontWeight: FontWeight.w800,
-                      color: isSelected ? Colors.white : AppColors.textTertiary,
+                      color: isSelected ? AppColors.white : AppColors.textTertiary,
                     ),
                   ),
                 ),
@@ -206,7 +210,7 @@ class UpdatesScreen extends StatelessWidget {
       margin: const EdgeInsets.only(left: 28, right: 28, bottom: 16),
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.s28),
         boxShadow: [
           BoxShadow(

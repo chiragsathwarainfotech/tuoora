@@ -63,7 +63,7 @@ class AddEditStudentScreen extends GetView<InstituteStudentController> {
     return Container(
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
-        color: AppColors.cardBg,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -162,11 +162,11 @@ class AddEditStudentScreen extends GetView<InstituteStudentController> {
                         decoration: BoxDecoration(
                           color: AppColors.primaryBrand,
                           shape: BoxShape.circle,
-                          border: Border.all(color: Colors.white, width: 2),
+                          border: Border.all(color: AppColors.white, width: 2),
                         ),
                         child: const Icon(
                           Icons.camera_alt_rounded,
-                          color: Colors.white,
+                          color: AppColors.white,
                           size: 14,
                         ),
                       ),
@@ -272,15 +272,15 @@ class AddEditStudentScreen extends GetView<InstituteStudentController> {
           style: AppTextStyles.manrope(
             fontSize: 14,
             fontWeight: FontWeight.w800,
-            color: const Color(0xFF663322),
+            color: AppColors.brandAppBarColor,
           ),
         ),
         AppSpacing.v8,
         Container(
           decoration: BoxDecoration(
             color: enabled
-                ? const Color(0xFFEBEBEB)
-                : const Color(0xFFEBEBEB).withValues(alpha: 0.5),
+                ? AppColors.paleSilver
+                : AppColors.paleSilver.withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(12),
           ),
           child: TextField(
@@ -298,11 +298,11 @@ class AddEditStudentScreen extends GetView<InstituteStudentController> {
               hintText: hint,
               hintStyle: AppTextStyles.lexend(
                 fontSize: 14,
-                color: const Color(0xFF917B6B),
+                color: AppColors.blueSapphire,
               ),
               prefixIcon: Icon(
                 icon,
-                color: const Color(0xFF917B6B),
+                color: AppColors.blueSapphire,
                 size: AppSpacing.s20,
               ),
               border: InputBorder.none,

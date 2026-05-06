@@ -53,7 +53,7 @@ class UpdatesController extends GetxController {
         'Error',
         'Failed to load batches: $e',
         backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
+        colorText: AppColors.white,
       );
     } finally {
       isLoadingBatches.value = false;
@@ -70,7 +70,7 @@ class UpdatesController extends GetxController {
         'Error',
         'Failed to load updates: $e',
         backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
+        colorText: AppColors.white,
       );
     } finally {
       isLoading.value = false;
@@ -93,7 +93,7 @@ class UpdatesController extends GetxController {
         'Error',
         'Could not pick files: $e',
         backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
+        colorText: AppColors.white,
       );
     }
   }
@@ -108,7 +108,7 @@ class UpdatesController extends GetxController {
         'Error',
         'Please fill in all fields',
         backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
+        colorText: AppColors.white,
       );
       return;
     }
@@ -149,7 +149,7 @@ class UpdatesController extends GetxController {
         'Success',
         'Update broadcasted successfully',
         backgroundColor: AppColors.darkGreen,
-        colorText: Colors.white,
+        colorText: AppColors.white,
         snackPosition: SnackPosition.BOTTOM,
       );
     } catch (e) {
@@ -157,7 +157,7 @@ class UpdatesController extends GetxController {
         'Error',
         'Failed to broadcast update: $e',
         backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
+        colorText: AppColors.white,
       );
     } finally {
       isCreating.value = false;

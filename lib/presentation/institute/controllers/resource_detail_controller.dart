@@ -40,12 +40,12 @@ class ResourceDetailController extends GetxController {
         aspectRatio: videoPlayerController!.value.aspectRatio,
         allowFullScreen: true,
         allowPlaybackSpeedChanging: true,
-        placeholder: const CommonLoading(color: Colors.white),
+        placeholder: const CommonLoading(color: AppColors.white),
         errorBuilder: (context, errorMessage) {
           return Center(
             child: Text(
               errorMessage,
-              style: const TextStyle(color: Colors.white),
+              style: const TextStyle(color: AppColors.white),
             ),
           );
         },
@@ -76,7 +76,7 @@ class ResourceDetailController extends GetxController {
         snackPosition: SnackPosition.BOTTOM,
         showProgressIndicator: true,
         backgroundColor: AppColors.primaryBrand,
-        colorText: Colors.white,
+        colorText: AppColors.white,
       );
 
       final bytes = await _repository.downloadResource(
@@ -100,7 +100,7 @@ class ResourceDetailController extends GetxController {
         'Failed to download file: ${e.toString().replaceAll('Exception: ', '')}',
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
+        colorText: AppColors.white,
       );
     } finally {
       isDownloading.value = false;

@@ -28,7 +28,7 @@ class HomeworkTile extends StatelessWidget {
       child: Container(
         padding: AppSpacing.all16,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(AppSpacing.s20),
           boxShadow: [
             BoxShadow(

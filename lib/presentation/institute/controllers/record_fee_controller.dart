@@ -84,8 +84,8 @@ class RecordFeeController extends GetxController {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
-              primary: AppColors.instPrimaryBlue,
-              onPrimary: Colors.white,
+              primary: AppColors.primaryBrand,
+              onPrimary: AppColors.white,
               onSurface: AppColors.textPrimary,
             ),
           ),
@@ -127,14 +127,14 @@ class RecordFeeController extends GetxController {
         'Success',
         'Fee record created and collected successfully',
         backgroundColor: AppColors.darkGreen,
-        colorText: Colors.white,
+        colorText: AppColors.white,
       );
     } catch (e) {
       Get.snackbar(
         'Error',
         e.toString().replaceAll('Exception: ', ''),
         backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
+        colorText: AppColors.white,
       );
     } finally {
       isLoading.value = false;

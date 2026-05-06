@@ -17,7 +17,8 @@ class AssignToBatchController extends GetxController {
   final InstituteController instituteController =
       Get.find<InstituteController>();
   final BatchDetailsController batchDetailsController;
-  final InstituteRepositoryImpl _repository = Get.find<InstituteRepositoryImpl>();
+  final InstituteRepositoryImpl _repository =
+      Get.find<InstituteRepositoryImpl>();
 
   final searchController = TextEditingController();
   final searchResults = <Student>[].obs;
@@ -77,11 +78,10 @@ class AssignToBatchController extends GetxController {
 
     try {
       isLoading.value = true;
-      
-      final List<Map<String, dynamic>> studentsData = selectedStudents.map((bs) => {
-        'id': bs.student.id,
-        'fee': bs.assignedFee.toInt(),
-      }).toList();
+
+      final List<Map<String, dynamic>> studentsData = selectedStudents
+          .map((bs) => {'id': bs.student.id, 'fee': bs.assignedFee.toInt()})
+          .toList();
 
       await _repository.assignStudentsToBatch(
         int.parse(batch.id),
@@ -94,7 +94,8 @@ class AssignToBatchController extends GetxController {
       }
 
       batchDetailsController.assignedStudents.addAll(selectedStudents);
-      batchDetailsController.studentCount.value = batchDetailsController.assignedStudents.length;
+      batchDetailsController.studentCount.value =
+          batchDetailsController.assignedStudents.length;
       batchDetailsController.assignedStudents.refresh();
       Get.back();
       Get.snackbar(
@@ -146,7 +147,9 @@ class AssignToBatchScreen extends StatelessWidget {
                         _buildSearchSection(controller),
                         AppSpacing.v24,
                         Obx(() => _buildSelectionList(controller)),
-                        const SizedBox(height: 120), // Space for the pinned button
+                        const SizedBox(
+                          height: 120,
+                        ), // Space for the pinned button
                       ],
                     ),
                   ),
@@ -223,7 +226,7 @@ class AssignToBatchScreen extends StatelessWidget {
           return Container(
             margin: const EdgeInsets.only(top: 4),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.white,
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
@@ -255,7 +258,7 @@ class AssignToBatchScreen extends StatelessWidget {
                   ),
                   trailing: const Icon(
                     Icons.add_circle_outline_rounded,
-                    color: AppColors.instPrimaryBlue,
+                    color: AppColors.primaryBrand,
                   ),
                   onTap: () => controller.addStudentToSelection(student),
                 );
@@ -300,7 +303,7 @@ class AssignToBatchScreen extends StatelessWidget {
           margin: const EdgeInsets.only(bottom: 16),
           padding: AppSpacing.all16,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: AppColors.borderGrey),
           ),
@@ -346,8 +349,12 @@ class AssignToBatchScreen extends StatelessWidget {
                     ),
                   ),
                   IconButton(
-                    onPressed: () => controller.removeStudentFromSelection(bs.student.id),
-                    icon: const Icon(Icons.close_rounded, color: AppColors.textMuted),
+                    onPressed: () =>
+                        controller.removeStudentFromSelection(bs.student.id),
+                    icon: const Icon(
+                      Icons.close_rounded,
+                      color: AppColors.textMuted,
+                    ),
                   ),
                 ],
               ),
@@ -370,7 +377,7 @@ class AssignToBatchScreen extends StatelessWidget {
                             '₹',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: AppColors.instPrimaryBlue,
+                              color: AppColors.primaryBrand,
                             ),
                           ),
                           AppSpacing.h12,

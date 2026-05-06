@@ -34,7 +34,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                           style: AppTextStyles.manrope(
                             fontSize: 14,
                             fontWeight: FontWeight.w800,
-                            color: const Color(0xFF663322),
+                            color: AppColors.brandAppBarColor,
                           ),
                         ),
                         AppSpacing.v16,
@@ -104,7 +104,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                 decoration: BoxDecoration(
                   color: isSelected
                       ? AppColors.primaryBrand
-                      : const Color(0xFFEBEBEB),
+                      : AppColors.paleSilver,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
@@ -112,7 +112,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                   style: AppTextStyles.manrope(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
-                    color: isSelected ? Colors.white : AppColors.textPrimary,
+                    color: isSelected ? AppColors.white : AppColors.textPrimary,
                   ),
                 ),
               ),
@@ -127,7 +127,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
     return Container(
       padding: AppSpacing.all20,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -148,7 +148,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                 style: AppTextStyles.manrope(
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
-                  color: const Color(0xFF663322),
+                  color: AppColors.brandAppBarColor,
                 ),
               ),
               const Icon(
@@ -162,7 +162,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             decoration: BoxDecoration(
-              color: const Color(0xFFEBEBEB),
+              color: AppColors.paleSilver,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Obx(
@@ -205,7 +205,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                     style: AppTextStyles.manrope(
                       fontSize: 14,
                       fontWeight: FontWeight.w800,
-                      color: const Color(0xFF663322),
+                      color: AppColors.brandAppBarColor,
                     ),
                   ),
                   AppSpacing.v12,
@@ -215,7 +215,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFEBEBEB),
+                      color: AppColors.paleSilver,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: DropdownButtonHideUnderline(
@@ -258,7 +258,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                       style: AppTextStyles.manrope(
                         fontSize: 14,
                         fontWeight: FontWeight.w800,
-                        color: const Color(0xFF663322),
+                        color: AppColors.brandAppBarColor,
                       ),
                     ),
                     AppSpacing.v12,
@@ -284,7 +284,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                           vertical: 4,
                         ),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFEBEBEB),
+                          color: AppColors.paleSilver,
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: DropdownButtonHideUnderline(
@@ -342,7 +342,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
           style: AppTextStyles.manrope(
             fontSize: 14,
             fontWeight: FontWeight.w800,
-            color: const Color(0xFF663322),
+            color: AppColors.brandAppBarColor,
           ),
         ),
         AppSpacing.v12,
@@ -358,10 +358,10 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
             hintText: hint,
             hintStyle: AppTextStyles.lexend(
               fontSize: 14,
-              color: const Color(0xFF917B6B),
+              color: AppColors.blueSapphire,
             ),
             filled: true,
-            fillColor: const Color(0xFFEBEBEB),
+            fillColor: AppColors.paleSilver,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide.none,
@@ -422,7 +422,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                     vertical: 8,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.white,
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(color: AppColors.borderGrey),
                   ),
@@ -475,7 +475,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
           style: AppTextStyles.manrope(
             fontSize: 14,
             fontWeight: FontWeight.w800,
-            color: const Color(0xFF663322),
+            color: AppColors.brandAppBarColor,
           ),
         ),
         AppSpacing.v16,
@@ -512,7 +512,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
     return Container(
       padding: AppSpacing.all16,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(

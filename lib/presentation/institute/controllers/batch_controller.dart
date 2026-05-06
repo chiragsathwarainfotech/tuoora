@@ -61,7 +61,7 @@ class BatchController extends GetxController {
         'Error',
         'Failed to load batches: ${e.toString()}',
         backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
+        colorText: AppColors.white,
       );
     } finally {
       isLoading.value = false;
@@ -181,14 +181,14 @@ class BatchController extends GetxController {
             'Deleted',
             'Batch deleted successfully',
             backgroundColor: AppColors.darkGreen,
-            colorText: Colors.white,
+            colorText: AppColors.white,
           );
         } catch (e) {
           Get.snackbar(
             'Error',
             e.toString(),
             backgroundColor: Colors.redAccent,
-            colorText: Colors.white,
+            colorText: AppColors.white,
           );
         } finally {
           isLoading.value = false;
@@ -203,7 +203,7 @@ class BatchController extends GetxController {
         'Error',
         'Please enter batch name',
         backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
+        colorText: AppColors.white,
       );
       return;
     }
@@ -253,14 +253,14 @@ class BatchController extends GetxController {
         isEditMode.value ? 'Batch Updated' : 'Batch Created',
         'Successfully saved ${batchNameController.text}',
         backgroundColor: AppColors.darkGreen,
-        colorText: Colors.white,
+        colorText: AppColors.white,
       );
     } catch (e) {
       Get.snackbar(
         'Error',
         e.toString(),
         backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
+        colorText: AppColors.white,
       );
     } finally {
       isLoading.value = false;
@@ -274,8 +274,8 @@ class BatchController extends GetxController {
     Get.snackbar(
       'Notice',
       'Student assignment is currently managed via Student Profile',
-      backgroundColor: AppColors.instPrimaryBlue,
-      colorText: Colors.white,
+      backgroundColor: AppColors.primaryBrand,
+      colorText: AppColors.white,
     );
   }
 

@@ -93,7 +93,7 @@ class _StudentHomeworkDetailScreenState
               vertical: AppSpacing.s8,
             ),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.15),
+              color: AppColors.white.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(AppSpacing.s12),
             ),
             child: Text(
@@ -101,7 +101,7 @@ class _StudentHomeworkDetailScreenState
               style: AppTextStyles.manrope(
                 fontSize: 10,
                 fontWeight: FontWeight.w800,
-                color: Colors.white,
+                color: AppColors.white,
                 letterSpacing: 1.2,
               ),
             ),
@@ -112,7 +112,7 @@ class _StudentHomeworkDetailScreenState
             style: AppTextStyles.manrope(
               fontSize: 32,
               fontWeight: FontWeight.w800,
-              color: Colors.white,
+              color: AppColors.white,
               height: 1.1,
             ),
           ),
@@ -122,7 +122,7 @@ class _StudentHomeworkDetailScreenState
               _buildStatusChip(
                 Icons.calendar_month_outlined,
                 'Due: Oct 24, 2023',
-                Colors.white.withValues(alpha: 0.1),
+                AppColors.white.withValues(alpha: 0.1),
               ),
               AppSpacing.h12,
               _buildStatusChip(
@@ -151,14 +151,14 @@ class _StudentHomeworkDetailScreenState
       ),
       child: Row(
         children: [
-          Icon(icon, color: Colors.white, size: AppSpacing.s14),
+          Icon(icon, color: AppColors.white, size: AppSpacing.s14),
           AppSpacing.h6,
           Text(
             label,
             style: AppTextStyles.manrope(
               fontSize: 11,
               fontWeight: FontWeight.w700,
-              color: Colors.white,
+              color: AppColors.white,
             ),
           ),
         ],
@@ -170,7 +170,7 @@ class _StudentHomeworkDetailScreenState
     return Container(
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.s28),
         boxShadow: [
           BoxShadow(
@@ -366,7 +366,7 @@ class _StudentHomeworkDetailScreenState
         Container(
           padding: AppSpacing.all24,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             borderRadius: BorderRadius.circular(AppSpacing.s28),
             boxShadow: [
               BoxShadow(
@@ -421,14 +421,10 @@ class _StudentHomeworkDetailScreenState
             Container(
               padding: AppSpacing.all10,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.circular(AppSpacing.s10),
               ),
-              child: Icon(
-                icon,
-                color: AppColors.redDot,
-                size: AppSpacing.s18,
-              ),
+              child: Icon(icon, color: AppColors.error, size: AppSpacing.s18),
             ),
             AppSpacing.h16,
             Expanded(
@@ -538,7 +534,7 @@ class _StudentHomeworkDetailScreenState
                   'Success',
                   'Homework submitted successfully!',
                   backgroundColor: AppColors.darkGreen,
-                  colorText: Colors.white,
+                  colorText: AppColors.white,
                   snackPosition: SnackPosition.BOTTOM,
                   margin: const EdgeInsets.all(16),
                 );
@@ -563,7 +559,7 @@ class _StudentHomeworkDetailScreenState
                     ? Icons.check_circle_rounded
                     : Icons.note_add_rounded,
                 color: isEnabled || _isSubmitted
-                    ? Colors.white
+                    ? AppColors.white
                     : Colors.grey.shade500,
                 size: AppSpacing.s20,
               ),
@@ -574,7 +570,7 @@ class _StudentHomeworkDetailScreenState
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
                   color: isEnabled || _isSubmitted
-                      ? Colors.white
+                      ? AppColors.white
                       : Colors.grey.shade500,
                 ),
               ),

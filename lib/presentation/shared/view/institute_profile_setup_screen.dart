@@ -74,7 +74,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                                   ),
                                   child: const Icon(
                                     Icons.edit,
-                                    color: Colors.white,
+                                    color: AppColors.white,
                                     size: 14,
                                   ),
                                 ),
@@ -174,7 +174,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                         onPressed: controller.completeProfile,
                         isLoading: controller.isLoading.value,
                         backgroundColor: AppColors.primaryBrand,
-                        foregroundColor: Colors.white,
+                        foregroundColor: AppColors.white,
                         borderRadius: AppSpacing.s16,
                         padding: const EdgeInsets.symmetric(
                           vertical: AppSpacing.s18,
@@ -228,8 +228,8 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
         Container(
           decoration: BoxDecoration(
             color: enabled
-                ? const Color(0xFFEBEBEB)
-                : const Color(0xFFEBEBEB).withValues(alpha: 0.5),
+                ? AppColors.paleSilver
+                : AppColors.paleSilver.withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(16),
           ),
           child: TextField(

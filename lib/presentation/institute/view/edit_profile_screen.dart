@@ -49,8 +49,7 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
                   ),
                 ],
               ),
-              if (controller.isLoading.value)
-                const CommonLoading(),
+              if (controller.isLoading.value) const CommonLoading(),
             ],
           ),
         ),
@@ -72,7 +71,7 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
                         child: Icon(
                           Icons.school_rounded,
                           size: 64,
-                          color: AppColors.instPrimaryBlue,
+                          color: AppColors.primaryBrand,
                         ),
                       )
                     : ClipRRect(
@@ -105,12 +104,12 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
                 child: Container(
                   padding: AppSpacing.all10,
                   decoration: BoxDecoration(
-                    color: AppColors.instPrimaryBlue,
+                    color: AppColors.primaryBrand,
                     shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 3),
+                    border: Border.all(color: AppColors.white, width: 3),
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.instPrimaryBlue.withValues(alpha: 0.3),
+                        color: AppColors.primaryBrand.withValues(alpha: 0.3),
                         blurRadius: 8,
                         offset: const Offset(0, 2),
                       ),
@@ -118,7 +117,7 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
                   ),
                   child: const Icon(
                     Icons.camera_alt_rounded,
-                    color: Colors.white,
+                    color: AppColors.white,
                     size: 18,
                   ),
                 ),
@@ -132,7 +131,7 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
           style: AppTextStyles.manrope(
             fontSize: 14,
             fontWeight: FontWeight.w800,
-            color: AppColors.instPrimaryBlue,
+            color: AppColors.primaryBrand,
           ),
         ),
       ],
@@ -143,7 +142,7 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
     return Container(
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
@@ -160,7 +159,7 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
             children: [
               const Icon(
                 Icons.business_rounded,
-                color: AppColors.instPrimaryBlue,
+                color: AppColors.primaryBrand,
                 size: 20,
               ),
               AppSpacing.h12,
@@ -169,7 +168,7 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
                 style: AppTextStyles.manrope(
                   fontSize: 12,
                   fontWeight: FontWeight.w900,
-                  color: AppColors.instPrimaryBlue,
+                  color: AppColors.primaryBrand,
                   letterSpacing: 1.2,
                 ),
               ),
@@ -279,7 +278,7 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
           ),
           child: Row(
             children: [
-              Icon(icon, color: AppColors.instPrimaryBlue, size: 20),
+              Icon(icon, color: AppColors.primaryBrand, size: 20),
               AppSpacing.h16,
               Expanded(
                 child: TextField(

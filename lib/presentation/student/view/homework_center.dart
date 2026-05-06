@@ -81,7 +81,9 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
         notificationsRoute: AppRoutes.studentNotifications,
       ),
       body: content,
-      bottomNavigationBar: widget.showBottomNav ? const StudentBottomNav(currentIndex: 2) : null,
+      bottomNavigationBar: widget.showBottomNav
+          ? const StudentBottomNav(currentIndex: 2)
+          : null,
     );
   }
 
@@ -123,7 +125,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
       margin: AppSpacing.x28,
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.s24),
         boxShadow: [
           BoxShadow(
@@ -201,7 +203,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
       child: Container(
         padding: AppSpacing.y12,
         decoration: BoxDecoration(
-          color: isSelected ? Colors.white : Colors.transparent,
+          color: isSelected ? AppColors.white : Colors.transparent,
           borderRadius: BorderRadius.circular(AppSpacing.s16),
           boxShadow: isSelected
               ? [
@@ -256,7 +258,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                   vertical: AppSpacing.s6,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.15),
+                  color: AppColors.white.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(AppSpacing.s10),
                 ),
                 child: Text(
@@ -264,7 +266,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                   style: AppTextStyles.manrope(
                     fontSize: 9,
                     fontWeight: FontWeight.w800,
-                    color: Colors.white,
+                    color: AppColors.white,
                     letterSpacing: 1.0,
                   ),
                 ),
@@ -282,7 +284,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                   children: [
                     const Icon(
                       Icons.timer_outlined,
-                      color: AppColors.redDot,
+                      color: AppColors.error,
                       size: AppSpacing.s12,
                     ),
                     AppSpacing.h4,
@@ -291,7 +293,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                       style: AppTextStyles.manrope(
                         fontSize: 9,
                         fontWeight: FontWeight.w800,
-                        color: AppColors.redDot,
+                        color: AppColors.error,
                       ),
                     ),
                   ],
@@ -305,7 +307,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
             style: AppTextStyles.lexend(
               fontSize: 10,
               fontWeight: FontWeight.w400,
-              color: Colors.white.withValues(alpha: 0.7),
+              color: AppColors.white.withValues(alpha: 0.7),
               fontStyle: FontStyle.italic,
             ),
           ),
@@ -315,7 +317,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
             style: AppTextStyles.manrope(
               fontSize: 22,
               fontWeight: FontWeight.w800,
-              color: Colors.white,
+              color: AppColors.white,
               height: 1.2,
             ),
           ),
@@ -325,7 +327,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
             style: AppTextStyles.lexend(
               fontSize: 13,
               fontWeight: FontWeight.w400,
-              color: Colors.white.withValues(alpha: 0.8),
+              color: AppColors.white.withValues(alpha: 0.8),
               height: 1.5,
             ),
           ),
@@ -366,7 +368,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                   style: AppTextStyles.manrope(
                     fontSize: 11,
                     fontWeight: FontWeight.w700,
-                    color: Colors.white,
+                    color: AppColors.white,
                   ),
                 ),
               ),
@@ -378,7 +380,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                     vertical: AppSpacing.s12,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.white,
                     borderRadius: BorderRadius.circular(AppSpacing.s24),
                   ),
                   child: Text(
@@ -414,7 +416,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
       margin: AppSpacing.x28,
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.s28),
         boxShadow: [
           BoxShadow(
@@ -435,7 +437,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                 style: AppTextStyles.manrope(
                   fontSize: 10,
                   fontWeight: FontWeight.w800,
-                  color: AppColors.redDot,
+                  color: AppColors.error,
                   letterSpacing: 1.0,
                 ),
               ),
@@ -498,7 +500,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                         ? AppColors.skyBlueLight
                         : (isDeadlineStyle
                               ? AppColors.amberLight
-                              : Colors.white),
+                              : AppColors.white),
                     borderRadius: BorderRadius.circular(AppSpacing.s10),
                   ),
                   child: Icon(
@@ -508,7 +510,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                               ? Icons.sticky_note_2_rounded
                               : Icons.chat_bubble_rounded),
                     color: isDeadlineStyle
-                        ? AppColors.redDot
+                        ? AppColors.error
                         : (isActive
                               ? AppColors.primaryBrand
                               : const Color(0xFF475569)),
@@ -552,9 +554,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: AppSpacing.s14),
               decoration: BoxDecoration(
-                color: isActive
-                    ? const Color(0xFF0052C2)
-                    : AppColors.divider,
+                color: isActive ? const Color(0xFF0052C2) : AppColors.divider,
                 borderRadius: BorderRadius.circular(AppSpacing.s16),
               ),
               child: Center(
@@ -563,7 +563,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                   style: AppTextStyles.manrope(
                     fontSize: 13,
                     fontWeight: FontWeight.w800,
-                    color: isActive ? Colors.white : AppColors.primaryBrand,
+                    color: isActive ? AppColors.white : AppColors.primaryBrand,
                   ),
                 ),
               ),
@@ -587,7 +587,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
           Container(
             padding: AppSpacing.all16,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.white,
               borderRadius: BorderRadius.circular(16),
             ),
             child: const Icon(
@@ -621,7 +621,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: AppSpacing.s14),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.white,
               borderRadius: BorderRadius.circular(16),
             ),
             child: Center(

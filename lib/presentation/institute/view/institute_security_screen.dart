@@ -33,7 +33,7 @@ class InstituteSecurityScreen extends GetView<SecurityController> {
             Obx(() => controller.isLoading.value
                 ? Container(
                     color: Colors.black.withValues(alpha: 0.3),
-                      child: const CommonLoading(color: Colors.white),
+                      child: const CommonLoading(color: AppColors.white),
                   )
                 : const SizedBox.shrink()),
           ],
@@ -46,7 +46,7 @@ class InstituteSecurityScreen extends GetView<SecurityController> {
     return Container(
       padding: AppSpacing.all28,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
@@ -64,7 +64,7 @@ class InstituteSecurityScreen extends GetView<SecurityController> {
             style: AppTextStyles.manrope(
               fontSize: 18,
               fontWeight: FontWeight.w800,
-              color: const Color(0xFF663322),
+              color: AppColors.brandAppBarColor,
             ),
           ),
           AppSpacing.v24,
@@ -125,7 +125,7 @@ class InstituteSecurityScreen extends GetView<SecurityController> {
           () => Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             decoration: BoxDecoration(
-              color: const Color(0xFFEBEBEB),
+              color: AppColors.paleSilver,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
@@ -142,7 +142,7 @@ class InstituteSecurityScreen extends GetView<SecurityController> {
                       hintText: hint,
                       hintStyle: AppTextStyles.lexend(
                         fontSize: 14,
-                        color: const Color(0xFF917B6B),
+                        color: AppColors.blueSapphire,
                       ),
                       border: InputBorder.none,
                       contentPadding: const EdgeInsets.symmetric(vertical: 14),
@@ -155,7 +155,7 @@ class InstituteSecurityScreen extends GetView<SecurityController> {
                     isVisible.value
                         ? Icons.visibility_off_outlined
                         : Icons.visibility_outlined,
-                    color: const Color(0xFF917B6B),
+                    color: AppColors.blueSapphire,
                     size: AppSpacing.s20,
                   ),
                   constraints: const BoxConstraints(),

@@ -19,7 +19,7 @@ class ReportsScreen extends StatelessWidget {
     });
 
     return Scaffold(
-      backgroundColor: AppColors.reportScaffoldBg,
+      backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
         child: Column(
           children: [
@@ -77,7 +77,7 @@ class ReportsScreen extends StatelessWidget {
       child: Container(
         padding: AppSpacing.all24,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
@@ -107,7 +107,7 @@ class ReportsScreen extends StatelessWidget {
                     style: AppTextStyles.manrope(
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
-                      color: const Color(0xFF663322),
+                      color: AppColors.brandAppBarColor,
                     ),
                   ),
                   AppSpacing.v4,

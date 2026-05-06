@@ -43,7 +43,7 @@ class BillingHistoryScreen extends StatelessWidget {
     return Container(
       padding: AppSpacing.all20,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.s16),
         border: Border.all(color: AppColors.divider),
       ),

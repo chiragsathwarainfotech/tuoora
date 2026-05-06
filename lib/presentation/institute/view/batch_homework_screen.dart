@@ -68,8 +68,8 @@ class BatchHomeworkScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () =>
             Get.toNamed(AppRoutes.instituteAddHomework, arguments: batch),
-        backgroundColor: AppColors.instPrimaryBlue,
-        child: const Icon(Icons.add, color: Colors.white),
+        backgroundColor: AppColors.primaryBrand,
+        child: const Icon(Icons.add, color: AppColors.white),
       ),
     );
   }
@@ -78,18 +78,18 @@ class BatchHomeworkScreen extends StatelessWidget {
     return Container(
       padding: AppSpacing.x16,
       decoration: BoxDecoration(
-        color: const Color(0xFFEBEBEB),
+        color: AppColors.paleSilver,
         borderRadius: BorderRadius.circular(16),
       ),
       child: TextField(
         onChanged: (val) => controller.searchQuery.value = val,
         decoration: InputDecoration(
           border: InputBorder.none,
-          icon: const Icon(Icons.search, color: const Color(0xFF917B6B)),
+          icon: const Icon(Icons.search, color: AppColors.blueSapphire),
           hintText: AppStrings.instSearchAssignmentsHint,
           hintStyle: AppTextStyles.lexend(
             fontSize: 14,
-            color: const Color(0xFF917B6B),
+            color: AppColors.blueSapphire,
           ),
         ),
       ),
@@ -112,7 +112,7 @@ class BatchHomeworkScreen extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 16),
         padding: AppSpacing.all16,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -129,7 +129,7 @@ class BatchHomeworkScreen extends StatelessWidget {
               height: 60,
               decoration: BoxDecoration(
                 color: isActive
-                    ? AppColors.instPrimaryBlue
+                    ? AppColors.primaryBrand
                     : AppColors.borderLightGray,
                 borderRadius: BorderRadius.circular(2),
               ),
@@ -171,7 +171,7 @@ class BatchHomeworkScreen extends StatelessWidget {
                             fontSize: 10,
                             fontWeight: FontWeight.w800,
                             color: isActive
-                                ? AppColors.instPrimaryBlue
+                                ? AppColors.primaryBrand
                                 : AppColors.textTertiary,
                           ),
                         ),

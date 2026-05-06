@@ -104,7 +104,7 @@ class AppTextStyles {
   static TextStyle get largeAmount => manrope(
     fontSize: 32,
     fontWeight: FontWeight.w800,
-    color: Colors.white,
+    color: AppColors.white,
     height: 1.0,
   );
 
@@ -138,6 +138,6 @@ class AppTextStyles {
   static TextStyle button = TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.w500,
-    color: Colors.white,
+    color: AppColors.white,
   );
 }

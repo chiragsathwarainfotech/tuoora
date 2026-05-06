@@ -56,7 +56,7 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
                   ),
                   icon: const Icon(
                     Icons.delete_outline_rounded,
-                    color: Color(0xFFD92D20),
+                    color: AppColors.bohoRed,
                   ),
                 ),
                 AppSpacing.h8,
@@ -87,7 +87,7 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
     return Container(
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
-        color: AppColors.cardBg,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -167,8 +167,11 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
                     Expanded(
                       child: InstituteMetricCard(
                         label: AppStrings.instFeesPaidLabel,
-                        value: batch.totalExpected != null &&
-                                double.tryParse(batch.totalExpected.toString()) !=
+                        value:
+                            batch.totalExpected != null &&
+                                double.tryParse(
+                                      batch.totalExpected.toString(),
+                                    ) !=
                                     0
                             ? '${((double.tryParse(batch.totalPaid?.toString() ?? '0') ?? 0) / (double.tryParse(batch.totalExpected.toString()) ?? 1) * 100).toStringAsFixed(0)}%'
                             : '0%',
@@ -287,7 +290,7 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
       child: Container(
         padding: AppSpacing.all12,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(

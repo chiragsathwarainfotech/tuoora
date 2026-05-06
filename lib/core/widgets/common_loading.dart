@@ -37,7 +37,7 @@ class CommonLoading extends StatelessWidget {
     if (Get.isDialogOpen ?? false) return;
     
     Get.dialog(
-      const CommonLoading(color: Colors.white),
+      const CommonLoading(color: AppColors.white),
       barrierDismissible: false,
       name: 'loading_dialog',
     );

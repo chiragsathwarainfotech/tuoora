@@ -22,7 +22,7 @@ class SplashScreen extends GetView<SplashController> {
               width: 100,
               height: 100,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.circular(24),
                 boxShadow: [
                   BoxShadow(
@@ -46,7 +46,7 @@ class SplashScreen extends GetView<SplashController> {
               style: AppTextStyles.manrope(
                 fontSize: 32,
                 fontWeight: FontWeight.w800,
-                color: Colors.white,
+                color: AppColors.white,
               ),
             ),
             AppSpacing.v8,
@@ -55,12 +55,12 @@ class SplashScreen extends GetView<SplashController> {
               style: AppTextStyles.lexend(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: Colors.white.withValues(alpha: 0.8),
+                color: AppColors.white.withValues(alpha: 0.8),
                 letterSpacing: 1.2,
               ),
             ),
             const SizedBox(height: 100),
-            const CommonLoading(color: Colors.white, size: 24),
+            const CommonLoading(color: AppColors.white, size: 24),
           ],
         ),
       ),

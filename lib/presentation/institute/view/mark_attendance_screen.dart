@@ -176,7 +176,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
         side: BorderSide(color: color.withValues(alpha: 0.3)),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         padding: const EdgeInsets.symmetric(vertical: 16),
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -200,7 +200,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
     return Container(
       padding: AppSpacing.x16,
       decoration: BoxDecoration(
-        color: const Color(0xFFEBEBEB),
+        color: AppColors.paleSilver,
         borderRadius: BorderRadius.circular(16),
       ),
       child: TextField(
@@ -209,14 +209,14 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
           border: InputBorder.none,
           icon: const Icon(
             Icons.search,
-            color: const Color(0xFF917B6B),
+            color: AppColors.blueSapphire,
             size: 20,
           ),
           hintText: 'Search student by name or ID...',
           hintStyle: AppTextStyles.lexend(
             fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: const Color(0xFF917B6B),
+            color: AppColors.blueSapphire,
           ),
         ),
       ),
@@ -230,7 +230,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
     return Container(
       padding: AppSpacing.all16,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -329,7 +329,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
           style: AppTextStyles.manrope(
             fontSize: 10,
             fontWeight: FontWeight.w900,
-            color: isSelected ? Colors.white : AppColors.textSecondary,
+            color: isSelected ? AppColors.white : AppColors.textSecondary,
             letterSpacing: 0.5,
           ),
         ),

@@ -69,7 +69,7 @@ class SignupController extends GetxController {
       Container(
         padding: AppSpacing.all32,
         decoration: const BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
         ),
         child: Column(

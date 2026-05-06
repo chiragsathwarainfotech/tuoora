@@ -82,7 +82,7 @@ class InstituteController extends GetxController {
         'Error',
         'Failed to fetch fees: $e',
         backgroundColor: Colors.red.withValues(alpha: 0.7),
-        colorText: Colors.white,
+        colorText: AppColors.white,
       );
     } finally {
       isLoadingFees.value = false;
@@ -97,7 +97,7 @@ class InstituteController extends GetxController {
         'Downloading',
         'Preparing your financial report...',
         backgroundColor: AppColors.primaryBrand,
-        colorText: Colors.white,
+        colorText: AppColors.white,
         snackPosition: SnackPosition.BOTTOM,
         showProgressIndicator: true,
       );
@@ -118,7 +118,7 @@ class InstituteController extends GetxController {
         'Download Error',
         e.toString().replaceAll('Exception: ', ''),
         backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
+        colorText: AppColors.white,
         snackPosition: SnackPosition.BOTTOM,
       );
     }
@@ -160,7 +160,7 @@ class InstituteController extends GetxController {
         'Error',
         'Failed to fetch students: $e',
         backgroundColor: Colors.red.withValues(alpha: 0.7),
-        colorText: Colors.white,
+        colorText: AppColors.white,
       );
     } finally {
       isLoadingStudents.value = false;

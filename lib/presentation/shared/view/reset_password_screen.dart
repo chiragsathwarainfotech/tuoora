@@ -40,7 +40,7 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
                     Container(
                       padding: const EdgeInsets.all(AppSpacing.s28),
                       decoration: BoxDecoration(
-                        color: AppColors.cardBg,
+                        color: AppColors.white,
                         borderRadius: BorderRadius.circular(AppSpacing.s32),
                         boxShadow: [
                           BoxShadow(
@@ -58,7 +58,7 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
                             style: AppTextStyles.manrope(
                               fontSize: 10,
                               fontWeight: FontWeight.w800,
-                              color: const Color(0xFF663322),
+                              color: AppColors.brandAppBarColor,
                               letterSpacing: 1.0,
                             ),
                           ),
@@ -75,7 +75,7 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
                             style: AppTextStyles.manrope(
                               fontSize: 10,
                               fontWeight: FontWeight.w800,
-                              color: const Color(0xFF663322),
+                              color: AppColors.brandAppBarColor,
                               letterSpacing: 1.0,
                             ),
                           ),
@@ -105,7 +105,7 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
                               onPressed: controller.resetPassword,
                               isLoading: controller.isLoading.value,
                               backgroundColor: AppColors.primaryBrand,
-                              foregroundColor: Colors.white,
+                              foregroundColor: AppColors.white,
                               borderRadius: AppSpacing.s24,
                               padding: const EdgeInsets.symmetric(
                                 vertical: AppSpacing.s18,
@@ -125,36 +125,36 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
                                       : "Resend code in ",
                                   style: AppTextStyles.lexend(
                                     fontSize: 14,
-                                  color: const Color(0xFF917B6B),
+                                    color: AppColors.blueSapphire,
+                                  ),
                                 ),
                               ),
-                            ),
-                            Obx(
-                              () => controller.canResend.value
-                                  ? GestureDetector(
-                                      onTap: controller.isLoading.value
-                                          ? null
-                                          : controller.resendOtp,
-                                      child: Text(
-                                        'Resend Code',
+                              Obx(
+                                () => controller.canResend.value
+                                    ? GestureDetector(
+                                        onTap: controller.isLoading.value
+                                            ? null
+                                            : controller.resendOtp,
+                                        child: Text(
+                                          'Resend Code',
+                                          style: AppTextStyles.manrope(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w800,
+                                            color: AppColors.primaryBrand,
+                                          ),
+                                        ),
+                                      )
+                                    : Text(
+                                        '00:${controller.timerSeconds.value.toString().padLeft(2, '0')}',
                                         style: AppTextStyles.manrope(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w800,
                                           color: AppColors.primaryBrand,
                                         ),
                                       ),
-                                    )
-                                  : Text(
-                                      '00:${controller.timerSeconds.value.toString().padLeft(2, '0')}',
-                                      style: AppTextStyles.manrope(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w800,
-                                        color: AppColors.primaryBrand,
-                                      ),
-                                    ),
-                            ),
-                          ],
-                        ),
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                     ),
@@ -178,7 +178,7 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFFEBEBEB),
+        color: AppColors.paleSilver,
         borderRadius: BorderRadius.circular(AppSpacing.s16),
       ),
       child: TextField(
@@ -190,11 +190,11 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
           hintText: hint,
           hintStyle: AppTextStyles.lexend(
             fontSize: 14,
-            color: const Color(0xFF917B6B),
+            color: AppColors.blueSapphire,
           ),
           prefixIcon: Icon(
             prefixIcon,
-            color: const Color(0xFF917B6B),
+            color: AppColors.blueSapphire,
             size: AppSpacing.s20,
           ),
           suffixIcon: suffixIcon,

@@ -51,14 +51,14 @@ class FeeTransactionHistoryScreen extends StatelessWidget {
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [AppColors.instDarkBtnBlue, Color(0xFF005C70)],
+          colors: [AppColors.primaryBrand, Color(0xFF005C70)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: AppColors.instDarkBtnBlue.withValues(alpha: 0.3),
+            color: AppColors.primaryBrand.withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -74,14 +74,14 @@ class FeeTransactionHistoryScreen extends StatelessWidget {
                 'Total Fees Collected',
                 style: AppTextStyles.lexend(
                   fontSize: 14,
-                  color: Colors.white.withValues(alpha: 0.7),
+                  color: AppColors.white.withValues(alpha: 0.7),
                 ),
               ),
               Text(
                 'Status',
                 style: AppTextStyles.lexend(
                   fontSize: 14,
-                  color: Colors.white.withValues(alpha: 0.7),
+                  color: AppColors.white.withValues(alpha: 0.7),
                 ),
               ),
             ],
@@ -94,7 +94,7 @@ class FeeTransactionHistoryScreen extends StatelessWidget {
                 style: AppTextStyles.manrope(
                   fontSize: 28,
                   fontWeight: FontWeight.w800,
-                  color: Colors.white,
+                  color: AppColors.white,
                 ),
               ),
               Text(
@@ -102,7 +102,7 @@ class FeeTransactionHistoryScreen extends StatelessWidget {
                 style: AppTextStyles.manrope(
                   fontSize: 14,
                   fontWeight: FontWeight.w800,
-                  color: Colors.white,
+                  color: AppColors.white,
                 ),
               ),
             ],
@@ -156,7 +156,7 @@ class FeeTransactionHistoryScreen extends StatelessWidget {
         return Container(
           padding: AppSpacing.all16,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: AppColors.borderLightGray),
           ),
@@ -172,7 +172,7 @@ class FeeTransactionHistoryScreen extends StatelessWidget {
                   tx['method'] == 'UPI'
                       ? Icons.phonelink_ring_rounded
                       : Icons.money_rounded,
-                  color: AppColors.instDarkBtnBlue,
+                  color: AppColors.primaryBrand,
                 ),
               ),
               AppSpacing.h16,

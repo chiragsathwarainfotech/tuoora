@@ -14,7 +14,7 @@ class StudentProfileScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.primaryBrand),
@@ -86,7 +86,7 @@ class StudentProfileScreen extends StatelessWidget {
                     style: AppTextStyles.manrope(
                       fontSize: 10,
                       fontWeight: FontWeight.w800,
-                      color: Colors.white.withValues(alpha: 0.7),
+                      color: AppColors.white.withValues(alpha: 0.7),
                       letterSpacing: 1.0,
                     ),
                   ),
@@ -96,7 +96,7 @@ class StudentProfileScreen extends StatelessWidget {
                     style: AppTextStyles.manrope(
                       fontSize: 24,
                       fontWeight: FontWeight.w800,
-                      color: Colors.white,
+                      color: AppColors.white,
                     ),
                   ),
                 ],
@@ -107,14 +107,14 @@ class StudentProfileScreen extends StatelessWidget {
                   vertical: 6,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.15),
+                  color: AppColors.white.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
                   children: const [
                     Icon(
                       Icons.check_circle,
-                      color: Colors.white,
+                      color: AppColors.white,
                       size: AppSpacing.s14,
                     ),
                     AppSpacing.h6,
@@ -124,7 +124,7 @@ class StudentProfileScreen extends StatelessWidget {
                         fontFamily: 'Manrope',
                         fontSize: 9,
                         fontWeight: FontWeight.w800,
-                        color: Colors.white,
+                        color: AppColors.white,
                       ),
                     ),
                   ],
@@ -141,7 +141,7 @@ class StudentProfileScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.3),
+                    color: AppColors.white.withValues(alpha: 0.3),
                     width: AppSpacing.s4,
                   ),
                   image: const DecorationImage(
@@ -160,7 +160,7 @@ class StudentProfileScreen extends StatelessWidget {
                       style: AppTextStyles.manrope(
                         fontSize: 24,
                         fontWeight: FontWeight.w800,
-                        color: Colors.white,
+                        color: AppColors.white,
                       ),
                     ),
                     AppSpacing.v4,
@@ -169,7 +169,7 @@ class StudentProfileScreen extends StatelessWidget {
                       style: AppTextStyles.manrope(
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
-                        color: Colors.white.withValues(alpha: 0.8),
+                        color: AppColors.white.withValues(alpha: 0.8),
                       ),
                     ),
                   ],
@@ -177,7 +177,7 @@ class StudentProfileScreen extends StatelessWidget {
               ),
               const Icon(
                 Icons.qr_code_2,
-                color: Colors.white,
+                color: AppColors.white,
                 size: AppSpacing.s32,
               ),
             ],
@@ -193,7 +193,9 @@ class StudentProfileScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.primaryBrandLight,
         borderRadius: BorderRadius.circular(AppSpacing.s16),
-        border: Border.all(color: AppColors.primaryBrand.withValues(alpha: 0.2)),
+        border: Border.all(
+          color: AppColors.primaryBrand.withValues(alpha: 0.2),
+        ),
       ),
       child: Row(
         children: [
@@ -234,7 +236,7 @@ class StudentProfileScreen extends StatelessWidget {
         Container(
           padding: AppSpacing.all32,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             borderRadius: BorderRadius.circular(32),
             boxShadow: [
               BoxShadow(
@@ -362,7 +364,7 @@ class StudentProfileScreen extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(small ? AppSpacing.s20 : AppSpacing.s24),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.s24),
         boxShadow: [
           BoxShadow(
@@ -469,7 +471,10 @@ class StudentProfileScreen extends StatelessWidget {
       onTap: () async {
         final authService = Get.find<AuthService>();
         await authService.clearSession();
-        Get.offAllNamed(AppRoutes.login, arguments: 'STUDENT'); // Defaulting to STUDENT role for this screen
+        Get.offAllNamed(
+          AppRoutes.login,
+          arguments: 'STUDENT',
+        ); // Defaulting to STUDENT role for this screen
       },
       child: Container(
         padding: AppSpacing.all24,
@@ -488,7 +493,7 @@ class StudentProfileScreen extends StatelessWidget {
               ),
               child: const Icon(
                 Icons.logout_rounded,
-                color: AppColors.redDot,
+                color: AppColors.error,
                 size: AppSpacing.s20,
               ),
             ),
@@ -502,7 +507,7 @@ class StudentProfileScreen extends StatelessWidget {
                     style: AppTextStyles.manrope(
                       fontSize: 16,
                       fontWeight: FontWeight.w800,
-                      color: AppColors.redDot,
+                      color: AppColors.error,
                     ),
                   ),
                   Text(

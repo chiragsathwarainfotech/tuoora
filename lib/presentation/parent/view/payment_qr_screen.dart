@@ -15,7 +15,7 @@ class PaymentQRScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.primaryBrand),
@@ -37,7 +37,7 @@ class PaymentQRScreen extends StatelessWidget {
               'QR Code saved to gallery',
               snackPosition: SnackPosition.BOTTOM,
               backgroundColor: Colors.green[700],
-              colorText: Colors.white,
+              colorText: AppColors.white,
               margin: const EdgeInsets.all(16),
             ),
           ),
@@ -50,7 +50,7 @@ class PaymentQRScreen extends StatelessWidget {
           Container(
             width: double.infinity,
             decoration: const BoxDecoration(
-              color: Colors.white,
+              color: AppColors.white,
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(32),
                 bottomRight: Radius.circular(32),
@@ -101,7 +101,7 @@ class PaymentQRScreen extends StatelessWidget {
               width: double.infinity,
               padding: AppSpacing.all32,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.circular(32),
                 boxShadow: [
                   BoxShadow(
@@ -118,7 +118,7 @@ class PaymentQRScreen extends StatelessWidget {
                     height: 210,
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.white,
                       border: Border.all(
                         color: AppColors.reportBorder,
                         width: 1.5,
@@ -139,7 +139,7 @@ class PaymentQRScreen extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(4),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: AppColors.white,
                             borderRadius: BorderRadius.circular(8),
                             boxShadow: [
                               BoxShadow(
@@ -182,7 +182,7 @@ class PaymentQRScreen extends StatelessWidget {
                   'UPI ID copied to clipboard',
                   snackPosition: SnackPosition.BOTTOM,
                   backgroundColor: AppColors.darkSlate,
-                  colorText: Colors.white,
+                  colorText: AppColors.white,
                   margin: const EdgeInsets.all(20),
                   borderRadius: 16,
                 );
@@ -196,7 +196,7 @@ class PaymentQRScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: AppColors.primaryBrandLight.withValues(alpha: 0.4),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.lightBlueBg),
+                  border: Border.all(color: AppColors.primaryBrandLight),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,

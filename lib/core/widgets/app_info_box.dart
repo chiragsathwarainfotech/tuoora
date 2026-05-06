@@ -24,24 +24,18 @@ class AppInfoBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeColor = color ?? AppColors.primaryBrand;
-    
+
     return Container(
       padding: AppSpacing.all20,
       decoration: BoxDecoration(
-        color: AppColors.instDashboardIconBg,
+        color: AppColors.primaryBrandLight,
         borderRadius: BorderRadius.circular(AppSpacing.s16),
-        border: Border.all(
-          color: themeColor.withValues(alpha: 0.5),
-        ),
+        border: Border.all(color: themeColor.withValues(alpha: 0.5)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            icon,
-            color: themeColor,
-            size: AppSpacing.s20,
-          ),
+          Icon(icon, color: themeColor, size: AppSpacing.s20),
           AppSpacing.h16,
           Expanded(
             child: Column(

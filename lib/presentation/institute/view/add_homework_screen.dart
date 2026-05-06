@@ -124,7 +124,7 @@ class AddHomeworkScreen extends StatelessWidget {
         child: Container(
           padding: AppSpacing.all32,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
               color: const Color(0xFFD0D5DD),
@@ -137,10 +137,10 @@ class AddHomeworkScreen extends StatelessWidget {
                     Container(
                       padding: AppSpacing.all12,
                       decoration: const BoxDecoration(
-                        color: AppColors.instPrimaryBlue,
+                        color: AppColors.primaryBrand,
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(Icons.add, color: Colors.white),
+                      child: const Icon(Icons.add, color: AppColors.white),
                     ),
                     AppSpacing.v12,
                     Text(
@@ -165,7 +165,7 @@ class AddHomeworkScreen extends StatelessWidget {
                   children: [
                     const Icon(
                       Icons.insert_drive_file_outlined,
-                      color: AppColors.instPrimaryBlue,
+                      color: AppColors.primaryBrand,
                       size: 40,
                     ),
                     AppSpacing.v12,

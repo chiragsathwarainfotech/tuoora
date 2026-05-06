@@ -62,7 +62,7 @@ class ReportsController extends GetxController {
         'Error',
         'Failed to load fee report: $e',
         backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
+        colorText: AppColors.white,
       );
     } finally {
       isFeeLoading.value = false;
@@ -78,7 +78,7 @@ class ReportsController extends GetxController {
         'Error',
         'Failed to load attendance report: $e',
         backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
+        colorText: AppColors.white,
       );
     } finally {
       isAttendanceLoading.value = false;
@@ -94,7 +94,7 @@ class ReportsController extends GetxController {
         'Error',
         'Failed to load performance report: $e',
         backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
+        colorText: AppColors.white,
       );
     } finally {
       isPerformanceLoading.value = false;
@@ -121,7 +121,7 @@ class ReportsController extends GetxController {
         'Error',
         'Failed to load batch $type details: $e',
         backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
+        colorText: AppColors.white,
       );
     } finally {
       isBatchDetailLoading.value = false;
@@ -134,7 +134,7 @@ class ReportsController extends GetxController {
         'Downloading',
         'Preparing $type report...',
         backgroundColor: AppColors.primaryBrand,
-        colorText: Colors.white,
+        colorText: AppColors.white,
         showProgressIndicator: true,
       );
 
@@ -160,7 +160,7 @@ class ReportsController extends GetxController {
         'Download Error',
         e.toString().replaceAll('Exception: ', ''),
         backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
+        colorText: AppColors.white,
       );
     }
   }

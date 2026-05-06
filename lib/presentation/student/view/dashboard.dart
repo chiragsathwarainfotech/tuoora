@@ -58,7 +58,7 @@ class StudentDashboard extends StatelessWidget {
             Container(
               padding: AppSpacing.all24,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.circular(AppSpacing.s16),
                 boxShadow: [
                   BoxShadow(
@@ -127,7 +127,7 @@ class StudentDashboard extends StatelessWidget {
                       AppSpacing.h8,
                       const AppStatusBadge(
                         text: 'TOP\n5%',
-                        textColor: Colors.white,
+                        textColor: AppColors.white,
                         backgroundColor: AppColors.primaryBrand,
                       ),
                     ],
@@ -243,18 +243,18 @@ class StudentDashboard extends StatelessWidget {
                       Container(
                         padding: AppSpacing.all12,
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.15),
+                          color: AppColors.white.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(AppSpacing.s12),
                         ),
                         child: const Icon(
                           Icons.account_balance_wallet,
-                          color: Colors.white,
+                          color: AppColors.white,
                           size: AppSpacing.s24,
                         ),
                       ),
                       const AppStatusBadge(
                         text: 'PAID',
-                        textColor: Colors.white,
+                        textColor: AppColors.white,
                         backgroundColor: AppColors.orangeTag,
                       ),
                     ],
@@ -265,7 +265,7 @@ class StudentDashboard extends StatelessWidget {
                     style: AppTextStyles.lexend(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
-                      color: Colors.white.withValues(alpha: 0.9),
+                      color: AppColors.white.withValues(alpha: 0.9),
                     ),
                   ),
                   AppSpacing.v8,
@@ -277,7 +277,7 @@ class StudentDashboard extends StatelessWidget {
                         style: AppTextStyles.manrope(
                           fontSize: 18,
                           fontWeight: FontWeight.w700,
-                          color: Colors.white.withValues(alpha: 0.8),
+                          color: AppColors.white.withValues(alpha: 0.8),
                         ),
                       ),
                       Text(
@@ -285,7 +285,7 @@ class StudentDashboard extends StatelessWidget {
                         style: AppTextStyles.manrope(
                           fontSize: 36,
                           fontWeight: FontWeight.w800,
-                          color: Colors.white,
+                          color: AppColors.white,
                           height: 1.0,
                         ),
                       ),
@@ -297,7 +297,7 @@ class StudentDashboard extends StatelessWidget {
                     style: AppTextStyles.manrope(
                       fontSize: 10,
                       fontWeight: FontWeight.w800,
-                      color: Colors.white.withValues(alpha: 0.7),
+                      color: AppColors.white.withValues(alpha: 0.7),
                       letterSpacing: 1.0,
                     ),
                   ),
@@ -305,7 +305,7 @@ class StudentDashboard extends StatelessWidget {
                   AppButton(
                     label: AppStrings.viewFeeHistory,
                     onPressed: () => Get.toNamed(AppRoutes.studentFeeHistory),
-                    backgroundColor: Colors.white,
+                    backgroundColor: AppColors.white,
                     foregroundColor: AppColors.primaryBrand,
                     fullWidth: true,
                   ),
@@ -327,7 +327,7 @@ class StudentDashboard extends StatelessWidget {
                   'title': 'Advanced Calculus',
                   'subject': 'Mathematics',
                   'status': 'DUE TODAY',
-                  'statusColor': AppColors.redDot,
+                  'statusColor': AppColors.error,
                 },
               ),
               icon: Icons.functions,

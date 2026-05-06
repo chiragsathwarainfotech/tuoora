@@ -13,7 +13,7 @@ class ParentBottomNav extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(AppSpacing.s24),
           topRight: Radius.circular(AppSpacing.s24),
@@ -135,7 +135,7 @@ class ParentBottomNav extends StatelessWidget {
         },
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             shape: BoxShape.circle,
             border: Border.all(color: const Color(0xFFEDF2F7), width: 1.5),
             boxShadow: [

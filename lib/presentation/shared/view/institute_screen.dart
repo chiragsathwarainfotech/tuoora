@@ -45,7 +45,7 @@ class InstituteScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         elevation: 0,
         centerTitle: false,
         title: Row(
@@ -98,7 +98,7 @@ class InstituteScreen extends StatelessWidget {
         const EdgeInsets.symmetric(vertical: AppSpacing.s32),
       ),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.s32),
         boxShadow: [
           BoxShadow(
@@ -231,7 +231,7 @@ class InstituteScreen extends StatelessWidget {
       margin: AppSpacing.x20,
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.s32),
       ),
       child: Column(
@@ -301,14 +301,14 @@ class InstituteScreen extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(Icons.explore_outlined, color: Colors.white, size: 24),
+              const Icon(Icons.explore_outlined, color: AppColors.white, size: 24),
               AppSpacing.h12,
               Text(
                 'Our Presence',
                 style: AppTextStyles.manrope(
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
-                  color: Colors.white,
+                  color: AppColors.white,
                 ),
               ),
             ],
@@ -319,7 +319,7 @@ class InstituteScreen extends StatelessWidget {
             style: AppTextStyles.lexend(
               fontSize: 14,
               fontWeight: FontWeight.w400,
-              color: Colors.white.withValues(alpha: 0.8),
+              color: AppColors.white.withValues(alpha: 0.8),
               height: 1.5,
             ),
           ),
@@ -327,7 +327,7 @@ class InstituteScreen extends StatelessWidget {
           Container(
             padding: AppSpacing.x24.add(AppSpacing.y14),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.15),
+              color: AppColors.white.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(AppSpacing.s16),
             ),
             child: Row(
@@ -339,11 +339,11 @@ class InstituteScreen extends StatelessWidget {
                     fontFamily: 'Manrope',
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
-                    color: Colors.white,
+                    color: AppColors.white,
                   ),
                 ),
                 AppSpacing.h8,
-                Icon(Icons.arrow_forward, color: Colors.white, size: 16),
+                Icon(Icons.arrow_forward, color: AppColors.white, size: 16),
               ],
             ),
           ),

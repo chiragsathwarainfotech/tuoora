@@ -69,4 +69,17 @@ class AppRoutes {
   static const String instituteBatchResources = '/institute/batches/resources';
   static const String instituteResourceDetail =
       '/institute/batches/resources/detail';
+  static const String instituteLeads = '/institute/leads';
+  static const String instituteAddEditLead = '/institute/leads/add-edit';
+  static const String instituteLeadDetails = '/institute/leads/details';
+  static const String instituteNotes = '/institute/notes';
+  static const String instituteAddEditNote = '/institute/notes/add-edit';
+  static const String instituteChats = '/institute/chats';
+  static const String instituteCreateChat = '/institute/chats/create';
+  static const String instituteChatMessages = '/institute/chats/messages';
+  static const String instituteStaffs = '/institute/staffs';
+  static const String instituteStaffDetails = '/institute/staffs/details';
+  static const String instituteAddEditStaff = '/institute/staffs/add-edit';
+  static const String instituteSalaryHistory = '/institute/staffs/salary-history';
+  static const String instituteStaffAttendance = '/institute/staffs/attendance';
 }

@@ -1,0 +1,122 @@
+import 'package:fee_easy/data/models/staff_model.dart';
+
+abstract class StaffRepository {
+  Future<List<Staff>> getStaffs();
+}
+
+class StaffRepositoryImpl implements StaffRepository {
+  @override
+  Future<List<Staff>> getStaffs() async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    return [
+      Staff(
+        id: '1',
+        name: 'Sarah Chen',
+        email: 'sarah.chen@example.com',
+        phone: '+1 (555) 012-3456',
+        role: 'Design Lead',
+        joinDate: 'Joined 2 years ago',
+        status: 'PERMANENT',
+        address: '123 Business Way, Suite 100,\nCity, State 12345',
+        reference: 'Internal Referral',
+        interactionHistory: [],
+      ),
+      Staff(
+        id: '2',
+        name: 'James Wilson',
+        email: 'james.wilson@example.com',
+        phone: '+1 (555) 987-6543',
+        role: 'Product Mgr',
+        joinDate: 'Joined 1 year ago',
+        status: 'PERMANENT',
+        address: '456 Tech Park,\nCity, State 67890',
+        reference: 'LinkedIn',
+        interactionHistory: [],
+      ),
+      Staff(
+        id: '3',
+        name: 'Amara Okafor',
+        email: 'amara.o@example.com',
+        phone: '+1 (555) 234-5678',
+        role: 'Sr. Engineer',
+        joinDate: 'Joined 6 months ago',
+        status: 'PERMANENT',
+        address: '789 Silicon Valley,\nCity, State 54321',
+        reference: 'Indeed',
+        interactionHistory: [],
+      ),
+      Staff(
+        id: '4',
+        name: 'David Park',
+        email: 'david.p@example.com',
+        phone: '+1 (555) 345-6789',
+        role: 'Operations',
+        joinDate: 'Joined 3 years ago',
+        status: 'PERMANENT',
+        address: '101 Operation Hub,\nCity, State 13579',
+        reference: 'Referral',
+        interactionHistory: [],
+      ),
+      Staff(
+        id: '5',
+        name: 'Elena Ruiz',
+        email: 'elena.r@example.com',
+        phone: '+1 (555) 456-7890',
+        role: 'HR Specialist',
+        joinDate: 'Joined 1 year ago',
+        status: 'PERMANENT',
+        address: '202 People Center,\nCity, State 24680',
+        reference: 'Glassdoor',
+        interactionHistory: [],
+      ),
+      Staff(
+        id: '6',
+        name: 'Leo Thorne',
+        email: 'leo.t@example.com',
+        phone: '+1 (555) 567-8901',
+        role: 'Sales Lead',
+        joinDate: 'Joined 2 years ago',
+        status: 'PERMANENT',
+        address: '303 Sales Office,\nCity, State 97531',
+        reference: 'Direct',
+        interactionHistory: [],
+      ),
+      Staff(
+        id: '7',
+        name: 'Maya Gupta',
+        email: 'maya.g@example.com',
+        phone: '+1 (555) 678-9012',
+        role: 'QA Analyst',
+        joinDate: 'Joined 8 months ago',
+        status: 'PERMANENT',
+        address: '404 Quality Lab,\nCity, State 86420',
+        reference: 'LinkedIn',
+        interactionHistory: [],
+      ),
+      Staff(
+        id: '8',
+        name: 'Robert Ford',
+        email: 'robert.f@example.com',
+        phone: '+1 (555) 789-0123',
+        role: 'Backend Dev',
+        joinDate: 'Joined 1 year ago',
+        status: 'PERMANENT',
+        address: '505 Server Room,\nCity, State 12121',
+        reference: 'Indeed',
+        interactionHistory: [],
+      ),
+      Staff(
+        id: '9',
+        name: 'Sia Jallow',
+        email: 'sia.j@example.com',
+        phone: '+1 (555) 890-1234',
+        role: 'Accountant',
+        joinDate: 'Joined 2 years ago',
+        status: 'PERMANENT',
+        address: '606 Finance Wing,\nCity, State 23232',
+        reference: 'Internal Referral',
+        interactionHistory: [],
+      ),
+    ];
+  }
+}

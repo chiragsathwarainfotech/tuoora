@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 
 class InstituteAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
+  final String? subtitle;
   final bool isRoot;
   final bool hideLeading;
   final bool showDefaultActions;
@@ -17,6 +18,7 @@ class InstituteAppBar extends StatelessWidget implements PreferredSizeWidget {
   const InstituteAppBar({
     super.key,
     required this.title,
+    this.subtitle,
     this.isRoot = false,
     this.hideLeading = false,
     this.showDefaultActions = true,
@@ -40,15 +42,30 @@ class InstituteAppBar extends StatelessWidget implements PreferredSizeWidget {
                 if (!hideLeading) _buildLeadingButton(context),
                 if (!hideLeading) AppSpacing.h16,
                 Expanded(
-                  child: Text(
-                    title,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTextStyles.manrope(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.brandAppBarColor,
-                    ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyles.manrope(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.brandAppBarColor,
+                        ),
+                      ),
+                      if (subtitle != null)
+                        Text(
+                          subtitle!,
+                          style: AppTextStyles.lexend(
+                            fontSize: 12,
+                            color: AppColors.textTertiary,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                    ],
                   ),
                 ),
               ],
@@ -90,10 +107,7 @@ class InstituteAppBar extends StatelessWidget implements PreferredSizeWidget {
     return Row(
       children: [
         GestureDetector(
-          onTap: () {
-            // TODO: Implement chat navigation
-            Get.snackbar('Coming Soon', 'Chat feature is under development');
-          },
+          onTap: () => Get.toNamed(AppRoutes.instituteChats),
           child: const Icon(
             Icons.chat_bubble_outline_rounded,
             color: AppColors.brandAppBarColor,

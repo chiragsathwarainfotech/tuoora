@@ -4,7 +4,6 @@ import 'package:fee_easy/presentation/institute/view/batches_screen.dart';
 import 'package:fee_easy/presentation/institute/view/fee_transaction_history_screen.dart';
 import 'package:fee_easy/presentation/institute/view/fees_screen.dart';
 import 'package:fee_easy/presentation/institute/view/institute_main_screen.dart';
-
 import 'package:fee_easy/presentation/institute/view/add_student_screen.dart';
 import 'package:fee_easy/presentation/institute/view/batch_details_screen.dart';
 import 'package:fee_easy/presentation/institute/view/institute_profile_view_screen.dart';
@@ -45,10 +44,8 @@ import 'package:fee_easy/presentation/shared/bindings/forgot_password_binding.da
 import 'package:fee_easy/presentation/shared/view/login_screen.dart';
 import 'package:fee_easy/presentation/shared/view/forgot_password_screen.dart';
 import 'package:fee_easy/presentation/shared/view/reset_password_screen.dart';
-import 'package:fee_easy/presentation/shared/view/student_profile_screen.dart'
-    as shared;
-import 'package:fee_easy/presentation/shared/view/updates_screen.dart'
-    as shared;
+import 'package:fee_easy/presentation/shared/view/student_profile_screen.dart' as shared;
+import 'package:fee_easy/presentation/shared/view/updates_screen.dart' as shared;
 import 'package:fee_easy/presentation/student/view/student_main_screen.dart';
 import 'package:fee_easy/presentation/student/bindings/student_binding.dart';
 import 'package:fee_easy/presentation/student/view/homework_detail_screen.dart';
@@ -59,6 +56,19 @@ import 'package:fee_easy/presentation/shared/bindings/signup_binding.dart';
 import 'package:fee_easy/presentation/shared/view/institute_signup_screen.dart';
 import 'package:fee_easy/presentation/shared/view/institute_otp_screen.dart';
 import 'package:fee_easy/presentation/shared/view/institute_profile_setup_screen.dart';
+import 'package:fee_easy/presentation/institute/view/leads_management_screen.dart';
+import 'package:fee_easy/presentation/institute/view/add_edit_lead_screen.dart';
+import 'package:fee_easy/presentation/institute/view/lead_details_screen.dart';
+import 'package:fee_easy/presentation/institute/view/notes_list_screen.dart';
+import 'package:fee_easy/presentation/institute/view/add_edit_note_screen.dart';
+import 'package:fee_easy/presentation/institute/view/chat_list_screen.dart';
+import 'package:fee_easy/presentation/institute/view/create_chat_screen.dart';
+import 'package:fee_easy/presentation/institute/view/chat_messages_screen.dart';
+import 'package:fee_easy/presentation/institute/view/staff_main_screen.dart';
+import 'package:fee_easy/presentation/institute/view/staff_profile_screen.dart';
+import 'package:fee_easy/presentation/institute/view/add_edit_staff_screen.dart';
+import 'package:fee_easy/presentation/institute/view/salary_history_screen.dart';
+import 'package:fee_easy/presentation/institute/view/staff_attendance_screen.dart';
 import 'package:get/get.dart';
 
 class AppPages {
@@ -354,6 +364,71 @@ class AppPages {
     GetPage(
       name: AppRoutes.instituteResourceDetail,
       page: () => const ResourceDetailScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteLeads,
+      page: () => const LeadsManagementScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteAddEditLead,
+      page: () => const AddEditLeadScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteLeadDetails,
+      page: () => const LeadDetailsScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteNotes,
+      page: () => const NotesListScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteAddEditNote,
+      page: () => const AddEditNoteScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteChats,
+      page: () => const ChatListScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteCreateChat,
+      page: () => const CreateChatScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteChatMessages,
+      page: () => const ChatMessagesScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteStaffs,
+      page: () => const StaffMainScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteStaffDetails,
+      page: () => const StaffProfileScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteAddEditStaff,
+      page: () => const AddEditStaffScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteSalaryHistory,
+      page: () => const SalaryHistoryScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteStaffAttendance,
+      page: () => const StaffAttendanceScreen(),
+      binding: InstituteBinding(),
     ),
   ];
 }

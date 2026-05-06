@@ -56,7 +56,7 @@ class InstituteDashboard extends StatelessWidget {
             () => Text(
               profileController.instituteName.value.isNotEmpty
                   ? profileController.instituteName.value
-                  : 'FeeEasy',
+                  : 'Tuoora',
               style: AppTextStyles.manrope(
                 fontSize: 24,
                 fontWeight: FontWeight.w800,
@@ -139,15 +139,31 @@ class InstituteDashboard extends StatelessWidget {
         Icons.account_balance_wallet_rounded,
         () => Get.toNamed(AppRoutes.instituteFees),
       ),
-      ModuleItem('Teachers', Icons.person_search_rounded, () {}),
-      ModuleItem('Engagement', Icons.auto_graph_rounded, () {}),
+      ModuleItem(
+        'Staffs',
+        Icons.person_search_rounded,
+        () => Get.toNamed(AppRoutes.instituteStaffs),
+      ),
+      ModuleItem(
+        'Chats',
+        Icons.chat,
+        () => Get.toNamed(AppRoutes.instituteChats),
+      ),
       ModuleItem(
         'Reports',
         Icons.insert_chart_rounded,
         () => Get.toNamed(AppRoutes.instituteReports),
       ),
-      ModuleItem('Leads', Icons.leaderboard_rounded, () {}),
-      ModuleItem('Notes', Icons.note_alt_rounded, () {}),
+      ModuleItem(
+        'Leads',
+        Icons.leaderboard_rounded,
+        () => Get.toNamed(AppRoutes.instituteLeads),
+      ),
+      ModuleItem(
+        'Notes',
+        Icons.note_alt_rounded,
+        () => Get.toNamed(AppRoutes.instituteNotes),
+      ),
       ModuleItem('Expenses', Icons.payments_rounded, () {}),
       ModuleItem(
         'Updates',

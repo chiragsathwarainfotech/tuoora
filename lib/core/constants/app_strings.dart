@@ -8,8 +8,8 @@ class AppStrings {
   static const String loginSubtitle =
       'Step back into your clarified sanctuary of\nlearning.';
   static const String stayAuthenticated = 'Stay authenticated on this device';
-  static const String signInButton = 'Sign in to FeeEasy';
-  static const String enrolmentText = 'New to FeeEasy? ';
+  static const String signInButton = 'Sign in to Tuoora';
+  static const String enrolmentText = 'New to Tuoora? ';
   static const String enrolmentLink = 'Enrolment Office';
 
   // Dashboards
@@ -89,7 +89,6 @@ class AppStrings {
   static const String instDrawerExpenseManagement = 'Expenses';
   static const String instDrawerLeadManagement = 'Leads';
   static const String instDrawerStudentEngagement = 'Engagement';
-  static const String instDrawerAppVersion = 'FeeEasy v2.4.0';
 
   // Institute Students Registry
   static const String instStudentRegistry = 'Student Registry';
@@ -424,4 +423,52 @@ class AppStrings {
   static const String subjectBreakdown = 'Subject Breakdown';
   static const String highCorrelationInsight =
       'Insight: High Correlation Detected';
+
+  // Institute Leads Management
+  static const String instLeadsManagementTitle = 'Leads Management';
+  static const String instSearchLeadsHint = 'Search leads by name or course...';
+  static const String instFilterByDateRange = 'Filter by Date Range';
+  static const String instCallBtn = 'Call';
+  static const String instAppliedSuffix = 'Applied';
+  static const String instAppliedYesterday = 'Applied yesterday';
+  static const String instLeadDetailsTitle = 'Lead Details';
+  static const String instAddLeadTitle = 'Add Lead';
+  static const String instEditLeadTitle = 'Edit Lead';
+  static const String instLeadInfoHeading = 'Lead Information';
+  static const String instLeadInfoSubtitle = 'Update contact and course preferences';
+  static const String instFullNameLabel = 'FULL NAME';
+  static const String instFullNameHint = 'e.g. Alex Rivera';
+  static const String instEmailAddressLabel = 'EMAIL ADDRESS';
+  static const String instEmailAddressHint = 'alex@company.com';
+  static const String instPhoneNumberLabelAlt = 'PHONE NUMBER';
+  static const String instPhoneNumberHint = '+1 (555) 000-0000';
+  static const String instAddressLabel = 'ADDRESS';
+  static const String instAddressHint = 'e.g. 123 Business Way, Suite 100';
+  static const String instReferenceLabel = 'REFERENCE';
+  static const String instReferenceHint = 'e.g. LinkedIn, Referral, Google Search';
+  static const String instCourseSelectionHeading = 'COURSE SELECTION';
+  static const String instCourseSelectionLabel = 'COURSE SELECTION';
+  static const String instCourseSelectionHint = 'Enter course name';
+  static const String instInteractionNotesHeading = 'INTERACTION NOTES';
+  static const String instInteractionNotesLabel = 'INTERACTION NOTES';
+  static const String instInteractionNotesHint = 'Add any specific details or past interactions with the lead...';
+  static const String instSaveLeadBtn = 'Save Lead';
+  static const String instActiveProspectTag = 'ACTIVE PROSPECT';
+  static const String instInteractionHistoryHeading = 'INTERACTION HISTORY';
+  static const String instToday = 'TODAY';
+
+  // Institute Notes Management
+  static const String instNotesManagementTitle = 'My Notes';
+  static const String instSearchNotesHint = 'Search your notes...';
+  static const String instAddNoteTitle = 'Add Note';
+  static const String instEditNoteTitle = 'Edit Note';
+  static const String instNoteTitleLabel = 'Title';
+  static const String instNoteTitleHint = 'Note Title';
+  static const String instNoteContentLabel = 'Content';
+  static const String instNoteContentHint = 'Write your note here...';
+  static const String instSaveNoteBtn = 'Save Note';
+  static const String instNoNotesFound = 'No notes found';
+  static const String instDeleteNoteTitle = 'Delete Note';
+  static const String instDeleteNoteConfirm = 'Are you sure you want to delete this note?';
+  static const String instBookmarkedNotes = 'Bookmarked Notes';
 }

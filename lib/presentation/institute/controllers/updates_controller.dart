@@ -1,5 +1,4 @@
-import 'package:fee_easy/core/constants/app_colors.dart';
-import 'package:fee_easy/core/enums/update_enums.dart';
+import 'package:fee_easy/core/enums/app_enums.dart';
 import 'package:fee_easy/data/models/daily_update_model.dart';
 import 'package:fee_easy/data/repositories_impl/daily_update_repository_impl.dart';
 import 'package:file_picker/file_picker.dart';
@@ -7,6 +6,7 @@ import 'package:fee_easy/data/models/batch_model.dart';
 import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:fee_easy/core/widgets/app_snackbar.dart';
 
 class UpdatesController extends GetxController {
   final DailyUpdateRepositoryImpl _updateRepository;
@@ -30,6 +30,30 @@ class UpdatesController extends GetxController {
   final appNotificationEnabled = true.obs;
   final whatsappEnabled = false.obs;
 
+  final triedToSave = false.obs;
+  final subjectError = RxnString();
+  final messageError = RxnString();
+
+  bool validateForm() {
+    bool isValid = true;
+
+    if (subjectController.text.trim().isEmpty) {
+      subjectError.value = 'Topic is required';
+      isValid = false;
+    } else {
+      subjectError.value = null;
+    }
+
+    if (messageController.text.trim().isEmpty) {
+      messageError.value = 'Message content is required';
+      isValid = false;
+    } else {
+      messageError.value = null;
+    }
+
+    return isValid;
+  }
+
   final availableBatches = <Batch>[].obs;
   final isLoadingBatches = false.obs;
 
@@ -49,12 +73,7 @@ class UpdatesController extends GetxController {
         selectedBatch.value = availableBatches.first;
       }
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Failed to load batches: $e',
-        backgroundColor: Colors.redAccent,
-        colorText: AppColors.white,
-      );
+      AppSnackbar.error('Failed to load batches: $e');
     } finally {
       isLoadingBatches.value = false;
     }
@@ -66,12 +85,7 @@ class UpdatesController extends GetxController {
       final updates = await _updateRepository.listDailyUpdates();
       updatesList.assignAll(updates);
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Failed to load updates: $e',
-        backgroundColor: Colors.redAccent,
-        colorText: AppColors.white,
-      );
+      AppSnackbar.error('Failed to load updates: $e');
     } finally {
       isLoading.value = false;
     }
@@ -89,12 +103,7 @@ class UpdatesController extends GetxController {
         attachments.addAll(result.paths.whereType<String>());
       }
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Could not pick files: $e',
-        backgroundColor: Colors.redAccent,
-        colorText: AppColors.white,
-      );
+      AppSnackbar.error('Could not pick files: $e');
     }
   }
 
@@ -103,15 +112,8 @@ class UpdatesController extends GetxController {
   }
 
   Future<void> broadcastUpdate() async {
-    if (subjectController.text.isEmpty || messageController.text.isEmpty) {
-      Get.snackbar(
-        'Error',
-        'Please fill in all fields',
-        backgroundColor: Colors.redAccent,
-        colorText: AppColors.white,
-      );
-      return;
-    }
+    triedToSave.value = true;
+    if (!validateForm()) return;
 
     try {
       isCreating.value = true;
@@ -143,22 +145,14 @@ class UpdatesController extends GetxController {
       if (availableBatches.isNotEmpty) {
         selectedBatch.value = availableBatches.first;
       }
+      triedToSave.value = false;
+      subjectError.value = null;
+      messageError.value = null;
 
       Get.back();
-      Get.snackbar(
-        'Success',
-        'Update broadcasted successfully',
-        backgroundColor: AppColors.darkGreen,
-        colorText: AppColors.white,
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackbar.success('Update broadcasted successfully');
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Failed to broadcast update: $e',
-        backgroundColor: Colors.redAccent,
-        colorText: AppColors.white,
-      );
+      AppSnackbar.error('Failed to broadcast update: $e');
     } finally {
       isCreating.value = false;
     }

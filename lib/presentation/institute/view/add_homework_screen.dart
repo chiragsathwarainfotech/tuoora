@@ -5,9 +5,9 @@ import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/core/widgets/app_button.dart';
 import 'package:fee_easy/presentation/institute/controllers/homework_controller.dart';
 import 'package:fee_easy/presentation/institute/models/batch_model.dart';
+import 'package:fee_easy/core/widgets/app_input_field.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_label.dart';
-import 'package:fee_easy/presentation/institute/widgets/institute_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -35,16 +35,17 @@ class AddHomeworkScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    InstituteTextField(
+                    Obx(() => AppInputField(
                       label: AppStrings.instHomeworkSubjectLabel,
                       controller: controller.titleController,
                       hint: AppStrings.instHomeworkSubjectHint,
-                    ),
+                      errorText: controller.triedToSave.value ? controller.titleError.value : null,
+                    )),
                     AppSpacing.v24,
                     const InstituteLabel(AppStrings.instDueDateLabel),
                     _buildDatePicker(context, controller),
                     AppSpacing.v24,
-                    InstituteTextField(
+                    AppInputField(
                       label: AppStrings.instInstructionDetailsLabel,
                       controller: controller.descriptionController,
                       hint: AppStrings.instInstructionDetailsHint,
@@ -78,39 +79,65 @@ class AddHomeworkScreen extends StatelessWidget {
           controller.dueDate.value = date;
         }
       },
-      child: Container(
-        padding: AppSpacing.all16,
-        decoration: BoxDecoration(
-          color: const Color(0xFFF2F4F7),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          children: [
-            const Icon(
-              Icons.calendar_month_outlined,
-              color: AppColors.textMuted,
-            ),
-            AppSpacing.h12,
-            Obx(
-              () => Text(
-                controller.dueDate.value == null
-                    ? AppStrings.instDueDateHint
-                    : DateFormat(
-                        'MM/dd/yyyy',
-                      ).format(controller.dueDate.value!),
-                style: AppTextStyles.manrope(
-                  fontSize: 14,
-                  color: controller.dueDate.value == null
-                      ? AppColors.textMuted
-                      : AppColors.textPrimary,
-                  fontWeight: controller.dueDate.value == null
-                      ? FontWeight.w500
-                      : FontWeight.w700,
-                ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: AppSpacing.all16,
+            decoration: BoxDecoration(
+              color: const Color(0xFFF2F4F7),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: controller.triedToSave.value && controller.dateError.value != null
+                    ? Colors.redAccent
+                    : Colors.transparent,
               ),
             ),
-          ],
-        ),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.calendar_month_outlined,
+                  color: AppColors.textMuted,
+                ),
+                AppSpacing.h12,
+                Obx(
+                  () => Text(
+                    controller.dueDate.value == null
+                        ? AppStrings.instDueDateHint
+                        : DateFormat(
+                            'MM/dd/yyyy',
+                          ).format(controller.dueDate.value!),
+                    style: AppTextStyles.manrope(
+                      fontSize: 14,
+                      color: controller.dueDate.value == null
+                          ? AppColors.textMuted
+                          : AppColors.textPrimary,
+                      fontWeight: controller.dueDate.value == null
+                          ? FontWeight.w500
+                          : FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Obx(() {
+            if (controller.triedToSave.value && controller.dateError.value != null) {
+              return Padding(
+                padding: const EdgeInsets.only(top: 8.0, left: 4.0),
+                child: Text(
+                  controller.dateError.value!,
+                  style: AppTextStyles.manrope(
+                    fontSize: 12,
+                    color: Colors.redAccent,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              );
+            }
+            return const SizedBox.shrink();
+          }),
+        ],
       ),
     );
   }

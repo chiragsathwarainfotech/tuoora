@@ -14,7 +14,7 @@ class ValidationUtils {
     if (value == null || value.isEmpty) {
       return 'Phone number is required';
     }
-    if (value.length < 10) {
+    if (value.length != 10) {
       return 'Enter a valid 10-digit phone number';
     }
     return null;

@@ -95,10 +95,15 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
           ),
           AppSpacing.v16,
           if (!controller.isStudentSelected.value) ...[
-            Container(
+            Obx(() => Container(
               decoration: BoxDecoration(
                 color: AppColors.paleSilver,
                 borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: controller.triedToSave.value && controller.studentError.value != null
+                      ? Colors.redAccent
+                      : Colors.transparent,
+                ),
               ),
               child: TextField(
                 onChanged: (value) => controller.searchQuery.value = value,
@@ -117,7 +122,23 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                   contentPadding: AppSpacing.all16,
                 ),
               ),
-            ),
+            )),
+            Obx(() {
+              if (controller.triedToSave.value && controller.studentError.value != null) {
+                return Padding(
+                  padding: const EdgeInsets.only(top: 8, left: 4),
+                  child: Text(
+                    controller.studentError.value!,
+                    style: AppTextStyles.manrope(
+                      fontSize: 12,
+                      color: Colors.redAccent,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                );
+              }
+              return const SizedBox.shrink();
+            }),
             if (controller.searchQuery.value.isNotEmpty)
               Container(
                 margin: const EdgeInsets.only(top: AppSpacing.s8),
@@ -241,11 +262,16 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
             ),
           ),
           AppSpacing.v8,
-          Container(
+          Obx(() => Container(
             padding: AppSpacing.all16,
             decoration: BoxDecoration(
               color: AppColors.paleSilver,
               borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                color: controller.triedToSave.value && controller.amountError.value != null
+                    ? Colors.redAccent
+                    : Colors.transparent,
+              ),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -278,7 +304,23 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                 ),
               ],
             ),
-          ),
+          )),
+          Obx(() {
+            if (controller.triedToSave.value && controller.amountError.value != null) {
+              return Padding(
+                padding: const EdgeInsets.only(top: 8, left: 4),
+                child: Text(
+                  controller.amountError.value!,
+                  style: AppTextStyles.manrope(
+                    fontSize: 12,
+                    color: Colors.redAccent,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              );
+            }
+            return const SizedBox.shrink();
+          }),
           AppSpacing.v20,
           Text(
             'Record Date',
@@ -480,10 +522,8 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
   }
 
   void _showReceiptPreview() {
-    if (controller.selectedStudent.value == null) {
-      Get.snackbar('Alert', 'Please select a student first');
-      return;
-    }
+    controller.triedToSave.value = true;
+    if (!controller.validateForm()) return;
 
     Get.bottomSheet(
       Container(

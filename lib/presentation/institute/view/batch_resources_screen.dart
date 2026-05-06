@@ -169,11 +169,12 @@ class BatchResourcesScreen extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _buildDialogField(
+          Obx(() => _buildDialogField(
             AppStrings.instResourceSubjectLabel,
             controller.subjectController,
             'e.g., Physics Notes',
-          ),
+            errorText: controller.triedToSave.value ? controller.subjectError.value : null,
+          )),
           AppSpacing.v16,
           _buildDialogField(
             AppStrings.instResourceDescriptionLabel,
@@ -193,6 +194,7 @@ class BatchResourcesScreen extends StatelessWidget {
     TextEditingController textController,
     String hint, {
     int maxLines = 1,
+    String? errorText,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -210,6 +212,9 @@ class BatchResourcesScreen extends StatelessWidget {
           decoration: BoxDecoration(
             color: const Color(0xFFF2F4F7),
             borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: errorText != null ? Colors.redAccent : Colors.transparent,
+            ),
           ),
           child: TextField(
             controller: textController,
@@ -225,6 +230,18 @@ class BatchResourcesScreen extends StatelessWidget {
             ),
           ),
         ),
+        if (errorText != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 4, left: 4),
+            child: Text(
+              errorText,
+              style: AppTextStyles.manrope(
+                fontSize: 12,
+                color: Colors.redAccent,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
       ],
     );
   }
@@ -232,42 +249,61 @@ class BatchResourcesScreen extends StatelessWidget {
   Widget _buildAttachmentButton(ResourcesController controller) {
     return Obx(() {
       final fileName = controller.selectedFileName.value;
-      return GestureDetector(
-        onTap: () => controller.pickFile(),
-        child: Container(
-          padding: AppSpacing.all16,
-          decoration: BoxDecoration(
-            color: AppColors.scaffoldBg,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: const Color(0xFFD0D5DD),
-              style: BorderStyle.solid,
-            ),
-          ),
-          child: Row(
-            children: [
-              const Icon(
-                Icons.attach_file_rounded,
-                color: AppColors.primaryBrand,
-              ),
-              AppSpacing.h12,
-              Expanded(
-                child: Text(
-                  fileName.isEmpty ? AppStrings.instAttachFileHint : fileName,
-                  style: AppTextStyles.manrope(
-                    fontSize: 14,
-                    fontWeight: fileName.isEmpty
-                        ? FontWeight.w500
-                        : FontWeight.w700,
-                    color: fileName.isEmpty
-                        ? AppColors.textMuted
-                        : AppColors.textPrimary,
-                  ),
+      final hasError = controller.triedToSave.value && controller.fileError.value != null;
+      
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GestureDetector(
+            onTap: () => controller.pickFile(),
+            child: Container(
+              padding: AppSpacing.all16,
+              decoration: BoxDecoration(
+                color: AppColors.scaffoldBg,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: hasError ? Colors.redAccent : const Color(0xFFD0D5DD),
+                  style: BorderStyle.solid,
                 ),
               ),
-            ],
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.attach_file_rounded,
+                    color: AppColors.primaryBrand,
+                  ),
+                  AppSpacing.h12,
+                  Expanded(
+                    child: Text(
+                      fileName.isEmpty ? AppStrings.instAttachFileHint : fileName,
+                      style: AppTextStyles.manrope(
+                        fontSize: 14,
+                        fontWeight: fileName.isEmpty
+                            ? FontWeight.w500
+                            : FontWeight.w700,
+                        color: fileName.isEmpty
+                            ? AppColors.textMuted
+                            : AppColors.textPrimary,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
-        ),
+          if (hasError)
+            Padding(
+              padding: const EdgeInsets.only(top: 8, left: 4),
+              child: Text(
+                controller.fileError.value!,
+                style: AppTextStyles.manrope(
+                  fontSize: 12,
+                  color: Colors.redAccent,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+        ],
       );
     });
   }

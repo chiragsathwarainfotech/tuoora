@@ -1,9 +1,9 @@
-import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/presentation/institute/models/batch_model.dart';
 import 'package:fee_easy/core/widgets/common_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
+import 'package:fee_easy/core/widgets/app_snackbar.dart';
 
 class BatchController extends GetxController {
   final InstituteRepositoryImpl _repository;
@@ -28,6 +28,46 @@ class BatchController extends GetxController {
   final searchQuery = ''.obs;
   final currentEditingBatchId = ''.obs;
   final allDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+  final triedToSave = false.obs;
+  final batchNameError = RxnString();
+  final subjectError = RxnString();
+  final feeError = RxnString();
+  final daysError = RxnString();
+
+  bool validateForm() {
+    bool isValid = true;
+
+    if (batchNameController.text.trim().isEmpty) {
+      batchNameError.value = 'Batch name is required';
+      isValid = false;
+    } else {
+      batchNameError.value = null;
+    }
+
+    if (subjectController.text.trim().isEmpty) {
+      subjectError.value = 'Subject is required';
+      isValid = false;
+    } else {
+      subjectError.value = null;
+    }
+
+    if (batchFeeController.text.trim().isEmpty) {
+      feeError.value = 'Fee is required';
+      isValid = false;
+    } else {
+      feeError.value = null;
+    }
+
+    if (selectedDays.isEmpty) {
+      daysError.value = 'Please select at least one day';
+      isValid = false;
+    } else {
+      daysError.value = null;
+    }
+
+    return isValid;
+  }
 
   Future<void> loadBatches({bool isRefresh = true}) async {
     if (isRefresh) {
@@ -57,12 +97,7 @@ class BatchController extends GetxController {
         currentPage.value++;
       }
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Failed to load batches: ${e.toString()}',
-        backgroundColor: Colors.redAccent,
-        colorText: AppColors.white,
-      );
+      AppSnackbar.error('Failed to load batches: ${e.toString()}');
     } finally {
       isLoading.value = false;
       isMoreLoading.value = false;
@@ -81,6 +116,11 @@ class BatchController extends GetxController {
     selectedStudentIds.clear();
     searchQuery.value = '';
     currentEditingBatchId.value = '';
+    triedToSave.value = false;
+    batchNameError.value = null;
+    subjectError.value = null;
+    feeError.value = null;
+    daysError.value = null;
   }
 
   void initEditMode(BatchModel batch) {
@@ -99,6 +139,11 @@ class BatchController extends GetxController {
 
     selectedDays.assignAll(batch.days);
     searchQuery.value = '';
+    triedToSave.value = false;
+    batchNameError.value = null;
+    subjectError.value = null;
+    feeError.value = null;
+    daysError.value = null;
   }
 
   TimeOfDay _parseTime(String timeStr) {
@@ -176,20 +221,9 @@ class BatchController extends GetxController {
           isLoading.value = true;
           await _repository.deleteBatch(int.parse(id));
           batchesList.removeWhere((batch) => batch.id == id);
-          Get.back(); // Go back from details screen to BatchesScreen
-          Get.snackbar(
-            'Deleted',
-            'Batch deleted successfully',
-            backgroundColor: AppColors.darkGreen,
-            colorText: AppColors.white,
-          );
+          AppSnackbar.success('Batch deleted successfully', title: 'Deleted');
         } catch (e) {
-          Get.snackbar(
-            'Error',
-            e.toString(),
-            backgroundColor: Colors.redAccent,
-            colorText: AppColors.white,
-          );
+          AppSnackbar.error(e.toString());
         } finally {
           isLoading.value = false;
         }
@@ -198,15 +232,8 @@ class BatchController extends GetxController {
   }
 
   Future<void> saveBatch(BuildContext context) async {
-    if (batchNameController.text.trim().isEmpty) {
-      Get.snackbar(
-        'Error',
-        'Please enter batch name',
-        backgroundColor: Colors.redAccent,
-        colorText: AppColors.white,
-      );
-      return;
-    }
+    triedToSave.value = true;
+    if (!validateForm()) return;
 
     final data = {
       'name': batchNameController.text.trim(),
@@ -248,20 +275,12 @@ class BatchController extends GetxController {
         // If adding, just go back once to BatchesScreen
         Get.back();
       }
-
-      Get.snackbar(
-        isEditMode.value ? 'Batch Updated' : 'Batch Created',
+      AppSnackbar.success(
         'Successfully saved ${batchNameController.text}',
-        backgroundColor: AppColors.darkGreen,
-        colorText: AppColors.white,
+        title: isEditMode.value ? 'Batch Updated' : 'Batch Created',
       );
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        e.toString(),
-        backgroundColor: Colors.redAccent,
-        colorText: AppColors.white,
-      );
+      AppSnackbar.error(e.toString());
     } finally {
       isLoading.value = false;
     }
@@ -271,11 +290,9 @@ class BatchController extends GetxController {
     // This part might need API support for assigning students to batch
     // For now keeping it local or showing a placeholder message
     Get.back();
-    Get.snackbar(
-      'Notice',
+    AppSnackbar.warning(
       'Student assignment is currently managed via Student Profile',
-      backgroundColor: AppColors.primaryBrand,
-      colorText: AppColors.white,
+      title: 'Notice',
     );
   }
 

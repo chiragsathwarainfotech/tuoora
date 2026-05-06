@@ -4,9 +4,9 @@ import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/core/widgets/app_button.dart';
 import 'package:fee_easy/presentation/institute/controllers/batch_controller.dart';
+import 'package:fee_easy/core/widgets/app_input_field.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_label.dart';
-import 'package:fee_easy/presentation/institute/widgets/institute_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -35,32 +35,35 @@ class AddEditBatchScreen extends GetView<BatchController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    InstituteTextField(
+                    Obx(() => AppInputField(
                       label: AppStrings.instBatchNameLabelAlt,
                       controller: controller.batchNameController,
                       hint: AppStrings.instBatchNameHint,
-                    ),
+                      errorText: controller.triedToSave.value ? controller.batchNameError.value : null,
+                    )),
                     AppSpacing.v24,
-                    InstituteTextField(
+                    Obx(() => AppInputField(
                       label: AppStrings.instBatchSubjectLabel,
                       controller: controller.subjectController,
                       hint: AppStrings.instBatchSubjectHint,
-                    ),
+                      errorText: controller.triedToSave.value ? controller.subjectError.value : null,
+                    )),
                     AppSpacing.v24,
-                    InstituteTextField(
+                    AppInputField(
                       label: AppStrings.instBatchDescLabel,
                       controller: controller.descriptionController,
                       hint: AppStrings.instBatchDescHint,
                       maxLines: 3,
                     ),
                     AppSpacing.v24,
-                    InstituteTextField(
+                    Obx(() => AppInputField(
                       label: AppStrings.instBatchFeeLabelAlt,
                       controller: controller.batchFeeController,
                       hint: AppStrings.instBatchFeeHint,
                       keyboardType: TextInputType.number,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    ),
+                      errorText: controller.triedToSave.value ? controller.feeError.value : null,
+                    )),
                     AppSpacing.v32,
                     _buildSectionHeader(
                       Icons.access_time_filled_rounded,
@@ -70,7 +73,24 @@ class AddEditBatchScreen extends GetView<BatchController> {
                     _buildScheduleCard(context),
                     AppSpacing.v24,
                     const InstituteLabel(AppStrings.instActiveDaysLabel),
-                    AppSpacing.v16,
+                    AppSpacing.v4,
+                    Obx(() {
+                      if (controller.triedToSave.value && controller.daysError.value != null) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 8.0),
+                          child: Text(
+                            controller.daysError.value!,
+                            style: AppTextStyles.manrope(
+                              fontSize: 12,
+                              color: Colors.redAccent,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        );
+                      }
+                      return const SizedBox.shrink();
+                    }),
+                    AppSpacing.v12,
                     _buildDaysSelection(),
                     AppSpacing.v32,
                     _buildSaveButton(context),

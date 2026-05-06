@@ -22,3 +22,5 @@ enum UpdateCategory {
 
   String toJson() => name;
 }
+
+enum AppInputFieldVariant { standard, profile }

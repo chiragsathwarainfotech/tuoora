@@ -1,10 +1,11 @@
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
-import 'package:fee_easy/core/enums/update_enums.dart';
+import 'package:fee_easy/core/enums/app_enums.dart';
 import 'package:fee_easy/data/models/batch_model.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/core/widgets/app_button.dart';
+import 'package:fee_easy/core/widgets/app_input_field.dart';
 import 'package:fee_easy/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:fee_easy/presentation/institute/controllers/updates_controller.dart';
@@ -42,18 +43,32 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                         AppSpacing.v32,
                         _buildTargetAudienceCard(controller),
                         AppSpacing.v32,
-                        _buildInputField(
-                          'Topic',
-                          'e.g., Q3 Fee Installment Reminder',
-                          controller.subjectController,
-                        ),
+                        Obx(() => AppInputField(
+                          label: 'Topic',
+                          hint: 'e.g., Q3 Fee Installment Reminder',
+                          controller: controller.subjectController,
+                          labelSpacing: 12.0,
+                          errorText: controller.triedToSave.value ? controller.subjectError.value : null,
+                          textStyle: AppTextStyles.manrope(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.textPrimary,
+                          ),
+                        )),
                         AppSpacing.v32,
-                        _buildInputField(
-                          'Message Content',
-                          'Write your message here...',
-                          controller.messageController,
+                        Obx(() => AppInputField(
+                          label: 'Message Content',
+                          hint: 'Write your message here...',
+                          controller: controller.messageController,
                           maxLines: 6,
-                        ),
+                          labelSpacing: 12.0,
+                          errorText: controller.triedToSave.value ? controller.messageError.value : null,
+                          textStyle: AppTextStyles.manrope(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.textPrimary,
+                          ),
+                        )),
                         AppSpacing.v32,
                         _buildAttachmentSection(controller),
                         AppSpacing.v32,
@@ -75,9 +90,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
           if (controller.isCreating.value) {
             return Container(
               color: Colors.black.withValues(alpha: 0.3),
-              child: const Center(
-                child: CommonLoading(),
-              ),
+              child: const Center(child: CommonLoading()),
             );
           }
           return const SizedBox.shrink();
@@ -325,51 +338,6 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
           }),
         ],
       ),
-    );
-  }
-
-  Widget _buildInputField(
-    String label,
-    String hint,
-    TextEditingController textController, {
-    int maxLines = 1,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: AppTextStyles.manrope(
-            fontSize: 14,
-            fontWeight: FontWeight.w800,
-            color: AppColors.brandAppBarColor,
-          ),
-        ),
-        AppSpacing.v12,
-        TextField(
-          controller: textController,
-          maxLines: maxLines,
-          style: AppTextStyles.manrope(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: AppColors.textPrimary,
-          ),
-          decoration: InputDecoration(
-            hintText: hint,
-            hintStyle: AppTextStyles.lexend(
-              fontSize: 14,
-              color: AppColors.blueSapphire,
-            ),
-            filled: true,
-            fillColor: AppColors.paleSilver,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide.none,
-            ),
-            contentPadding: AppSpacing.all16,
-          ),
-        ),
-      ],
     );
   }
 

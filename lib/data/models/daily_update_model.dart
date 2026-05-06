@@ -1,4 +1,4 @@
-import 'package:fee_easy/core/enums/update_enums.dart';
+import 'package:fee_easy/core/enums/app_enums.dart';
 import 'package:fee_easy/data/models/student_model.dart';
 
 class DailyUpdate {

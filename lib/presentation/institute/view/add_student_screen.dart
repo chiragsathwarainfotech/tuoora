@@ -6,8 +6,10 @@ import 'package:fee_easy/core/widgets/common_loading.dart';
 import 'package:fee_easy/presentation/institute/controllers/student_controller.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/core/widgets/app_button.dart';
+import 'package:fee_easy/core/widgets/app_input_field.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class AddEditStudentScreen extends GetView<InstituteStudentController> {
@@ -203,116 +205,65 @@ class AddEditStudentScreen extends GetView<InstituteStudentController> {
             ],
           ),
           AppSpacing.v32,
-          _buildInputField(
+          Obx(() => AppInputField(
             label: AppStrings.instStudentNameLabel,
             hint: AppStrings.instNameHint,
             icon: Icons.person,
             controller: controller.nameController,
-          ),
+            errorText: controller.triedToSave.value ? controller.nameError.value : null,
+          )),
           AppSpacing.v20,
-          _buildInputField(
+          Obx(() => AppInputField(
             label: AppStrings.instStudentEmailLabel,
             hint: 'student@example.com',
             icon: Icons.email_rounded,
             controller: controller.emailController,
             keyboardType: TextInputType.emailAddress,
             enabled: controller.editingStudentId.value == null,
-          ),
+            errorText: controller.triedToSave.value ? controller.emailError.value : null,
+          )),
           AppSpacing.v20,
-          _buildInputField(
+          Obx(() => AppInputField(
             label: AppStrings.instStudentDobLabel,
             hint: 'YYYY-MM-DD',
             icon: Icons.calendar_today_rounded,
             controller: controller.dobController,
             readOnly: true,
             onTap: () => controller.selectDOB(context),
-          ),
+            errorText: controller.triedToSave.value ? controller.dobError.value : null,
+          )),
           AppSpacing.v20,
-          _buildInputField(
+          Obx(() => AppInputField(
             label: AppStrings.instGuardianNameLabel,
             hint: AppStrings.instGuardianHint,
             icon: Icons.group,
             controller: controller.parentNameController,
-          ),
+            errorText: controller.triedToSave.value ? controller.parentNameError.value : null,
+          )),
           AppSpacing.v20,
-          _buildInputField(
+          Obx(() => AppInputField(
             label: AppStrings.instPhoneLabel,
             hint: AppStrings.instPhoneHint,
             icon: Icons.phone,
             controller: controller.phoneController,
             keyboardType: TextInputType.phone,
-          ),
+            maxLength: 10,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            errorText: controller.triedToSave.value ? controller.phoneError.value : null,
+          )),
           AppSpacing.v20,
-          _buildInputField(
+          Obx(() => AppInputField(
             label: AppStrings.instGradeLabel,
             hint: AppStrings.instGradeHint,
             icon: Icons.school,
             controller: controller.standardController,
-          ),
+            errorText: controller.triedToSave.value ? controller.standardError.value : null,
+          )),
         ],
       ),
     );
   }
 
-  Widget _buildInputField({
-    required String label,
-    required String hint,
-    required IconData icon,
-    TextEditingController? controller,
-    TextInputType keyboardType = TextInputType.text,
-    bool readOnly = false,
-    bool enabled = true,
-    VoidCallback? onTap,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: AppTextStyles.manrope(
-            fontSize: 14,
-            fontWeight: FontWeight.w800,
-            color: AppColors.brandAppBarColor,
-          ),
-        ),
-        AppSpacing.v8,
-        Container(
-          decoration: BoxDecoration(
-            color: enabled
-                ? AppColors.paleSilver
-                : AppColors.paleSilver.withValues(alpha: 0.5),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: TextField(
-            controller: controller,
-            readOnly: readOnly,
-            enabled: enabled,
-            onTap: onTap,
-            style: AppTextStyles.lexend(
-              fontSize: 14,
-              color: AppColors.textPrimary,
-              fontWeight: FontWeight.w500,
-            ),
-            keyboardType: keyboardType,
-            decoration: InputDecoration(
-              hintText: hint,
-              hintStyle: AppTextStyles.lexend(
-                fontSize: 14,
-                color: AppColors.blueSapphire,
-              ),
-              prefixIcon: Icon(
-                icon,
-                color: AppColors.blueSapphire,
-                size: AppSpacing.s20,
-              ),
-              border: InputBorder.none,
-              contentPadding: AppSpacing.all16,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
 
   Widget _buildActionButtons() {
     return Column(
@@ -322,7 +273,6 @@ class AddEditStudentScreen extends GetView<InstituteStudentController> {
             label: controller.editingStudentId.value != null
                 ? 'Update Student'
                 : AppStrings.instConfirmBtn,
-            isDisabled: !controller.isFormValid.value,
             onPressed: () => controller.saveStudent(
               isEdit: controller.editingStudentId.value != null,
             ),

@@ -1,9 +1,11 @@
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
+import 'package:fee_easy/core/enums/app_enums.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/core/widgets/app_button.dart';
+import 'package:fee_easy/core/widgets/app_input_field.dart';
 import 'package:fee_easy/core/widgets/app_info_box.dart';
 import 'package:fee_easy/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
@@ -175,134 +177,81 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
             ],
           ),
           AppSpacing.v24,
-          _buildInputField(
+          AppInputField(
             label: AppStrings.instInstituteNameLabel,
-            textController: controller.nameController,
+            controller: controller.nameController,
             icon: Icons.school_outlined,
+            variant: AppInputFieldVariant.profile,
           ),
           AppSpacing.v20,
-          _buildInputField(
+          AppInputField(
             label: AppStrings.instOwnerNameLabel,
-            textController: controller.ownerController,
+            controller: controller.ownerController,
             icon: Icons.person_outline_rounded,
+            variant: AppInputFieldVariant.profile,
           ),
           AppSpacing.v20,
-          _buildInputField(
+          AppInputField(
             label: AppStrings.instContactEmailLabel,
-            textController: controller.emailController,
+            controller: controller.emailController,
             icon: Icons.alternate_email_rounded,
             keyboardType: TextInputType.emailAddress,
             enabled: false,
+            variant: AppInputFieldVariant.profile,
           ),
           AppSpacing.v20,
-          _buildInputField(
+          AppInputField(
             label: AppStrings.instPhoneNumberLabel,
-            textController: controller.phoneController,
+            controller: controller.phoneController,
             icon: Icons.phone_iphone_rounded,
             keyboardType: TextInputType.number,
+            variant: AppInputFieldVariant.profile,
           ),
           AppSpacing.v20,
-          _buildInputField(
+          AppInputField(
             label: 'Address Line 1',
-            textController: controller.addressLine1Controller,
+            controller: controller.addressLine1Controller,
             icon: Icons.location_on_outlined,
+            variant: AppInputFieldVariant.profile,
           ),
           AppSpacing.v20,
-          _buildInputField(
+          AppInputField(
             label: 'Address Line 2',
-            textController: controller.addressLine2Controller,
+            controller: controller.addressLine2Controller,
             icon: Icons.location_on_outlined,
+            variant: AppInputFieldVariant.profile,
           ),
           AppSpacing.v20,
-          _buildInputField(
+          AppInputField(
             label: 'City',
-            textController: controller.cityController,
+            controller: controller.cityController,
             icon: Icons.location_city_rounded,
+            variant: AppInputFieldVariant.profile,
           ),
           AppSpacing.v20,
-          _buildInputField(
+          AppInputField(
             label: 'State',
-            textController: controller.stateController,
+            controller: controller.stateController,
             icon: Icons.map_rounded,
+            variant: AppInputFieldVariant.profile,
           ),
           AppSpacing.v20,
-          _buildInputField(
+          AppInputField(
             label: 'Country',
-            textController: controller.countryController,
+            controller: controller.countryController,
             icon: Icons.public_rounded,
+            variant: AppInputFieldVariant.profile,
           ),
           AppSpacing.v20,
-          _buildInputField(
+          AppInputField(
             label: 'Pincode',
-            textController: controller.pincodeController,
+            controller: controller.pincodeController,
             icon: Icons.pin_drop_rounded,
             keyboardType: TextInputType.number,
-            isLast: true,
+            variant: AppInputFieldVariant.profile,
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildInputField({
-    required String label,
-    required TextEditingController textController,
-    required IconData icon,
-    TextInputType keyboardType = TextInputType.text,
-    bool isLast = false,
-    bool enabled = true,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: AppTextStyles.manrope(
-            fontSize: 12,
-            fontWeight: FontWeight.w800,
-            color: AppColors.textMuted,
-            letterSpacing: 0.5,
-          ),
-        ),
-        AppSpacing.v8,
-        Container(
-          padding: AppSpacing.x16,
-          decoration: BoxDecoration(
-            color: enabled
-                ? AppColors.inputBg
-                : AppColors.inputBg.withValues(alpha: 0.5),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: AppColors.borderGrey.withValues(alpha: 0.5),
-            ),
-          ),
-          child: Row(
-            children: [
-              Icon(icon, color: AppColors.primaryBrand, size: 20),
-              AppSpacing.h16,
-              Expanded(
-                child: TextField(
-                  controller: textController,
-                  enabled: enabled,
-                  keyboardType: keyboardType,
-                  style: AppTextStyles.manrope(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.textPrimary,
-                  ),
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    isDense: true,
-                    contentPadding: EdgeInsets.symmetric(
-                      vertical: AppSpacing.s18,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
     );
   }
 

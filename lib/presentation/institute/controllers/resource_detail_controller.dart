@@ -23,21 +23,15 @@ class ResourceDetailController extends GetxController {
   ChewieController? chewieController;
   final isVideoInitialized = false.obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
   Future<void> initializeVideo(String url) async {
     try {
       videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(url));
-      await videoPlayerController!.initialize();
-      
+      await videoPlayerController?.initialize();
       chewieController = ChewieController(
         videoPlayerController: videoPlayerController!,
         autoPlay: false,
         looping: false,
-        aspectRatio: videoPlayerController!.value.aspectRatio,
+        aspectRatio: videoPlayerController?.value.aspectRatio,
         allowFullScreen: true,
         allowPlaybackSpeedChanging: true,
         placeholder: const CommonLoading(color: AppColors.white),
@@ -50,7 +44,6 @@ class ResourceDetailController extends GetxController {
           );
         },
       );
-      
       isVideoInitialized.value = true;
     } catch (e) {
       print('Video Initialization Error: $e');

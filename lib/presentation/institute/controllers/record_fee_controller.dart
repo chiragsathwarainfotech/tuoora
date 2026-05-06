@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'institute_controller.dart';
+import 'package:fee_easy/core/widgets/app_snackbar.dart';
 
 class RecordFeeController extends GetxController {
   final InstituteController instituteController =
@@ -22,6 +23,33 @@ class RecordFeeController extends GetxController {
   final paymentMethod = 'Cash'.obs;
   final selectedRecordDate = DateTime.now().obs;
   final isLoading = false.obs;
+
+  final triedToSave = false.obs;
+  final studentError = RxnString();
+  final amountError = RxnString();
+
+  bool validateForm() {
+    bool isValid = true;
+
+    if (selectedStudent.value == null) {
+      studentError.value = 'Please select a student';
+      isValid = false;
+    } else {
+      studentError.value = null;
+    }
+
+    if (amount.value.trim().isEmpty) {
+      amountError.value = 'Please enter an amount';
+      isValid = false;
+    } else if (double.tryParse(amount.value.trim()) == null) {
+      amountError.value = 'Please enter a valid amount';
+      isValid = false;
+    } else {
+      amountError.value = null;
+    }
+
+    return isValid;
+  }
 
   @override
   void onInit() {
@@ -62,6 +90,7 @@ class RecordFeeController extends GetxController {
     selectedStudent.value = student;
     isStudentSelected.value = true;
     searchQuery.value = '';
+    studentError.value = null;
   }
 
   void changeStudent() {
@@ -99,15 +128,8 @@ class RecordFeeController extends GetxController {
   }
 
   Future<void> saveRecord() async {
-    if (selectedStudent.value == null) {
-      Get.snackbar('Error', 'Please select a student');
-      return;
-    }
-
-    if (amount.value.isEmpty || double.tryParse(amount.value) == null) {
-      Get.snackbar('Error', 'Please enter a valid amount');
-      return;
-    }
+    triedToSave.value = true;
+    if (!validateForm()) return;
 
     try {
       isLoading.value = true;
@@ -123,19 +145,9 @@ class RecordFeeController extends GetxController {
       await instituteController.refreshFees();
 
       Get.back();
-      Get.snackbar(
-        'Success',
-        'Fee record created and collected successfully',
-        backgroundColor: AppColors.darkGreen,
-        colorText: AppColors.white,
-      );
+      AppSnackbar.success('Fee record created and collected successfully');
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        e.toString().replaceAll('Exception: ', ''),
-        backgroundColor: Colors.redAccent,
-        colorText: AppColors.white,
-      );
+      AppSnackbar.error(e.toString().replaceAll('Exception: ', ''));
     } finally {
       isLoading.value = false;
     }

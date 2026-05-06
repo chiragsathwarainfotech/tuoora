@@ -11,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:fee_easy/data/models/student_model.dart';
 import 'package:fee_easy/presentation/institute/controllers/batch_controller.dart';
 import 'package:fee_easy/presentation/institute/models/batch_model.dart';
+import 'package:fee_easy/core/widgets/app_snackbar.dart';
 
 class InstituteStudentController extends GetxController {
   final StudentRepositoryImpl _studentRepository =
@@ -20,6 +21,7 @@ class InstituteStudentController extends GetxController {
   final selectedImagePath = Rxn<String>();
   final isLoading = false.obs;
   final isFormValid = false.obs;
+  final triedToSave = false.obs;
   final currentStudent = Rxn<Student>();
 
   final nameController = TextEditingController();
@@ -29,6 +31,13 @@ class InstituteStudentController extends GetxController {
   final dobController = TextEditingController();
   final addressController = TextEditingController();
   final standardController = TextEditingController();
+
+  final nameError = RxnString();
+  final parentNameError = RxnString();
+  final phoneError = RxnString();
+  final emailError = RxnString();
+  final dobError = RxnString();
+  final standardError = RxnString();
 
   final editingStudentId = Rxn<dynamic>();
   final selectedBatchId = RxnString();
@@ -104,6 +113,15 @@ class InstituteStudentController extends GetxController {
     standardController.clear();
     selectedImagePath.value = null;
     selectedBatchId.value = null;
+
+    nameError.value = null;
+    parentNameError.value = null;
+    phoneError.value = null;
+    emailError.value = null;
+    dobError.value = null;
+    standardError.value = null;
+    triedToSave.value = false;
+
     validateForm();
   }
 
@@ -120,13 +138,32 @@ class InstituteStudentController extends GetxController {
   }
 
   void validateForm() {
+    nameError.value = ValidationUtils.validateRequired(
+      nameController.text,
+      'Name',
+    );
+    parentNameError.value = ValidationUtils.validateRequired(
+      parentNameController.text,
+      'Guardian Name',
+    );
+    phoneError.value = ValidationUtils.validatePhone(phoneController.text);
+    emailError.value = ValidationUtils.validateEmail(emailController.text);
+    dobError.value = ValidationUtils.validateRequired(
+      dobController.text,
+      'Date of Birth',
+    );
+    standardError.value = ValidationUtils.validateRequired(
+      standardController.text,
+      'Grade/Standard',
+    );
+
     bool isValid =
-        nameController.text.isNotEmpty &&
-        parentNameController.text.isNotEmpty &&
-        phoneController.text.length >= 10 &&
-        ValidationUtils.validateEmail(emailController.text) == null &&
-        dobController.text.isNotEmpty &&
-        standardController.text.isNotEmpty;
+        nameError.value == null &&
+        parentNameError.value == null &&
+        phoneError.value == null &&
+        emailError.value == null &&
+        dobError.value == null &&
+        standardError.value == null;
 
     isFormValid.value = isValid;
   }
@@ -205,7 +242,7 @@ class InstituteStudentController extends GetxController {
         selectedImagePath.value = image.path;
       }
     } catch (e) {
-      Get.snackbar('Error', 'Could not pick image: $e');
+      AppSnackbar.error('Could not pick image: $e');
     }
   }
 
@@ -265,6 +302,9 @@ class InstituteStudentController extends GetxController {
   }
 
   Future<void> saveStudent({bool isEdit = false}) async {
+    triedToSave.value = true;
+    validateForm();
+
     if (!isFormValid.value) return;
 
     try {
@@ -303,19 +343,14 @@ class InstituteStudentController extends GetxController {
       }
 
       Future.delayed(const Duration(milliseconds: 300), () {
-        Get.snackbar(
-          'Success',
+        AppSnackbar.success(
           isEdit
               ? 'Student updated successfully'
               : 'Student added successfully',
-          backgroundColor: Colors.green.withValues(alpha: 0.7),
-          colorText: AppColors.white,
-          snackPosition: SnackPosition.BOTTOM,
-          margin: AppSpacing.all16,
         );
       });
     } catch (e) {
-      Get.snackbar('Error', 'Failed to save student: $e');
+      AppSnackbar.error('Failed to save student: $e');
     } finally {
       isLoading.value = false;
     }
@@ -329,20 +364,17 @@ class InstituteStudentController extends GetxController {
         editingStudentId.value!,
       );
       if (success) {
-        // Locally remove to show immediate update
         final instController = Get.find<InstituteController>();
         instController.students.removeWhere(
           (s) => s.id == editingStudentId.value,
         );
         instController.students.refresh();
 
-        Get.back(); // Return to registry screen
-
-        // Refresh from server to ensure sync
+        Get.back();
         instController.fetchStudents(reset: true);
       }
     } catch (e) {
-      Get.snackbar('Error', 'Delete failed: $e');
+      AppSnackbar.error('Delete failed: $e');
     } finally {
       isLoading.value = false;
     }

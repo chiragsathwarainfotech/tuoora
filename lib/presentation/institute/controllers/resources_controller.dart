@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:fee_easy/core/widgets/common_loading.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:fee_easy/core/widgets/app_snackbar.dart';
 
 class ResourcesController extends GetxController {
   final BatchModel batch;
@@ -29,7 +30,7 @@ class ResourcesController extends GetxController {
       final response = await _repository.getResources(int.parse(batch.id));
       resources.assignAll(response);
     } catch (e) {
-      Get.snackbar('Error', 'Failed to fetch resources: ${e.toString()}');
+      AppSnackbar.error('Failed to fetch resources: ${e.toString()}');
     } finally {
       isLoading.value = false;
     }
@@ -41,6 +42,30 @@ class ResourcesController extends GetxController {
   final selectedFileName = ''.obs;
   final selectedFilePath = ''.obs;
   final selectedType = ResourceType.document.obs;
+
+  final triedToSave = false.obs;
+  final subjectError = RxnString();
+  final fileError = RxnString();
+
+  bool validateForm() {
+    bool isValid = true;
+
+    if (subjectController.text.trim().isEmpty) {
+      subjectError.value = 'Title is required';
+      isValid = false;
+    } else {
+      subjectError.value = null;
+    }
+
+    if (selectedFilePath.isEmpty) {
+      fileError.value = 'Please select a file';
+      isValid = false;
+    } else {
+      fileError.value = null;
+    }
+
+    return isValid;
+  }
 
   Future<void> pickFile() async {
     try {
@@ -54,11 +79,9 @@ class ResourcesController extends GetxController {
         if (isVideo) {
           final double sizeInMb = file.size / (1024 * 1024);
           if (sizeInMb > 50) {
-            Get.snackbar(
-              'File Too Large',
+            AppSnackbar.error(
               'Video files must be under 50 MB. Selected file is ${sizeInMb.toStringAsFixed(2)} MB.',
-              backgroundColor: Colors.redAccent,
-              colorText: AppColors.white,
+              title: 'File Too Large',
             );
             return;
           }
@@ -71,17 +94,16 @@ class ResourcesController extends GetxController {
 
         selectedFilePath.value = file.path!;
         selectedFileName.value = file.name;
+        fileError.value = null;
       }
     } catch (e) {
-      Get.snackbar('Error', 'Failed to pick file: ${e.toString()}');
+      AppSnackbar.error('Failed to pick file: ${e.toString()}');
     }
   }
 
   Future<void> uploadResource() async {
-    if (subjectController.text.isEmpty || selectedFilePath.isEmpty) {
-      Get.snackbar('Error', 'Please provide a title and select a file');
-      return;
-    }
+    triedToSave.value = true;
+    if (!validateForm()) return;
 
     try {
       CommonLoading.show();
@@ -109,12 +131,11 @@ class ResourcesController extends GetxController {
       // Close creation dialog
       Get.back();
 
-      Get.snackbar('Success', 'Resource uploaded successfully');
+      AppSnackbar.success('Resource uploaded successfully');
     } catch (e) {
       // Close loader if open
       CommonLoading.dismiss();
-
-      Get.snackbar('Error', 'Failed to upload resource: ${e.toString()}');
+      AppSnackbar.error('Failed to upload resource: ${e.toString()}');
     }
   }
 
@@ -123,6 +144,9 @@ class ResourcesController extends GetxController {
     descriptionController.clear();
     selectedFileName.value = '';
     selectedFilePath.value = '';
+    triedToSave.value = false;
+    subjectError.value = null;
+    fileError.value = null;
   }
 
   @override

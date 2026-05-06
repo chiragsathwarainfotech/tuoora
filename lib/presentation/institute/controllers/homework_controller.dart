@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:fee_easy/core/widgets/common_loading.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:fee_easy/core/widgets/app_snackbar.dart';
 
 class HomeworkController extends GetxController {
   final BatchModel batch;
@@ -30,7 +31,7 @@ class HomeworkController extends GetxController {
       final response = await _repository.getHomeworks(int.parse(batch.id));
       homeworks.assignAll(response);
     } catch (e) {
-      Get.snackbar('Error', 'Failed to fetch homeworks: ${e.toString()}');
+      AppSnackbar.error('Failed to fetch homeworks: ${e.toString()}');
     } finally {
       isLoading.value = false;
     }
@@ -55,6 +56,30 @@ class HomeworkController extends GetxController {
   final dueDate = Rxn<DateTime>();
   final selectedAttachment = Rxn<String>();
 
+  final triedToSave = false.obs;
+  final titleError = RxnString();
+  final dateError = RxnString();
+
+  bool validateForm() {
+    bool isValid = true;
+
+    if (titleController.text.trim().isEmpty) {
+      titleError.value = 'Title is required';
+      isValid = false;
+    } else {
+      titleError.value = null;
+    }
+
+    if (dueDate.value == null) {
+      dateError.value = 'Due date is required';
+      isValid = false;
+    } else {
+      dateError.value = null;
+    }
+
+    return isValid;
+  }
+
   Future<void> pickAttachment() async {
     try {
       final result = await FilePicker.pickFiles(
@@ -66,7 +91,7 @@ class HomeworkController extends GetxController {
         selectedAttachment.value = result.files.single.path;
       }
     } catch (e) {
-      Get.snackbar('Error', 'Failed to pick file: $e');
+      AppSnackbar.error('Failed to pick file: $e');
     }
   }
 
@@ -75,14 +100,8 @@ class HomeworkController extends GetxController {
   }
 
   Future<void> createHomework() async {
-    if (titleController.text.trim().isEmpty) {
-      Get.snackbar('Error', 'Please enter a title');
-      return;
-    }
-    if (dueDate.value == null) {
-      Get.snackbar('Error', 'Please select a due date');
-      return;
-    }
+    triedToSave.value = true;
+    if (!validateForm()) return;
 
     try {
       // Show full screen non-dismissible loader
@@ -109,12 +128,12 @@ class HomeworkController extends GetxController {
       // Close creation dialog
       Get.back();
       
-      Get.snackbar('Success', 'Homework created successfully');
+      AppSnackbar.success('Homework created successfully');
     } catch (e) {
       // Close loader if open
       CommonLoading.dismiss();
       
-      Get.snackbar('Error', 'Failed to create homework: ${e.toString()}');
+      AppSnackbar.error('Failed to create homework: ${e.toString()}');
     }
   }
 
@@ -123,6 +142,9 @@ class HomeworkController extends GetxController {
     descriptionController.clear();
     dueDate.value = null;
     selectedAttachment.value = null;
+    triedToSave.value = false;
+    titleError.value = null;
+    dateError.value = null;
   }
 
   @override

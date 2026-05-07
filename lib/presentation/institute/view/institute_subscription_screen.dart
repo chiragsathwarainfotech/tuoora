@@ -137,7 +137,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text: '\$4,990',
+                      text: '₹4,990',
                       style: AppTextStyles.manrope(
                         fontSize: AppSpacing.s24,
                         fontWeight: FontWeight.w800,
@@ -307,7 +307,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
             text: TextSpan(
               children: [
                 TextSpan(
-                  text: '\$$price',
+                  text: '₹$price',
                   style: AppTextStyles.manrope(
                     fontSize: 32,
                     fontWeight: FontWeight.w800,
@@ -546,7 +546,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                '\$$amount',
+                '₹$amount',
                 style: AppTextStyles.manrope(
                   fontSize: AppSpacing.s14,
                   fontWeight: FontWeight.w800,

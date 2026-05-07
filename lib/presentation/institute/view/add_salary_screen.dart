@@ -71,7 +71,7 @@ class AddSalaryScreen extends GetView<StaffController> {
                       label: 'SALARY AMOUNT',
                       controller: controller.salaryAmountController,
                       hint: '0.00',
-                      icon: Icons.attach_money_rounded,
+                      icon: Icons.currency_rupee_sharp,
                       keyboardType: const TextInputType.numberWithOptions(
                         decimal: true,
                       ),
@@ -349,7 +349,7 @@ class AddSalaryScreen extends GetView<StaffController> {
                     ),
                   ),
                   Text(
-                    '\$$amount',
+                    '₹$amount',
                     style: AppTextStyles.manrope(
                       fontSize: 22,
                       fontWeight: FontWeight.w800,
@@ -432,7 +432,7 @@ class AddSalaryScreen extends GetView<StaffController> {
         Get.back();
         Get.snackbar(
           'Payment Recorded',
-          'Salary payout of \$$amountStr for $staffName saved successfully.',
+          'Salary payout of ₹$amountStr for $staffName saved successfully.',
           backgroundColor: AppColors.successGreen.withValues(alpha: 0.1),
           colorText: AppColors.textPrimary,
           icon: const Icon(

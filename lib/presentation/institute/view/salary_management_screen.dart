@@ -116,7 +116,7 @@ class SalaryManagementScreen extends GetView<StaffController> {
                 ),
                 AppSpacing.v8,
                 Text(
-                  '\$4,850.00',
+                  '₹4,850.00',
                   style: AppTextStyles.manrope(
                     fontSize: 42,
                     fontWeight: FontWeight.w800,
@@ -186,18 +186,18 @@ class SalaryManagementScreen extends GetView<StaffController> {
           _buildPayoutItem(
             'Sarah Jenkins',
             'Oct 24, 2023 • Online',
-            '\$1,200.00',
+            '₹1,200.00',
           ),
           const Divider(height: 1, color: AppColors.divider),
-          _buildPayoutItem('Michael Chen', 'Oct 22, 2023 • Cash', '\$850.00'),
+          _buildPayoutItem('Michael Chen', 'Oct 22, 2023 • Cash', '₹850.00'),
           const Divider(height: 1, color: AppColors.divider),
           _buildPayoutItem(
             'Elena Rodriguez',
             'Oct 20, 2023 • Online',
-            '\$1,500.00',
+            '₹1,500.00',
           ),
           const Divider(height: 1, color: AppColors.divider),
-          _buildPayoutItem('David Kim', 'Oct 18, 2023 • Online', '\$1,300.00'),
+          _buildPayoutItem('David Kim', 'Oct 18, 2023 • Online', '₹1,300.00'),
         ],
       ),
     );

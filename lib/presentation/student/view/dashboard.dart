@@ -273,7 +273,7 @@ class StudentDashboard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        '\$ ',
+                        '₹ ',
                         style: AppTextStyles.manrope(
                           fontSize: 18,
                           fontWeight: FontWeight.w700,

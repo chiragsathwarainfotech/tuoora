@@ -156,7 +156,7 @@ class ReportsScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                '\$4,250',
+                '₹4,250',
                 style: AppTextStyles.manrope(
                   fontSize: 28,
                   fontWeight: FontWeight.w800,
@@ -167,7 +167,7 @@ class ReportsScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: AppSpacing.s4),
                 child: Text(
-                  '/ \$6,000 total',
+                  '/ ₹6,000 total',
                   style: AppTextStyles.lexend(
                     fontSize: 12,
                     fontWeight: FontWeight.w400,
@@ -203,7 +203,7 @@ class ReportsScreen extends StatelessWidget {
             children: [
               _buildInfoBox('Next Due Date', 'Oct 15, 2024', false),
               AppSpacing.h16,
-              _buildInfoBox('Balance Outstanding', '\$1,750.00', true),
+              _buildInfoBox('Balance Outstanding', '₹1,750.00', true),
             ],
           ),
         ],

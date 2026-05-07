@@ -88,7 +88,7 @@ class BillingHistoryScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                '\$$amount',
+                '₹$amount',
                 style: AppTextStyles.manrope(
                   fontSize: AppSpacing.s16,
                   fontWeight: FontWeight.w800,

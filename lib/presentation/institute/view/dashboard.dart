@@ -164,7 +164,11 @@ class InstituteDashboard extends StatelessWidget {
         Icons.note_alt_rounded,
         () => Get.toNamed(AppRoutes.instituteNotes),
       ),
-      ModuleItem('Expenses', Icons.payments_rounded, () {}),
+      ModuleItem(
+        'Expenses',
+        Icons.payments_rounded,
+        () => Get.toNamed(AppRoutes.instituteExpenses),
+      ),
       ModuleItem(
         'Updates',
         Icons.campaign_rounded,

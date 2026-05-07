@@ -101,31 +101,31 @@ final List<Map<String, dynamic>> _mockSalaries = [
   {
     'month': 'October 2023',
     'date': 'Paid on Oct 28, 2023',
-    'amount': '\$3,500.00',
+    'amount': '₹3,500.00',
     'isEven': true,
   },
   {
     'month': 'September 2023',
     'date': 'Paid on Sep 28, 2023',
-    'amount': '\$3,500.00',
+    'amount': '₹3,500.00',
     'isEven': true,
   },
   {
     'month': 'August 2023',
     'date': 'Paid on Aug 27, 2023',
-    'amount': '\$3,500.00',
+    'amount': '₹3,500.00',
     'isEven': false,
   },
   {
     'month': 'July 2023',
     'date': 'Paid on Jul 28, 2023',
-    'amount': '\$3,500.00',
+    'amount': '₹3,500.00',
     'isEven': true,
   },
   {
     'month': 'June 2023',
     'date': 'Paid on Jun 28, 2023',
-    'amount': '\$3,200.00',
+    'amount': '₹3,200.00',
     'isEven': false,
   },
 ];

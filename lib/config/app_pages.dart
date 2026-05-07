@@ -71,6 +71,9 @@ import 'package:fee_easy/presentation/institute/view/salary_history_screen.dart'
 import 'package:fee_easy/presentation/institute/view/staff_attendance_screen.dart';
 import 'package:fee_easy/presentation/institute/view/log_attendance_screen.dart';
 import 'package:fee_easy/presentation/institute/view/add_salary_screen.dart';
+import 'package:fee_easy/presentation/institute/view/expenses_screen.dart';
+import 'package:fee_easy/presentation/institute/view/add_expense_screen.dart';
+import 'package:fee_easy/presentation/institute/view/expense_analysis_screen.dart';
 import 'package:get/get.dart';
 
 class AppPages {
@@ -440,6 +443,21 @@ class AppPages {
     GetPage(
       name: AppRoutes.instituteAddSalary,
       page: () => const AddSalaryScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteExpenses,
+      page: () => const ExpensesScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteAddExpense,
+      page: () => const AddExpenseScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteExpenseAnalysis,
+      page: () => const ExpenseAnalysisScreen(),
       binding: InstituteBinding(),
     ),
   ];

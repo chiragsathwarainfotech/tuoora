@@ -278,7 +278,7 @@ class ParentDashboard extends StatelessWidget {
                   ),
                   AppSpacing.v32,
                   Text(
-                    '\$1,240.00',
+                    '₹1,240.00',
                     style: AppTextStyles.manrope(
                       fontSize: AppSpacing.s32,
                       fontWeight: FontWeight.w800,

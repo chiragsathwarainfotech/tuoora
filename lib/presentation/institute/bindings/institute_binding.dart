@@ -25,6 +25,7 @@ import 'package:fee_easy/presentation/institute/controllers/updates_controller.d
 import 'package:fee_easy/presentation/institute/controllers/whatsapp_controller.dart';
 import 'package:fee_easy/presentation/institute/controllers/chat_controller.dart';
 import 'package:fee_easy/presentation/institute/controllers/staff_controller.dart';
+import 'package:fee_easy/presentation/institute/controllers/expense_controller.dart';
 import 'package:fee_easy/core/api/api_client.dart';
 import 'package:fee_easy/core/services/download_service.dart';
 import 'package:get/get.dart';
@@ -102,6 +103,7 @@ class InstituteBinding extends Bindings {
       () => StaffController(Get.find<StaffRepositoryImpl>()),
       fenix: true,
     );
+    Get.lazyPut<ExpenseController>(() => ExpenseController(), fenix: true);
 
     Get.put<DownloadService>(DownloadService(), permanent: true);
   }

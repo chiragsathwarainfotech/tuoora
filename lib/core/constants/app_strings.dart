@@ -134,11 +134,11 @@ class AppStrings {
   static const String instFeesTitle = 'Financial Ledger';
   static const String instTotalCollected = 'TOTAL COLLECTED';
   static const String instCurrentMonthCollected = 'CURRENT MONTH COLLECTION';
-  static const String instTotalCollectedAmount = '\$124,500';
+  static const String instTotalCollectedAmount = '₹124,500';
   static const String instCollectedTrend = '12% vs last month';
   static const String instTotalPending = 'TOTAL PENDING';
   static const String instCurrentMonthPending = 'CURRENT MONTH PENDING';
-  static const String instTotalPendingAmount = '\$18,240';
+  static const String instTotalPendingAmount = '₹18,240';
   static const String instOutstandingInvoices = '42 Outstanding Invoices';
   static const String instFinancialReport = 'Financial Report';
   static const String instMonthlyBreakdown = 'Monthly breakdown PDF';

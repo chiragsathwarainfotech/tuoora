@@ -19,15 +19,15 @@ class StaffProfileScreen extends GetView<StaffController> {
         child: Column(
           children: [
             InstituteAppBar(
-              title: 'Staff Directory',
+              title: 'Staff Profile',
               actions: [
                 IconButton(
                   onPressed: () => Get.toNamed(AppRoutes.instituteAddEditStaff),
-                  icon: const Icon(Icons.edit, color: AppColors.textSecondary),
+                  icon: const Icon(Icons.edit, color: AppColors.primaryBrand),
                 ),
                 IconButton(
                   onPressed: () => _showDeleteConfirmation(),
-                  icon: const Icon(Icons.delete, color: AppColors.textSecondary),
+                  icon: const Icon(Icons.delete, color: AppColors.bohoRed),
                 ),
               ],
             ),
@@ -97,9 +97,17 @@ class StaffProfileScreen extends GetView<StaffController> {
                   ),
                 ),
                 AppSpacing.v16,
-                _buildContactItem(Icons.email, staff.email, AppColors.primaryBrand),
+                _buildContactItem(
+                  Icons.email,
+                  staff.email,
+                  AppColors.primaryBrand,
+                ),
                 AppSpacing.v8,
-                _buildContactItem(Icons.phone, staff.phone, AppColors.textSecondary),
+                _buildContactItem(
+                  Icons.phone,
+                  staff.phone,
+                  AppColors.textSecondary,
+                ),
               ],
             ),
           ),
@@ -139,11 +147,7 @@ class StaffProfileScreen extends GetView<StaffController> {
             ),
           ),
           Expanded(
-            child: _buildSimpleInfo(
-              Icons.work,
-              'EMPLOYMENT TYPE',
-              'Salary',
-            ),
+            child: _buildSimpleInfo(Icons.work, 'EMPLOYMENT TYPE', 'Salary'),
           ),
         ],
       ),
@@ -209,7 +213,12 @@ class StaffProfileScreen extends GetView<StaffController> {
     );
   }
 
-  Widget _buildLargeButton(IconData icon, String label, bool isFilled, {required VoidCallback onTap}) {
+  Widget _buildLargeButton(
+    IconData icon,
+    String label,
+    bool isFilled, {
+    required VoidCallback onTap,
+  }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -218,18 +227,21 @@ class StaffProfileScreen extends GetView<StaffController> {
           color: isFilled ? AppColors.primaryBrand : AppColors.white,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: AppColors.primaryBrand, width: 1.5),
-          boxShadow: isFilled ? [
-            BoxShadow(
-              color: AppColors.primaryBrand.withValues(alpha: 0.2),
-              blurRadius: 10, offset: const Offset(0, 4),
-            ),
-          ] : null,
+          boxShadow: isFilled
+              ? [
+                  BoxShadow(
+                    color: AppColors.primaryBrand.withValues(alpha: 0.2),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ]
+              : null,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              icon, 
+              icon,
               color: isFilled ? AppColors.white : AppColors.primaryBrand,
               size: 20,
             ),
@@ -252,7 +264,9 @@ class StaffProfileScreen extends GetView<StaffController> {
     Get.dialog(
       AlertDialog(
         title: const Text('Delete Staff'),
-        content: const Text('Are you sure you want to delete this staff member?'),
+        content: const Text(
+          'Are you sure you want to delete this staff member?',
+        ),
         actions: [
           TextButton(onPressed: () => Get.back(), child: const Text('Cancel')),
           TextButton(

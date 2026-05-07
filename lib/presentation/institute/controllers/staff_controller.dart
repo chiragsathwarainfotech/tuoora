@@ -23,11 +23,121 @@ class StaffController extends GetxController {
   // Tab index for bottom navigation
   final currentTabIndex = 0.obs;
 
-  // Reactive variables for Add/Edit Staff
+  // Add/Edit Staff Reactive State
   final selectedRole = 'Senior Designer'.obs;
   final selectedDepartment = 'Product'.obs;
   final isSalaryType = true.obs; // true for Salary, false for Hourly
+
+  // Add/Edit Staff Form State
+  final staffNameController = TextEditingController();
+  final staffEmailController = TextEditingController();
+  final staffPhoneController = TextEditingController();
+  final staffSalaryController = TextEditingController();
+  final addStaffFormKey = GlobalKey<FormState>();
+
+  void clearStaffForm() {
+    staffNameController.clear();
+    staffEmailController.clear();
+    staffPhoneController.clear();
+    staffSalaryController.clear();
+    selectedRole.value = roles.first;
+    selectedDepartment.value = departments.first;
+    isSalaryType.value = true;
+    selectedImagePath.value = null;
+    selectedStaff.value = null;
+  }
+
+  void loadStaffForEdit(Staff staff) {
+    selectedStaff.value = staff;
+    staffNameController.text = staff.name;
+    staffEmailController.text = staff.email;
+    staffPhoneController.text = staff.phone;
+    staffSalaryController.text = staff.salary.toString();
+    selectedRole.value = staff.role;
+    selectedDepartment.value = staff.department;
+    isSalaryType.value = true; // Assuming default for now
+  }
+
+  // Log Attendance State
+  final selectedLogStaff = Rxn<Staff>();
+  final selectedLogDate = DateTime.now().obs;
+  final isPresent = true.obs;
+  final logSearchQuery = ''.obs;
+  final filteredLogStaffs = <Staff>[].obs;
+  final logNotesController = TextEditingController();
+
+  void selectLogDate(DateTime date) {
+    selectedLogDate.value = date;
+  }
+
+  void toggleStatus(bool present) {
+    isPresent.value = present;
+  }
+
+  void searchLogStaff(String query) {
+    logSearchQuery.value = query;
+    if (query.isEmpty) {
+      filteredLogStaffs.assignAll(staffList);
+    } else {
+      final q = query.toLowerCase();
+      filteredLogStaffs.assignAll(
+        staffList.where((s) => s.name.toLowerCase().contains(q) || s.role.toLowerCase().contains(q)).toList(),
+      );
+    }
+  }
+
+  void setLogStaff(Staff staff) {
+    selectedLogStaff.value = staff;
+    logSearchQuery.value = '';
+    filteredLogStaffs.clear();
+  }
+
+  void removeLogStaff() {
+    selectedLogStaff.value = null;
+  }
   
+  // Salary Management State
+  final selectedSalaryMonth = DateTime.now().obs;
+
+  void selectSalaryMonth(DateTime date) {
+    selectedSalaryMonth.value = date;
+  }
+
+  // Add Salary State
+  final selectedAddSalaryStaff = Rxn<Staff>();
+  final salarySearchQuery = ''.obs;
+  final selectedSalaryDate = DateTime.now().obs;
+  final isOnlinePayment = true.obs;
+  final salaryAmountController = TextEditingController();
+  final salaryNotesController = TextEditingController();
+
+  List<Staff> get filteredSalaryStaffs => staffList
+      .where((s) =>
+          s.name.toLowerCase().contains(salarySearchQuery.value.toLowerCase()) ||
+          s.role.toLowerCase().contains(salarySearchQuery.value.toLowerCase()))
+      .toList();
+
+  void searchSalaryStaff(String query) {
+    salarySearchQuery.value = query;
+  }
+
+  void setSalaryStaff(Staff staff) {
+    selectedAddSalaryStaff.value = staff;
+    salarySearchQuery.value = '';
+  }
+
+  void removeSalaryStaff() {
+    selectedAddSalaryStaff.value = null;
+  }
+
+  void selectSalaryDate(DateTime date) {
+    selectedSalaryDate.value = date;
+  }
+
+  void togglePaymentMethod(bool isOnline) {
+    isOnlinePayment.value = isOnline;
+  }
+
   // Attendance Month Navigation
   final selectedAttendanceMonth = DateTime.now().obs;
 
@@ -47,6 +157,7 @@ class StaffController extends GetxController {
 
   final roles = [
     'Senior Designer',
+    'Design Lead',
     'Product Mgr',
     'Sr. Engineer',
     'Operations',
@@ -56,6 +167,8 @@ class StaffController extends GetxController {
     'Backend Dev',
     'Accountant',
     'Admin Faculty',
+    'Teacher',
+    'Coordinator',
   ];
 
   final departments = [
@@ -103,19 +216,11 @@ class StaffController extends GetxController {
   }
 
   void selectStaff(Staff staff) {
-    selectedStaff.value = staff;
-    selectedRole.value = staff.role;
-    selectedDepartment.value = 'Product'; 
-    isSalaryType.value = true;
-    selectedImagePath.value = null;
+    loadStaffForEdit(staff);
   }
-  
+
   void prepareForAdd() {
-    selectedStaff.value = null;
-    selectedRole.value = roles[0];
-    selectedDepartment.value = departments[0];
-    isSalaryType.value = true;
-    selectedImagePath.value = null;
+    clearStaffForm();
   }
   
   void changeTab(int index) {

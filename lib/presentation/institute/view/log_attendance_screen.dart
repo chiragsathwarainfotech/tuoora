@@ -1,0 +1,346 @@
+import 'package:fee_easy/core/constants/app_colors.dart';
+import 'package:fee_easy/core/constants/app_text_styles.dart';
+import 'package:fee_easy/core/theme/app_spacing.dart';
+import 'package:fee_easy/core/utils/validation_utils.dart';
+import 'package:fee_easy/core/widgets/app_button.dart';
+import 'package:fee_easy/data/models/staff_model.dart';
+import 'package:fee_easy/presentation/institute/controllers/staff_controller.dart';
+import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+
+class LogAttendanceScreen extends GetView<StaffController> {
+  const LogAttendanceScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.scaffoldBg,
+      body: SafeArea(
+        child: Column(
+          children: [
+            const InstituteAppBar(title: 'Log Attendance'),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: AppSpacing.all24,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildSectionCard(
+                      label: 'SELECT STAFF MEMBER',
+                      child: Obx(() {
+                        if (controller.selectedLogStaff.value != null) {
+                          return _buildSelectedStaffCard(controller.selectedLogStaff.value!);
+                        } else {
+                          return _buildStaffSearchField();
+                        }
+                      }),
+                    ),
+                    AppSpacing.v20,
+                    _buildSectionCard(
+                      label: 'SELECT DATE',
+                      child: Obx(() => GestureDetector(
+                            onTap: () async {
+                              final picked = await showDatePicker(
+                                context: context,
+                                initialDate: controller.selectedLogDate.value,
+                                firstDate: DateTime(2020),
+                                lastDate: DateTime.now(),
+                              );
+                              if (picked != null) {
+                                controller.selectLogDate(picked);
+                              }
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                              decoration: BoxDecoration(
+                                color: AppColors.paleSilver.withValues(alpha: 0.3),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    DateFormat('MM/dd/yyyy').format(controller.selectedLogDate.value),
+                                    style: AppTextStyles.lexend(fontSize: 15, color: AppColors.textPrimary),
+                                  ),
+                                  const Icon(Icons.calendar_today_rounded, color: AppColors.textTertiary, size: 20),
+                                ],
+                              ),
+                            ),
+                          )),
+                    ),
+                    AppSpacing.v24,
+                    Text(
+                      'ATTENDANCE STATUS',
+                      style: AppTextStyles.manrope(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.textTertiary,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                    AppSpacing.v12,
+                    _buildStatusToggle(),
+                    AppSpacing.v24,
+                    _buildSectionCard(
+                      label: 'ADDITIONAL NOTES',
+                      child: Container(
+                        padding: AppSpacing.all12,
+                        decoration: BoxDecoration(
+                          color: AppColors.paleSilver.withValues(alpha: 0.3),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: TextField(
+                          controller: controller.logNotesController,
+                          maxLines: 4,
+                          style: AppTextStyles.lexend(fontSize: 14),
+                          decoration: InputDecoration(
+                            hintText: 'Any overtime details or shift adjustments...',
+                            hintStyle: AppTextStyles.lexend(fontSize: 14, color: AppColors.textMuted),
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                    ),
+                    AppSpacing.v32,
+                    _buildLogButton(),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionCard({required String label, required Widget child}) {
+    return Container(
+      padding: AppSpacing.all20,
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.divider),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: AppTextStyles.manrope(
+              fontSize: 12,
+              fontWeight: FontWeight.w800,
+              color: AppColors.textTertiary,
+              letterSpacing: 0.5,
+            ),
+          ),
+          AppSpacing.v12,
+          child,
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStaffSearchField() {
+    return Column(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            color: AppColors.paleSilver.withValues(alpha: 0.3),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: TextField(
+            onChanged: (val) => controller.searchLogStaff(val),
+            style: AppTextStyles.lexend(fontSize: 14, color: AppColors.textPrimary),
+            decoration: InputDecoration(
+              hintText: 'Search by name or role...',
+              hintStyle: AppTextStyles.lexend(fontSize: 14, color: AppColors.textMuted),
+              prefixIcon: const Icon(Icons.search, color: AppColors.textTertiary, size: 20),
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.symmetric(vertical: 14),
+            ),
+          ),
+        ),
+        Obx(() {
+          if (controller.filteredLogStaffs.isEmpty || controller.logSearchQuery.value.isEmpty) {
+            return const SizedBox.shrink();
+          }
+          return Container(
+            margin: const EdgeInsets.only(top: 8),
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: AppColors.divider),
+              boxShadow: [
+                BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 10, offset: const Offset(0, 4)),
+              ],
+            ),
+            constraints: const BoxConstraints(maxHeight: 200),
+            child: ListView.separated(
+              shrinkWrap: true,
+              padding: EdgeInsets.zero,
+              itemCount: controller.filteredLogStaffs.length,
+              separatorBuilder: (_, __) => const Divider(height: 1),
+              itemBuilder: (context, index) {
+                final staff = controller.filteredLogStaffs[index];
+                return ListTile(
+                  leading: const CircleAvatar(
+                    radius: 16,
+                    backgroundImage: NetworkImage('https://i.pravatar.cc/150'),
+                  ),
+                  title: Text(
+                    staff.name,
+                    style: AppTextStyles.manrope(fontSize: 14, fontWeight: FontWeight.w700),
+                  ),
+                  subtitle: Text(
+                    staff.role,
+                    style: AppTextStyles.lexend(fontSize: 12, color: AppColors.textTertiary),
+                  ),
+                  onTap: () => controller.setLogStaff(staff),
+                );
+              },
+            ),
+          );
+        }),
+      ],
+    );
+  }
+
+  Widget _buildSelectedStaffCard(Staff staff) {
+    return Container(
+      padding: AppSpacing.all12,
+      decoration: BoxDecoration(
+        color: AppColors.paleSilver.withValues(alpha: 0.2),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.primaryBrand.withValues(alpha: 0.2)),
+      ),
+      child: Row(
+        children: [
+          const CircleAvatar(
+            radius: 20,
+            backgroundImage: NetworkImage('https://i.pravatar.cc/150'),
+          ),
+          AppSpacing.h12,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  staff.name,
+                  style: AppTextStyles.manrope(fontSize: 14, fontWeight: FontWeight.w800),
+                ),
+                Text(
+                  staff.role,
+                  style: AppTextStyles.lexend(fontSize: 11, color: AppColors.textTertiary),
+                ),
+              ],
+            ),
+          ),
+          IconButton(
+            onPressed: () => controller.removeLogStaff(),
+            icon: const Icon(Icons.close_rounded, color: AppColors.errorRed, size: 20),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatusToggle() {
+    return Obx(() => Row(
+          children: [
+            Expanded(
+              child: GestureDetector(
+                onTap: () => controller.toggleStatus(true),
+                child: _buildStatusButton(
+                  'Present',
+                  Icons.check_circle_rounded,
+                  AppColors.successGreen,
+                  controller.isPresent.value,
+                ),
+              ),
+            ),
+            AppSpacing.h16,
+            Expanded(
+              child: GestureDetector(
+                onTap: () => controller.toggleStatus(false),
+                child: _buildStatusButton(
+                  'Absent',
+                  Icons.cancel_rounded,
+                  AppColors.errorRed,
+                  !controller.isPresent.value,
+                ),
+              ),
+            ),
+          ],
+        ));
+  }
+
+  Widget _buildStatusButton(String label, IconData icon, Color color, bool isSelected) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 24),
+      decoration: BoxDecoration(
+        color: isSelected ? color.withValues(alpha: 0.05) : AppColors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: isSelected ? color : AppColors.divider,
+          width: 1.5,
+        ),
+      ),
+      child: Column(
+        children: [
+          Icon(icon, color: isSelected ? color : AppColors.textTertiary, size: 28),
+          AppSpacing.v12,
+          Text(
+            label,
+            style: AppTextStyles.manrope(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              color: isSelected ? color : AppColors.textTertiary,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLogButton() {
+    return AppButton(
+      onPressed: () {
+        final error = ValidationUtils.validateStaffSelection(controller.selectedLogStaff.value);
+        if (error != null) {
+          Get.snackbar(
+            'Selection Required',
+            error,
+            backgroundColor: Colors.orange.withValues(alpha: 0.1),
+            colorText: AppColors.textPrimary,
+            icon: const Icon(Icons.warning_amber_rounded, color: Colors.orange),
+            snackPosition: SnackPosition.BOTTOM,
+            margin: AppSpacing.all16,
+          );
+          return;
+        }
+
+        // Logic to save record...
+        final staffName = controller.selectedLogStaff.value!.name;
+        Get.back();
+        Get.snackbar(
+          'Success',
+          'Attendance for $staffName has been logged.',
+          backgroundColor: AppColors.successGreen.withValues(alpha: 0.1),
+          colorText: AppColors.textPrimary,
+          icon: const Icon(Icons.check_circle_rounded, color: AppColors.successGreen),
+          snackPosition: SnackPosition.BOTTOM,
+          margin: AppSpacing.all16,
+        );
+
+        // Reset state
+        controller.selectedLogStaff.value = null;
+        controller.logNotesController.clear();
+      },
+      label: 'Log Attendance',
+      icon: Icons.check_circle_outline_rounded,
+    );
+  }
+}

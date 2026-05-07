@@ -33,6 +33,8 @@ class AppInputField extends StatelessWidget {
   final int? maxLength;
   final List<TextInputFormatter>? inputFormatters;
   final AppInputFieldVariant variant;
+  final String? Function(String?)? validator;
+  final void Function(String?)? onChanged;
 
   const AppInputField({
     super.key,
@@ -63,6 +65,8 @@ class AppInputField extends StatelessWidget {
     this.maxLength,
     this.inputFormatters,
     this.variant = AppInputFieldVariant.standard,
+    this.validator,
+    this.onChanged,
   });
 
   @override
@@ -104,7 +108,7 @@ class AppInputField extends StatelessWidget {
                       )
                     : null),
           ),
-          child: TextField(
+          child: TextFormField(
             controller: controller,
             readOnly: readOnly,
             enabled: enabled,
@@ -113,6 +117,8 @@ class AppInputField extends StatelessWidget {
             keyboardType: keyboardType,
             maxLength: maxLength,
             inputFormatters: inputFormatters,
+            validator: validator,
+            onChanged: onChanged,
             style:
                 textStyle ??
                 (isProfile
@@ -155,6 +161,9 @@ class AppInputField extends StatelessWidget {
               border: InputBorder.none,
               enabledBorder: InputBorder.none,
               disabledBorder: InputBorder.none,
+              errorBorder: InputBorder.none,
+              focusedErrorBorder: InputBorder.none,
+              errorStyle: const TextStyle(height: 0, color: Colors.transparent),
               contentPadding:
                   contentPadding ??
                   (isProfile

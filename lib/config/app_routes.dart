@@ -82,4 +82,6 @@ class AppRoutes {
   static const String instituteAddEditStaff = '/institute/staffs/add-edit';
   static const String instituteSalaryHistory = '/institute/staffs/salary-history';
   static const String instituteStaffAttendance = '/institute/staffs/attendance';
+  static const String instituteLogStaffAttendance = '/institute/staffs/log-attendance';
+  static const String instituteAddSalary = '/institute/staffs/add-salary';
 }

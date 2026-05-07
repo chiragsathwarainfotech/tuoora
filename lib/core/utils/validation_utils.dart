@@ -57,4 +57,25 @@ class ValidationUtils {
     }
     return null;
   }
+
+  static String? validateAmount(String? value, String fieldName) {
+    if (value == null || value.isEmpty) {
+      return '$fieldName is required';
+    }
+    final amount = double.tryParse(value);
+    if (amount == null) {
+      return 'Enter a valid amount';
+    }
+    if (amount <= 0) {
+      return '$fieldName must be greater than zero';
+    }
+    return null;
+  }
+
+  static String? validateStaffSelection(dynamic staff) {
+    if (staff == null) {
+      return 'Please select a staff member to continue.';
+    }
+    return null;
+  }
 }

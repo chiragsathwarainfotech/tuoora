@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
+import 'package:fee_easy/core/utils/validation_utils.dart';
 import 'package:fee_easy/core/widgets/app_button.dart';
 import 'package:fee_easy/core/widgets/app_input_field.dart';
 import 'package:fee_easy/presentation/institute/controllers/staff_controller.dart';
@@ -27,15 +28,18 @@ class AddEditStaffScreen extends GetView<StaffController> {
             Expanded(
               child: SingleChildScrollView(
                 padding: AppSpacing.x24.add(AppSpacing.y16),
-                child: Column(
-                  children: [
-                    _buildMainFormCard(context),
-                    AppSpacing.v24,
-                    _buildSaveButton(isEdit),
-                    AppSpacing.v16,
-                    _buildDiscardButton(),
-                    AppSpacing.v32,
-                  ],
+                child: Form(
+                  key: controller.addStaffFormKey,
+                  child: Column(
+                    children: [
+                      _buildMainFormCard(context),
+                      AppSpacing.v24,
+                      _buildSaveButton(isEdit),
+                      AppSpacing.v16,
+                      _buildDiscardButton(),
+                      AppSpacing.v32,
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -66,11 +70,10 @@ class AddEditStaffScreen extends GetView<StaffController> {
           AppSpacing.v32,
           AppInputField(
             label: 'Full Name',
-            controller: TextEditingController(
-              text: controller.selectedStaff.value?.name,
-            ),
+            controller: controller.staffNameController,
             hint: 'Eleanor Shellstrop',
             icon: Icons.person,
+            validator: (value) => ValidationUtils.validateRequired(value, 'Full name'),
           ),
           AppSpacing.v20,
           Row(
@@ -123,20 +126,21 @@ class AddEditStaffScreen extends GetView<StaffController> {
           AppSpacing.v20,
           AppInputField(
             label: 'Email Address',
-            controller: TextEditingController(
-              text: controller.selectedStaff.value?.email,
-            ),
+            controller: controller.staffEmailController,
             hint: 'eleanor.s@company.com',
             icon: Icons.email_rounded,
+            keyboardType: TextInputType.emailAddress,
+            validator: ValidationUtils.validateEmail,
           ),
           AppSpacing.v20,
           AppInputField(
             label: 'Phone Number',
-            controller: TextEditingController(
-              text: controller.selectedStaff.value?.phone,
-            ),
-            hint: '+1 (555) 000-1234',
+            controller: controller.staffPhoneController,
+            hint: '0123456789',
             icon: Icons.phone,
+            keyboardType: TextInputType.phone,
+            maxLength: 10,
+            validator: ValidationUtils.validatePhone,
           ),
           AppSpacing.v32,
           Text(
@@ -169,14 +173,15 @@ class AddEditStaffScreen extends GetView<StaffController> {
           ),
           AppSpacing.v24,
           Obx(() => AppInputField(
-                label: controller.isSalaryType.value
-                    ? 'Base Salary'
-                    : 'Hourly Rate',
-                controller: TextEditingController(
-                  text: controller.isSalaryType.value ? '95,000' : '50.00',
-                ),
+                label: controller.isSalaryType.value ? 'Base Salary' : 'Hourly Rate',
+                controller: controller.staffSalaryController,
                 hint: '0.00',
                 icon: Icons.payments_rounded,
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                validator: (value) => ValidationUtils.validateAmount(
+                  value,
+                  controller.isSalaryType.value ? 'Base Salary' : 'Hourly Rate',
+                ),
               )),
         ],
       ),
@@ -191,22 +196,22 @@ class AddEditStaffScreen extends GetView<StaffController> {
           child: Stack(
             children: [
               Obx(() => Container(
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                  color: AppColors.primaryBrandLight,
-                  shape: BoxShape.circle,
-                  image: controller.selectedImagePath.value != null
-                      ? DecorationImage(
-                          image: FileImage(File(controller.selectedImagePath.value!)),
-                          fit: BoxFit.cover,
-                        )
-                      : const DecorationImage(
-                          image: NetworkImage('https://i.pravatar.cc/300'),
-                          fit: BoxFit.cover,
-                        ),
-                ),
-              )),
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryBrandLight,
+                      shape: BoxShape.circle,
+                      image: controller.selectedImagePath.value != null
+                          ? DecorationImage(
+                              image: FileImage(File(controller.selectedImagePath.value!)),
+                              fit: BoxFit.cover,
+                            )
+                          : const DecorationImage(
+                              image: NetworkImage('https://i.pravatar.cc/300'),
+                              fit: BoxFit.cover,
+                            ),
+                    ),
+                  )),
               Positioned(
                 bottom: 0,
                 right: 0,
@@ -321,8 +326,11 @@ class AddEditStaffScreen extends GetView<StaffController> {
   Widget _buildSaveButton(bool isEdit) {
     return AppButton(
       onPressed: () {
-        Get.back();
-        Get.snackbar('Success', 'Staff member details saved');
+        if (controller.addStaffFormKey.currentState!.validate()) {
+          Get.back();
+          Get.snackbar('Success', isEdit ? 'Staff member details updated' : 'Staff member created successfully');
+          controller.clearStaffForm();
+        }
       },
       label: 'Save Staff Member',
     );
@@ -330,7 +338,10 @@ class AddEditStaffScreen extends GetView<StaffController> {
 
   Widget _buildDiscardButton() {
     return GestureDetector(
-      onTap: () => Get.back(),
+      onTap: () {
+        controller.clearStaffForm();
+        Get.back();
+      },
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 18),

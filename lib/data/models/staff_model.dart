@@ -4,6 +4,8 @@ class Staff {
   final String email;
   final String phone;
   final String role;
+  final String department;
+  final double salary;
   final String joinDate;
   final String status;
   final String address;
@@ -16,6 +18,8 @@ class Staff {
     required this.email,
     required this.phone,
     required this.role,
+    required this.department,
+    required this.salary,
     required this.joinDate,
     required this.status,
     required this.address,

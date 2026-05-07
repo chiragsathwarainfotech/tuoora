@@ -66,6 +66,26 @@ class CommonDialog extends StatelessWidget {
     );
   }
 
+  static void showDeleteConfirmation({
+    required String title,
+    required String description,
+    required VoidCallback onConfirm,
+    String confirmText = 'Delete',
+    String cancelText = 'Cancel',
+  }) {
+    show(
+      title: title,
+      description: description,
+      icon: Icons.delete_outline_rounded,
+      iconColor: AppColors.bohoRed,
+      iconBgColor: AppColors.errorBg,
+      confirmText: confirmText,
+      cancelText: cancelText,
+      confirmButtonColor: AppColors.bohoRed,
+      onConfirm: onConfirm,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -145,8 +165,6 @@ class CommonDialog extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        // For confirm, we don't automatically close if it's an input dialog usually,
-                        // but let's follow the pattern
                         if (body == null) Get.back();
                         onConfirm();
                       },

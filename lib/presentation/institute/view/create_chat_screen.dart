@@ -5,6 +5,7 @@ import 'package:fee_easy/presentation/institute/controllers/chat_controller.dart
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/presentation/shared/widgets/common_state_widget.dart';
 import 'package:fee_easy/data/models/chat_model.dart';
+import 'package:fee_easy/core/widgets/app_search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -58,29 +59,9 @@ class CreateChatScreen extends GetView<ChatController> {
   }
 
   Widget _buildSearchField() {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.paleSilver,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: TextField(
-        onChanged: (value) => controller.participantSearchQuery.value = value,
-        style: AppTextStyles.lexend(fontSize: 16, color: AppColors.textPrimary),
-        decoration: InputDecoration(
-          hintText: 'Search members...',
-          hintStyle: AppTextStyles.lexend(
-            fontSize: 14,
-            color: AppColors.blueSapphire,
-          ),
-          prefixIcon: const Icon(
-            Icons.search,
-            color: AppColors.blueSapphire,
-            size: AppSpacing.s24,
-          ),
-          border: InputBorder.none,
-          contentPadding: AppSpacing.all16,
-        ),
-      ),
+    return AppSearchField(
+      hintText: 'Search members...',
+      onChanged: (value) => controller.participantSearchQuery.value = value,
     );
   }
 

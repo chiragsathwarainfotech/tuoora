@@ -9,6 +9,7 @@ import 'package:fee_easy/data/models/student_model.dart';
 import 'package:fee_easy/presentation/institute/controllers/institute_controller.dart';
 import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
 import 'package:fee_easy/presentation/institute/controllers/batch_controller.dart';
+import 'package:fee_easy/core/widgets/app_search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -197,29 +198,10 @@ class AssignToBatchScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Container(
-          decoration: BoxDecoration(
-            color: const Color(0xFFF2F4F7),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: TextField(
-            controller: controller.searchController,
-            onChanged: controller.searchStudents,
-            decoration: InputDecoration(
-              hintText: 'Search and add students to this batch',
-              hintStyle: AppTextStyles.lexend(
-                fontSize: 14,
-                color: AppColors.textMuted,
-              ),
-              prefixIcon: const Icon(Icons.search, color: AppColors.textMuted),
-              suffixIcon: const Icon(
-                Icons.keyboard_arrow_down_rounded,
-                color: AppColors.textMuted,
-              ),
-              border: InputBorder.none,
-              contentPadding: AppSpacing.all16,
-            ),
-          ),
+        AppSearchField(
+          hintText: 'Search and add students to this batch',
+          controller: controller.searchController,
+          onChanged: controller.searchStudents,
         ),
         Obx(() {
           if (controller.searchResults.isEmpty) return const SizedBox.shrink();

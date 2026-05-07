@@ -7,6 +7,7 @@ import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/presentation/institute/controllers/record_fee_controller.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/core/widgets/common_loading.dart';
+import 'package:fee_easy/core/widgets/app_search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -95,33 +96,12 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
           ),
           AppSpacing.v16,
           if (!controller.isStudentSelected.value) ...[
-            Obx(() => Container(
-              decoration: BoxDecoration(
-                color: AppColors.paleSilver,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: controller.triedToSave.value && controller.studentError.value != null
-                      ? Colors.redAccent
-                      : Colors.transparent,
-                ),
-              ),
-              child: TextField(
-                onChanged: (value) => controller.searchQuery.value = value,
-                decoration: InputDecoration(
-                  hintText: AppStrings.instSearchStudentHint,
-                  hintStyle: AppTextStyles.lexend(
-                    fontSize: 14,
-                    color: AppColors.blueSapphire,
-                  ),
-                  suffixIcon: const Icon(
-                    Icons.search,
-                    color: AppColors.textTertiary,
-                    size: AppSpacing.s22,
-                  ),
-                  border: InputBorder.none,
-                  contentPadding: AppSpacing.all16,
-                ),
-              ),
+            Obx(() => AppSearchField(
+              hintText: AppStrings.instSearchStudentHint,
+              onChanged: (value) => controller.searchQuery.value = value,
+              borderColor: controller.triedToSave.value && controller.studentError.value != null
+                  ? Colors.redAccent
+                  : Colors.transparent,
             )),
             Obx(() {
               if (controller.triedToSave.value && controller.studentError.value != null) {

@@ -272,11 +272,9 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
   }
 
   void _showDeleteConfirmation(BuildContext context, String studentName) {
-    CommonDialog.show(
+    CommonDialog.showDeleteConfirmation(
       title: 'Delete Student',
       description: 'Are you sure you want to delete\n$studentName?',
-      icon: Icons.delete_forever_rounded,
-      confirmText: 'Yes, Delete',
       onConfirm: () => controller.deleteStudent(),
     );
   }

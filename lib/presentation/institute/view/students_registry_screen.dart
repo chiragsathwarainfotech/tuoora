@@ -8,6 +8,7 @@ import 'package:fee_easy/presentation/institute/controllers/student_controller.d
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/presentation/shared/widgets/common_state_widget.dart';
 import 'package:fee_easy/core/widgets/common_loading.dart';
+import 'package:fee_easy/core/widgets/app_search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -59,29 +60,9 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
   }
 
   Widget _buildSearchBar() {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.paleSilver,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: TextField(
-        onChanged: controller.onSearchChanged,
-        style: AppTextStyles.lexend(fontSize: 16, color: AppColors.textPrimary),
-        decoration: InputDecoration(
-          hintText: AppStrings.instStudentSearchHint,
-          hintStyle: AppTextStyles.lexend(
-            fontSize: 14,
-            color: AppColors.blueSapphire,
-          ),
-          prefixIcon: const Icon(
-            Icons.search,
-            color: AppColors.blueSapphire,
-            size: AppSpacing.s24,
-          ),
-          border: InputBorder.none,
-          contentPadding: AppSpacing.all16,
-        ),
-      ),
+    return AppSearchField(
+      hintText: AppStrings.instStudentSearchHint,
+      onChanged: controller.onSearchChanged,
     );
   }
 

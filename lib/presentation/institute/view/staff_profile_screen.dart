@@ -1,6 +1,7 @@
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
+import 'package:fee_easy/core/widgets/common_dialog.dart';
 import 'package:fee_easy/presentation/institute/controllers/staff_controller.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/data/models/staff_model.dart';
@@ -27,7 +28,10 @@ class StaffProfileScreen extends GetView<StaffController> {
                 ),
                 IconButton(
                   onPressed: () => _showDeleteConfirmation(),
-                  icon: const Icon(Icons.delete, color: AppColors.bohoRed),
+                  icon: const Icon(
+                    Icons.delete_outline_rounded,
+                    color: AppColors.bohoRed,
+                  ),
                 ),
               ],
             ),
@@ -261,24 +265,14 @@ class StaffProfileScreen extends GetView<StaffController> {
   }
 
   void _showDeleteConfirmation() {
-    Get.dialog(
-      AlertDialog(
-        title: const Text('Delete Staff'),
-        content: const Text(
-          'Are you sure you want to delete this staff member?',
-        ),
-        actions: [
-          TextButton(onPressed: () => Get.back(), child: const Text('Cancel')),
-          TextButton(
-            onPressed: () {
-              Get.back();
-              Get.back();
-              Get.snackbar('Deleted', 'Staff member has been removed');
-            },
-            child: const Text('Delete', style: TextStyle(color: Colors.red)),
-          ),
-        ],
-      ),
+    CommonDialog.showDeleteConfirmation(
+      title: 'Delete Staff',
+      description: 'Are you sure you want to delete this staff member?',
+      onConfirm: () {
+        Get.back();
+        Get.back();
+        Get.snackbar('Deleted', 'Staff member has been removed');
+      },
     );
   }
 }

@@ -85,11 +85,11 @@ class AddHomeworkScreen extends StatelessWidget {
           Container(
             padding: AppSpacing.all16,
             decoration: BoxDecoration(
-              color: const Color(0xFFF2F4F7),
+              color: AppColors.paleSilver,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
                 color: controller.triedToSave.value && controller.dateError.value != null
-                    ? Colors.redAccent
+                    ? AppColors.bohoRed
                     : Colors.transparent,
               ),
             ),
@@ -208,13 +208,13 @@ class AddHomeworkScreen extends StatelessWidget {
                     AppSpacing.v12,
                     TextButton.icon(
                       onPressed: controller.removeAttachment,
-                      icon: const Icon(Icons.delete_outline, color: Colors.red),
+                      icon: const Icon(Icons.delete_outline_rounded, color: AppColors.bohoRed),
                       label: Text(
                         'Remove',
                         style: AppTextStyles.manrope(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
-                          color: Colors.red,
+                          color: AppColors.bohoRed,
                         ),
                       ),
                     ),

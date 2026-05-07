@@ -5,6 +5,7 @@ import 'package:fee_easy/presentation/institute/controllers/attendance_controlle
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_bottom_button.dart';
 import 'package:fee_easy/core/widgets/common_loading.dart';
+import 'package:fee_easy/core/widgets/app_search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -106,8 +107,8 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
-              color: const Color(0xFFEAECF0),
-              borderRadius: BorderRadius.circular(8),
+              color: AppColors.paleSilver,
+              borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -197,29 +198,9 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
   }
 
   Widget _buildSearchBar(AttendanceController controller) {
-    return Container(
-      padding: AppSpacing.x16,
-      decoration: BoxDecoration(
-        color: AppColors.paleSilver,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: TextField(
-        onChanged: (value) => controller.searchQuery.value = value,
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          icon: const Icon(
-            Icons.search,
-            color: AppColors.blueSapphire,
-            size: 20,
-          ),
-          hintText: 'Search student by name or ID...',
-          hintStyle: AppTextStyles.lexend(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: AppColors.blueSapphire,
-          ),
-        ),
-      ),
+    return AppSearchField(
+      hintText: 'Search student by name or ID...',
+      onChanged: (value) => controller.searchQuery.value = value,
     );
   }
 
@@ -283,8 +264,8 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
     return Container(
       height: 36,
       decoration: BoxDecoration(
-        color: const Color(0xFFF2F4F7),
-        borderRadius: BorderRadius.circular(8),
+        color: AppColors.paleSilver,
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
         children: [

@@ -7,6 +7,7 @@ import 'package:fee_easy/presentation/institute/models/batch_model.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_bottom_button.dart';
 import 'package:fee_easy/core/widgets/common_dialog.dart';
+import 'package:fee_easy/core/widgets/app_search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -166,29 +167,10 @@ class BatchStudentsScreen extends StatelessWidget {
   }
 
   Widget _buildSearchBar(BatchDetailsController controller) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.paleSilver,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: TextField(
-        controller: controller.assignedSearchController,
-        onChanged: (val) => controller.assignedSearchQuery.value = val,
-        decoration: InputDecoration(
-          hintText: 'Search enrolled students...',
-          hintStyle: AppTextStyles.lexend(
-            fontSize: 14,
-            color: AppColors.blueSapphire,
-          ),
-          prefixIcon: const Icon(
-            Icons.search,
-            color: AppColors.blueSapphire,
-            size: 20,
-          ),
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(vertical: 14),
-        ),
-      ),
+    return AppSearchField(
+      hintText: 'Search enrolled students...',
+      controller: controller.assignedSearchController,
+      onChanged: (val) => controller.assignedSearchQuery.value = val,
     );
   }
 
@@ -262,9 +244,9 @@ class BatchStudentsScreen extends StatelessWidget {
                 IconButton(
                   onPressed: () =>
                       _showRemoveConfirmation(context, controller, bs),
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.delete_outline_rounded,
-                    color: Colors.red.shade300,
+                    color: AppColors.bohoRed,
                     size: 24,
                   ),
                 ),
@@ -281,11 +263,10 @@ class BatchStudentsScreen extends StatelessWidget {
     BatchDetailsController controller,
     BatchStudent bs,
   ) {
-    CommonDialog.show(
+    CommonDialog.showDeleteConfirmation(
       title: 'Remove Student',
       description:
           'Are you sure you want to remove\n${bs.student.name} from this batch?',
-      icon: Icons.person_remove_rounded,
       confirmText: 'Remove',
       onConfirm: () => controller.removeStudentFromBatch(bs.student.id),
     );

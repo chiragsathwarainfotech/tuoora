@@ -8,6 +8,7 @@ import 'package:fee_easy/presentation/institute/models/batch_model.dart';
 import 'package:fee_easy/presentation/institute/models/homework_model.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/presentation/shared/widgets/common_state_widget.dart';
+import 'package:fee_easy/core/widgets/app_search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -75,24 +76,9 @@ class BatchHomeworkScreen extends StatelessWidget {
   }
 
   Widget _buildSearchBar(HomeworkController controller) {
-    return Container(
-      padding: AppSpacing.x16,
-      decoration: BoxDecoration(
-        color: AppColors.paleSilver,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: TextField(
-        onChanged: (val) => controller.searchQuery.value = val,
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          icon: const Icon(Icons.search, color: AppColors.blueSapphire),
-          hintText: AppStrings.instSearchAssignmentsHint,
-          hintStyle: AppTextStyles.lexend(
-            fontSize: 14,
-            color: AppColors.blueSapphire,
-          ),
-        ),
-      ),
+    return AppSearchField(
+      hintText: AppStrings.instSearchAssignmentsHint,
+      onChanged: (val) => controller.searchQuery.value = val,
     );
   }
 

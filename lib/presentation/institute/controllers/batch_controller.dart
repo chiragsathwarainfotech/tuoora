@@ -210,14 +210,11 @@ class BatchController extends GetxController {
   }
 
   void deleteBatchWithConfirmation(String id) {
-    CommonDialog.show(
+    CommonDialog.showDeleteConfirmation(
       title: 'Delete Batch',
       description: 'Are you sure you want to delete this batch?',
-      icon: Icons.delete_forever_rounded,
-      confirmText: 'Delete',
       onConfirm: () async {
         try {
-          Get.back(); // Close dialog
           isLoading.value = true;
           await _repository.deleteBatch(int.parse(id));
           batchesList.removeWhere((batch) => batch.id == id);

@@ -3,11 +3,13 @@ import 'package:fee_easy/core/constants/app_strings.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/core/widgets/app_button.dart';
+import 'package:fee_easy/core/widgets/common_dialog.dart';
 import 'package:fee_easy/presentation/institute/controllers/leads_controller.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/presentation/shared/widgets/common_state_widget.dart';
 import 'package:fee_easy/data/models/lead_model.dart';
 import 'package:fee_easy/config/app_routes.dart';
+import 'package:fee_easy/core/widgets/app_search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -37,7 +39,8 @@ class LeadsManagementScreen extends GetView<LeadsController> {
                           isLoading: controller.isLoading.value,
                           isEmpty: controller.filteredLeads.isEmpty,
                           emptyTitle: 'No Leads Found',
-                          emptySubtitle: 'Start adding leads to manage your potential students.',
+                          emptySubtitle:
+                              'Start adding leads to manage your potential students.',
                           emptyIcon: Icons.leaderboard_outlined,
                           child: ListView.separated(
                             padding: EdgeInsets.zero,
@@ -70,29 +73,9 @@ class LeadsManagementScreen extends GetView<LeadsController> {
   }
 
   Widget _buildSearchField() {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.paleSilver,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: TextField(
-        onChanged: (value) => controller.searchQuery.value = value,
-        style: AppTextStyles.lexend(fontSize: 16, color: AppColors.textPrimary),
-        decoration: InputDecoration(
-          hintText: AppStrings.instSearchLeadsHint,
-          hintStyle: AppTextStyles.lexend(
-            fontSize: 14,
-            color: AppColors.blueSapphire,
-          ),
-          prefixIcon: const Icon(
-            Icons.search,
-            color: AppColors.blueSapphire,
-            size: AppSpacing.s24,
-          ),
-          border: InputBorder.none,
-          contentPadding: AppSpacing.all16,
-        ),
-      ),
+    return AppSearchField(
+      hintText: AppStrings.instSearchLeadsHint,
+      onChanged: (value) => controller.searchQuery.value = value,
     );
   }
 
@@ -216,30 +199,11 @@ class LeadsManagementScreen extends GetView<LeadsController> {
                   Get.toNamed(AppRoutes.instituteAddEditLead);
                 }),
                 AppSpacing.h12,
-                _buildActionBtn(Icons.delete_outline, () {
-                  Get.dialog(
-                    AlertDialog(
-                      title: const Text('Delete Lead'),
-                      content: const Text(
-                        'Are you sure you want to delete this lead?',
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Get.back(),
-                          child: const Text('Cancel'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            controller.deleteLead(lead.id);
-                            Get.back();
-                          },
-                          child: const Text(
-                            'Delete',
-                            style: TextStyle(color: Colors.red),
-                          ),
-                        ),
-                      ],
-                    ),
+                _buildActionBtn(Icons.delete_outline_rounded, () {
+                  CommonDialog.showDeleteConfirmation(
+                    title: 'Delete Lead',
+                    description: 'Are you sure you want to delete this lead?',
+                    onConfirm: () => controller.deleteLead(lead.id),
                   );
                 }, isDanger: true),
               ],

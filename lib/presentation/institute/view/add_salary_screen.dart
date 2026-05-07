@@ -3,9 +3,11 @@ import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/core/utils/validation_utils.dart';
 import 'package:fee_easy/core/widgets/app_button.dart';
+import 'package:fee_easy/core/widgets/app_input_field.dart';
 import 'package:fee_easy/data/models/staff_model.dart';
 import 'package:fee_easy/presentation/institute/controllers/staff_controller.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
+import 'package:fee_easy/core/widgets/app_search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -40,137 +42,58 @@ class AddSalaryScreen extends GetView<StaffController> {
                       }),
                     ),
                     AppSpacing.v20,
-                    _buildSectionCard(
-                      label: 'PAYMENT DATE',
-                      child: Obx(
-                        () => GestureDetector(
-                          onTap: () async {
-                            final picked = await showDatePicker(
-                              context: context,
-                              initialDate: controller.selectedSalaryDate.value,
-                              firstDate: DateTime(2020),
-                              lastDate: DateTime.now(),
-                            );
-                            if (picked != null) {
-                              controller.selectSalaryDate(picked);
-                            }
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 14,
-                            ),
-                            decoration: BoxDecoration(
-                              color: AppColors.paleSilver.withValues(
-                                alpha: 0.3,
-                              ),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  DateFormat(
-                                    'MM/dd/yyyy',
-                                  ).format(controller.selectedSalaryDate.value),
-                                  style: AppTextStyles.lexend(
-                                    fontSize: 15,
-                                    color: AppColors.textPrimary,
-                                  ),
-                                ),
-                                const Icon(
-                                  Icons.calendar_today_rounded,
-                                  color: AppColors.textTertiary,
-                                  size: 20,
-                                ),
-                              ],
-                            ),
-                          ),
+                    Obx(
+                      () => AppInputField(
+                        label: 'PAYMENT DATE',
+                        hint: 'MM/dd/yyyy',
+                        icon: Icons.calendar_today_rounded,
+                        controller: TextEditingController(
+                          text: DateFormat(
+                            'MM/dd/yyyy',
+                          ).format(controller.selectedSalaryDate.value),
                         ),
+                        readOnly: true,
+                        onTap: () async {
+                          final picked = await showDatePicker(
+                            context: context,
+                            initialDate: controller.selectedSalaryDate.value,
+                            firstDate: DateTime(2020),
+                            lastDate: DateTime.now(),
+                          );
+                          if (picked != null) {
+                            controller.selectSalaryDate(picked);
+                          }
+                        },
                       ),
                     ),
                     AppSpacing.v20,
-                    _buildSectionCard(
+                    AppInputField(
                       label: 'SALARY AMOUNT',
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        decoration: BoxDecoration(
-                          color: AppColors.paleSilver.withValues(alpha: 0.3),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          children: [
-                            Text(
-                              '\$',
-                              style: AppTextStyles.manrope(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w800,
-                                color: AppColors.primaryBrand,
-                              ),
-                            ),
-                            AppSpacing.h12,
-                            Expanded(
-                              child: TextField(
-                                controller: controller.salaryAmountController,
-                                onChanged: (_) => controller.update(),
-                                style: AppTextStyles.manrope(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w700,
-                                  color: AppColors.textPrimary,
-                                ),
-                                decoration: const InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: '0.00',
-                                  contentPadding: EdgeInsets.symmetric(
-                                    vertical: 14,
-                                  ),
-                                ),
-                                keyboardType:
-                                    const TextInputType.numberWithOptions(
-                                      decimal: true,
-                                    ),
-                              ),
-                            ),
-                          ],
-                        ),
+                      controller: controller.salaryAmountController,
+                      hint: '0.00',
+                      icon: Icons.attach_money_rounded,
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
                       ),
+                      onChanged: (_) => controller.update(),
                     ),
                     AppSpacing.v24,
                     Text(
                       'PAYMENT METHOD',
                       style: AppTextStyles.manrope(
-                        fontSize: 12,
+                        fontSize: 14,
                         fontWeight: FontWeight.w800,
-                        color: AppColors.textTertiary,
-                        letterSpacing: 0.5,
+                        color: AppColors.brandAppBarColor,
                       ),
                     ),
                     AppSpacing.v12,
                     _buildPaymentMethodToggle(),
                     AppSpacing.v24,
-                    _buildSectionCard(
+                    AppInputField(
                       label: 'NOTES (OPTIONAL)',
-                      child: Container(
-                        padding: AppSpacing.all12,
-                        decoration: BoxDecoration(
-                          color: AppColors.paleSilver.withValues(alpha: 0.3),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: TextField(
-                          controller: controller.salaryNotesController,
-                          maxLines: 3,
-                          style: AppTextStyles.lexend(fontSize: 14),
-                          decoration: InputDecoration(
-                            hintText:
-                                'Add any specific details regarding bonuses...',
-                            hintStyle: AppTextStyles.lexend(
-                              fontSize: 14,
-                              color: AppColors.textMuted,
-                            ),
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
+                      controller: controller.salaryNotesController,
+                      hint: 'Add any specific details regarding bonuses...',
+                      maxLines: 3,
                     ),
                     AppSpacing.v32,
                     _buildDisbursementSummary(),
@@ -217,32 +140,9 @@ class AddSalaryScreen extends GetView<StaffController> {
   Widget _buildStaffSearchField() {
     return Column(
       children: [
-        Container(
-          decoration: BoxDecoration(
-            color: AppColors.paleSilver.withValues(alpha: 0.3),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: TextField(
-            onChanged: (val) => controller.searchSalaryStaff(val),
-            style: AppTextStyles.lexend(
-              fontSize: 14,
-              color: AppColors.textPrimary,
-            ),
-            decoration: InputDecoration(
-              hintText: 'Search by name or role...',
-              hintStyle: AppTextStyles.lexend(
-                fontSize: 14,
-                color: AppColors.textMuted,
-              ),
-              prefixIcon: const Icon(
-                Icons.search,
-                color: AppColors.textTertiary,
-                size: 20,
-              ),
-              border: InputBorder.none,
-              contentPadding: const EdgeInsets.symmetric(vertical: 14),
-            ),
-          ),
+        AppSearchField(
+          hintText: 'Search by name or role...',
+          onChanged: (val) => controller.searchSalaryStaff(val),
         ),
         Obx(() {
           if (controller.filteredSalaryStaffs.isEmpty ||
@@ -341,8 +241,8 @@ class AddSalaryScreen extends GetView<StaffController> {
           IconButton(
             onPressed: () => controller.removeSalaryStaff(),
             icon: const Icon(
-              Icons.close_rounded,
-              color: AppColors.errorRed,
+              Icons.delete_outline_rounded,
+              color: AppColors.bohoRed,
               size: 20,
             ),
           ),

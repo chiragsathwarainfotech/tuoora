@@ -1,20 +1,123 @@
+import 'package:fee_easy/core/utils/validation_utils.dart';
+import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
 import 'package:fee_easy/presentation/institute/models/expense_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ExpenseController extends GetxController {
+  final InstituteRepositoryImpl _repository;
+
+  ExpenseController(this._repository);
+
   final expenses = <ExpenseModel>[].obs;
   final isLoading = false.obs;
+  final isCategoriesLoading = false.obs;
+  final categories = <ExpenseCategory>[].obs;
+
+  // Pagination
+  final currentPage = 1.obs;
+  final lastPage = 1.obs;
+  final totalItems = 0.obs;
 
   // Add Expense Form Controllers
   final amountController = TextEditingController();
   final descriptionController = TextEditingController();
-  final selectedCategory = 'Shopping'.obs;
+  final selectedCategory = Rxn<ExpenseCategory>();
   final selectedDate = DateTime.now().obs;
   final isOnlinePayment = false.obs;
   final selectedReceiptPath = RxnString();
   final selectedAnalysisMonth = DateTime.now().obs;
   final formKey = GlobalKey<FormState>();
+
+  // Validation States (Pattern consistent with Add Student)
+  final triedToSave = false.obs;
+  final amountError = RxnString();
+  final descriptionError = RxnString();
+  final categoryError = RxnString();
+
+  @override
+  void onInit() {
+    super.onInit();
+    loadExpenses();
+    loadCategories();
+    
+    // Listeners to clear errors as user types
+    amountController.addListener(() {
+      if (triedToSave.value) validateForm();
+    });
+    descriptionController.addListener(() {
+      if (triedToSave.value) validateForm();
+    });
+    ever(selectedCategory, (_) {
+      if (triedToSave.value) validateForm();
+    });
+  }
+
+  bool validateForm() {
+    bool isValid = true;
+
+    // Amount validation
+    final amountVal = ValidationUtils.validateAmount(amountController.text, 'Amount');
+    amountError.value = amountVal;
+    if (amountVal != null) isValid = false;
+
+    // Description validation
+    final descVal = ValidationUtils.validateRequired(descriptionController.text, 'Description');
+    descriptionError.value = descVal;
+    if (descVal != null) isValid = false;
+
+    // Category validation
+    if (selectedCategory.value == null) {
+      categoryError.value = 'Please select a category';
+      isValid = false;
+    } else {
+      categoryError.value = null;
+    }
+
+    return isValid;
+  }
+
+  Future<void> loadExpenses({int page = 1}) async {
+    if (isLoading.value && page != 1) return;
+
+    try {
+      if (page == 1) isLoading.value = true;
+      final response = await _repository.listExpenses(page: page);
+      
+      if (page == 1) {
+        expenses.assignAll(response.items);
+      } else {
+        expenses.addAll(response.items);
+      }
+
+      currentPage.value = response.currentPage;
+      lastPage.value = response.lastPage;
+      totalItems.value = response.total;
+    } catch (e) {
+      debugPrint('Error loading expenses: $e');
+    } finally {
+      if (page == 1) isLoading.value = false;
+    }
+  }
+
+  Future<void> loadMoreExpenses() async {
+    if (currentPage.value < lastPage.value) {
+      await loadExpenses(page: currentPage.value + 1);
+    }
+  }
+
+  Future<void> loadCategories() async {
+    try {
+      isCategoriesLoading.value = true;
+      final fetchedCategories = await _repository.getExpenseCategories();
+      categories.assignAll(fetchedCategories);
+    } catch (e) {
+      debugPrint('Error loading categories: $e');
+    } finally {
+      isCategoriesLoading.value = false;
+    }
+  }
 
   void nextAnalysisMonth() {
     selectedAnalysisMonth.value = DateTime(
@@ -34,82 +137,37 @@ class ExpenseController extends GetxController {
     selectedAnalysisMonth.value = DateTime(date.year, date.month);
   }
 
-  final categories = [
-    'Shopping',
-    'Bills',
-    'Entertainment',
-    'Food & Drink',
-    'Transport',
-    'Other',
-  ];
-
-  @override
-  void onInit() {
-    super.onInit();
-    loadExpenses();
-  }
-
-  void loadExpenses() {
-    expenses.assignAll([
-      ExpenseModel(
-        id: '1',
-        title: 'Grocery Store',
-        date: DateTime(2023, 10, 12),
-        category: 'Shopping',
-        amount: 120.50,
-        icon: Icons.shopping_cart_rounded,
-        iconBgColor: const Color(0xFFFFF7ED),
-      ),
-      ExpenseModel(
-        id: '2',
-        title: 'Utility Bill',
-        date: DateTime(2023, 10, 8),
-        category: 'Bills',
-        amount: 85.00,
-        icon: Icons.bolt_rounded,
-        iconBgColor: const Color(0xFFEFF6FF),
-      ),
-      ExpenseModel(
-        id: '3',
-        title: 'Netflix Subscription',
-        date: DateTime(2023, 10, 5),
-        category: 'Entertainment',
-        amount: 15.99,
-        icon: Icons.movie_rounded,
-        iconBgColor: const Color(0xFFFAF5FF),
-      ),
-      ExpenseModel(
-        id: '4',
-        title: 'Starbucks Coffee',
-        date: DateTime(2023, 10, 3),
-        category: 'Food & Drink',
-        amount: 5.45,
-        icon: Icons.local_cafe_rounded,
-        iconBgColor: const Color(0xFFECFDF5),
-      ),
-      ExpenseModel(
-        id: '5',
-        title: 'Uber Ride',
-        date: DateTime(2023, 10, 1),
-        category: 'Transport',
-        amount: 24.30,
-        icon: Icons.directions_car_rounded,
-        iconBgColor: const Color(0xFFF1F5F9),
-      ),
-    ]);
-  }
-
   void resetForm() {
     amountController.clear();
     descriptionController.clear();
-    selectedCategory.value = 'Shopping';
+    selectedCategory.value = null;
     selectedDate.value = DateTime.now();
     isOnlinePayment.value = false;
     selectedReceiptPath.value = null;
+    triedToSave.value = false;
+    amountError.value = null;
+    descriptionError.value = null;
+    categoryError.value = null;
   }
 
   void togglePaymentMethod(bool isOnline) {
     isOnlinePayment.value = isOnline;
+  }
+
+  Future<void> pickReceipt() async {
+    try {
+      final ImagePicker picker = ImagePicker();
+      final XFile? image = await picker.pickImage(
+        source: ImageSource.camera,
+        imageQuality: 70,
+      );
+      
+      if (image != null) {
+        selectedReceiptPath.value = image.path;
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to pick image: $e');
+    }
   }
 
   Future<void> selectDate(BuildContext context) async {
@@ -124,58 +182,35 @@ class ExpenseController extends GetxController {
     }
   }
 
-  void addExpense() {
-    if (formKey.currentState?.validate() ?? false) {
-      final newExpense = ExpenseModel(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
-        title: descriptionController.text.isEmpty
-            ? selectedCategory.value
-            : descriptionController.text,
-        date: selectedDate.value,
-        category: selectedCategory.value,
-        amount: double.tryParse(amountController.text) ?? 0.0,
-        icon: _getIconForCategory(selectedCategory.value),
-        iconBgColor: _getBgColorForCategory(selectedCategory.value),
-      );
+  Future<void> addExpense() async {
+    triedToSave.value = true;
+    if (!validateForm()) return;
 
-      expenses.insert(0, newExpense);
+    try {
+      isLoading.value = true;
+      
+      final Map<String, dynamic> data = {
+        'expense_category_id': selectedCategory.value!.id.toString(),
+        'amount': amountController.text,
+        'date': selectedDate.value.toIso8601String().split('T')[0],
+        'description': descriptionController.text,
+        'payment_method': isOnlinePayment.value ? 'Online' : 'Cash',
+      };
+
+      if (selectedReceiptPath.value != null) {
+        data['receipt_image'] = selectedReceiptPath.value;
+      }
+
+      await _repository.createExpense(data);
+      
       Get.back();
       Get.snackbar('Success', 'Expense added successfully');
       resetForm();
-    }
-  }
-
-  IconData _getIconForCategory(String category) {
-    switch (category) {
-      case 'Shopping':
-        return Icons.shopping_cart_rounded;
-      case 'Bills':
-        return Icons.bolt_rounded;
-      case 'Entertainment':
-        return Icons.movie_rounded;
-      case 'Food & Drink':
-        return Icons.local_cafe_rounded;
-      case 'Transport':
-        return Icons.directions_car_rounded;
-      default:
-        return Icons.payments_rounded;
-    }
-  }
-
-  Color _getBgColorForCategory(String category) {
-    switch (category) {
-      case 'Shopping':
-        return const Color(0xFFFFF7ED);
-      case 'Bills':
-        return const Color(0xFFEFF6FF);
-      case 'Entertainment':
-        return const Color(0xFFFAF5FF);
-      case 'Food & Drink':
-        return const Color(0xFFECFDF5);
-      case 'Transport':
-        return const Color(0xFFF1F5F9);
-      default:
-        return const Color(0xFFF8FAFC);
+      loadExpenses(page: 1); // Refresh list
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+    } finally {
+      isLoading.value = false;
     }
   }
 

@@ -12,6 +12,7 @@ import 'package:fee_easy/config/app_routes.dart';
 import 'package:fee_easy/core/widgets/app_search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class LeadsManagementScreen extends GetView<LeadsController> {
   const LeadsManagementScreen({super.key});
@@ -36,20 +37,48 @@ class LeadsManagementScreen extends GetView<LeadsController> {
                     Expanded(
                       child: Obx(() {
                         return CommonStateWidget(
-                          isLoading: controller.isLoading.value,
-                          isEmpty: controller.filteredLeads.isEmpty,
+                          isLoading:
+                              controller.isLoading.value &&
+                              controller.leadsList.isEmpty,
+                          isEmpty: controller.leadsList.isEmpty,
                           emptyTitle: 'No Leads Found',
                           emptySubtitle:
                               'Start adding leads to manage your potential students.',
                           emptyIcon: Icons.leaderboard_outlined,
-                          child: ListView.separated(
-                            padding: EdgeInsets.zero,
-                            itemCount: controller.filteredLeads.length,
-                            separatorBuilder: (_, _) => AppSpacing.v16,
-                            itemBuilder: (context, index) {
-                              final lead = controller.filteredLeads[index];
-                              return _buildLeadCard(lead);
+                          child: NotificationListener<ScrollNotification>(
+                            onNotification: (ScrollNotification scrollInfo) {
+                              if (!controller.isLoading.value &&
+                                  scrollInfo.metrics.pixels ==
+                                      scrollInfo.metrics.maxScrollExtent) {
+                                controller.loadMoreLeads();
+                              }
+                              return false;
                             },
+                            child: RefreshIndicator(
+                              onRefresh: () => controller.fetchLeads(page: 1),
+                              child: ListView.separated(
+                                padding: EdgeInsets.only(bottom: 100),
+                                itemCount:
+                                    controller.leadsList.length +
+                                    (controller.currentPage.value <
+                                            controller.lastPage.value
+                                        ? 1
+                                        : 0),
+                                separatorBuilder: (_, _) => AppSpacing.v16,
+                                itemBuilder: (context, index) {
+                                  if (index == controller.leadsList.length) {
+                                    return const Center(
+                                      child: Padding(
+                                        padding: EdgeInsets.all(16.0),
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                    );
+                                  }
+                                  final lead = controller.leadsList[index];
+                                  return _buildLeadCard(lead);
+                                },
+                              ),
+                            ),
                           ),
                         );
                       }),
@@ -80,6 +109,8 @@ class LeadsManagementScreen extends GetView<LeadsController> {
   }
 
   Widget _buildLeadCard(Lead lead) {
+    final dateFormat = DateFormat('MMM dd, yyyy');
+
     return GestureDetector(
       onTap: () {
         controller.selectedLead.value = lead;
@@ -107,11 +138,14 @@ class LeadsManagementScreen extends GetView<LeadsController> {
                   radius: 24,
                   backgroundColor: AppColors.primaryBrandLight,
                   child: Text(
-                    lead.name
-                        .split(' ')
-                        .map((e) => e[0])
-                        .join('')
-                        .toUpperCase(),
+                    lead.fullName.isNotEmpty
+                        ? lead.fullName
+                              .trim()
+                              .split(' ')
+                              .map((e) => e.isNotEmpty ? e[0] : '')
+                              .join('')
+                              .toUpperCase()
+                        : '?',
                     style: AppTextStyles.manrope(
                       fontSize: 14,
                       fontWeight: FontWeight.w800,
@@ -120,58 +154,62 @@ class LeadsManagementScreen extends GetView<LeadsController> {
                   ),
                 ),
                 AppSpacing.h16,
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      lead.name,
-                      style: AppTextStyles.manrope(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.textPrimary,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        lead.fullName,
+                        style: AppTextStyles.manrope(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.textPrimary,
+                        ),
                       ),
-                    ),
-                    Text(
-                      '${AppStrings.instAppliedSuffix} ${lead.appliedDate}',
-                      style: AppTextStyles.lexend(
-                        fontSize: 12,
-                        color: AppColors.textTertiary,
+                      Text(
+                        '${AppStrings.instAppliedSuffix} ${dateFormat.format(lead.createdAt)}',
+                        style: AppTextStyles.lexend(
+                          fontSize: 12,
+                          color: AppColors.textTertiary,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            AppSpacing.v16,
-            Row(
-              children: [
-                const Icon(
-                  Icons.school_rounded,
-                  color: AppColors.textTertiary,
-                  size: 18,
-                ),
-                AppSpacing.h12,
-                Text(
-                  lead.course,
-                  style: AppTextStyles.manrope(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.textSecondary,
+                    ],
                   ),
                 ),
               ],
             ),
+            AppSpacing.v16,
+            if (lead.courseSelection != null &&
+                lead.courseSelection!.isNotEmpty)
+              Row(
+                children: [
+                  const Icon(
+                    Icons.school_rounded,
+                    color: AppColors.textTertiary,
+                    size: 18,
+                  ),
+                  AppSpacing.h12,
+                  Text(
+                    lead.courseSelection!,
+                    style: AppTextStyles.manrope(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                ],
+              ),
             AppSpacing.v8,
             Row(
               children: [
                 const Icon(
-                  Icons.calendar_month_rounded,
+                  Icons.phone_android_rounded,
                   color: AppColors.textTertiary,
                   size: 18,
                 ),
                 AppSpacing.h12,
                 Text(
-                  lead.appliedDate,
+                  lead.phone,
                   style: AppTextStyles.manrope(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,

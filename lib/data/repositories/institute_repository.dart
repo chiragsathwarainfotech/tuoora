@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:fee_easy/presentation/institute/models/expense_model.dart';
 import 'package:fee_easy/core/api/api_client.dart';
 import 'package:fee_easy/core/constants/api_constants.dart';
 import 'package:fee_easy/core/services/auth_service.dart';
@@ -576,5 +577,55 @@ class InstituteRepository implements InstituteRepositoryImpl {
 
     final List<dynamic> data = response.body['data'] ?? [];
     return data.map((json) => NotificationModel.fromJson(json)).toList();
+  }
+
+  @override
+  Future<ExpenseListResponse> listExpenses({int page = 1}) async {
+    final response = await _apiClient.get(
+      ApiConstants.instituteExpenses,
+      query: {'page': page.toString()},
+    );
+    if (response.status.hasError) {
+      throw Exception('Failed to fetch expenses: ${response.statusText}');
+    }
+    return ExpenseListResponse.fromJson(response.body['data']);
+  }
+
+  @override
+  Future<List<ExpenseCategory>> getExpenseCategories() async {
+    final response = await _apiClient.get(ApiConstants.instituteExpenseCategories);
+    if (response.status.hasError) {
+      throw Exception('Failed to fetch categories: ${response.statusText}');
+    }
+    final List<dynamic> data = response.body['data'] ?? [];
+    return data.map((json) => ExpenseCategory.fromJson(json)).toList();
+  }
+
+  @override
+  Future<ExpenseModel> createExpense(Map<String, dynamic> data) async {
+    final Map<String, dynamic> fields = Map.from(data);
+    final String? receiptPath = fields.remove('receipt_image');
+    
+    final formData = FormData(fields);
+
+    if (receiptPath != null && receiptPath.isNotEmpty) {
+      formData.files.add(
+        MapEntry(
+          'receipt_image',
+          MultipartFile(receiptPath, filename: receiptPath.split('/').last),
+        ),
+      );
+    }
+
+    final response = await _apiClient.post(
+      ApiConstants.instituteExpenses,
+      formData,
+    );
+
+    if (response.status.hasError) {
+      final message = response.body?['message'] ?? 'Failed to add expense';
+      throw Exception(message);
+    }
+    return ExpenseModel.fromJson(response.body['data']);
   }
 }

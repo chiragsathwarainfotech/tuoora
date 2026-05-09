@@ -1,121 +1,103 @@
-import 'package:fee_easy/core/constants/app_strings.dart';
+class LeadListResponse {
+  final List<Lead> data;
+  final int total;
+  final int perPage;
+  final int currentPage;
+  final int lastPage;
 
-class Lead {
-  final String id;
-  final String name;
-  final String email;
-  final String phone;
-  final String course;
-  final String appliedDate;
-  final String status;
-  final String? address;
-  final String? reference;
-  final String? notes;
-  final List<InteractionHistory>? interactionHistory;
-
-  Lead({
-    required this.id,
-    required this.name,
-    required this.email,
-    required this.phone,
-    required this.course,
-    required this.appliedDate,
-    required this.status,
-    this.address,
-    this.reference,
-    this.notes,
-    this.interactionHistory,
+  LeadListResponse({
+    required this.data,
+    required this.total,
+    required this.perPage,
+    required this.currentPage,
+    required this.lastPage,
   });
 
-  factory Lead.fromJson(Map<String, dynamic> json) {
-    return Lead(
-      id: json['id'] ?? '',
-      name: json['name'] ?? '',
-      email: json['email'] ?? '',
-      phone: json['phone'] ?? '',
-      course: json['course'] ?? '',
-      appliedDate: json['applied_date'] ?? '',
-      status: json['status'] ?? AppStrings.instActiveProspectTag,
-      address: json['address'],
-      reference: json['reference'],
-      notes: json['notes'],
-      interactionHistory: json['interaction_history'] != null
-          ? (json['interaction_history'] as List)
-              .map((i) => InteractionHistory.fromJson(i))
-              .toList()
-          : null,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'email': email,
-      'phone': phone,
-      'course': course,
-      'applied_date': appliedDate,
-      'status': status,
-      'address': address,
-      'reference': reference,
-      'notes': notes,
-      'interaction_history': interactionHistory?.map((i) => i.toJson()).toList(),
-    };
-  }
-
-  Lead copyWith({
-    String? id,
-    String? name,
-    String? email,
-    String? phone,
-    String? course,
-    String? appliedDate,
-    String? status,
-    String? address,
-    String? reference,
-    String? notes,
-    List<InteractionHistory>? interactionHistory,
-  }) {
-    return Lead(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      email: email ?? this.email,
-      phone: phone ?? this.phone,
-      course: course ?? this.course,
-      appliedDate: appliedDate ?? this.appliedDate,
-      status: status ?? this.status,
-      address: address ?? this.address,
-      reference: reference ?? this.reference,
-      notes: notes ?? this.notes,
-      interactionHistory: interactionHistory ?? this.interactionHistory,
+  factory LeadListResponse.fromJson(Map<String, dynamic> json) {
+    final pagination = json['pagination'] ?? {};
+    return LeadListResponse(
+      data: (json['data'] as List).map((i) => Lead.fromJson(i)).toList(),
+      total: pagination['total'] ?? 0,
+      perPage: pagination['per_page'] ?? 10,
+      currentPage: pagination['current_page'] ?? 1,
+      lastPage: pagination['last_page'] ?? 1,
     );
   }
 }
 
-class InteractionHistory {
-  final String title;
-  final String description;
-  final String date;
+class Lead {
+  final int id;
+  final int instituteId;
+  final String fullName;
+  final String phone;
+  final String email;
+  final String? address;
+  final String? courseSelection;
+  final String? reference;
+  final String status;
+  final List<LeadNote> notes;
+  final DateTime createdAt;
 
-  InteractionHistory({
-    required this.title,
-    required this.description,
-    required this.date,
+  Lead({
+    required this.id,
+    required this.instituteId,
+    required this.fullName,
+    required this.phone,
+    required this.email,
+    this.address,
+    this.courseSelection,
+    this.reference,
+    required this.status,
+    required this.notes,
+    required this.createdAt,
   });
 
-  factory InteractionHistory.fromJson(Map<String, dynamic> json) {
-    return InteractionHistory(
-      title: json['title'] ?? '',
-      description: json['description'] ?? '',
-      date: json['date'] ?? '',
+  factory Lead.fromJson(Map<String, dynamic> json) {
+    return Lead(
+      id: json['id'],
+      instituteId: json['institute_id'] ?? 0,
+      fullName: json['full_name'] ?? '',
+      phone: json['phone'] ?? '',
+      email: json['email'] ?? '',
+      address: json['address'],
+      courseSelection: json['course_selection'],
+      reference: json['reference'],
+      status: json['status'] ?? 'New',
+      notes: json['notes'] != null
+          ? (json['notes'] as List).map((i) => LeadNote.fromJson(i)).toList()
+          : [],
+      createdAt: DateTime.parse(
+        json['created_at'] ?? DateTime.now().toIso8601String(),
+      ),
     );
   }
+}
 
-  Map<String, dynamic> toJson() {
-    return {
-      'title': title,
-      'description': description,
-      'date': date,
-    };
+class LeadNote {
+  final int id;
+  final int leadId;
+  final int instituteId;
+  final String title;
+  final String note;
+  final DateTime createdAt;
+
+  LeadNote({
+    required this.id,
+    required this.leadId,
+    required this.instituteId,
+    required this.title,
+    required this.note,
+    required this.createdAt,
+  });
+
+  factory LeadNote.fromJson(Map<String, dynamic> json) {
+    return LeadNote(
+      id: json['id'],
+      leadId: json['lead_id'],
+      instituteId: json['institute_id'],
+      title: json['title'] ?? '',
+      note: json['note'] ?? '',
+      createdAt: DateTime.parse(json['created_at']),
+    );
   }
 }

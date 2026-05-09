@@ -1,6 +1,7 @@
 import 'package:fee_easy/data/models/batch_model.dart';
 import 'package:fee_easy/data/models/institute_profile_model.dart';
 import 'package:fee_easy/data/models/whatsapp_settings_model.dart';
+import 'package:fee_easy/presentation/institute/models/expense_model.dart';
 import 'package:fee_easy/presentation/institute/models/fee_record.dart';
 import 'package:fee_easy/presentation/institute/models/report_models.dart';
 import 'package:fee_easy/presentation/institute/models/homework_model.dart';
@@ -57,17 +58,31 @@ abstract class InstituteRepositoryImpl {
   // Homework
   Future<List<HomeworkModel>> getHomeworks(int batchId);
   Future<dynamic> createHomework(Map<String, dynamic> data);
-  Future<dynamic> submitHomeworkScore(int homeworkId, Map<String, dynamic> data);
+  Future<dynamic> submitHomeworkScore(
+    int homeworkId,
+    Map<String, dynamic> data,
+  );
 
   // Batch Students
   Future<void> removeStudentFromBatch(int batchId, int studentId);
-  Future<dynamic> assignStudentsToBatch(int batchId, List<Map<String, dynamic>> students);
+  Future<dynamic> assignStudentsToBatch(
+    int batchId,
+    List<Map<String, dynamic>> students,
+  );
 
   // Resources
   Future<List<ResourceModel>> getResources(int batchId);
   Future<dynamic> uploadResource(Map<String, dynamic> data);
-  Future<List<int>> downloadResource(int resourceId, {Function(double)? onProgress});
-  
+  Future<List<int>> downloadResource(
+    int resourceId, {
+    Function(double)? onProgress,
+  });
+
   // Notifications
   Future<List<NotificationModel>> getNotifications();
+
+  // Expenses
+  Future<ExpenseListResponse> listExpenses({int page = 1});
+  Future<List<ExpenseCategory>> getExpenseCategories();
+  Future<ExpenseModel> createExpense(Map<String, dynamic> data);
 }

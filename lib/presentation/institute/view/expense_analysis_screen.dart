@@ -46,6 +46,7 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
   }
 
   Widget _buildTotalSpendingCard() {
+    final _ = controller.selectedAnalysisMonth.value;
     return Container(
       width: double.infinity,
       padding: AppSpacing.all24,

@@ -41,13 +41,25 @@ class AddEditLeadScreen extends GetView<LeadsController> {
                     ),
                     AppSpacing.v20,
                     _buildCourseSelectionSection(),
-                    AppSpacing.v32,
-                    _buildSectionHeader(
-                      Icons.note_alt_rounded,
-                      AppStrings.instInteractionNotesHeading,
-                    ),
-                    AppSpacing.v20,
-                    _buildInteractionNotesSection(),
+                    
+                    Obx(() {
+                      if (controller.editingLeadId.value == null) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            AppSpacing.v32,
+                            _buildSectionHeader(
+                              Icons.note_alt_rounded,
+                              'Initial Interaction Note',
+                            ),
+                            AppSpacing.v20,
+                            _buildInteractionNoteSection(),
+                          ],
+                        );
+                      }
+                      return const SizedBox.shrink();
+                    }),
+                    
                     AppSpacing.v40,
                     Obx(
                       () => AppButton(
@@ -93,19 +105,22 @@ class AddEditLeadScreen extends GetView<LeadsController> {
             label: AppStrings.instFullNameLabel,
             hint: AppStrings.instFullNameHint,
             controller: controller.nameController,
-            errorText:
-                controller.triedToSave.value &&
-                    controller.nameController.text.isEmpty
-                ? 'Name is required'
+            errorText: controller.triedToSave.value
+                ? controller.nameError.value
                 : null,
           ),
         ),
         AppSpacing.v24,
-        AppInputField(
-          label: AppStrings.instEmailAddressLabel,
-          hint: AppStrings.instEmailAddressHint,
-          controller: controller.emailController,
-          keyboardType: TextInputType.emailAddress,
+        Obx(
+          () => AppInputField(
+            label: AppStrings.instEmailAddressLabel,
+            hint: AppStrings.instEmailAddressHint,
+            controller: controller.emailController,
+            keyboardType: TextInputType.emailAddress,
+            errorText: controller.triedToSave.value
+                ? controller.emailError.value
+                : null,
+          ),
         ),
         AppSpacing.v24,
         Obx(
@@ -115,25 +130,33 @@ class AddEditLeadScreen extends GetView<LeadsController> {
             controller: controller.phoneController,
             keyboardType: TextInputType.phone,
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            errorText:
-                controller.triedToSave.value &&
-                    controller.phoneController.text.isEmpty
-                ? 'Phone is required'
+            errorText: controller.triedToSave.value
+                ? controller.phoneError.value
                 : null,
           ),
         ),
         AppSpacing.v24,
-        AppInputField(
-          label: AppStrings.instAddressLabel,
-          hint: AppStrings.instAddressHint,
-          controller: controller.addressController,
-          maxLines: 3,
+        Obx(
+          () => AppInputField(
+            label: AppStrings.instAddressLabel,
+            hint: AppStrings.instAddressHint,
+            controller: controller.addressController,
+            maxLines: 3,
+            errorText: controller.triedToSave.value
+                ? controller.addressError.value
+                : null,
+          ),
         ),
         AppSpacing.v24,
-        AppInputField(
-          label: AppStrings.instReferenceLabel,
-          hint: AppStrings.instReferenceHint,
-          controller: controller.referenceController,
+        Obx(
+          () => AppInputField(
+            label: AppStrings.instReferenceLabel,
+            hint: AppStrings.instReferenceHint,
+            controller: controller.referenceController,
+            errorText: controller.triedToSave.value
+                ? controller.referenceError.value
+                : null,
+          ),
         ),
       ],
     );
@@ -145,21 +168,39 @@ class AddEditLeadScreen extends GetView<LeadsController> {
         label: AppStrings.instCourseSelectionLabel,
         hint: AppStrings.instCourseSelectionHint,
         controller: controller.courseController,
-        errorText:
-            controller.triedToSave.value &&
-                controller.courseController.text.isEmpty
-            ? 'Course selection is required'
+        errorText: controller.triedToSave.value
+            ? controller.courseError.value
             : null,
       ),
     );
   }
 
-  Widget _buildInteractionNotesSection() {
-    return AppInputField(
-      label: AppStrings.instInteractionNotesLabel,
-      hint: AppStrings.instInteractionNotesHint,
-      controller: controller.notesController,
-      maxLines: 5,
+  Widget _buildInteractionNoteSection() {
+    return Column(
+      children: [
+        Obx(
+          () => AppInputField(
+            label: 'NOTE TITLE',
+            hint: 'e.g., Initial Inquiry',
+            controller: controller.noteTitleController,
+            errorText: controller.triedToSave.value
+                ? controller.noteTitleError.value
+                : null,
+          ),
+        ),
+        AppSpacing.v20,
+        Obx(
+          () => AppInputField(
+            label: 'NOTE DESCRIPTION',
+            hint: 'Add more details about the interaction...',
+            controller: controller.notesController,
+            maxLines: 5,
+            errorText: controller.triedToSave.value
+                ? controller.noteError.value
+                : null,
+          ),
+        ),
+      ],
     );
   }
 }

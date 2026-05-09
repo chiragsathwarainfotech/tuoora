@@ -41,8 +41,22 @@ class ExpensesScreen extends GetView<ExpenseController> {
               ],
             ),
             Expanded(
-              child: Obx(
-                () => ListView.separated(
+              child: Obx(() {
+                if (controller.isLoading.value && controller.expenses.isEmpty) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (controller.expenses.isEmpty) {
+                  return Center(
+                    child: Text(
+                      'No expenses found',
+                      style: AppTextStyles.manrope(
+                        fontSize: 16,
+                        color: AppColors.textTertiary,
+                      ),
+                    ),
+                  );
+                }
+                return ListView.separated(
                   padding: AppSpacing.all24,
                   itemCount: controller.expenses.length,
                   separatorBuilder: (context, index) => AppSpacing.v16,
@@ -50,8 +64,8 @@ class ExpensesScreen extends GetView<ExpenseController> {
                     final expense = controller.expenses[index];
                     return _buildExpenseCard(expense);
                   },
-                ),
-              ),
+                );
+              }),
             ),
           ],
         ),
@@ -68,10 +82,7 @@ class ExpensesScreen extends GetView<ExpenseController> {
   }
 
   Widget _buildExpenseCard(ExpenseModel expense) {
-    final currencyFormat = NumberFormat.currency(
-      symbol: '₹',
-      decimalDigits: 2,
-    );
+    final currencyFormat = NumberFormat.currency(symbol: '₹', decimalDigits: 2);
     final dateFormat = DateFormat('MMM dd, yyyy');
 
     return Container(
@@ -107,7 +118,7 @@ class ExpensesScreen extends GetView<ExpenseController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  expense.title,
+                  expense.category?.name ?? "",
                   style: AppTextStyles.manrope(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
@@ -116,7 +127,7 @@ class ExpensesScreen extends GetView<ExpenseController> {
                 ),
                 AppSpacing.v4,
                 Text(
-                  '${dateFormat.format(expense.date)} • ${expense.category}',
+                  dateFormat.format(expense.date),
                   style: AppTextStyles.lexend(
                     fontSize: 12,
                     fontWeight: FontWeight.w400,
@@ -127,7 +138,7 @@ class ExpensesScreen extends GetView<ExpenseController> {
             ),
           ),
           Text(
-            '-${currencyFormat.format(expense.amount)}',
+            currencyFormat.format(expense.amount),
             style: AppTextStyles.manrope(
               fontSize: 16,
               fontWeight: FontWeight.w700,

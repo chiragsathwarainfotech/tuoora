@@ -28,6 +28,9 @@ class ApiConstants {
   static const String instituteForgotPassword = '/institute/forgot-password';
   static const String instituteResetPassword = '/institute/reset-password';
   static const String instituteNotifications = '/institute/notifications';
+  static const String instituteExpenses = '/institute/expenses';
+  static const String instituteExpenseCategories = '/institute/expenses/categories';
+  static const String instituteLeads = '/institute/leads';
 
   static String removeStudentFromBatch(int batchId) =>
       '/institute/batches/$batchId/remove-student';

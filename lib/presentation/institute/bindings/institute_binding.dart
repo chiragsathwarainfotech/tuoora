@@ -47,7 +47,9 @@ class InstituteBinding extends Bindings {
     Get.lazyPut<DailyUpdateRepositoryImpl>(
       () => DailyUpdateRepository(Get.find<ApiClient>()),
     );
-    Get.lazyPut<LeadsRepositoryImpl>(() => LeadsRepositoryImpl());
+    Get.lazyPut<LeadsRepositoryImpl>(
+      () => LeadsRepositoryImpl(Get.find<ApiClient>()),
+    );
     Get.lazyPut<NotesRepositoryImpl>(() => NotesRepositoryImpl());
     Get.lazyPut<ChatRepositoryImpl>(() => ChatRepositoryImpl());
     Get.lazyPut<StaffRepositoryImpl>(() => StaffRepositoryImpl());
@@ -103,7 +105,10 @@ class InstituteBinding extends Bindings {
       () => StaffController(Get.find<StaffRepositoryImpl>()),
       fenix: true,
     );
-    Get.lazyPut<ExpenseController>(() => ExpenseController(), fenix: true);
+    Get.lazyPut<ExpenseController>(
+      () => ExpenseController(Get.find<InstituteRepositoryImpl>()),
+      fenix: true,
+    );
 
     Get.put<DownloadService>(DownloadService(), permanent: true);
   }

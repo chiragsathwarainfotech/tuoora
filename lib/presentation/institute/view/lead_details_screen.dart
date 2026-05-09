@@ -8,6 +8,7 @@ import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/data/models/lead_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class LeadDetailsScreen extends GetView<LeadsController> {
   const LeadDetailsScreen({super.key});
@@ -38,24 +39,23 @@ class LeadDetailsScreen extends GetView<LeadsController> {
                       _buildInfoCard(
                         Icons.school_rounded,
                         AppStrings.instCourseSelectionLabel,
-                        lead.course,
-                        subtitle: 'Part-time (Cohort 12) • Starts Oct 15, 2024',
+                        lead.courseSelection ?? "",
                       ),
                       AppSpacing.v16,
                       _buildInfoCard(
                         Icons.location_on_rounded,
                         AppStrings.instAddressLabel,
-                        lead.address ?? 'Not provided',
+                        lead.address ?? "",
                       ),
                       AppSpacing.v16,
                       _buildInfoCard(
                         Icons.campaign_rounded,
                         AppStrings.instReferenceLabel,
-                        lead.reference ?? 'Not provided',
+                        lead.reference ?? "",
                       ),
                       AppSpacing.v32,
-                      _buildInteractionHistory(lead),
-                      AppSpacing.v32,
+                      // _buildInteractionHistory(lead),
+                      // AppSpacing.v32,
                     ],
                   ),
                 ),
@@ -69,6 +69,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
   }
 
   Widget _buildHeader(Lead lead) {
+    final dateFormat = DateFormat('MMM dd, yyyy');
     return Container(
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
@@ -108,7 +109,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
                 ),
               ),
               Text(
-                '${AppStrings.instAppliedSuffix} ${lead.appliedDate}',
+                '${AppStrings.instAppliedSuffix} ${dateFormat.format(lead.createdAt)}',
                 style: AppTextStyles.lexend(
                   fontSize: 12,
                   color: AppColors.textTertiary,
@@ -118,7 +119,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
           ),
           AppSpacing.v16,
           Text(
-            lead.name,
+            lead.fullName,
             style: AppTextStyles.manrope(
               fontSize: 28,
               fontWeight: FontWeight.w800,
@@ -253,129 +254,129 @@ class LeadDetailsScreen extends GetView<LeadsController> {
     );
   }
 
-  Widget _buildInteractionHistory(Lead lead) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            const Icon(
-              Icons.history_rounded,
-              color: AppColors.primaryBrand,
-              size: 20,
-            ),
-            AppSpacing.h12,
-            Text(
-              AppStrings.instInteractionHistoryHeading,
-              style: AppTextStyles.manrope(
-                fontSize: 16,
-                fontWeight: FontWeight.w800,
-                color: AppColors.primaryBrand,
-              ),
-            ),
-          ],
-        ),
-        AppSpacing.v24,
-        if (lead.interactionHistory != null &&
-            lead.interactionHistory!.isNotEmpty)
-          ...lead.interactionHistory!.map((item) => _buildTimelineItem(item))
-        else
-          Container(
-            padding: AppSpacing.all20,
-            decoration: BoxDecoration(
-              color: AppColors.white,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: const Center(
-              child: Text('No interaction history available'),
-            ),
-          ),
-      ],
-    );
-  }
+  // Widget _buildInteractionHistory(Lead lead) {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       Row(
+  //         children: [
+  //           const Icon(
+  //             Icons.history_rounded,
+  //             color: AppColors.primaryBrand,
+  //             size: 20,
+  //           ),
+  //           AppSpacing.h12,
+  //           Text(
+  //             AppStrings.instInteractionHistoryHeading,
+  //             style: AppTextStyles.manrope(
+  //               fontSize: 16,
+  //               fontWeight: FontWeight.w800,
+  //               color: AppColors.primaryBrand,
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //       AppSpacing.v24,
+  //       if (lead.interactionHistory != null &&
+  //           lead.interactionHistory!.isNotEmpty)
+  //         ...lead.interactionHistory!.map((item) => _buildTimelineItem(item))
+  //       else
+  //         Container(
+  //           padding: AppSpacing.all20,
+  //           decoration: BoxDecoration(
+  //             color: AppColors.white,
+  //             borderRadius: BorderRadius.circular(16),
+  //           ),
+  //           child: const Center(
+  //             child: Text('No interaction history available'),
+  //           ),
+  //         ),
+  //     ],
+  //   );
+  // }
 
-  Widget _buildTimelineItem(InteractionHistory item) {
-    return IntrinsicHeight(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Column(
-              children: [
-                Container(
-                  width: 12,
-                  height: 12,
-                  decoration: const BoxDecoration(
-                    color: AppColors.primaryBrand,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    width: 2,
-                    color: AppColors.primaryBrand.withValues(alpha: 0.2),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          AppSpacing.h16,
-          Expanded(
-            child: Container(
-              padding: AppSpacing.all16,
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.02),
-                    blurRadius: 5,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        item.title,
-                        style: AppTextStyles.manrope(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.textPrimary,
-                        ),
-                      ),
-                      Text(
-                        item.date,
-                        style: AppTextStyles.lexend(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.textTertiary,
-                        ),
-                      ),
-                    ],
-                  ),
-                  AppSpacing.v8,
-                  Text(
-                    item.description,
-                    style: AppTextStyles.lexend(
-                      fontSize: 12,
-                      color: AppColors.textSecondary,
-                      height: 1.4,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget _buildTimelineItem(InteractionHistory item) {
+  //   return IntrinsicHeight(
+  //     child: Row(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         Padding(
+  //           padding: const EdgeInsets.symmetric(horizontal: 8.0),
+  //           child: Column(
+  //             children: [
+  //               Container(
+  //                 width: 12,
+  //                 height: 12,
+  //                 decoration: const BoxDecoration(
+  //                   color: AppColors.primaryBrand,
+  //                   shape: BoxShape.circle,
+  //                 ),
+  //               ),
+  //               Expanded(
+  //                 child: Container(
+  //                   width: 2,
+  //                   color: AppColors.primaryBrand.withValues(alpha: 0.2),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //         AppSpacing.h16,
+  //         Expanded(
+  //           child: Container(
+  //             padding: AppSpacing.all16,
+  //             decoration: BoxDecoration(
+  //               color: AppColors.white,
+  //               borderRadius: BorderRadius.circular(12),
+  //               boxShadow: [
+  //                 BoxShadow(
+  //                   color: Colors.black.withValues(alpha: 0.02),
+  //                   blurRadius: 5,
+  //                   offset: const Offset(0, 2),
+  //                 ),
+  //               ],
+  //             ),
+  //             child: Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: [
+  //                 Row(
+  //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                   children: [
+  //                     Text(
+  //                       item.title,
+  //                       style: AppTextStyles.manrope(
+  //                         fontSize: 14,
+  //                         fontWeight: FontWeight.w700,
+  //                         color: AppColors.textPrimary,
+  //                       ),
+  //                     ),
+  //                     Text(
+  //                       item.date,
+  //                       style: AppTextStyles.lexend(
+  //                         fontSize: 10,
+  //                         fontWeight: FontWeight.w500,
+  //                         color: AppColors.textTertiary,
+  //                       ),
+  //                     ),
+  //                   ],
+  //                 ),
+  //                 AppSpacing.v8,
+  //                 Text(
+  //                   item.description,
+  //                   style: AppTextStyles.lexend(
+  //                     fontSize: 12,
+  //                     color: AppColors.textSecondary,
+  //                     height: 1.4,
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _buildBottomAction(Lead lead) {
     return Container(
@@ -391,7 +392,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
         ],
       ),
       child: AppButton(
-        label: '${AppStrings.instCallBtn} ${lead.name.split(' ')[0]}',
+        label: '${AppStrings.instCallBtn} ${lead.fullName.split(' ')[0]}',
         icon: Icons.phone,
         onPressed: () => controller.callLead(lead.phone),
       ),

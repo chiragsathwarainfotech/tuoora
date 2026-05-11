@@ -1,82 +1,85 @@
+import 'package:fee_easy/core/api/api_client.dart';
+import 'package:fee_easy/core/constants/api_constants.dart';
 import 'package:fee_easy/data/models/note_model.dart';
 
 class NotesRepositoryImpl {
-  final List<Note> _mockNotes = [
-    Note(
-      id: '1',
-      title: 'UI Design Principles',
-      content: 'Remember to focus on hierarchy, typography, and color harmony in all web projects. Use consistent spacing and accessibility standards.',
-      createdAt: 'Oct 24, 2023',
-      isBookmarked: true,
-      tag: 'DESIGN',
-    ),
-    Note(
-      id: '2',
-      title: 'Meeting Notes: Batch A',
-      content: 'Discussed the upcoming final exams. Students requested more practice materials for Organic Chemistry.',
-      createdAt: 'Oct 23, 2023',
-      tag: 'ACADEMIC',
-    ),
-    Note(
-      id: '3',
-      title: 'Project Ideas',
-      content: '1. Personal Finance Tracker\n2. AI Chatbot for Institutes\n3. Portfolio Website with 3D elements',
-      createdAt: 'Oct 22, 2023',
-      isBookmarked: true,
-      tag: 'IDEAS',
-    ),
-    Note(
-      id: '4',
-      title: 'Quick Reminder',
-      content: 'Check the attendance logs for last week and send reminders to parents of students with low attendance.',
-      createdAt: 'Oct 21, 2023',
-      tag: 'ADMIN',
-    ),
-  ];
+  final ApiClient _apiClient;
 
-  Future<List<Note>> getNotes() async {
-    await Future.delayed(const Duration(milliseconds: 500));
-    return _mockNotes;
+  NotesRepositoryImpl(this._apiClient);
+
+  Future<NoteListResponse> getNotes({int page = 1, bool? isBookmarked}) async {
+    final query = {
+      'page': page.toString(),
+      if (isBookmarked != null) 'is_bookmarked': isBookmarked.toString(),
+    };
+
+    final response = await _apiClient.get(
+      ApiConstants.instituteNotes,
+      query: query,
+    );
+
+    if (response.status.hasError) {
+      throw Exception('Failed to fetch notes: ${response.statusText}');
+    }
+
+    return NoteListResponse.fromJson(response.body);
+  }
+
+  Future<List<NoteCategory>> getNoteCategories() async {
+    final response = await _apiClient.get(ApiConstants.instituteNoteCategories);
+
+    if (response.status.hasError) {
+      throw Exception('Failed to fetch note categories: ${response.statusText}');
+    }
+
+    final List<dynamic> data = response.body['data'] ?? [];
+    return data.map((json) => NoteCategory.fromJson(json)).toList();
   }
 
   Future<void> createNote(Map<String, dynamic> noteData) async {
-    await Future.delayed(const Duration(milliseconds: 500));
-    final newNote = Note(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
-      title: noteData['title'],
-      content: noteData['content'],
-      tag: noteData['tag'],
-      createdAt: 'Oct 25, 2023',
-      isBookmarked: false,
+    final response = await _apiClient.post(
+      ApiConstants.instituteNotes,
+      noteData,
     );
-    _mockNotes.insert(0, newNote);
-  }
 
-  Future<void> updateNote(String id, Map<String, dynamic> noteData) async {
-    await Future.delayed(const Duration(milliseconds: 500));
-    final index = _mockNotes.indexWhere((n) => n.id == id);
-    if (index != -1) {
-      _mockNotes[index] = _mockNotes[index].copyWith(
-        title: noteData['title'],
-        content: noteData['content'],
-        tag: noteData['tag'],
-        isBookmarked: noteData['is_bookmarked'],
-      );
+    if (response.status.hasError) {
+      final message = response.body?['message'] ?? 'Failed to create note';
+      throw Exception(message);
     }
   }
 
-  Future<void> deleteNote(String id) async {
-    await Future.delayed(const Duration(milliseconds: 500));
-    _mockNotes.removeWhere((n) => n.id == id);
+  Future<void> updateNote(int id, Map<String, dynamic> noteData) async {
+    final response = await _apiClient.put(
+      '${ApiConstants.instituteNotes}/$id',
+      noteData,
+    );
+
+    if (response.status.hasError) {
+      final message = response.body?['message'] ?? 'Failed to update note';
+      throw Exception(message);
+    }
   }
 
-  Future<void> toggleBookmark(String id) async {
-    await Future.delayed(const Duration(milliseconds: 300));
-    final index = _mockNotes.indexWhere((n) => n.id == id);
-    if (index != -1) {
-      _mockNotes[index] = _mockNotes[index].copyWith(
-        isBookmarked: !_mockNotes[index].isBookmarked,
-      );
+  Future<void> deleteNote(int id) async {
+    final response = await _apiClient.delete(
+      '${ApiConstants.instituteNotes}/$id',
+    );
+
+    if (response.status.hasError) {
+      final message = response.body?['message'] ?? 'Failed to delete note';
+      throw Exception(message);
+    }
+  }
+
+  Future<void> toggleBookmark(int id, bool isBookmarked) async {
+    final response = await _apiClient.post(
+      '${ApiConstants.instituteNotes}/$id/bookmark',
+      {'is_bookmarked': isBookmarked},
+    );
+
+    if (response.status.hasError) {
+      final message = response.body?['message'] ?? 'Failed to update bookmark';
+      throw Exception(message);
     }
   }
 }

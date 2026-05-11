@@ -22,9 +22,7 @@ class AddEditNoteScreen extends GetView<NotesController> {
             Obx(
               () => InstituteAppBar(
                 title: controller.editingNoteId.value != null
-                    ? controller.titleController.text.isEmpty
-                          ? AppStrings.instEditNoteTitle
-                          : controller.titleController.text
+                    ? AppStrings.instEditNoteTitle
                     : AppStrings.instAddNoteTitle,
               ),
             ),
@@ -34,28 +32,38 @@ class AddEditNoteScreen extends GetView<NotesController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    AppInputField(
-                      label: AppStrings.instNoteTitleLabel,
-                      hint: AppStrings.instNoteTitleHint,
-                      controller: controller.titleController,
-                      textStyle: AppTextStyles.manrope(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.textPrimary,
+                    Obx(
+                      () => AppInputField(
+                        label: AppStrings.instNoteTitleLabel,
+                        hint: AppStrings.instNoteTitleHint,
+                        controller: controller.titleController,
+                        errorText: controller.triedToSave.value
+                            ? controller.titleError.value
+                            : null,
+                        textStyle: AppTextStyles.manrope(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.textPrimary,
+                        ),
                       ),
                     ),
                     AppSpacing.v24,
-                    _buildTagSelection(),
+                    _buildCategorySelection(),
                     AppSpacing.v24,
-                    AppInputField(
-                      label: AppStrings.instNoteContentLabel,
-                      hint: AppStrings.instNoteContentHint,
-                      controller: controller.contentController,
-                      maxLines: 12,
-                      textStyle: AppTextStyles.lexend(
-                        fontSize: 14,
-                        color: AppColors.textSecondary,
-                        height: 1.6,
+                    Obx(
+                      () => AppInputField(
+                        label: AppStrings.instNoteContentLabel,
+                        hint: AppStrings.instNoteContentHint,
+                        controller: controller.contentController,
+                        maxLines: 12,
+                        errorText: controller.triedToSave.value
+                            ? controller.contentError.value
+                            : null,
+                        textStyle: AppTextStyles.lexend(
+                          fontSize: 14,
+                          color: AppColors.textSecondary,
+                          height: 1.6,
+                        ),
                       ),
                     ),
                   ],
@@ -69,12 +77,12 @@ class AddEditNoteScreen extends GetView<NotesController> {
     );
   }
 
-  Widget _buildTagSelection() {
+  Widget _buildCategorySelection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Choose Tag',
+          'CATEGORY',
           style: AppTextStyles.manrope(
             fontSize: 14,
             fontWeight: FontWeight.w800,
@@ -82,134 +90,86 @@ class AddEditNoteScreen extends GetView<NotesController> {
           ),
         ),
         AppSpacing.v12,
-        Obx(
-          () => SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                ...controller.availableTags.map((tag) {
-                  final isSelected = controller.selectedTag.value == tag;
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 12),
-                    child: GestureDetector(
-                      onTap: () {
-                        if (isSelected) {
-                          controller.selectedTag.value = null;
-                        } else {
-                          controller.selectedTag.value = tag;
-                        }
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 10,
-                        ),
-                        decoration: BoxDecoration(
-                          color: isSelected
-                              ? AppColors.primaryBrand
-                              : AppColors.paleSilver,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Text(
-                          tag,
-                          style: AppTextStyles.lexend(
-                            fontSize: 13,
-                            fontWeight: isSelected
-                                ? FontWeight.w600
-                                : FontWeight.w500,
-                            color: isSelected
-                                ? AppColors.white
-                                : AppColors.textSecondary,
+        Obx(() {
+          if (controller.isCategoriesLoading.value &&
+              controller.noteCategories.isEmpty) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    ...controller.noteCategories.map((cat) {
+                      final isSelected =
+                          controller.selectedCategoryName.value == cat.name;
+                      final Color catColor = Color(
+                        int.parse(cat.color.replaceAll('#', '0xFF')),
+                      );
+
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 12),
+                        child: GestureDetector(
+                          onTap: () {
+                            controller.selectedCategoryName.value = cat.name;
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 10,
+                            ),
+                            decoration: BoxDecoration(
+                              color: isSelected
+                                  ? catColor
+                                  : AppColors.paleSilver.withValues(alpha: 0.5),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: isSelected
+                                    ? catColor
+                                    : AppColors.borderGrey.withValues(
+                                        alpha: 0.3,
+                                      ),
+                              ),
+                            ),
+                            child: Text(
+                              cat.name,
+                              style: AppTextStyles.lexend(
+                                fontSize: 13,
+                                fontWeight: isSelected
+                                    ? FontWeight.w600
+                                    : FontWeight.w500,
+                                color: isSelected
+                                    ? AppColors.white
+                                    : AppColors.textSecondary,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                  );
-                }),
-                GestureDetector(
-                  onTap: () => _showAddTagDialog(),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 10,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.paleSilver,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Icon(
-                      Icons.add_rounded,
-                      size: 18,
-                      color: AppColors.blueSapphire,
+                      );
+                    }),
+                  ],
+                ),
+              ),
+              if (controller.triedToSave.value &&
+                  controller.categoryError.value != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8, left: 4),
+                  child: Text(
+                    controller.categoryError.value!,
+                    style: AppTextStyles.manrope(
+                      fontSize: 12,
+                      color: Colors.redAccent,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
-              ],
-            ),
-          ),
-        ),
+            ],
+          );
+        }),
       ],
-    );
-  }
-
-  void _showAddTagDialog() {
-    final tagController = TextEditingController();
-    Get.dialog(
-      AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-        backgroundColor: AppColors.white,
-        title: Text(
-          'Add New Tag',
-          style: AppTextStyles.manrope(
-            fontSize: 20,
-            fontWeight: FontWeight.w800,
-            color: AppColors.textPrimary,
-          ),
-        ),
-        content: AppInputField(
-          label: 'TAG NAME',
-          hint: 'e.g., URGENT',
-          controller: tagController,
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: Text(
-              'Cancel',
-              style: AppTextStyles.manrope(
-                fontWeight: FontWeight.w700,
-                color: AppColors.textSecondary,
-              ),
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              final newTag = tagController.text.trim().toUpperCase();
-              if (newTag.isNotEmpty &&
-                  !controller.availableTags.contains(newTag)) {
-                controller.availableTags.add(newTag);
-                controller.selectedTag.value = newTag;
-              }
-              Get.back();
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primaryBrand,
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-            ),
-            child: Text(
-              'Add Tag',
-              style: AppTextStyles.manrope(
-                fontWeight: FontWeight.w700,
-                color: AppColors.white,
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 

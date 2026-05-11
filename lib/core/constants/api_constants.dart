@@ -29,8 +29,17 @@ class ApiConstants {
   static const String instituteResetPassword = '/institute/reset-password';
   static const String instituteNotifications = '/institute/notifications';
   static const String instituteExpenses = '/institute/expenses';
-  static const String instituteExpenseCategories = '/institute/expenses/categories';
+  static const String instituteExpenseCategories =
+      '/institute/expenses/categories';
+  static const String instituteExpenseAnalysis = '/institute/expenses/analysis';
   static const String instituteLeads = '/institute/leads';
+  static const String instituteNotes = '/institute/notes';
+  static const String instituteNoteCategories = '/institute/note-categories';
+  static const String instituteStaff = '/institute/staff';
+  static const String instituteStaffRoles = '/institute/staff-roles';
+  static const String instituteStaffDepartments =
+      '/institute/staff-departments';
+  static const String instituteSalaries = '/institute/salaries';
 
   static String removeStudentFromBatch(int batchId) =>
       '/institute/batches/$batchId/remove-student';

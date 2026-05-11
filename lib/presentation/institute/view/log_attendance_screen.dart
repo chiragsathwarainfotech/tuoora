@@ -1,7 +1,6 @@
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
-import 'package:fee_easy/core/utils/validation_utils.dart';
 import 'package:fee_easy/core/widgets/app_button.dart';
 import 'package:fee_easy/core/widgets/app_input_field.dart';
 import 'package:fee_easy/data/models/staff_model.dart';
@@ -155,23 +154,20 @@ class LogAttendanceScreen extends GetView<StaffController> {
               shrinkWrap: true,
               padding: EdgeInsets.zero,
               itemCount: controller.filteredLogStaffs.length,
-              separatorBuilder: (_, __) => const Divider(height: 1),
+              separatorBuilder: (_, _) => const Divider(height: 1),
               itemBuilder: (context, index) {
                 final staff = controller.filteredLogStaffs[index];
                 return ListTile(
-                  leading: const CircleAvatar(
-                    radius: 16,
-                    backgroundImage: NetworkImage('https://i.pravatar.cc/150'),
-                  ),
+                  leading: _buildStaffAvatar(staff.profileUrl ?? '', staff.fullName, size: 32),
                   title: Text(
-                    staff.name,
+                    staff.fullName,
                     style: AppTextStyles.manrope(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
                   subtitle: Text(
-                    staff.role,
+                    staff.role?.name ?? "",
                     style: AppTextStyles.lexend(
                       fontSize: 12,
                       color: AppColors.textTertiary,
@@ -199,24 +195,21 @@ class LogAttendanceScreen extends GetView<StaffController> {
       ),
       child: Row(
         children: [
-          const CircleAvatar(
-            radius: 20,
-            backgroundImage: NetworkImage('https://i.pravatar.cc/150'),
-          ),
+          _buildStaffAvatar(staff.profileUrl ?? '', staff.fullName, size: 40),
           AppSpacing.h12,
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  staff.name,
+                  staff.fullName,
                   style: AppTextStyles.manrope(
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
                 Text(
-                  staff.role,
+                  staff.role?.name ?? "",
                   style: AppTextStyles.lexend(
                     fontSize: 11,
                     color: AppColors.textTertiary,
@@ -308,46 +301,63 @@ class LogAttendanceScreen extends GetView<StaffController> {
   }
 
   Widget _buildLogButton() {
-    return AppButton(
-      onPressed: () {
-        final error = ValidationUtils.validateStaffSelection(
-          controller.selectedLogStaff.value,
-        );
-        if (error != null) {
-          Get.snackbar(
-            'Selection Required',
-            error,
-            backgroundColor: Colors.orange.withValues(alpha: 0.1),
-            colorText: AppColors.textPrimary,
-            icon: const Icon(Icons.warning_amber_rounded, color: Colors.orange),
-            snackPosition: SnackPosition.BOTTOM,
-            margin: AppSpacing.all16,
-          );
-          return;
-        }
-
-        // Logic to save record...
-        final staffName = controller.selectedLogStaff.value!.name;
-        Get.back();
-        Get.snackbar(
-          'Success',
-          'Attendance for $staffName has been logged.',
-          backgroundColor: AppColors.successGreen.withValues(alpha: 0.1),
-          colorText: AppColors.textPrimary,
-          icon: const Icon(
-            Icons.check_circle_rounded,
-            color: AppColors.successGreen,
-          ),
-          snackPosition: SnackPosition.BOTTOM,
-          margin: AppSpacing.all16,
-        );
-
-        // Reset state
-        controller.selectedLogStaff.value = null;
-        controller.logNotesController.clear();
-      },
-      label: 'Log Attendance',
-      icon: Icons.check_circle_outline_rounded,
+    return Obx(
+      () => AppButton(
+        onPressed: () => controller.saveAttendanceRecord(),
+        label: 'Log Attendance',
+        icon: Icons.check_circle_outline_rounded,
+        isLoading: controller.isSaving.value,
+      ),
     );
+  }
+  Widget _buildStaffAvatar(String imageUrl, String name, {double size = 40}) {
+    if (imageUrl.isNotEmpty &&
+        imageUrl.startsWith('http') &&
+        !imageUrl.contains('ui-avatars.com')) {
+      return Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          color: AppColors.primaryBrand.withValues(alpha: 0.1),
+          shape: BoxShape.circle,
+          image: DecorationImage(
+            image: NetworkImage(imageUrl),
+            fit: BoxFit.cover,
+          ),
+        ),
+      );
+    }
+
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: AppColors.primaryBrand.withValues(alpha: 0.1),
+        shape: BoxShape.circle,
+      ),
+      child: Center(
+        child: Text(
+          getInitials(name),
+          style: AppTextStyles.manrope(
+            fontSize: size * 0.4,
+            fontWeight: FontWeight.w800,
+            color: AppColors.primaryBrand,
+          ),
+        ),
+      ),
+    );
+  }
+
+  String getInitials(String name) {
+    if (name.isEmpty) return 'ST';
+    List<String> names = name.split(" ");
+    String initials = "";
+    int numWords = names.length > 1 ? 2 : 1;
+    for (var i = 0; i < numWords; i++) {
+      if (names[i].isNotEmpty) {
+        initials += names[i][0];
+      }
+    }
+    return initials.toUpperCase();
   }
 }

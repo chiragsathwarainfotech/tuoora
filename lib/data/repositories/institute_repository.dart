@@ -13,6 +13,7 @@ import 'package:fee_easy/presentation/institute/models/homework_model.dart';
 import 'package:fee_easy/presentation/institute/models/resource_model.dart';
 import 'package:fee_easy/presentation/institute/models/attendance_record_model.dart';
 import 'package:fee_easy/data/models/notification_model.dart';
+import 'package:fee_easy/data/models/staff_model.dart';
 import 'package:get/get.dart';
 
 class InstituteRepository implements InstituteRepositoryImpl {
@@ -533,7 +534,7 @@ class InstituteRepository implements InstituteRepositoryImpl {
   Future<dynamic> uploadResource(Map<String, dynamic> data) async {
     final Map<String, dynamic> fields = Map.from(data);
     final String? filePath = fields.remove('file');
-    
+
     final formData = FormData(fields);
 
     if (filePath != null) {
@@ -593,7 +594,9 @@ class InstituteRepository implements InstituteRepositoryImpl {
 
   @override
   Future<List<ExpenseCategory>> getExpenseCategories() async {
-    final response = await _apiClient.get(ApiConstants.instituteExpenseCategories);
+    final response = await _apiClient.get(
+      ApiConstants.instituteExpenseCategories,
+    );
     if (response.status.hasError) {
       throw Exception('Failed to fetch categories: ${response.statusText}');
     }
@@ -605,7 +608,7 @@ class InstituteRepository implements InstituteRepositoryImpl {
   Future<ExpenseModel> createExpense(Map<String, dynamic> data) async {
     final Map<String, dynamic> fields = Map.from(data);
     final String? receiptPath = fields.remove('receipt_image');
-    
+
     final formData = FormData(fields);
 
     if (receiptPath != null && receiptPath.isNotEmpty) {
@@ -627,5 +630,220 @@ class InstituteRepository implements InstituteRepositoryImpl {
       throw Exception(message);
     }
     return ExpenseModel.fromJson(response.body['data']);
+  }
+
+  @override
+  Future<ExpenseAnalysis> getExpenseAnalysis(String month, String year) async {
+    final response = await _apiClient.get(
+      ApiConstants.instituteExpenseAnalysis,
+      query: {'month': month, 'year': year},
+    );
+    if (response.status.hasError) {
+      throw Exception(
+        'Failed to fetch expense analysis: ${response.statusText}',
+      );
+    }
+    return ExpenseAnalysis.fromJson(response.body);
+  }
+
+  @override
+  Future<StaffListResponse> listStaff({int page = 1, String? search}) async {
+    final response = await _apiClient.get(
+      ApiConstants.instituteStaff,
+      query: {
+        'page': page.toString(),
+        if (search != null && search.isNotEmpty) 'search': search,
+      },
+    );
+    if (response.status.hasError) {
+      throw Exception('Failed to fetch staff: ${response.statusText}');
+    }
+    return StaffListResponse.fromJson(response.body);
+  }
+
+  @override
+  Future<void> deleteStaff(int id) async {
+    final response = await _apiClient.delete(
+      '${ApiConstants.instituteStaff}/$id',
+    );
+    if (response.status.hasError) {
+      final message = response.body?['message'] ?? 'Failed to delete staff';
+      throw Exception(message);
+    }
+  }
+
+  @override
+  Future<List<StaffRole>> getStaffRoles() async {
+    final response = await _apiClient.get(ApiConstants.instituteStaffRoles);
+    if (response.status.hasError) {
+      throw Exception('Failed to fetch staff roles');
+    }
+    return (response.body as List).map((e) => StaffRole.fromJson(e)).toList();
+  }
+
+  @override
+  Future<List<StaffDepartment>> getStaffDepartments() async {
+    final response = await _apiClient.get(
+      ApiConstants.instituteStaffDepartments,
+    );
+    if (response.status.hasError) {
+      throw Exception('Failed to fetch staff departments');
+    }
+    return (response.body as List)
+        .map((e) => StaffDepartment.fromJson(e))
+        .toList();
+  }
+
+  @override
+  Future<Staff> createStaff(
+    Map<String, dynamic> data,
+    String? imagePath,
+  ) async {
+    final formData = FormData(data);
+    if (imagePath != null) {
+      formData.files.add(
+        MapEntry(
+          'profile_image',
+          MultipartFile(File(imagePath), filename: imagePath.split('/').last),
+        ),
+      );
+    }
+
+    final response = await _apiClient.post(
+      ApiConstants.instituteStaff,
+      formData,
+    );
+
+    if (response.status.hasError) {
+      final message = response.body?['message'] ?? 'Failed to create staff';
+      throw Exception(message);
+    }
+
+    return Staff.fromJson(response.body['data']);
+  }
+
+  @override
+  Future<Staff> updateStaff(
+    int id,
+    Map<String, dynamic> data,
+    String? imagePath,
+  ) async {
+    // Spoof PUT method for multipart/form-data updates
+    data['_method'] = 'PUT';
+    final formData = FormData(data);
+    
+    if (imagePath != null) {
+      formData.files.add(
+        MapEntry(
+          'profile_image',
+          MultipartFile(File(imagePath), filename: imagePath.split('/').last),
+        ),
+      );
+    }
+
+    final response = await _apiClient.post(
+      '${ApiConstants.instituteStaff}/$id',
+      formData,
+    );
+
+    if (response.status.hasError) {
+      final message = response.body?['message'] ?? 'Failed to update staff';
+      throw Exception(message);
+    }
+
+    return Staff.fromJson(response.body['data']);
+  }
+
+  @override
+  Future<SalaryListResponse> getStaffSalaries(
+    int staffId, {
+    int page = 1,
+  }) async {
+    final response = await _apiClient.get(
+      '${ApiConstants.instituteSalaries}/$staffId',
+      query: {'page': page.toString()},
+    );
+    if (response.status.hasError) {
+      throw Exception('Failed to fetch salary history');
+    }
+    return SalaryListResponse.fromJson(response.body);
+  }
+
+  @override
+  Future<AttendanceListResponse> getStaffAttendance(
+    int staffId, {
+    int page = 1,
+    String? month,
+    String? year,
+  }) async {
+    final response = await _apiClient.get(
+      '${ApiConstants.instituteAttendance}/$staffId',
+      query: {
+        'page': page.toString(),
+        if (month != null) 'month': month,
+        if (year != null) 'year': year,
+      },
+    );
+    if (response.status.hasError) {
+      throw Exception('Failed to fetch attendance history');
+    }
+    return AttendanceListResponse.fromJson(response.body);
+  }
+
+  @override
+  Future<AttendanceListResponse> getAttendanceLogs({int page = 1}) async {
+    final response = await _apiClient.get(
+      ApiConstants.instituteAttendance,
+      query: {'page': page.toString()},
+    );
+    if (response.status.hasError) {
+      throw Exception('Failed to fetch attendance logs');
+    }
+    return AttendanceListResponse.fromJson(response.body);
+  }
+
+  @override
+  Future<void> logStaffAttendance(Map<String, dynamic> data) async {
+    final response = await _apiClient.post(
+      ApiConstants.instituteAttendance,
+      data,
+    );
+    if (response.status.hasError) {
+      final message = response.body?['message'] ?? 'Failed to log attendance';
+      throw Exception(message);
+    }
+  }
+
+  @override
+  Future<SalaryListResponse> getGlobalSalaries({
+    int? page,
+    String? month,
+    String? year,
+  }) async {
+    final queryParams = {
+      if (page != null) 'page': page.toString(),
+      if (month != null) 'month': month,
+      if (year != null) 'year': year,
+    };
+    final response = await _apiClient.get(
+      ApiConstants.instituteSalaries,
+      query: queryParams,
+    );
+    if (response.status.hasError) {
+      throw Exception('Failed to fetch salaries');
+    }
+    return SalaryListResponse.fromJson(response.body);
+  }
+
+  @override
+  Future<void> logSalary(Map<String, dynamic> data) async {
+    final response = await _apiClient.post(
+      ApiConstants.instituteSalaries,
+      data,
+    );
+    if (response.status.hasError) {
+      final message = response.body?['message'] ?? 'Failed to log salary';
+      throw Exception(message);
+    }
   }
 }

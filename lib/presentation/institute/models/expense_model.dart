@@ -125,3 +125,46 @@ class ExpenseListResponse {
     );
   }
 }
+
+class CategoryAnalysis {
+  final String categoryName;
+  final double amount;
+  final double percentage;
+
+  CategoryAnalysis({
+    required this.categoryName,
+    required this.amount,
+    required this.percentage,
+  });
+
+  factory CategoryAnalysis.fromJson(Map<String, dynamic> json) {
+    return CategoryAnalysis(
+      categoryName: json['category_name'] ?? 'Unknown',
+      amount: (json['amount'] as num).toDouble(),
+      percentage: (json['percentage'] as num).toDouble(),
+    );
+  }
+}
+
+class ExpenseAnalysis {
+  final double totalSpending;
+  final String monthName;
+  final List<CategoryAnalysis> categories;
+
+  ExpenseAnalysis({
+    required this.totalSpending,
+    required this.monthName,
+    required this.categories,
+  });
+
+  factory ExpenseAnalysis.fromJson(Map<String, dynamic> json) {
+    final data = json['data'] ?? {};
+    return ExpenseAnalysis(
+      totalSpending: (data['total_spending'] as num).toDouble(),
+      monthName: data['month_name'] ?? '',
+      categories: (data['categories'] as List? ?? [])
+          .map((c) => CategoryAnalysis.fromJson(c))
+          .toList(),
+    );
+  }
+}

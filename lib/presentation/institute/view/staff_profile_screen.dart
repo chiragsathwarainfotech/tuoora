@@ -19,22 +19,33 @@ class StaffProfileScreen extends GetView<StaffController> {
       body: SafeArea(
         child: Column(
           children: [
-            InstituteAppBar(
-              title: 'Staff Profile',
-              actions: [
-                IconButton(
-                  onPressed: () => Get.toNamed(AppRoutes.instituteAddEditStaff),
-                  icon: const Icon(Icons.edit, color: AppColors.primaryBrand),
-                ),
-                IconButton(
-                  onPressed: () => _showDeleteConfirmation(),
-                  icon: const Icon(
-                    Icons.delete_outline_rounded,
-                    color: AppColors.bohoRed,
-                  ),
-                ),
-              ],
-            ),
+            Obx(() {
+              final staff = controller.selectedStaff.value;
+              return InstituteAppBar(
+                title: 'Staff Profile',
+                actions: [
+                  if (staff != null) ...[
+                    IconButton(
+                      onPressed: () {
+                        controller.loadStaffForEdit(staff);
+                        Get.toNamed(AppRoutes.instituteAddEditStaff);
+                      },
+                      icon: const Icon(
+                        Icons.edit,
+                        color: AppColors.primaryBrand,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () => _showDeleteConfirmation(),
+                      icon: const Icon(
+                        Icons.delete_outline_rounded,
+                        color: AppColors.bohoRed,
+                      ),
+                    ),
+                  ],
+                ],
+              );
+            }),
             Expanded(
               child: Obx(() {
                 final staff = controller.selectedStaff.value;
@@ -73,8 +84,15 @@ class StaffProfileScreen extends GetView<StaffController> {
             height: 100,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
-              image: const DecorationImage(
-                image: NetworkImage('https://i.pravatar.cc/300'),
+              border: Border.all(
+                color: AppColors.primaryBrand.withValues(alpha: 0.1),
+              ),
+              image: DecorationImage(
+                image: staff.profileUrl != null
+                    ? NetworkImage(staff.profileUrl!)
+                    : const NetworkImage(
+                        'https://ui-avatars.com/api/?name=Staff&background=00A3A3&color=fff',
+                      ),
                 fit: BoxFit.cover,
               ),
             ),
@@ -85,7 +103,7 @@ class StaffProfileScreen extends GetView<StaffController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  staff.name,
+                  staff.fullName,
                   style: AppTextStyles.manrope(
                     fontSize: 22,
                     fontWeight: FontWeight.w800,
@@ -93,7 +111,7 @@ class StaffProfileScreen extends GetView<StaffController> {
                   ),
                 ),
                 Text(
-                  staff.role,
+                  staff.role?.name ?? 'No Role',
                   style: AppTextStyles.lexend(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
@@ -147,11 +165,21 @@ class StaffProfileScreen extends GetView<StaffController> {
             child: _buildSimpleInfo(
               Icons.business,
               'DEPARTMENT',
-              'Global Logistics',
+              staff.department?.name ?? 'N/A',
             ),
           ),
+          Container(
+            height: 40,
+            width: 1,
+            color: AppColors.divider,
+            margin: AppSpacing.x24,
+          ),
           Expanded(
-            child: _buildSimpleInfo(Icons.work, 'EMPLOYMENT TYPE', 'Salary'),
+            child: _buildSimpleInfo(
+              Icons.work, 
+              'EMPLOYMENT TYPE', 
+              staff.employmentType,
+            ),
           ),
         ],
       ),
@@ -162,29 +190,29 @@ class StaffProfileScreen extends GetView<StaffController> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: AppTextStyles.manrope(
-            fontSize: 11,
-            fontWeight: FontWeight.w700,
-            color: AppColors.textTertiary,
-            letterSpacing: 0.5,
-          ),
-        ),
-        AppSpacing.v12,
         Row(
           children: [
             Icon(icon, size: 20, color: AppColors.primaryBrand),
-            AppSpacing.h12,
+            AppSpacing.h6,
             Text(
-              value,
+              label,
               style: AppTextStyles.manrope(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: AppColors.textPrimary,
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+                color: AppColors.textTertiary,
+                letterSpacing: 0.5,
               ),
             ),
           ],
+        ),
+        AppSpacing.v8,
+        Text(
+          value,
+          style: AppTextStyles.manrope(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: AppColors.textPrimary,
+          ),
         ),
       ],
     );
@@ -265,13 +293,15 @@ class StaffProfileScreen extends GetView<StaffController> {
   }
 
   void _showDeleteConfirmation() {
+    final staff = controller.selectedStaff.value;
+    if (staff == null) return;
+
     CommonDialog.showDeleteConfirmation(
       title: 'Delete Staff',
-      description: 'Are you sure you want to delete this staff member?',
-      onConfirm: () {
-        Get.back();
-        Get.back();
-        Get.snackbar('Deleted', 'Staff member has been removed');
+      description: 'Are you sure you want to delete ${staff.fullName}?',
+      onConfirm: () async {
+        Get.back(); // Close the dialog
+        await controller.deleteStaff(staff.id);
       },
     );
   }

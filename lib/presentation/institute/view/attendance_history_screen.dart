@@ -1,6 +1,7 @@
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
+import 'package:fee_easy/core/widgets/common_loading.dart';
 import 'package:fee_easy/presentation/institute/controllers/staff_controller.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/config/app_routes.dart';
@@ -12,6 +13,11 @@ class AttendanceHistoryScreen extends GetView<StaffController> {
 
   @override
   Widget build(BuildContext context) {
+    // Fetch logs on build if list is empty
+    if (controller.globalAttendanceList.isEmpty) {
+      controller.fetchGlobalAttendance(page: 1);
+    }
+
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
@@ -19,55 +25,64 @@ class AttendanceHistoryScreen extends GetView<StaffController> {
           children: [
             const InstituteAppBar(title: 'Attendance History'),
             Expanded(
-              child: ListView(
-                padding: AppSpacing.all24,
-                children: [
-                  _buildSectionHeader('TODAY, OCT 24'),
-                  AppSpacing.v16,
-                  _buildAttendanceCard(
-                    'Sarah Jenkins',
-                    'On time for the morning briefing.',
-                    'Present',
-                    AppColors.successGreen,
-                    'https://i.pravatar.cc/150?u=sarah',
+              child: Obx(() {
+                if (controller.isLoadingGlobalAttendance.value &&
+                    controller.globalAttendanceList.isEmpty) {
+                  return CommonLoading();
+                }
+
+                if (controller.globalAttendanceList.isEmpty) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.calendar_today_outlined,
+                          size: 64,
+                          color: AppColors.textTertiary,
+                        ),
+                        AppSpacing.v16,
+                        Text(
+                          'No attendance logs found',
+                          style: AppTextStyles.manrope(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+
+                return RefreshIndicator(
+                  onRefresh: () => controller.fetchGlobalAttendance(page: 1),
+                  child: ListView.builder(
+                    padding: AppSpacing.all24,
+                    itemCount: controller.globalAttendanceList.length,
+                    itemBuilder: (context, index) {
+                      final attendance = controller.globalAttendanceList[index];
+
+                      // Simple date grouping logic could be added here if needed
+                      // For now just show as a list
+
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 12.0),
+                        child: _buildAttendanceCard(
+                          attendance.staff?.fullName ?? 'Unknown Staff',
+                          attendance.note ?? '',
+                          attendance.status,
+                          attendance.status.toLowerCase() == 'present'
+                              ? AppColors.successGreen
+                              : AppColors.errorRed,
+                          attendance.staff?.profileUrl ?? '',
+                          attendance.date,
+                        ),
+                      );
+                    },
                   ),
-                  AppSpacing.v12,
-                  _buildAttendanceCard(
-                    'David Chen',
-                    'Scheduled medical appointment.',
-                    'Absent',
-                    AppColors.errorRed,
-                    'https://i.pravatar.cc/150?u=david',
-                  ),
-                  AppSpacing.v12,
-                  _buildAttendanceCard(
-                    'Elena Rodriguez',
-                    '',
-                    'Present',
-                    AppColors.successGreen,
-                    'https://i.pravatar.cc/150?u=elena',
-                  ),
-                  AppSpacing.v24,
-                  _buildSectionHeader('YESTERDAY, OCT 23'),
-                  AppSpacing.v16,
-                  _buildAttendanceCard(
-                    'Marcus Thorne',
-                    '',
-                    'Present',
-                    AppColors.successGreen,
-                    'https://i.pravatar.cc/150?u=marcus',
-                  ),
-                  AppSpacing.v12,
-                  _buildAttendanceCard(
-                    'Sophia Laurent',
-                    'Late due to public transport delay.',
-                    'Present',
-                    AppColors.successGreen,
-                    'https://i.pravatar.cc/150?u=sophia',
-                  ),
-                  const SizedBox(height: 100),
-                ],
-              ),
+                );
+              }),
             ),
           ],
         ),
@@ -77,24 +92,13 @@ class AttendanceHistoryScreen extends GetView<StaffController> {
     );
   }
 
-  Widget _buildSectionHeader(String title) {
-    return Text(
-      title,
-      style: AppTextStyles.manrope(
-        fontSize: 13,
-        fontWeight: FontWeight.w800,
-        color: AppColors.textTertiary,
-        letterSpacing: 0.5,
-      ),
-    );
-  }
-
   Widget _buildAttendanceCard(
     String name,
     String remark,
     String status,
     Color statusColor,
     String imageUrl,
+    String date,
   ) {
     return Container(
       padding: AppSpacing.all16,
@@ -105,7 +109,7 @@ class AttendanceHistoryScreen extends GetView<StaffController> {
       ),
       child: Row(
         children: [
-          CircleAvatar(radius: 24, backgroundImage: NetworkImage(imageUrl)),
+          _buildStaffAvatar(imageUrl, name, size: 48),
           AppSpacing.h16,
           Expanded(
             child: Column(
@@ -114,12 +118,27 @@ class AttendanceHistoryScreen extends GetView<StaffController> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      name,
-                      style: AppTextStyles.manrope(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.textPrimary,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            name,
+                            style: AppTextStyles.manrope(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w800,
+                              color: AppColors.textPrimary,
+                            ),
+                          ),
+                          Text(
+                            date,
+                            style: AppTextStyles.manrope(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.textTertiary,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     _buildStatusBadge(status, statusColor),
@@ -182,5 +201,56 @@ class AttendanceHistoryScreen extends GetView<StaffController> {
       backgroundColor: AppColors.primaryBrand,
       child: const Icon(Icons.add, color: AppColors.white, size: 32),
     );
+  }
+
+  Widget _buildStaffAvatar(String imageUrl, String name, {double size = 48}) {
+    if (imageUrl.isNotEmpty &&
+        imageUrl.startsWith('http') &&
+        !imageUrl.contains('ui-avatars.com')) {
+      return Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          color: AppColors.primaryBrand.withValues(alpha: 0.1),
+          shape: BoxShape.circle,
+          image: DecorationImage(
+            image: NetworkImage(imageUrl),
+            fit: BoxFit.cover,
+          ),
+        ),
+      );
+    }
+
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: AppColors.primaryBrand.withValues(alpha: 0.1),
+        shape: BoxShape.circle,
+      ),
+      child: Center(
+        child: Text(
+          getInitials(name),
+          style: AppTextStyles.manrope(
+            fontSize: size * 0.4,
+            fontWeight: FontWeight.w800,
+            color: AppColors.primaryBrand,
+          ),
+        ),
+      ),
+    );
+  }
+
+  String getInitials(String name) {
+    if (name.isEmpty) return 'ST';
+    List<String> names = name.split(" ");
+    String initials = "";
+    int numWords = names.length > 1 ? 2 : 1;
+    for (var i = 0; i < numWords; i++) {
+      if (names[i].isNotEmpty) {
+        initials += names[i][0];
+      }
+    }
+    return initials.toUpperCase();
   }
 }

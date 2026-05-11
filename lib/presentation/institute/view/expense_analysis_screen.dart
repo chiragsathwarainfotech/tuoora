@@ -2,7 +2,9 @@ import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/presentation/institute/controllers/expense_controller.dart';
+import 'package:fee_easy/presentation/institute/models/expense_model.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
+import 'package:fee_easy/presentation/shared/widgets/common_state_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -19,25 +21,39 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
           children: [
             const InstituteAppBar(title: 'Expense Analysis'),
             Expanded(
-              child: ListView(
-                padding: AppSpacing.all24,
-                children: [
-                  Obx(() => _buildTotalSpendingCard()),
-                  AppSpacing.v24,
-                  _buildDateAndNavHeader(context),
-                  AppSpacing.v24,
-                  Text(
-                    'Categories',
-                    style: AppTextStyles.manrope(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.textPrimary,
-                    ),
+              child: Obx(() {
+                final analysis = controller.expenseAnalysis.value;
+                return RefreshIndicator(
+                  onRefresh: () => controller.loadExpenseAnalysis(),
+                  child: ListView(
+                    padding: AppSpacing.all24,
+                    children: [
+                      _buildTotalSpendingCard(analysis),
+                      AppSpacing.v24,
+                      _buildDateAndNavHeader(context),
+                      AppSpacing.v24,
+                      Text(
+                        'Categories Breakdown',
+                        style: AppTextStyles.manrope(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                      AppSpacing.v16,
+                      CommonStateWidget(
+                        isLoading: controller.isAnalysisLoading.value,
+                        isEmpty:
+                            analysis == null || analysis.categories.isEmpty,
+                        emptyTitle: 'No Data for this month',
+                        emptySubtitle: 'Add expenses to see the analysis.',
+                        emptyIcon: Icons.analytics_outlined,
+                        child: _buildCategoryList(analysis),
+                      ),
+                    ],
                   ),
-                  AppSpacing.v16,
-                  Obx(() => _buildCategoryList()),
-                ],
-              ),
+                );
+              }),
             ),
           ],
         ),
@@ -45,13 +61,18 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
     );
   }
 
-  Widget _buildTotalSpendingCard() {
-    final _ = controller.selectedAnalysisMonth.value;
+  Widget _buildTotalSpendingCard(ExpenseAnalysis? analysis) {
+    final NumberFormat currencyFormat = NumberFormat.currency(
+      locale: 'en_IN',
+      symbol: '₹',
+      decimalDigits: 2,
+    );
+
     return Container(
       width: double.infinity,
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: AppColors.primaryBrand,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -64,21 +85,47 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Total Spending',
-            style: AppTextStyles.manrope(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: AppColors.textTertiary,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Total Spending',
+                style: AppTextStyles.manrope(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.white.withValues(alpha: 0.8),
+                ),
+              ),
+              if (analysis != null)
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.white.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    analysis.monthName,
+                    style: AppTextStyles.manrope(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.white,
+                    ),
+                  ),
+                ),
+            ],
           ),
-          AppSpacing.v8,
+          AppSpacing.v12,
           Text(
-            '₹3,428.50',
+            analysis != null
+                ? currencyFormat.format(analysis.totalSpending)
+                : '₹0.00',
             style: AppTextStyles.manrope(
-              fontSize: 32,
+              fontSize: 36,
               fontWeight: FontWeight.w800,
-              color: AppColors.textPrimary,
+              color: AppColors.white,
             ),
           ),
         ],
@@ -96,7 +143,7 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
               context: context,
               initialDate: controller.selectedAnalysisMonth.value,
               firstDate: DateTime(2020),
-              lastDate: DateTime(2100),
+              lastDate: DateTime.now(),
               helpText: 'Select Month',
             );
             if (picked != null) {
@@ -104,18 +151,20 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
             }
           },
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             decoration: BoxDecoration(
               color: AppColors.white,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: AppColors.divider),
+              border: Border.all(
+                color: AppColors.borderGrey.withValues(alpha: 0.3),
+              ),
             ),
             child: Row(
               children: [
                 const Icon(
                   Icons.calendar_month_rounded,
-                  size: 18,
-                  color: AppColors.textPrimary,
+                  size: 20,
+                  color: AppColors.primaryBrand,
                 ),
                 AppSpacing.h8,
                 Obx(
@@ -133,7 +182,7 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
                 AppSpacing.h4,
                 const Icon(
                   Icons.keyboard_arrow_down_rounded,
-                  size: 18,
+                  size: 20,
                   color: AppColors.textTertiary,
                 ),
               ],
@@ -145,11 +194,15 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
             _buildSmallNavButton(
               Icons.chevron_left_rounded,
               onTap: () => controller.prevAnalysisMonth(),
+              isEnabled: true,
             ),
             AppSpacing.h12,
-            _buildSmallNavButton(
-              Icons.chevron_right_rounded,
-              onTap: () => controller.nextAnalysisMonth(),
+            Obx(
+              () => _buildSmallNavButton(
+                Icons.chevron_right_rounded,
+                onTap: () => controller.nextAnalysisMonth(),
+                isEnabled: controller.canGoToNextMonth,
+              ),
             ),
           ],
         ),
@@ -157,51 +210,82 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
     );
   }
 
-  Widget _buildSmallNavButton(IconData icon, {required VoidCallback onTap}) {
+  Widget _buildSmallNavButton(
+    IconData icon, {
+    required VoidCallback onTap,
+    required bool isEnabled,
+  }) {
     return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: AppColors.divider),
+      onTap: isEnabled ? onTap : null,
+      child: AnimatedOpacity(
+        duration: const Duration(milliseconds: 200),
+        opacity: isEnabled ? 1.0 : 0.3,
+        child: Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: AppColors.borderGrey.withValues(alpha: 0.3),
+            ),
+          ),
+          child: Icon(icon, size: 24, color: AppColors.primaryBrand),
         ),
-        child: Icon(icon, size: 20, color: AppColors.textSecondary),
       ),
     );
   }
 
-  Widget _buildCategoryList() {
-    // Mocking data that "changes" with the month
-    final month = controller.selectedAnalysisMonth.value.month;
+  Widget _buildCategoryList(ExpenseAnalysis? analysis) {
+    if (analysis == null) return const SizedBox.shrink();
+
     return Column(
-      children: [
-        _buildCategoryProgressItem(
-          'Food & Dining',
-          '₹${1200 + month * 10}',
-          0.45,
-          Icons.restaurant_rounded,
-          const Color(0xFFB45309),
-        ),
-        AppSpacing.v16,
-        _buildCategoryProgressItem(
-          'Shopping',
-          '₹${800 + month * 5}',
-          0.30,
-          Icons.shopping_bag_rounded,
-          const Color(0xFF005C70),
-        ),
-        AppSpacing.v16,
-        _buildCategoryProgressItem(
-          'Transport',
-          '₹${400 + month * 3}',
-          0.15,
-          Icons.directions_car_rounded,
-          const Color(0xFF059669),
-        ),
-      ],
+      children: analysis.categories.map((cat) {
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: _buildCategoryProgressItem(
+            cat.categoryName,
+            '₹${cat.amount.toStringAsFixed(2)}',
+            cat.percentage / 100,
+            _getCategoryIcon(cat.categoryName),
+            _getCategoryColor(cat.categoryName),
+          ),
+        );
+      }).toList(),
     );
+  }
+
+  IconData _getCategoryIcon(String category) {
+    switch (category) {
+      case 'Bills':
+        return Icons.bolt_rounded;
+      case 'Shopping':
+        return Icons.shopping_bag_rounded;
+      case 'Entertainment':
+        return Icons.movie_rounded;
+      case 'Food & Drink':
+        return Icons.local_cafe_rounded;
+      case 'Transport':
+        return Icons.directions_car_rounded;
+      default:
+        return Icons.category_rounded;
+    }
+  }
+
+  Color _getCategoryColor(String category) {
+    switch (category) {
+      case 'Bills':
+        return const Color(0xFF3B82F6);
+      case 'Shopping':
+        return const Color(0xFFF59E0B);
+      case 'Entertainment':
+        return const Color(0xFF8B5CF6);
+      case 'Food & Drink':
+        return const Color(0xFF10B981);
+      case 'Transport':
+        return const Color(0xFF6366F1);
+      default:
+        return AppColors.primaryBrand;
+    }
   }
 
   Widget _buildCategoryProgressItem(
@@ -215,48 +299,69 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
       padding: AppSpacing.all16,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.02),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
-      child: Row(
+      child: Column(
         children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(icon, color: color, size: 20),
-          ),
-          AppSpacing.h16,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: AppTextStyles.manrope(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.textPrimary,
-                  ),
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(14),
                 ),
-                Text(
-                  amount,
-                  style: AppTextStyles.manrope(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.textPrimary,
-                  ),
+                child: Icon(icon, color: color, size: 20),
+              ),
+              AppSpacing.h16,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: AppTextStyles.manrope(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                    Text(
+                      amount,
+                      style: AppTextStyles.manrope(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              Text(
+                '${(progress * 100).toStringAsFixed(1)}%',
+                style: AppTextStyles.manrope(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+            ],
           ),
-          Text(
-            '${(progress * 100).toInt()}%',
-            style: AppTextStyles.manrope(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: AppColors.textTertiary,
+          AppSpacing.v12,
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: LinearProgressIndicator(
+              value: progress,
+              minHeight: 8,
+              backgroundColor: color.withValues(alpha: 0.1),
+              valueColor: AlwaysStoppedAnimation<Color>(color),
             ),
           ),
         ],

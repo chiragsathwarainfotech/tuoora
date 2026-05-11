@@ -11,6 +11,7 @@ import 'package:fee_easy/config/app_routes.dart';
 import 'package:fee_easy/core/widgets/app_search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class NotesListScreen extends GetView<NotesController> {
   const NotesListScreen({super.key});
@@ -51,21 +52,49 @@ class NotesListScreen extends GetView<NotesController> {
                     AppSpacing.v20,
                     Expanded(
                       child: Obx(() {
+                        final notes = controller.filteredNotes;
                         return CommonStateWidget(
-                          isLoading: controller.isLoading.value,
-                          isEmpty: controller.filteredNotes.isEmpty,
+                          isLoading:
+                              controller.isLoading.value && notes.isEmpty,
+                          isEmpty: notes.isEmpty,
                           emptyTitle: 'No Notes Found',
                           emptySubtitle:
                               'Start creating notes to keep track of important information.',
                           emptyIcon: Icons.note_alt_outlined,
-                          child: ListView.separated(
-                            padding: EdgeInsets.zero,
-                            itemCount: controller.filteredNotes.length,
-                            separatorBuilder: (_, __) => AppSpacing.v16,
-                            itemBuilder: (context, index) {
-                              final note = controller.filteredNotes[index];
-                              return _buildNoteCard(note);
+                          child: NotificationListener<ScrollNotification>(
+                            onNotification: (ScrollNotification scrollInfo) {
+                              if (!controller.isLoading.value &&
+                                  scrollInfo.metrics.pixels ==
+                                      scrollInfo.metrics.maxScrollExtent) {
+                                controller.loadMoreNotes();
+                              }
+                              return false;
                             },
+                            child: RefreshIndicator(
+                              onRefresh: () => controller.fetchNotes(page: 1),
+                              child: ListView.separated(
+                                padding: const EdgeInsets.only(bottom: 100),
+                                itemCount:
+                                    notes.length +
+                                    (controller.currentPage.value <
+                                            controller.lastPage.value
+                                        ? 1
+                                        : 0),
+                                separatorBuilder: (_, __) => AppSpacing.v16,
+                                itemBuilder: (context, index) {
+                                  if (index == notes.length) {
+                                    return const Center(
+                                      child: Padding(
+                                        padding: EdgeInsets.all(16.0),
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                    );
+                                  }
+                                  final note = notes[index];
+                                  return _buildNoteCard(note);
+                                },
+                              ),
+                            ),
                           ),
                         );
                       }),
@@ -96,6 +125,20 @@ class NotesListScreen extends GetView<NotesController> {
   }
 
   Widget _buildNoteCard(Note note) {
+    final dateFormat = DateFormat('MMM dd, yyyy');
+
+    // Get color from relation if available
+    Color catColor = AppColors.primaryBrand;
+    if (note.categoryRelation != null) {
+      try {
+        catColor = Color(
+          int.parse(note.categoryRelation!.color.replaceAll('#', '0xFF')),
+        );
+      } catch (_) {
+        catColor = AppColors.primaryBrand;
+      }
+    }
+
     return GestureDetector(
       onTap: () {
         controller.prepareForEdit(note);
@@ -132,44 +175,51 @@ class NotesListScreen extends GetView<NotesController> {
                           color: AppColors.textPrimary,
                         ),
                       ),
-                      if (note.tag != null && note.tag!.isNotEmpty) ...[
-                        AppSpacing.v8,
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.primaryBrandLight,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            note.tag!,
-                            style: AppTextStyles.manrope(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w800,
-                              color: AppColors.primaryBrand,
-                              letterSpacing: 0.5,
-                            ),
+                      AppSpacing.v8,
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: catColor.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: catColor.withValues(alpha: 0.2),
                           ),
                         ),
-                      ],
+                        child: Text(
+                          note.category,
+                          style: AppTextStyles.manrope(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w800,
+                            color: catColor,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
                 GestureDetector(
                   onTap: () => controller.toggleBookmark(note),
-                  child: Icon(
-                    note.isBookmarked
-                        ? Icons.bookmark_rounded
-                        : Icons.bookmark_border_rounded,
-                    color: AppColors.primaryBrand,
-                    size: 20,
-                  ),
+                  child: Obx(() {
+                    final liveNote = controller.notesList.firstWhere(
+                      (n) => n.id == note.id,
+                      orElse: () => note,
+                    );
+                    return Icon(
+                      liveNote.isBookmarked
+                          ? Icons.bookmark_rounded
+                          : Icons.bookmark_border_rounded,
+                      color: AppColors.primaryBrand,
+                      size: 20,
+                    );
+                  }),
                 ),
               ],
             ),
-            AppSpacing.v8,
+            AppSpacing.v12,
             Text(
               note.content,
               maxLines: 3,
@@ -185,7 +235,7 @@ class NotesListScreen extends GetView<NotesController> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  note.createdAt,
+                  dateFormat.format(note.createdAt),
                   style: AppTextStyles.lexend(
                     fontSize: 11,
                     color: AppColors.textTertiary,

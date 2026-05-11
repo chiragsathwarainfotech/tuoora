@@ -1,3 +1,4 @@
+import 'package:fee_easy/core/utils/validation_utils.dart';
 import 'package:fee_easy/core/widgets/app_snackbar.dart';
 import 'package:fee_easy/data/models/note_model.dart';
 import 'package:fee_easy/data/repositories_impl/notes_repository_impl.dart';
@@ -12,48 +13,100 @@ class NotesController extends GetxController {
   final searchQuery = ''.obs;
   final isBookmarkView = false.obs;
 
+  // Pagination
+  final currentPage = 1.obs;
+  final lastPage = 1.obs;
+  final totalItems = 0.obs;
+
   // Form controllers
   final titleController = TextEditingController();
   final contentController = TextEditingController();
   final triedToSave = false.obs;
 
-  final availableTags = ['PERSONAL', 'WORK', 'FAMILY', 'IMPORTANT', 'TODO'].obs;
-  final selectedTag = RxnString();
+  final noteCategories = <NoteCategory>[].obs;
+  final isCategoriesLoading = false.obs;
+  final selectedCategoryName = RxnString();
 
   final selectedNote = Rxn<Note>();
-  final editingNoteId = RxnString();
+  final editingNoteId = RxnInt();
+
+  // Field errors
+  final titleError = RxnString();
+  final contentError = RxnString();
+  final categoryError = RxnString();
 
   @override
   void onInit() {
     super.onInit();
     fetchNotes();
+    fetchNoteCategories();
+    
+    // Search debouncing
+    debounce(searchQuery, (_) => fetchNotes(page: 1), time: const Duration(milliseconds: 500));
+
+    // Clear errors as user types
+    titleController.addListener(() => _clearError(titleError));
+    contentController.addListener(() => _clearError(contentError));
   }
 
-  Future<void> fetchNotes() async {
+  void _clearError(RxnString error) {
+    if (triedToSave.value && error.value != null) {
+      error.value = null;
+    }
+  }
+
+  Future<void> fetchNoteCategories() async {
     try {
-      isLoading.value = true;
-      final notes = await _notesRepository.getNotes();
-      notesList.assignAll(notes);
+      isCategoriesLoading.value = true;
+      final categories = await _notesRepository.getNoteCategories();
+      noteCategories.assignAll(categories);
+    } catch (e) {
+      debugPrint('Error fetching note categories: $e');
+    } finally {
+      isCategoriesLoading.value = false;
+    }
+  }
+
+  Future<void> fetchNotes({int page = 1}) async {
+    try {
+      if (page == 1) isLoading.value = true;
+      
+      final response = await _notesRepository.getNotes(
+        page: page,
+        isBookmarked: isBookmarkView.value ? true : null,
+      );
+      
+      if (page == 1) {
+        notesList.assignAll(response.data);
+      } else {
+        notesList.addAll(response.data);
+      }
+
+      currentPage.value = response.currentPage;
+      lastPage.value = response.lastPage;
+      totalItems.value = response.total;
     } catch (e) {
       AppSnackbar.error('Failed to load notes: $e');
     } finally {
-      isLoading.value = false;
+      if (page == 1) isLoading.value = false;
+    }
+  }
+
+  Future<void> loadMoreNotes() async {
+    if (currentPage.value < lastPage.value && !isLoading.value) {
+      await fetchNotes(page: currentPage.value + 1);
     }
   }
 
   List<Note> get filteredNotes {
     List<Note> filtered = notesList;
 
-    if (isBookmarkView.value) {
-      filtered = filtered.where((n) => n.isBookmarked).toList();
-    }
-
     if (searchQuery.value.isNotEmpty) {
       final query = searchQuery.value.toLowerCase();
       filtered = filtered.where((note) {
         return note.title.toLowerCase().contains(query) ||
             note.content.toLowerCase().contains(query) ||
-            (note.tag?.toLowerCase().contains(query) ?? false);
+            note.category.toLowerCase().contains(query);
       }).toList();
     }
 
@@ -62,6 +115,7 @@ class NotesController extends GetxController {
 
   void toggleBookmarkView() {
     isBookmarkView.value = !isBookmarkView.value;
+    fetchNotes(page: 1);
   }
 
   void prepareForAdd() {
@@ -75,40 +129,48 @@ class NotesController extends GetxController {
     selectedNote.value = note;
     titleController.text = note.title;
     contentController.text = note.content;
-    selectedTag.value = note.tag;
+    selectedCategoryName.value = note.category;
     triedToSave.value = false;
+    _resetErrors();
   }
 
   void _clearForm() {
     titleController.clear();
     contentController.clear();
-    selectedTag.value = null;
+    selectedCategoryName.value = null;
     triedToSave.value = false;
+    _resetErrors();
+  }
+
+  void _resetErrors() {
+    titleError.value = null;
+    contentError.value = null;
+    categoryError.value = null;
   }
 
   Future<void> saveNote() async {
     triedToSave.value = true;
-    if (titleController.text.trim().isEmpty) return;
+    if (!_validateForm()) return;
 
     try {
       isLoading.value = true;
       final noteData = {
         'title': titleController.text.trim(),
         'content': contentController.text.trim(),
-        'tag': selectedTag.value,
-        'is_bookmarked': selectedNote.value?.isBookmarked ?? false,
+        'category': selectedCategoryName.value,
       };
 
       if (editingNoteId.value != null) {
         await _notesRepository.updateNote(editingNoteId.value!, noteData);
+        Get.back();
         AppSnackbar.success('Note updated successfully');
       } else {
         await _notesRepository.createNote(noteData);
+        Get.back();
         AppSnackbar.success('Note created successfully');
       }
 
-      fetchNotes();
-      Get.back();
+      fetchNotes(page: 1);
     } catch (e) {
       AppSnackbar.error('Failed to save note: $e');
     } finally {
@@ -116,24 +178,53 @@ class NotesController extends GetxController {
     }
   }
 
-  Future<void> deleteNote(String id) async {
+  bool _validateForm() {
+    bool isValid = true;
+
+    final tErr = ValidationUtils.validateRequired(titleController.text, 'Title');
+    titleError.value = tErr;
+    if (tErr != null) isValid = false;
+
+    final cErr = ValidationUtils.validateRequired(contentController.text, 'Content');
+    contentError.value = cErr;
+    if (cErr != null) isValid = false;
+
+    if (selectedCategoryName.value == null) {
+      categoryError.value = 'Please select a category';
+      isValid = false;
+    } else {
+      categoryError.value = null;
+    }
+
+    return isValid;
+  }
+
+  Future<void> deleteNote(int id) async {
     try {
+      isLoading.value = true;
       await _notesRepository.deleteNote(id);
       notesList.removeWhere((n) => n.id == id);
       AppSnackbar.success('Note deleted successfully');
     } catch (e) {
       AppSnackbar.error('Failed to delete note: $e');
+    } finally {
+      isLoading.value = false;
     }
   }
 
   Future<void> toggleBookmark(Note note) async {
     try {
-      await _notesRepository.toggleBookmark(note.id);
+      final newStatus = !note.isBookmarked;
+      await _notesRepository.toggleBookmark(note.id, newStatus);
+      
       final index = notesList.indexWhere((n) => n.id == note.id);
       if (index != -1) {
-        notesList[index] = notesList[index].copyWith(
-          isBookmarked: !notesList[index].isBookmarked,
-        );
+        // Use copyWith to preserve categoryRelation and other fields
+        notesList[index] = note.copyWith(isBookmarked: newStatus);
+        
+        if (isBookmarkView.value && !newStatus) {
+          notesList.removeAt(index);
+        }
       }
     } catch (e) {
       AppSnackbar.error('Failed to update bookmark: $e');

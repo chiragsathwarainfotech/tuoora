@@ -9,7 +9,6 @@ import 'package:fee_easy/data/repositories_impl/student_repository_impl.dart';
 import 'package:fee_easy/data/repositories_impl/leads_repository_impl.dart';
 import 'package:fee_easy/data/repositories_impl/notes_repository_impl.dart';
 import 'package:fee_easy/data/repositories_impl/chat_repository_impl.dart';
-import 'package:fee_easy/data/repositories_impl/staff_repository_impl.dart';
 import 'package:fee_easy/presentation/institute/controllers/attendance_controller.dart';
 import 'package:fee_easy/presentation/institute/controllers/batch_controller.dart';
 import 'package:fee_easy/presentation/institute/controllers/institute_controller.dart';
@@ -50,9 +49,10 @@ class InstituteBinding extends Bindings {
     Get.lazyPut<LeadsRepositoryImpl>(
       () => LeadsRepositoryImpl(Get.find<ApiClient>()),
     );
-    Get.lazyPut<NotesRepositoryImpl>(() => NotesRepositoryImpl());
+    Get.lazyPut<NotesRepositoryImpl>(
+      () => NotesRepositoryImpl(Get.find<ApiClient>()),
+    );
     Get.lazyPut<ChatRepositoryImpl>(() => ChatRepositoryImpl());
-    Get.lazyPut<StaffRepositoryImpl>(() => StaffRepositoryImpl());
 
     // Controllers
     Get.lazyPut<InstituteController>(() => InstituteController());
@@ -77,13 +77,13 @@ class InstituteBinding extends Bindings {
       ),
       fenix: true,
     );
-    
+
     // BatchController depends on InstituteRepositoryImpl
     Get.put<BatchController>(
       BatchController(Get.find<InstituteRepositoryImpl>()),
       permanent: true,
     );
-    
+
     Get.lazyPut<SecurityController>(
       () => SecurityController(Get.find<InstituteRepositoryImpl>()),
       fenix: true,
@@ -102,7 +102,7 @@ class InstituteBinding extends Bindings {
       fenix: true,
     );
     Get.lazyPut<StaffController>(
-      () => StaffController(Get.find<StaffRepositoryImpl>()),
+      () => StaffController(Get.find<InstituteRepositoryImpl>()),
       fenix: true,
     );
     Get.lazyPut<ExpenseController>(

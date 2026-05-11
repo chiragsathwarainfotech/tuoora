@@ -1,7 +1,6 @@
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
-import 'package:fee_easy/core/utils/validation_utils.dart';
 import 'package:fee_easy/core/widgets/app_button.dart';
 import 'package:fee_easy/core/widgets/app_input_field.dart';
 import 'package:fee_easy/data/models/staff_model.dart';
@@ -172,19 +171,16 @@ class AddSalaryScreen extends GetView<StaffController> {
               itemBuilder: (context, index) {
                 final staff = controller.filteredSalaryStaffs[index];
                 return ListTile(
-                  leading: const CircleAvatar(
-                    radius: 16,
-                    backgroundImage: NetworkImage('https://i.pravatar.cc/150'),
-                  ),
+                  leading: _buildStaffAvatar(staff.fullName, staff.profileUrl),
                   title: Text(
-                    staff.name,
+                    staff.fullName,
                     style: AppTextStyles.manrope(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
                   subtitle: Text(
-                    staff.role,
+                    staff.role?.name ?? "",
                     style: AppTextStyles.lexend(
                       fontSize: 12,
                       color: AppColors.textTertiary,
@@ -212,24 +208,21 @@ class AddSalaryScreen extends GetView<StaffController> {
       ),
       child: Row(
         children: [
-          const CircleAvatar(
-            radius: 20,
-            backgroundImage: NetworkImage('https://i.pravatar.cc/150'),
-          ),
+          _buildStaffAvatar(staff.fullName, staff.profileUrl),
           AppSpacing.h12,
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  staff.name,
+                  staff.fullName,
                   style: AppTextStyles.manrope(
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
                 Text(
-                  staff.role,
+                  staff.role?.name ?? "",
                   style: AppTextStyles.lexend(
                     fontSize: 11,
                     color: AppColors.textTertiary,
@@ -251,13 +244,56 @@ class AddSalaryScreen extends GetView<StaffController> {
     );
   }
 
+  Widget _buildStaffAvatar(String name, String? profileUrl) {
+    return Container(
+      width: 40,
+      height: 40,
+      decoration: BoxDecoration(
+        color: AppColors.primaryBrand.withValues(alpha: 0.1),
+        shape: BoxShape.circle,
+      ),
+      child: profileUrl != null && profileUrl.isNotEmpty
+          ? ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Image.network(
+                profileUrl,
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => _buildInitials(name),
+              ),
+            )
+          : _buildInitials(name),
+    );
+  }
+
+  Widget _buildInitials(String name) {
+    return Center(
+      child: Text(
+        getInitials(name),
+        style: AppTextStyles.manrope(
+          fontSize: 14,
+          fontWeight: FontWeight.w800,
+          color: AppColors.primaryBrand,
+        ),
+      ),
+    );
+  }
+
+  String getInitials(String name) {
+    if (name.isEmpty) return 'S';
+    List<String> names = name.split(' ');
+    if (names.length > 1) {
+      return (names[0][0] + names[names.length - 1][0]).toUpperCase();
+    }
+    return names[0][0].toUpperCase();
+  }
+
   Widget _buildPaymentMethodToggle() {
     return Obx(
       () => Row(
         children: [
           Expanded(
             child: GestureDetector(
-              onTap: () => controller.togglePaymentMethod(false),
+              onTap: () => controller.isOnlinePayment.value = false,
               child: _buildToggleButton(
                 'Cash',
                 Icons.payments_rounded,
@@ -269,7 +305,7 @@ class AddSalaryScreen extends GetView<StaffController> {
           AppSpacing.h16,
           Expanded(
             child: GestureDetector(
-              onTap: () => controller.togglePaymentMethod(true),
+              onTap: () => controller.isOnlinePayment.value = true,
               child: _buildToggleButton(
                 'Online',
                 Icons.account_balance_rounded,
@@ -321,135 +357,83 @@ class AddSalaryScreen extends GetView<StaffController> {
   }
 
   Widget _buildDisbursementSummary() {
-    return GetBuilder<StaffController>(
-      builder: (controller) {
-        final amount = controller.salaryAmountController.text.isEmpty
-            ? '0.00'
-            : controller.salaryAmountController.text;
-        return Container(
-          padding: AppSpacing.all24,
-          decoration: BoxDecoration(
-            color: AppColors.primaryBrand.withValues(alpha: 0.05),
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: AppColors.primaryBrand.withValues(alpha: 0.1),
-            ),
+    return Obx(() {
+      final amount = controller.salaryAmountController.text.isEmpty
+          ? '0.00'
+          : controller.salaryAmountController.text;
+      return Container(
+        padding: AppSpacing.all24,
+        decoration: BoxDecoration(
+          color: AppColors.primaryBrand.withValues(alpha: 0.05),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: AppColors.primaryBrand.withValues(alpha: 0.1),
           ),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Total Disbursement',
-                    style: AppTextStyles.manrope(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.textPrimary,
-                    ),
+        ),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Total Disbursement',
+                  style: AppTextStyles.manrope(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.textPrimary,
                   ),
-                  Text(
-                    '₹$amount',
-                    style: AppTextStyles.manrope(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.primaryBrand,
-                    ),
-                  ),
-                ],
-              ),
-              AppSpacing.v16,
-              const Divider(height: 1),
-              AppSpacing.v16,
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Icon(
-                    Icons.info_outline_rounded,
+                ),
+                Text(
+                  '₹$amount',
+                  style: AppTextStyles.manrope(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w800,
                     color: AppColors.primaryBrand,
-                    size: 16,
                   ),
-                  AppSpacing.h12,
-                  Expanded(
-                    child: Text(
-                      'This payment will be recorded in the general ledger and deducted from the monthly payroll budget.',
-                      style: AppTextStyles.lexend(
-                        fontSize: 12,
-                        color: AppColors.textSecondary,
-                      ),
+                ),
+              ],
+            ),
+            AppSpacing.v16,
+            const Divider(height: 1),
+            AppSpacing.v16,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Icon(
+                  Icons.info_outline_rounded,
+                  color: AppColors.primaryBrand,
+                  size: 16,
+                ),
+                AppSpacing.h12,
+                Expanded(
+                  child: Text(
+                    'This payment will be recorded in the general ledger and deducted from the monthly payroll budget.',
+                    style: AppTextStyles.lexend(
+                      fontSize: 12,
+                      color: AppColors.textSecondary,
                     ),
                   ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
-    );
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    });
   }
 
   Widget _buildSaveButton() {
-    return AppButton(
-      onPressed: () {
-        final staffError = ValidationUtils.validateStaffSelection(
-          controller.selectedAddSalaryStaff.value,
-        );
-        if (staffError != null) {
-          Get.snackbar(
-            'Selection Required',
-            staffError,
-            backgroundColor: Colors.orange.withValues(alpha: 0.1),
-            colorText: AppColors.textPrimary,
-            icon: const Icon(Icons.warning_amber_rounded, color: Colors.orange),
-            snackPosition: SnackPosition.BOTTOM,
-            margin: AppSpacing.all16,
-          );
-          return;
-        }
-
-        final amountStr = controller.salaryAmountController.text;
-        final amountError = ValidationUtils.validateAmount(
-          amountStr,
-          'Salary amount',
-        );
-        if (amountError != null) {
-          Get.snackbar(
-            'Invalid Amount',
-            amountError,
-            backgroundColor: AppColors.errorRed.withValues(alpha: 0.1),
-            colorText: AppColors.textPrimary,
-            icon: const Icon(
-              Icons.error_outline_rounded,
-              color: AppColors.errorRed,
-            ),
-            snackPosition: SnackPosition.BOTTOM,
-            margin: AppSpacing.all16,
-          );
-          return;
-        }
-
-        final staffName = controller.selectedAddSalaryStaff.value!.name;
-        Get.back();
-        Get.snackbar(
-          'Payment Recorded',
-          'Salary payout of ₹$amountStr for $staffName saved successfully.',
-          backgroundColor: AppColors.successGreen.withValues(alpha: 0.1),
-          colorText: AppColors.textPrimary,
-          icon: const Icon(
-            Icons.check_circle_rounded,
-            color: AppColors.successGreen,
-          ),
-          snackPosition: SnackPosition.BOTTOM,
-          margin: AppSpacing.all16,
-        );
-
-        // Reset state
-        controller.selectedAddSalaryStaff.value = null;
-        controller.salaryAmountController.clear();
-        controller.salaryNotesController.clear();
-      },
-      label: 'Save Salary Record',
-      icon: Icons.check_circle_outline_rounded,
+    return Obx(
+      () => AppButton(
+        onPressed: controller.isSaving.value
+            ? null
+            : () => controller.saveSalaryRecord(),
+        label: controller.isSaving.value ? 'Saving...' : 'Save Salary Record',
+        icon: controller.isSaving.value
+            ? null
+            : Icons.check_circle_outline_rounded,
+        isLoading: controller.isSaving.value,
+      ),
     );
   }
 }

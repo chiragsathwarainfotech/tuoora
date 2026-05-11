@@ -1,41 +1,51 @@
-import 'dart:math';
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/presentation/institute/controllers/staff_controller.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
+import 'package:fee_easy/presentation/shared/widgets/common_state_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class StaffAttendanceScreen extends GetView<StaffController> {
   const StaffAttendanceScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final staffName = controller.selectedStaff.value?.name ?? 'Staff Member';
-    
+    final staffName =
+        controller.selectedStaff.value?.fullName ?? 'Staff Member';
+
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
         child: Column(
           children: [
-            InstituteAppBar(
-              title: 'Attendance',
-              subtitle: staffName,
-            ),
+            InstituteAppBar(title: 'Attendance', subtitle: staffName),
             Expanded(
-              child: SingleChildScrollView(
-                padding: AppSpacing.all24,
-                child: Column(
-                  children: [
-                    _buildSummaryCard(),
-                    AppSpacing.v24,
-                    _buildCalendarCard(),
-                    AppSpacing.v24,
-                    _buildRemarksCard(),
-                  ],
-                ),
-              ),
+              child: Obx(() {
+                return CommonStateWidget(
+                  isLoading:
+                      controller.isLoadingAttendance.value &&
+                      controller.attendanceList.isEmpty,
+                  isEmpty: false,
+                  emptyTitle: 'No Attendance Data',
+                  emptySubtitle: 'No attendance records found for this month.',
+                  emptyIcon: Icons.calendar_today_outlined,
+                  child: SingleChildScrollView(
+                    padding: AppSpacing.all24,
+                    child: Column(
+                      children: [
+                        _buildSummaryCard(),
+                        AppSpacing.v24,
+                        _buildCalendarCard(),
+                        AppSpacing.v24,
+                        _buildRemarksCard(),
+                      ],
+                    ),
+                  ),
+                );
+              }),
             ),
           ],
         ),
@@ -52,15 +62,34 @@ class StaffAttendanceScreen extends GetView<StaffController> {
       ),
       child: Row(
         children: [
-          Expanded(child: _buildSummaryItem(Icons.check_circle, '22', 'PRESENT', AppColors.successGreen)),
+          Expanded(
+            child: _buildSummaryItem(
+              Icons.check_circle,
+              controller.totalPresent.value.toString().padLeft(2, '0'),
+              'PRESENT',
+              AppColors.successGreen,
+            ),
+          ),
           Container(width: 1, height: 40, color: AppColors.divider),
-          Expanded(child: _buildSummaryItem(Icons.cancel, '02', 'ABSENT', AppColors.errorRed)),
+          Expanded(
+            child: _buildSummaryItem(
+              Icons.cancel,
+              controller.totalAbsent.value.toString().padLeft(2, '0'),
+              'ABSENT',
+              AppColors.errorRed,
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildSummaryItem(IconData icon, String count, String label, Color color) {
+  Widget _buildSummaryItem(
+    IconData icon,
+    String count,
+    String label,
+    Color color,
+  ) {
     return Column(
       children: [
         Row(
@@ -92,11 +121,6 @@ class StaffAttendanceScreen extends GetView<StaffController> {
   }
 
   Widget _buildCalendarCard() {
-    final List<String> months = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
-    ];
-
     return Container(
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
@@ -105,34 +129,39 @@ class StaffAttendanceScreen extends GetView<StaffController> {
       ),
       child: Column(
         children: [
-          Obx(() {
-            final date = controller.selectedAttendanceMonth.value;
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: () => controller.previousMonth(),
-                  child: const Icon(Icons.chevron_left, color: AppColors.textTertiary),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GestureDetector(
+                onTap: () => controller.previousMonth(),
+                child: const Icon(
+                  Icons.chevron_left,
+                  color: AppColors.textTertiary,
                 ),
-                Text(
-                  '${months[date.month - 1]} ${date.year}',
-                  style: AppTextStyles.manrope(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.textPrimary,
-                  ),
+              ),
+              Text(
+                DateFormat(
+                  'MMMM yyyy',
+                ).format(controller.selectedAttendanceMonth.value),
+                style: AppTextStyles.manrope(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.textPrimary,
                 ),
-                GestureDetector(
-                  onTap: () => controller.nextMonth(),
-                  child: const Icon(Icons.chevron_right, color: AppColors.textTertiary),
+              ),
+              GestureDetector(
+                onTap: () => controller.nextMonth(),
+                child: const Icon(
+                  Icons.chevron_right,
+                  color: AppColors.textTertiary,
                 ),
-              ],
-            );
-          }),
+              ),
+            ],
+          ),
           AppSpacing.v24,
           const Divider(height: 1, color: AppColors.divider),
           AppSpacing.v24,
-          Obx(() => _buildCalendarGrid(controller.selectedAttendanceMonth.value)),
+          _buildCalendarGrid(controller.selectedAttendanceMonth.value),
           AppSpacing.v24,
           const Divider(height: 1, color: AppColors.divider),
           AppSpacing.v24,
@@ -144,53 +173,59 @@ class StaffAttendanceScreen extends GetView<StaffController> {
 
   Widget _buildCalendarGrid(DateTime currentMonth) {
     final weekdays = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-    
-    // Get first day of month and last day of month
     final firstDayOfMonth = DateTime(currentMonth.year, currentMonth.month, 1);
-    final lastDayOfMonth = DateTime(currentMonth.year, currentMonth.month + 1, 0);
-    
+    final lastDayOfMonth = DateTime(
+      currentMonth.year,
+      currentMonth.month + 1,
+      0,
+    );
     final daysInMonth = lastDayOfMonth.day;
-    final startWeekday = firstDayOfMonth.weekday % 7; // 0 for Sunday
-    
+    final startWeekday = firstDayOfMonth.weekday % 7;
+
     List<Widget> rows = [];
     List<String> currentDates = [];
     List<int> currentStatuses = [];
-    
-    // Fill leading empty days
+
+    // Map attendance data for easy lookup
+    final attendanceMap = <int, String>{};
+    for (var a in controller.attendanceList) {
+      try {
+        final day = DateTime.parse(a.date).day;
+        attendanceMap[day] = a.status;
+      } catch (_) {}
+    }
+
     for (int i = 0; i < startWeekday; i++) {
       currentDates.add('');
       currentStatuses.add(-1);
     }
-    
-    final random = Random(currentMonth.month + currentMonth.year); // Seed for consistency per month
 
     for (int day = 1; day <= daysInMonth; day++) {
       currentDates.add(day.toString());
-      
-      // Logic for status: 1: Present, 2: Absent, 0: Off, 3: Selected
-      int status = 1; // Default present
-      final weekday = (startWeekday + day - 1) % 7;
-      
-      if (weekday == 0) {
-        status = 0; // Sundays are Off
-      } else if (random.nextInt(10) > 8) {
-        status = 2; // Random absences
+
+      final statusStr = attendanceMap[day];
+      int status = 0; // Default off/no data
+      if (statusStr == 'Present') {
+        status = 1;
+      } else if (statusStr == 'Absent') {
+        status = 2;
       }
-      
-      // Highlight "16th" as selected for the mockup feel
-      if (day == 16) status = 3;
-      
+
       currentStatuses.add(status);
-      
+
       if (currentDates.length == 7) {
-        rows.add(_buildCalendarRow(List.from(currentDates), List.from(currentStatuses)));
+        rows.add(
+          _buildCalendarRow(
+            List.from(currentDates),
+            List.from(currentStatuses),
+          ),
+        );
         rows.add(AppSpacing.v20);
         currentDates.clear();
         currentStatuses.clear();
       }
     }
-    
-    // Fill trailing empty days
+
     if (currentDates.isNotEmpty) {
       while (currentDates.length < 7) {
         currentDates.add('');
@@ -203,18 +238,22 @@ class StaffAttendanceScreen extends GetView<StaffController> {
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: weekdays.map((d) => SizedBox(
-            width: 32,
-            child: Text(
-              d,
-              style: AppTextStyles.manrope(
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-                color: AppColors.textMuted,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          )).toList(),
+          children: weekdays
+              .map(
+                (d) => SizedBox(
+                  width: 32,
+                  child: Text(
+                    d,
+                    style: AppTextStyles.manrope(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.textMuted,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              )
+              .toList(),
         ),
         AppSpacing.v24,
         ...rows,
@@ -225,20 +264,16 @@ class StaffAttendanceScreen extends GetView<StaffController> {
   Widget _buildCalendarRow(List<String> dates, List<int> statuses) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: List.generate(7, (i) {
-        final date = dates[i];
-        final status = statuses[i];
-        return _buildCalendarDay(date, status);
-      }),
+      children: List.generate(
+        7,
+        (i) => _buildCalendarDay(dates[i], statuses[i]),
+      ),
     );
   }
 
   Widget _buildCalendarDay(String date, int status) {
     if (date.isEmpty) return const SizedBox(width: 32);
-    
-    bool isSelected = status == 3;
-    bool isOff = status == 0;
-    
+
     return SizedBox(
       width: 32,
       child: Column(
@@ -246,39 +281,29 @@ class StaffAttendanceScreen extends GetView<StaffController> {
           Container(
             width: 32,
             height: 32,
-            decoration: BoxDecoration(
-              color: isSelected ? AppColors.primaryBrand : Colors.transparent,
-              shape: BoxShape.circle,
-            ),
+            decoration: const BoxDecoration(shape: BoxShape.circle),
             child: Center(
               child: Text(
                 date,
                 style: AppTextStyles.manrope(
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
-                  color: isSelected ? AppColors.white : (isOff ? AppColors.textMuted : AppColors.textPrimary),
+                  color: AppColors.textPrimary,
                 ),
               ),
             ),
           ),
-          if (status != -1 && !isSelected) ...[
+          if (status != -1) ...[
             AppSpacing.v4,
             Container(
               width: 4,
               height: 4,
               decoration: BoxDecoration(
-                color: status == 1 ? AppColors.successGreen.withValues(alpha: 0.6) : (status == 2 ? AppColors.errorRed.withValues(alpha: 0.6) : Colors.transparent),
-                shape: BoxShape.circle,
-              ),
-            ),
-          ],
-          if (isSelected) ...[
-            AppSpacing.v4,
-            Container(
-              width: 4,
-              height: 4,
-              decoration: const BoxDecoration(
-                color: AppColors.white,
+                color: status == 1
+                    ? AppColors.successGreen.withValues(alpha: 0.6)
+                    : (status == 2
+                          ? AppColors.errorRed.withValues(alpha: 0.6)
+                          : Colors.transparent),
                 shape: BoxShape.circle,
               ),
             ),
@@ -292,7 +317,10 @@ class StaffAttendanceScreen extends GetView<StaffController> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _buildLegendItem(AppColors.successGreen.withValues(alpha: 0.6), 'PRESENT'),
+        _buildLegendItem(
+          AppColors.successGreen.withValues(alpha: 0.6),
+          'PRESENT',
+        ),
         AppSpacing.h24,
         _buildLegendItem(AppColors.errorRed.withValues(alpha: 0.6), 'ABSENT'),
         AppSpacing.h24,
@@ -324,55 +352,61 @@ class StaffAttendanceScreen extends GetView<StaffController> {
   }
 
   Widget _buildRemarksCard() {
-    return Obx(() {
-      final date = controller.selectedAttendanceMonth.value;
-      final months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-      
-      return Container(
-        width: double.infinity,
-        padding: AppSpacing.all24,
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Container(
-                  padding: AppSpacing.all8,
-                  decoration: BoxDecoration(
-                    color: AppColors.scaffoldBg,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Icon(Icons.speaker_notes, size: 20, color: AppColors.textTertiary),
+    // Show remark for the latest entry if available
+    final latestRemark = controller.attendanceList.firstWhereOrNull(
+      (a) => a.note != null && a.note!.isNotEmpty,
+    );
+
+    return Container(
+      width: double.infinity,
+      padding: AppSpacing.all24,
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: AppSpacing.all8,
+                decoration: BoxDecoration(
+                  color: AppColors.scaffoldBg,
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                AppSpacing.h16,
-                Text(
-                  '${months[date.month - 1]} 16 REMARKS',
-                  style: AppTextStyles.manrope(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.textTertiary,
-                    letterSpacing: 0.5,
-                  ),
+                child: const Icon(
+                  Icons.speaker_notes,
+                  size: 20,
+                  color: AppColors.textTertiary,
                 ),
-              ],
-            ),
-            AppSpacing.v20,
-            Text(
-              'Left early for dental appointment. Approved by lead.',
-              style: AppTextStyles.lexend(
-                fontSize: 15,
-                fontWeight: FontWeight.w400,
-                color: AppColors.textSecondary,
-                fontStyle: FontStyle.italic,
               ),
+              AppSpacing.h16,
+              Text(
+                latestRemark != null
+                    ? '${DateFormat('MMM dd').format(DateTime.parse(latestRemark.date)).toUpperCase()} REMARKS'
+                    : 'LATEST REMARKS',
+                style: AppTextStyles.manrope(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.textTertiary,
+                  letterSpacing: 0.5,
+                ),
+              ),
+            ],
+          ),
+          AppSpacing.v20,
+          Text(
+            latestRemark?.note ?? 'No remarks for this month.',
+            style: AppTextStyles.lexend(
+              fontSize: 15,
+              fontWeight: FontWeight.w400,
+              color: AppColors.textSecondary,
+              fontStyle: FontStyle.italic,
             ),
-          ],
-        ),
-      );
-    });
+          ),
+        ],
+      ),
+    );
   }
 }

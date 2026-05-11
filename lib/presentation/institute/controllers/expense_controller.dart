@@ -4,6 +4,7 @@ import 'package:fee_easy/presentation/institute/models/expense_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
 class ExpenseController extends GetxController {
   final InstituteRepositoryImpl _repository;
@@ -14,6 +15,11 @@ class ExpenseController extends GetxController {
   final isLoading = false.obs;
   final isCategoriesLoading = false.obs;
   final categories = <ExpenseCategory>[].obs;
+
+  // Analysis State
+  final expenseAnalysis = Rxn<ExpenseAnalysis>();
+  final isAnalysisLoading = false.obs;
+  final selectedAnalysisMonth = DateTime.now().obs;
 
   // Pagination
   final currentPage = 1.obs;
@@ -27,7 +33,6 @@ class ExpenseController extends GetxController {
   final selectedDate = DateTime.now().obs;
   final isOnlinePayment = false.obs;
   final selectedReceiptPath = RxnString();
-  final selectedAnalysisMonth = DateTime.now().obs;
   final formKey = GlobalKey<FormState>();
 
   // Validation States (Pattern consistent with Add Student)
@@ -41,6 +46,7 @@ class ExpenseController extends GetxController {
     super.onInit();
     loadExpenses();
     loadCategories();
+    loadExpenseAnalysis();
     
     // Listeners to clear errors as user types
     amountController.addListener(() {
@@ -52,6 +58,9 @@ class ExpenseController extends GetxController {
     ever(selectedCategory, (_) {
       if (triedToSave.value) validateForm();
     });
+    
+    // Auto-refresh analysis when month changes
+    ever(selectedAnalysisMonth, (_) => loadExpenseAnalysis());
   }
 
   bool validateForm() {
@@ -119,7 +128,38 @@ class ExpenseController extends GetxController {
     }
   }
 
+  Future<void> loadExpenseAnalysis() async {
+    try {
+      isAnalysisLoading.value = true;
+      final month = DateFormat('MM').format(selectedAnalysisMonth.value);
+      final year = DateFormat('yyyy').format(selectedAnalysisMonth.value);
+      
+      final analysis = await _repository.getExpenseAnalysis(month, year);
+      
+      // Sort categories by percentage descending (high first)
+      analysis.categories.sort((a, b) => b.percentage.compareTo(a.percentage));
+      
+      expenseAnalysis.value = analysis;
+    } catch (e) {
+      debugPrint('Error loading analysis: $e');
+      expenseAnalysis.value = null;
+    } finally {
+      isAnalysisLoading.value = false;
+    }
+  }
+
+  bool get canGoToNextMonth {
+    final now = DateTime.now();
+    final currentView = selectedAnalysisMonth.value;
+    // Cannot go beyond current month
+    if (currentView.year < now.year) return true;
+    if (currentView.year == now.year && currentView.month < now.month) return true;
+    return false;
+  }
+
   void nextAnalysisMonth() {
+    if (!canGoToNextMonth) return;
+    
     selectedAnalysisMonth.value = DateTime(
       selectedAnalysisMonth.value.year,
       selectedAnalysisMonth.value.month + 1,
@@ -207,6 +247,7 @@ class ExpenseController extends GetxController {
       Get.snackbar('Success', 'Expense added successfully');
       resetForm();
       loadExpenses(page: 1); // Refresh list
+      loadExpenseAnalysis(); // Refresh analysis
     } catch (e) {
       Get.snackbar('Error', e.toString());
     } finally {

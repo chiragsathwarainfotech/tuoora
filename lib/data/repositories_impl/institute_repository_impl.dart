@@ -1,5 +1,6 @@
 import 'package:fee_easy/data/models/batch_model.dart';
 import 'package:fee_easy/data/models/institute_profile_model.dart';
+import 'package:fee_easy/data/models/staff_model.dart';
 import 'package:fee_easy/data/models/whatsapp_settings_model.dart';
 import 'package:fee_easy/presentation/institute/models/expense_model.dart';
 import 'package:fee_easy/presentation/institute/models/fee_record.dart';
@@ -85,4 +86,19 @@ abstract class InstituteRepositoryImpl {
   Future<ExpenseListResponse> listExpenses({int page = 1});
   Future<List<ExpenseCategory>> getExpenseCategories();
   Future<ExpenseModel> createExpense(Map<String, dynamic> data);
+  Future<ExpenseAnalysis> getExpenseAnalysis(String month, String year);
+
+  // Staff
+  Future<StaffListResponse> listStaff({int page = 1, String? search});
+  Future<void> deleteStaff(int id);
+  Future<List<StaffRole>> getStaffRoles();
+  Future<List<StaffDepartment>> getStaffDepartments();
+  Future<Staff> createStaff(Map<String, dynamic> data, String? imagePath);
+  Future<Staff> updateStaff(int id, Map<String, dynamic> data, String? imagePath);
+  Future<SalaryListResponse> getStaffSalaries(int staffId, {int page = 1});
+  Future<AttendanceListResponse> getStaffAttendance(int staffId, {int page = 1, String? month, String? year});
+  Future<AttendanceListResponse> getAttendanceLogs({int page = 1});
+  Future<void> logStaffAttendance(Map<String, dynamic> data);
+  Future<SalaryListResponse> getGlobalSalaries({int? page, String? month, String? year});
+  Future<void> logSalary(Map<String, dynamic> data);
 }

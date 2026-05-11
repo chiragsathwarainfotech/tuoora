@@ -13,6 +13,11 @@ class SalaryManagementScreen extends GetView<StaffController> {
 
   @override
   Widget build(BuildContext context) {
+    // Initial fetch if list is empty
+    if (controller.globalSalaryList.isEmpty) {
+      controller.fetchGlobalSalaries(page: 1);
+    }
+
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
@@ -20,18 +25,27 @@ class SalaryManagementScreen extends GetView<StaffController> {
           children: [
             const InstituteAppBar(title: 'Salary Management'),
             Expanded(
-              child: ListView(
-                padding: AppSpacing.all24,
-                children: [
-                  _buildTotalPaidCard(),
-                  AppSpacing.v24,
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: _buildMonthPicker(context),
-                  ),
-                  AppSpacing.v24,
-                  _buildPayoutHistory(),
-                ],
+              child: RefreshIndicator(
+                onRefresh: () => controller.fetchGlobalSalaries(page: 1),
+                color: AppColors.primaryBrand,
+                child: Obx(
+                  () => controller.isLoadingGlobalSalaries.value &&
+                          controller.globalSalaryList.isEmpty
+                      ? const Center(child: CircularProgressIndicator())
+                      : ListView(
+                          padding: AppSpacing.all24,
+                          children: [
+                            _buildTotalPaidCard(),
+                            AppSpacing.v24,
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: _buildMonthPicker(context),
+                            ),
+                            AppSpacing.v24,
+                            _buildPayoutHistory(),
+                          ],
+                        ),
+                ),
               ),
             ),
           ],
@@ -46,48 +60,94 @@ class SalaryManagementScreen extends GetView<StaffController> {
   }
 
   Widget _buildMonthPicker(BuildContext context) {
-    return Obx(
-      () => GestureDetector(
-        onTap: () async {
-          final picked = await showDatePicker(
-            context: context,
-            initialDate: controller.selectedSalaryMonth.value,
-            firstDate: DateTime(2020),
-            lastDate: DateTime(2030),
-            helpText: 'Select Payout Month',
-          );
-          if (picked != null) {
-            controller.selectSalaryMonth(picked);
-          }
-        },
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          decoration: BoxDecoration(
-            color: AppColors.paleSilver,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                DateFormat(
-                  'MMM yyyy',
-                ).format(controller.selectedSalaryMonth.value),
-                style: AppTextStyles.manrope(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.textPrimary,
-                ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            _buildArrowButton(
+              icon: Icons.chevron_left_rounded,
+              onTap: () {
+                final current = controller.selectedSalaryMonth.value;
+                controller.selectedSalaryMonth.value =
+                    DateTime(current.year, current.month - 1);
+                controller.fetchGlobalSalaries(page: null);
+              },
+            ),
+            AppSpacing.h8,
+            _buildArrowButton(
+              icon: Icons.chevron_right_rounded,
+              onTap: () {
+                final current = controller.selectedSalaryMonth.value;
+                controller.selectedSalaryMonth.value =
+                    DateTime(current.year, current.month + 1);
+                controller.fetchGlobalSalaries(page: null);
+              },
+            ),
+          ],
+        ),
+        Obx(
+          () => GestureDetector(
+            onTap: () async {
+              final picked = await showDatePicker(
+                context: context,
+                initialDate: controller.selectedSalaryMonth.value,
+                firstDate: DateTime(2020),
+                lastDate: DateTime(2030),
+                helpText: 'Select Payout Month',
+              );
+              if (picked != null) {
+                controller.selectedSalaryMonth.value = picked;
+                controller.fetchGlobalSalaries(page: null);
+              }
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: AppColors.paleSilver,
+                borderRadius: BorderRadius.circular(8),
               ),
-              AppSpacing.h8,
-              const Icon(
-                Icons.calendar_month_rounded,
-                size: 18,
-                color: AppColors.textPrimary,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    DateFormat(
+                      'MMM yyyy',
+                    ).format(controller.selectedSalaryMonth.value),
+                    style: AppTextStyles.manrope(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                  AppSpacing.h8,
+                  const Icon(
+                    Icons.calendar_month_rounded,
+                    size: 18,
+                    color: AppColors.textPrimary,
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
+      ],
+    );
+  }
+
+  Widget _buildArrowButton({
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: AppColors.paleSilver,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Icon(icon, size: 20, color: AppColors.textPrimary),
       ),
     );
   }
@@ -116,7 +176,7 @@ class SalaryManagementScreen extends GetView<StaffController> {
                 ),
                 AppSpacing.v8,
                 Text(
-                  '₹4,850.00',
+                  '₹${controller.totalGlobalSalaryAmount.value}',
                   style: AppTextStyles.manrope(
                     fontSize: 42,
                     fontWeight: FontWeight.w800,
@@ -141,85 +201,82 @@ class SalaryManagementScreen extends GetView<StaffController> {
   }
 
   Widget _buildPayoutHistory() {
-    return Container(
-      padding: AppSpacing.all24,
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.divider),
-      ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Payout History',
-                style: AppTextStyles.manrope(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.textPrimary,
+    return Obx(() {
+      if (controller.globalSalaryList.isEmpty) {
+        return Container(
+          padding: AppSpacing.all24,
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: AppColors.divider),
+          ),
+          child: Center(
+            child: Column(
+              children: [
+                Icon(Icons.receipt_long_rounded, size: 48, color: AppColors.textTertiary.withValues(alpha: 0.3)),
+                AppSpacing.v16,
+                Text(
+                  'No payout records found for this month.',
+                  style: AppTextStyles.lexend(fontSize: 14, color: AppColors.textTertiary),
+                  textAlign: TextAlign.center,
                 ),
-              ),
-              Row(
-                children: [
-                  const Icon(
-                    Icons.file_download_outlined,
-                    size: 18,
-                    color: AppColors.primaryBrand,
+              ],
+            ),
+          ),
+        );
+      }
+
+      return Container(
+        padding: AppSpacing.all24,
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: AppColors.divider),
+        ),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Payout History',
+                  style: AppTextStyles.manrope(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.textPrimary,
                   ),
-                  AppSpacing.h4,
-                  Text(
-                    'Statement',
-                    style: AppTextStyles.manrope(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.primaryBrand,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          AppSpacing.v24,
-          const Divider(height: 1, color: AppColors.divider),
-          _buildPayoutItem(
-            'Sarah Jenkins',
-            'Oct 24, 2023 • Online',
-            '₹1,200.00',
-          ),
-          const Divider(height: 1, color: AppColors.divider),
-          _buildPayoutItem('Michael Chen', 'Oct 22, 2023 • Cash', '₹850.00'),
-          const Divider(height: 1, color: AppColors.divider),
-          _buildPayoutItem(
-            'Elena Rodriguez',
-            'Oct 20, 2023 • Online',
-            '₹1,500.00',
-          ),
-          const Divider(height: 1, color: AppColors.divider),
-          _buildPayoutItem('David Kim', 'Oct 18, 2023 • Online', '₹1,300.00'),
-        ],
-      ),
-    );
+                ),
+              ],
+            ),
+            AppSpacing.v24,
+            ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: controller.globalSalaryList.length,
+              separatorBuilder: (_, __) => const Divider(height: 1, color: AppColors.divider),
+              itemBuilder: (context, index) {
+                final salary = controller.globalSalaryList[index];
+                final date = DateFormat('MMM dd, yyyy').format(DateTime.parse(salary.paymentDate));
+                return _buildPayoutItem(
+                  salary.staff?.fullName ?? 'Unknown Staff',
+                  '$date • ${salary.paymentMethod}',
+                  '₹${salary.netSalary}',
+                  salary.staff?.profileUrl ?? '',
+                );
+              },
+            ),
+          ],
+        ),
+      );
+    });
   }
 
-  Widget _buildPayoutItem(String name, String sub, String amount) {
+  Widget _buildPayoutItem(String name, String sub, String amount, String imageUrl) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: Row(
         children: [
-          Container(
-            padding: AppSpacing.all10,
-            decoration: BoxDecoration(
-              color: AppColors.primaryBrand.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: const Icon(
-              Icons.person_rounded,
-              color: AppColors.primaryBrand,
-              size: 24,
-            ),
-          ),
+          _buildStaffAvatar(name, imageUrl),
           AppSpacing.h16,
           Expanded(
             child: Column(
@@ -268,5 +325,48 @@ class SalaryManagementScreen extends GetView<StaffController> {
         ],
       ),
     );
+  }
+
+  Widget _buildStaffAvatar(String name, String? profileUrl) {
+    return Container(
+      width: 44,
+      height: 44,
+      decoration: BoxDecoration(
+        color: AppColors.primaryBrand.withValues(alpha: 0.1),
+        shape: BoxShape.circle,
+      ),
+      child: profileUrl != null && profileUrl.isNotEmpty
+          ? ClipRRect(
+              borderRadius: BorderRadius.circular(22),
+              child: Image.network(
+                profileUrl,
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => _buildInitials(name),
+              ),
+            )
+          : _buildInitials(name),
+    );
+  }
+
+  Widget _buildInitials(String name) {
+    return Center(
+      child: Text(
+        getInitials(name),
+        style: AppTextStyles.manrope(
+          fontSize: 14,
+          fontWeight: FontWeight.w800,
+          color: AppColors.primaryBrand,
+        ),
+      ),
+    );
+  }
+
+  String getInitials(String name) {
+    if (name.isEmpty) return 'S';
+    List<String> names = name.split(' ');
+    if (names.length > 1) {
+      return (names[0][0] + names[names.length - 1][0]).toUpperCase();
+    }
+    return names[0][0].toUpperCase();
   }
 }

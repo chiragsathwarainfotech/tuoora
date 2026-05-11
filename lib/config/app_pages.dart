@@ -44,8 +44,10 @@ import 'package:fee_easy/presentation/shared/bindings/forgot_password_binding.da
 import 'package:fee_easy/presentation/shared/view/login_screen.dart';
 import 'package:fee_easy/presentation/shared/view/forgot_password_screen.dart';
 import 'package:fee_easy/presentation/shared/view/reset_password_screen.dart';
-import 'package:fee_easy/presentation/shared/view/student_profile_screen.dart' as shared;
-import 'package:fee_easy/presentation/shared/view/updates_screen.dart' as shared;
+import 'package:fee_easy/presentation/shared/view/student_profile_screen.dart'
+    as shared;
+import 'package:fee_easy/presentation/shared/view/updates_screen.dart'
+    as shared;
 import 'package:fee_easy/presentation/student/view/student_main_screen.dart';
 import 'package:fee_easy/presentation/student/bindings/student_binding.dart';
 import 'package:fee_easy/presentation/student/view/homework_detail_screen.dart';

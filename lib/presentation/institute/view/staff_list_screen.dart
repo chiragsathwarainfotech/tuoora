@@ -17,44 +17,89 @@ class StaffListScreen extends GetView<StaffController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
-      body: Stack(
-        children: [
-          SafeArea(
-            child: Column(
-              children: [
-                InstituteAppBar(title: 'Staff Directory'),
-                Expanded(
-                  child: Padding(
-                    padding: AppSpacing.x24,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        AppSpacing.v16,
-                        _buildSearchBar(),
-                        AppSpacing.v20,
-                        Expanded(
-                          child: Obx(() {
-                            return CommonStateWidget(
-                              isLoading: controller.isLoading.value,
-                              isEmpty: controller.filteredStaffs.isEmpty,
-                              emptyTitle: 'No Staff Found',
-                              emptySubtitle:
-                                  controller.searchQuery.value.isEmpty
-                                  ? 'You haven\'t added any staff members yet.'
-                                  : 'No staff members match your search.',
-                              emptyIcon: Icons.people_outline_rounded,
-                              child: _buildStaffGrid(),
-                            );
-                          }),
-                        ),
-                      ],
+      body: SafeArea(
+        child: Column(
+          children: [
+            const InstituteAppBar(title: 'Staff Directory'),
+            Expanded(
+              child: Padding(
+                padding: AppSpacing.x24,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AppSpacing.v16,
+                    _buildSearchBar(),
+                    AppSpacing.v20,
+                    Expanded(
+                      child: Obx(() {
+                        final staffs = controller.staffList;
+                        return CommonStateWidget(
+                          isLoading:
+                              controller.isLoading.value && staffs.isEmpty,
+                          isEmpty: staffs.isEmpty,
+                          emptyTitle: 'No Staff Found',
+                          emptySubtitle: controller.searchQuery.value.isEmpty
+                              ? 'You haven\'t added any staff members yet.'
+                              : 'No staff members match your search.',
+                          emptyIcon: Icons.people_outline_rounded,
+                          child: NotificationListener<ScrollNotification>(
+                            onNotification: (ScrollNotification scrollInfo) {
+                              if (!controller.isLoading.value &&
+                                  scrollInfo.metrics.pixels ==
+                                      scrollInfo.metrics.maxScrollExtent) {
+                                controller.loadMoreStaff();
+                              }
+                              return false;
+                            },
+                            child: RefreshIndicator(
+                              onRefresh: () => controller.fetchStaffs(page: 1),
+                              child: GridView.builder(
+                                padding: const EdgeInsets.only(
+                                  bottom: 100,
+                                  top: 4,
+                                ),
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 3,
+                                      crossAxisSpacing: 12,
+                                      mainAxisSpacing: 16,
+                                      childAspectRatio: 0.72,
+                                    ),
+                                itemCount:
+                                    staffs.length +
+                                    (controller.currentPage.value <
+                                            controller.lastPage.value
+                                        ? 1
+                                        : 0),
+                                itemBuilder: (context, index) {
+                                  if (index == staffs.length) {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
+                                  final staff = staffs[index];
+                                  return _buildStaffCard(staff);
+                                },
+                              ),
+                            ),
+                          ),
+                        );
+                      }),
                     ),
-                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          controller.prepareForAdd();
+          Get.toNamed(AppRoutes.instituteAddEditStaff);
+        },
+        backgroundColor: AppColors.primaryBrand,
+        child: const Icon(Icons.add, color: AppColors.white, size: 32),
       ),
     );
   }
@@ -63,39 +108,6 @@ class StaffListScreen extends GetView<StaffController> {
     return AppSearchField(
       hintText: 'Search Staff',
       onChanged: (value) => controller.searchQuery.value = value,
-    );
-  }
-
-  Widget _buildStaffGrid() {
-    return Stack(
-      children: [
-        GridView.builder(
-          padding: const EdgeInsets.only(bottom: 100),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 16,
-            childAspectRatio: 0.72,
-          ),
-          itemCount: controller.filteredStaffs.length,
-          itemBuilder: (context, index) {
-            final staff = controller.filteredStaffs[index];
-            return _buildStaffCard(staff);
-          },
-        ),
-        Positioned(
-          right: 0,
-          bottom: 24,
-          child: FloatingActionButton(
-            onPressed: () {
-              controller.prepareForAdd();
-              Get.toNamed(AppRoutes.instituteAddEditStaff);
-            },
-            backgroundColor: AppColors.primaryBrand,
-            child: const Icon(Icons.add, color: AppColors.white, size: 32),
-          ),
-        ),
-      ],
     );
   }
 
@@ -121,44 +133,91 @@ class StaffListScreen extends GetView<StaffController> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              width: 65,
-              height: 65,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: AppColors.primaryBrand, width: 2),
-                image: const DecorationImage(
-                  image: NetworkImage('https://i.pravatar.cc/150'),
-                  fit: BoxFit.cover,
+            _buildStaffAvatar(staff.profileUrl ?? '', staff.fullName, size: 60),
+            AppSpacing.v8,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: Text(
+                staff.fullName,
+                style: AppTextStyles.manrope(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.textPrimary,
                 ),
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
-            ),
-            AppSpacing.v12,
-            Text(
-              staff.name,
-              style: AppTextStyles.manrope(
-                fontSize: 14,
-                fontWeight: FontWeight.w800,
-                color: AppColors.textPrimary,
-              ),
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
             ),
             AppSpacing.v2,
-            Text(
-              staff.role,
-              style: AppTextStyles.lexend(
-                fontSize: 10,
-                fontWeight: FontWeight.w400,
-                color: AppColors.textTertiary,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: Text(
+                staff.role?.name ?? 'No Role',
+                style: AppTextStyles.lexend(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w400,
+                  color: AppColors.textTertiary,
+                ),
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
-              textAlign: TextAlign.center,
-              maxLines: 1,
             ),
           ],
         ),
       ),
     );
+  }
+
+  Widget _buildStaffAvatar(String imageUrl, String name, {double size = 48}) {
+    if (imageUrl.isNotEmpty &&
+        imageUrl.startsWith('http') &&
+        !imageUrl.contains('ui-avatars.com')) {
+      return Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          color: AppColors.primaryBrand.withValues(alpha: 0.1),
+          shape: BoxShape.circle,
+          image: DecorationImage(
+            image: NetworkImage(imageUrl),
+            fit: BoxFit.cover,
+          ),
+        ),
+      );
+    }
+
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: AppColors.primaryBrand.withValues(alpha: 0.1),
+        shape: BoxShape.circle,
+      ),
+      child: Center(
+        child: Text(
+          getInitials(name),
+          style: AppTextStyles.manrope(
+            fontSize: size * 0.4,
+            fontWeight: FontWeight.w800,
+            color: AppColors.primaryBrand,
+          ),
+        ),
+      ),
+    );
+  }
+
+  String getInitials(String name) {
+    if (name.isEmpty) return 'ST';
+    List<String> names = name.split(" ");
+    String initials = "";
+    int numWords = names.length > 1 ? 2 : 1;
+    for (var i = 0; i < numWords; i++) {
+      if (names[i].isNotEmpty) {
+        initials += names[i][0];
+      }
+    }
+    return initials.toUpperCase();
   }
 }

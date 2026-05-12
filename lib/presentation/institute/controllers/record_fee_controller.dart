@@ -3,9 +3,11 @@ import 'package:fee_easy/data/models/student_model.dart';
 import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:fee_easy/core/utils/validation_utils.dart';
 import 'package:intl/intl.dart';
 import 'institute_controller.dart';
 import 'package:fee_easy/core/widgets/app_snackbar.dart';
+import 'package:fee_easy/core/api/api_exception.dart';
 
 class RecordFeeController extends GetxController {
   final InstituteController instituteController =
@@ -31,22 +33,15 @@ class RecordFeeController extends GetxController {
   bool validateForm() {
     bool isValid = true;
 
-    if (selectedStudent.value == null) {
-      studentError.value = 'Please select a student';
-      isValid = false;
-    } else {
-      studentError.value = null;
-    }
+    final studentVal = ValidationUtils.validateStudentSelection(
+      selectedStudent.value,
+    );
+    studentError.value = studentVal;
+    if (studentVal != null) isValid = false;
 
-    if (amount.value.trim().isEmpty) {
-      amountError.value = 'Please enter an amount';
-      isValid = false;
-    } else if (double.tryParse(amount.value.trim()) == null) {
-      amountError.value = 'Please enter a valid amount';
-      isValid = false;
-    } else {
-      amountError.value = null;
-    }
+    final amountVal = ValidationUtils.validateAmount(amount.value, 'Amount');
+    amountError.value = amountVal;
+    if (amountVal != null) isValid = false;
 
     return isValid;
   }
@@ -64,6 +59,13 @@ class RecordFeeController extends GetxController {
       (_) => _performSearch(),
       time: const Duration(milliseconds: 300),
     );
+
+    // Clear error when typing amount
+    ever(amount, (_) {
+      if (triedToSave.value && amountError.value != null) {
+        amountError.value = null;
+      }
+    });
   }
 
   void _performSearch() {
@@ -147,9 +149,24 @@ class RecordFeeController extends GetxController {
       Get.back();
       AppSnackbar.success('Fee record created and collected successfully');
     } catch (e) {
-      AppSnackbar.error(e.toString().replaceAll('Exception: ', ''));
+      if (e is ValidationException) {
+        _handleValidationErrors(e.errors);
+        AppSnackbar.error('Please correct the highlighted errors');
+      } else {
+        AppSnackbar.error(e.toString().replaceAll('Exception: ', ''));
+      }
     } finally {
       isLoading.value = false;
     }
   }
+
+  void _handleValidationErrors(Map<String, dynamic> errors) {
+    if (errors.containsKey('student_id')) {
+      studentError.value = (errors['student_id'] as List).first.toString();
+    }
+    if (errors.containsKey('total_amount')) {
+      amountError.value = (errors['total_amount'] as List).first.toString();
+    }
+  }
 }
+

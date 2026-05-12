@@ -176,8 +176,8 @@ class StaffProfileScreen extends GetView<StaffController> {
           ),
           Expanded(
             child: _buildSimpleInfo(
-              Icons.work, 
-              'EMPLOYMENT TYPE', 
+              Icons.work,
+              'EMPLOYMENT TYPE',
               staff.employmentType,
             ),
           ),

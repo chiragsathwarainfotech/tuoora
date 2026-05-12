@@ -63,3 +63,4 @@ class DailyUpdateRepository implements DailyUpdateRepositoryImpl {
         .toList();
   }
 }
+

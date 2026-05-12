@@ -120,3 +120,4 @@ class AppSpacing {
   );
   static const headerPaddingLarge = EdgeInsets.fromLTRB(s28, s40, s28, s32);
 }
+

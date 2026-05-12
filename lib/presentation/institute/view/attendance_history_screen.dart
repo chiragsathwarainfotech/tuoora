@@ -1,11 +1,11 @@
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
-import 'package:fee_easy/core/widgets/common_loading.dart';
 import 'package:fee_easy/presentation/institute/controllers/staff_controller.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/config/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:fee_easy/presentation/shared/widgets/common_state_widget.dart';
 import 'package:get/get.dart';
 
 class AttendanceHistoryScreen extends GetView<StaffController> {
@@ -13,7 +13,6 @@ class AttendanceHistoryScreen extends GetView<StaffController> {
 
   @override
   Widget build(BuildContext context) {
-    // Fetch logs on build if list is empty
     if (controller.globalAttendanceList.isEmpty) {
       controller.fetchGlobalAttendance(page: 1);
     }
@@ -26,60 +25,35 @@ class AttendanceHistoryScreen extends GetView<StaffController> {
             const InstituteAppBar(title: 'Attendance History'),
             Expanded(
               child: Obx(() {
-                if (controller.isLoadingGlobalAttendance.value &&
-                    controller.globalAttendanceList.isEmpty) {
-                  return CommonLoading();
-                }
-
-                if (controller.globalAttendanceList.isEmpty) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.calendar_today_outlined,
-                          size: 64,
-                          color: AppColors.textTertiary,
-                        ),
-                        AppSpacing.v16,
-                        Text(
-                          'No attendance logs found',
-                          style: AppTextStyles.manrope(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.textSecondary,
+                return CommonStateWidget(
+                  isLoading: controller.isLoadingGlobalAttendance.value,
+                  isEmpty: controller.globalAttendanceList.isEmpty,
+                  emptyTitle: 'No Records Found',
+                  emptySubtitle: 'No attendance logs found for this month.',
+                  emptyIcon: Icons.calendar_today_outlined,
+                  child: RefreshIndicator(
+                    onRefresh: () => controller.fetchGlobalAttendance(page: 1),
+                    child: ListView.builder(
+                      padding: AppSpacing.all24,
+                      itemCount: controller.globalAttendanceList.length,
+                      itemBuilder: (context, index) {
+                        final attendance =
+                            controller.globalAttendanceList[index];
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 12.0),
+                          child: _buildAttendanceCard(
+                            attendance.staff?.fullName ?? 'Unknown Staff',
+                            attendance.note ?? '',
+                            attendance.status,
+                            attendance.status.toLowerCase() == 'present'
+                                ? AppColors.successGreen
+                                : AppColors.errorRed,
+                            attendance.staff?.profileUrl ?? '',
+                            attendance.date,
                           ),
-                        ),
-                      ],
+                        );
+                      },
                     ),
-                  );
-                }
-
-                return RefreshIndicator(
-                  onRefresh: () => controller.fetchGlobalAttendance(page: 1),
-                  child: ListView.builder(
-                    padding: AppSpacing.all24,
-                    itemCount: controller.globalAttendanceList.length,
-                    itemBuilder: (context, index) {
-                      final attendance = controller.globalAttendanceList[index];
-
-                      // Simple date grouping logic could be added here if needed
-                      // For now just show as a list
-
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 12.0),
-                        child: _buildAttendanceCard(
-                          attendance.staff?.fullName ?? 'Unknown Staff',
-                          attendance.note ?? '',
-                          attendance.status,
-                          attendance.status.toLowerCase() == 'present'
-                              ? AppColors.successGreen
-                              : AppColors.errorRed,
-                          attendance.staff?.profileUrl ?? '',
-                          attendance.date,
-                        ),
-                      );
-                    },
                   ),
                 );
               }),

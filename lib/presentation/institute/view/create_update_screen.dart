@@ -43,32 +43,40 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                         AppSpacing.v32,
                         _buildTargetAudienceCard(controller),
                         AppSpacing.v32,
-                        Obx(() => AppInputField(
-                          label: 'Topic',
-                          hint: 'e.g., Q3 Fee Installment Reminder',
-                          controller: controller.subjectController,
-                          labelSpacing: 12.0,
-                          errorText: controller.triedToSave.value ? controller.subjectError.value : null,
-                          textStyle: AppTextStyles.manrope(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.textPrimary,
+                        Obx(
+                          () => AppInputField(
+                            label: 'Topic',
+                            hint: 'e.g., Q3 Fee Installment Reminder',
+                            controller: controller.subjectController,
+                            labelSpacing: 12.0,
+                            errorText: controller.triedToSave.value
+                                ? controller.subjectError.value
+                                : null,
+                            textStyle: AppTextStyles.manrope(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.textPrimary,
+                            ),
                           ),
-                        )),
+                        ),
                         AppSpacing.v32,
-                        Obx(() => AppInputField(
-                          label: 'Message Content',
-                          hint: 'Write your message here...',
-                          controller: controller.messageController,
-                          maxLines: 6,
-                          labelSpacing: 12.0,
-                          errorText: controller.triedToSave.value ? controller.messageError.value : null,
-                          textStyle: AppTextStyles.manrope(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.textPrimary,
+                        Obx(
+                          () => AppInputField(
+                            label: 'Message Content',
+                            hint: 'Write your message here...',
+                            controller: controller.messageController,
+                            maxLines: 6,
+                            labelSpacing: 12.0,
+                            errorText: controller.triedToSave.value
+                                ? controller.messageError.value
+                                : null,
+                            textStyle: AppTextStyles.manrope(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.textPrimary,
+                            ),
                           ),
-                        )),
+                        ),
                         AppSpacing.v32,
                         _buildAttachmentSection(controller),
                         AppSpacing.v32,

@@ -57,10 +57,15 @@ class NotesListScreen extends GetView<NotesController> {
                           isLoading:
                               controller.isLoading.value && notes.isEmpty,
                           isEmpty: notes.isEmpty,
-                          emptyTitle: 'No Notes Found',
-                          emptySubtitle:
-                              'Start creating notes to keep track of important information.',
-                          emptyIcon: Icons.note_alt_outlined,
+                          emptyTitle: controller.isBookmarkView.value
+                              ? AppStrings.instNoBookmarkedNotesFound
+                              : 'No Notes Found',
+                          emptySubtitle: controller.isBookmarkView.value
+                              ? AppStrings.instNoBookmarkedNotesSubtitle
+                              : 'Start creating notes to keep track of important information.',
+                          emptyIcon: controller.isBookmarkView.value
+                              ? Icons.bookmark_border_rounded
+                              : Icons.note_alt_outlined,
                           child: NotificationListener<ScrollNotification>(
                             onNotification: (ScrollNotification scrollInfo) {
                               if (!controller.isLoading.value &&
@@ -80,7 +85,7 @@ class NotesListScreen extends GetView<NotesController> {
                                             controller.lastPage.value
                                         ? 1
                                         : 0),
-                                separatorBuilder: (_, __) => AppSpacing.v16,
+                                separatorBuilder: (_, _) => AppSpacing.v16,
                                 itemBuilder: (context, index) {
                                   if (index == notes.length) {
                                     return const Center(

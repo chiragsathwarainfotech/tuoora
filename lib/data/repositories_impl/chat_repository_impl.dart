@@ -111,3 +111,4 @@ class ChatRepositoryImpl implements ChatRepository {
     return _mockParticipants;
   }
 }
+

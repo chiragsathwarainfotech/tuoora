@@ -99,3 +99,4 @@ class ChatParticipant {
     this.image,
   });
 }
+

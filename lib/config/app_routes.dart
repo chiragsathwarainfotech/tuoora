@@ -90,3 +90,4 @@ class AppRoutes {
   static const String instituteAddExpense = '/institute/expenses/add';
   static const String instituteExpenseAnalysis = '/institute/expenses/analysis';
 }
+

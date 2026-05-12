@@ -258,7 +258,7 @@ class AddSalaryScreen extends GetView<StaffController> {
               child: Image.network(
                 profileUrl,
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => _buildInitials(name),
+                errorBuilder: (_, _, _) => _buildInitials(name),
               ),
             )
           : _buildInitials(name),

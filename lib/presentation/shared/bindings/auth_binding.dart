@@ -10,3 +10,4 @@ class AuthBinding extends Bindings {
     Get.lazyPut(() => LoginController(Get.find<AuthRepository>()));
   }
 }
+

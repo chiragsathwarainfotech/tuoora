@@ -24,3 +24,4 @@ enum UpdateCategory {
 }
 
 enum AppInputFieldVariant { standard, profile }
+

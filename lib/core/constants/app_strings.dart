@@ -471,4 +471,7 @@ class AppStrings {
   static const String instDeleteNoteTitle = 'Delete Note';
   static const String instDeleteNoteConfirm = 'Are you sure you want to delete this note?';
   static const String instBookmarkedNotes = 'Bookmarked Notes';
+  static const String instNoBookmarkedNotesFound = 'No Bookmarked Notes Found';
+  static const String instNoBookmarkedNotesSubtitle = 'You haven\'t bookmarked any notes yet.';
 }
+

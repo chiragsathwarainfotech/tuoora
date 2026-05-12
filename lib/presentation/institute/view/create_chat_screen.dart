@@ -34,14 +34,19 @@ class CreateChatScreen extends GetView<ChatController> {
                           isLoading: controller.isLoading.value,
                           isEmpty: controller.filteredParticipants.isEmpty,
                           emptyTitle: 'No Members Found',
-                          emptySubtitle: 'We couldn\'t find any members matching your search.',
+                          emptySubtitle:
+                              'We couldn\'t find any members matching your search.',
                           emptyIcon: Icons.person_search_outlined,
                           child: ListView.separated(
                             padding: EdgeInsets.zero,
                             itemCount: controller.filteredParticipants.length,
-                            separatorBuilder: (_, __) => const Divider(height: 1, color: AppColors.divider),
+                            separatorBuilder: (_, _) => const Divider(
+                              height: 1,
+                              color: AppColors.divider,
+                            ),
                             itemBuilder: (context, index) {
-                              final participant = controller.filteredParticipants[index];
+                              final participant =
+                                  controller.filteredParticipants[index];
                               return _buildMemberTile(participant);
                             },
                           ),
@@ -96,7 +101,10 @@ class CreateChatScreen extends GetView<ChatController> {
           color: AppColors.textTertiary,
         ),
       ),
-      trailing: const Icon(Icons.chevron_right_rounded, color: AppColors.textTertiary),
+      trailing: const Icon(
+        Icons.chevron_right_rounded,
+        color: AppColors.textTertiary,
+      ),
     );
   }
 }

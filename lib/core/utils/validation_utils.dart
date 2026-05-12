@@ -78,4 +78,57 @@ class ValidationUtils {
     }
     return null;
   }
+
+  static String? validateRoleSelection(dynamic role) {
+    if (role == null) {
+      return 'Please select a staff role to continue.';
+    }
+    return null;
+  }
+
+  static String? validateDepartmentSelection(dynamic department) {
+    if (department == null) {
+      return 'Please select a staff department to continue.';
+    }
+    return null;
+  }
+
+  static String? validateCategorySelection(dynamic category) {
+    if (category == null) {
+      return 'Please select a category to continue.';
+    }
+    return null;
+  }
+
+  static String? validateStudentSelection(dynamic student) {
+    if (student == null) {
+      return 'Please select a student to continue.';
+    }
+    return null;
+  }
+
+  static String? validateDaysSelection(List<dynamic> days) {
+    if (days.isEmpty) {
+      return 'Please select at least one day to continue.';
+    }
+    return null;
+  }
+
+  static String? validateDateSelection(dynamic date, String fieldName) {
+    if (date == null) {
+      return 'Please select $fieldName to continue.';
+    }
+    return null;
+  }
+
+  static String? validateConfirmPassword(String? password, String? confirmPassword) {
+    if (confirmPassword == null || confirmPassword.isEmpty) {
+      return 'Please confirm your password';
+    }
+    if (password != confirmPassword) {
+      return 'Passwords do not match';
+    }
+    return null;
+  }
 }
+

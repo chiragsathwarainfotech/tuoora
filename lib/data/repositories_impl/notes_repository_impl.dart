@@ -1,6 +1,8 @@
 import 'package:fee_easy/core/api/api_client.dart';
+import 'package:fee_easy/core/api/api_exception.dart';
 import 'package:fee_easy/core/constants/api_constants.dart';
 import 'package:fee_easy/data/models/note_model.dart';
+import 'package:get/get_connect/http/src/response/response.dart';
 
 class NotesRepositoryImpl {
   final ApiClient _apiClient;
@@ -29,7 +31,9 @@ class NotesRepositoryImpl {
     final response = await _apiClient.get(ApiConstants.instituteNoteCategories);
 
     if (response.status.hasError) {
-      throw Exception('Failed to fetch note categories: ${response.statusText}');
+      throw Exception(
+        'Failed to fetch note categories: ${response.statusText}',
+      );
     }
 
     final List<dynamic> data = response.body['data'] ?? [];
@@ -43,8 +47,7 @@ class NotesRepositoryImpl {
     );
 
     if (response.status.hasError) {
-      final message = response.body?['message'] ?? 'Failed to create note';
-      throw Exception(message);
+      _handleError(response, 'Failed to create note');
     }
   }
 
@@ -55,8 +58,7 @@ class NotesRepositoryImpl {
     );
 
     if (response.status.hasError) {
-      final message = response.body?['message'] ?? 'Failed to update note';
-      throw Exception(message);
+      _handleError(response, 'Failed to update note');
     }
   }
 
@@ -82,4 +84,13 @@ class NotesRepositoryImpl {
       throw Exception(message);
     }
   }
+
+  void _handleError(Response response, String defaultMessage) {
+    if (response.statusCode == 422 && response.body?['errors'] != null) {
+      throw ValidationException(response.body['errors']);
+    }
+    final message = response.body?['message'] ?? defaultMessage;
+    throw Exception(message);
+  }
 }
+

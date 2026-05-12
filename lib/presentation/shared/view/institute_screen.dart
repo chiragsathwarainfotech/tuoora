@@ -301,7 +301,11 @@ class InstituteScreen extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(Icons.explore_outlined, color: AppColors.white, size: 24),
+              const Icon(
+                Icons.explore_outlined,
+                color: AppColors.white,
+                size: 24,
+              ),
               AppSpacing.h12,
               Text(
                 'Our Presence',

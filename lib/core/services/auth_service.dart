@@ -70,3 +70,4 @@ class AuthService extends GetxService {
     print('AuthService: Session cleared (user and token removed). Preferences preserved.');
   }
 }
+

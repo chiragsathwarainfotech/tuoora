@@ -158,7 +158,11 @@ class LogAttendanceScreen extends GetView<StaffController> {
               itemBuilder: (context, index) {
                 final staff = controller.filteredLogStaffs[index];
                 return ListTile(
-                  leading: _buildStaffAvatar(staff.profileUrl ?? '', staff.fullName, size: 32),
+                  leading: _buildStaffAvatar(
+                    staff.profileUrl ?? '',
+                    staff.fullName,
+                    size: 32,
+                  ),
                   title: Text(
                     staff.fullName,
                     style: AppTextStyles.manrope(
@@ -310,6 +314,7 @@ class LogAttendanceScreen extends GetView<StaffController> {
       ),
     );
   }
+
   Widget _buildStaffAvatar(String imageUrl, String name, {double size = 40}) {
     if (imageUrl.isNotEmpty &&
         imageUrl.startsWith('http') &&

@@ -35,19 +35,23 @@ class AddEditBatchScreen extends GetView<BatchController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Obx(() => AppInputField(
-                      label: AppStrings.instBatchNameLabelAlt,
-                      controller: controller.batchNameController,
-                      hint: AppStrings.instBatchNameHint,
-                      errorText: controller.triedToSave.value ? controller.batchNameError.value : null,
-                    )),
+                    Obx(
+                      () => AppInputField(
+                        label: AppStrings.instBatchNameLabelAlt,
+                        controller: controller.batchNameController,
+                        hint: AppStrings.instBatchNameHint,
+                        errorText: controller.batchNameError.value,
+                      ),
+                    ),
                     AppSpacing.v24,
-                    Obx(() => AppInputField(
-                      label: AppStrings.instBatchSubjectLabel,
-                      controller: controller.subjectController,
-                      hint: AppStrings.instBatchSubjectHint,
-                      errorText: controller.triedToSave.value ? controller.subjectError.value : null,
-                    )),
+                    Obx(
+                      () => AppInputField(
+                        label: AppStrings.instBatchSubjectLabel,
+                        controller: controller.subjectController,
+                        hint: AppStrings.instBatchSubjectHint,
+                        errorText: controller.subjectError.value,
+                      ),
+                    ),
                     AppSpacing.v24,
                     AppInputField(
                       label: AppStrings.instBatchDescLabel,
@@ -56,14 +60,18 @@ class AddEditBatchScreen extends GetView<BatchController> {
                       maxLines: 3,
                     ),
                     AppSpacing.v24,
-                    Obx(() => AppInputField(
-                      label: AppStrings.instBatchFeeLabelAlt,
-                      controller: controller.batchFeeController,
-                      hint: AppStrings.instBatchFeeHint,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      errorText: controller.triedToSave.value ? controller.feeError.value : null,
-                    )),
+                    Obx(
+                      () => AppInputField(
+                        label: AppStrings.instBatchFeeLabelAlt,
+                        controller: controller.batchFeeController,
+                        hint: AppStrings.instBatchFeeHint,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                        errorText: controller.feeError.value,
+                      ),
+                    ),
                     AppSpacing.v32,
                     _buildSectionHeader(
                       Icons.access_time_filled_rounded,
@@ -75,7 +83,7 @@ class AddEditBatchScreen extends GetView<BatchController> {
                     const InstituteLabel(AppStrings.instActiveDaysLabel),
                     AppSpacing.v4,
                     Obx(() {
-                      if (controller.triedToSave.value && controller.daysError.value != null) {
+                      if (controller.daysError.value != null) {
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 8.0),
                           child: Text(

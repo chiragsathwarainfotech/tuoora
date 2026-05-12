@@ -122,3 +122,4 @@ class WhatsAppController extends GetxController {
     super.onClose();
   }
 }
+

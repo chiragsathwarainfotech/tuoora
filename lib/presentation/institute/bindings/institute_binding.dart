@@ -113,3 +113,4 @@ class InstituteBinding extends Bindings {
     Get.put<DownloadService>(DownloadService(), permanent: true);
   }
 }
+

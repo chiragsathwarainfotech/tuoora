@@ -7,3 +7,4 @@ class ModuleItem {
 
   ModuleItem(this.title, this.icon, this.onTap);
 }
+

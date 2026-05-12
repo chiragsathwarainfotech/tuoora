@@ -22,3 +22,4 @@ class InstituteLabel extends StatelessWidget {
     );
   }
 }
+

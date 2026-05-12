@@ -34,3 +34,4 @@ class NotificationController extends GetxController {
     await fetchNotifications();
   }
 }
+

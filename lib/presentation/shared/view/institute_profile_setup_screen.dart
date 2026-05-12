@@ -46,10 +46,15 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                                     color: AppColors.brandAppBarColor,
                                     width: 2,
                                   ),
-                                  image: controller.selectedLogoPath.value != null
+                                  image:
+                                      controller.selectedLogoPath.value != null
                                       ? DecorationImage(
                                           image: FileImage(
-                                            File(controller.selectedLogoPath.value!),
+                                            File(
+                                              controller
+                                                  .selectedLogoPath
+                                                  .value!,
+                                            ),
                                           ),
                                           fit: BoxFit.cover,
                                         )

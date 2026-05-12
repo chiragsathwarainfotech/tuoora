@@ -159,3 +159,4 @@ class BatchReportDetailScreen extends StatelessWidget {
     return AppColors.errorRed;
   }
 }
+

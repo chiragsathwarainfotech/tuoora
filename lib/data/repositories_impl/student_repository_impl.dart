@@ -7,3 +7,4 @@ abstract class StudentRepositoryImpl {
   Future<Student> updateStudent(int id, Map<String, dynamic> data);
   Future<bool> deleteStudent(int id);
 }
+

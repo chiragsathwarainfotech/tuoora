@@ -1,4 +1,5 @@
 import 'package:fee_easy/core/api/api_client.dart';
+import 'package:fee_easy/core/api/api_exception.dart';
 import 'package:fee_easy/core/constants/api_constants.dart';
 import 'package:fee_easy/data/models/student_model.dart';
 import 'package:fee_easy/data/repositories_impl/student_repository_impl.dart';
@@ -56,7 +57,7 @@ class StudentRepository implements StudentRepositoryImpl {
       formData,
     );
     if (response.status.hasError) {
-      throw Exception('Failed to create student: ${response.statusText}');
+      _handleError(response, 'Failed to create student');
     }
     return Student.fromJson(response.body['data']);
   }
@@ -97,9 +98,8 @@ class StudentRepository implements StudentRepositoryImpl {
       '${ApiConstants.instituteStudents}/$id',
       formData,
     );
-
     if (response.status.hasError) {
-      throw Exception('Failed to update student: ${response.statusText}');
+      _handleError(response, 'Failed to update student');
     }
     return Student.fromJson(response.body['data']);
   }
@@ -114,4 +114,13 @@ class StudentRepository implements StudentRepositoryImpl {
     }
     return response.statusCode == 200 || response.statusCode == 204;
   }
+
+  void _handleError(Response response, String defaultMessage) {
+    if (response.statusCode == 422 && response.body?['errors'] != null) {
+      throw ValidationException(response.body['errors']);
+    }
+    final message = response.body?['message'] ?? defaultMessage;
+    throw Exception(message);
+  }
 }
+

@@ -236,9 +236,7 @@ class ReportsScreen extends StatelessWidget {
               style: AppTextStyles.manrope(
                 fontSize: 14,
                 fontWeight: FontWeight.w800,
-                color: isAlert
-                    ? const Color(0xFFDC2626)
-                    : AppColors.darkSlate,
+                color: isAlert ? const Color(0xFFDC2626) : AppColors.darkSlate,
               ),
             ),
           ],

@@ -4,6 +4,8 @@ import 'package:fee_easy/presentation/institute/models/expense_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:fee_easy/core/api/api_exception.dart';
+import 'package:fee_easy/core/widgets/app_snackbar.dart';
 import 'package:intl/intl.dart';
 
 class ExpenseController extends GetxController {
@@ -77,12 +79,10 @@ class ExpenseController extends GetxController {
     if (descVal != null) isValid = false;
 
     // Category validation
-    if (selectedCategory.value == null) {
-      categoryError.value = 'Please select a category';
-      isValid = false;
-    } else {
-      categoryError.value = null;
-    }
+    final categoryVal =
+        ValidationUtils.validateCategorySelection(selectedCategory.value);
+    categoryError.value = categoryVal;
+    if (categoryVal != null) isValid = false;
 
     return isValid;
   }
@@ -249,9 +249,27 @@ class ExpenseController extends GetxController {
       loadExpenses(page: 1); // Refresh list
       loadExpenseAnalysis(); // Refresh analysis
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      if (e is ValidationException) {
+        _handleValidationErrors(e.errors);
+        AppSnackbar.error('Please correct the highlighted errors');
+      } else {
+        AppSnackbar.error(e.toString());
+      }
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  void _handleValidationErrors(Map<String, dynamic> errors) {
+    if (errors.containsKey('amount')) {
+      amountError.value = (errors['amount'] as List).first.toString();
+    }
+    if (errors.containsKey('description')) {
+      descriptionError.value = (errors['description'] as List).first.toString();
+    }
+    if (errors.containsKey('expense_category_id')) {
+      categoryError.value =
+          (errors['expense_category_id'] as List).first.toString();
     }
   }
 
@@ -262,3 +280,4 @@ class ExpenseController extends GetxController {
     super.onClose();
   }
 }
+

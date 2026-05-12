@@ -211,9 +211,7 @@ class AddEditStudentScreen extends GetView<InstituteStudentController> {
               hint: AppStrings.instNameHint,
               icon: Icons.person,
               controller: controller.nameController,
-              errorText: controller.triedToSave.value
-                  ? controller.nameError.value
-                  : null,
+              errorText: controller.nameError.value,
             ),
           ),
           AppSpacing.v20,
@@ -225,9 +223,7 @@ class AddEditStudentScreen extends GetView<InstituteStudentController> {
               controller: controller.emailController,
               keyboardType: TextInputType.emailAddress,
               enabled: controller.editingStudentId.value == null,
-              errorText: controller.triedToSave.value
-                  ? controller.emailError.value
-                  : null,
+              errorText: controller.emailError.value,
             ),
           ),
           AppSpacing.v20,
@@ -239,9 +235,7 @@ class AddEditStudentScreen extends GetView<InstituteStudentController> {
               controller: controller.dobController,
               readOnly: true,
               onTap: () => controller.selectDOB(context),
-              errorText: controller.triedToSave.value
-                  ? controller.dobError.value
-                  : null,
+              errorText: controller.dobError.value,
             ),
           ),
           AppSpacing.v20,
@@ -251,9 +245,7 @@ class AddEditStudentScreen extends GetView<InstituteStudentController> {
               hint: AppStrings.instGuardianHint,
               icon: Icons.group,
               controller: controller.parentNameController,
-              errorText: controller.triedToSave.value
-                  ? controller.parentNameError.value
-                  : null,
+              errorText: controller.parentNameError.value,
             ),
           ),
           AppSpacing.v20,
@@ -266,9 +258,7 @@ class AddEditStudentScreen extends GetView<InstituteStudentController> {
               keyboardType: TextInputType.phone,
               maxLength: 10,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              errorText: controller.triedToSave.value
-                  ? controller.phoneError.value
-                  : null,
+              errorText: controller.phoneError.value,
             ),
           ),
           AppSpacing.v20,
@@ -278,9 +268,7 @@ class AddEditStudentScreen extends GetView<InstituteStudentController> {
               hint: AppStrings.instGradeHint,
               icon: Icons.school,
               controller: controller.standardController,
-              errorText: controller.triedToSave.value
-                  ? controller.standardError.value
-                  : null,
+              errorText: controller.standardError.value,
             ),
           ),
         ],

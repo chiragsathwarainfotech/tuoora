@@ -4,10 +4,13 @@ import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/services/auth_service.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
+import 'package:fee_easy/core/utils/validation_utils.dart';
 import 'package:fee_easy/data/models/institute_profile_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:fee_easy/core/api/api_exception.dart';
+import 'package:fee_easy/core/widgets/app_snackbar.dart';
 
 class InstituteProfileController extends GetxController {
   final InstituteRepositoryImpl _instituteRepository;
@@ -31,6 +34,13 @@ class InstituteProfileController extends GetxController {
   final pincode = "".obs;
 
   final isLoading = false.obs;
+  final triedToSave = false.obs;
+
+  final instituteNameError = RxnString();
+  final ownerNameError = RxnString();
+  final emailError = RxnString();
+  final phoneError = RxnString();
+  final pincodeError = RxnString();
 
   // Controllers for text fields (for editing)
   late TextEditingController nameController;
@@ -64,6 +74,22 @@ class InstituteProfileController extends GetxController {
     stateController = TextEditingController(text: state.value);
     countryController = TextEditingController(text: country.value);
     pincodeController = TextEditingController(text: pincode.value);
+
+    _addListeners();
+  }
+
+  void _addListeners() {
+    nameController.addListener(() => _clearError(instituteNameError));
+    ownerController.addListener(() => _clearError(ownerNameError));
+    emailController.addListener(() => _clearError(emailError));
+    phoneController.addListener(() => _clearError(phoneError));
+    pincodeController.addListener(() => _clearError(pincodeError));
+  }
+
+  void _clearError(RxnString error) {
+    if (triedToSave.value && error.value != null) {
+      error.value = null;
+    }
   }
 
   Future<void> fetchProfile() async {
@@ -180,6 +206,27 @@ class InstituteProfileController extends GetxController {
   }
 
   Future<void> saveProfile() async {
+    triedToSave.value = true;
+    _resetErrors();
+
+    final nameErr =
+        ValidationUtils.validateRequired(nameController.text, 'Institute name');
+    instituteNameError.value = nameErr;
+    if (nameErr != null) return;
+
+    final ownerErr =
+        ValidationUtils.validateRequired(ownerController.text, 'Owner name');
+    ownerNameError.value = ownerErr;
+    if (ownerErr != null) return;
+
+    final emailErr = ValidationUtils.validateEmail(emailController.text);
+    emailError.value = emailErr;
+    if (emailErr != null) return;
+
+    final phoneErr = ValidationUtils.validatePhone(phoneController.text);
+    phoneError.value = phoneErr;
+    if (phoneErr != null) return;
+
     try {
       isLoading.value = true;
       final updateData = {
@@ -210,15 +257,42 @@ class InstituteProfileController extends GetxController {
         margin: const EdgeInsets.all(16),
       );
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Failed to update profile: $e',
-        backgroundColor: Colors.redAccent,
-        colorText: AppColors.white,
-      );
+      if (e is ValidationException) {
+        _handleValidationErrors(e.errors);
+        AppSnackbar.error('Please correct the highlighted errors');
+      } else {
+        AppSnackbar.error('Failed to update profile: $e');
+      }
     } finally {
       isLoading.value = false;
     }
+  }
+
+  void _handleValidationErrors(Map<String, dynamic> errors) {
+    if (errors.containsKey('institute_name')) {
+      instituteNameError.value =
+          (errors['institute_name'] as List).first.toString();
+    }
+    if (errors.containsKey('name')) {
+      ownerNameError.value = (errors['name'] as List).first.toString();
+    }
+    if (errors.containsKey('email')) {
+      emailError.value = (errors['email'] as List).first.toString();
+    }
+    if (errors.containsKey('phone')) {
+      phoneError.value = (errors['phone'] as List).first.toString();
+    }
+    if (errors.containsKey('pincode')) {
+      pincodeError.value = (errors['pincode'] as List).first.toString();
+    }
+  }
+
+  void _resetErrors() {
+    instituteNameError.value = null;
+    ownerNameError.value = null;
+    emailError.value = null;
+    phoneError.value = null;
+    pincodeError.value = null;
   }
 
   void discardChanges() {
@@ -247,3 +321,4 @@ class InstituteProfileController extends GetxController {
     super.onClose();
   }
 }
+

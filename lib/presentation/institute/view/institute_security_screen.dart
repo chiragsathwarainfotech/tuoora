@@ -30,12 +30,14 @@ class InstituteSecurityScreen extends GetView<SecurityController> {
                 ),
               ],
             ),
-            Obx(() => controller.isLoading.value
-                ? Container(
-                    color: Colors.black.withValues(alpha: 0.3),
+            Obx(
+              () => controller.isLoading.value
+                  ? Container(
+                      color: Colors.black.withValues(alpha: 0.3),
                       child: const CommonLoading(color: AppColors.white),
-                  )
-                : const SizedBox.shrink()),
+                    )
+                  : const SizedBox.shrink(),
+            ),
           ],
         ),
       ),
@@ -68,28 +70,37 @@ class InstituteSecurityScreen extends GetView<SecurityController> {
             ),
           ),
           AppSpacing.v24,
-          _buildPasswordField(
-            label: AppStrings.instCurrentPasswordLabel,
-            hint: '••••••••',
-            controller: controller.currentPasswordController,
-            isVisible: controller.isCurrentPasswordVisible,
-            onToggle: controller.toggleCurrentPasswordVisibility,
+          Obx(
+            () => _buildPasswordField(
+              label: AppStrings.instCurrentPasswordLabel,
+              hint: '••••••••',
+              controller: controller.currentPasswordController,
+              isVisible: controller.isCurrentPasswordVisible,
+              onToggle: controller.toggleCurrentPasswordVisibility,
+              errorText: controller.currentPasswordError.value,
+            ),
           ),
           AppSpacing.v24,
-          _buildPasswordField(
-            label: AppStrings.instNewPasswordLabel,
-            hint: 'Min. 6 characters',
-            controller: controller.newPasswordController,
-            isVisible: controller.isNewPasswordVisible,
-            onToggle: controller.toggleNewPasswordVisibility,
+          Obx(
+            () => _buildPasswordField(
+              label: AppStrings.instNewPasswordLabel,
+              hint: 'Min. 6 characters',
+              controller: controller.newPasswordController,
+              isVisible: controller.isNewPasswordVisible,
+              onToggle: controller.toggleNewPasswordVisibility,
+              errorText: controller.newPasswordError.value,
+            ),
           ),
           AppSpacing.v24,
-          _buildPasswordField(
-            label: AppStrings.instConfirmPasswordLabel,
-            hint: 'Repeat password',
-            controller: controller.confirmPasswordController,
-            isVisible: controller.isConfirmPasswordVisible,
-            onToggle: controller.toggleConfirmPasswordVisibility,
+          Obx(
+            () => _buildPasswordField(
+              label: AppStrings.instConfirmPasswordLabel,
+              hint: 'Repeat password',
+              controller: controller.confirmPasswordController,
+              isVisible: controller.isConfirmPasswordVisible,
+              onToggle: controller.toggleConfirmPasswordVisibility,
+              errorText: controller.confirmPasswordError.value,
+            ),
           ),
           AppSpacing.v32,
           AppButton(
@@ -108,6 +119,7 @@ class InstituteSecurityScreen extends GetView<SecurityController> {
     required TextEditingController controller,
     required RxBool isVisible,
     required VoidCallback onToggle,
+    String? errorText,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -127,6 +139,9 @@ class InstituteSecurityScreen extends GetView<SecurityController> {
             decoration: BoxDecoration(
               color: AppColors.paleSilver,
               borderRadius: BorderRadius.circular(12),
+              border: errorText != null
+                  ? Border.all(color: Colors.redAccent, width: 1.5)
+                  : null,
             ),
             child: Row(
               children: [
@@ -165,6 +180,20 @@ class InstituteSecurityScreen extends GetView<SecurityController> {
             ),
           ),
         ),
+        if (errorText != null) ...[
+          const SizedBox(height: 4),
+          Padding(
+            padding: const EdgeInsets.only(left: 4),
+            child: Text(
+              errorText,
+              style: AppTextStyles.manrope(
+                fontSize: 12,
+                color: Colors.redAccent,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ],
       ],
     );
   }

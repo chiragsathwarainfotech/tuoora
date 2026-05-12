@@ -7,6 +7,7 @@ import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/presentation/shared/widgets/common_state_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:fee_easy/presentation/institute/widgets/month_selector_widget.dart';
 import 'package:intl/intl.dart';
 
 class ExpenseAnalysisScreen extends GetView<ExpenseController> {
@@ -134,103 +135,15 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
   }
 
   Widget _buildDateAndNavHeader(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        GestureDetector(
-          onTap: () async {
-            final picked = await showDatePicker(
-              context: context,
-              initialDate: controller.selectedAnalysisMonth.value,
-              firstDate: DateTime(2020),
-              lastDate: DateTime.now(),
-              helpText: 'Select Month',
-            );
-            if (picked != null) {
-              controller.setAnalysisMonth(picked);
-            }
-          },
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-            decoration: BoxDecoration(
-              color: AppColors.white,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: AppColors.borderGrey.withValues(alpha: 0.3),
-              ),
-            ),
-            child: Row(
-              children: [
-                const Icon(
-                  Icons.calendar_month_rounded,
-                  size: 20,
-                  color: AppColors.primaryBrand,
-                ),
-                AppSpacing.h8,
-                Obx(
-                  () => Text(
-                    DateFormat(
-                      'MMMM yyyy',
-                    ).format(controller.selectedAnalysisMonth.value),
-                    style: AppTextStyles.manrope(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.textPrimary,
-                    ),
-                  ),
-                ),
-                AppSpacing.h4,
-                const Icon(
-                  Icons.keyboard_arrow_down_rounded,
-                  size: 20,
-                  color: AppColors.textTertiary,
-                ),
-              ],
-            ),
-          ),
-        ),
-        Row(
-          children: [
-            _buildSmallNavButton(
-              Icons.chevron_left_rounded,
-              onTap: () => controller.prevAnalysisMonth(),
-              isEnabled: true,
-            ),
-            AppSpacing.h12,
-            Obx(
-              () => _buildSmallNavButton(
-                Icons.chevron_right_rounded,
-                onTap: () => controller.nextAnalysisMonth(),
-                isEnabled: controller.canGoToNextMonth,
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSmallNavButton(
-    IconData icon, {
-    required VoidCallback onTap,
-    required bool isEnabled,
-  }) {
-    return GestureDetector(
-      onTap: isEnabled ? onTap : null,
-      child: AnimatedOpacity(
-        duration: const Duration(milliseconds: 200),
-        opacity: isEnabled ? 1.0 : 0.3,
-        child: Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: AppColors.borderGrey.withValues(alpha: 0.3),
-            ),
-          ),
-          child: Icon(icon, size: 24, color: AppColors.primaryBrand),
-        ),
+    return Obx(
+      () => MonthSelectorWidget(
+        selectedMonth: controller.selectedAnalysisMonth.value,
+        onMonthChanged: (date) {
+          controller.setAnalysisMonth(date);
+        },
+        isNextEnabled: controller.canGoToNextMonth,
+        maxDate: DateTime.now(),
+        helpText: 'Select Analysis Month',
       ),
     );
   }

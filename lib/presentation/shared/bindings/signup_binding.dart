@@ -12,3 +12,4 @@ class SignupBinding extends Bindings {
     Get.lazyPut<SignupController>(() => SignupController());
   }
 }
+

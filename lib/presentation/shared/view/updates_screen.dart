@@ -171,7 +171,9 @@ class UpdatesScreen extends StatelessWidget {
                     style: AppTextStyles.manrope(
                       fontSize: 14,
                       fontWeight: FontWeight.w800,
-                      color: isSelected ? AppColors.white : AppColors.textTertiary,
+                      color: isSelected
+                          ? AppColors.white
+                          : AppColors.textTertiary,
                     ),
                   ),
                 ),

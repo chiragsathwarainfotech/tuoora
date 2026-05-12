@@ -24,10 +24,12 @@ class SalaryHistoryScreen extends GetView<StaffController> {
               child: Obx(() {
                 final salaries = controller.salaryList;
                 return CommonStateWidget(
-                  isLoading: controller.isLoadingSalary.value && salaries.isEmpty,
+                  isLoading:
+                      controller.isLoadingSalary.value && salaries.isEmpty,
                   isEmpty: salaries.isEmpty,
                   emptyTitle: 'No Salary Records',
-                  emptySubtitle: 'No salary payments found for this staff member.',
+                  emptySubtitle:
+                      'No salary payments found for this staff member.',
                   emptyIcon: Icons.payments_outlined,
                   child: ListView.separated(
                     padding: AppSpacing.all24,

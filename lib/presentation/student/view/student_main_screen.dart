@@ -34,3 +34,4 @@ class StudentMainScreen extends GetView<StudentController> {
     );
   }
 }
+

@@ -84,3 +84,4 @@ class HomeworkRatingController extends GetxController {
     Get.snackbar('Reminder Sent', 'A reminder has been sent to the student.');
   }
 }
+

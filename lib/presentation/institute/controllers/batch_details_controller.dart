@@ -121,3 +121,4 @@ class BatchDetailsController extends GetxController {
     super.onClose();
   }
 }
+

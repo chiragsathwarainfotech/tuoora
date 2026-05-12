@@ -3,6 +3,7 @@ import 'package:fee_easy/presentation/institute/models/expense_model.dart';
 import 'package:fee_easy/core/api/api_client.dart';
 import 'package:fee_easy/core/constants/api_constants.dart';
 import 'package:fee_easy/core/services/auth_service.dart';
+import 'package:fee_easy/core/api/api_exception.dart';
 import 'package:fee_easy/data/models/batch_model.dart';
 import 'package:fee_easy/data/models/institute_profile_model.dart';
 import 'package:fee_easy/data/models/whatsapp_settings_model.dart';
@@ -87,9 +88,8 @@ class InstituteRepository implements InstituteRepositoryImpl {
       ApiConstants.instituteProfileUpdate,
       formData,
     );
-
     if (response.status.hasError) {
-      throw Exception('Failed to update profile: ${response.statusText}');
+      _handleError(response, 'Failed to update profile');
     }
   }
 
@@ -120,9 +120,7 @@ class InstituteRepository implements InstituteRepositoryImpl {
       data,
     );
     if (response.status.hasError) {
-      throw Exception(
-        'Failed to save WhatsApp settings: ${response.statusText}',
-      );
+      _handleError(response, 'Failed to save WhatsApp settings');
     }
     return WhatsAppSettings.fromJson(response.body['data']);
   }
@@ -136,9 +134,7 @@ class InstituteRepository implements InstituteRepositoryImpl {
       data,
     );
     if (response.status.hasError) {
-      throw Exception(
-        'Failed to update WhatsApp settings: ${response.statusText}',
-      );
+      _handleError(response, 'Failed to update WhatsApp settings');
     }
     return WhatsAppSettings.fromJson(response.body['data']);
   }
@@ -150,8 +146,7 @@ class InstituteRepository implements InstituteRepositoryImpl {
       data,
     );
     if (response.status.hasError) {
-      final message = response.body?['message'] ?? 'Failed to change password';
-      throw Exception(message);
+      _handleError(response, 'Failed to change password');
     }
   }
 
@@ -171,9 +166,7 @@ class InstituteRepository implements InstituteRepositoryImpl {
   Future<FeeRecord> createFee(Map<String, dynamic> data) async {
     final response = await _apiClient.post(ApiConstants.instituteFees, data);
     if (response.status.hasError) {
-      final message =
-          response.body?['message'] ?? 'Failed to create fee record';
-      throw Exception(message);
+      _handleError(response, 'Failed to create fee record');
     }
     return FeeRecord.fromJson(response.body['data']);
   }
@@ -352,8 +345,7 @@ class InstituteRepository implements InstituteRepositoryImpl {
   Future<Batch> createBatch(Map<String, dynamic> data) async {
     final response = await _apiClient.post(ApiConstants.instituteBatches, data);
     if (response.status.hasError) {
-      final message = response.body?['message'] ?? 'Failed to create batch';
-      throw Exception(message);
+      _handleError(response, 'Failed to create batch');
     }
     return Batch.fromJson(response.body['data']);
   }
@@ -365,8 +357,7 @@ class InstituteRepository implements InstituteRepositoryImpl {
       data,
     );
     if (response.status.hasError) {
-      final message = response.body?['message'] ?? 'Failed to update batch';
-      throw Exception(message);
+      _handleError(response, 'Failed to update batch');
     }
     return Batch.fromJson(response.body['data']);
   }
@@ -456,8 +447,7 @@ class InstituteRepository implements InstituteRepositoryImpl {
     );
 
     if (response.status.hasError) {
-      final message = response.body?['message'] ?? 'Failed to create homework';
-      throw Exception(message);
+      _handleError(response, 'Failed to create homework');
     }
     return response.body['data'];
   }
@@ -485,9 +475,7 @@ class InstituteRepository implements InstituteRepositoryImpl {
       {'students': students},
     );
     if (response.status.hasError) {
-      final message =
-          response.body?['message'] ?? 'Failed to assign students to batch';
-      throw Exception(message);
+      _handleError(response, 'Failed to assign students to batch');
     }
     return response.body['data'];
   }
@@ -502,10 +490,9 @@ class InstituteRepository implements InstituteRepositoryImpl {
       data,
     );
     if (response.status.hasError) {
-      final message = response.body?['message'] ?? 'Failed to submit ratings';
-      throw Exception(message);
+      _handleError(response, 'Failed to submit ratings');
     }
-    return response.body;
+    return response.body['data'];
   }
 
   @override
@@ -624,10 +611,8 @@ class InstituteRepository implements InstituteRepositoryImpl {
       ApiConstants.instituteExpenses,
       formData,
     );
-
     if (response.status.hasError) {
-      final message = response.body?['message'] ?? 'Failed to add expense';
-      throw Exception(message);
+      _handleError(response, 'Failed to add expense');
     }
     return ExpenseModel.fromJson(response.body['data']);
   }
@@ -713,10 +698,8 @@ class InstituteRepository implements InstituteRepositoryImpl {
       ApiConstants.instituteStaff,
       formData,
     );
-
     if (response.status.hasError) {
-      final message = response.body?['message'] ?? 'Failed to create staff';
-      throw Exception(message);
+      _handleError(response, 'Failed to create staff');
     }
 
     return Staff.fromJson(response.body['data']);
@@ -731,7 +714,7 @@ class InstituteRepository implements InstituteRepositoryImpl {
     // Spoof PUT method for multipart/form-data updates
     data['_method'] = 'PUT';
     final formData = FormData(data);
-    
+
     if (imagePath != null) {
       formData.files.add(
         MapEntry(
@@ -745,13 +728,19 @@ class InstituteRepository implements InstituteRepositoryImpl {
       '${ApiConstants.instituteStaff}/$id',
       formData,
     );
-
     if (response.status.hasError) {
-      final message = response.body?['message'] ?? 'Failed to update staff';
-      throw Exception(message);
+      _handleError(response, 'Failed to update staff');
     }
 
     return Staff.fromJson(response.body['data']);
+  }
+
+  void _handleError(Response response, String defaultMessage) {
+    if (response.statusCode == 422 && response.body?['errors'] != null) {
+      throw ValidationException(response.body['errors']);
+    }
+    final message = response.body?['message'] ?? defaultMessage;
+    throw Exception(message);
   }
 
   @override
@@ -778,11 +767,7 @@ class InstituteRepository implements InstituteRepositoryImpl {
   }) async {
     final response = await _apiClient.get(
       '${ApiConstants.instituteAttendance}/$staffId',
-      query: {
-        'page': page.toString(),
-        if (month != null) 'month': month,
-        if (year != null) 'year': year,
-      },
+      query: {'page': page.toString(), 'month': ?month, 'year': ?year},
     );
     if (response.status.hasError) {
       throw Exception('Failed to fetch attendance history');
@@ -791,10 +776,19 @@ class InstituteRepository implements InstituteRepositoryImpl {
   }
 
   @override
-  Future<AttendanceListResponse> getAttendanceLogs({int page = 1}) async {
+  Future<AttendanceListResponse> getAttendanceLogs({
+    int? page,
+    String? month,
+    String? year,
+  }) async {
+    final queryParams = {
+      if (page != null) 'page': page.toString(),
+      'month': ?month,
+      'year': ?year,
+    };
     final response = await _apiClient.get(
       ApiConstants.instituteAttendance,
-      query: {'page': page.toString()},
+      query: queryParams,
     );
     if (response.status.hasError) {
       throw Exception('Failed to fetch attendance logs');
@@ -809,8 +803,7 @@ class InstituteRepository implements InstituteRepositoryImpl {
       data,
     );
     if (response.status.hasError) {
-      final message = response.body?['message'] ?? 'Failed to log attendance';
-      throw Exception(message);
+      _handleError(response, 'Failed to log attendance');
     }
   }
 
@@ -822,8 +815,8 @@ class InstituteRepository implements InstituteRepositoryImpl {
   }) async {
     final queryParams = {
       if (page != null) 'page': page.toString(),
-      if (month != null) 'month': month,
-      if (year != null) 'year': year,
+      'month': ?month,
+      'year': ?year,
     };
     final response = await _apiClient.get(
       ApiConstants.instituteSalaries,
@@ -842,8 +835,7 @@ class InstituteRepository implements InstituteRepositoryImpl {
       data,
     );
     if (response.status.hasError) {
-      final message = response.body?['message'] ?? 'Failed to log salary';
-      throw Exception(message);
+      _handleError(response, 'Failed to log salary');
     }
   }
 }

@@ -34,3 +34,4 @@ class ParentMainScreen extends GetView<ParentController> {
     );
   }
 }
+

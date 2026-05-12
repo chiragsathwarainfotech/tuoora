@@ -50,3 +50,4 @@ class AppColors {
   static const Color blueSapphire = Color(0xFF917B6B);
   static const Color paleSilver = Color(0xFFEBEBEB);
 }
+

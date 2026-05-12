@@ -33,7 +33,9 @@ class InstituteMetricCard extends StatelessWidget {
         ],
       ),
       child: Column(
-        crossAxisAlignment: isCentered ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+        crossAxisAlignment: isCentered
+            ? CrossAxisAlignment.center
+            : CrossAxisAlignment.start,
         children: [
           Text(
             label.toUpperCase(),

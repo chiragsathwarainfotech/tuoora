@@ -68,12 +68,16 @@ class AddEditStaffScreen extends GetView<StaffController> {
         children: [
           _buildProfileImageSection(context),
           AppSpacing.v32,
-          AppInputField(
-            label: 'Full Name',
-            controller: controller.staffNameController,
-            hint: 'Eleanor Shellstrop',
-            icon: Icons.person,
-            validator: (value) => ValidationUtils.validateRequired(value, 'Full name'),
+          Obx(
+            () => AppInputField(
+              label: 'Full Name',
+              controller: controller.staffNameController,
+              hint: 'Eleanor Shellstrop',
+              icon: Icons.person,
+              errorText: controller.staffNameError.value,
+              validator: (value) =>
+                  ValidationUtils.validateRequired(value, 'Full name'),
+            ),
           ),
           AppSpacing.v20,
           Row(
@@ -91,7 +95,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
                       ),
                     ),
                     AppSpacing.v8,
-                    Obx(() => _buildRoleDropdown()),
+                    Obx(() => _buildRoleDropdown(controller.roleError.value)),
                   ],
                 ),
               ),
@@ -109,30 +113,39 @@ class AddEditStaffScreen extends GetView<StaffController> {
                       ),
                     ),
                     AppSpacing.v8,
-                    Obx(() => _buildDepartmentDropdown()),
+                    Obx(
+                      () =>
+                          _buildDepartmentDropdown(controller.deptError.value),
+                    ),
                   ],
                 ),
               ),
             ],
           ),
           AppSpacing.v20,
-          AppInputField(
-            label: 'Email Address',
-            controller: controller.staffEmailController,
-            hint: 'eleanor.s@company.com',
-            icon: Icons.email_rounded,
-            keyboardType: TextInputType.emailAddress,
-            validator: ValidationUtils.validateEmail,
+          Obx(
+            () => AppInputField(
+              label: 'Email Address',
+              controller: controller.staffEmailController,
+              hint: 'eleanor.s@company.com',
+              icon: Icons.email_rounded,
+              keyboardType: TextInputType.emailAddress,
+              errorText: controller.staffEmailError.value,
+              validator: ValidationUtils.validateEmail,
+            ),
           ),
           AppSpacing.v20,
-          AppInputField(
-            label: 'Phone Number',
-            controller: controller.staffPhoneController,
-            hint: '0123456789',
-            icon: Icons.phone,
-            keyboardType: TextInputType.phone,
-            maxLength: 10,
-            validator: ValidationUtils.validatePhone,
+          Obx(
+            () => AppInputField(
+              label: 'Phone Number',
+              controller: controller.staffPhoneController,
+              hint: '0123456789',
+              icon: Icons.phone,
+              keyboardType: TextInputType.phone,
+              maxLength: 10,
+              errorText: controller.staffPhoneError.value,
+              validator: ValidationUtils.validatePhone,
+            ),
           ),
           AppSpacing.v32,
           Text(
@@ -147,34 +160,47 @@ class AddEditStaffScreen extends GetView<StaffController> {
           Row(
             children: [
               Expanded(
-                child: Obx(() => _buildToggleButton(
-                      'Salary',
-                      controller.employmentType.value == 'Salary',
-                      () => controller.employmentType.value = 'Salary',
-                    )),
+                child: Obx(
+                  () => _buildToggleButton(
+                    'Salary',
+                    controller.employmentType.value == 'Salary',
+                    () => controller.employmentType.value = 'Salary',
+                  ),
+                ),
               ),
               AppSpacing.h12,
               Expanded(
-                child: Obx(() => _buildToggleButton(
-                      'Hourly',
-                      controller.employmentType.value == 'Hourly',
-                      () => controller.employmentType.value = 'Hourly',
-                    )),
+                child: Obx(
+                  () => _buildToggleButton(
+                    'Hourly',
+                    controller.employmentType.value == 'Hourly',
+                    () => controller.employmentType.value = 'Hourly',
+                  ),
+                ),
               ),
             ],
           ),
           AppSpacing.v24,
-          Obx(() => AppInputField(
-                label: controller.employmentType.value == 'Salary' ? 'Base Salary' : 'Hourly Rate',
-                controller: controller.staffSalaryController,
-                hint: '0.00',
-                icon: Icons.payments_rounded,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                validator: (value) => ValidationUtils.validateAmount(
-                  value,
-                  controller.employmentType.value == 'Salary' ? 'Base Salary' : 'Hourly Rate',
-                ),
-              )),
+          Obx(
+            () => AppInputField(
+              label: controller.employmentType.value == 'Salary'
+                  ? 'Base Salary'
+                  : 'Hourly Rate',
+              controller: controller.staffSalaryController,
+              hint: '0.00',
+              icon: Icons.payments_rounded,
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
+              errorText: controller.staffSalaryError.value,
+              validator: (value) => ValidationUtils.validateAmount(
+                value,
+                controller.employmentType.value == 'Salary'
+                    ? 'Base Salary'
+                    : 'Hourly Rate',
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -187,26 +213,38 @@ class AddEditStaffScreen extends GetView<StaffController> {
           onTap: () => controller.showImagePickerSourceSheet(context),
           child: Stack(
             children: [
-              Obx(() => Container(
-                    width: 80,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryBrandLight,
-                      shape: BoxShape.circle,
-                      border: Border.all(color: AppColors.primaryBrand.withValues(alpha: 0.1)),
-                      image: controller.selectedImagePath.value != null
-                          ? DecorationImage(
-                              image: FileImage(File(controller.selectedImagePath.value!)),
-                              fit: BoxFit.cover,
-                            )
-                          : DecorationImage(
-                              image: controller.selectedStaff.value?.profileUrl != null
-                                  ? NetworkImage(controller.selectedStaff.value!.profileUrl!)
-                                  : const NetworkImage('https://ui-avatars.com/api/?name=Staff&background=00A3A3&color=fff'),
-                              fit: BoxFit.cover,
-                            ),
+              Obx(
+                () => Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryBrandLight,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: AppColors.primaryBrand.withValues(alpha: 0.1),
                     ),
-                  )),
+                    image: controller.selectedImagePath.value != null
+                        ? DecorationImage(
+                            image: FileImage(
+                              File(controller.selectedImagePath.value!),
+                            ),
+                            fit: BoxFit.cover,
+                          )
+                        : DecorationImage(
+                            image:
+                                controller.selectedStaff.value?.profileUrl !=
+                                    null
+                                ? NetworkImage(
+                                    controller.selectedStaff.value!.profileUrl!,
+                                  )
+                                : const NetworkImage(
+                                    'https://ui-avatars.com/api/?name=Staff&background=00A3A3&color=fff',
+                                  ),
+                            fit: BoxFit.cover,
+                          ),
+                  ),
+                ),
+              ),
               Positioned(
                 bottom: 0,
                 right: 0,
@@ -257,53 +295,129 @@ class AddEditStaffScreen extends GetView<StaffController> {
     );
   }
 
-  Widget _buildRoleDropdown() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      decoration: BoxDecoration(
-        color: AppColors.paleSilver,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<int>(
-          value: controller.selectedRoleId.value,
-          isExpanded: true,
-          hint: Text('Select Role', style: AppTextStyles.lexend(fontSize: 14, color: AppColors.textTertiary)),
-          icon: const Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.blueSapphire),
-          items: controller.roles.map((role) {
-            return DropdownMenuItem<int>(
-              value: role.id,
-              child: Text(role.name, style: AppTextStyles.lexend(fontSize: 14, color: AppColors.textPrimary, fontWeight: FontWeight.w500)),
-            );
-          }).toList(),
-          onChanged: (val) => controller.selectedRoleId.value = val,
+  Widget _buildRoleDropdown(String? errorText) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          decoration: BoxDecoration(
+            color: AppColors.paleSilver,
+            borderRadius: BorderRadius.circular(12),
+            border: errorText != null
+                ? Border.all(color: Colors.redAccent, width: 1.5)
+                : null,
+          ),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<int>(
+              value: controller.selectedRoleId.value,
+              isExpanded: true,
+              hint: Text(
+                'Select Role',
+                style: AppTextStyles.lexend(
+                  fontSize: 14,
+                  color: AppColors.textTertiary,
+                ),
+              ),
+              icon: const Icon(
+                Icons.keyboard_arrow_down_rounded,
+                color: AppColors.blueSapphire,
+              ),
+              items: controller.roles.map((role) {
+                return DropdownMenuItem<int>(
+                  value: role.id,
+                  child: Text(
+                    role.name,
+                    style: AppTextStyles.lexend(
+                      fontSize: 14,
+                      color: AppColors.textPrimary,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                );
+              }).toList(),
+              onChanged: (val) => controller.selectedRoleId.value = val,
+            ),
+          ),
         ),
-      ),
+        if (errorText != null) ...[
+          const SizedBox(height: 4),
+          Padding(
+            padding: const EdgeInsets.only(left: 4),
+            child: Text(
+              errorText,
+              style: AppTextStyles.manrope(
+                fontSize: 12,
+                color: Colors.redAccent,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ],
+      ],
     );
   }
 
-  Widget _buildDepartmentDropdown() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      decoration: BoxDecoration(
-        color: AppColors.paleSilver,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<int>(
-          value: controller.selectedDepartmentId.value,
-          isExpanded: true,
-          hint: Text('Select Dept', style: AppTextStyles.lexend(fontSize: 14, color: AppColors.textTertiary)),
-          icon: const Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.blueSapphire),
-          items: controller.departments.map((dept) {
-            return DropdownMenuItem<int>(
-              value: dept.id,
-              child: Text(dept.name, style: AppTextStyles.lexend(fontSize: 14, color: AppColors.textPrimary, fontWeight: FontWeight.w500)),
-            );
-          }).toList(),
-          onChanged: (val) => controller.selectedDepartmentId.value = val,
+  Widget _buildDepartmentDropdown(String? errorText) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          decoration: BoxDecoration(
+            color: AppColors.paleSilver,
+            borderRadius: BorderRadius.circular(12),
+            border: errorText != null
+                ? Border.all(color: Colors.redAccent, width: 1.5)
+                : null,
+          ),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<int>(
+              value: controller.selectedDepartmentId.value,
+              isExpanded: true,
+              hint: Text(
+                'Select Dept',
+                style: AppTextStyles.lexend(
+                  fontSize: 14,
+                  color: AppColors.textTertiary,
+                ),
+              ),
+              icon: const Icon(
+                Icons.keyboard_arrow_down_rounded,
+                color: AppColors.blueSapphire,
+              ),
+              items: controller.departments.map((dept) {
+                return DropdownMenuItem<int>(
+                  value: dept.id,
+                  child: Text(
+                    dept.name,
+                    style: AppTextStyles.lexend(
+                      fontSize: 14,
+                      color: AppColors.textPrimary,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                );
+              }).toList(),
+              onChanged: (val) => controller.selectedDepartmentId.value = val,
+            ),
+          ),
         ),
-      ),
+        if (errorText != null) ...[
+          const SizedBox(height: 4),
+          Padding(
+            padding: const EdgeInsets.only(left: 4),
+            child: Text(
+              errorText,
+              style: AppTextStyles.manrope(
+                fontSize: 12,
+                color: Colors.redAccent,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ],
+      ],
     );
   }
 
@@ -331,11 +445,15 @@ class AddEditStaffScreen extends GetView<StaffController> {
   }
 
   Widget _buildSaveButton(bool isEdit) {
-    return Obx(() => AppButton(
-      onPressed: controller.isSaving.value ? null : () => controller.saveStaff(),
-      isLoading: controller.isSaving.value,
-      label: isEdit ? 'Update Staff Member' : 'Save Staff Member',
-    ));
+    return Obx(
+      () => AppButton(
+        onPressed: controller.isSaving.value
+            ? null
+            : () => controller.saveStaff(),
+        isLoading: controller.isSaving.value,
+        label: isEdit ? 'Update Staff Member' : 'Save Staff Member',
+      ),
+    );
   }
 
   Widget _buildDiscardButton() {

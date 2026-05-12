@@ -4,6 +4,7 @@ import 'package:fee_easy/data/models/note_model.dart';
 import 'package:fee_easy/data/repositories_impl/notes_repository_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:fee_easy/core/api/api_exception.dart';
 
 class NotesController extends GetxController {
   final NotesRepositoryImpl _notesRepository = Get.find<NotesRepositoryImpl>();
@@ -172,9 +173,26 @@ class NotesController extends GetxController {
 
       fetchNotes(page: 1);
     } catch (e) {
-      AppSnackbar.error('Failed to save note: $e');
+      if (e is ValidationException) {
+        _handleValidationErrors(e.errors);
+        AppSnackbar.error('Please correct the highlighted errors');
+      } else {
+        AppSnackbar.error('Failed to save note: $e');
+      }
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  void _handleValidationErrors(Map<String, dynamic> errors) {
+    if (errors.containsKey('title')) {
+      titleError.value = (errors['title'] as List).first.toString();
+    }
+    if (errors.containsKey('content')) {
+      contentError.value = (errors['content'] as List).first.toString();
+    }
+    if (errors.containsKey('category')) {
+      categoryError.value = (errors['category'] as List).first.toString();
     }
   }
 
@@ -189,12 +207,9 @@ class NotesController extends GetxController {
     contentError.value = cErr;
     if (cErr != null) isValid = false;
 
-    if (selectedCategoryName.value == null) {
-      categoryError.value = 'Please select a category';
-      isValid = false;
-    } else {
-      categoryError.value = null;
-    }
+    final catErr = ValidationUtils.validateCategorySelection(selectedCategoryName.value);
+    categoryError.value = catErr;
+    if (catErr != null) isValid = false;
 
     return isValid;
   }
@@ -238,3 +253,4 @@ class NotesController extends GetxController {
     super.onClose();
   }
 }
+

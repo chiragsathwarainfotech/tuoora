@@ -197,8 +197,10 @@ class ChatMessagesScreen extends GetView<ChatController> {
                       maxLines: null,
                     ),
                   ),
-                  const Icon(Icons.sentiment_satisfied_alt_rounded,
-                      color: AppColors.textTertiary),
+                  const Icon(
+                    Icons.sentiment_satisfied_alt_rounded,
+                    color: AppColors.textTertiary,
+                  ),
                 ],
               ),
             ),
@@ -241,18 +243,42 @@ class ChatMessagesScreen extends GetView<ChatController> {
               mainAxisSpacing: 24,
               crossAxisSpacing: 24,
               children: [
-                _buildAttachmentItem(Icons.insert_drive_file_rounded, 'DOCUMENT',
-                    Colors.cyan.shade100, Colors.cyan.shade900),
-                _buildAttachmentItem(Icons.camera_alt_rounded, 'CAMERA',
-                    Colors.orange.shade100, Colors.orange.shade900),
-                _buildAttachmentItem(Icons.image_rounded, 'GALLERY',
-                    Colors.green.shade100, Colors.green.shade900),
-                _buildAttachmentItem(Icons.headphones_rounded, 'AUDIO',
-                    Colors.red.shade100, Colors.red.shade900),
-                _buildAttachmentItem(Icons.location_on_rounded, 'LOCATION',
-                    Colors.lightBlue.shade100, Colors.lightBlue.shade900),
-                _buildAttachmentItem(Icons.person_rounded, 'CONTACT',
-                    Colors.blueGrey.shade100, Colors.blueGrey.shade900),
+                _buildAttachmentItem(
+                  Icons.insert_drive_file_rounded,
+                  'DOCUMENT',
+                  Colors.cyan.shade100,
+                  Colors.cyan.shade900,
+                ),
+                _buildAttachmentItem(
+                  Icons.camera_alt_rounded,
+                  'CAMERA',
+                  Colors.orange.shade100,
+                  Colors.orange.shade900,
+                ),
+                _buildAttachmentItem(
+                  Icons.image_rounded,
+                  'GALLERY',
+                  Colors.green.shade100,
+                  Colors.green.shade900,
+                ),
+                _buildAttachmentItem(
+                  Icons.headphones_rounded,
+                  'AUDIO',
+                  Colors.red.shade100,
+                  Colors.red.shade900,
+                ),
+                _buildAttachmentItem(
+                  Icons.location_on_rounded,
+                  'LOCATION',
+                  Colors.lightBlue.shade100,
+                  Colors.lightBlue.shade900,
+                ),
+                _buildAttachmentItem(
+                  Icons.person_rounded,
+                  'CONTACT',
+                  Colors.blueGrey.shade100,
+                  Colors.blueGrey.shade900,
+                ),
               ],
             ),
           ],
@@ -263,17 +289,18 @@ class ChatMessagesScreen extends GetView<ChatController> {
   }
 
   Widget _buildAttachmentItem(
-      IconData icon, String label, Color bgColor, Color iconColor) {
+    IconData icon,
+    String label,
+    Color bgColor,
+    Color iconColor,
+  ) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
           width: 56,
           height: 56,
-          decoration: BoxDecoration(
-            color: bgColor,
-            shape: BoxShape.circle,
-          ),
+          decoration: BoxDecoration(color: bgColor, shape: BoxShape.circle),
           child: Icon(icon, color: iconColor),
         ),
         const SizedBox(height: 8),

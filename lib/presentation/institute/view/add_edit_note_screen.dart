@@ -37,9 +37,7 @@ class AddEditNoteScreen extends GetView<NotesController> {
                         label: AppStrings.instNoteTitleLabel,
                         hint: AppStrings.instNoteTitleHint,
                         controller: controller.titleController,
-                        errorText: controller.triedToSave.value
-                            ? controller.titleError.value
-                            : null,
+                        errorText: controller.titleError.value,
                         textStyle: AppTextStyles.manrope(
                           fontSize: 18,
                           fontWeight: FontWeight.w700,
@@ -56,9 +54,7 @@ class AddEditNoteScreen extends GetView<NotesController> {
                         hint: AppStrings.instNoteContentHint,
                         controller: controller.contentController,
                         maxLines: 12,
-                        errorText: controller.triedToSave.value
-                            ? controller.contentError.value
-                            : null,
+                        errorText: controller.contentError.value,
                         textStyle: AppTextStyles.lexend(
                           fontSize: 14,
                           color: AppColors.textSecondary,
@@ -153,8 +149,7 @@ class AddEditNoteScreen extends GetView<NotesController> {
                   ],
                 ),
               ),
-              if (controller.triedToSave.value &&
-                  controller.categoryError.value != null)
+              if (controller.categoryError.value != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 8, left: 4),
                   child: Text(

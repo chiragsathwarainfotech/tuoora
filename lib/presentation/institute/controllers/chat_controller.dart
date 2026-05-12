@@ -172,3 +172,4 @@ class ChatController extends GetxController {
     super.onClose();
   }
 }
+

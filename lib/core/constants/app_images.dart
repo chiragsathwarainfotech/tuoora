@@ -23,3 +23,4 @@ class AppImages {
   static const String icCheck = '$_iconsPath/ic_check.svg';
   static const String icClose = '$_iconsPath/ic_close.svg';
 }
+

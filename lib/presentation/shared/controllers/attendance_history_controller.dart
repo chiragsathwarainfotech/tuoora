@@ -40,3 +40,4 @@ class AttendanceHistoryController extends GetxController {
   String get currentMonthName => months[viewDate.value.month - 1];
   String get currentYear => viewDate.value.year.toString();
 }
+

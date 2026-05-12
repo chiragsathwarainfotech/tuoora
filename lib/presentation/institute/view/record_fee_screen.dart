@@ -96,15 +96,17 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
           ),
           AppSpacing.v16,
           if (!controller.isStudentSelected.value) ...[
-            Obx(() => AppSearchField(
-              hintText: AppStrings.instSearchStudentHint,
-              onChanged: (value) => controller.searchQuery.value = value,
-              borderColor: controller.triedToSave.value && controller.studentError.value != null
-                  ? Colors.redAccent
-                  : Colors.transparent,
-            )),
+            Obx(
+              () => AppSearchField(
+                hintText: AppStrings.instSearchStudentHint,
+                onChanged: (value) => controller.searchQuery.value = value,
+                borderColor: controller.studentError.value != null
+                    ? Colors.redAccent
+                    : Colors.transparent,
+              ),
+            ),
             Obx(() {
-              if (controller.triedToSave.value && controller.studentError.value != null) {
+              if (controller.studentError.value != null) {
                 return Padding(
                   padding: const EdgeInsets.only(top: 8, left: 4),
                   child: Text(
@@ -242,51 +244,53 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
             ),
           ),
           AppSpacing.v8,
-          Obx(() => Container(
-            padding: AppSpacing.all16,
-            decoration: BoxDecoration(
-              color: AppColors.paleSilver,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(
-                color: controller.triedToSave.value && controller.amountError.value != null
-                    ? Colors.redAccent
-                    : Colors.transparent,
+          Obx(
+            () => Container(
+              padding: AppSpacing.all16,
+              decoration: BoxDecoration(
+                color: AppColors.paleSilver,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: controller.amountError.value != null
+                      ? Colors.redAccent
+                      : Colors.transparent,
+                ),
               ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: TextField(
-                    onChanged: (value) => controller.amount.value = value,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      hintText: 'Enter Amount',
-                      border: InputBorder.none,
-                      isDense: true,
-                      contentPadding: EdgeInsets.zero,
-                      hintStyle: AppTextStyles.lexend(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: TextField(
+                      onChanged: (value) => controller.amount.value = value,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        hintText: 'Enter Amount',
+                        border: InputBorder.none,
+                        isDense: true,
+                        contentPadding: EdgeInsets.zero,
+                        hintStyle: AppTextStyles.lexend(
+                          fontSize: 15,
+                          color: AppColors.blueSapphire,
+                        ),
+                      ),
+                      style: AppTextStyles.lexend(
                         fontSize: 15,
-                        color: AppColors.blueSapphire,
+                        color: AppColors.textPrimary,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
-                    style: AppTextStyles.lexend(
-                      fontSize: 15,
-                      color: AppColors.textPrimary,
-                      fontWeight: FontWeight.w700,
-                    ),
                   ),
-                ),
-                const Icon(
-                  Icons.payments,
-                  color: AppColors.textTertiary,
-                  size: AppSpacing.s24,
-                ),
-              ],
+                  const Icon(
+                    Icons.payments,
+                    color: AppColors.textTertiary,
+                    size: AppSpacing.s24,
+                  ),
+                ],
+              ),
             ),
-          )),
+          ),
           Obx(() {
-            if (controller.triedToSave.value && controller.amountError.value != null) {
+            if (controller.amountError.value != null) {
               return Padding(
                 padding: const EdgeInsets.only(top: 8, left: 4),
                 child: Text(

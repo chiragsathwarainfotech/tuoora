@@ -177,35 +177,47 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
             ],
           ),
           AppSpacing.v24,
-          AppInputField(
-            label: AppStrings.instInstituteNameLabel,
-            controller: controller.nameController,
-            icon: Icons.school_outlined,
-            variant: AppInputFieldVariant.profile,
+          Obx(
+            () => AppInputField(
+              label: AppStrings.instInstituteNameLabel,
+              controller: controller.nameController,
+              icon: Icons.school_outlined,
+              variant: AppInputFieldVariant.profile,
+              errorText: controller.instituteNameError.value,
+            ),
           ),
           AppSpacing.v20,
-          AppInputField(
-            label: AppStrings.instOwnerNameLabel,
-            controller: controller.ownerController,
-            icon: Icons.person_outline_rounded,
-            variant: AppInputFieldVariant.profile,
+          Obx(
+            () => AppInputField(
+              label: AppStrings.instOwnerNameLabel,
+              controller: controller.ownerController,
+              icon: Icons.person_outline_rounded,
+              variant: AppInputFieldVariant.profile,
+              errorText: controller.ownerNameError.value,
+            ),
           ),
           AppSpacing.v20,
-          AppInputField(
-            label: AppStrings.instContactEmailLabel,
-            controller: controller.emailController,
-            icon: Icons.alternate_email_rounded,
-            keyboardType: TextInputType.emailAddress,
-            enabled: false,
-            variant: AppInputFieldVariant.profile,
+          Obx(
+            () => AppInputField(
+              label: AppStrings.instContactEmailLabel,
+              controller: controller.emailController,
+              icon: Icons.alternate_email_rounded,
+              keyboardType: TextInputType.emailAddress,
+              enabled: false,
+              variant: AppInputFieldVariant.profile,
+              errorText: controller.emailError.value,
+            ),
           ),
           AppSpacing.v20,
-          AppInputField(
-            label: AppStrings.instPhoneNumberLabel,
-            controller: controller.phoneController,
-            icon: Icons.phone_iphone_rounded,
-            keyboardType: TextInputType.number,
-            variant: AppInputFieldVariant.profile,
+          Obx(
+            () => AppInputField(
+              label: AppStrings.instPhoneNumberLabel,
+              controller: controller.phoneController,
+              icon: Icons.phone_iphone_rounded,
+              keyboardType: TextInputType.number,
+              variant: AppInputFieldVariant.profile,
+              errorText: controller.phoneError.value,
+            ),
           ),
           AppSpacing.v20,
           AppInputField(
@@ -243,12 +255,15 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
             variant: AppInputFieldVariant.profile,
           ),
           AppSpacing.v20,
-          AppInputField(
-            label: 'Pincode',
-            controller: controller.pincodeController,
-            icon: Icons.pin_drop_rounded,
-            keyboardType: TextInputType.number,
-            variant: AppInputFieldVariant.profile,
+          Obx(
+            () => AppInputField(
+              label: 'Pincode',
+              controller: controller.pincodeController,
+              icon: Icons.pin_drop_rounded,
+              keyboardType: TextInputType.number,
+              variant: AppInputFieldVariant.profile,
+              errorText: controller.pincodeError.value,
+            ),
           ),
         ],
       ),

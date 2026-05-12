@@ -12,6 +12,7 @@ import 'package:fee_easy/data/models/student_model.dart';
 import 'package:fee_easy/presentation/institute/controllers/batch_controller.dart';
 import 'package:fee_easy/presentation/institute/models/batch_model.dart';
 import 'package:fee_easy/core/widgets/app_snackbar.dart';
+import 'package:fee_easy/core/api/api_exception.dart';
 
 class InstituteStudentController extends GetxController {
   final StudentRepositoryImpl _studentRepository =
@@ -350,10 +351,38 @@ class InstituteStudentController extends GetxController {
         );
       });
     } catch (e) {
-      AppSnackbar.error('Failed to save student: $e');
+      if (e is ValidationException) {
+        _handleValidationErrors(e.errors);
+        AppSnackbar.error('Please correct the highlighted errors');
+      } else {
+        AppSnackbar.error('Failed to save student: $e');
+      }
     } finally {
       isLoading.value = false;
     }
+  }
+
+  void _handleValidationErrors(Map<String, dynamic> errors) {
+    if (errors.containsKey('name')) {
+      nameError.value = (errors['name'] as List).first.toString();
+    }
+    if (errors.containsKey('guardian_name')) {
+      parentNameError.value =
+          (errors['guardian_name'] as List).first.toString();
+    }
+    if (errors.containsKey('phone')) {
+      phoneError.value = (errors['phone'] as List).first.toString();
+    }
+    if (errors.containsKey('email')) {
+      emailError.value = (errors['email'] as List).first.toString();
+    }
+    if (errors.containsKey('dob')) {
+      dobError.value = (errors['dob'] as List).first.toString();
+    }
+    if (errors.containsKey('standard')) {
+      standardError.value = (errors['standard'] as List).first.toString();
+    }
+    isFormValid.value = false;
   }
 
   Future<void> deleteStudent() async {
@@ -410,3 +439,4 @@ class InstituteStudentController extends GetxController {
     );
   }
 }
+

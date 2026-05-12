@@ -4,3 +4,4 @@ abstract class DailyUpdateRepositoryImpl {
   Future<DailyUpdate> createDailyUpdate(Map<String, dynamic> data);
   Future<List<DailyUpdate>> listDailyUpdates();
 }
+

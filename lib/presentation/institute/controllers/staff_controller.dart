@@ -1,9 +1,11 @@
 import 'package:fee_easy/config/app_routes.dart';
+import 'package:fee_easy/core/utils/validation_utils.dart';
 import 'package:fee_easy/core/widgets/app_snackbar.dart';
 import 'package:fee_easy/data/models/staff_model.dart';
 import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:fee_easy/core/api/api_exception.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
@@ -56,6 +58,7 @@ class StaffController extends GetxController {
   final isLoadingGlobalAttendance = false.obs;
   final globalAttendanceCurrentPage = 1.obs;
   final globalAttendanceLastPage = 1.obs;
+  final selectedGlobalAttendanceMonth = DateTime.now().obs;
 
   // Global Salary State (for StaffMainScreen)
   final globalSalaryList = <StaffSalary>[].obs;
@@ -64,6 +67,26 @@ class StaffController extends GetxController {
   final globalSalaryCurrentPage = 1.obs;
   final globalSalaryLastPage = 1.obs;
   final selectedSalaryMonth = DateTime.now().obs;
+
+  bool get canGoToNextSalaryMonth {
+    final now = DateTime.now();
+    if (selectedSalaryMonth.value.year < now.year) return true;
+    if (selectedSalaryMonth.value.year == now.year &&
+        selectedSalaryMonth.value.month < now.month) {
+      return true;
+    }
+    return false;
+  }
+
+  bool get canGoToNextAttendanceMonth {
+    final now = DateTime.now();
+    if (selectedGlobalAttendanceMonth.value.year < now.year) return true;
+    if (selectedGlobalAttendanceMonth.value.year == now.year &&
+        selectedGlobalAttendanceMonth.value.month < now.month) {
+      return true;
+    }
+    return false;
+  }
 
   // Add/Edit Staff Reactive State
   final selectedRoleId = Rxn<int>();
@@ -75,6 +98,15 @@ class StaffController extends GetxController {
   final staffPhoneController = TextEditingController();
   final staffSalaryController = TextEditingController();
   final addStaffFormKey = GlobalKey<FormState>();
+
+  // Form field errors
+  final staffNameError = RxnString();
+  final staffEmailError = RxnString();
+  final staffPhoneError = RxnString();
+  final staffSalaryError = RxnString();
+  final roleError = RxnString();
+  final deptError = RxnString();
+  final triedToSave = false.obs;
 
   // Log Attendance State
   final selectedLogStaff = Rxn<Staff>();
@@ -103,6 +135,20 @@ class StaffController extends GetxController {
       (_) => fetchStaffs(page: 1),
       time: const Duration(milliseconds: 500),
     );
+
+    // Validation listeners
+    staffNameController.addListener(() => _clearError(staffNameError));
+    staffEmailController.addListener(() => _clearError(staffEmailError));
+    staffPhoneController.addListener(() => _clearError(staffPhoneError));
+    staffSalaryController.addListener(() => _clearError(staffSalaryError));
+    selectedRoleId.listen((_) => _clearError(roleError));
+    selectedDepartmentId.listen((_) => _clearError(deptError));
+  }
+
+  void _clearError(RxnString error) {
+    if (triedToSave.value && error.value != null) {
+      error.value = null;
+    }
   }
 
   void changeTab(int index) {
@@ -226,12 +272,19 @@ class StaffController extends GetxController {
   }
 
   Future<void> saveSalaryRecord() async {
-    if (selectedAddSalaryStaff.value == null) {
-      AppSnackbar.error('Please select a staff member');
+    final staffError =
+        ValidationUtils.validateStaffSelection(selectedAddSalaryStaff.value);
+    if (staffError != null) {
+      AppSnackbar.error(staffError);
       return;
     }
-    if (salaryAmountController.text.isEmpty) {
-      AppSnackbar.error('Please enter salary amount');
+
+    final amountError = ValidationUtils.validateAmount(
+      salaryAmountController.text,
+      'Salary amount',
+    );
+    if (amountError != null) {
+      AppSnackbar.error(amountError);
       return;
     }
 
@@ -269,11 +322,16 @@ class StaffController extends GetxController {
     }
   }
 
-  Future<void> fetchGlobalAttendance({int page = 1}) async {
+  Future<void> fetchGlobalAttendance({int? page}) async {
     try {
-      if (page == 1) isLoadingGlobalAttendance.value = true;
-      final response = await _repository.getAttendanceLogs(page: page);
-      if (page == 1) {
+      final isInitialFetch = page == null || page == 1;
+      if (isInitialFetch) isLoadingGlobalAttendance.value = true;
+      final response = await _repository.getAttendanceLogs(
+        page: page,
+        month: selectedGlobalAttendanceMonth.value.month.toString(),
+        year: selectedGlobalAttendanceMonth.value.year.toString(),
+      );
+      if (isInitialFetch) {
         globalAttendanceList.assignAll(response.items);
       } else {
         globalAttendanceList.addAll(response.items);
@@ -283,13 +341,15 @@ class StaffController extends GetxController {
     } catch (e) {
       AppSnackbar.error('Failed to load attendance logs: $e');
     } finally {
-      if (page == 1) isLoadingGlobalAttendance.value = false;
+      if (page == null || page == 1) isLoadingGlobalAttendance.value = false;
     }
   }
 
   Future<void> saveAttendanceRecord() async {
-    if (selectedLogStaff.value == null) {
-      AppSnackbar.error('Please select a staff member');
+    final staffError =
+        ValidationUtils.validateStaffSelection(selectedLogStaff.value);
+    if (staffError != null) {
+      AppSnackbar.error(staffError);
       return;
     }
 
@@ -404,11 +464,18 @@ class StaffController extends GetxController {
   }
 
   Future<void> saveStaff() async {
+    triedToSave.value = true;
+    _resetFormErrors();
     if (!addStaffFormKey.currentState!.validate()) return;
-    if (selectedRoleId.value == null || selectedDepartmentId.value == null) {
-      AppSnackbar.error('Please select both role and department');
-      return;
-    }
+
+    final rErr = ValidationUtils.validateRoleSelection(selectedRoleId.value);
+    roleError.value = rErr;
+    if (rErr != null) return;
+
+    final dErr =
+        ValidationUtils.validateDepartmentSelection(selectedDepartmentId.value);
+    deptError.value = dErr;
+    if (dErr != null) return;
 
     try {
       isSaving.value = true;
@@ -444,10 +511,46 @@ class StaffController extends GetxController {
         Get.back();
       }
     } catch (e) {
-      AppSnackbar.error('Failed to save staff: $e');
+      if (e is ValidationException) {
+        _handleValidationErrors(e.errors);
+        AppSnackbar.error('Please correct the highlighted errors');
+      } else {
+        AppSnackbar.error('Failed to save staff: $e');
+      }
     } finally {
       isSaving.value = false;
     }
+  }
+
+  void _handleValidationErrors(Map<String, dynamic> errors) {
+    if (errors.containsKey('full_name')) {
+      staffNameError.value = (errors['full_name'] as List).first.toString();
+    }
+    if (errors.containsKey('phone')) {
+      staffPhoneError.value = (errors['phone'] as List).first.toString();
+    }
+    if (errors.containsKey('email')) {
+      staffEmailError.value = (errors['email'] as List).first.toString();
+    }
+    if (errors.containsKey('base_salary')) {
+      staffSalaryError.value = (errors['base_salary'] as List).first.toString();
+    }
+    if (errors.containsKey('staff_role_id')) {
+      roleError.value = (errors['staff_role_id'] as List).first.toString();
+    }
+    if (errors.containsKey('staff_department_id')) {
+      deptError.value =
+          (errors['staff_department_id'] as List).first.toString();
+    }
+  }
+
+  void _resetFormErrors() {
+    staffNameError.value = null;
+    staffEmailError.value = null;
+    staffPhoneError.value = null;
+    staffSalaryError.value = null;
+    roleError.value = null;
+    deptError.value = null;
   }
 
   Future<void> deleteStaff(int id) async {
@@ -477,6 +580,8 @@ class StaffController extends GetxController {
     employmentType.value = 'Salary';
     selectedImagePath.value = null;
     selectedStaff.value = null;
+    triedToSave.value = false;
+    _resetFormErrors();
   }
 
   void loadStaffForEdit(Staff staff) {
@@ -489,6 +594,8 @@ class StaffController extends GetxController {
     selectedDepartmentId.value = staff.staffDepartmentId;
     employmentType.value = staff.employmentType;
     selectedImagePath.value = null;
+    triedToSave.value = false;
+    _resetFormErrors();
   }
 
   void selectStaff(Staff staff) {
@@ -578,3 +685,4 @@ class StaffController extends GetxController {
     super.onClose();
   }
 }
+

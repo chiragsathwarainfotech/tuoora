@@ -7,3 +7,4 @@ class ParentBinding extends Bindings {
     Get.lazyPut<ParentController>(() => ParentController());
   }
 }
+

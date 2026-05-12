@@ -39,7 +39,7 @@ class AddHomeworkScreen extends StatelessWidget {
                       label: AppStrings.instHomeworkSubjectLabel,
                       controller: controller.titleController,
                       hint: AppStrings.instHomeworkSubjectHint,
-                      errorText: controller.triedToSave.value ? controller.titleError.value : null,
+                      errorText: controller.titleError.value,
                     )),
                     AppSpacing.v24,
                     const InstituteLabel(AppStrings.instDueDateLabel),
@@ -88,7 +88,7 @@ class AddHomeworkScreen extends StatelessWidget {
               color: AppColors.paleSilver,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: controller.triedToSave.value && controller.dateError.value != null
+                color: controller.dateError.value != null
                     ? AppColors.bohoRed
                     : Colors.transparent,
               ),
@@ -122,7 +122,7 @@ class AddHomeworkScreen extends StatelessWidget {
             ),
           ),
           Obx(() {
-            if (controller.triedToSave.value && controller.dateError.value != null) {
+            if (controller.dateError.value != null) {
               return Padding(
                 padding: const EdgeInsets.only(top: 8.0, left: 4.0),
                 child: Text(
@@ -237,3 +237,4 @@ class AddHomeworkScreen extends StatelessWidget {
     );
   }
 }
+

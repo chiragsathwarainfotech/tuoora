@@ -108,3 +108,4 @@ class ResourceDetailController extends GetxController {
     super.onClose();
   }
 }
+

@@ -75,9 +75,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
               keyboardType: const TextInputType.numberWithOptions(
                 decimal: true,
               ),
-              errorText: controller.triedToSave.value
-                  ? controller.amountError.value
-                  : null,
+              errorText: controller.amountError.value,
             ),
           ),
           AppSpacing.v20,
@@ -87,9 +85,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
               hint: 'What was this for?',
               icon: Icons.description_rounded,
               controller: controller.descriptionController,
-              errorText: controller.triedToSave.value
-                  ? controller.descriptionError.value
-                  : null,
+              errorText: controller.descriptionError.value,
             ),
           ),
           AppSpacing.v20,
@@ -126,9 +122,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
                   color: AppColors.primaryBrandLight.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color:
-                        controller.triedToSave.value &&
-                            controller.categoryError.value != null
+                    color: controller.categoryError.value != null
                         ? Colors.redAccent
                         : AppColors.primaryBrand.withValues(alpha: 0.2),
                     width: 1.5,
@@ -169,8 +163,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
                   ),
                 ),
               ),
-              if (controller.triedToSave.value &&
-                  controller.categoryError.value != null)
+              if (controller.categoryError.value != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 8, left: 4),
                   child: Text(

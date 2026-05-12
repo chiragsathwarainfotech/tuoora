@@ -219,3 +219,4 @@ class ReportsController extends GetxController {
     return batchPerformances.firstWhereOrNull((b) => b.batchId == batchId);
   }
 }
+

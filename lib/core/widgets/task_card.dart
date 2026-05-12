@@ -121,7 +121,11 @@ class TaskCard extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
                 padding: const EdgeInsets.all(2),
-                child: const Icon(Icons.check, color: AppColors.white, size: 16),
+                child: const Icon(
+                  Icons.check,
+                  color: AppColors.white,
+                  size: 16,
+                ),
               )
             else if (progressValue != null)
               SizedBox(

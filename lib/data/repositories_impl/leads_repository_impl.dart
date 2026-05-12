@@ -1,5 +1,6 @@
 import 'package:fee_easy/core/api/api_client.dart';
 import 'package:fee_easy/core/constants/api_constants.dart';
+import 'package:fee_easy/core/api/api_exception.dart';
 import 'package:fee_easy/data/models/lead_model.dart';
 
 class LeadsRepositoryImpl {
@@ -32,6 +33,9 @@ class LeadsRepositoryImpl {
     );
 
     if (response.status.hasError) {
+      if (response.statusCode == 422 && response.body?['errors'] != null) {
+        throw ValidationException(response.body['errors']);
+      }
       final message = response.body?['message'] ?? 'Failed to create lead';
       throw Exception(message);
     }
@@ -44,6 +48,9 @@ class LeadsRepositoryImpl {
     );
 
     if (response.status.hasError) {
+      if (response.statusCode == 422 && response.body?['errors'] != null) {
+        throw ValidationException(response.body['errors']);
+      }
       final message = response.body?['message'] ?? 'Failed to update lead';
       throw Exception(message);
     }
@@ -60,3 +67,4 @@ class LeadsRepositoryImpl {
     }
   }
 }
+

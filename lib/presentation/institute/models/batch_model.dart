@@ -38,3 +38,4 @@ class BatchModel {
     this.students,
   });
 }
+

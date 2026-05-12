@@ -15,3 +15,4 @@ class InstituteMainScreen extends GetView<InstituteController> {
     );
   }
 }
+

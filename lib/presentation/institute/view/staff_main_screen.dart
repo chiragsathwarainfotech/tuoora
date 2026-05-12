@@ -26,58 +26,60 @@ class StaffMainScreen extends GetView<StaffController> {
             return const StaffListScreen();
         }
       }),
-      bottomNavigationBar: Obx(() => Container(
-            decoration: BoxDecoration(
-              color: AppColors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, -4),
-                ),
-              ],
-            ),
-            child: BottomNavigationBar(
-              currentIndex: controller.currentTabIndex.value,
-              onTap: controller.changeTab,
-              backgroundColor: AppColors.white,
-              selectedItemColor: AppColors.primaryBrand,
-              unselectedItemColor: AppColors.textTertiary,
-              selectedLabelStyle: AppTextStyles.manrope(
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
+      bottomNavigationBar: Obx(
+        () => Container(
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.05),
+                blurRadius: 10,
+                offset: const Offset(0, -4),
               ),
-              unselectedLabelStyle: AppTextStyles.manrope(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-              ),
-              type: BottomNavigationBarType.fixed,
-              elevation: 0,
-              items: const [
-                BottomNavigationBarItem(
-                  icon: Padding(
-                    padding: EdgeInsets.only(bottom: 4),
-                    child: Icon(Icons.people_alt_rounded),
-                  ),
-                  label: 'Staff',
-                ),
-                BottomNavigationBarItem(
-                  icon: Padding(
-                    padding: EdgeInsets.only(bottom: 4),
-                    child: Icon(Icons.calendar_month_rounded),
-                  ),
-                  label: 'Attendance',
-                ),
-                BottomNavigationBarItem(
-                  icon: Padding(
-                    padding: EdgeInsets.only(bottom: 4),
-                    child: Icon(Icons.payments_rounded),
-                  ),
-                  label: 'Salary',
-                ),
-              ],
+            ],
+          ),
+          child: BottomNavigationBar(
+            currentIndex: controller.currentTabIndex.value,
+            onTap: controller.changeTab,
+            backgroundColor: AppColors.white,
+            selectedItemColor: AppColors.primaryBrand,
+            unselectedItemColor: AppColors.textTertiary,
+            selectedLabelStyle: AppTextStyles.manrope(
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
             ),
-          )),
+            unselectedLabelStyle: AppTextStyles.manrope(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+            ),
+            type: BottomNavigationBarType.fixed,
+            elevation: 0,
+            items: const [
+              BottomNavigationBarItem(
+                icon: Padding(
+                  padding: EdgeInsets.only(bottom: 4),
+                  child: Icon(Icons.people_alt_rounded),
+                ),
+                label: 'Staff',
+              ),
+              BottomNavigationBarItem(
+                icon: Padding(
+                  padding: EdgeInsets.only(bottom: 4),
+                  child: Icon(Icons.calendar_month_rounded),
+                ),
+                label: 'Attendance',
+              ),
+              BottomNavigationBarItem(
+                icon: Padding(
+                  padding: EdgeInsets.only(bottom: 4),
+                  child: Icon(Icons.payments_rounded),
+                ),
+                label: 'Salary',
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

@@ -75,3 +75,4 @@ class AuthRepository implements AuthRepositoryImpl {
     return response.body['message'] ?? 'Success';
   }
 }
+

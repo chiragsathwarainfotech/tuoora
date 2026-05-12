@@ -35,12 +35,16 @@ class ChatListScreen extends GetView<ChatController> {
                           isLoading: controller.isLoading.value,
                           isEmpty: controller.filteredChats.isEmpty,
                           emptyTitle: 'No Chats Found',
-                          emptySubtitle: 'Start a new conversation to see your chats here.',
+                          emptySubtitle:
+                              'Start a new conversation to see your chats here.',
                           emptyIcon: Icons.chat_bubble_outline_rounded,
                           child: ListView.separated(
                             padding: EdgeInsets.zero,
                             itemCount: controller.filteredChats.length,
-                            separatorBuilder: (_, __) => const Divider(height: 1, color: AppColors.divider),
+                            separatorBuilder: (_, _) => const Divider(
+                              height: 1,
+                              color: AppColors.divider,
+                            ),
                             itemBuilder: (context, index) {
                               final chat = controller.filteredChats[index];
                               return _buildChatTile(chat);
@@ -124,8 +128,12 @@ class ChatListScreen extends GetView<ChatController> {
                 chat.lastMessage,
                 style: AppTextStyles.lexend(
                   fontSize: 14,
-                  color: chat.unreadCount > 0 ? AppColors.textPrimary : AppColors.textSecondary,
-                  fontWeight: chat.unreadCount > 0 ? FontWeight.w600 : FontWeight.w400,
+                  color: chat.unreadCount > 0
+                      ? AppColors.textPrimary
+                      : AppColors.textSecondary,
+                  fontWeight: chat.unreadCount > 0
+                      ? FontWeight.w600
+                      : FontWeight.w400,
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,

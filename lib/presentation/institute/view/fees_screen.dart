@@ -128,10 +128,7 @@ class InstituteFeesScreen extends GetView<InstituteController> {
     return Obx(() {
       if (controller.isLoadingFees.value && controller.feeRecords.isEmpty) {
         return const Center(
-          child: Padding(
-            padding: EdgeInsets.all(32.0),
-            child: CommonLoading(),
-          ),
+          child: Padding(padding: EdgeInsets.all(32.0), child: CommonLoading()),
         );
       }
 

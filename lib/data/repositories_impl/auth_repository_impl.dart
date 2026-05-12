@@ -9,3 +9,4 @@ abstract class AuthRepositoryImpl {
   Future<String> forgotPassword(String email);
   Future<String> resetPassword(Map<String, dynamic> data);
 }
+

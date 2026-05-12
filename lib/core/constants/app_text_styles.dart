@@ -141,3 +141,4 @@ class AppTextStyles {
     color: AppColors.white,
   );
 }
+

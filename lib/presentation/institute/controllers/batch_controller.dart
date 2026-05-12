@@ -3,7 +3,9 @@ import 'package:fee_easy/core/widgets/common_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
+import 'package:fee_easy/core/utils/validation_utils.dart';
 import 'package:fee_easy/core/widgets/app_snackbar.dart';
+import 'package:fee_easy/core/api/api_exception.dart';
 
 class BatchController extends GetxController {
   final InstituteRepositoryImpl _repository;
@@ -15,6 +17,20 @@ class BatchController extends GetxController {
   final isMoreLoading = false.obs;
   final currentPage = 1.obs;
   final lastPage = 1.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    batchNameController.addListener(() => _clearError(batchNameError));
+    subjectController.addListener(() => _clearError(subjectError));
+    batchFeeController.addListener(() => _clearError(feeError));
+  }
+
+  void _clearError(RxnString error) {
+    if (triedToSave.value && error.value != null) {
+      error.value = null;
+    }
+  }
 
   final isEditMode = false.obs;
   final batchNameController = TextEditingController();
@@ -38,33 +54,24 @@ class BatchController extends GetxController {
   bool validateForm() {
     bool isValid = true;
 
-    if (batchNameController.text.trim().isEmpty) {
-      batchNameError.value = 'Batch name is required';
-      isValid = false;
-    } else {
-      batchNameError.value = null;
-    }
+    final nameVal =
+        ValidationUtils.validateRequired(batchNameController.text, 'Batch name');
+    batchNameError.value = nameVal;
+    if (nameVal != null) isValid = false;
 
-    if (subjectController.text.trim().isEmpty) {
-      subjectError.value = 'Subject is required';
-      isValid = false;
-    } else {
-      subjectError.value = null;
-    }
+    final subjectVal =
+        ValidationUtils.validateRequired(subjectController.text, 'Subject');
+    subjectError.value = subjectVal;
+    if (subjectVal != null) isValid = false;
 
-    if (batchFeeController.text.trim().isEmpty) {
-      feeError.value = 'Fee is required';
-      isValid = false;
-    } else {
-      feeError.value = null;
-    }
+    final feeVal =
+        ValidationUtils.validateAmount(batchFeeController.text, 'Batch fee');
+    feeError.value = feeVal;
+    if (feeVal != null) isValid = false;
 
-    if (selectedDays.isEmpty) {
-      daysError.value = 'Please select at least one day';
-      isValid = false;
-    } else {
-      daysError.value = null;
-    }
+    final daysVal = ValidationUtils.validateDaysSelection(selectedDays.toList());
+    daysError.value = daysVal;
+    if (daysVal != null) isValid = false;
 
     return isValid;
   }
@@ -183,6 +190,7 @@ class BatchController extends GetxController {
     } else {
       selectedDays.add(day);
     }
+    _clearError(daysError);
   }
 
   void toggleStudent(String id) {
@@ -277,9 +285,29 @@ class BatchController extends GetxController {
         title: isEditMode.value ? 'Batch Updated' : 'Batch Created',
       );
     } catch (e) {
-      AppSnackbar.error(e.toString());
+      if (e is ValidationException) {
+        _handleValidationErrors(e.errors);
+        AppSnackbar.error('Please correct the highlighted errors');
+      } else {
+        AppSnackbar.error(e.toString());
+      }
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  void _handleValidationErrors(Map<String, dynamic> errors) {
+    if (errors.containsKey('name')) {
+      batchNameError.value = (errors['name'] as List).first.toString();
+    }
+    if (errors.containsKey('subject')) {
+      subjectError.value = (errors['subject'] as List).first.toString();
+    }
+    if (errors.containsKey('fees')) {
+      feeError.value = (errors['fees'] as List).first.toString();
+    }
+    if (errors.containsKey('days')) {
+      daysError.value = (errors['days'] as List).first.toString();
     }
   }
 
@@ -302,3 +330,4 @@ class BatchController extends GetxController {
     super.onClose();
   }
 }
+

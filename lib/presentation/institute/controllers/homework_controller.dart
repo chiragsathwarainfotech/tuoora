@@ -3,10 +3,12 @@ import 'package:fee_easy/presentation/institute/models/homework_model.dart';
 import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:fee_easy/core/utils/validation_utils.dart';
 import 'package:intl/intl.dart';
 import 'package:fee_easy/core/widgets/common_loading.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:fee_easy/core/widgets/app_snackbar.dart';
+import 'package:fee_easy/core/api/api_exception.dart';
 
 class HomeworkController extends GetxController {
   final BatchModel batch;
@@ -23,6 +25,18 @@ class HomeworkController extends GetxController {
   void onInit() {
     super.onInit();
     fetchHomeworks();
+
+    titleController.addListener(() {
+      if (triedToSave.value && titleError.value != null) {
+        titleError.value = null;
+      }
+    });
+
+    ever(dueDate, (_) {
+      if (triedToSave.value && dateError.value != null) {
+        dateError.value = null;
+      }
+    });
   }
 
   Future<void> fetchHomeworks() async {
@@ -63,19 +77,19 @@ class HomeworkController extends GetxController {
   bool validateForm() {
     bool isValid = true;
 
-    if (titleController.text.trim().isEmpty) {
-      titleError.value = 'Title is required';
-      isValid = false;
-    } else {
-      titleError.value = null;
-    }
+    final tErr = ValidationUtils.validateRequired(
+      titleController.text,
+      'Title',
+    );
+    titleError.value = tErr;
+    if (tErr != null) isValid = false;
 
-    if (dueDate.value == null) {
-      dateError.value = 'Due date is required';
-      isValid = false;
-    } else {
-      dateError.value = null;
-    }
+    final dErr = ValidationUtils.validateDateSelection(
+      dueDate.value,
+      'due date',
+    );
+    dateError.value = dErr;
+    if (dErr != null) isValid = false;
 
     return isValid;
   }
@@ -122,18 +136,32 @@ class HomeworkController extends GetxController {
       await fetchHomeworks();
 
       clearForm();
-      
+
       // Close loader
       CommonLoading.dismiss();
       // Close creation dialog
       Get.back();
-      
+
       AppSnackbar.success('Homework created successfully');
     } catch (e) {
       // Close loader if open
       CommonLoading.dismiss();
-      
-      AppSnackbar.error('Failed to create homework: ${e.toString()}');
+
+      if (e is ValidationException) {
+        _handleValidationErrors(e.errors);
+        AppSnackbar.error('Please correct the highlighted errors');
+      } else {
+        AppSnackbar.error('Failed to create homework: ${e.toString()}');
+      }
+    }
+  }
+
+  void _handleValidationErrors(Map<String, dynamic> errors) {
+    if (errors.containsKey('title')) {
+      titleError.value = (errors['title'] as List).first.toString();
+    }
+    if (errors.containsKey('due_date')) {
+      dateError.value = (errors['due_date'] as List).first.toString();
     }
   }
 

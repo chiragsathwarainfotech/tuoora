@@ -39,11 +39,13 @@ class InstituteBottomButton extends StatelessWidget {
         onPressed: isLoading ? null : onTap,
         style: ElevatedButton.styleFrom(
           backgroundColor: backgroundColor ?? AppColors.primaryBrand,
-          disabledBackgroundColor: backgroundColor?.withValues(alpha: 0.6) ??
+          disabledBackgroundColor:
+              backgroundColor?.withValues(alpha: 0.6) ??
               AppColors.primaryBrand.withValues(alpha: 0.6),
           minimumSize: const Size(double.infinity, 56),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
           elevation: 0,
         ),
         child: isLoading

@@ -63,3 +63,4 @@ class SplashController extends GetxController {
     }
   }
 }
+

@@ -50,3 +50,4 @@ class StudentController extends GetxController {
     super.onClose();
   }
 }
+

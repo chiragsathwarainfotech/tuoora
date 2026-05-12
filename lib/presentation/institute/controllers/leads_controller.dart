@@ -1,3 +1,4 @@
+import 'package:fee_easy/core/api/api_exception.dart';
 import 'package:fee_easy/core/utils/validation_utils.dart';
 import 'package:fee_easy/core/widgets/app_snackbar.dart';
 import 'package:fee_easy/data/models/lead_model.dart';
@@ -176,9 +177,41 @@ class LeadsController extends GetxController {
       }
       fetchLeads(page: 1);
     } catch (e) {
-      AppSnackbar.error('Failed to save lead: $e');
+      if (e is ValidationException) {
+        _handleValidationErrors(e.errors);
+        AppSnackbar.error('Please correct the highlighted errors');
+      } else {
+        AppSnackbar.error('Failed to save lead: $e');
+      }
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  void _handleValidationErrors(Map<String, dynamic> errors) {
+    if (errors.containsKey('full_name')) {
+      nameError.value = (errors['full_name'] as List).first.toString();
+    }
+    if (errors.containsKey('phone')) {
+      phoneError.value = (errors['phone'] as List).first.toString();
+    }
+    if (errors.containsKey('email')) {
+      emailError.value = (errors['email'] as List).first.toString();
+    }
+    if (errors.containsKey('course_selection')) {
+      courseError.value = (errors['course_selection'] as List).first.toString();
+    }
+    if (errors.containsKey('address')) {
+      addressError.value = (errors['address'] as List).first.toString();
+    }
+    if (errors.containsKey('reference')) {
+      referenceError.value = (errors['reference'] as List).first.toString();
+    }
+    if (errors.containsKey('title')) {
+      noteTitleError.value = (errors['title'] as List).first.toString();
+    }
+    if (errors.containsKey('note')) {
+      noteError.value = (errors['note'] as List).first.toString();
     }
   }
 
@@ -275,3 +308,4 @@ class LeadsController extends GetxController {
     super.onClose();
   }
 }
+

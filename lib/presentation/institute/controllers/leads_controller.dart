@@ -295,6 +295,80 @@ class LeadsController extends GetxController {
     }
   }
 
+  Future<void> addLeadNote() async {
+    if (selectedLead.value == null) return;
+
+    final title = noteTitleController.text.trim();
+    final note = notesController.text.trim();
+
+    triedToSave.value = true;
+    _resetErrors();
+
+    bool isValid = true;
+    if (title.isEmpty) {
+      noteTitleError.value = 'Note title is required';
+      isValid = false;
+    }
+    if (note.isEmpty) {
+      noteError.value = 'Note description is required';
+      isValid = false;
+    }
+
+    if (!isValid) return;
+
+    try {
+      isLoading.value = true;
+      final newNote = await _leadsRepository.addLeadNote(
+        selectedLead.value!.id,
+        {
+          'title': title,
+          'note': note,
+        },
+      );
+
+      // Update current lead's notes
+      final currentLead = selectedLead.value!;
+      final updatedNotes = List<LeadNote>.from(currentLead.notes);
+      updatedNotes.insert(0, newNote);
+
+      selectedLead.value = Lead(
+        id: currentLead.id,
+        instituteId: currentLead.instituteId,
+        fullName: currentLead.fullName,
+        phone: currentLead.phone,
+        email: currentLead.email,
+        status: currentLead.status,
+        address: currentLead.address,
+        courseSelection: currentLead.courseSelection,
+        reference: currentLead.reference,
+        notes: updatedNotes,
+        createdAt: currentLead.createdAt,
+      );
+
+      // Clear main list cache if necessary, or update it
+      final index = leadsList.indexWhere((l) => l.id == currentLead.id);
+      if (index != -1) {
+        leadsList[index] = selectedLead.value!;
+        leadsList.refresh();
+      }
+
+      noteTitleController.clear();
+      notesController.clear();
+      triedToSave.value = false;
+
+      Get.back(); // Close dialog
+      AppSnackbar.success('Interaction note added successfully');
+    } catch (e) {
+      if (e is ValidationException) {
+        _handleValidationErrors(e.errors);
+      } else {
+        AppSnackbar.error('Failed to add note: $e');
+      }
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   @override
   void onClose() {
     nameController.dispose();

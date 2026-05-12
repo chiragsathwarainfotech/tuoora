@@ -66,5 +66,23 @@ class LeadsRepositoryImpl {
       throw Exception(message);
     }
   }
+
+  Future<LeadNote> addLeadNote(int leadId, Map<String, dynamic> noteData) async {
+    final response = await _apiClient.post(
+      '${ApiConstants.instituteLeads}/$leadId/notes',
+      noteData,
+    );
+
+    if (response.status.hasError) {
+      if (response.statusCode == 422 && response.body?['errors'] != null) {
+        throw ValidationException(response.body['errors']);
+      }
+      final message =
+          response.body?['message'] ?? 'Failed to add interaction note';
+      throw Exception(message);
+    }
+
+    return LeadNote.fromJson(response.body['data']);
+  }
 }
 

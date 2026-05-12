@@ -43,6 +43,7 @@ class AppSpacing {
   static const v4 = SizedBox(height: s4);
   static const v6 = SizedBox(height: s6);
   static const v8 = SizedBox(height: s8);
+  static const v10 = SizedBox(height: s10);
   static const v12 = SizedBox(height: s12);
   static const v16 = SizedBox(height: s16);
   static const v20 = SizedBox(height: s20);
@@ -120,4 +121,3 @@ class AppSpacing {
   );
   static const headerPaddingLarge = EdgeInsets.fromLTRB(s28, s40, s28, s32);
 }
-

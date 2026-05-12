@@ -80,6 +80,7 @@ class LeadNote {
   final String title;
   final String note;
   final DateTime createdAt;
+  final DateTime updatedAt;
 
   LeadNote({
     required this.id,
@@ -88,6 +89,7 @@ class LeadNote {
     required this.title,
     required this.note,
     required this.createdAt,
+    required this.updatedAt,
   });
 
   factory LeadNote.fromJson(Map<String, dynamic> json) {
@@ -98,7 +100,7 @@ class LeadNote {
       title: json['title'] ?? '',
       note: json['note'] ?? '',
       createdAt: DateTime.parse(json['created_at']),
+      updatedAt: DateTime.parse(json['updated_at']),
     );
   }
 }
-

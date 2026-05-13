@@ -123,6 +123,7 @@ class StaffController extends GetxController {
   final isOnlinePayment = true.obs;
   final salaryAmountController = TextEditingController();
   final salaryNotesController = TextEditingController();
+  final salaryDateController = TextEditingController();
   final filteredSalaryStaffs = <Staff>[].obs;
 
   @override
@@ -143,6 +144,13 @@ class StaffController extends GetxController {
     staffSalaryController.addListener(() => _clearError(staffSalaryError));
     selectedRoleId.listen((_) => _clearError(roleError));
     selectedDepartmentId.listen((_) => _clearError(deptError));
+
+    // Initialize salary date controller
+    salaryDateController.text =
+        DateFormat('MM/dd/yyyy').format(selectedSalaryDate.value);
+    selectedSalaryDate.listen((date) {
+      salaryDateController.text = DateFormat('MM/dd/yyyy').format(date);
+    });
   }
 
   void _clearError(RxnString error) {
@@ -207,9 +215,12 @@ class StaffController extends GetxController {
         page: page,
       );
       if (page == 1) {
-        salaryList.assignAll(response.items);
+        final items = response.items;
+        items.sort((a, b) => b.paymentDate.compareTo(a.paymentDate));
+        salaryList.assignAll(items);
       } else {
         salaryList.addAll(response.items);
+        salaryList.sort((a, b) => b.paymentDate.compareTo(a.paymentDate));
       }
       totalSalaryAmount.value = response.totalAmount;
       salaryCurrentPage.value = response.currentPage;
@@ -232,9 +243,12 @@ class StaffController extends GetxController {
         year: DateFormat('yyyy').format(selectedAttendanceMonth.value),
       );
       if (page == 1) {
-        attendanceList.assignAll(response.items);
+        final items = response.items;
+        items.sort((a, b) => b.date.compareTo(a.date));
+        attendanceList.assignAll(items);
       } else {
         attendanceList.addAll(response.items);
+        attendanceList.sort((a, b) => b.date.compareTo(a.date));
       }
       totalPresent.value = response.totalPresent;
       totalAbsent.value = response.totalAbsent;
@@ -257,9 +271,12 @@ class StaffController extends GetxController {
         year: selectedSalaryMonth.value.year.toString(),
       );
       if (isInitialFetch) {
-        globalSalaryList.assignAll(response.items);
+        final items = response.items;
+        items.sort((a, b) => b.paymentDate.compareTo(a.paymentDate));
+        globalSalaryList.assignAll(items);
       } else {
         globalSalaryList.addAll(response.items);
+        globalSalaryList.sort((a, b) => b.paymentDate.compareTo(a.paymentDate));
       }
       totalGlobalSalaryAmount.value = response.totalAmount;
       globalSalaryCurrentPage.value = response.currentPage;
@@ -314,7 +331,9 @@ class StaffController extends GetxController {
         fetchSalaryHistory(page: 1);
       }
 
-      Get.back();
+      // Robust navigation: go back to StaffMainScreen and set tab to Salary
+      Get.until((route) => route.settings.name == AppRoutes.instituteStaffs);
+      currentTabIndex.value = 2;
     } catch (e) {
       AppSnackbar.error('Failed to save salary record: $e');
     } finally {
@@ -332,9 +351,12 @@ class StaffController extends GetxController {
         year: selectedGlobalAttendanceMonth.value.year.toString(),
       );
       if (isInitialFetch) {
-        globalAttendanceList.assignAll(response.items);
+        final items = response.items;
+        items.sort((a, b) => b.date.compareTo(a.date));
+        globalAttendanceList.assignAll(items);
       } else {
         globalAttendanceList.addAll(response.items);
+        globalAttendanceList.sort((a, b) => b.date.compareTo(a.date));
       }
       globalAttendanceCurrentPage.value = response.currentPage;
       globalAttendanceLastPage.value = response.lastPage;
@@ -374,7 +396,7 @@ class StaffController extends GetxController {
       }
 
       // Robust navigation: go back to StaffMainScreen and set tab to Attendance
-      Get.until((route) => Get.currentRoute == AppRoutes.instituteStaffs);
+      Get.until((route) => route.settings.name == AppRoutes.instituteStaffs);
       currentTabIndex.value = 1;
       fetchGlobalAttendance(page: 1); // Refresh logs to show new entry
 
@@ -466,16 +488,34 @@ class StaffController extends GetxController {
   Future<void> saveStaff() async {
     triedToSave.value = true;
     _resetFormErrors();
-    if (!addStaffFormKey.currentState!.validate()) return;
 
-    final rErr = ValidationUtils.validateRoleSelection(selectedRoleId.value);
-    roleError.value = rErr;
-    if (rErr != null) return;
+    // Perform manual validation to populate error observables
+    staffNameError.value =
+        ValidationUtils.validateRequired(staffNameController.text, 'Full name');
+    staffEmailError.value =
+        ValidationUtils.validateEmail(staffEmailController.text);
+    staffPhoneError.value =
+        ValidationUtils.validatePhone(staffPhoneController.text);
+    staffSalaryError.value = ValidationUtils.validateAmount(
+      staffSalaryController.text,
+      employmentType.value == 'Salary' ? 'Base Salary' : 'Hourly Rate',
+    );
+    roleError.value = ValidationUtils.validateRoleSelection(
+      selectedRoleId.value,
+    );
+    deptError.value = ValidationUtils.validateDepartmentSelection(
+      selectedDepartmentId.value,
+    );
 
-    final dErr =
-        ValidationUtils.validateDepartmentSelection(selectedDepartmentId.value);
-    deptError.value = dErr;
-    if (dErr != null) return;
+    // Check if any validation failed
+    if (staffNameError.value != null ||
+        staffEmailError.value != null ||
+        staffPhoneError.value != null ||
+        staffSalaryError.value != null ||
+        roleError.value != null ||
+        deptError.value != null) {
+      return;
+    }
 
     try {
       isSaving.value = true;
@@ -499,8 +539,6 @@ class StaffController extends GetxController {
         if (index != -1) staffList[index] = updated;
         selectedStaff.value = updated;
         AppSnackbar.success('Staff updated successfully');
-
-        Get.until((route) => route.settings.name == AppRoutes.instituteStaffs);
       } else {
         final created = await _repository.createStaff(
           data,
@@ -508,8 +546,11 @@ class StaffController extends GetxController {
         );
         staffList.insert(0, created);
         AppSnackbar.success('Staff created successfully');
-        Get.back();
       }
+
+      // Robust navigation: go back to StaffMainScreen and set tab to Staff
+      Get.until((route) => route.settings.name == AppRoutes.instituteStaffs);
+      currentTabIndex.value = 0;
     } catch (e) {
       if (e is ValidationException) {
         _handleValidationErrors(e.errors);

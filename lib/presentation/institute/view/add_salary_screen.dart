@@ -41,29 +41,23 @@ class AddSalaryScreen extends GetView<StaffController> {
                       }),
                     ),
                     AppSpacing.v20,
-                    Obx(
-                      () => AppInputField(
-                        label: 'PAYMENT DATE',
-                        hint: 'MM/dd/yyyy',
-                        icon: Icons.calendar_today_rounded,
-                        controller: TextEditingController(
-                          text: DateFormat(
-                            'MM/dd/yyyy',
-                          ).format(controller.selectedSalaryDate.value),
-                        ),
-                        readOnly: true,
-                        onTap: () async {
-                          final picked = await showDatePicker(
-                            context: context,
-                            initialDate: controller.selectedSalaryDate.value,
-                            firstDate: DateTime(2020),
-                            lastDate: DateTime.now(),
-                          );
-                          if (picked != null) {
-                            controller.selectSalaryDate(picked);
-                          }
-                        },
-                      ),
+                    AppInputField(
+                      label: 'PAYMENT DATE',
+                      hint: 'MM/dd/yyyy',
+                      icon: Icons.calendar_today_rounded,
+                      controller: controller.salaryDateController,
+                      readOnly: true,
+                      onTap: () async {
+                        final picked = await showDatePicker(
+                          context: context,
+                          initialDate: controller.selectedSalaryDate.value,
+                          firstDate: DateTime(2020),
+                          lastDate: DateTime.now(),
+                        );
+                        if (picked != null) {
+                          controller.selectSalaryDate(picked);
+                        }
+                      },
                     ),
                     AppSpacing.v20,
                     AppInputField(
@@ -357,7 +351,7 @@ class AddSalaryScreen extends GetView<StaffController> {
   }
 
   Widget _buildDisbursementSummary() {
-    return Obx(() {
+    return GetBuilder<StaffController>(builder: (controller) {
       final amount = controller.salaryAmountController.text.isEmpty
           ? '0.00'
           : controller.salaryAmountController.text;

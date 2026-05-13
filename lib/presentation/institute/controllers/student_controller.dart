@@ -139,34 +139,41 @@ class InstituteStudentController extends GetxController {
   }
 
   void validateForm() {
-    nameError.value = ValidationUtils.validateRequired(
+    final nErr = ValidationUtils.validateRequired(
       nameController.text,
       'Name',
     );
-    parentNameError.value = ValidationUtils.validateRequired(
+    final pnErr = ValidationUtils.validateRequired(
       parentNameController.text,
       'Guardian Name',
     );
-    phoneError.value = ValidationUtils.validatePhone(phoneController.text);
-    emailError.value = ValidationUtils.validateEmail(emailController.text);
-    dobError.value = ValidationUtils.validateRequired(
+    final pErr = ValidationUtils.validatePhone(phoneController.text);
+    final eErr = ValidationUtils.validateEmail(emailController.text);
+    final dErr = ValidationUtils.validateRequired(
       dobController.text,
       'Date of Birth',
     );
-    standardError.value = ValidationUtils.validateRequired(
+    final sErr = ValidationUtils.validateRequired(
       standardController.text,
       'Grade/Standard',
     );
 
-    bool isValid =
-        nameError.value == null &&
-        parentNameError.value == null &&
-        phoneError.value == null &&
-        emailError.value == null &&
-        dobError.value == null &&
-        standardError.value == null;
+    if (triedToSave.value) {
+      nameError.value = nErr;
+      parentNameError.value = pnErr;
+      phoneError.value = pErr;
+      emailError.value = eErr;
+      dobError.value = dErr;
+      standardError.value = sErr;
+    }
 
-    isFormValid.value = isValid;
+    isFormValid.value =
+        nErr == null &&
+        pnErr == null &&
+        pErr == null &&
+        eErr == null &&
+        dErr == null &&
+        sErr == null;
   }
 
   Future<void> fetchStudentDetails(dynamic id) async {

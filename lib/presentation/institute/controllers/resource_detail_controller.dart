@@ -5,6 +5,8 @@ import 'package:fee_easy/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
+import 'package:fee_easy/presentation/institute/controllers/resources_controller.dart';
+import 'package:fee_easy/core/widgets/app_snackbar.dart';
 import 'package:chewie/chewie.dart';
 
 class ResourceDetailController extends GetxController {
@@ -17,6 +19,7 @@ class ResourceDetailController extends GetxController {
   final progress = 0.0.obs;
   final downloadProgress = 0.0.obs;
   final isDownloading = false.obs;
+  final isLoading = false.obs;
 
   // Video Player
   VideoPlayerController? videoPlayerController;
@@ -98,6 +101,25 @@ class ResourceDetailController extends GetxController {
     } finally {
       isDownloading.value = false;
       downloadProgress.value = 0.0;
+    }
+  }
+
+  Future<void> deleteResource(String resourceId, String batchId) async {
+    try {
+      isLoading.value = true;
+      await _repository.deleteResource(int.parse(resourceId));
+
+      // Update parent list if it exists
+      if (Get.isRegistered<ResourcesController>(tag: batchId)) {
+        Get.find<ResourcesController>(tag: batchId).removeResource(resourceId);
+      }
+
+      Get.back(); // Close detail screen
+      AppSnackbar.success('Resource deleted successfully');
+    } catch (e) {
+      AppSnackbar.error('Failed to delete resource: $e');
+    } finally {
+      isLoading.value = false;
     }
   }
 

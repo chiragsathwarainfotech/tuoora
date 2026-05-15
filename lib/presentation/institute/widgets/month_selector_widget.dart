@@ -3,6 +3,8 @@ import 'package:intl/intl.dart';
 import 'package:fee_easy/core/constants/app_colors.dart';
 import 'package:fee_easy/core/constants/app_text_styles.dart';
 import 'package:fee_easy/core/theme/app_spacing.dart';
+import 'package:fee_easy/core/widgets/app_month_picker.dart';
+import 'package:get/get.dart';
 
 class MonthSelectorWidget extends StatelessWidget {
   final DateTime selectedMonth;
@@ -30,12 +32,12 @@ class MonthSelectorWidget extends StatelessWidget {
         // Left: Month Picker with Dropdown Icon
         GestureDetector(
           onTap: () async {
-            final picked = await showDatePicker(
-              context: context,
-              initialDate: selectedMonth,
-              firstDate: DateTime(2020),
-              lastDate: maxDate ?? DateTime(2030),
-              helpText: helpText ?? 'Select Month',
+            final picked = await Get.dialog<DateTime>(
+              AppMonthPicker(
+                initialDate: selectedMonth,
+                firstDate: DateTime(2020),
+                lastDate: maxDate ?? DateTime.now(),
+              ),
             );
             if (picked != null) {
               onMonthChanged(DateTime(picked.year, picked.month));

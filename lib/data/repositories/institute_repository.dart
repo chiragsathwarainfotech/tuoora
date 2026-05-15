@@ -376,7 +376,7 @@ class InstituteRepository implements InstituteRepositoryImpl {
   @override
   Future<void> markAttendance(Map<String, dynamic> data) async {
     final response = await _apiClient.post(
-      ApiConstants.instituteAttendance,
+      ApiConstants.instituteBatchAttendance,
       data,
     );
     if (response.status.hasError) {
@@ -414,7 +414,7 @@ class InstituteRepository implements InstituteRepositoryImpl {
     int batchId,
   ) async {
     final response = await _apiClient.get(
-      ApiConstants.instituteAttendance,
+      ApiConstants.instituteBatchAttendance,
       query: {'date': date, 'batch_id': batchId.toString()},
     );
     if (response.status.hasError) {
@@ -543,6 +543,17 @@ class InstituteRepository implements InstituteRepositoryImpl {
       throw Exception(message);
     }
     return response.body['data'];
+  }
+
+  @override
+  Future<void> deleteResource(int id) async {
+    final response = await _apiClient.delete(
+      '${ApiConstants.instituteResources}/$id',
+    );
+    if (response.status.hasError) {
+      final message = response.body?['message'] ?? 'Failed to delete resource';
+      throw Exception(message);
+    }
   }
 
   @override

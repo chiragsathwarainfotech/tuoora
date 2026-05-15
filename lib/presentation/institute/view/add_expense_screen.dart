@@ -36,7 +36,6 @@ class AddExpenseScreen extends GetView<ExpenseController> {
                         isLoading: controller.isLoading.value,
                       ),
                     ),
-                    AppSpacing.v24,
                   ],
                 ),
               ),
@@ -323,7 +322,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
               Icon(
                 controller.selectedReceiptPath.value != null
                     ? Icons.check_circle_rounded
-                    : Icons.add_a_photo_rounded,
+                    : Icons.file_upload_rounded,
                 color: AppColors.primaryBrand,
                 size: 28,
               ),

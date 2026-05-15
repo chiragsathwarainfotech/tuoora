@@ -13,6 +13,10 @@ class ResourcesController extends GetxController {
       Get.find<InstituteRepositoryImpl>();
 
   final resources = <ResourceModel>[].obs;
+  
+  void removeResource(String id) {
+    resources.removeWhere((r) => r.id == id);
+  }
   final isLoading = false.obs;
 
   ResourcesController(this.batch);

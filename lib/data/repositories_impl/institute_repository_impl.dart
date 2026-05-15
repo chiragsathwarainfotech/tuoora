@@ -101,5 +101,6 @@ abstract class InstituteRepositoryImpl {
   Future<void> logStaffAttendance(Map<String, dynamic> data);
   Future<SalaryListResponse> getGlobalSalaries({int? page, String? month, String? year});
   Future<void> logSalary(Map<String, dynamic> data);
+  Future<void> deleteResource(int id);
 }
 

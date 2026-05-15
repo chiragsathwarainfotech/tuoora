@@ -3,9 +3,9 @@ import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
 import 'package:fee_easy/presentation/institute/models/expense_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:fee_easy/core/api/api_exception.dart';
 import 'package:fee_easy/core/widgets/app_snackbar.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 
 class ExpenseController extends GetxController {
@@ -49,7 +49,7 @@ class ExpenseController extends GetxController {
     loadExpenses();
     loadCategories();
     loadExpenseAnalysis();
-    
+
     // Listeners to clear errors as user types
     amountController.addListener(() {
       if (triedToSave.value) validateForm();
@@ -60,7 +60,7 @@ class ExpenseController extends GetxController {
     ever(selectedCategory, (_) {
       if (triedToSave.value) validateForm();
     });
-    
+
     // Auto-refresh analysis when month changes
     ever(selectedAnalysisMonth, (_) => loadExpenseAnalysis());
   }
@@ -69,18 +69,25 @@ class ExpenseController extends GetxController {
     bool isValid = true;
 
     // Amount validation
-    final amountVal = ValidationUtils.validateAmount(amountController.text, 'Amount');
+    final amountVal = ValidationUtils.validateAmount(
+      amountController.text,
+      'Amount',
+    );
     amountError.value = amountVal;
     if (amountVal != null) isValid = false;
 
     // Description validation
-    final descVal = ValidationUtils.validateRequired(descriptionController.text, 'Description');
+    final descVal = ValidationUtils.validateRequired(
+      descriptionController.text,
+      'Description',
+    );
     descriptionError.value = descVal;
     if (descVal != null) isValid = false;
 
     // Category validation
-    final categoryVal =
-        ValidationUtils.validateCategorySelection(selectedCategory.value);
+    final categoryVal = ValidationUtils.validateCategorySelection(
+      selectedCategory.value,
+    );
     categoryError.value = categoryVal;
     if (categoryVal != null) isValid = false;
 
@@ -93,7 +100,7 @@ class ExpenseController extends GetxController {
     try {
       if (page == 1) isLoading.value = true;
       final response = await _repository.listExpenses(page: page);
-      
+
       if (page == 1) {
         expenses.assignAll(response.items);
       } else {
@@ -133,12 +140,12 @@ class ExpenseController extends GetxController {
       isAnalysisLoading.value = true;
       final month = DateFormat('MM').format(selectedAnalysisMonth.value);
       final year = DateFormat('yyyy').format(selectedAnalysisMonth.value);
-      
+
       final analysis = await _repository.getExpenseAnalysis(month, year);
-      
+
       // Sort categories by percentage descending (high first)
       analysis.categories.sort((a, b) => b.percentage.compareTo(a.percentage));
-      
+
       expenseAnalysis.value = analysis;
     } catch (e) {
       debugPrint('Error loading analysis: $e');
@@ -153,13 +160,14 @@ class ExpenseController extends GetxController {
     final currentView = selectedAnalysisMonth.value;
     // Cannot go beyond current month
     if (currentView.year < now.year) return true;
-    if (currentView.year == now.year && currentView.month < now.month) return true;
+    if (currentView.year == now.year && currentView.month < now.month)
+      return true;
     return false;
   }
 
   void nextAnalysisMonth() {
     if (!canGoToNextMonth) return;
-    
+
     selectedAnalysisMonth.value = DateTime(
       selectedAnalysisMonth.value.year,
       selectedAnalysisMonth.value.month + 1,
@@ -196,17 +204,13 @@ class ExpenseController extends GetxController {
 
   Future<void> pickReceipt() async {
     try {
-      final ImagePicker picker = ImagePicker();
-      final XFile? image = await picker.pickImage(
-        source: ImageSource.camera,
-        imageQuality: 70,
-      );
-      
-      if (image != null) {
-        selectedReceiptPath.value = image.path;
+      FilePickerResult? result = await FilePicker.pickFiles(type: FileType.any);
+
+      if (result != null && result.files.single.path != null) {
+        selectedReceiptPath.value = result.files.single.path!;
       }
     } catch (e) {
-      Get.snackbar('Error', 'Failed to pick image: $e');
+      AppSnackbar.error('Failed to pick receipt: $e');
     }
   }
 
@@ -228,7 +232,7 @@ class ExpenseController extends GetxController {
 
     try {
       isLoading.value = true;
-      
+
       final Map<String, dynamic> data = {
         'expense_category_id': selectedCategory.value!.id.toString(),
         'amount': amountController.text,
@@ -242,7 +246,7 @@ class ExpenseController extends GetxController {
       }
 
       await _repository.createExpense(data);
-      
+
       Get.back();
       Get.snackbar('Success', 'Expense added successfully');
       resetForm();
@@ -268,8 +272,8 @@ class ExpenseController extends GetxController {
       descriptionError.value = (errors['description'] as List).first.toString();
     }
     if (errors.containsKey('expense_category_id')) {
-      categoryError.value =
-          (errors['expense_category_id'] as List).first.toString();
+      categoryError.value = (errors['expense_category_id'] as List).first
+          .toString();
     }
   }
 
@@ -280,4 +284,3 @@ class ExpenseController extends GetxController {
     super.onClose();
   }
 }
-

@@ -6,6 +6,7 @@ import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_bottom_button.dart';
 import 'package:fee_easy/core/widgets/common_loading.dart';
 import 'package:fee_easy/core/widgets/app_search_field.dart';
+import 'package:fee_easy/presentation/shared/widgets/common_state_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -42,34 +43,34 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
                           ],
                           _buildSearchBar(controller),
                           AppSpacing.v24,
-                          ...controller.filteredStudents.map(
-                            (student) => Padding(
-                              padding: AppSpacing.bottom16,
-                              child: _buildStudentCard(controller, student),
+                          CommonStateWidget(
+                            isLoading: controller.isLoading.value,
+                            isEmpty: controller.filteredStudents.isEmpty,
+                            emptyTitle: 'No students found',
+                            emptySubtitle:
+                                'There are no students assigned to this batch or matching your search.',
+                            emptyIcon: Icons.group_off_rounded,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: controller.filteredStudents
+                                  .map(
+                                    (student) => Padding(
+                                      padding: AppSpacing.bottom16,
+                                      child: _buildStudentCard(
+                                        controller,
+                                        student,
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
                             ),
                           ),
-                          if (controller.filteredStudents.isEmpty &&
-                              !controller.isLoading.value)
-                            Center(
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 40),
-                                child: Text(
-                                  'No students found',
-                                  style: AppTextStyles.manrope(
-                                    fontSize: 16,
-                                    color: AppColors.textTertiary,
-                                  ),
-                                ),
-                              ),
-                            ),
                         ],
                       ),
                     ),
                   ),
                 ],
               ),
-              if (controller.isLoading.value && controller.allStudents.isEmpty)
-                const CommonLoading(),
             ],
           ),
         ),

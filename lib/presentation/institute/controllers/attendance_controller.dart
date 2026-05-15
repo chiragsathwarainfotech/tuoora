@@ -1,3 +1,4 @@
+import 'package:fee_easy/core/widgets/common_loading.dart';
 import 'package:fee_easy/presentation/institute/models/batch_model.dart';
 import 'package:fee_easy/presentation/institute/models/attendance_record_model.dart';
 import 'package:flutter/material.dart';
@@ -22,16 +23,13 @@ class AttendanceStudent {
   bool get isPresent => status == 'present';
 
   Map<String, dynamic> toMap() {
-    return {
-      'student_id': id,
-      'status': status,
-    };
+    return {'student_id': id, 'status': status};
   }
 }
 
 class AttendanceController extends GetxController {
   final InstituteRepositoryImpl _repository;
-  
+
   final selectedDate = DateTime.now().obs;
   final searchQuery = ''.obs;
   final isLoading = false.obs;
@@ -45,53 +43,64 @@ class AttendanceController extends GetxController {
   bool get isToday {
     final now = DateTime.now();
     return selectedDate.value.year == now.year &&
-           selectedDate.value.month == now.month &&
-           selectedDate.value.day == now.day;
+        selectedDate.value.month == now.month &&
+        selectedDate.value.day == now.day;
   }
 
   bool get isPastDate {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    final selected = DateTime(selectedDate.value.year, selectedDate.value.month, selectedDate.value.day);
+    final selected = DateTime(
+      selectedDate.value.year,
+      selectedDate.value.month,
+      selectedDate.value.day,
+    );
     return selected.isBefore(today);
   }
 
   // Attendance is only editable for today. Past dates are read-only.
-  bool get isEditable => isToday; 
+  bool get isEditable => isToday;
 
   @override
   void onInit() {
     super.onInit();
     batch = Get.arguments;
-    
+
     fetchAttendance();
 
     // Setup search listener
-    debounce(searchQuery, (_) => filterStudents(), time: const Duration(milliseconds: 300));
+    debounce(
+      searchQuery,
+      (_) => filterStudents(),
+      time: const Duration(milliseconds: 300),
+    );
   }
 
-  String get formattedDate => DateFormat('MMMM dd, yyyy • EEEE').format(selectedDate.value);
+  String get formattedDate =>
+      DateFormat('MMMM dd, yyyy • EEEE').format(selectedDate.value);
   String get apiDate => DateFormat('yyyy-MM-dd').format(selectedDate.value);
 
   Future<void> fetchAttendance() async {
     try {
       isLoading.value = true;
-      final List<AttendanceRecordModel> response = await _repository.getAttendance(apiDate, int.parse(batch.id));
-      
+      final List<AttendanceRecordModel> response = await _repository
+          .getAttendance(apiDate, int.parse(batch.id));
+
       if (response.isNotEmpty) {
         final students = response.map((record) {
           return AttendanceStudent(
             id: record.studentId,
             name: record.studentName,
             profileImageUrl: null, // API doesn't provide it in this endpoint
-            status: record.status ?? 'present', // Default to present if not marked
+            status:
+                record.status ?? 'present', // Default to present if not marked
           );
         }).toList();
         allStudents.assignAll(students);
       } else {
         allStudents.clear();
       }
-      
+
       filterStudents();
     } catch (e) {
       Get.snackbar('Error', 'Failed to fetch attendance: ${e.toString()}');
@@ -102,15 +111,16 @@ class AttendanceController extends GetxController {
 
   Future<void> submitAttendance() async {
     try {
-      isLoading.value = true;
+      CommonLoading.show();
       final data = {
         'batch_id': int.parse(batch.id),
         'date': apiDate,
         'attendance': allStudents.map((s) => s.toMap()).toList(),
       };
-      
+
       await _repository.markAttendance(data);
-      
+
+      CommonLoading.dismiss();
       Get.back();
       Get.snackbar(
         'Success',
@@ -121,7 +131,7 @@ class AttendanceController extends GetxController {
     } catch (e) {
       Get.snackbar('Error', 'Failed to submit attendance: ${e.toString()}');
     } finally {
-      isLoading.value = false;
+      CommonLoading.dismiss();
     }
   }
 
@@ -143,10 +153,15 @@ class AttendanceController extends GetxController {
       filteredStudents.assignAll(allStudents);
     } else {
       filteredStudents.assignAll(
-        allStudents.where((s) => 
-          s.name.toLowerCase().contains(searchQuery.value.toLowerCase()) ||
-          s.id.toString().contains(searchQuery.value)
-        ).toList()
+        allStudents
+            .where(
+              (s) =>
+                  s.name.toLowerCase().contains(
+                    searchQuery.value.toLowerCase(),
+                  ) ||
+                  s.id.toString().contains(searchQuery.value),
+            )
+            .toList(),
       );
     }
   }
@@ -176,4 +191,3 @@ class AttendanceController extends GetxController {
     filterStudents();
   }
 }
-

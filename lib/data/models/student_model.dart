@@ -97,6 +97,48 @@ class Student {
     };
   }
 
+  Student copyWith({
+    int? id,
+    String? name,
+    String? email,
+    String? phone,
+    int? instituteId,
+    int? parentId,
+    int? batchId,
+    String? standard,
+    String? dob,
+    String? guardianName,
+    String? monthlyFee,
+    String? schoolName,
+    String? status,
+    String? idHash,
+    String? createdAt,
+    String? updatedAt,
+    String? profileImageUrl,
+    dynamic batch,
+  }) {
+    return Student(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      phone: phone ?? this.phone,
+      instituteId: instituteId ?? this.instituteId,
+      parentId: parentId ?? this.parentId,
+      batchId: batchId ?? this.batchId,
+      standard: standard ?? this.standard,
+      dob: dob ?? this.dob,
+      guardianName: guardianName ?? this.guardianName,
+      monthlyFee: monthlyFee ?? this.monthlyFee,
+      schoolName: schoolName ?? this.schoolName,
+      status: status ?? this.status,
+      idHash: idHash ?? this.idHash,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      profileImageUrl: profileImageUrl ?? this.profileImageUrl,
+      batch: batch ?? this.batch,
+    );
+  }
+
   // Helper getters for UI compatibility
   String get grade => standard;
   String get imageUrl => profileImageUrl;

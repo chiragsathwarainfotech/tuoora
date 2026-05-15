@@ -29,47 +29,51 @@ class AddEditNoteScreen extends GetView<NotesController> {
             Expanded(
               child: SingleChildScrollView(
                 padding: AppSpacing.all24,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Obx(
-                      () => AppInputField(
-                        label: AppStrings.instNoteTitleLabel,
-                        hint: AppStrings.instNoteTitleHint,
-                        controller: controller.titleController,
-                        errorText: controller.titleError.value,
-                        textStyle: AppTextStyles.manrope(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.textPrimary,
-                        ),
-                      ),
-                    ),
-                    AppSpacing.v24,
-                    _buildCategorySelection(),
-                    AppSpacing.v24,
-                    Obx(
-                      () => AppInputField(
-                        label: AppStrings.instNoteContentLabel,
-                        hint: AppStrings.instNoteContentHint,
-                        controller: controller.contentController,
-                        maxLines: 12,
-                        errorText: controller.contentError.value,
-                        textStyle: AppTextStyles.lexend(
-                          fontSize: 14,
-                          color: AppColors.textSecondary,
-                          height: 1.6,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                child: Column(children: [_buildFormCard()]),
               ),
             ),
             _buildBottomAction(),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildFormCard() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Obx(
+          () => AppInputField(
+            label: AppStrings.instNoteTitleLabel,
+            hint: AppStrings.instNoteTitleHint,
+            controller: controller.titleController,
+            errorText: controller.titleError.value,
+            textStyle: AppTextStyles.manrope(
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              color: AppColors.textPrimary,
+            ),
+          ),
+        ),
+        AppSpacing.v24,
+        _buildCategorySelection(),
+        AppSpacing.v24,
+        Obx(
+          () => AppInputField(
+            label: AppStrings.instNoteContentLabel,
+            hint: AppStrings.instNoteContentHint,
+            controller: controller.contentController,
+            maxLines: 12,
+            errorText: controller.contentError.value,
+            textStyle: AppTextStyles.lexend(
+              fontSize: 14,
+              color: AppColors.textSecondary,
+              height: 1.6,
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -171,16 +175,6 @@ class AddEditNoteScreen extends GetView<NotesController> {
   Widget _buildBottomAction() {
     return Container(
       padding: AppSpacing.all24,
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, -4),
-          ),
-        ],
-      ),
       child: Obx(
         () => AppButton(
           label: AppStrings.instSaveNoteBtn,

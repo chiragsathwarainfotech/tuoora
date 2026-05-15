@@ -35,9 +35,9 @@ class CommonLoading extends StatelessWidget {
   /// Shows a full-screen non-dismissible loading dialog
   static void show() {
     if (Get.isDialogOpen ?? false) return;
-    
+
     Get.dialog(
-      const CommonLoading(color: AppColors.white),
+      const CommonLoading(color: AppColors.primaryBrand),
       barrierDismissible: false,
       name: 'loading_dialog',
     );
@@ -50,4 +50,3 @@ class CommonLoading extends StatelessWidget {
     }
   }
 }
-

@@ -25,16 +25,6 @@ class InstituteBottomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: AppSpacing.all24,
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, -4),
-          ),
-        ],
-      ),
       child: ElevatedButton(
         onPressed: isLoading ? null : onTap,
         style: ElevatedButton.styleFrom(
@@ -49,7 +39,14 @@ class InstituteBottomButton extends StatelessWidget {
           elevation: 0,
         ),
         child: isLoading
-            ? const CommonLoading(color: AppColors.white, size: 24)
+            ? const SizedBox(
+                height: 20,
+                width: 20,
+                child: CircularProgressIndicator(
+                  color: AppColors.white,
+                  strokeWidth: 2,
+                ),
+              )
             : Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

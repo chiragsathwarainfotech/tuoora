@@ -138,6 +138,8 @@ class RecordFeeController extends GetxController {
       final data = {
         'student_id': selectedStudent.value!.id,
         'total_amount': double.parse(amount.value),
+        'paid_amount': double.parse(amount.value),
+        "status": "Paid",
         'date': DateFormat('yyyy-MM-dd').format(selectedRecordDate.value),
         'payment_method': paymentMethod.value,
       };
@@ -169,4 +171,3 @@ class RecordFeeController extends GetxController {
     }
   }
 }
-

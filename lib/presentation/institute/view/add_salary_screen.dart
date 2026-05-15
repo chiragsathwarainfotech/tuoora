@@ -9,7 +9,6 @@ import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/core/widgets/app_search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 class AddSalaryScreen extends GetView<StaffController> {
   const AddSalaryScreen({super.key});
@@ -351,69 +350,71 @@ class AddSalaryScreen extends GetView<StaffController> {
   }
 
   Widget _buildDisbursementSummary() {
-    return GetBuilder<StaffController>(builder: (controller) {
-      final amount = controller.salaryAmountController.text.isEmpty
-          ? '0.00'
-          : controller.salaryAmountController.text;
-      return Container(
-        padding: AppSpacing.all24,
-        decoration: BoxDecoration(
-          color: AppColors.primaryBrand.withValues(alpha: 0.05),
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: AppColors.primaryBrand.withValues(alpha: 0.1),
-          ),
-        ),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Total Disbursement',
-                  style: AppTextStyles.manrope(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-                Text(
-                  '₹$amount',
-                  style: AppTextStyles.manrope(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.primaryBrand,
-                  ),
-                ),
-              ],
+    return GetBuilder<StaffController>(
+      builder: (controller) {
+        final amount = controller.salaryAmountController.text.isEmpty
+            ? '0.00'
+            : controller.salaryAmountController.text;
+        return Container(
+          padding: AppSpacing.all24,
+          decoration: BoxDecoration(
+            color: AppColors.primaryBrand.withValues(alpha: 0.05),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: AppColors.primaryBrand.withValues(alpha: 0.1),
             ),
-            AppSpacing.v16,
-            const Divider(height: 1),
-            AppSpacing.v16,
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Icon(
-                  Icons.info_outline_rounded,
-                  color: AppColors.primaryBrand,
-                  size: 16,
-                ),
-                AppSpacing.h12,
-                Expanded(
-                  child: Text(
-                    'This payment will be recorded in the general ledger and deducted from the monthly payroll budget.',
-                    style: AppTextStyles.lexend(
-                      fontSize: 12,
-                      color: AppColors.textSecondary,
+          ),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Total Disbursement',
+                    style: AppTextStyles.manrope(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.textPrimary,
                     ),
                   ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      );
-    });
+                  Text(
+                    '₹$amount',
+                    style: AppTextStyles.manrope(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.primaryBrand,
+                    ),
+                  ),
+                ],
+              ),
+              AppSpacing.v16,
+              const Divider(height: 1),
+              AppSpacing.v16,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Icon(
+                    Icons.info_outline_rounded,
+                    color: AppColors.primaryBrand,
+                    size: 16,
+                  ),
+                  AppSpacing.h12,
+                  Expanded(
+                    child: Text(
+                      'This payment will be recorded in the general ledger and deducted from the monthly payroll budget.',
+                      style: AppTextStyles.lexend(
+                        fontSize: 12,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   Widget _buildSaveButton() {

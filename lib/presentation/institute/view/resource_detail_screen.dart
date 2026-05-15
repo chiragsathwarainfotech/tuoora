@@ -9,6 +9,7 @@ import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:fee_easy/presentation/institute/controllers/resource_detail_controller.dart';
+import 'package:fee_easy/core/widgets/common_dialog.dart';
 import 'package:fee_easy/core/widgets/common_loading.dart';
 import 'package:chewie/chewie.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -31,43 +32,52 @@ class ResourceDetailScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
-        child: Column(
-          children: [
-            InstituteAppBar(
-              title: AppStrings.instResourceDetailTitle,
-              onBackTap: () => Get.back(),
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: AppSpacing.x24.add(AppSpacing.y16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _buildPreviewSection(resource, controller),
-                    AppSpacing.v32,
-                    Text(
-                      resource.subject,
-                      style: AppTextStyles.manrope(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.textPrimary,
+        child: Obx(
+          () => Stack(
+            children: [
+              Column(
+                children: [
+                  InstituteAppBar(
+                    title: AppStrings.instResourceDetailTitle,
+                    onBackTap: () => Get.back(),
+                    actions: [_buildDeleteAction(controller, resource)],
+                  ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: AppSpacing.x24.add(AppSpacing.y16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          _buildPreviewSection(resource, controller),
+                          AppSpacing.v32,
+                          Text(
+                            resource.subject,
+                            style: AppTextStyles.manrope(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w800,
+                              color: AppColors.textPrimary,
+                            ),
+                          ),
+                          AppSpacing.v12,
+                          Text(
+                            resource.description,
+                            style: AppTextStyles.manrope(
+                              fontSize: 16,
+                              color: AppColors.textSecondary,
+                              height: 1.5,
+                            ),
+                          ),
+                          AppSpacing.v40,
+                        ],
                       ),
                     ),
-                    AppSpacing.v12,
-                    Text(
-                      resource.description,
-                      style: AppTextStyles.manrope(
-                        fontSize: 16,
-                        color: AppColors.textSecondary,
-                        height: 1.5,
-                      ),
-                    ),
-                    AppSpacing.v40,
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ),
-          ],
+              if (controller.isLoading.value)
+                const Center(child: CommonLoading()),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: Obx(
@@ -199,6 +209,23 @@ class ResourceDetailScreen extends StatelessWidget {
           ),
         );
     }
+  }
+
+  Widget _buildDeleteAction(
+    ResourceDetailController controller,
+    ResourceModel resource,
+  ) {
+    return IconButton(
+      onPressed: () {
+        CommonDialog.showDeleteConfirmation(
+          title: 'Delete Resource',
+          description: 'Are you sure you want to delete this resource?',
+          onConfirm: () =>
+              controller.deleteResource(resource.id, resource.batchId),
+        );
+      },
+      icon: const Icon(Icons.delete_outline_rounded, color: AppColors.bohoRed),
+    );
   }
 
   void _showFullScreenImage(String url) {

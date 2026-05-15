@@ -118,7 +118,6 @@ class HomeworkController extends GetxController {
     if (!validateForm()) return;
 
     try {
-      // Show full screen non-dismissible loader
       CommonLoading.show();
 
       final Map<String, dynamic> data = {

@@ -93,6 +93,16 @@ class BatchDetailsController extends GetxController {
         Get.find<BatchController>().loadBatches(isRefresh: true);
       }
 
+      // Update global students list to reflect batch removal
+      final student = assignedStudents
+          .firstWhereOrNull((s) => s.student.id == studentId)
+          ?.student;
+      if (student != null) {
+        // We use -1 or null? The copyWith expects int?. 
+        // Usually, safeNullableInt handles null.
+        instituteController.updateStudent(student.copyWith(batchId: null));
+      }
+
       // Update local list and count
       assignedStudents.removeWhere((s) => s.student.id == studentId);
       studentCount.value = assignedStudents.length;

@@ -47,6 +47,7 @@ class AssignToBatchController extends GetxController {
                     s.id.toString().toLowerCase().contains(
                       query.toLowerCase(),
                     )) &&
+                s.batchId == null &&
                 !existingIds.contains(s.id) &&
                 !selectedIds.contains(s.id),
           )
@@ -95,6 +96,13 @@ class AssignToBatchController extends GetxController {
       }
 
       batchDetailsController.assignedStudents.addAll(selectedStudents);
+      
+      // Update global students list to reflect new batch assignment
+      for (var bs in selectedStudents) {
+        final updatedStudent = bs.student.copyWith(batchId: int.parse(batch.id));
+        instituteController.updateStudent(updatedStudent);
+      }
+
       batchDetailsController.studentCount.value =
           batchDetailsController.assignedStudents.length;
       batchDetailsController.assignedStudents.refresh();

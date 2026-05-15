@@ -23,6 +23,7 @@ class ApiConstants {
   static const String instituteAttendance = '/institute/attendance';
   static const String instituteHomeworks = '/institute/homeworks';
   static const String instituteResources = '/institute/resources';
+  static const String instituteBatchAttendance = '/institute/batch-attendance';
   static String downloadResource(int resourceId) =>
       '/institute/resources/$resourceId/download';
   static const String instituteForgotPassword = '/institute/forgot-password';

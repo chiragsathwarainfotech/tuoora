@@ -4,7 +4,6 @@ import 'package:fee_easy/core/theme/app_spacing.dart';
 import 'package:fee_easy/presentation/institute/controllers/attendance_controller.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:fee_easy/presentation/institute/widgets/institute_bottom_button.dart';
-import 'package:fee_easy/core/widgets/common_loading.dart';
 import 'package:fee_easy/core/widgets/app_search_field.dart';
 import 'package:fee_easy/presentation/shared/widgets/common_state_widget.dart';
 import 'package:flutter/material.dart';

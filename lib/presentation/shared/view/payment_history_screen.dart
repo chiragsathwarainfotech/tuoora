@@ -1,8 +1,8 @@
-import 'package:fee_easy/core/theme/app_spacing.dart';
-import 'package:fee_easy/core/constants/app_text_styles.dart';
-import 'package:fee_easy/core/widgets/payment_item_tile.dart';
+import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/widgets/payment_item_tile.dart';
 import 'package:flutter/material.dart';
-import 'package:fee_easy/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:get/get.dart';
 
 class PaymentHistoryScreen extends StatelessWidget {

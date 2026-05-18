@@ -1,15 +1,15 @@
-import 'package:fee_easy/core/constants/app_colors.dart';
-import 'package:fee_easy/core/constants/app_text_styles.dart';
-import 'package:fee_easy/core/theme/app_spacing.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:fee_easy/config/app_routes.dart';
-import 'package:fee_easy/data/repositories/institute_repository.dart';
-import 'package:fee_easy/core/services/auth_service.dart';
-import 'package:fee_easy/data/models/user_model.dart';
+import 'package:tuoora/config/app_routes.dart';
+import 'package:tuoora/data/repositories/institute_repository.dart';
+import 'package:tuoora/core/services/auth_service.dart';
+import 'package:tuoora/data/models/user_model.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:fee_easy/data/repositories/auth_repository.dart';
-import 'package:fee_easy/core/utils/validation_utils.dart';
+import 'package:tuoora/data/repositories/auth_repository.dart';
+import 'package:tuoora/core/utils/validation_utils.dart';
 import 'dart:async';
 
 class SignupController extends GetxController {

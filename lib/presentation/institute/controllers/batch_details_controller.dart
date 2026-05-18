@@ -1,8 +1,8 @@
-import 'package:fee_easy/data/models/student_model.dart';
-import 'package:fee_easy/presentation/institute/controllers/institute_controller.dart';
-import 'package:fee_easy/presentation/institute/models/batch_model.dart';
-import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
-import 'package:fee_easy/presentation/institute/controllers/batch_controller.dart';
+import 'package:tuoora/data/models/student_model.dart';
+import 'package:tuoora/presentation/institute/controllers/institute_controller.dart';
+import 'package:tuoora/presentation/institute/models/batch_model.dart';
+import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
+import 'package:tuoora/presentation/institute/controllers/batch_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

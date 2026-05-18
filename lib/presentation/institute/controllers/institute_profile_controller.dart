@@ -1,16 +1,16 @@
-import 'package:fee_easy/config/app_routes.dart';
-import 'package:fee_easy/core/constants/app_colors.dart';
-import 'package:fee_easy/core/constants/app_text_styles.dart';
-import 'package:fee_easy/core/services/auth_service.dart';
-import 'package:fee_easy/core/theme/app_spacing.dart';
-import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
-import 'package:fee_easy/core/utils/validation_utils.dart';
-import 'package:fee_easy/data/models/institute_profile_model.dart';
+import 'package:tuoora/config/app_routes.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/services/auth_service.dart';
+import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
+import 'package:tuoora/core/utils/validation_utils.dart';
+import 'package:tuoora/data/models/institute_profile_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:fee_easy/core/api/api_exception.dart';
-import 'package:fee_easy/core/widgets/app_snackbar.dart';
+import 'package:tuoora/core/api/api_exception.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 
 class InstituteProfileController extends GetxController {
   final InstituteRepositoryImpl _instituteRepository;
@@ -209,13 +209,17 @@ class InstituteProfileController extends GetxController {
     triedToSave.value = true;
     _resetErrors();
 
-    final nameErr =
-        ValidationUtils.validateRequired(nameController.text, 'Institute name');
+    final nameErr = ValidationUtils.validateRequired(
+      nameController.text,
+      'Institute name',
+    );
     instituteNameError.value = nameErr;
     if (nameErr != null) return;
 
-    final ownerErr =
-        ValidationUtils.validateRequired(ownerController.text, 'Owner name');
+    final ownerErr = ValidationUtils.validateRequired(
+      ownerController.text,
+      'Owner name',
+    );
     ownerNameError.value = ownerErr;
     if (ownerErr != null) return;
 
@@ -259,9 +263,9 @@ class InstituteProfileController extends GetxController {
     } catch (e) {
       if (e is ValidationException) {
         _handleValidationErrors(e.errors);
-        AppSnackbar.error('Please correct the highlighted errors');
+        AppSnackBar.error('Please correct the highlighted errors');
       } else {
-        AppSnackbar.error('Failed to update profile: $e');
+        AppSnackBar.error('Failed to update profile: $e');
       }
     } finally {
       isLoading.value = false;
@@ -270,8 +274,8 @@ class InstituteProfileController extends GetxController {
 
   void _handleValidationErrors(Map<String, dynamic> errors) {
     if (errors.containsKey('institute_name')) {
-      instituteNameError.value =
-          (errors['institute_name'] as List).first.toString();
+      instituteNameError.value = (errors['institute_name'] as List).first
+          .toString();
     }
     if (errors.containsKey('name')) {
       ownerNameError.value = (errors['name'] as List).first.toString();
@@ -321,4 +325,3 @@ class InstituteProfileController extends GetxController {
     super.onClose();
   }
 }
-

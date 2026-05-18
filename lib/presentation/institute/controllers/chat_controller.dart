@@ -1,7 +1,7 @@
-import 'package:fee_easy/config/app_routes.dart';
-import 'package:fee_easy/core/widgets/app_snackbar.dart';
-import 'package:fee_easy/data/models/chat_model.dart';
-import 'package:fee_easy/data/repositories_impl/chat_repository_impl.dart';
+import 'package:tuoora/config/app_routes.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
+import 'package:tuoora/data/models/chat_model.dart';
+import 'package:tuoora/data/repositories_impl/chat_repository_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -28,9 +28,17 @@ class ChatController extends GetxController {
   void onInit() {
     super.onInit();
     fetchChats();
-    
-    debounce(searchQuery, (_) => _filterChats(), time: const Duration(milliseconds: 300));
-    debounce(participantSearchQuery, (_) => _filterParticipants(), time: const Duration(milliseconds: 300));
+
+    debounce(
+      searchQuery,
+      (_) => _filterChats(),
+      time: const Duration(milliseconds: 300),
+    );
+    debounce(
+      participantSearchQuery,
+      (_) => _filterParticipants(),
+      time: const Duration(milliseconds: 300),
+    );
   }
 
   Future<void> fetchChats() async {
@@ -40,7 +48,7 @@ class ChatController extends GetxController {
       chatsList.assignAll(chats);
       _filterChats();
     } catch (e) {
-      AppSnackbar.error('Failed to load chats: $e');
+      AppSnackBar.error('Failed to load chats: $e');
     } finally {
       isLoading.value = false;
     }
@@ -52,9 +60,13 @@ class ChatController extends GetxController {
     } else {
       final query = searchQuery.value.toLowerCase();
       filteredChats.assignAll(
-        chatsList.where((chat) =>
-            chat.participantName.toLowerCase().contains(query) ||
-            chat.lastMessage.toLowerCase().contains(query)).toList(),
+        chatsList
+            .where(
+              (chat) =>
+                  chat.participantName.toLowerCase().contains(query) ||
+                  chat.lastMessage.toLowerCase().contains(query),
+            )
+            .toList(),
       );
     }
   }
@@ -66,7 +78,7 @@ class ChatController extends GetxController {
       messages.assignAll(chatMessages);
       _scrollToBottom();
     } catch (e) {
-      AppSnackbar.error('Failed to load messages: $e');
+      AppSnackBar.error('Failed to load messages: $e');
     } finally {
       isLoading.value = false;
     }
@@ -80,7 +92,7 @@ class ChatController extends GetxController {
       final chatId = selectedChat.value!.id;
       messageController.clear();
       await _chatRepository.sendMessage(chatId, content);
-      
+
       // Local update for immediate feedback
       final newMessage = Message(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
@@ -94,7 +106,7 @@ class ChatController extends GetxController {
       _scrollToBottom();
       fetchChats(); // Refresh last message in list
     } catch (e) {
-      AppSnackbar.error('Failed to send message: $e');
+      AppSnackBar.error('Failed to send message: $e');
     }
   }
 
@@ -105,7 +117,7 @@ class ChatController extends GetxController {
       availableParticipants.assignAll(participants);
       _filterParticipants();
     } catch (e) {
-      AppSnackbar.error('Failed to load members: $e');
+      AppSnackBar.error('Failed to load members: $e');
     } finally {
       isLoading.value = false;
     }
@@ -117,7 +129,9 @@ class ChatController extends GetxController {
     } else {
       final query = participantSearchQuery.value.toLowerCase();
       filteredParticipants.assignAll(
-        availableParticipants.where((p) => p.name.toLowerCase().contains(query)).toList(),
+        availableParticipants
+            .where((p) => p.name.toLowerCase().contains(query))
+            .toList(),
       );
     }
   }
@@ -172,4 +186,3 @@ class ChatController extends GetxController {
     super.onClose();
   }
 }
-

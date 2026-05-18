@@ -1,4 +1,4 @@
-import 'package:fee_easy/config/app_routes.dart';
+import 'package:tuoora/config/app_routes.dart';
 import 'package:get/get.dart';
 
 class AttendanceHistoryController extends GetxController {

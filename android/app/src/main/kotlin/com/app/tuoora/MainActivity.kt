@@ -1,4 +1,4 @@
-package com.example.fee_easy
+package com.app.tuoora
 
 import io.flutter.embedding.android.FlutterActivity
 

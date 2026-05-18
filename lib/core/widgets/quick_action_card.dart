@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fee_easy/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/constants/app_text_styles.dart';
 import '../../core/widgets/glass_card.dart';
 
 class QuickActionCard extends StatelessWidget {

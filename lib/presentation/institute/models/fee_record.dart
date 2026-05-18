@@ -1,4 +1,4 @@
-import 'package:fee_easy/data/models/student_model.dart';
+import 'package:tuoora/data/models/student_model.dart';
 
 class FeeRecord {
   final int id;

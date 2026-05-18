@@ -1,4 +1,4 @@
-import 'package:fee_easy/data/models/chat_model.dart';
+import 'package:tuoora/data/models/chat_model.dart';
 
 abstract class ChatRepository {
   Future<List<Chat>> getChats();

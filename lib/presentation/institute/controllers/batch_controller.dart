@@ -1,11 +1,11 @@
-import 'package:fee_easy/presentation/institute/models/batch_model.dart';
-import 'package:fee_easy/core/widgets/common_dialog.dart';
+import 'package:tuoora/presentation/institute/models/batch_model.dart';
+import 'package:tuoora/core/widgets/common_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
-import 'package:fee_easy/core/utils/validation_utils.dart';
-import 'package:fee_easy/core/widgets/app_snackbar.dart';
-import 'package:fee_easy/core/api/api_exception.dart';
+import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
+import 'package:tuoora/core/utils/validation_utils.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
+import 'package:tuoora/core/api/api_exception.dart';
 
 class BatchController extends GetxController {
   final InstituteRepositoryImpl _repository;
@@ -54,22 +54,30 @@ class BatchController extends GetxController {
   bool validateForm() {
     bool isValid = true;
 
-    final nameVal =
-        ValidationUtils.validateRequired(batchNameController.text, 'Batch name');
+    final nameVal = ValidationUtils.validateRequired(
+      batchNameController.text,
+      'Batch name',
+    );
     batchNameError.value = nameVal;
     if (nameVal != null) isValid = false;
 
-    final subjectVal =
-        ValidationUtils.validateRequired(subjectController.text, 'Subject');
+    final subjectVal = ValidationUtils.validateRequired(
+      subjectController.text,
+      'Subject',
+    );
     subjectError.value = subjectVal;
     if (subjectVal != null) isValid = false;
 
-    final feeVal =
-        ValidationUtils.validateAmount(batchFeeController.text, 'Batch fee');
+    final feeVal = ValidationUtils.validateAmount(
+      batchFeeController.text,
+      'Batch fee',
+    );
     feeError.value = feeVal;
     if (feeVal != null) isValid = false;
 
-    final daysVal = ValidationUtils.validateDaysSelection(selectedDays.toList());
+    final daysVal = ValidationUtils.validateDaysSelection(
+      selectedDays.toList(),
+    );
     daysError.value = daysVal;
     if (daysVal != null) isValid = false;
 
@@ -104,7 +112,7 @@ class BatchController extends GetxController {
         currentPage.value++;
       }
     } catch (e) {
-      AppSnackbar.error('Failed to load batches: ${e.toString()}');
+      AppSnackBar.error('Failed to load batches: ${e.toString()}');
     } finally {
       isLoading.value = false;
       isMoreLoading.value = false;
@@ -226,9 +234,9 @@ class BatchController extends GetxController {
           isLoading.value = true;
           await _repository.deleteBatch(int.parse(id));
           batchesList.removeWhere((batch) => batch.id == id);
-          AppSnackbar.success('Batch deleted successfully', title: 'Deleted');
+          AppSnackBar.success('Batch deleted successfully', title: 'Deleted');
         } catch (e) {
-          AppSnackbar.error(e.toString());
+          AppSnackBar.error(e.toString());
         } finally {
           isLoading.value = false;
         }
@@ -280,16 +288,16 @@ class BatchController extends GetxController {
         // If adding, just go back once to BatchesScreen
         Get.back();
       }
-      AppSnackbar.success(
+      AppSnackBar.success(
         'Successfully saved ${batchNameController.text}',
         title: isEditMode.value ? 'Batch Updated' : 'Batch Created',
       );
     } catch (e) {
       if (e is ValidationException) {
         _handleValidationErrors(e.errors);
-        AppSnackbar.error('Please correct the highlighted errors');
+        AppSnackBar.error('Please correct the highlighted errors');
       } else {
-        AppSnackbar.error(e.toString());
+        AppSnackBar.error(e.toString());
       }
     } finally {
       isLoading.value = false;
@@ -315,7 +323,7 @@ class BatchController extends GetxController {
     // This part might need API support for assigning students to batch
     // For now keeping it local or showing a placeholder message
     Get.back();
-    AppSnackbar.warning(
+    AppSnackBar.warning(
       'Student assignment is currently managed via Student Profile',
       title: 'Notice',
     );
@@ -330,4 +338,3 @@ class BatchController extends GetxController {
     super.onClose();
   }
 }
-

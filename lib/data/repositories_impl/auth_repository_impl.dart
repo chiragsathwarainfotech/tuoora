@@ -1,4 +1,4 @@
-import 'package:fee_easy/data/models/user_model.dart';
+import 'package:tuoora/data/models/user_model.dart';
 
 abstract class AuthRepositoryImpl {
   Future<User> loginInstitute(String email, String password);

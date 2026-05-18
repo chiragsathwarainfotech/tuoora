@@ -1,4 +1,4 @@
-import 'package:fee_easy/data/models/student_model.dart';
+import 'package:tuoora/data/models/student_model.dart';
 
 abstract class StudentRepositoryImpl {
   Future<List<Student>> listStudents({String? search, int? page});

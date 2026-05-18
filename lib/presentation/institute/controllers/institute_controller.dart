@@ -1,11 +1,11 @@
-import 'package:fee_easy/config/app_routes.dart';
-import 'package:fee_easy/core/constants/app_colors.dart';
-import 'package:fee_easy/core/constants/app_strings.dart';
-import 'package:fee_easy/data/models/student_model.dart';
-import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
-import 'package:fee_easy/data/repositories_impl/student_repository_impl.dart';
-import 'package:fee_easy/presentation/institute/models/fee_record.dart';
-import 'package:fee_easy/core/services/download_service.dart';
+import 'package:tuoora/config/app_routes.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
+import 'package:tuoora/data/models/student_model.dart';
+import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
+import 'package:tuoora/data/repositories_impl/student_repository_impl.dart';
+import 'package:tuoora/presentation/institute/models/fee_record.dart';
+import 'package:tuoora/core/services/download_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

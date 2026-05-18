@@ -1,9 +1,9 @@
-import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
+import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
 import 'package:flutter/material.dart';
-import 'package:fee_easy/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:get/get.dart';
-import 'package:fee_easy/core/api/api_exception.dart';
-import 'package:fee_easy/core/utils/validation_utils.dart';
+import 'package:tuoora/core/api/api_exception.dart';
+import 'package:tuoora/core/utils/validation_utils.dart';
 
 class SecurityController extends GetxController {
   final InstituteRepositoryImpl _instituteRepository;

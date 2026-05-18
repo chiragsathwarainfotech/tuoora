@@ -1,5 +1,5 @@
-import 'package:fee_easy/core/constants/api_constants.dart';
-import 'package:fee_easy/core/services/auth_service.dart';
+import 'package:tuoora/core/constants/api_constants.dart';
+import 'package:tuoora/core/services/auth_service.dart';
 import 'package:get/get.dart';
 
 class ApiClient extends GetConnect {

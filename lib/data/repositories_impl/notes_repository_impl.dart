@@ -1,7 +1,7 @@
-import 'package:fee_easy/core/api/api_client.dart';
-import 'package:fee_easy/core/api/api_exception.dart';
-import 'package:fee_easy/core/constants/api_constants.dart';
-import 'package:fee_easy/data/models/note_model.dart';
+import 'package:tuoora/core/api/api_client.dart';
+import 'package:tuoora/core/api/api_exception.dart';
+import 'package:tuoora/core/constants/api_constants.dart';
+import 'package:tuoora/data/models/note_model.dart';
 import 'package:get/get_connect/http/src/response/response.dart';
 
 class NotesRepositoryImpl {

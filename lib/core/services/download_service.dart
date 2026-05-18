@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:fee_easy/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,7 +18,7 @@ class DownloadService extends GetxService {
           filePath = '${directory.path}/$fileName';
         } else {
           filePath =
-              '/storage/emulated/0/Android/data/com.example.fee_easy/files/$fileName';
+              '/storage/emulated/0/Android/data/com.app.tuoora/files/$fileName';
         }
       } else if (Platform.isIOS) {
         throw Exception('iOS download path requires path_provider package');

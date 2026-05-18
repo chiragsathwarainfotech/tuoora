@@ -1,5 +1,5 @@
-import 'package:fee_easy/presentation/institute/models/batch_model.dart';
-import 'package:fee_easy/core/constants/app_colors.dart';
+import 'package:tuoora/presentation/institute/models/batch_model.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
 
 class Batch {
   final int id;

@@ -1,11 +1,11 @@
-import 'package:fee_easy/core/widgets/common_loading.dart';
-import 'package:fee_easy/presentation/institute/models/batch_model.dart';
-import 'package:fee_easy/presentation/institute/models/attendance_record_model.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
+import 'package:tuoora/presentation/institute/models/batch_model.dart';
+import 'package:tuoora/presentation/institute/models/attendance_record_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
-import 'package:fee_easy/core/constants/app_colors.dart';
+import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
 
 class AttendanceStudent {
   final int id;

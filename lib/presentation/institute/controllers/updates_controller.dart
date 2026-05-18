@@ -1,12 +1,12 @@
-import 'package:fee_easy/core/enums/app_enums.dart';
-import 'package:fee_easy/data/models/daily_update_model.dart';
-import 'package:fee_easy/data/repositories_impl/daily_update_repository_impl.dart';
+import 'package:tuoora/core/enums/app_enums.dart';
+import 'package:tuoora/data/models/daily_update_model.dart';
+import 'package:tuoora/data/repositories_impl/daily_update_repository_impl.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:fee_easy/data/models/batch_model.dart';
-import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
+import 'package:tuoora/data/models/batch_model.dart';
+import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:fee_easy/core/widgets/app_snackbar.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 
 class UpdatesController extends GetxController {
   final DailyUpdateRepositoryImpl _updateRepository;
@@ -73,7 +73,7 @@ class UpdatesController extends GetxController {
         selectedBatch.value = availableBatches.first;
       }
     } catch (e) {
-      AppSnackbar.error('Failed to load batches: $e');
+      AppSnackBar.error('Failed to load batches: $e');
     } finally {
       isLoadingBatches.value = false;
     }
@@ -85,7 +85,7 @@ class UpdatesController extends GetxController {
       final updates = await _updateRepository.listDailyUpdates();
       updatesList.assignAll(updates);
     } catch (e) {
-      AppSnackbar.error('Failed to load updates: $e');
+      AppSnackBar.error('Failed to load updates: $e');
     } finally {
       isLoading.value = false;
     }
@@ -103,7 +103,7 @@ class UpdatesController extends GetxController {
         attachments.addAll(result.paths.whereType<String>());
       }
     } catch (e) {
-      AppSnackbar.error('Could not pick files: $e');
+      AppSnackBar.error('Could not pick files: $e');
     }
   }
 
@@ -150,9 +150,9 @@ class UpdatesController extends GetxController {
       messageError.value = null;
 
       Get.back();
-      AppSnackbar.success('Update broadcasted successfully');
+      AppSnackBar.success('Update broadcasted successfully');
     } catch (e) {
-      AppSnackbar.error('Failed to broadcast update: $e');
+      AppSnackBar.error('Failed to broadcast update: $e');
     } finally {
       isCreating.value = false;
     }

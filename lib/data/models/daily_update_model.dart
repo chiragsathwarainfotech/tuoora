@@ -1,5 +1,5 @@
-import 'package:fee_easy/core/enums/app_enums.dart';
-import 'package:fee_easy/data/models/student_model.dart';
+import 'package:tuoora/core/enums/app_enums.dart';
+import 'package:tuoora/data/models/student_model.dart';
 
 class DailyUpdate {
   final int? id;

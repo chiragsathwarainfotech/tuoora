@@ -1,8 +1,8 @@
-import 'package:fee_easy/core/api/api_exception.dart';
-import 'package:fee_easy/core/utils/validation_utils.dart';
-import 'package:fee_easy/core/widgets/app_snackbar.dart';
-import 'package:fee_easy/data/models/lead_model.dart';
-import 'package:fee_easy/data/repositories_impl/leads_repository_impl.dart';
+import 'package:tuoora/core/api/api_exception.dart';
+import 'package:tuoora/core/utils/validation_utils.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
+import 'package:tuoora/data/models/lead_model.dart';
+import 'package:tuoora/data/repositories_impl/leads_repository_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -89,7 +89,7 @@ class LeadsController extends GetxController {
       lastPage.value = response.lastPage;
       totalItems.value = response.total;
     } catch (e) {
-      AppSnackbar.error('Failed to load leads: $e');
+      AppSnackBar.error('Failed to load leads: $e');
     } finally {
       if (page == 1) isLoading.value = false;
     }
@@ -169,19 +169,19 @@ class LeadsController extends GetxController {
         await _leadsRepository.createLead(leadData);
         searchQuery.value = '';
         Get.back();
-        AppSnackbar.success('Lead created successfully');
+        AppSnackBar.success('Lead created successfully');
       } else {
         await _leadsRepository.updateLead(editingLeadId.value!, leadData);
         Get.back();
-        AppSnackbar.success('Lead updated successfully');
+        AppSnackBar.success('Lead updated successfully');
       }
       fetchLeads(page: 1);
     } catch (e) {
       if (e is ValidationException) {
         _handleValidationErrors(e.errors);
-        AppSnackbar.error('Please correct the highlighted errors');
+        AppSnackBar.error('Please correct the highlighted errors');
       } else {
-        AppSnackbar.error('Failed to save lead: $e');
+        AppSnackBar.error('Failed to save lead: $e');
       }
     } finally {
       isLoading.value = false;
@@ -278,9 +278,9 @@ class LeadsController extends GetxController {
       isLoading.value = true;
       await _leadsRepository.deleteLead(id);
       leadsList.removeWhere((l) => l.id == id);
-      AppSnackbar.success('Lead deleted successfully');
+      AppSnackBar.success('Lead deleted successfully');
     } catch (e) {
-      AppSnackbar.error('Failed to delete lead: $e');
+      AppSnackBar.error('Failed to delete lead: $e');
     } finally {
       isLoading.value = false;
     }
@@ -291,7 +291,7 @@ class LeadsController extends GetxController {
     if (await canLaunchUrl(launchUri)) {
       await launchUrl(launchUri);
     } else {
-      AppSnackbar.error('Could not launch dialer for $phone');
+      AppSnackBar.error('Could not launch dialer for $phone');
     }
   }
 
@@ -320,10 +320,7 @@ class LeadsController extends GetxController {
       isLoading.value = true;
       final newNote = await _leadsRepository.addLeadNote(
         selectedLead.value!.id,
-        {
-          'title': title,
-          'note': note,
-        },
+        {'title': title, 'note': note},
       );
 
       // Update current lead's notes
@@ -357,12 +354,12 @@ class LeadsController extends GetxController {
       triedToSave.value = false;
 
       Get.back(); // Close dialog
-      AppSnackbar.success('Interaction note added successfully');
+      AppSnackBar.success('Interaction note added successfully');
     } catch (e) {
       if (e is ValidationException) {
         _handleValidationErrors(e.errors);
       } else {
-        AppSnackbar.error('Failed to add note: $e');
+        AppSnackBar.error('Failed to add note: $e');
       }
     } finally {
       isLoading.value = false;
@@ -382,4 +379,3 @@ class LeadsController extends GetxController {
     super.onClose();
   }
 }
-

@@ -1,5 +1,5 @@
-import 'package:fee_easy/data/models/notification_model.dart';
-import 'package:fee_easy/data/repositories/institute_repository.dart';
+import 'package:tuoora/data/models/notification_model.dart';
+import 'package:tuoora/data/repositories/institute_repository.dart';
 import 'package:get/get.dart';
 
 class NotificationController extends GetxController {

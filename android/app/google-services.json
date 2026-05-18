@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "443775286225",
+    "project_id": "tuoora-8bc7a",
+    "storage_bucket": "tuoora-8bc7a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:443775286225:android:eec6431f33965ec65cbef0",
+        "android_client_info": {
+          "package_name": "com.app.tuoora"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjbUxQqrw0ki4cji1HnQt9PbYJZDbLP8Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

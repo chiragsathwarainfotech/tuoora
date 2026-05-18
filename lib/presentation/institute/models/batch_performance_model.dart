@@ -1,4 +1,4 @@
-import 'package:fee_easy/presentation/institute/models/student_performance_model.dart';
+import 'package:tuoora/presentation/institute/models/student_performance_model.dart';
 
 class BatchPerformance {
   final String batchId;

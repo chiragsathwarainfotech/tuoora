@@ -1,8 +1,8 @@
-import 'package:fee_easy/core/api/api_client.dart';
-import 'package:fee_easy/core/api/api_exception.dart';
-import 'package:fee_easy/core/constants/api_constants.dart';
-import 'package:fee_easy/data/models/student_model.dart';
-import 'package:fee_easy/data/repositories_impl/student_repository_impl.dart';
+import 'package:tuoora/core/api/api_client.dart';
+import 'package:tuoora/core/api/api_exception.dart';
+import 'package:tuoora/core/constants/api_constants.dart';
+import 'package:tuoora/data/models/student_model.dart';
+import 'package:tuoora/data/repositories_impl/student_repository_impl.dart';
 import 'package:get/get.dart';
 
 class StudentRepository implements StudentRepositoryImpl {

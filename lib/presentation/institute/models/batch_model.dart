@@ -1,4 +1,4 @@
-import 'package:fee_easy/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class BatchModel {

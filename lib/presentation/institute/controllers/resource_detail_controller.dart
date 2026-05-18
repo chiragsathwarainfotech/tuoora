@@ -1,12 +1,12 @@
-import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
-import 'package:fee_easy/core/services/download_service.dart';
-import 'package:fee_easy/core/constants/app_colors.dart';
-import 'package:fee_easy/core/widgets/common_loading.dart';
+import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
+import 'package:tuoora/core/services/download_service.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
-import 'package:fee_easy/presentation/institute/controllers/resources_controller.dart';
-import 'package:fee_easy/core/widgets/app_snackbar.dart';
+import 'package:tuoora/presentation/institute/controllers/resources_controller.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:chewie/chewie.dart';
 
 class ResourceDetailController extends GetxController {
@@ -115,9 +115,9 @@ class ResourceDetailController extends GetxController {
       }
 
       Get.back(); // Close detail screen
-      AppSnackbar.success('Resource deleted successfully');
+      AppSnackBar.success('Resource deleted successfully');
     } catch (e) {
-      AppSnackbar.error('Failed to delete resource: $e');
+      AppSnackBar.error('Failed to delete resource: $e');
     } finally {
       isLoading.value = false;
     }
@@ -130,4 +130,3 @@ class ResourceDetailController extends GetxController {
     super.onClose();
   }
 }
-

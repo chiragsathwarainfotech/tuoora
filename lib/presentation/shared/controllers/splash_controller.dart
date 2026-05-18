@@ -1,5 +1,5 @@
-import 'package:fee_easy/config/app_routes.dart';
-import 'package:fee_easy/core/services/auth_service.dart';
+import 'package:tuoora/config/app_routes.dart';
+import 'package:tuoora/core/services/auth_service.dart';
 import 'package:get/get.dart';
 
 class SplashController extends GetxController {

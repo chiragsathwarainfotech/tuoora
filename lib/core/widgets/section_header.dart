@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fee_easy/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
 import '../../core/constants/app_text_styles.dart';
 import '../../core/theme/app_spacing.dart';
 

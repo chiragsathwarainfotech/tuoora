@@ -1,10 +1,10 @@
-import 'package:fee_easy/core/utils/validation_utils.dart';
-import 'package:fee_easy/core/widgets/app_snackbar.dart';
-import 'package:fee_easy/data/models/note_model.dart';
-import 'package:fee_easy/data/repositories_impl/notes_repository_impl.dart';
+import 'package:tuoora/core/utils/validation_utils.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
+import 'package:tuoora/data/models/note_model.dart';
+import 'package:tuoora/data/repositories_impl/notes_repository_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:fee_easy/core/api/api_exception.dart';
+import 'package:tuoora/core/api/api_exception.dart';
 
 class NotesController extends GetxController {
   final NotesRepositoryImpl _notesRepository = Get.find<NotesRepositoryImpl>();
@@ -41,9 +41,13 @@ class NotesController extends GetxController {
     super.onInit();
     fetchNotes();
     fetchNoteCategories();
-    
+
     // Search debouncing
-    debounce(searchQuery, (_) => fetchNotes(page: 1), time: const Duration(milliseconds: 500));
+    debounce(
+      searchQuery,
+      (_) => fetchNotes(page: 1),
+      time: const Duration(milliseconds: 500),
+    );
 
     // Clear errors as user types
     titleController.addListener(() => _clearError(titleError));
@@ -71,12 +75,12 @@ class NotesController extends GetxController {
   Future<void> fetchNotes({int page = 1}) async {
     try {
       if (page == 1) isLoading.value = true;
-      
+
       final response = await _notesRepository.getNotes(
         page: page,
         isBookmarked: isBookmarkView.value ? true : null,
       );
-      
+
       if (page == 1) {
         notesList.assignAll(response.data);
       } else {
@@ -87,7 +91,7 @@ class NotesController extends GetxController {
       lastPage.value = response.lastPage;
       totalItems.value = response.total;
     } catch (e) {
-      AppSnackbar.error('Failed to load notes: $e');
+      AppSnackBar.error('Failed to load notes: $e');
     } finally {
       if (page == 1) isLoading.value = false;
     }
@@ -164,20 +168,20 @@ class NotesController extends GetxController {
       if (editingNoteId.value != null) {
         await _notesRepository.updateNote(editingNoteId.value!, noteData);
         Get.back();
-        AppSnackbar.success('Note updated successfully');
+        AppSnackBar.success('Note updated successfully');
       } else {
         await _notesRepository.createNote(noteData);
         Get.back();
-        AppSnackbar.success('Note created successfully');
+        AppSnackBar.success('Note created successfully');
       }
 
       fetchNotes(page: 1);
     } catch (e) {
       if (e is ValidationException) {
         _handleValidationErrors(e.errors);
-        AppSnackbar.error('Please correct the highlighted errors');
+        AppSnackBar.error('Please correct the highlighted errors');
       } else {
-        AppSnackbar.error('Failed to save note: $e');
+        AppSnackBar.error('Failed to save note: $e');
       }
     } finally {
       isLoading.value = false;
@@ -199,15 +203,23 @@ class NotesController extends GetxController {
   bool _validateForm() {
     bool isValid = true;
 
-    final tErr = ValidationUtils.validateRequired(titleController.text, 'Title');
+    final tErr = ValidationUtils.validateRequired(
+      titleController.text,
+      'Title',
+    );
     titleError.value = tErr;
     if (tErr != null) isValid = false;
 
-    final cErr = ValidationUtils.validateRequired(contentController.text, 'Content');
+    final cErr = ValidationUtils.validateRequired(
+      contentController.text,
+      'Content',
+    );
     contentError.value = cErr;
     if (cErr != null) isValid = false;
 
-    final catErr = ValidationUtils.validateCategorySelection(selectedCategoryName.value);
+    final catErr = ValidationUtils.validateCategorySelection(
+      selectedCategoryName.value,
+    );
     categoryError.value = catErr;
     if (catErr != null) isValid = false;
 
@@ -219,9 +231,9 @@ class NotesController extends GetxController {
       isLoading.value = true;
       await _notesRepository.deleteNote(id);
       notesList.removeWhere((n) => n.id == id);
-      AppSnackbar.success('Note deleted successfully');
+      AppSnackBar.success('Note deleted successfully');
     } catch (e) {
-      AppSnackbar.error('Failed to delete note: $e');
+      AppSnackBar.error('Failed to delete note: $e');
     } finally {
       isLoading.value = false;
     }
@@ -231,18 +243,18 @@ class NotesController extends GetxController {
     try {
       final newStatus = !note.isBookmarked;
       await _notesRepository.toggleBookmark(note.id, newStatus);
-      
+
       final index = notesList.indexWhere((n) => n.id == note.id);
       if (index != -1) {
         // Use copyWith to preserve categoryRelation and other fields
         notesList[index] = note.copyWith(isBookmarked: newStatus);
-        
+
         if (isBookmarkView.value && !newStatus) {
           notesList.removeAt(index);
         }
       }
     } catch (e) {
-      AppSnackbar.error('Failed to update bookmark: $e');
+      AppSnackBar.error('Failed to update bookmark: $e');
     }
   }
 
@@ -253,4 +265,3 @@ class NotesController extends GetxController {
     super.onClose();
   }
 }
-

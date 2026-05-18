@@ -1,4 +1,4 @@
-import 'package:fee_easy/data/models/user_model.dart';
+import 'package:tuoora/data/models/user_model.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 

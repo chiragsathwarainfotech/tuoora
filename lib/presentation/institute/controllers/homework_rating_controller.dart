@@ -1,6 +1,6 @@
-import 'package:fee_easy/presentation/institute/models/homework_model.dart';
-import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
-import 'package:fee_easy/core/constants/app_colors.dart';
+import 'package:tuoora/presentation/institute/models/homework_model.dart';
+import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:get/get.dart';
 
 class HomeworkRatingController extends GetxController {

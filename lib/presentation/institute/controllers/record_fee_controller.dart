@@ -1,13 +1,13 @@
-import 'package:fee_easy/core/constants/app_colors.dart';
-import 'package:fee_easy/data/models/student_model.dart';
-import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/data/models/student_model.dart';
+import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:fee_easy/core/utils/validation_utils.dart';
+import 'package:tuoora/core/utils/validation_utils.dart';
 import 'package:intl/intl.dart';
 import 'institute_controller.dart';
-import 'package:fee_easy/core/widgets/app_snackbar.dart';
-import 'package:fee_easy/core/api/api_exception.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
+import 'package:tuoora/core/api/api_exception.dart';
 
 class RecordFeeController extends GetxController {
   final InstituteController instituteController =
@@ -149,13 +149,13 @@ class RecordFeeController extends GetxController {
       await instituteController.refreshFees();
 
       Get.back();
-      AppSnackbar.success('Fee record created and collected successfully');
+      AppSnackBar.success('Fee record created and collected successfully');
     } catch (e) {
       if (e is ValidationException) {
         _handleValidationErrors(e.errors);
-        AppSnackbar.error('Please correct the highlighted errors');
+        AppSnackBar.error('Please correct the highlighted errors');
       } else {
-        AppSnackbar.error(e.toString().replaceAll('Exception: ', ''));
+        AppSnackBar.error(e.toString().replaceAll('Exception: ', ''));
       }
     } finally {
       isLoading.value = false;

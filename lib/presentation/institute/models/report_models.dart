@@ -1,4 +1,4 @@
-import 'package:fee_easy/presentation/institute/models/fee_record.dart';
+import 'package:tuoora/presentation/institute/models/fee_record.dart';
 
 class FeeReportSummary {
   final double totalAmount;

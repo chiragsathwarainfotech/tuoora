@@ -1,14 +1,14 @@
-import 'package:fee_easy/presentation/institute/models/batch_model.dart';
-import 'package:fee_easy/presentation/institute/models/homework_model.dart';
-import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
+import 'package:tuoora/presentation/institute/models/batch_model.dart';
+import 'package:tuoora/presentation/institute/models/homework_model.dart';
+import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:fee_easy/core/utils/validation_utils.dart';
+import 'package:tuoora/core/utils/validation_utils.dart';
 import 'package:intl/intl.dart';
-import 'package:fee_easy/core/widgets/common_loading.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:fee_easy/core/widgets/app_snackbar.dart';
-import 'package:fee_easy/core/api/api_exception.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
+import 'package:tuoora/core/api/api_exception.dart';
 
 class HomeworkController extends GetxController {
   final BatchModel batch;
@@ -45,7 +45,7 @@ class HomeworkController extends GetxController {
       final response = await _repository.getHomeworks(int.parse(batch.id));
       homeworks.assignAll(response);
     } catch (e) {
-      AppSnackbar.error('Failed to fetch homeworks: ${e.toString()}');
+      AppSnackBar.error('Failed to fetch homeworks: ${e.toString()}');
     } finally {
       isLoading.value = false;
     }
@@ -105,7 +105,7 @@ class HomeworkController extends GetxController {
         selectedAttachment.value = result.files.single.path;
       }
     } catch (e) {
-      AppSnackbar.error('Failed to pick file: $e');
+      AppSnackBar.error('Failed to pick file: $e');
     }
   }
 
@@ -141,16 +141,16 @@ class HomeworkController extends GetxController {
       // Close creation dialog
       Get.back();
 
-      AppSnackbar.success('Homework created successfully');
+      AppSnackBar.success('Homework created successfully');
     } catch (e) {
       // Close loader if open
       CommonLoading.dismiss();
 
       if (e is ValidationException) {
         _handleValidationErrors(e.errors);
-        AppSnackbar.error('Please correct the highlighted errors');
+        AppSnackBar.error('Please correct the highlighted errors');
       } else {
-        AppSnackbar.error('Failed to create homework: ${e.toString()}');
+        AppSnackBar.error('Failed to create homework: ${e.toString()}');
       }
     }
   }

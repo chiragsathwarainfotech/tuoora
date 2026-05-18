@@ -1,9 +1,9 @@
-import 'package:fee_easy/core/constants/app_colors.dart';
-import 'package:fee_easy/core/constants/app_text_styles.dart';
-import 'package:fee_easy/presentation/institute/controllers/staff_controller.dart';
-import 'package:fee_easy/presentation/institute/view/staff_list_screen.dart';
-import 'package:fee_easy/presentation/institute/view/attendance_history_screen.dart';
-import 'package:fee_easy/presentation/institute/view/salary_management_screen.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/presentation/institute/controllers/staff_controller.dart';
+import 'package:tuoora/presentation/institute/view/staff_list_screen.dart';
+import 'package:tuoora/presentation/institute/view/attendance_history_screen.dart';
+import 'package:tuoora/presentation/institute/view/salary_management_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

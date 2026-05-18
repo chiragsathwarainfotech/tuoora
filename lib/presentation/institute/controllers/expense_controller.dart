@@ -1,10 +1,10 @@
-import 'package:fee_easy/core/utils/validation_utils.dart';
-import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
-import 'package:fee_easy/presentation/institute/models/expense_model.dart';
+import 'package:tuoora/core/utils/validation_utils.dart';
+import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
+import 'package:tuoora/presentation/institute/models/expense_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:fee_easy/core/api/api_exception.dart';
-import 'package:fee_easy/core/widgets/app_snackbar.dart';
+import 'package:tuoora/core/api/api_exception.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -210,7 +210,7 @@ class ExpenseController extends GetxController {
         selectedReceiptPath.value = result.files.single.path!;
       }
     } catch (e) {
-      AppSnackbar.error('Failed to pick receipt: $e');
+      AppSnackBar.error('Failed to pick receipt: $e');
     }
   }
 
@@ -255,9 +255,9 @@ class ExpenseController extends GetxController {
     } catch (e) {
       if (e is ValidationException) {
         _handleValidationErrors(e.errors);
-        AppSnackbar.error('Please correct the highlighted errors');
+        AppSnackBar.error('Please correct the highlighted errors');
       } else {
-        AppSnackbar.error(e.toString());
+        AppSnackBar.error(e.toString());
       }
     } finally {
       isLoading.value = false;

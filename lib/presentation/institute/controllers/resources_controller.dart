@@ -1,11 +1,11 @@
-import 'package:fee_easy/presentation/institute/models/batch_model.dart';
-import 'package:fee_easy/presentation/institute/models/resource_model.dart';
-import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
+import 'package:tuoora/presentation/institute/models/batch_model.dart';
+import 'package:tuoora/presentation/institute/models/resource_model.dart';
+import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:fee_easy/core/widgets/common_loading.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:fee_easy/core/widgets/app_snackbar.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 
 class ResourcesController extends GetxController {
   final BatchModel batch;
@@ -13,10 +13,11 @@ class ResourcesController extends GetxController {
       Get.find<InstituteRepositoryImpl>();
 
   final resources = <ResourceModel>[].obs;
-  
+
   void removeResource(String id) {
     resources.removeWhere((r) => r.id == id);
   }
+
   final isLoading = false.obs;
 
   ResourcesController(this.batch);
@@ -33,7 +34,7 @@ class ResourcesController extends GetxController {
       final response = await _repository.getResources(int.parse(batch.id));
       resources.assignAll(response);
     } catch (e) {
-      AppSnackbar.error('Failed to fetch resources: ${e.toString()}');
+      AppSnackBar.error('Failed to fetch resources: ${e.toString()}');
     } finally {
       isLoading.value = false;
     }
@@ -82,7 +83,7 @@ class ResourcesController extends GetxController {
         if (isVideo) {
           final double sizeInMb = file.size / (1024 * 1024);
           if (sizeInMb > 50) {
-            AppSnackbar.error(
+            AppSnackBar.error(
               'Video files must be under 50 MB. Selected file is ${sizeInMb.toStringAsFixed(2)} MB.',
               title: 'File Too Large',
             );
@@ -100,7 +101,7 @@ class ResourcesController extends GetxController {
         fileError.value = null;
       }
     } catch (e) {
-      AppSnackbar.error('Failed to pick file: ${e.toString()}');
+      AppSnackBar.error('Failed to pick file: ${e.toString()}');
     }
   }
 
@@ -134,11 +135,11 @@ class ResourcesController extends GetxController {
       // Close creation dialog
       Get.back();
 
-      AppSnackbar.success('Resource uploaded successfully');
+      AppSnackBar.success('Resource uploaded successfully');
     } catch (e) {
       // Close loader if open
       CommonLoading.dismiss();
-      AppSnackbar.error('Failed to upload resource: ${e.toString()}');
+      AppSnackBar.error('Failed to upload resource: ${e.toString()}');
     }
   }
 

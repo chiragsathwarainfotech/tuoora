@@ -1,10 +1,10 @@
-import 'package:fee_easy/core/utils/validation_utils.dart';
+import 'package:tuoora/core/utils/validation_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:fee_easy/data/repositories/auth_repository.dart';
-import 'package:fee_easy/config/app_routes.dart';
+import 'package:tuoora/data/repositories/auth_repository.dart';
+import 'package:tuoora/config/app_routes.dart';
 import 'dart:async';
-import 'package:fee_easy/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
 
 class ForgotPasswordController extends GetxController {
   final _authRepository = Get.find<AuthRepository>();

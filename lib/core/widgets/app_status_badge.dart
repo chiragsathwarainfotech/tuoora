@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fee_easy/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/constants/app_text_styles.dart';
 
 class AppStatusBadge extends StatelessWidget {
   final String text;

@@ -1,20 +1,20 @@
 import 'dart:io';
-import 'package:fee_easy/presentation/institute/models/expense_model.dart';
-import 'package:fee_easy/core/api/api_client.dart';
-import 'package:fee_easy/core/constants/api_constants.dart';
-import 'package:fee_easy/core/services/auth_service.dart';
-import 'package:fee_easy/core/api/api_exception.dart';
-import 'package:fee_easy/data/models/batch_model.dart';
-import 'package:fee_easy/data/models/institute_profile_model.dart';
-import 'package:fee_easy/data/models/whatsapp_settings_model.dart';
-import 'package:fee_easy/presentation/institute/models/fee_record.dart';
-import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
-import 'package:fee_easy/presentation/institute/models/report_models.dart';
-import 'package:fee_easy/presentation/institute/models/homework_model.dart';
-import 'package:fee_easy/presentation/institute/models/resource_model.dart';
-import 'package:fee_easy/presentation/institute/models/attendance_record_model.dart';
-import 'package:fee_easy/data/models/notification_model.dart';
-import 'package:fee_easy/data/models/staff_model.dart';
+import 'package:tuoora/presentation/institute/models/expense_model.dart';
+import 'package:tuoora/core/api/api_client.dart';
+import 'package:tuoora/core/constants/api_constants.dart';
+import 'package:tuoora/core/services/auth_service.dart';
+import 'package:tuoora/core/api/api_exception.dart';
+import 'package:tuoora/data/models/batch_model.dart';
+import 'package:tuoora/data/models/institute_profile_model.dart';
+import 'package:tuoora/data/models/whatsapp_settings_model.dart';
+import 'package:tuoora/presentation/institute/models/fee_record.dart';
+import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
+import 'package:tuoora/presentation/institute/models/report_models.dart';
+import 'package:tuoora/presentation/institute/models/homework_model.dart';
+import 'package:tuoora/presentation/institute/models/resource_model.dart';
+import 'package:tuoora/presentation/institute/models/attendance_record_model.dart';
+import 'package:tuoora/data/models/notification_model.dart';
+import 'package:tuoora/data/models/staff_model.dart';
 import 'package:get/get.dart';
 
 class InstituteRepository implements InstituteRepositoryImpl {

@@ -1,10 +1,10 @@
-import 'package:fee_easy/core/widgets/parent_bottom_nav.dart';
-import 'package:fee_easy/presentation/parent/controllers/parent_controller.dart';
-import 'package:fee_easy/presentation/parent/view/dashboard.dart';
-import 'package:fee_easy/presentation/parent/view/fees_screen.dart';
-import 'package:fee_easy/presentation/parent/view/reports_screen.dart';
-import 'package:fee_easy/presentation/shared/view/attendance_screen.dart' as shared;
-import 'package:fee_easy/presentation/shared/view/institute_screen.dart' as shared;
+import 'package:tuoora/core/widgets/parent_bottom_nav.dart';
+import 'package:tuoora/presentation/parent/controllers/parent_controller.dart';
+import 'package:tuoora/presentation/parent/view/dashboard.dart';
+import 'package:tuoora/presentation/parent/view/fees_screen.dart';
+import 'package:tuoora/presentation/parent/view/reports_screen.dart';
+import 'package:tuoora/presentation/shared/view/attendance_screen.dart' as shared;
+import 'package:tuoora/presentation/shared/view/institute_screen.dart' as shared;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

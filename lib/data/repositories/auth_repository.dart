@@ -1,7 +1,7 @@
-import 'package:fee_easy/core/api/api_client.dart';
-import 'package:fee_easy/core/constants/api_constants.dart';
-import 'package:fee_easy/data/models/user_model.dart';
-import 'package:fee_easy/data/repositories_impl/auth_repository_impl.dart';
+import 'package:tuoora/core/api/api_client.dart';
+import 'package:tuoora/core/constants/api_constants.dart';
+import 'package:tuoora/data/models/user_model.dart';
+import 'package:tuoora/data/repositories_impl/auth_repository_impl.dart';
 
 class AuthRepository implements AuthRepositoryImpl {
   final ApiClient _apiClient;

@@ -1,12 +1,12 @@
-import 'package:fee_easy/core/constants/app_colors.dart';
-import 'package:fee_easy/presentation/institute/controllers/batch_controller.dart';
-import 'package:fee_easy/presentation/institute/controllers/institute_controller.dart';
-import 'package:fee_easy/presentation/institute/models/batch_performance_model.dart';
-import 'package:fee_easy/presentation/institute/models/report_models.dart';
-import 'package:fee_easy/core/services/download_service.dart';
-import 'package:fee_easy/presentation/institute/models/student_performance_model.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/presentation/institute/controllers/batch_controller.dart';
+import 'package:tuoora/presentation/institute/controllers/institute_controller.dart';
+import 'package:tuoora/presentation/institute/models/batch_performance_model.dart';
+import 'package:tuoora/presentation/institute/models/report_models.dart';
+import 'package:tuoora/core/services/download_service.dart';
+import 'package:tuoora/presentation/institute/models/student_performance_model.dart';
 import 'package:flutter/material.dart';
-import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
+import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
 import 'package:get/get.dart';
 
 class ReportsController extends GetxController {

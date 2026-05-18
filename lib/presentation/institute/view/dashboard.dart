@@ -1,9 +1,9 @@
-import 'package:fee_easy/core/constants/app_colors.dart';
-import 'package:fee_easy/core/constants/app_text_styles.dart';
-import 'package:fee_easy/core/theme/app_spacing.dart';
-import 'package:fee_easy/config/app_routes.dart';
-import 'package:fee_easy/data/models/menu_item.dart';
-import 'package:fee_easy/presentation/institute/controllers/institute_profile_controller.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/config/app_routes.dart';
+import 'package:tuoora/data/models/menu_item.dart';
+import 'package:tuoora/presentation/institute/controllers/institute_profile_controller.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 

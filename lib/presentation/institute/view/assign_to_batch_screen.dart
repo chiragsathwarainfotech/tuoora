@@ -1,15 +1,15 @@
-import 'package:fee_easy/core/constants/app_colors.dart';
-import 'package:fee_easy/core/constants/app_text_styles.dart';
-import 'package:fee_easy/core/theme/app_spacing.dart';
-import 'package:fee_easy/presentation/institute/controllers/batch_details_controller.dart';
-import 'package:fee_easy/presentation/institute/models/batch_model.dart';
-import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
-import 'package:fee_easy/core/widgets/app_button.dart';
-import 'package:fee_easy/data/models/student_model.dart';
-import 'package:fee_easy/presentation/institute/controllers/institute_controller.dart';
-import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
-import 'package:fee_easy/presentation/institute/controllers/batch_controller.dart';
-import 'package:fee_easy/core/widgets/app_search_field.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/presentation/institute/controllers/batch_details_controller.dart';
+import 'package:tuoora/presentation/institute/models/batch_model.dart';
+import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
+import 'package:tuoora/core/widgets/app_button.dart';
+import 'package:tuoora/data/models/student_model.dart';
+import 'package:tuoora/presentation/institute/controllers/institute_controller.dart';
+import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
+import 'package:tuoora/presentation/institute/controllers/batch_controller.dart';
+import 'package:tuoora/core/widgets/app_search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

@@ -1,14 +1,14 @@
-import 'package:fee_easy/config/app_routes.dart';
-import 'package:fee_easy/core/utils/validation_utils.dart';
-import 'package:fee_easy/core/widgets/app_snackbar.dart';
-import 'package:fee_easy/data/models/staff_model.dart';
-import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
+import 'package:tuoora/config/app_routes.dart';
+import 'package:tuoora/core/utils/validation_utils.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
+import 'package:tuoora/data/models/staff_model.dart';
+import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:fee_easy/core/api/api_exception.dart';
-import 'package:fee_easy/core/theme/app_spacing.dart';
-import 'package:fee_easy/core/constants/app_colors.dart';
-import 'package:fee_easy/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/api/api_exception.dart';
+import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -146,8 +146,9 @@ class StaffController extends GetxController {
     selectedDepartmentId.listen((_) => _clearError(deptError));
 
     // Initialize salary date controller
-    salaryDateController.text =
-        DateFormat('MM/dd/yyyy').format(selectedSalaryDate.value);
+    salaryDateController.text = DateFormat(
+      'MM/dd/yyyy',
+    ).format(selectedSalaryDate.value);
     selectedSalaryDate.listen((date) {
       salaryDateController.text = DateFormat('MM/dd/yyyy').format(date);
     });
@@ -178,7 +179,7 @@ class StaffController extends GetxController {
       roles.assignAll(results[0] as List<StaffRole>);
       departments.assignAll(results[1] as List<StaffDepartment>);
     } catch (e) {
-      AppSnackbar.error('Failed to load roles and departments: $e');
+      AppSnackBar.error('Failed to load roles and departments: $e');
     } finally {
       isLoadingMetadata.value = false;
     }
@@ -200,7 +201,7 @@ class StaffController extends GetxController {
       lastPage.value = response.lastPage;
       totalItems.value = response.total;
     } catch (e) {
-      AppSnackbar.error('Failed to load staff: $e');
+      AppSnackBar.error('Failed to load staff: $e');
     } finally {
       if (page == 1) isLoading.value = false;
     }
@@ -226,7 +227,7 @@ class StaffController extends GetxController {
       salaryCurrentPage.value = response.currentPage;
       salaryLastPage.value = response.lastPage;
     } catch (e) {
-      AppSnackbar.error('Failed to load salary history: $e');
+      AppSnackBar.error('Failed to load salary history: $e');
     } finally {
       if (page == 1) isLoadingSalary.value = false;
     }
@@ -255,7 +256,7 @@ class StaffController extends GetxController {
       attendanceCurrentPage.value = response.currentPage;
       attendanceLastPage.value = response.lastPage;
     } catch (e) {
-      AppSnackbar.error('Failed to load attendance history: $e');
+      AppSnackBar.error('Failed to load attendance history: $e');
     } finally {
       if (page == 1) isLoadingAttendance.value = false;
     }
@@ -282,17 +283,18 @@ class StaffController extends GetxController {
       globalSalaryCurrentPage.value = response.currentPage;
       globalSalaryLastPage.value = response.lastPage;
     } catch (e) {
-      AppSnackbar.error('Failed to load salary logs: $e');
+      AppSnackBar.error('Failed to load salary logs: $e');
     } finally {
       if (isInitialFetch) isLoadingGlobalSalaries.value = false;
     }
   }
 
   Future<void> saveSalaryRecord() async {
-    final staffError =
-        ValidationUtils.validateStaffSelection(selectedAddSalaryStaff.value);
+    final staffError = ValidationUtils.validateStaffSelection(
+      selectedAddSalaryStaff.value,
+    );
     if (staffError != null) {
-      AppSnackbar.error(staffError);
+      AppSnackBar.error(staffError);
       return;
     }
 
@@ -301,7 +303,7 @@ class StaffController extends GetxController {
       'Salary amount',
     );
     if (amountError != null) {
-      AppSnackbar.error(amountError);
+      AppSnackBar.error(amountError);
       return;
     }
 
@@ -320,7 +322,7 @@ class StaffController extends GetxController {
       };
 
       await _repository.logSalary(data);
-      AppSnackbar.success('Salary record saved successfully');
+      AppSnackBar.success('Salary record saved successfully');
 
       // Refresh global list
       fetchGlobalSalaries(page: 1);
@@ -335,7 +337,7 @@ class StaffController extends GetxController {
       Get.until((route) => route.settings.name == AppRoutes.instituteStaffs);
       currentTabIndex.value = 2;
     } catch (e) {
-      AppSnackbar.error('Failed to save salary record: $e');
+      AppSnackBar.error('Failed to save salary record: $e');
     } finally {
       isSaving.value = false;
     }
@@ -361,17 +363,18 @@ class StaffController extends GetxController {
       globalAttendanceCurrentPage.value = response.currentPage;
       globalAttendanceLastPage.value = response.lastPage;
     } catch (e) {
-      AppSnackbar.error('Failed to load attendance logs: $e');
+      AppSnackBar.error('Failed to load attendance logs: $e');
     } finally {
       if (page == null || page == 1) isLoadingGlobalAttendance.value = false;
     }
   }
 
   Future<void> saveAttendanceRecord() async {
-    final staffError =
-        ValidationUtils.validateStaffSelection(selectedLogStaff.value);
+    final staffError = ValidationUtils.validateStaffSelection(
+      selectedLogStaff.value,
+    );
     if (staffError != null) {
-      AppSnackbar.error(staffError);
+      AppSnackBar.error(staffError);
       return;
     }
 
@@ -385,7 +388,7 @@ class StaffController extends GetxController {
       };
 
       await _repository.logStaffAttendance(data);
-      AppSnackbar.success('Attendance logged successfully');
+      AppSnackBar.success('Attendance logged successfully');
 
       // Refresh logs
       fetchGlobalAttendance(page: 1);
@@ -404,7 +407,7 @@ class StaffController extends GetxController {
       selectedLogStaff.value = null;
       logNotesController.clear();
     } catch (e) {
-      AppSnackbar.error('Failed to log attendance: $e');
+      AppSnackBar.error('Failed to log attendance: $e');
     } finally {
       isSaving.value = false;
     }
@@ -490,12 +493,16 @@ class StaffController extends GetxController {
     _resetFormErrors();
 
     // Perform manual validation to populate error observables
-    staffNameError.value =
-        ValidationUtils.validateRequired(staffNameController.text, 'Full name');
-    staffEmailError.value =
-        ValidationUtils.validateEmail(staffEmailController.text);
-    staffPhoneError.value =
-        ValidationUtils.validatePhone(staffPhoneController.text);
+    staffNameError.value = ValidationUtils.validateRequired(
+      staffNameController.text,
+      'Full name',
+    );
+    staffEmailError.value = ValidationUtils.validateEmail(
+      staffEmailController.text,
+    );
+    staffPhoneError.value = ValidationUtils.validatePhone(
+      staffPhoneController.text,
+    );
     staffSalaryError.value = ValidationUtils.validateAmount(
       staffSalaryController.text,
       employmentType.value == 'Salary' ? 'Base Salary' : 'Hourly Rate',
@@ -538,14 +545,14 @@ class StaffController extends GetxController {
         int index = staffList.indexWhere((s) => s.id == updated.id);
         if (index != -1) staffList[index] = updated;
         selectedStaff.value = updated;
-        AppSnackbar.success('Staff updated successfully');
+        AppSnackBar.success('Staff updated successfully');
       } else {
         final created = await _repository.createStaff(
           data,
           selectedImagePath.value,
         );
         staffList.insert(0, created);
-        AppSnackbar.success('Staff created successfully');
+        AppSnackBar.success('Staff created successfully');
       }
 
       // Robust navigation: go back to StaffMainScreen and set tab to Staff
@@ -554,9 +561,9 @@ class StaffController extends GetxController {
     } catch (e) {
       if (e is ValidationException) {
         _handleValidationErrors(e.errors);
-        AppSnackbar.error('Please correct the highlighted errors');
+        AppSnackBar.error('Please correct the highlighted errors');
       } else {
-        AppSnackbar.error('Failed to save staff: $e');
+        AppSnackBar.error('Failed to save staff: $e');
       }
     } finally {
       isSaving.value = false;
@@ -580,8 +587,8 @@ class StaffController extends GetxController {
       roleError.value = (errors['staff_role_id'] as List).first.toString();
     }
     if (errors.containsKey('staff_department_id')) {
-      deptError.value =
-          (errors['staff_department_id'] as List).first.toString();
+      deptError.value = (errors['staff_department_id'] as List).first
+          .toString();
     }
   }
 
@@ -599,13 +606,13 @@ class StaffController extends GetxController {
       isLoading.value = true;
       await _repository.deleteStaff(id);
       staffList.removeWhere((s) => s.id == id);
-      AppSnackbar.success('Staff deleted successfully');
+      AppSnackBar.success('Staff deleted successfully');
 
       if (Get.currentRoute == AppRoutes.instituteStaffDetails) {
         Get.back();
       }
     } catch (e) {
-      AppSnackbar.error('Failed to delete staff: $e');
+      AppSnackBar.error('Failed to delete staff: $e');
     } finally {
       isLoading.value = false;
     }
@@ -657,7 +664,7 @@ class StaffController extends GetxController {
       );
       if (image != null) selectedImagePath.value = image.path;
     } catch (e) {
-      AppSnackbar.error('Could not pick image: $e');
+      AppSnackBar.error('Could not pick image: $e');
     }
   }
 
@@ -726,4 +733,3 @@ class StaffController extends GetxController {
     super.onClose();
   }
 }
-

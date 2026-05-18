@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:fee_easy/data/repositories/auth_repository.dart';
-import 'package:fee_easy/core/services/auth_service.dart';
-import 'package:fee_easy/config/app_routes.dart';
+import 'package:tuoora/data/repositories/auth_repository.dart';
+import 'package:tuoora/core/services/auth_service.dart';
+import 'package:tuoora/config/app_routes.dart';
 
 class LoginController extends GetxController {
   final AuthRepository _authRepository;

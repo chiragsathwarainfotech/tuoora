@@ -1,7 +1,7 @@
-import 'package:fee_easy/data/repositories_impl/institute_repository_impl.dart';
-import 'package:fee_easy/data/models/whatsapp_settings_model.dart';
+import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
+import 'package:tuoora/data/models/whatsapp_settings_model.dart';
 import 'package:flutter/material.dart';
-import 'package:fee_easy/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:get/get.dart';
 
 class WhatsAppController extends GetxController {

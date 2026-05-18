@@ -1,18 +1,18 @@
-import 'package:fee_easy/core/constants/app_colors.dart';
-import 'package:fee_easy/core/constants/app_strings.dart';
-import 'package:fee_easy/core/constants/app_text_styles.dart';
-import 'package:fee_easy/core/theme/app_spacing.dart';
-import 'package:fee_easy/data/repositories_impl/student_repository_impl.dart';
-import 'package:fee_easy/presentation/institute/controllers/institute_controller.dart';
-import 'package:fee_easy/core/utils/validation_utils.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
+import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/data/repositories_impl/student_repository_impl.dart';
+import 'package:tuoora/presentation/institute/controllers/institute_controller.dart';
+import 'package:tuoora/core/utils/validation_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:fee_easy/data/models/student_model.dart';
-import 'package:fee_easy/presentation/institute/controllers/batch_controller.dart';
-import 'package:fee_easy/presentation/institute/models/batch_model.dart';
-import 'package:fee_easy/core/widgets/app_snackbar.dart';
-import 'package:fee_easy/core/api/api_exception.dart';
+import 'package:tuoora/data/models/student_model.dart';
+import 'package:tuoora/presentation/institute/controllers/batch_controller.dart';
+import 'package:tuoora/presentation/institute/models/batch_model.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
+import 'package:tuoora/core/api/api_exception.dart';
 
 class InstituteStudentController extends GetxController {
   final StudentRepositoryImpl _studentRepository =
@@ -139,10 +139,7 @@ class InstituteStudentController extends GetxController {
   }
 
   void validateForm() {
-    final nErr = ValidationUtils.validateRequired(
-      nameController.text,
-      'Name',
-    );
+    final nErr = ValidationUtils.validateRequired(nameController.text, 'Name');
     final pnErr = ValidationUtils.validateRequired(
       parentNameController.text,
       'Guardian Name',
@@ -250,7 +247,7 @@ class InstituteStudentController extends GetxController {
         selectedImagePath.value = image.path;
       }
     } catch (e) {
-      AppSnackbar.error('Could not pick image: $e');
+      AppSnackBar.error('Could not pick image: $e');
     }
   }
 
@@ -351,7 +348,7 @@ class InstituteStudentController extends GetxController {
       }
 
       Future.delayed(const Duration(milliseconds: 300), () {
-        AppSnackbar.success(
+        AppSnackBar.success(
           isEdit
               ? 'Student updated successfully'
               : 'Student added successfully',
@@ -360,9 +357,9 @@ class InstituteStudentController extends GetxController {
     } catch (e) {
       if (e is ValidationException) {
         _handleValidationErrors(e.errors);
-        AppSnackbar.error('Please correct the highlighted errors');
+        AppSnackBar.error('Please correct the highlighted errors');
       } else {
-        AppSnackbar.error('Failed to save student: $e');
+        AppSnackBar.error('Failed to save student: $e');
       }
     } finally {
       isLoading.value = false;
@@ -374,8 +371,8 @@ class InstituteStudentController extends GetxController {
       nameError.value = (errors['name'] as List).first.toString();
     }
     if (errors.containsKey('guardian_name')) {
-      parentNameError.value =
-          (errors['guardian_name'] as List).first.toString();
+      parentNameError.value = (errors['guardian_name'] as List).first
+          .toString();
     }
     if (errors.containsKey('phone')) {
       phoneError.value = (errors['phone'] as List).first.toString();
@@ -410,7 +407,7 @@ class InstituteStudentController extends GetxController {
         instController.fetchStudents(reset: true);
       }
     } catch (e) {
-      AppSnackbar.error('Delete failed: $e');
+      AppSnackBar.error('Delete failed: $e');
     } finally {
       isLoading.value = false;
     }
@@ -446,4 +443,3 @@ class InstituteStudentController extends GetxController {
     );
   }
 }
-

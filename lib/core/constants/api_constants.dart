@@ -64,5 +64,14 @@ class ApiConstants {
       '/institute/reports/performance';
   static const String instituteReportPerformanceExport =
       '/institute/reports/performance/export';
+
+  // Chat Endpoints
+  static const String chatList = '/chat/list';
+  static const String chatContacts = '/chat/contacts';
+  static const String chatSend = '/chat/send';
+  static const String chatMarkReceived = '/chat/mark-received';
+  static const String chatMarkRead = '/chat/mark-read';
+  static const String chatConversation = '/chat/conversation';
+  static String chatMessages(String userId) => '/chat/messages/$userId';
 }
 

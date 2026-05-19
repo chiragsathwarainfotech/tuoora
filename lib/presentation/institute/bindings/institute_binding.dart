@@ -26,6 +26,7 @@ import 'package:tuoora/presentation/institute/controllers/chat_controller.dart';
 import 'package:tuoora/presentation/institute/controllers/staff_controller.dart';
 import 'package:tuoora/presentation/institute/controllers/expense_controller.dart';
 import 'package:tuoora/core/api/api_client.dart';
+import 'package:tuoora/core/services/chat_socket_service.dart';
 import 'package:tuoora/core/services/download_service.dart';
 import 'package:get/get.dart';
 
@@ -52,7 +53,9 @@ class InstituteBinding extends Bindings {
     Get.lazyPut<NotesRepositoryImpl>(
       () => NotesRepositoryImpl(Get.find<ApiClient>()),
     );
-    Get.lazyPut<ChatRepositoryImpl>(() => ChatRepositoryImpl());
+    Get.lazyPut<ChatRepositoryImpl>(
+      () => ChatRepositoryImpl(Get.find<ApiClient>()),
+    );
 
     // Controllers
     Get.lazyPut<InstituteController>(() => InstituteController());
@@ -111,6 +114,9 @@ class InstituteBinding extends Bindings {
     );
 
     Get.put<DownloadService>(DownloadService(), permanent: true);
+    if (!Get.isRegistered<ChatSocketService>()) {
+      Get.put<ChatSocketService>(ChatSocketService(), permanent: true);
+    }
   }
 }
 

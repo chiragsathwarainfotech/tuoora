@@ -82,7 +82,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
       ),
       body: content,
       bottomNavigationBar: widget.showBottomNav
-          ? const StudentBottomNav(currentIndex: 2)
+          ? const StudentBottomNav(currentIndex: 1)
           : null,
     );
   }

@@ -42,15 +42,6 @@ class RoleSelectionScreen extends StatelessWidget {
               ),
               AppSpacing.v16,
               _buildRoleCard(
-                title: 'Login as Parent',
-                subtitle:
-                    "Monitor your child's progress and manage fee payments.",
-                icon: Icons.family_restroom_rounded,
-                iconColor: AppColors.primaryBrand,
-                onTap: () => Get.toNamed(AppRoutes.login, arguments: 'PARENT'),
-              ),
-              AppSpacing.v16,
-              _buildRoleCard(
                 title: 'Login as Student',
                 subtitle: 'View your classes, fees, homework and more.',
                 icon: Icons.school_rounded,

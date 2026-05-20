@@ -2,18 +2,6 @@ class AppRoutes {
   static const String splash = '/';
   static const String roleSelection = '/role-selection';
   static const String login = '/login';
-  static const String parentDashboard = '/parent/dashboard';
-  static const String parentFees = '/parent/fees';
-  static const String parentAttendance = '/parent/attendance';
-  static const String parentReports = '/parent/reports';
-  static const String parentInstitute = '/parent/institute';
-  static const String parentStudentProfile = '/parent/student-profile';
-  static const String parentUpdates = '/parent/updates';
-  static const String parentRecentPayments = '/parent/recent-payments';
-  static const String parentHomeworkTracker = '/parent/homework-tracker';
-  static const String parentAttendanceHistory = '/parent/attendance-history';
-  static const String parentHomeworkDetail = '/parent/homework-detail';
-  static const String parentPaymentQR = '/parent/payment-qr';
 
   static const String studentDashboard = '/student/dashboard';
   static const String studentAttendance = '/student/attendance';
@@ -21,8 +9,17 @@ class AppRoutes {
   static const String studentNotifications = '/student/notifications';
   static const String studentHomework = '/student/homework';
   static const String studentHomeworkDetail = '/student/homework-detail';
+  static const String studentAssignmentDetail = '/student/assignment-detail';
+  static const String studentAttachmentPreview =
+      '/student/attachment-preview';
+  static const String studentFeeReceipt = '/student/fee-receipt';
+  static const String studentPayFees = '/student/pay-fees';
   static const String studentInstitute = '/student/institute';
   static const String studentFeeHistory = '/student/fee-history';
+  static const String studentChat = '/student/chat';
+  static const String studentFeeReminder = '/student/fee-reminder';
+  static const String studentEventDetail = '/student/event-detail';
+  static const String studentHolidayDetail = '/student/holiday-detail';
 
   static const String instituteDashboard = '/institute/dashboard';
   static const String instituteStudents = '/institute/students';

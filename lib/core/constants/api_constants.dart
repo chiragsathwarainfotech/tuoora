@@ -6,7 +6,6 @@ class ApiConstants {
   static const String instituteRegister = '/institute/register';
   static const String instituteVerifyOtp = '/institute/verify-otp';
   static const String studentLogin = '/student/login';
-  static const String parentLogin = '/parent/login';
 
   // Institute Endpoints
   static const String instituteStudents = '/institute/students';

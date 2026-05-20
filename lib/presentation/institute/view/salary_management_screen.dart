@@ -1,4 +1,4 @@
-import 'package:tuoora/core/constants/app_colors.dart';
+﻿import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/controllers/staff_controller.dart';
@@ -7,7 +7,7 @@ import 'package:tuoora/config/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/presentation/institute/widgets/month_selector_widget.dart';
-import 'package:tuoora/presentation/shared/widgets/common_state_widget.dart';
+import 'package:tuoora/presentation/institute/widgets/common_state_widget.dart';
 import 'package:intl/intl.dart';
 
 class SalaryManagementScreen extends GetView<StaffController> {
@@ -85,7 +85,7 @@ class SalaryManagementScreen extends GetView<StaffController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Total Paid this Month • ${DateFormat('MMMM yyyy').format(controller.selectedSalaryMonth.value)}',
+                  'Total Paid this Month â€¢ ${DateFormat('MMMM yyyy').format(controller.selectedSalaryMonth.value)}',
                   style: AppTextStyles.manrope(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -94,7 +94,7 @@ class SalaryManagementScreen extends GetView<StaffController> {
                 ),
                 AppSpacing.v8,
                 Text(
-                  '₹${controller.totalGlobalSalaryAmount.value}',
+                  'â‚¹${controller.totalGlobalSalaryAmount.value}',
                   style: AppTextStyles.manrope(
                     fontSize: 42,
                     fontWeight: FontWeight.w800,
@@ -162,8 +162,8 @@ class SalaryManagementScreen extends GetView<StaffController> {
                   ).format(DateTime.parse(salary.paymentDate));
                   return _buildPayoutItem(
                     salary.staff?.fullName ?? 'Unknown Staff',
-                    '$date • ${salary.paymentMethod}',
-                    '₹${salary.netSalary}',
+                    '$date â€¢ ${salary.paymentMethod}',
+                    'â‚¹${salary.netSalary}',
                     salary.staff?.profileUrl ?? '',
                   );
                 },

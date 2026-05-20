@@ -55,8 +55,6 @@ class SplashController extends GetxController {
       }
     } else if (role == 'STUDENT') {
       Get.offAllNamed(AppRoutes.studentDashboard);
-    } else if (role == 'PARENT') {
-      Get.offAllNamed(AppRoutes.parentDashboard);
     } else {
       // Fallback
       Get.offAllNamed(AppRoutes.roleSelection);

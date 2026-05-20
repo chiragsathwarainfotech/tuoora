@@ -10,7 +10,8 @@
       "WebSearch",
       "WebFetch(domain:help.figma.com)",
       "Bash(claude plugin *)",
-      "WebFetch(domain:claude.ai)"
+      "WebFetch(domain:claude.ai)",
+      "PowerShell(Remove-Item *)"
     ]
   },
   "enabledPlugins": {

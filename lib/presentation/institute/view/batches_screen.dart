@@ -1,11 +1,11 @@
-import 'package:tuoora/core/constants/app_colors.dart';
+﻿import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/controllers/batch_controller.dart';
 import 'package:tuoora/presentation/institute/models/batch_model.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
-import 'package:tuoora/presentation/shared/widgets/common_state_widget.dart';
+import 'package:tuoora/presentation/institute/widgets/common_state_widget.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -229,7 +229,7 @@ class _BatchesScreenState extends State<BatchesScreen> {
                             ),
                             AppSpacing.h16,
                             Text(
-                              '₹${batch.baseFee.toStringAsFixed(0)}',
+                              'â‚¹${batch.baseFee.toStringAsFixed(0)}',
                               style: AppTextStyles.manrope(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w800,

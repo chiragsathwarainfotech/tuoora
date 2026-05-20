@@ -32,32 +32,34 @@ import 'package:tuoora/presentation/institute/view/homework_rating_screen.dart';
 import 'package:tuoora/presentation/institute/view/batch_resources_screen.dart';
 import 'package:tuoora/presentation/institute/view/resource_detail_screen.dart';
 import 'package:tuoora/presentation/institute/view/students_registry_screen.dart';
-import 'package:tuoora/presentation/parent/view/parent_main_screen.dart';
-import 'package:tuoora/presentation/shared/view/payment_history_screen.dart';
-import 'package:tuoora/presentation/parent/view/homework_tracker_screen.dart';
-import 'package:tuoora/presentation/parent/view/homework_detail_screen.dart';
-import 'package:tuoora/presentation/parent/view/attendance_history_screen.dart';
-import 'package:tuoora/presentation/parent/view/payment_qr_screen.dart';
-import 'package:tuoora/presentation/parent/bindings/parent_binding.dart';
+import 'package:tuoora/presentation/student/view/payment_history_screen.dart';
 import 'package:tuoora/presentation/shared/bindings/auth_binding.dart';
-import 'package:tuoora/presentation/shared/bindings/forgot_password_binding.dart';
+import 'package:tuoora/presentation/institute/bindings/forgot_password_binding.dart';
 import 'package:tuoora/presentation/shared/view/login_screen.dart';
-import 'package:tuoora/presentation/shared/view/forgot_password_screen.dart';
-import 'package:tuoora/presentation/shared/view/reset_password_screen.dart';
-import 'package:tuoora/presentation/shared/view/student_profile_screen.dart'
+import 'package:tuoora/presentation/institute/view/forgot_password_screen.dart';
+import 'package:tuoora/presentation/institute/view/reset_password_screen.dart';
+import 'package:tuoora/presentation/student/view/student_profile_screen.dart'
     as shared;
-import 'package:tuoora/presentation/shared/view/updates_screen.dart'
+import 'package:tuoora/presentation/student/view/updates_screen.dart'
     as shared;
 import 'package:tuoora/presentation/student/view/student_main_screen.dart';
 import 'package:tuoora/presentation/student/bindings/student_binding.dart';
 import 'package:tuoora/presentation/student/view/homework_detail_screen.dart';
+import 'package:tuoora/presentation/student/view/student_assignment_detail_screen.dart';
+import 'package:tuoora/presentation/student/view/student_attachment_preview_screen.dart';
+import 'package:tuoora/presentation/student/view/student_pay_fees_screen.dart';
+import 'package:tuoora/presentation/student/view/student_receipt_screen.dart';
+import 'package:tuoora/presentation/student/view/student_chat_screen.dart';
+import 'package:tuoora/presentation/student/view/student_fee_reminder_screen.dart';
+import 'package:tuoora/presentation/student/view/student_event_detail_screen.dart';
+import 'package:tuoora/presentation/student/view/student_holiday_detail_screen.dart';
 import 'package:tuoora/presentation/shared/view/role_selection_screen.dart';
 import 'package:tuoora/presentation/shared/bindings/splash_binding.dart';
 import 'package:tuoora/presentation/shared/view/splash_screen.dart';
-import 'package:tuoora/presentation/shared/bindings/signup_binding.dart';
-import 'package:tuoora/presentation/shared/view/institute_signup_screen.dart';
-import 'package:tuoora/presentation/shared/view/institute_otp_screen.dart';
-import 'package:tuoora/presentation/shared/view/institute_profile_setup_screen.dart';
+import 'package:tuoora/presentation/institute/bindings/signup_binding.dart';
+import 'package:tuoora/presentation/institute/view/institute_signup_screen.dart';
+import 'package:tuoora/presentation/institute/view/institute_otp_screen.dart';
+import 'package:tuoora/presentation/institute/view/institute_profile_setup_screen.dart';
 import 'package:tuoora/presentation/institute/view/leads_management_screen.dart';
 import 'package:tuoora/presentation/institute/view/add_edit_lead_screen.dart';
 import 'package:tuoora/presentation/institute/view/lead_details_screen.dart';
@@ -94,60 +96,6 @@ class AppPages {
       page: () => const LoginScreen(),
       binding: AuthBinding(),
     ),
-    // Parent routes
-    GetPage(
-      name: AppRoutes.parentDashboard,
-      page: () => const ParentMainScreen(),
-      binding: ParentBinding(),
-    ),
-    GetPage(
-      name: AppRoutes.parentFees,
-      page: () => const ParentMainScreen(),
-      binding: ParentBinding(),
-    ),
-    GetPage(
-      name: AppRoutes.parentAttendance,
-      page: () => const ParentMainScreen(),
-      binding: ParentBinding(),
-    ),
-    GetPage(
-      name: AppRoutes.parentReports,
-      page: () => const ParentMainScreen(),
-      binding: ParentBinding(),
-    ),
-    GetPage(
-      name: AppRoutes.parentInstitute,
-      page: () => const ParentMainScreen(),
-      binding: ParentBinding(),
-    ),
-    GetPage(
-      name: AppRoutes.parentStudentProfile,
-      page: () => const shared.StudentProfileScreen(),
-    ),
-    GetPage(
-      name: AppRoutes.parentUpdates,
-      page: () => const shared.UpdatesScreen(),
-    ),
-    GetPage(
-      name: AppRoutes.parentRecentPayments,
-      page: () => const PaymentHistoryScreen(title: 'Recent Payments'),
-    ),
-    GetPage(
-      name: AppRoutes.parentHomeworkTracker,
-      page: () => const HomeworkTrackerScreen(),
-    ),
-    GetPage(
-      name: AppRoutes.parentAttendanceHistory,
-      page: () => const AttendanceHistoryScreen(),
-    ),
-    GetPage(
-      name: AppRoutes.parentHomeworkDetail,
-      page: () => const HomeworkDetailScreen(),
-    ),
-    GetPage(
-      name: AppRoutes.parentPaymentQR,
-      page: () => const PaymentQRScreen(),
-    ),
     // Student routes
     GetPage(
       name: AppRoutes.studentDashboard,
@@ -177,6 +125,26 @@ class AppPages {
       page: () => const StudentHomeworkDetailScreen(),
     ),
     GetPage(
+      name: AppRoutes.studentAssignmentDetail,
+      page: () => const StudentAssignmentDetailScreen(),
+      binding: StudentBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.studentAttachmentPreview,
+      page: () => const StudentAttachmentPreviewScreen(),
+      binding: StudentBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.studentFeeReceipt,
+      page: () => const StudentReceiptScreen(),
+      binding: StudentBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.studentPayFees,
+      page: () => const StudentPayFeesScreen(),
+      binding: StudentBinding(),
+    ),
+    GetPage(
       name: AppRoutes.studentInstitute,
       page: () => const StudentMainScreen(),
       binding: StudentBinding(),
@@ -184,6 +152,22 @@ class AppPages {
     GetPage(
       name: AppRoutes.studentFeeHistory,
       page: () => const PaymentHistoryScreen(title: 'Fee History'),
+    ),
+    GetPage(
+      name: AppRoutes.studentChat,
+      page: () => const StudentChatScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.studentFeeReminder,
+      page: () => const StudentFeeReminderScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.studentEventDetail,
+      page: () => const StudentEventDetailScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.studentHolidayDetail,
+      page: () => const StudentHolidayDetailScreen(),
     ),
     // Institute routes
     GetPage(

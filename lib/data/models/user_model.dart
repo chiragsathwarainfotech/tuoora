@@ -4,7 +4,7 @@ class User {
   final String email;
   final String? phone;
   final String token;
-  final String role; // 'INSTITUTE', 'STUDENT', 'PARENT'
+  final String role; // 'INSTITUTE', 'STUDENT'
   
   // Institute specific
   final String? instituteName;
@@ -23,9 +23,6 @@ class User {
   final String? website;
   final String? youtube;
   final String? instagram;
-  
-  // Parent specific
-  final String? relation;
 
   final bool isProfileSetup;
 
@@ -49,7 +46,6 @@ class User {
     this.website,
     this.youtube,
     this.instagram,
-    this.relation,
     this.isProfileSetup = true,
   });
 
@@ -74,7 +70,6 @@ class User {
       website: json['website'],
       youtube: json['youtube'],
       instagram: json['instagram'],
-      relation: json['relation'],
       isProfileSetup: json['is_profile_setup'] ?? true,
     );
   }
@@ -100,7 +95,6 @@ class User {
       'website': website,
       'youtube': youtube,
       'instagram': instagram,
-      'relation': relation,
       'is_profile_setup': isProfileSetup,
     };
   }

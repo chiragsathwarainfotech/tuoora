@@ -6,6 +6,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:tuoora/core/api/api_client.dart';
+import 'package:tuoora/core/constants/api_constants.dart';
+import 'package:tuoora/core/services/auth_service.dart';
 
 /// Top-level background message handler.
 /// Required by FCM — must be a top-level (or static) function so the OS can
@@ -31,6 +34,7 @@ class PushNotificationService extends GetxService {
   final GetStorage _storage = GetStorage();
 
   static const String _tokenStorageKey = 'fcm_token';
+  static const String _syncedTokenStorageKey = 'fcm_token_synced';
   static const String _androidChannelId = 'tuoora_default_channel';
   static const String _androidChannelName = 'Tuoora Notifications';
   static const String _androidChannelDesc =
@@ -117,7 +121,7 @@ class PushNotificationService extends GetxService {
       _fcmToken.value = newToken;
       _storage.write(_tokenStorageKey, newToken);
       if (kDebugMode) print('[FCM] token refreshed: $newToken');
-      // TODO: push refreshed token to your backend here.
+      _sendTokenToServer(newToken);
     });
 
     // Foreground messages.
@@ -138,11 +142,60 @@ class PushNotificationService extends GetxService {
       }
       final token = await _fcm.getToken();
       _fcmToken.value = token;
-      if (token != null) await _storage.write(_tokenStorageKey, token);
+      if (token != null) {
+        await _storage.write(_tokenStorageKey, token);
+        await _sendTokenToServer(token);
+      }
       if (kDebugMode) print('[FCM] token: $token');
     } catch (e) {
       if (kDebugMode) print('[FCM] getToken failed: $e');
     }
+  }
+
+  /// POSTs the FCM token to the backend so push messages can be targeted at
+  /// this device. No-op when the user isn't authenticated or when the token
+  /// matches the last value successfully synced.
+  Future<void> _sendTokenToServer(String token) async {
+    if (token.isEmpty) return;
+
+    final auth = Get.isRegistered<AuthService>() ? Get.find<AuthService>() : null;
+    if (auth == null || !auth.isAuthenticated) {
+      if (kDebugMode) print('[FCM] skip sync — not authenticated');
+      return;
+    }
+
+    final lastSynced = _storage.read<String>(_syncedTokenStorageKey);
+    if (lastSynced == token) {
+      if (kDebugMode) print('[FCM] token already synced');
+      return;
+    }
+
+    try {
+      final api = Get.find<ApiClient>();
+      final response = await api.post(
+        ApiConstants.fcmToken,
+        {'fcm_token': token},
+      );
+      if (response.status.hasError) {
+        if (kDebugMode) {
+          print('[FCM] sync failed: ${response.statusCode} ${response.body}');
+        }
+        return;
+      }
+      await _storage.write(_syncedTokenStorageKey, token);
+      if (kDebugMode) print('[FCM] token synced to server');
+    } catch (e) {
+      if (kDebugMode) print('[FCM] sync error: $e');
+    }
+  }
+
+  /// Push the cached FCM token to the backend now. Call this right after a
+  /// successful login so the server can target this device.
+  Future<void> syncToken() async {
+    final token = _fcmToken.value ?? await _fcm.getToken();
+    if (token == null) return;
+    _fcmToken.value = token;
+    await _sendTokenToServer(token);
   }
 
   Future<void> _checkInitialMessage() async {
@@ -213,5 +266,6 @@ class PushNotificationService extends GetxService {
     await _fcm.deleteToken();
     _fcmToken.value = null;
     await _storage.remove(_tokenStorageKey);
+    await _storage.remove(_syncedTokenStorageKey);
   }
 }

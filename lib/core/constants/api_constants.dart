@@ -65,6 +65,9 @@ class ApiConstants {
   static const String instituteReportPerformanceExport =
       '/institute/reports/performance/export';
 
+  // FCM Endpoints
+  static const String fcmToken = '/fcm-token';
+
   // Chat Endpoints
   static const String chatList = '/chat/list';
   static const String chatContacts = '/chat/contacts';

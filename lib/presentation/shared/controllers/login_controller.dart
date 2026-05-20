@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/data/repositories/auth_repository.dart';
 import 'package:tuoora/core/services/auth_service.dart';
+import 'package:tuoora/core/services/push_notification_service.dart';
 import 'package:tuoora/config/app_routes.dart';
 
 class LoginController extends GetxController {
@@ -45,11 +48,14 @@ class LoginController extends GetxController {
       if (user != null) {
         // Use the actual email/password entered, as user object might not have them
         await _authService.saveSession(
-          user, 
+          user,
           stayAuthenticated: stayAuthenticated.value,
           email: email,
           password: stayAuthenticated.value ? password : null,
         );
+        if (Get.isRegistered<PushNotificationService>()) {
+          unawaited(Get.find<PushNotificationService>().syncToken());
+        }
         _navigateToDashboard(role);
       }
     } catch (e) {

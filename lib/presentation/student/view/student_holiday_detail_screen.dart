@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
@@ -24,18 +23,18 @@ class StudentHolidayDetailScreen extends StatelessWidget {
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(AppSpacing.s16),
                 child: Column(
-          children: [
-            _buildMainCard(),
-            const SizedBox(height: AppSpacing.s16),
-            _buildDetailsCard(),
-            const SizedBox(height: AppSpacing.s16),
-            _buildResumeCard(),
-              ],
+                  children: [
+                    _buildMainCard(),
+                    const SizedBox(height: AppSpacing.s16),
+                    _buildDetailsCard(),
+                    const SizedBox(height: AppSpacing.s16),
+                    _buildResumeCard(),
+                  ],
+                ),
+              ),
             ),
-          ),
-          ),
-        ],
-      ),
+          ],
+        ),
       ),
     );
   }
@@ -135,7 +134,11 @@ class StudentHolidayDetailScreen extends StatelessWidget {
               color: const Color(0xFFDCFCE7),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: const Icon(Icons.arrow_forward, color: Color(0xFF15803D), size: 20),
+            child: const Icon(
+              Icons.arrow_forward,
+              color: Color(0xFF15803D),
+              size: 20,
+            ),
           ),
           AppSpacing.h16,
           Expanded(
@@ -183,16 +186,23 @@ class _DashedRectPainter extends CustomPainter {
     final double dashSpace = 4;
 
     final RRect rrect = RRect.fromRectAndRadius(
-        Rect.fromLTWH(0, 0, size.width, size.height), const Radius.circular(20));
-    
+      Rect.fromLTWH(0, 0, size.width, size.height),
+      const Radius.circular(20),
+    );
+
     Path path = Path()..addRRect(rrect);
     PathMetrics pathMetrics = path.computeMetrics();
 
     for (PathMetric pathMetric in pathMetrics) {
       double distance = 0.0;
       while (distance < pathMetric.length) {
-        final length = (dashWidth < (pathMetric.length - distance)) ? dashWidth : (pathMetric.length - distance);
-        canvas.drawPath(pathMetric.extractPath(distance, distance + length), paint);
+        final length = (dashWidth < (pathMetric.length - distance))
+            ? dashWidth
+            : (pathMetric.length - distance);
+        canvas.drawPath(
+          pathMetric.extractPath(distance, distance + length),
+          paint,
+        );
         distance += dashWidth + dashSpace;
       }
     }

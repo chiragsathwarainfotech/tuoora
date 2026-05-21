@@ -1,4 +1,4 @@
-enum ResourceType { image, video, document }
+import 'package:tuoora/core/enums/app_enums.dart';
 
 class ResourceModel {
   final String id;
@@ -25,13 +25,13 @@ class ResourceModel {
 
   String get displayFileName {
     if (fileName.isEmpty) return 'Unnamed File';
-    
+
     // Get the actual file name from the path
     final nameOnly = fileName.split('/').last;
-    
+
     // Remove leading timestamp pattern like "1777554757_"
     String cleanName = nameOnly.replaceFirst(RegExp(r'^\d+_'), '');
-    
+
     // Convert snake_case or kebab-case to Title Case (Proper Name)
     return cleanName
         .replaceAll('_', ' ')
@@ -62,4 +62,3 @@ class ResourceModel {
     );
   }
 }
-

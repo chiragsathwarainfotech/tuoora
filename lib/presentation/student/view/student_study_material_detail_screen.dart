@@ -6,22 +6,20 @@ import 'package:tuoora/presentation/student/controllers/student_study_material_d
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
 import 'package:tuoora/presentation/student/widgets/student_attachment_tile.dart';
 
-class StudentStudyMaterialDetailScreen extends GetView<StudentStudyMaterialDetailController> {
+class StudentStudyMaterialDetailScreen
+    extends GetView<StudentStudyMaterialDetailController> {
   const StudentStudyMaterialDetailScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final material = controller.material;
-    
+
     return Scaffold(
       backgroundColor: AppColors.studentBg,
       body: SafeArea(
         child: Column(
           children: [
-            StudentAppBar(
-              title: material['title'],
-              showDefaultActions: false,
-            ),
+            StudentAppBar(title: material['title'], showDefaultActions: false),
             const SizedBox(height: 16),
             Expanded(
               child: ListView(
@@ -62,7 +60,7 @@ class StudentStudyMaterialDetailScreen extends GetView<StudentStudyMaterialDetai
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppColors.borderGrey.withOpacity(0.5)),
+        border: Border.all(color: AppColors.borderGrey.withValues(alpha: 0.5)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

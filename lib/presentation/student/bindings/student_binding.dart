@@ -4,6 +4,7 @@ import '../controllers/assignments_controller.dart';
 import '../controllers/fees_controller.dart';
 import '../controllers/student_controller.dart';
 import '../controllers/attendance_history_controller.dart';
+import '../controllers/student_profile_controller.dart';
 
 class StudentBinding extends Bindings {
   @override
@@ -15,5 +16,6 @@ class StudentBinding extends Bindings {
     );
     Get.lazyPut<FeesController>(() => FeesController(), fenix: true);
     Get.lazyPut<AttendanceHistoryController>(() => AttendanceHistoryController(), fenix: true);
+    Get.lazyPut<StudentProfileController>(() => StudentProfileController(), fenix: true);
   }
 }

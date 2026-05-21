@@ -4,10 +4,36 @@ import 'package:image_picker/image_picker.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/api/api_client.dart';
+import 'package:tuoora/data/models/student_profile_model.dart';
+import 'package:tuoora/data/repositories/student_profile_repository.dart';
 
 class StudentProfileController extends GetxController {
   final RxString profileImagePath = ''.obs;
   final ImagePicker _picker = ImagePicker();
+
+  final RxBool isLoading = true.obs;
+  final Rxn<StudentProfileModel> profileData = Rxn<StudentProfileModel>();
+  late final StudentProfileRepository _repository;
+
+  @override
+  void onInit() {
+    super.onInit();
+    _repository = StudentProfileRepository(Get.find<ApiClient>());
+    fetchProfile();
+  }
+
+  Future<void> fetchProfile() async {
+    try {
+      isLoading.value = true;
+      final data = await _repository.getProfile();
+      profileData.value = data;
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to load profile');
+    } finally {
+      isLoading.value = false;
+    }
+  }
 
   Future<void> pickImage(ImageSource source) async {
     final XFile? image = await _picker.pickImage(source: source);

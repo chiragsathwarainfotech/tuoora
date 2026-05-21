@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
-import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
 
 enum ReportPeriod { thisWeek, fourWeeks, twelveWeeks }
@@ -28,7 +27,7 @@ class StudentReportsScreen extends StatelessWidget {
       ReportData('Tue', 1.0, 1.0, 0.0),
       ReportData('Wed', 0.0, 0.0, 0.0),
       ReportData('Thu', 1.0, 1.0, 0.0),
-      ReportData('Fri', 1.0, 0.5, 0.5), // Sum = 1.0
+      ReportData('Fri', 1.0, 0.5, 0.5),
       ReportData('Sat', 1.0, 0.0, 0.0),
     ],
     ReportPeriod.fourWeeks: [
@@ -107,7 +106,7 @@ class StudentReportsScreen extends StatelessWidget {
   Widget _buildSegmentControl() {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.borderGrey.withOpacity(0.3),
+        color: AppColors.borderGrey.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(8),
       ),
       padding: const EdgeInsets.all(4),
@@ -136,7 +135,7 @@ class StudentReportsScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(6),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: Colors.black.withValues(alpha: 0.05),
                       blurRadius: 4,
                     ),
                   ],
@@ -169,7 +168,9 @@ class StudentReportsScreen extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: AppColors.borderGrey.withOpacity(0.5)),
+          border: Border.all(
+            color: AppColors.borderGrey.withValues(alpha: 0.5),
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -287,7 +288,9 @@ class StudentReportsScreen extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: AppColors.borderGrey.withOpacity(0.5)),
+          border: Border.all(
+            color: AppColors.borderGrey.withValues(alpha: 0.5),
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -457,7 +460,7 @@ class LineChartPainter extends CustomPainter {
       ..style = PaintingStyle.stroke;
 
     final fillPaint = Paint()
-      ..color = const Color(0xFFDCFCE7).withOpacity(0.8)
+      ..color = const Color(0xFFDCFCE7).withValues(alpha: 0.8)
       ..style = PaintingStyle.fill;
 
     final pointPaint = Paint()

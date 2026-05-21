@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:tuoora/core/enums/app_enums.dart';
 
 class Chat {
   final String id;
@@ -110,8 +111,6 @@ class Chat {
     return DateFormat('d MMM').format(dt);
   }
 }
-
-enum MessageStatus { sending, sent, delivered, read, failed }
 
 class Message {
   final String id;

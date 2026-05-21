@@ -25,3 +25,12 @@ enum UpdateCategory {
 
 enum AppInputFieldVariant { standard, profile }
 
+enum ResourceType { image, video, document }
+
+enum ChatMenuAction { delete }
+
+enum MessageStatus { sending, sent, delivered, read, failed }
+
+enum FeedbackRating { loveIt, useful, meh, broken }
+
+enum FeeStatus { paid, pending }

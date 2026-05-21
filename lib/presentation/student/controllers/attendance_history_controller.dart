@@ -43,36 +43,53 @@ class AttendanceHistoryController extends GetxController {
   // In a real app, this would calculate based on actual attendance records.
   Map<String, int> get currentMonthStats {
     final now = DateTime.now();
-    final isCurrentMonth = viewDate.value.year == now.year && viewDate.value.month == now.month;
-    
-    int daysInMonth = DateTime(viewDate.value.year, viewDate.value.month + 1, 0).day;
+    final isCurrentMonth =
+        viewDate.value.year == now.year && viewDate.value.month == now.month;
+
+    int daysInMonth = DateTime(
+      viewDate.value.year,
+      viewDate.value.month + 1,
+      0,
+    ).day;
     int present = 0;
     int absent = 0;
     int holiday = 0;
-    
+
     // Simulate data to match the UI mock
     for (int day = 1; day <= daysInMonth; day++) {
-      int currentWeekday = DateTime(viewDate.value.year, viewDate.value.month, day).weekday;
-      
+      int currentWeekday = DateTime(
+        viewDate.value.year,
+        viewDate.value.month,
+        day,
+      ).weekday;
+
       if (currentWeekday == 6 || currentWeekday == 7) {
         // weekends (skip or count as no class)
       } else if (isCurrentMonth) {
         if (day > now.day) {
           // future
         } else {
-          if (day % 7 == 0) absent++;
-          else if (day % 13 == 0) holiday++;
-          else present++;
+          if (day % 7 == 0) {
+            absent++;
+          } else if (day % 13 == 0) {
+            holiday++;
+          } else {
+            present++;
+          }
         }
       } else if (viewDate.value.isAfter(now)) {
         // entirely in the future
       } else {
-        if (day % 8 == 0) absent++;
-        else if (day % 15 == 0) holiday++;
-        else present++;
+        if (day % 8 == 0) {
+          absent++;
+        } else if (day % 15 == 0) {
+          holiday++;
+        } else {
+          present++;
+        }
       }
     }
-    
+
     // Hardcode for April to match screenshot if needed, but dynamic is better
     return {
       'present': present,
@@ -82,4 +99,3 @@ class AttendanceHistoryController extends GetxController {
     };
   }
 }
-

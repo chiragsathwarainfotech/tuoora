@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
-import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/student/controllers/fees_controller.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
 
@@ -17,10 +15,7 @@ class StudentReceiptsListScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const StudentAppBar(
-              title: 'Receipts',
-              showDefaultActions: false,
-            ),
+            const StudentAppBar(title: 'Receipts', showDefaultActions: false),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(16),
@@ -35,11 +30,29 @@ class StudentReceiptsListScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    _buildReceiptCard('April 2026', 'INV-2026-04', 'UPI', 'PhonePe', '₹4,500'),
+                    _buildReceiptCard(
+                      'April 2026',
+                      'INV-2026-04',
+                      'UPI',
+                      'PhonePe',
+                      '₹4,500',
+                    ),
                     const SizedBox(height: 12),
-                    _buildReceiptCard('March 2026', 'INV-2026-03', 'Cash', '', '₹4,500'),
+                    _buildReceiptCard(
+                      'March 2026',
+                      'INV-2026-03',
+                      'Cash',
+                      '',
+                      '₹4,500',
+                    ),
                     const SizedBox(height: 12),
-                    _buildReceiptCard('Jan 2026', 'INV-2026-01', 'UPI', 'GPay', '₹4,500'),
+                    _buildReceiptCard(
+                      'Jan 2026',
+                      'INV-2026-01',
+                      'UPI',
+                      'GPay',
+                      '₹4,500',
+                    ),
                   ],
                 ),
               ),
@@ -63,7 +76,10 @@ class StudentReceiptsListScreen extends StatelessWidget {
         final statement = feesController.statements.firstWhere(
           (s) => s.id == invoiceId,
           // Fallback to the first available paid statement if not exactly matched
-          orElse: () => feesController.statements.firstWhere((s) => s.status.name == 'paid', orElse: () => feesController.statements.first),
+          orElse: () => feesController.statements.firstWhere(
+            (s) => s.status.name == 'paid',
+            orElse: () => feesController.statements.first,
+          ),
         );
         feesController.openReceipt(statement);
       },
@@ -72,7 +88,9 @@ class StudentReceiptsListScreen extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: AppColors.borderGrey.withOpacity(0.5)),
+          border: Border.all(
+            color: AppColors.borderGrey.withValues(alpha: 0.5),
+          ),
         ),
         child: Row(
           children: [

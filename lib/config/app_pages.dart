@@ -62,6 +62,8 @@ import 'package:tuoora/presentation/student/view/student_study_material_screen.d
 import 'package:tuoora/presentation/student/controllers/student_study_material_controller.dart';
 import 'package:tuoora/presentation/student/view/student_study_material_detail_screen.dart';
 import 'package:tuoora/presentation/student/controllers/student_study_material_detail_controller.dart';
+import 'package:tuoora/presentation/student/view/student_feedback_screen.dart';
+import 'package:tuoora/presentation/student/controllers/student_feedback_controller.dart';
 import 'package:tuoora/presentation/shared/view/role_selection_screen.dart';
 import 'package:tuoora/presentation/shared/bindings/splash_binding.dart';
 import 'package:tuoora/presentation/shared/view/splash_screen.dart';
@@ -205,6 +207,13 @@ class AppPages {
       page: () => const StudentStudyMaterialDetailScreen(),
       binding: BindingsBuilder(() {
         Get.lazyPut<StudentStudyMaterialDetailController>(() => StudentStudyMaterialDetailController());
+      }),
+    ),
+    GetPage(
+      name: AppRoutes.studentFeedback,
+      page: () => const StudentFeedbackScreen(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut<StudentFeedbackController>(() => StudentFeedbackController());
       }),
     ),
     // Institute routes

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
@@ -25,23 +24,23 @@ class StudentEventDetailScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(AppSpacing.s16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _buildImageCard(),
-            const SizedBox(height: AppSpacing.s16),
-            _buildInfoCard(),
-            const SizedBox(height: AppSpacing.s16),
-            _buildDetailsCard(),
-            const SizedBox(height: AppSpacing.s24),
-            Text(
-              'ATTACHMENTS',
-              style: AppTextStyles.manrope(
-                fontSize: 12,
-                fontWeight: FontWeight.w800,
-                color: AppColors.textTertiary,
-              ),
-            ),
-            const SizedBox(height: AppSpacing.s12),
-            _buildAttachmentsCard(),
+                  children: [
+                    _buildImageCard(),
+                    const SizedBox(height: AppSpacing.s16),
+                    _buildInfoCard(),
+                    const SizedBox(height: AppSpacing.s16),
+                    _buildDetailsCard(),
+                    const SizedBox(height: AppSpacing.s24),
+                    Text(
+                      'ATTACHMENTS',
+                      style: AppTextStyles.manrope(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.textTertiary,
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.s12),
+                    _buildAttachmentsCard(),
                   ],
                 ),
               ),
@@ -75,7 +74,10 @@ class StudentEventDetailScreen extends StatelessWidget {
               height: 200,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(color: Colors.white.withOpacity(0.2), width: 2),
+                border: Border.all(
+                  color: Colors.white.withValues(alpha: 0.2),
+                  width: 2,
+                ),
               ),
             ),
           ),
@@ -87,18 +89,24 @@ class StudentEventDetailScreen extends StatelessWidget {
               height: 140,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(color: Colors.white.withOpacity(0.2), width: 2),
+                border: Border.all(
+                  color: Colors.white.withValues(alpha: 0.2),
+                  width: 2,
+                ),
               ),
             ),
           ),
-          
+
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.3),
+                  color: Colors.white.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(AppSpacing.s16),
                 ),
                 child: Text(
@@ -231,26 +239,32 @@ class StudentEventDetailScreen extends StatelessWidget {
       child: Column(
         children: [
           _buildAttachmentRow(
-            Icons.description, 
-            const Color(0xFF15803D), 
+            Icons.description,
+            const Color(0xFF15803D),
             const Color(0xFFDCFCE7),
             'Schedule_ScienceDay.pdf',
-            'Document - 120 KB'
+            'Document - 120 KB',
           ),
           const Divider(height: 1, color: AppColors.borderGrey),
           _buildAttachmentRow(
-            Icons.image, 
-            const Color(0xFF92400E), 
+            Icons.image,
+            const Color(0xFF92400E),
             const Color(0xFFFEF3C7),
             'Floor_plan_HallA.png',
-            'Image - 480 KB'
+            'Image - 480 KB',
           ),
         ],
       ),
     );
   }
 
-  Widget _buildAttachmentRow(IconData icon, Color iconColor, Color iconBg, String title, String subtitle) {
+  Widget _buildAttachmentRow(
+    IconData icon,
+    Color iconColor,
+    Color iconBg,
+    String title,
+    String subtitle,
+  ) {
     return Padding(
       padding: const EdgeInsets.all(AppSpacing.s16),
       child: Row(

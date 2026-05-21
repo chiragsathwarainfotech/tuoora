@@ -25,6 +25,7 @@ class AppRoutes {
   static const String studentNotificationPreferences = '/student/notification-preferences';
   static const String studentStudyMaterial = '/student/study-material';
   static const String studentStudyMaterialDetail = '/student/study-material/detail';
+  static const String studentFeedback = '/student/feedback';
 
   static const String instituteDashboard = '/institute/dashboard';
   static const String instituteStudents = '/institute/students';

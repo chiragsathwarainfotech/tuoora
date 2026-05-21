@@ -74,7 +74,7 @@ class StudentNotificationPreferencesScreen
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppColors.borderGrey.withOpacity(0.5)),
+        border: Border.all(color: AppColors.borderGrey.withValues(alpha: 0.5)),
       ),
       child: Row(
         children: [
@@ -130,7 +130,7 @@ class StudentNotificationPreferencesScreen
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppColors.borderGrey.withOpacity(0.5)),
+        border: Border.all(color: AppColors.borderGrey.withValues(alpha: 0.5)),
       ),
       child: Column(
         children: [
@@ -143,7 +143,10 @@ class StudentNotificationPreferencesScreen
               onChanged: controller.toggleFeeReminders,
             ),
           ),
-          Divider(height: 1, color: AppColors.borderGrey.withOpacity(0.5)),
+          Divider(
+            height: 1,
+            color: AppColors.borderGrey.withValues(alpha: 0.5),
+          ),
           Obx(
             () => _buildToggleRow(
               icon: Icons.tablet_mac_rounded,
@@ -153,7 +156,10 @@ class StudentNotificationPreferencesScreen
               onChanged: controller.toggleAssignmentAlerts,
             ),
           ),
-          Divider(height: 1, color: AppColors.borderGrey.withOpacity(0.5)),
+          Divider(
+            height: 1,
+            color: AppColors.borderGrey.withValues(alpha: 0.5),
+          ),
           Obx(
             () => _buildToggleRow(
               icon: Icons.calendar_today_outlined,
@@ -163,7 +169,10 @@ class StudentNotificationPreferencesScreen
               onChanged: controller.toggleAttendance,
             ),
           ),
-          Divider(height: 1, color: AppColors.borderGrey.withOpacity(0.5)),
+          Divider(
+            height: 1,
+            color: AppColors.borderGrey.withValues(alpha: 0.5),
+          ),
           Obx(
             () => _buildToggleRow(
               icon: Icons.auto_awesome_rounded,
@@ -173,7 +182,10 @@ class StudentNotificationPreferencesScreen
               onChanged: controller.toggleDailyUpdates,
             ),
           ),
-          Divider(height: 1, color: AppColors.borderGrey.withOpacity(0.5)),
+          Divider(
+            height: 1,
+            color: AppColors.borderGrey.withValues(alpha: 0.5),
+          ),
           Obx(
             () => _buildToggleRow(
               icon: Icons.event_note_rounded,

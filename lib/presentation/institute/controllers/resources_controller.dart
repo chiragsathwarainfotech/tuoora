@@ -1,3 +1,4 @@
+import 'package:tuoora/core/enums/app_enums.dart';
 import 'package:tuoora/presentation/institute/models/batch_model.dart';
 import 'package:tuoora/presentation/institute/models/resource_model.dart';
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';

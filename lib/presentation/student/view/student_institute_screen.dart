@@ -16,10 +16,7 @@ class StudentInstituteScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const StudentAppBar(
-              title: 'Institute',
-              showDefaultActions: false,
-            ),
+            const StudentAppBar(title: 'Institute', showDefaultActions: false),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(16),
@@ -58,7 +55,7 @@ class StudentInstituteScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppColors.borderGrey.withOpacity(0.5)),
+        border: Border.all(color: AppColors.borderGrey.withValues(alpha: 0.5)),
       ),
       child: Column(
         children: [
@@ -99,12 +96,15 @@ class StudentInstituteScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppColors.borderGrey.withOpacity(0.5)),
+        border: Border.all(color: AppColors.borderGrey.withValues(alpha: 0.5)),
       ),
       child: Column(
         children: [
           _buildInfoRow('Contact person', 'Mr. R. Verma'),
-          Divider(height: 1, color: AppColors.borderGrey.withOpacity(0.5)),
+          Divider(
+            height: 1,
+            color: AppColors.borderGrey.withValues(alpha: 0.5),
+          ),
           _buildInfoRow('Phone', '+91  20  4123  7700'),
         ],
       ),
@@ -144,9 +144,7 @@ class StudentInstituteScreen extends StatelessWidget {
         backgroundColor: const Color(0xFF92400E),
         elevation: 0,
         padding: const EdgeInsets.symmetric(vertical: 16),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -175,7 +173,7 @@ class StudentInstituteScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppColors.borderGrey.withOpacity(0.5)),
+        border: Border.all(color: AppColors.borderGrey.withValues(alpha: 0.5)),
       ),
       child: Column(
         children: [
@@ -190,9 +188,7 @@ class StudentInstituteScreen extends StatelessWidget {
               children: [
                 // Draw some decorative lines and blocks to mimic a map
                 Positioned.fill(
-                  child: CustomPaint(
-                    painter: MapBackgroundPainter(),
-                  ),
+                  child: CustomPaint(painter: MapBackgroundPainter()),
                 ),
                 // Map marker
                 Center(
@@ -202,7 +198,7 @@ class StudentInstituteScreen extends StatelessWidget {
                     color: const Color(0xFF92400E),
                     shadows: [
                       Shadow(
-                        color: Colors.black.withOpacity(0.3),
+                        color: Colors.black.withValues(alpha: 0.3),
                         blurRadius: 10,
                         offset: const Offset(0, 4),
                       ),
@@ -256,8 +252,13 @@ class StudentInstituteScreen extends StatelessWidget {
                 OutlinedButton(
                   onPressed: () {},
                   style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    side: BorderSide(color: AppColors.borderGrey.withOpacity(0.5)),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
+                    side: BorderSide(
+                      color: AppColors.borderGrey.withValues(alpha: 0.5),
+                    ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6),
                     ),
@@ -303,19 +304,39 @@ class MapBackgroundPainter extends CustomPainter {
       ..style = PaintingStyle.fill;
 
     // Draw horizontal road
-    canvas.drawLine(Offset(0, size.height * 0.4), Offset(size.width, size.height * 0.45), roadPaint);
-    
+    canvas.drawLine(
+      Offset(0, size.height * 0.4),
+      Offset(size.width, size.height * 0.45),
+      roadPaint,
+    );
+
     // Draw vertical roads
-    canvas.drawLine(Offset(size.width * 0.3, 0), Offset(size.width * 0.25, size.height), roadPaint);
-    canvas.drawLine(Offset(size.width * 0.75, 0), Offset(size.width * 0.8, size.height), roadPaint);
+    canvas.drawLine(
+      Offset(size.width * 0.3, 0),
+      Offset(size.width * 0.25, size.height),
+      roadPaint,
+    );
+    canvas.drawLine(
+      Offset(size.width * 0.75, 0),
+      Offset(size.width * 0.8, size.height),
+      roadPaint,
+    );
 
     // Draw some green blocks
     canvas.drawRRect(
-        RRect.fromRectAndRadius(Rect.fromLTWH(size.width * 0.05, size.height * 0.6, 60, 40), const Radius.circular(4)),
-        blockPaint);
+      RRect.fromRectAndRadius(
+        Rect.fromLTWH(size.width * 0.05, size.height * 0.6, 60, 40),
+        const Radius.circular(4),
+      ),
+      blockPaint,
+    );
     canvas.drawRRect(
-        RRect.fromRectAndRadius(Rect.fromLTWH(size.width * 0.45, size.height * 0.6, 80, 40), const Radius.circular(4)),
-        blockPaint);
+      RRect.fromRectAndRadius(
+        Rect.fromLTWH(size.width * 0.45, size.height * 0.6, 80, 40),
+        const Radius.circular(4),
+      ),
+      blockPaint,
+    );
   }
 
   @override

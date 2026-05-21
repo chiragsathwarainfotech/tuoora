@@ -9,66 +9,67 @@ import 'package:tuoora/presentation/student/widgets/profile_grid_action.dart';
 import 'package:tuoora/presentation/student/widgets/profile_menu_tile.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
 import 'package:tuoora/presentation/student/controllers/student_profile_controller.dart';
+import 'package:tuoora/data/models/student_profile_model.dart';
 import 'dart:io';
 
-class StudentProfileScreen extends StatelessWidget {
+class StudentProfileScreen extends GetView<StudentProfileController> {
   final bool showBottomNav;
 
   const StudentProfileScreen({super.key, this.showBottomNav = true});
 
   @override
   Widget build(BuildContext context) {
-    Get.put(StudentProfileController());
-
     return Scaffold(
       backgroundColor: AppColors.studentBg,
       body: SafeArea(
-        child: Column(
-          children: [
-            const StudentAppBar(title: 'Profile', isRoot: true),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _buildHeroCard(),
-                    const SizedBox(height: 12),
-                    _buildStatsRow(),
-                    const SizedBox(height: 12),
-                    _buildQRCard(),
-                    const SizedBox(height: 16),
-                    _buildGridActions(),
-                    const SizedBox(height: 32),
-                    _buildSectionTitle('YOUR INFO'),
-                    const SizedBox(height: 8),
-                    _buildYourInfoCard(),
-                    const SizedBox(height: 24),
-                    _buildSectionTitle('SETTINGS'),
-                    const SizedBox(height: 8),
-                    _buildSettingsCard(),
-                    const SizedBox(height: 24),
-                    _buildSectionTitle('HELP & INFO'),
-                    const SizedBox(height: 8),
-                    _buildHelpCard(),
-                    const SizedBox(height: 24),
-                    _buildLogOutButton(),
-                    const SizedBox(height: 24),
-                    Center(
-                      child: Text(
-                        'Tuoora • v1.0.0 - About',
-                        style: AppTextStyles.lexend(
-                          fontSize: 11,
-                          color: AppColors.textTertiary,
-                        ),
-                      ),
-                    ),
-                  ],
+        child: Obx(() {
+          if (controller.isLoading.value) {
+            return const Center(
+              child: CircularProgressIndicator(color: AppColors.primaryBrand),
+            );
+          }
+          final profile = controller.profileData.value;
+          if (profile == null) {
+            return const Center(child: Text('Failed to load profile data'));
+          }
+
+          return Column(
+            children: [
+              const StudentAppBar(title: 'Profile', isRoot: true),
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _buildHeroCard(profile.header),
+                      const SizedBox(height: 12),
+                      _buildStatsRow(profile.stats),
+                      const SizedBox(height: 12),
+                      _buildQRCard(profile.studentQr),
+                      const SizedBox(height: 16),
+                      _buildGridActions(),
+                      const SizedBox(height: 32),
+                      _buildSectionTitle('YOUR INFO'),
+                      const SizedBox(height: 8),
+                      _buildYourInfoCard(profile.info),
+                      const SizedBox(height: 24),
+                      _buildSectionTitle('SETTINGS'),
+                      const SizedBox(height: 8),
+                      _buildSettingsCard(),
+                      const SizedBox(height: 24),
+                      _buildSectionTitle('HELP & INFO'),
+                      const SizedBox(height: 8),
+                      _buildHelpCard(),
+                      const SizedBox(height: 24),
+                      _buildLogOutButton(),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
+            ],
+          );
+        }),
       ),
       bottomNavigationBar: showBottomNav
           ? const StudentBottomNav(currentIndex: 4)
@@ -87,7 +88,7 @@ class StudentProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHeroCard() {
+  Widget _buildHeroCard(StudentProfileHeader header) {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
@@ -113,7 +114,7 @@ class StudentProfileScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Aarav Sharma',
+                      header.name,
                       style: AppTextStyles.manrope(
                         fontSize: 18,
                         fontWeight: FontWeight.w800,
@@ -122,7 +123,7 @@ class StudentProfileScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      'Class X-B • Math & Science • Roll 041',
+                      'Class ${header.standard} • ${header.subject} • Roll ${header.rollNo}',
                       style: AppTextStyles.lexend(
                         fontSize: 11,
                         color: AppColors.textSecondary,
@@ -138,7 +139,7 @@ class StudentProfileScreen extends StatelessWidget {
                         ),
                         const SizedBox(width: 6),
                         Text(
-                          'Member since   June 2024',
+                          'Member since   ${header.memberSince}',
                           style: AppTextStyles.lexend(
                             fontSize: 11,
                             color: AppColors.textSecondary,
@@ -170,16 +171,22 @@ class StudentProfileScreen extends StatelessWidget {
                     clipBehavior: Clip.antiAlias,
                     child: imagePath.isNotEmpty
                         ? Image.file(File(imagePath), fit: BoxFit.cover)
-                        : Center(
-                            child: Text(
-                              'AS',
-                              style: AppTextStyles.manrope(
-                                fontSize: 28,
-                                fontWeight: FontWeight.w900,
-                                color: const Color(0xFF78350F),
-                              ),
-                            ),
-                          ),
+                        : (header.avatarUrl.isNotEmpty &&
+                                  header.avatarUrl.startsWith('http')
+                              ? Image.network(
+                                  header.avatarUrl,
+                                  fit: BoxFit.cover,
+                                )
+                              : Center(
+                                  child: Text(
+                                    header.initials,
+                                    style: AppTextStyles.manrope(
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.w900,
+                                      color: const Color(0xFF78350F),
+                                    ),
+                                  ),
+                                )),
                   );
                 }),
                 Positioned(
@@ -187,7 +194,8 @@ class StudentProfileScreen extends StatelessWidget {
                   bottom: -4,
                   child: GestureDetector(
                     onTap: () {
-                      Get.find<StudentProfileController>().showImagePickerOptions();
+                      Get.find<StudentProfileController>()
+                          .showImagePickerOptions();
                     },
                     child: Container(
                       padding: const EdgeInsets.all(2),
@@ -218,14 +226,13 @@ class StudentProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStatsRow() {
+  Widget _buildStatsRow(StudentProfileStats stats) {
     return Row(
       children: [
         Expanded(
           child: _buildStatCard(
             label: 'ATTENDANCE',
-            value: '94%',
-            sub: 'this month',
+            value: '${stats.attendancePct}%',
             valueColor: const Color(0xFF0F766E),
           ),
         ),
@@ -233,8 +240,7 @@ class StudentProfileScreen extends StatelessWidget {
         Expanded(
           child: _buildStatCard(
             label: 'COMPLETED',
-            value: '96%',
-            sub: 'of assignments',
+            value: '${stats.assignmentsPct}%',
             valueColor: const Color(0xFF78350F),
           ),
         ),
@@ -245,7 +251,6 @@ class StudentProfileScreen extends StatelessWidget {
   Widget _buildStatCard({
     required String label,
     required String value,
-    required String sub,
     Color? valueColor,
   }) {
     return Container(
@@ -276,20 +281,12 @@ class StudentProfileScreen extends StatelessWidget {
               height: 1,
             ),
           ),
-          const SizedBox(height: 4),
-          Text(
-            sub,
-            style: AppTextStyles.lexend(
-              fontSize: 10,
-              color: AppColors.textTertiary,
-            ),
-          ),
         ],
       ),
     );
   }
 
-  Widget _buildQRCard() {
+  Widget _buildQRCard(StudentProfileQr qr) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -319,7 +316,7 @@ class StudentProfileScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  'STU-2026-041',
+                  qr.displayId,
                   style: AppTextStyles.manrope(
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
@@ -328,7 +325,7 @@ class StudentProfileScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Show this at the door so the institute can mark attendance.',
+                  qr.hint,
                   style: AppTextStyles.lexend(
                     fontSize: 11,
                     color: AppColors.textSecondary,
@@ -424,14 +421,22 @@ class StudentProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildYourInfoCard() {
+  Widget _buildYourInfoCard(StudentProfileInfo info) {
     return _buildCardWrap(
       children: [
-        _buildInfoRow('Phone', '+91 98103 22141'),
+        _buildInfoRow('Phone', '+91 ${info.phone}'),
         Divider(height: 1, color: AppColors.borderGrey.withValues(alpha: 0.5)),
-        _buildInfoRow('Email', 'aarav.sharma@gmail.com'),
-        Divider(height: 1, color: AppColors.borderGrey.withValues(alpha: 0.5)),
-        _buildInfoRow('Parent', 'Sunita Sharma · +91 98765 43210'),
+        _buildInfoRow('Email', info.email),
+        if (info.parentName != null) ...[
+          Divider(
+            height: 1,
+            color: AppColors.borderGrey.withValues(alpha: 0.5),
+          ),
+          _buildInfoRow(
+            info.parentRelation,
+            '${info.parentName} • +91 ${info.parentPhone ?? ''}',
+          ),
+        ],
       ],
     );
   }
@@ -504,9 +509,10 @@ class StudentProfileScreen extends StatelessWidget {
           title: 'Privacy & terms',
         ),
         Divider(height: 1, color: AppColors.borderGrey.withValues(alpha: 0.5)),
-        const ProfileMenuTile(
+        ProfileMenuTile(
           icon: Icons.add_circle_outline_rounded,
           title: 'Tell us what\'s missing',
+          onTap: () => Get.toNamed(AppRoutes.studentFeedback),
         ),
       ],
     );

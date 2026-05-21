@@ -68,9 +68,7 @@ class StudentDashboard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: AppSpacing.s24),
-                    const StudentSectionHeader(
-                      title: "TODAY'S ATTENDANCE",
-                    ),
+                    const StudentSectionHeader(title: "TODAY'S ATTENDANCE"),
                     const SizedBox(height: AppSpacing.s12),
                     GestureDetector(
                       onTap: _openAttendanceTab,
@@ -83,7 +81,8 @@ class StudentDashboard extends StatelessWidget {
                     StudentSectionHeader(
                       title: 'STUDY MATERIAL THIS WEEK',
                       showSeeAll: true,
-                      onActionTap: () => Get.toNamed(AppRoutes.studentStudyMaterial),
+                      onActionTap: () =>
+                          Get.toNamed(AppRoutes.studentStudyMaterial),
                     ),
                     const SizedBox(height: AppSpacing.s12),
                     GestureDetector(
@@ -91,7 +90,8 @@ class StudentDashboard extends StatelessWidget {
                         'subject': 'Mathematics',
                         'date': 'Today',
                         'title': 'Trigonometry — quick reference',
-                        'description': 'All Class X trig identities, complementary-angle formulas, and sign chart on one page. Print and stick inside your notebook.',
+                        'description':
+                            'All Class X trig identities, complementary-angle formulas, and sign chart on one page. Print and stick inside your notebook.',
                         'fileCount': 1,
                         'isVideo': false,
                         'teacher': 'Mr. R. Verma',
@@ -109,7 +109,8 @@ class StudentDashboard extends StatelessWidget {
                         'subject': 'Physics',
                         'date': 'Wed',
                         'title': 'Reflection — concept video',
-                        'description': 'A 6-minute walkthrough of plane mirrors, the angle of incidence/reflection, and image formation. Watch before...',
+                        'description':
+                            'A 6-minute walkthrough of plane mirrors, the angle of incidence/reflection, and image formation. Watch before...',
                         'fileCount': 1,
                         'isVideo': true,
                         'teacher': 'Mrs. Iyer',
@@ -142,8 +143,9 @@ class StudentDashboard extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar:
-          showBottomNav ? const StudentBottomNav(currentIndex: 0) : null,
+      bottomNavigationBar: showBottomNav
+          ? const StudentBottomNav(currentIndex: 0)
+          : null,
     );
   }
 
@@ -293,9 +295,7 @@ class _HeaderIconButton extends StatelessWidget {
         child: Stack(
           clipBehavior: Clip.none,
           children: [
-            Center(
-              child: Icon(icon, size: 18, color: AppColors.textPrimary),
-            ),
+            Center(child: Icon(icon, size: 18, color: AppColors.textPrimary)),
             if (hasBadge)
               Positioned(
                 top: 8,
@@ -445,8 +445,18 @@ class _TodayClassCard extends StatelessWidget {
 
   String _shortMonth(int m) {
     const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
     ];
     return months[m - 1];
   }
@@ -473,8 +483,8 @@ class _WeekStrip extends StatelessWidget {
         final Color dotColor = isActive
             ? AppColors.studentBrandAccent
             : isPast
-                ? AppColors.successGreen
-                : AppColors.borderGrey;
+            ? AppColors.successGreen
+            : AppColors.borderGrey;
         return Column(
           children: [
             Text(
@@ -660,10 +670,7 @@ class _AttendanceCard extends StatelessWidget {
               ],
             ),
           ),
-          const Icon(
-            Icons.chevron_right_rounded,
-            color: AppColors.textMuted,
-          ),
+          const Icon(Icons.chevron_right_rounded, color: AppColors.textMuted),
         ],
       ),
     );
@@ -730,10 +737,7 @@ class _StudyMaterialTile extends StatelessWidget {
               ],
             ),
           ),
-          const Icon(
-            Icons.chevron_right_rounded,
-            color: AppColors.textMuted,
-          ),
+          const Icon(Icons.chevron_right_rounded, color: AppColors.textMuted),
         ],
       ),
     );
@@ -817,93 +821,6 @@ class _PendingFeeTile extends StatelessWidget {
                 fontWeight: FontWeight.w700,
                 color: AppColors.studentTomorrowPillText,
               ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _UpdateTile extends StatelessWidget {
-  final String title;
-  final String timestamp;
-  final String body;
-  const _UpdateTile({
-    required this.title,
-    required this.timestamp,
-    required this.body,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(AppSpacing.s14),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.s16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: AppSpacing.s40,
-            height: AppSpacing.s40,
-            decoration: BoxDecoration(
-              color: AppColors.studentUpdateIconBg,
-              borderRadius: BorderRadius.circular(AppSpacing.s12),
-            ),
-            child: Icon(
-              Icons.auto_awesome_rounded,
-              color: AppColors.studentUpdateIconColor,
-              size: 20,
-            ),
-          ),
-          AppSpacing.h12,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        title,
-                        style: AppTextStyles.manrope(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w800,
-                          color: AppColors.textPrimary,
-                        ),
-                      ),
-                    ),
-                    Text(
-                      timestamp,
-                      style: AppTextStyles.lexend(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.textTertiary,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  body,
-                  style: AppTextStyles.lexend(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                    color: AppColors.textSecondary,
-                    height: 1.4,
-                  ),
-                ),
-              ],
             ),
           ),
         ],

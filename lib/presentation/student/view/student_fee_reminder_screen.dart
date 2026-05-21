@@ -5,41 +5,32 @@ import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
 
 class StudentFeeReminderScreen extends StatelessWidget {
-  // Can pass arguments for isPaid state, for now default to false.
   final bool isPaid;
   const StudentFeeReminderScreen({super.key, this.isPaid = false});
 
   @override
   Widget build(BuildContext context) {
-    // If argument passed via route, use it
     final args = Get.arguments;
     final bool paid = args?['isPaid'] ?? isPaid;
 
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
-      appBar: AppBar(
-        backgroundColor: AppColors.scaffoldBg,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.chevron_left, color: AppColors.textPrimary),
-          onPressed: () => Get.back(),
-        ),
-        title: Text(
-          paid
-              ? 'Payment received • ₹4,500'
-              : 'Fee reminder • ₹4,500 due 25 May',
-          style: AppTextStyles.manrope(
-            fontSize: 18,
-            fontWeight: FontWeight.w800,
-            color: AppColors.textPrimary,
-          ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(AppSpacing.s16),
+      body: SafeArea(
         child: Column(
+          children: [
+            StudentAppBar(
+              title: paid
+                  ? 'Payment received • ₹4,500'
+                  : 'Fee reminder • ₹4,500 due 25 May',
+              showDefaultActions: false,
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(AppSpacing.s16),
+                child: Column(
           children: [
             _buildMainCard(paid),
             const SizedBox(height: AppSpacing.s16),
@@ -48,8 +39,12 @@ class StudentFeeReminderScreen extends StatelessWidget {
             if (!paid) _buildWarningCard(),
             const SizedBox(height: AppSpacing.s24),
             _buildActionButton(paid),
-          ],
-        ),
+              ],
+            ),
+          ),
+          ),
+        ],
+      ),
       ),
     );
   }
@@ -218,9 +213,13 @@ class StudentFeeReminderScreen extends StatelessWidget {
       onPressed: () {
         final FeesController controller = Get.find<FeesController>();
         if (controller.statements.isNotEmpty) {
-          controller.openReceipt(controller.statements.firstWhere(
-              (s) => paid ? s.status.name == 'paid' : s.status.name == 'pending', 
-              orElse: () => controller.statements.first));
+          controller.openReceipt(
+            controller.statements.firstWhere(
+              (s) =>
+                  paid ? s.status.name == 'paid' : s.status.name == 'pending',
+              orElse: () => controller.statements.first,
+            ),
+          );
         } else {
           Get.toNamed(AppRoutes.studentFeeReceipt);
         }

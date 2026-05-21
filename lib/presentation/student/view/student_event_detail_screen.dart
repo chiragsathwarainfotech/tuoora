@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
 
 class StudentEventDetailScreen extends StatelessWidget {
   const StudentEventDetailScreen({super.key});
@@ -11,26 +12,19 @@ class StudentEventDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
-      appBar: AppBar(
-        backgroundColor: AppColors.scaffoldBg,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.chevron_left, color: AppColors.textPrimary),
-          onPressed: () => Get.back(),
-        ),
-        title: Text(
-          'Science Day exhibition',
-          style: AppTextStyles.manrope(
-            fontSize: 18,
-            fontWeight: FontWeight.w800,
-            color: AppColors.textPrimary,
-          ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(AppSpacing.s16),
+      body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const StudentAppBar(
+              title: 'Science Day exhibition',
+              showDefaultActions: false,
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(AppSpacing.s16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _buildImageCard(),
             const SizedBox(height: AppSpacing.s16),
@@ -48,6 +42,10 @@ class StudentEventDetailScreen extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.s12),
             _buildAttachmentsCard(),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),

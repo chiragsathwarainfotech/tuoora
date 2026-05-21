@@ -4,6 +4,7 @@ import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
 
 class UpdatesScreen extends StatelessWidget {
   const UpdatesScreen({super.key});
@@ -12,25 +13,17 @@ class UpdatesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
-      appBar: AppBar(
-        backgroundColor: AppColors.scaffoldBg,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.chevron_left, color: AppColors.textPrimary),
-          onPressed: () => Get.back(),
-        ),
-        title: Text(
-          'Notifications',
-          style: AppTextStyles.manrope(
-            fontSize: 22,
-            fontWeight: FontWeight.w900,
-            color: AppColors.textPrimary,
-          ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s16, vertical: AppSpacing.s12),
+      body: SafeArea(
         child: Column(
+          children: [
+            const StudentAppBar(
+              title: 'Notifications',
+              showDefaultActions: false,
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s16, vertical: AppSpacing.s12),
+                child: Column(
           children: [
             _buildNotificationCard(
               icon: Icons.currency_rupee,
@@ -100,9 +93,12 @@ class UpdatesScreen extends StatelessWidget {
               time: '13 May',
               description: 'You were marked absent on 13 May. Reason recorded by parent: sick leave.',
             ),
-            const SizedBox(height: AppSpacing.s24),
-          ],
-        ),
+              ],
+            ),
+          ),
+          ),
+        ],
+      ),
       ),
     );
   }

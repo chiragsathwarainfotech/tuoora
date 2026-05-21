@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/presentation/student/widgets/student_back_button.dart';
 
 class StudentChatScreen extends StatelessWidget {
   const StudentChatScreen({super.key});
@@ -14,9 +15,10 @@ class StudentChatScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: AppColors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.chevron_left, color: AppColors.textPrimary),
-          onPressed: () => Get.back(),
+        leadingWidth: 56,
+        leading: const Padding(
+          padding: EdgeInsets.only(left: AppSpacing.s16),
+          child: Center(child: StudentBackButton()),
         ),
         title: Row(
           children: [
@@ -112,65 +114,166 @@ class StudentChatScreen extends StatelessWidget {
               ),
             ),
           ),
-          _buildMessageInput(),
+          _buildMessageInput(context),
         ],
       ),
     );
   }
 
-  Widget _buildMessageInput() {
+  Widget _buildMessageInput(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s16, vertical: AppSpacing.s12),
-      decoration: const BoxDecoration(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      decoration: BoxDecoration(
         color: AppColors.white,
-        border: Border(top: BorderSide(color: AppColors.divider)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, -4),
+          ),
+        ],
       ),
       child: SafeArea(
         child: Row(
           children: [
-            Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                color: AppColors.scaffoldBg,
-                borderRadius: BorderRadius.circular(AppSpacing.s8),
-                border: Border.all(color: AppColors.borderGrey),
-              ),
-              child: const Icon(Icons.add, color: AppColors.textSecondary, size: 20),
+            IconButton(
+              onPressed: () => _showAttachmentSheet(context),
+              icon: const Icon(Icons.add, color: AppColors.textSecondary),
             ),
-            AppSpacing.h12,
             Expanded(
               child: Container(
-                height: 44,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
-                  color: AppColors.scaffoldBg,
-                  borderRadius: BorderRadius.circular(AppSpacing.s8),
-                  border: Border.all(color: AppColors.borderGrey),
+                  color: AppColors.paleSilver.withValues(alpha: 0.5),
+                  borderRadius: BorderRadius.circular(24),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s12),
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Message the institute...',
-                  style: AppTextStyles.lexend(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w400,
-                    color: AppColors.textTertiary,
-                  ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        style: AppTextStyles.lexend(fontSize: 14),
+                        decoration: const InputDecoration(
+                          hintText: 'Message the institute...',
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(vertical: 12),
+                        ),
+                        maxLines: null,
+                      ),
+                    ),
+                    const Icon(
+                      Icons.sentiment_satisfied_alt_rounded,
+                      color: AppColors.textTertiary,
+                    ),
+                  ],
                 ),
               ),
             ),
-            AppSpacing.h12,
-            Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                color: AppColors.scaffoldBg,
-                borderRadius: BorderRadius.circular(AppSpacing.s8),
+            const SizedBox(width: 12),
+            GestureDetector(
+              onTap: () {},
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: const BoxDecoration(
+                  color: AppColors.primaryBrand,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.send_rounded,
+                  color: AppColors.white,
+                  size: 20,
+                ),
               ),
-              child: const Icon(Icons.arrow_forward, color: AppColors.textSecondary, size: 20),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _showAttachmentSheet(BuildContext context) {
+    Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.all(24),
+        decoration: const BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            GridView.count(
+              shrinkWrap: true,
+              crossAxisCount: 4,
+              mainAxisSpacing: 24,
+              crossAxisSpacing: 24,
+              childAspectRatio: 0.82,
+              children: [
+                _buildAttachmentItem(
+                  Icons.image_rounded,
+                  'IMAGE',
+                  Colors.green.shade100,
+                  Colors.green.shade900,
+                  onTap: () => Get.back(),
+                ),
+                _buildAttachmentItem(
+                  Icons.videocam_rounded,
+                  'VIDEO',
+                  Colors.purple.shade100,
+                  Colors.purple.shade900,
+                  onTap: () => Get.back(),
+                ),
+                _buildAttachmentItem(
+                  Icons.headphones_rounded,
+                  'AUDIO',
+                  Colors.red.shade100,
+                  Colors.red.shade900,
+                  onTap: () => Get.back(),
+                ),
+                _buildAttachmentItem(
+                  Icons.insert_drive_file_rounded,
+                  'DOCUMENT',
+                  Colors.cyan.shade100,
+                  Colors.cyan.shade900,
+                  onTap: () => Get.back(),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      isScrollControlled: true,
+    );
+  }
+
+  Widget _buildAttachmentItem(
+    IconData icon,
+    String label,
+    Color bgColor,
+    Color iconColor, {
+    VoidCallback? onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(28),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 56,
+            height: 56,
+            decoration: BoxDecoration(color: bgColor, shape: BoxShape.circle),
+            child: Icon(icon, color: iconColor),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            label,
+            style: AppTextStyles.manrope(
+              fontSize: 10,
+              fontWeight: FontWeight.w700,
+              color: AppColors.textSecondary,
+            ),
+          ),
+        ],
       ),
     );
   }

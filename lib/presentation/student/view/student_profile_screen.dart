@@ -1,416 +1,213 @@
-import 'package:tuoora/config/app_routes.dart';
-import 'package:tuoora/core/constants/app_colors.dart';
-import 'package:tuoora/core/services/auth_service.dart';
-import 'package:tuoora/core/constants/app_text_styles.dart';
-import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tuoora/config/app_routes.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/services/auth_service.dart';
+import 'package:tuoora/core/widgets/student_bottom_nav.dart';
+import 'package:tuoora/presentation/student/widgets/profile_grid_action.dart';
+import 'package:tuoora/presentation/student/widgets/profile_menu_tile.dart';
+import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
+import 'package:tuoora/presentation/student/controllers/student_profile_controller.dart';
+import 'dart:io';
 
 class StudentProfileScreen extends StatelessWidget {
   final bool showBottomNav;
+
   const StudentProfileScreen({super.key, this.showBottomNav = true});
 
   @override
   Widget build(BuildContext context) {
+    Get.put(StudentProfileController());
+
     return Scaffold(
-      backgroundColor: AppColors.scaffoldBg,
-      appBar: AppBar(
-        backgroundColor: AppColors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.primaryBrand),
-          onPressed: () => Get.back(),
-        ),
-        title: Text(
-          'Student Profile',
-          style: AppTextStyles.manrope(
-            fontSize: 18,
-            fontWeight: FontWeight.w800,
-            color: AppColors.primaryBrand,
-          ),
-        ),
-        centerTitle: false,
-      ),
-      body: SingleChildScrollView(
-        padding: AppSpacing.x24.add(AppSpacing.y32),
+      backgroundColor: AppColors.studentBg,
+      body: SafeArea(
         child: Column(
           children: [
-            _buildProfileHeroCard(),
-            AppSpacing.v32,
-            _buildAdministrativeLockNotice(),
-            AppSpacing.v32,
-            _buildAcademicDetails(),
-            AppSpacing.v16,
-            _buildPersonalDetails(),
-            AppSpacing.v40,
-            _buildSignOutSection(),
-            AppSpacing.v40,
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildProfileHeroCard() {
-    return Container(
-      width: double.infinity,
-      padding: AppSpacing.all32,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            AppColors.primaryBrand,
-            AppColors.primaryBrand.withValues(alpha: 0.8),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(32),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.primaryBrand.withValues(alpha: 0.25),
-            blurRadius: 20,
-            offset: const Offset(0, AppSpacing.s10),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'STUDENT IDENTIFICATION',
-                    style: AppTextStyles.manrope(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.white.withValues(alpha: 0.7),
-                      letterSpacing: 1.0,
-                    ),
-                  ),
-                  AppSpacing.v4,
-                  Text(
-                    'Student Profile',
-                    style: AppTextStyles.manrope(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.white,
-                    ),
-                  ),
-                ],
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.white.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  children: const [
-                    Icon(
-                      Icons.check_circle,
-                      color: AppColors.white,
-                      size: AppSpacing.s14,
-                    ),
-                    AppSpacing.h6,
-                    Text(
-                      'VERIFIED',
-                      style: TextStyle(
-                        fontFamily: 'Manrope',
-                        fontSize: 9,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.white,
+            const StudentAppBar(title: 'Profile', isRoot: true),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _buildHeroCard(),
+                    const SizedBox(height: 12),
+                    _buildStatsRow(),
+                    const SizedBox(height: 12),
+                    _buildQRCard(),
+                    const SizedBox(height: 16),
+                    _buildGridActions(),
+                    const SizedBox(height: 32),
+                    _buildSectionTitle('YOUR INFO'),
+                    const SizedBox(height: 8),
+                    _buildYourInfoCard(),
+                    const SizedBox(height: 24),
+                    _buildSectionTitle('SETTINGS'),
+                    const SizedBox(height: 8),
+                    _buildSettingsCard(),
+                    const SizedBox(height: 24),
+                    _buildSectionTitle('HELP & INFO'),
+                    const SizedBox(height: 8),
+                    _buildHelpCard(),
+                    const SizedBox(height: 24),
+                    _buildLogOutButton(),
+                    const SizedBox(height: 24),
+                    Center(
+                      child: Text(
+                        'Tuoora • v1.0.0 - About',
+                        style: AppTextStyles.lexend(
+                          fontSize: 11,
+                          color: AppColors.textTertiary,
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
-            ],
-          ),
-          const SizedBox(height: 40),
-          Row(
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: showBottomNav
+          ? const StudentBottomNav(currentIndex: 4)
+          : null,
+    );
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return Text(
+      title,
+      style: AppTextStyles.manrope(
+        fontSize: 12,
+        fontWeight: FontWeight.w800,
+        color: AppColors.textSecondary,
+      ),
+    );
+  }
+
+  Widget _buildHeroCard() {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.borderGrey.withValues(alpha: 0.5)),
+      ),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                width: AppSpacing.s100,
-                height: AppSpacing.s100,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: AppColors.white.withValues(alpha: 0.3),
-                    width: AppSpacing.s4,
-                  ),
-                  image: const DecorationImage(
-                    image: AssetImage('assets/julian_profile.png'),
-                    fit: BoxFit.cover,
-                  ),
+                height: 70,
+                decoration: const BoxDecoration(
+                  color: Color(0xFFDF7634),
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
                 ),
               ),
-              AppSpacing.h20,
-              Expanded(
+              Padding(
+                padding: const EdgeInsets.fromLTRB(100, 16, 16, 16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Julian Sterling',
+                      'Aarav Sharma',
                       style: AppTextStyles.manrope(
-                        fontSize: 24,
+                        fontSize: 18,
                         fontWeight: FontWeight.w800,
-                        color: AppColors.white,
+                        color: AppColors.textPrimary,
                       ),
                     ),
-                    AppSpacing.v4,
+                    const SizedBox(height: 2),
                     Text(
-                      'Class of 2024',
-                      style: AppTextStyles.manrope(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.white.withValues(alpha: 0.8),
+                      'Class X-B • Math & Science • Roll 041',
+                      style: AppTextStyles.lexend(
+                        fontSize: 11,
+                        color: AppColors.textSecondary,
                       ),
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.insights_rounded,
+                          size: 14,
+                          color: AppColors.textTertiary,
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          'Member since   June 2024',
+                          style: AppTextStyles.lexend(
+                            fontSize: 11,
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
-              const Icon(
-                Icons.qr_code_2,
-                color: AppColors.white,
-                size: AppSpacing.s32,
-              ),
             ],
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAdministrativeLockNotice() {
-    return Container(
-      padding: AppSpacing.all16,
-      decoration: BoxDecoration(
-        color: AppColors.primaryBrandLight,
-        borderRadius: BorderRadius.circular(AppSpacing.s16),
-        border: Border.all(
-          color: AppColors.primaryBrand.withValues(alpha: 0.2),
-        ),
-      ),
-      child: Row(
-        children: [
-          const Icon(
-            Icons.lock_person_outlined,
-            color: AppColors.primaryBrand,
-            size: AppSpacing.s20,
-          ),
-          AppSpacing.h12,
-          Expanded(
-            child: Text(
-              'Profile details are managed by the administration. Contact the office for updates.',
-              style: AppTextStyles.lexend(
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-                color: AppColors.primaryBrand,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPersonalDetails() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Personal Details',
-          style: AppTextStyles.manrope(
-            fontSize: 18,
-            fontWeight: FontWeight.w800,
-            color: AppColors.textPrimary,
-          ),
-        ),
-        AppSpacing.v20,
-        Container(
-          padding: AppSpacing.all32,
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.circular(32),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.02),
-                blurRadius: 10,
-                offset: const Offset(0, AppSpacing.s4),
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildPersonalInfoRow(
-                'FULL LEGAL NAME',
-                'Julian Alexander Sterling',
-                icon: Icons.badge_outlined,
-              ),
-              const Divider(
-                height: AppSpacing.s48,
-                thickness: 1,
-                color: AppColors.reportBorder,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: _buildPersonalInfoRow(
-                      'DATE OF BIRTH',
-                      'March 14, 2007',
-                    ),
-                  ),
-                  Expanded(
-                    child: _buildPersonalInfoRow(
-                      'NATIONALITY',
-                      'United Kingdom',
-                      alignment: CrossAxisAlignment.end,
-                    ),
-                  ),
-                ],
-              ),
-              const Divider(
-                height: AppSpacing.s48,
-                thickness: 1,
-                color: AppColors.reportBorder,
-              ),
-              _buildPersonalInfoRow(
-                'RESIDENTIAL ADDRESS',
-                '42 Kensington High Street,\nLondon, W8 4SG,\nUnited Kingdom',
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildAcademicDetails() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Academic Details',
-              style: AppTextStyles.manrope(
-                fontSize: 18,
-                fontWeight: FontWeight.w800,
-                color: AppColors.textPrimary,
-              ),
-            ),
-            Container(
-              padding: AppSpacing.x12.add(AppSpacing.y6),
-              decoration: BoxDecoration(
-                color: AppColors.primaryBrandLight,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Text(
-                'OFFICIAL RECORD',
-                style: TextStyle(
-                  fontFamily: 'Manrope',
-                  fontSize: 8,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.primaryBrand,
-                ),
-              ),
-            ),
-          ],
-        ),
-        AppSpacing.v20,
-        _buildDetailCard(
-          icon: Icons.school_outlined,
-          label: 'CURRENT GRADE',
-          value: 'Grade 11 - Honours',
-        ),
-        AppSpacing.v16,
-        Row(
-          children: [
-            Expanded(
-              child: _buildDetailCard(
-                label: 'SECTION',
-                value: 'A-Alpha',
-                small: true,
-              ),
-            ),
-            AppSpacing.h16,
-            Expanded(
-              child: _buildDetailCard(
-                label: 'ENROLLMENT ID',
-                value: '#AEON-2024-8821',
-                small: true,
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildDetailCard({
-    IconData? icon,
-    required String label,
-    required String value,
-    bool small = false,
-  }) {
-    return Container(
-      padding: EdgeInsets.all(small ? AppSpacing.s20 : AppSpacing.s24),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.s24),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
-            blurRadius: AppSpacing.s10,
-            offset: const Offset(0, AppSpacing.s4),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          icon != null
-              ? Container(
-                  padding: AppSpacing.all12,
-                  decoration: BoxDecoration(
-                    color: AppColors.reportBorder,
-                    borderRadius: BorderRadius.circular(AppSpacing.s16),
-                  ),
-                  child: Icon(
-                    icon,
-                    color: const Color(0xFF475569),
-                    size: AppSpacing.s24,
-                  ),
-                )
-              : SizedBox.shrink(),
-          AppSpacing.h20,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          Positioned(
+            top: 30,
+            left: 16,
+            child: Stack(
+              clipBehavior: Clip.none,
               children: [
-                Text(
-                  label,
-                  style: AppTextStyles.lexend(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w400,
-                    color: AppColors.textTertiary,
-                  ),
-                ),
-                AppSpacing.v4,
-                Text(
-                  value,
-                  style: AppTextStyles.manrope(
-                    fontSize: small ? 14 : 16,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.darkSlate,
+                Obx(() {
+                  final controller = Get.find<StudentProfileController>();
+                  final imagePath = controller.profileImagePath.value;
+                  return Container(
+                    width: 72,
+                    height: 72,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFFEF2F2),
+                      shape: BoxShape.circle,
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    child: imagePath.isNotEmpty
+                        ? Image.file(File(imagePath), fit: BoxFit.cover)
+                        : Center(
+                            child: Text(
+                              'AS',
+                              style: AppTextStyles.manrope(
+                                fontSize: 28,
+                                fontWeight: FontWeight.w900,
+                                color: const Color(0xFF78350F),
+                              ),
+                            ),
+                          ),
+                  );
+                }),
+                Positioned(
+                  right: -4,
+                  bottom: -4,
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.find<StudentProfileController>().showImagePickerOptions();
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(2),
+                      decoration: const BoxDecoration(
+                        color: AppColors.white,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Container(
+                        padding: const EdgeInsets.all(2),
+                        decoration: const BoxDecoration(
+                          color: Color(0xFF92400E),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.add,
+                          size: 14,
+                          color: AppColors.white,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -421,108 +218,331 @@ class StudentProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPersonalInfoRow(
-    String label,
-    String value, {
-    IconData? icon,
-    CrossAxisAlignment alignment = CrossAxisAlignment.start,
-  }) {
-    return Column(
-      crossAxisAlignment: alignment,
+  Widget _buildStatsRow() {
+    return Row(
       children: [
-        Row(
-          mainAxisAlignment: alignment == CrossAxisAlignment.start
-              ? MainAxisAlignment.start
-              : MainAxisAlignment.end,
-          children: [
-            Text(
-              label,
-              style: AppTextStyles.manrope(
-                fontSize: 9,
-                fontWeight: FontWeight.w800,
-                color: AppColors.textMuted,
-                letterSpacing: 0.5,
-              ),
-            ),
-            if (icon != null) ...[
-              AppSpacing.h8,
-              Icon(icon, color: const Color(0xFFCBD5E1), size: AppSpacing.s16),
-            ],
-          ],
-        ),
-        AppSpacing.v8,
-        Text(
-          value,
-          style: AppTextStyles.manrope(
-            fontSize: 16,
-            fontWeight: FontWeight.w800,
-            color: AppColors.darkSlate,
-            height: 1.4,
+        Expanded(
+          child: _buildStatCard(
+            label: 'ATTENDANCE',
+            value: '94%',
+            sub: 'this month',
+            valueColor: const Color(0xFF0F766E),
           ),
-          textAlign: alignment == CrossAxisAlignment.start
-              ? TextAlign.left
-              : TextAlign.right,
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: _buildStatCard(
+            label: 'COMPLETED',
+            value: '96%',
+            sub: 'of assignments',
+            valueColor: const Color(0xFF78350F),
+          ),
         ),
       ],
     );
   }
 
-  Widget _buildSignOutSection() {
-    return InkWell(
-      onTap: () async {
-        final authService = Get.find<AuthService>();
-        await authService.clearSession();
-        Get.offAllNamed(
-          AppRoutes.login,
-          arguments: 'STUDENT',
-        ); // Defaulting to STUDENT role for this screen
-      },
-      child: Container(
-        padding: AppSpacing.all24,
-        decoration: BoxDecoration(
-          color: const Color(0xFFFEF2F2),
-          borderRadius: BorderRadius.circular(AppSpacing.s24),
-          border: Border.all(color: const Color(0xFFFEE2E2)),
-        ),
-        child: Row(
+  Widget _buildStatCard({
+    required String label,
+    required String value,
+    required String sub,
+    Color? valueColor,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: AppColors.borderGrey.withValues(alpha: 0.5)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: AppTextStyles.manrope(
+              fontSize: 10,
+              fontWeight: FontWeight.w800,
+              color: AppColors.textTertiary,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            value,
+            style: AppTextStyles.manrope(
+              fontSize: 20,
+              fontWeight: FontWeight.w800,
+              color: valueColor ?? AppColors.textPrimary,
+              height: 1,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            sub,
+            style: AppTextStyles.lexend(
+              fontSize: 10,
+              color: AppColors.textTertiary,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildQRCard() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: AppColors.borderGrey.withValues(alpha: 0.5)),
+      ),
+      child: Row(
+        children: [
+          const Icon(
+            Icons.qr_code_2_rounded,
+            size: 72,
+            color: AppColors.textPrimary,
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'STUDENT QR',
+                  style: AppTextStyles.manrope(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.textTertiary,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  'STU-2026-041',
+                  style: AppTextStyles.manrope(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Show this at the door so the institute can mark attendance.',
+                  style: AppTextStyles.lexend(
+                    fontSize: 11,
+                    color: AppColors.textSecondary,
+                    height: 1.4,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildGridActions() {
+    return Column(
+      children: [
+        Row(
           children: [
-            Container(
-              padding: AppSpacing.all12,
-              decoration: BoxDecoration(
-                color: const Color(0xFFFEE2E2),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: const Icon(
-                Icons.logout_rounded,
-                color: AppColors.error,
-                size: AppSpacing.s20,
+            Expanded(
+              child: ProfileGridAction(
+                icon: Icons.show_chart_rounded,
+                label: 'Reports',
+                iconBgColor: const Color(0xFFFEF2F2),
+                iconColor: const Color(0xFF7F1D1D),
+                onTap: () => Get.toNamed(AppRoutes.studentReports),
               ),
             ),
-            AppSpacing.h16,
+            const SizedBox(width: 12),
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Sign Out',
-                    style: AppTextStyles.manrope(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.error,
-                    ),
-                  ),
-                  Text(
-                    'Securely terminate session',
-                    style: AppTextStyles.lexend(
-                      fontSize: 12,
-                      color: AppColors.errorRed.withValues(alpha: 0.7),
-                    ),
-                  ),
-                ],
+              child: ProfileGridAction(
+                icon: Icons.book_outlined,
+                label: 'Study\nmaterial',
+                iconBgColor: const Color(0xFFFEF9C3),
+                iconColor: const Color(0xFF713F12),
+                onTap: () => Get.toNamed(AppRoutes.studentStudyMaterial),
               ),
             ),
           ],
         ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              child: ProfileGridAction(
+                icon: Icons.domain_rounded,
+                label: 'Institute',
+                iconBgColor: const Color(0xFFDCFCE7),
+                iconColor: const Color(0xFF14532D),
+                onTap: () => Get.toNamed(AppRoutes.studentInstitute),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: ProfileGridAction(
+                icon: Icons.chat_bubble_outline_rounded,
+                label: 'Chat',
+                iconBgColor: const Color(0xFFFEF2F2),
+                iconColor: const Color(0xFF78350F),
+                onTap: () => Get.toNamed(AppRoutes.studentChat),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              child: ProfileGridAction(
+                icon: Icons.download_rounded,
+                label: 'Receipts',
+                iconBgColor: const Color(0xFFCCFBF1),
+                iconColor: const Color(0xFF134E4A),
+                onTap: () => Get.toNamed(AppRoutes.studentReceiptsList),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(child: SizedBox()),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCardWrap({required List<Widget> children}) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: AppColors.borderGrey.withValues(alpha: 0.5)),
+      ),
+      child: Column(children: children),
+    );
+  }
+
+  Widget _buildYourInfoCard() {
+    return _buildCardWrap(
+      children: [
+        _buildInfoRow('Phone', '+91 98103 22141'),
+        Divider(height: 1, color: AppColors.borderGrey.withValues(alpha: 0.5)),
+        _buildInfoRow('Email', 'aarav.sharma@gmail.com'),
+        Divider(height: 1, color: AppColors.borderGrey.withValues(alpha: 0.5)),
+        _buildInfoRow('Parent', 'Sunita Sharma · +91 98765 43210'),
+      ],
+    );
+  }
+
+  Widget _buildInfoRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 60,
+            child: Text(
+              label,
+              style: AppTextStyles.lexend(
+                fontSize: 13,
+                color: AppColors.textTertiary,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              value,
+              textAlign: TextAlign.right,
+              style: AppTextStyles.lexend(
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+                color: AppColors.textPrimary,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSettingsCard() {
+    return _buildCardWrap(
+      children: [
+        ProfileMenuTile(
+          icon: Icons.notifications_none_rounded,
+          title: 'Notification preferences',
+          onTap: () => Get.toNamed(AppRoutes.studentNotificationPreferences),
+        ),
+        // Divider(height: 1, color: AppColors.borderGrey.withValues(alpha: 0.5)),
+        // const ProfileMenuTile(
+        //   icon: Icons.article_outlined,
+        //   title: 'Language',
+        //   trailingText: 'English',
+        // ),
+        // Divider(height: 1, color: AppColors.borderGrey.withValues(alpha: 0.5)),
+        // const ProfileMenuTile(
+        //   icon: Icons.brightness_auto_rounded,
+        //   title: 'Theme',
+        //   trailingText: 'Light',
+        // ),
+      ],
+    );
+  }
+
+  Widget _buildHelpCard() {
+    return _buildCardWrap(
+      children: [
+        const ProfileMenuTile(
+          icon: Icons.chat_bubble_outline_rounded,
+          title: 'Help & support',
+        ),
+        Divider(height: 1, color: AppColors.borderGrey.withValues(alpha: 0.5)),
+        const ProfileMenuTile(
+          icon: Icons.shield_outlined,
+          title: 'Privacy & terms',
+        ),
+        Divider(height: 1, color: AppColors.borderGrey.withValues(alpha: 0.5)),
+        const ProfileMenuTile(
+          icon: Icons.add_circle_outline_rounded,
+          title: 'Tell us what\'s missing',
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLogOutButton() {
+    return ElevatedButton(
+      onPressed: () async {
+        final authService = Get.find<AuthService>();
+        await authService.clearSession();
+        Get.offAllNamed(AppRoutes.login, arguments: 'STUDENT');
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color(0xFFFEF2F2),
+        elevation: 0,
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(
+            Icons.arrow_forward_rounded,
+            color: Color(0xFF991B1B),
+            size: 18,
+          ),
+          const SizedBox(width: 8),
+          Text(
+            'Log out',
+            style: AppTextStyles.manrope(
+              fontSize: 14,
+              fontWeight: FontWeight.w800,
+              color: const Color(0xFF991B1B),
+            ),
+          ),
+        ],
       ),
     );
   }

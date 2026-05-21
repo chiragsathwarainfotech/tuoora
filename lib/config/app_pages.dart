@@ -53,6 +53,15 @@ import 'package:tuoora/presentation/student/view/student_chat_screen.dart';
 import 'package:tuoora/presentation/student/view/student_fee_reminder_screen.dart';
 import 'package:tuoora/presentation/student/view/student_event_detail_screen.dart';
 import 'package:tuoora/presentation/student/view/student_holiday_detail_screen.dart';
+import 'package:tuoora/presentation/student/view/student_reports_screen.dart';
+import 'package:tuoora/presentation/student/view/student_institute_screen.dart';
+import 'package:tuoora/presentation/student/view/student_receipts_list_screen.dart';
+import 'package:tuoora/presentation/student/view/student_notification_preferences_screen.dart';
+import 'package:tuoora/presentation/student/controllers/student_notification_preferences_controller.dart';
+import 'package:tuoora/presentation/student/view/student_study_material_screen.dart';
+import 'package:tuoora/presentation/student/controllers/student_study_material_controller.dart';
+import 'package:tuoora/presentation/student/view/student_study_material_detail_screen.dart';
+import 'package:tuoora/presentation/student/controllers/student_study_material_detail_controller.dart';
 import 'package:tuoora/presentation/shared/view/role_selection_screen.dart';
 import 'package:tuoora/presentation/shared/bindings/splash_binding.dart';
 import 'package:tuoora/presentation/shared/view/splash_screen.dart';
@@ -146,8 +155,7 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.studentInstitute,
-      page: () => const StudentMainScreen(),
-      binding: StudentBinding(),
+      page: () => const StudentInstituteScreen(),
     ),
     GetPage(
       name: AppRoutes.studentFeeHistory,
@@ -168,6 +176,36 @@ class AppPages {
     GetPage(
       name: AppRoutes.studentHolidayDetail,
       page: () => const StudentHolidayDetailScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.studentReports,
+      page: () => StudentReportsScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.studentReceiptsList,
+      page: () => const StudentReceiptsListScreen(),
+      binding: StudentBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.studentNotificationPreferences,
+      page: () => const StudentNotificationPreferencesScreen(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut<StudentNotificationPreferencesController>(() => StudentNotificationPreferencesController());
+      }),
+    ),
+    GetPage(
+      name: AppRoutes.studentStudyMaterial,
+      page: () => const StudentStudyMaterialScreen(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut<StudentStudyMaterialController>(() => StudentStudyMaterialController());
+      }),
+    ),
+    GetPage(
+      name: AppRoutes.studentStudyMaterialDetail,
+      page: () => const StudentStudyMaterialDetailScreen(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut<StudentStudyMaterialDetailController>(() => StudentStudyMaterialDetailController());
+      }),
     ),
     // Institute routes
     GetPage(

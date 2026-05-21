@@ -20,6 +20,11 @@ class AppRoutes {
   static const String studentFeeReminder = '/student/fee-reminder';
   static const String studentEventDetail = '/student/event-detail';
   static const String studentHolidayDetail = '/student/holiday-detail';
+  static const String studentReports = '/student/reports';
+  static const String studentReceiptsList = '/student/receipts-list';
+  static const String studentNotificationPreferences = '/student/notification-preferences';
+  static const String studentStudyMaterial = '/student/study-material';
+  static const String studentStudyMaterialDetail = '/student/study-material/detail';
 
   static const String instituteDashboard = '/institute/dashboard';
   static const String instituteStudents = '/institute/students';

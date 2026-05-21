@@ -1,6 +1,7 @@
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/widgets/toggle_switch.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
@@ -357,12 +358,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
                   ],
                 ),
               ),
-              Switch(
-                value: value,
-                onChanged: onChanged,
-                activeThumbColor: AppColors.white,
-                activeTrackColor: AppColors.primaryBrand,
-              ),
+              ToggleSwitch(value: value, onChanged: onChanged),
             ],
           ),
         ),

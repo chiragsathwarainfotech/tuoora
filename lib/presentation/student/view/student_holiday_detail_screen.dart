@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
 
 class StudentHolidayDetailScreen extends StatelessWidget {
   const StudentHolidayDetailScreen({super.key});
@@ -12,33 +13,29 @@ class StudentHolidayDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
-      appBar: AppBar(
-        backgroundColor: AppColors.scaffoldBg,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.chevron_left, color: AppColors.textPrimary),
-          onPressed: () => Get.back(),
-        ),
-        title: Text(
-          'Holiday • Buddha Purnima',
-          style: AppTextStyles.manrope(
-            fontSize: 18,
-            fontWeight: FontWeight.w800,
-            color: AppColors.textPrimary,
-          ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(AppSpacing.s16),
+      body: SafeArea(
         child: Column(
+          children: [
+            const StudentAppBar(
+              title: 'Holiday • Buddha Purnima',
+              showDefaultActions: false,
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(AppSpacing.s16),
+                child: Column(
           children: [
             _buildMainCard(),
             const SizedBox(height: AppSpacing.s16),
             _buildDetailsCard(),
             const SizedBox(height: AppSpacing.s16),
             _buildResumeCard(),
-          ],
-        ),
+              ],
+            ),
+          ),
+          ),
+        ],
+      ),
       ),
     );
   }

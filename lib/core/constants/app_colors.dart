@@ -16,6 +16,8 @@ class AppColors {
   static const Color instBrandOrange = Color(0xFFFF6600);
   static const Color instBrandOrangeLight = Color(0xFFFF8800);
   static const Color brandAppBarColor = Color(0xFF663322);
+  static const Color activeTracker = Color(0xFF9b3f00);
+  static const Color inActiveTracker = Color(0xFFd9dcde);
 
   // --- Typography ---
   static const Color textPrimary = Color(0xFF111827);
@@ -114,4 +116,3 @@ class AppColors {
   static const Color studentTabInactiveBg = Color(0xFFF1EFEC);
   static const Color studentTabInactiveText = Color(0xFF6B7280);
 }
-

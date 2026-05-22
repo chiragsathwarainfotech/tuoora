@@ -1,30 +1,16 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/enums/app_enums.dart';
 
-/// Pill shown on the right side of an assignment card.
-enum AssignmentBadge { today, tomorrow, done }
-
-/// Type of file attached to an assignment — drives the icon + colours in
-/// the attachment file tile.
-enum AssignmentAttachmentKind { document, image, video, audio }
-
-/// A single file attached to an assignment.
 class AssignmentAttachment {
   final String id;
-  final String name; // e.g. 'Exercise 8.1 questions.pdf'
-  final String sizeLabel; // e.g. '420 KB'
+  final String name;
+  final String sizeLabel;
   final AssignmentAttachmentKind kind;
   final String? url;
-
-  /// Optional. Used by [AssignmentAttachmentKind.video] / `audio` to show
-  /// the clip length next to the size, e.g. `2:34`.
   final String? durationLabel;
-
-  /// Optional total page count for documents. Drives the `PAGE 1 OF X`
-  /// counter on the preview screen.
   final int? pageCount;
-
-  /// Optional document file extension shown in lowercase on the preview
-  /// (e.g. `PDF`). Defaults to inferring from the filename.
   final String? extensionLabel;
 
   const AssignmentAttachment({
@@ -38,7 +24,6 @@ class AssignmentAttachment {
     this.extensionLabel,
   });
 
-  /// `PDF`, `JPG`, `MP4`, etc — derived from filename or [extensionLabel].
   String get inferredExtension {
     if (extensionLabel != null) return extensionLabel!.toUpperCase();
     final dot = name.lastIndexOf('.');
@@ -47,47 +32,22 @@ class AssignmentAttachment {
   }
 }
 
-/// Domain model for a single assignment row + detail screen.
-///
-/// Card-level fields (icon, stripe, badge, etc.) populate the list tile;
-/// the optional detail fields (instructions, attachments, assignedBy, …)
-/// populate the detail screen. All detail fields are nullable so that
-/// list-only data sources don't have to provide them.
 class Assignment {
   final String id;
   final String title;
-  final String subjectLabel; // e.g. 'MATHEMATICS'
-  final String dueLabel; // e.g. 'DUE TODAY', 'DUE 22 MAY'
+  final String subjectLabel;
+  final String dueLabel;
   final IconData icon;
   final Color stripe;
   final Color iconBg;
   final Color iconColor;
   final AssignmentBadge badge;
-
-  // ─── Detail-screen fields ────────────────────────────────────────────
-  /// Human-friendly full due text shown on the detail page DUE card.
-  /// e.g. `Today, 11:59 PM`, `22 May, 2026`.
   final String? dueDateFullText;
-
-  /// Long instructional body for the detail page.
   final String? instructions;
-
-  /// e.g. `Mr. R. Verma, 16 May 2026`.
   final String? assignedBy;
-
-  /// Files attached by the teacher. Empty list when nothing is attached.
   final List<AssignmentAttachment> attachments;
-
-  /// Pending-state banner subtitle. Used only when [badge] is
-  /// [AssignmentBadge.today] / [AssignmentBadge.tomorrow].
   final String? pendingNote;
-
-  /// First line in the completion banner.
-  /// e.g. `Marked complete by institute on 19 May`.
   final String? completedNote;
-
-  /// Second line in the completion banner.
-  /// e.g. `Graded: Excellent`.
   final String? gradeNote;
 
   const Assignment({
@@ -110,4 +70,148 @@ class Assignment {
   });
 
   bool get isCompleted => badge == AssignmentBadge.done;
+
+  factory Assignment.fromJson(
+    Map<String, dynamic> json, {
+    bool isCompleted = false,
+  }) {
+    final subject = json['subject']?.toString() ?? 'General';
+
+    final palettes = <Map<String, Color>>[
+      {'stripe': AppColors.studentProgressOrange, 'bg': AppColors.studentBrandSoft},
+      {'stripe': AppColors.subjectPhysics, 'bg': AppColors.subjectPhysicsSoft},
+      {'stripe': AppColors.studentPresentText, 'bg': AppColors.studentPresentBg},
+      {'stripe': AppColors.studentProgressBlue, 'bg': AppColors.studentUpdateIconBg},
+      {'stripe': AppColors.bohoRed, 'bg': AppColors.errorBg},
+    ];
+
+    final palette = palettes[Random().nextInt(palettes.length)];
+
+    final stripe = palette['stripe'] as Color;
+    final iconBg = palette['bg'] as Color;
+    final iconColor = stripe;
+    final icon = Icons.menu_book_rounded;
+
+    final attachments = <AssignmentAttachment>[];
+    if (json['attachment_url'] != null) {
+      final url = json['attachment_url'].toString();
+      final name = url.split('/').last;
+      final ext = name.split('.').last.toLowerCase();
+      var kind = AssignmentAttachmentKind.document;
+      if (['jpg', 'jpeg', 'png'].contains(ext)) {
+        kind = AssignmentAttachmentKind.image;
+      }
+      if (['mp4', 'mov'].contains(ext)) kind = AssignmentAttachmentKind.video;
+
+      attachments.add(
+        AssignmentAttachment(
+          id: url,
+          name: name,
+          sizeLabel: 'Attachment',
+          kind: kind,
+          url: url,
+        ),
+      );
+    }
+
+    final rawDue = json['due_date']?.toString();
+    DateTime? parsedDue;
+    if (rawDue != null && rawDue.isNotEmpty) {
+      try {
+        parsedDue = DateTime.parse(rawDue);
+      } catch (_) {}
+    }
+
+    String dueLabelText = rawDue ?? '';
+    if (parsedDue != null) {
+      final now = DateTime.now();
+      final today = DateTime(now.year, now.month, now.day);
+      final dueDay = DateTime(parsedDue.year, parsedDue.month, parsedDue.day);
+      final diff = dueDay.difference(today).inDays;
+      if (diff == 0) {
+        dueLabelText = 'Today';
+      } else if (diff == 1) {
+        dueLabelText = 'Tomorrow';
+      } else {
+        const months = [
+          'Jan',
+          'Feb',
+          'Mar',
+          'Apr',
+          'May',
+          'Jun',
+          'Jul',
+          'Aug',
+          'Sep',
+          'Oct',
+          'Nov',
+          'Dec',
+        ];
+        dueLabelText = '${parsedDue.day} ${months[parsedDue.month - 1]}';
+      }
+    }
+
+    AssignmentBadge badge = AssignmentBadge.today;
+    if (isCompleted) {
+      badge = AssignmentBadge.done;
+    } else {
+      if (json['is_overdue'] == true) {
+        badge = AssignmentBadge.today;
+      } else {
+        badge = AssignmentBadge.tomorrow;
+      }
+    }
+
+    String? completedNoteStr;
+    String? gradeNoteStr;
+    if (json['submission'] != null) {
+      final sub = json['submission'];
+      completedNoteStr = 'Status: ${sub['status'] ?? 'Submitted'}';
+      if (sub['score'] != null) {
+        gradeNoteStr = 'Score: ${sub['score']}';
+      }
+    }
+
+    return Assignment(
+      id: json['id']?.toString() ?? '',
+      title: json['title'] ?? '',
+      subjectLabel: subject.toUpperCase(),
+      dueLabel: dueLabelText,
+      icon: icon,
+      stripe: stripe,
+      iconBg: iconBg,
+      iconColor: iconColor,
+      badge: badge,
+      dueDateFullText: json['due_date'],
+      instructions: json['description'],
+      assignedBy: 'Batch: ${json['batch_name']}',
+      attachments: attachments,
+      pendingNote: json['is_overdue'] == true ? 'Overdue' : null,
+      completedNote: completedNoteStr,
+      gradeNote: gradeNoteStr,
+    );
+  }
+}
+
+class AssignmentSummary {
+  final int total;
+  final int pending;
+  final int completed;
+  final int overdue;
+
+  const AssignmentSummary({
+    required this.total,
+    required this.pending,
+    required this.completed,
+    required this.overdue,
+  });
+
+  factory AssignmentSummary.fromJson(Map<String, dynamic> json) {
+    return AssignmentSummary(
+      total: json['total'] ?? 0,
+      pending: json['pending'] ?? 0,
+      completed: json['completed'] ?? 0,
+      overdue: json['overdue'] ?? 0,
+    );
+  }
 }

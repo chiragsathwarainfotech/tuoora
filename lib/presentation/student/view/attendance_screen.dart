@@ -9,6 +9,7 @@ import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/widgets/student_bottom_nav.dart';
 import 'package:tuoora/presentation/student/controllers/attendance_history_controller.dart';
 import 'package:tuoora/presentation/student/widgets/student_section_header.dart';
+import 'package:shimmer/shimmer.dart';
 
 class AttendanceScreen extends GetView<AttendanceHistoryController> {
   final bool showBottomNav;
@@ -17,7 +18,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.studentBg,
+      backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
         bottom: false,
         child: Column(
@@ -96,10 +97,6 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
   }
 
   Widget _buildTodayCard() {
-    final now = DateTime.now();
-    final dayStr =
-        '${_weekdayName(now.weekday)}, ${now.day} ${_shortMonth(now.month)}';
-
     return Container(
       padding: const EdgeInsets.all(AppSpacing.s16),
       decoration: BoxDecoration(
@@ -113,48 +110,65 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
           ),
         ],
       ),
-      child: Row(
-        children: [
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              color: AppColors.studentPresentBg,
-              borderRadius: BorderRadius.circular(AppSpacing.s8),
+      child: Obx(() {
+        if (controller.isLoading.value) {
+          return _buildTodayCardShimmer();
+        }
+
+        final data = controller.attendanceData.value?.today;
+        if (data == null) return const SizedBox();
+
+        final isNotMarked = data.status == 'Not Marked';
+
+        return Row(
+          children: [
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: isNotMarked
+                    ? AppColors.primaryBrand
+                    : AppColors.studentPresentBg,
+                borderRadius: BorderRadius.circular(AppSpacing.s8),
+              ),
+              child: Icon(
+                isNotMarked ? Icons.close_rounded : Icons.check_rounded,
+                color: isNotMarked
+                    ? AppColors.white
+                    : AppColors.studentPresentText,
+                size: 24,
+              ),
             ),
-            child: const Icon(
-              Icons.check_rounded,
-              color: AppColors.studentPresentText,
-              size: 24,
-            ),
-          ),
-          AppSpacing.h16,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Present',
-                  style: AppTextStyles.manrope(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.studentPresentText,
+            AppSpacing.h16,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    data.status,
+                    style: AppTextStyles.manrope(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800,
+                      color: isNotMarked
+                          ? AppColors.primaryBrand
+                          : AppColors.studentPresentText,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  '$dayStr - checked in at 8:00 AM',
-                  style: AppTextStyles.lexend(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w400,
-                    color: AppColors.textTertiary,
+                  const SizedBox(height: 2),
+                  Text(
+                    data.text,
+                    style: AppTextStyles.lexend(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.textTertiary,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
+          ],
+        );
+      }),
     );
   }
 
@@ -223,13 +237,10 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
   }
 
   Widget _buildGoToTodayButton() {
-    final now = DateTime.now();
-    final todayStr =
-        '${now.day} ${_shortMonth(now.month).toUpperCase()} ${now.year}';
     return GestureDetector(
       onTap: controller.goToToday,
       child: CustomPaint(
-        painter: _DashedRectPainter(color: AppColors.studentBrandAccent),
+        painter: _DashedRectPainter(color: AppColors.orangeTag),
         child: Container(
           padding: const EdgeInsets.symmetric(
             vertical: AppSpacing.s10,
@@ -243,17 +254,21 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
                   Icon(
                     Icons.radio_button_checked,
                     size: 16,
-                    color: AppColors.studentBrandAccent,
+                    color: AppColors.orangeTag,
                   ),
                   AppSpacing.h8,
-                  Text(
-                    'TODAY - $todayStr',
-                    style: AppTextStyles.manrope(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.studentBrandAccent,
-                    ),
-                  ),
+                  Obx(() {
+                    final data = controller.attendanceData.value;
+                    final todayStr = data?.calendar.todayLabel ?? 'TODAY';
+                    return Text(
+                      todayStr,
+                      style: AppTextStyles.manrope(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.orangeTag,
+                      ),
+                    );
+                  }),
                 ],
               ),
               Row(
@@ -263,14 +278,14 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
                     style: AppTextStyles.manrope(
                       fontSize: 11,
                       fontWeight: FontWeight.w800,
-                      color: AppColors.studentBrandAccent,
+                      color: AppColors.orangeTag,
                     ),
                   ),
                   AppSpacing.h4,
                   Icon(
                     Icons.arrow_right_alt,
                     size: 16,
-                    color: AppColors.studentBrandAccent,
+                    color: AppColors.orangeTag,
                   ),
                 ],
               ),
@@ -284,10 +299,14 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
   Widget _buildCalendarGrid() {
     final days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
     return Obx(() {
-      final now = DateTime.now();
+      if (controller.isLoading.value) {
+        return _buildCalendarGridShimmer();
+      }
+
+      final calendarData = controller.attendanceData.value?.calendar;
+      final Map<int, String> statusDays = calendarData?.days ?? {};
+
       final viewDate = controller.viewDate.value;
-      final isCurrentMonth =
-          viewDate.year == now.year && viewDate.month == now.month;
 
       int daysInMonth = DateTime(viewDate.year, viewDate.month + 1, 0).day;
       int firstWeekday = DateTime(viewDate.year, viewDate.month, 1).weekday;
@@ -331,39 +350,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
       }
 
       for (int day = 1; day <= daysInMonth; day++) {
-        String type = 'p';
-
-        int currentWeekday = DateTime(
-          viewDate.year,
-          viewDate.month,
-          day,
-        ).weekday;
-
-        if (currentWeekday == 6 || currentWeekday == 7) {
-          type = 'p';
-        } else if (isCurrentMonth) {
-          if (day > now.day) {
-            type = 'p';
-          } else {
-            if (day % 7 == 0) {
-              type = 'a';
-            } else if (day % 13 == 0) {
-              type = 'h';
-            } else {
-              type = 'p';
-            }
-          }
-        } else if (viewDate.isAfter(now)) {
-          type = 'p';
-        } else {
-          if (day % 8 == 0) {
-            type = 'a';
-          } else if (day % 15 == 0) {
-            type = 'h';
-          } else {
-            type = 'p';
-          }
-        }
+        String type = statusDays[day] ?? 'no_class';
 
         currentRow.add(Expanded(child: _buildDateBubble('$day', type)));
 
@@ -403,23 +390,27 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
     bool isDashed = false;
 
     switch (type) {
-      case 'p': // Present
-        bg = const Color(0xFFDCFCE7); // studentPresentBg
-        fg = const Color(0xFF15803D); // studentPresentText
+      case 'present': // Present
+      case 'p':
+        bg = AppColors.studentPresentBg; // studentPresentBg
+        fg = AppColors.studentPresentText; // studentPresentText
         break;
-      case 'a': // Absent
-        bg = const Color(0xFFFEF2F2);
-        fg = const Color(0xFFB91C1C);
+      case 'absent': // Absent
+      case 'a':
+        bg = AppColors.errorBg;
+        fg = AppColors.bohoRed;
         break;
-      case 'h': // Holiday
-        bg = const Color(0xFFFEF3C7);
-        fg = const Color(0xFF92400E);
+      case 'holiday': // Holiday
+      case 'h':
+        bg = AppColors.amberLight;
+        fg = AppColors.studentTomorrowPillText;
         break;
       case 'p_dashed': // Previous month (dashed)
         bg = Colors.transparent;
         fg = AppColors.textTertiary;
         isDashed = true;
         break;
+      case 'no_class':
       default:
         bg = AppColors.scaffoldBg;
         fg = AppColors.textTertiary;
@@ -466,11 +457,11 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _legendItem(const Color(0xFF15803D), 'Present'),
+        _legendItem(AppColors.studentPresentText, 'Present'),
         AppSpacing.h12,
-        _legendItem(const Color(0xFFB91C1C), 'Absent'),
+        _legendItem(AppColors.bohoRed, 'Absent'),
         AppSpacing.h12,
-        _legendItem(const Color(0xFF92400E), 'Holiday'),
+        _legendItem(AppColors.studentTomorrowPillText, 'Holiday'),
         AppSpacing.h12,
         _legendItem(AppColors.borderLightGray, 'No class'),
       ],
@@ -517,10 +508,15 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
         ],
       ),
       child: Obx(() {
-        final stats = controller.currentMonthStats;
-        final total = stats['total']!;
-        final present = stats['present']!;
-        final percent = total > 0 ? ((present / total) * 100).round() : 100;
+        if (controller.isLoading.value) {
+          return _buildSummaryCardShimmer();
+        }
+
+        final data = controller.attendanceData.value;
+        if (data == null) return const SizedBox();
+
+        final summary = data.summary;
+        final percent = summary.pct;
 
         return Row(
           children: [
@@ -535,7 +531,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
                     style: AppTextStyles.manrope(
                       fontSize: 13,
                       fontWeight: FontWeight.w800,
-                      color: const Color(0xFF15803D),
+                      color: AppColors.studentPresentText,
                     ),
                   ),
                 ),
@@ -547,7 +543,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${controller.currentMonthName.toUpperCase()} OVERALL',
+                    summary.label,
                     style: AppTextStyles.manrope(
                       fontSize: 10,
                       fontWeight: FontWeight.w800,
@@ -565,7 +561,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    '${stats['present']} present - ${stats['absent']} absent - ${stats['holiday']} holiday',
+                    '${summary.present} present - ${summary.absent} absent',
                     style: AppTextStyles.lexend(
                       fontSize: 11,
                       fontWeight: FontWeight.w400,
@@ -580,37 +576,101 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
       }),
     );
   }
+}
 
-  String _shortMonth(int m) {
-    const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-    return months[m - 1];
-  }
+Widget _buildTodayCardShimmer() {
+  return Shimmer.fromColors(
+    baseColor: Colors.grey[300]!,
+    highlightColor: Colors.grey[100]!,
+    child: Row(
+      children: [
+        Container(
+          width: 48,
+          height: 48,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(AppSpacing.s8),
+          ),
+        ),
+        AppSpacing.h16,
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(width: 100, height: 16, color: Colors.white),
+              const SizedBox(height: 8),
+              Container(
+                width: double.infinity,
+                height: 12,
+                color: Colors.white,
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+}
 
-  String _weekdayName(int wd) {
-    const days = [
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday',
-      'Sunday',
-    ];
-    return days[wd - 1];
-  }
+Widget _buildSummaryCardShimmer() {
+  return Shimmer.fromColors(
+    baseColor: Colors.grey[300]!,
+    highlightColor: Colors.grey[100]!,
+    child: Row(
+      children: [
+        Container(
+          width: 64,
+          height: 64,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            shape: BoxShape.circle,
+          ),
+        ),
+        AppSpacing.h16,
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(width: 80, height: 12, color: Colors.white),
+              const SizedBox(height: 8),
+              Container(width: 60, height: 24, color: Colors.white),
+              const SizedBox(height: 8),
+              Container(width: 150, height: 12, color: Colors.white),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget _buildCalendarGridShimmer() {
+  return Shimmer.fromColors(
+    baseColor: Colors.grey[300]!,
+    highlightColor: Colors.grey[100]!,
+    child: Column(
+      children: List.generate(
+        6,
+        (index) => Padding(
+          padding: const EdgeInsets.only(bottom: AppSpacing.s8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: List.generate(
+              7,
+              (i) => Container(
+                width: AppSpacing.s36,
+                height: AppSpacing.s36,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(AppSpacing.s8),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
 }
 
 class HeaderIconButton extends StatelessWidget {
@@ -673,7 +733,7 @@ class _SummaryRingPainter extends CustomPainter {
       radius: (size.shortestSide - stroke) / 2,
     );
     final track = Paint()
-      ..color = const Color(0xFFDCFCE7)
+      ..color = AppColors.studentPresentBg
       ..style = PaintingStyle.stroke
       ..strokeWidth = stroke
       ..strokeCap = StrokeCap.round;
@@ -681,7 +741,7 @@ class _SummaryRingPainter extends CustomPainter {
 
     if (percent <= 0) return;
     final progress = Paint()
-      ..color = const Color(0xFF15803D)
+      ..color = AppColors.studentPresentText
       ..style = PaintingStyle.stroke
       ..strokeWidth = stroke
       ..strokeCap = StrokeCap.round;

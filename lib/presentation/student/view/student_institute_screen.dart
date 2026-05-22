@@ -1,47 +1,64 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
-import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
+import 'package:tuoora/presentation/student/controllers/student_institute_controller.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class StudentInstituteScreen extends StatelessWidget {
+class StudentInstituteScreen extends GetView<StudentInstituteController> {
   const StudentInstituteScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.studentBg,
+      backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
         child: Column(
           children: [
             const StudentAppBar(title: 'Institute', showDefaultActions: false),
             Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _buildHeroCard(),
-                    const SizedBox(height: 16),
-                    _buildContactCard(),
-                    const SizedBox(height: 16),
-                    _buildChatButton(),
-                    const SizedBox(height: 32),
-                    Text(
-                      'LOCATION',
-                      style: AppTextStyles.manrope(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.textSecondary,
-                      ),
+              child: Obx(() {
+                if (controller.isLoading.value) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: AppColors.primaryBrand,
                     ),
-                    const SizedBox(height: 8),
-                    _buildMapCard(),
-                  ],
-                ),
-              ),
+                  );
+                }
+
+                final institute = controller.instituteData.value;
+                if (institute == null) {
+                  return const Center(child: Text('No institute data found'));
+                }
+
+                return SingleChildScrollView(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _buildHeroCard(institute),
+                      const SizedBox(height: 16),
+                      _buildContactCard(institute),
+                      const SizedBox(height: 16),
+                      _buildChatButton(),
+                      const SizedBox(height: 32),
+                      Text(
+                        'LOCATION',
+                        style: AppTextStyles.manrope(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      _buildMapCard(institute),
+                    ],
+                  ),
+                );
+              }),
             ),
           ],
         ),
@@ -49,7 +66,7 @@ class StudentInstituteScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHeroCard() {
+  Widget _buildHeroCard(dynamic institute) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
       decoration: BoxDecoration(
@@ -63,22 +80,41 @@ class StudentInstituteScreen extends StatelessWidget {
             width: 72,
             height: 72,
             decoration: const BoxDecoration(
-              color: Color(0xFF334155),
+              color: AppColors.textDarkGrey,
               shape: BoxShape.circle,
             ),
             alignment: Alignment.center,
-            child: Text(
-              'SC',
-              style: AppTextStyles.manrope(
-                fontSize: 24,
-                fontWeight: FontWeight.w800,
-                color: AppColors.white,
-              ),
-            ),
+            child: institute.logoUrl != null
+                ? ClipOval(
+                    child: CachedNetworkImage(
+                      imageUrl: institute.logoUrl!,
+                      width: 72,
+                      height: 72,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) =>
+                          const CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => Text(
+                        institute.initials,
+                        style: AppTextStyles.manrope(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.white,
+                        ),
+                      ),
+                    ),
+                  )
+                : Text(
+                    institute.initials,
+                    style: AppTextStyles.manrope(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.white,
+                    ),
+                  ),
           ),
           const SizedBox(height: 16),
           Text(
-            'Saraswati Coaching Centre',
+            institute.name,
             style: AppTextStyles.manrope(
               fontSize: 16,
               fontWeight: FontWeight.w800,
@@ -91,7 +127,7 @@ class StudentInstituteScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildContactCard() {
+  Widget _buildContactCard(dynamic institute) {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
@@ -100,12 +136,26 @@ class StudentInstituteScreen extends StatelessWidget {
       ),
       child: Column(
         children: [
-          _buildInfoRow('Contact person', 'Mr. R. Verma'),
+          _buildInfoRow('Contact person', institute.contactPerson),
           Divider(
             height: 1,
             color: AppColors.borderGrey.withValues(alpha: 0.5),
           ),
-          _buildInfoRow('Phone', '+91  20  4123  7700'),
+          _buildInfoRow('Phone', institute.phone),
+          if (institute.email != null) ...[
+            Divider(
+              height: 1,
+              color: AppColors.borderGrey.withValues(alpha: 0.5),
+            ),
+            _buildInfoRow('Email', institute.email!),
+          ],
+          if (institute.website != null) ...[
+            Divider(
+              height: 1,
+              color: AppColors.borderGrey.withValues(alpha: 0.5),
+            ),
+            _buildInfoRow('Website', institute.website!),
+          ],
         ],
       ),
     );
@@ -141,7 +191,7 @@ class StudentInstituteScreen extends StatelessWidget {
     return ElevatedButton(
       onPressed: () => Get.toNamed(AppRoutes.studentChat),
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFF92400E),
+        backgroundColor: AppColors.studentTomorrowPillText,
         elevation: 0,
         padding: const EdgeInsets.symmetric(vertical: 16),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -168,7 +218,19 @@ class StudentInstituteScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMapCard() {
+  Widget _buildMapCard(dynamic institute) {
+    final location = institute.location;
+    final addressLine1 = location.address ?? '';
+    final addressLine2 =
+        '${location.city ?? ''}, ${location.state ?? ''} ${location.pincode ?? ''}'
+            .trim();
+
+    // Fallback if parts are empty
+    final displayAddr1 = addressLine1.isNotEmpty
+        ? addressLine1
+        : (location.fullAddress ?? 'Address not available');
+    final displayAddr2 = addressLine1.isNotEmpty ? addressLine2 : '';
+
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
@@ -181,7 +243,7 @@ class StudentInstituteScreen extends StatelessWidget {
           Container(
             height: 160,
             decoration: const BoxDecoration(
-              color: Color(0xFFDCFCE7),
+              color: AppColors.studentPresentBg,
               borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
             ),
             child: Stack(
@@ -195,7 +257,7 @@ class StudentInstituteScreen extends StatelessWidget {
                   child: Icon(
                     Icons.location_on_rounded,
                     size: 40,
-                    color: const Color(0xFF92400E),
+                    color: AppColors.studentTomorrowPillText,
                     shadows: [
                       Shadow(
                         color: Colors.black.withValues(alpha: 0.3),
@@ -216,12 +278,12 @@ class StudentInstituteScreen extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFFEF2F2),
+                    color: AppColors.errorBg,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Icon(
                     Icons.domain_rounded,
-                    color: Color(0xFF78350F),
+                    color: AppColors.studentBrand,
                     size: 20,
                   ),
                 ),
@@ -231,26 +293,44 @@ class StudentInstituteScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Lane 5, Koregaon Park',
+                        displayAddr1,
                         style: AppTextStyles.manrope(
                           fontSize: 14,
                           fontWeight: FontWeight.w800,
                           color: AppColors.textPrimary,
                         ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Pune, Maharashtra 411001',
-                        style: AppTextStyles.lexend(
-                          fontSize: 11,
-                          color: AppColors.textSecondary,
+                      if (displayAddr2.isNotEmpty) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          displayAddr2,
+                          style: AppTextStyles.lexend(
+                            fontSize: 11,
+                            color: AppColors.textSecondary,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
+                      ],
                     ],
                   ),
                 ),
                 OutlinedButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    if (location.fullAddress != null) {
+                      final url =
+                          'https://www.google.com/maps/search/?api=1&query=${Uri.encodeComponent(location.fullAddress!)}';
+                      final uri = Uri.parse(url);
+                      if (await canLaunchUrl(uri)) {
+                        await launchUrl(
+                          uri,
+                          mode: LaunchMode.externalApplication,
+                        );
+                      }
+                    }
+                  },
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 12,
@@ -300,7 +380,7 @@ class MapBackgroundPainter extends CustomPainter {
       ..style = PaintingStyle.stroke;
 
     final blockPaint = Paint()
-      ..color = const Color(0xFFBBF7D0)
+      ..color = AppColors.greenBg
       ..style = PaintingStyle.fill;
 
     // Draw horizontal road

@@ -13,7 +13,7 @@ class ForgotPasswordScreen extends GetView<ForgotPasswordController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.loginBg,
+      backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
         child: Column(
           children: [

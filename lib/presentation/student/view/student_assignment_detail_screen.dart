@@ -4,32 +4,29 @@ import 'package:get/get.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/enums/app_enums.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/student/controllers/assignments_controller.dart';
 import 'package:tuoora/presentation/student/models/assignment_model.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
 import 'package:tuoora/presentation/student/widgets/student_section_header.dart';
 
-/// Student → Assignment detail.
-///
-/// One screen for both pending and completed assignments — the visual
-/// state (DUE pill colour + status banner) is driven by
-/// [Assignment.isCompleted]. The screen is fully stateless; it reads
-/// `controller.selectedAssignment` set by [AssignmentsController.openAssignment].
 class StudentAssignmentDetailScreen extends GetView<AssignmentsController> {
   const StudentAssignmentDetailScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.studentBg,
+      backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
         bottom: false,
         child: Obx(() {
+          if (controller.isDetailLoading.value)
+            return const Center(
+              child: CircularProgressIndicator(color: AppColors.primaryBrand),
+            );
           final assignment = controller.selectedAssignment.value;
           if (assignment == null) {
-            // Defensive — shouldn't happen via the normal `openAssignment`
-            // flow, but covers a hot-reload landing here directly.
             return const Center(
               child: Padding(
                 padding: EdgeInsets.all(AppSpacing.s24),
@@ -79,8 +76,8 @@ class _DetailBody extends StatelessWidget {
                     assignment.attachments.map(
                       (a) => _AttachmentTile(
                         attachment: a,
-                        onTap: () => Get.find<AssignmentsController>()
-                            .openAttachment(a),
+                        onTap: () =>
+                            Get.find<AssignmentsController>().openAttachment(a),
                       ),
                     ),
                     const SizedBox(height: AppSpacing.s8),
@@ -107,8 +104,6 @@ class _DetailBody extends StatelessWidget {
     return out;
   }
 }
-
-// ────────────────────────────────────────────────────────────── Due card
 
 class _DueCard extends StatelessWidget {
   final Assignment assignment;
@@ -137,13 +132,13 @@ class _DueCard extends StatelessWidget {
             width: AppSpacing.s40,
             height: AppSpacing.s40,
             decoration: BoxDecoration(
-              color: AppColors.studentTodayPillBg,
+              color: AppColors.studentBrandSoft,
               borderRadius: BorderRadius.circular(AppSpacing.s12),
             ),
             child: const Icon(
               Icons.calendar_today_rounded,
               size: 18,
-              color: AppColors.studentTodayPillText,
+              color: AppColors.studentBrand,
             ),
           ),
           AppSpacing.h12,
@@ -157,7 +152,7 @@ class _DueCard extends StatelessWidget {
                   style: AppTextStyles.manrope(
                     fontSize: 10,
                     fontWeight: FontWeight.w800,
-                    color: AppColors.studentBrandAccent,
+                    color: AppColors.orangeTag,
                     letterSpacing: 1.2,
                   ),
                 ),
@@ -193,16 +188,16 @@ class _StatusPill extends StatelessWidget {
     late final Color fg;
     late final String label;
     if (isCompleted) {
-      bg = AppColors.studentDonePillBg;
-      fg = AppColors.studentDonePillText;
+      bg = AppColors.studentPresentBg;
+      fg = AppColors.studentPresentText;
       label = AppStrings.studentAssignmentDetailCompletedPill;
     } else if (badge == AssignmentBadge.tomorrow) {
-      bg = AppColors.studentTomorrowPillBg;
+      bg = AppColors.amberLight;
       fg = AppColors.studentTomorrowPillText;
       label = AppStrings.studentTomorrowPill;
     } else {
-      bg = AppColors.studentTodayPillBg;
-      fg = AppColors.studentTodayPillText;
+      bg = AppColors.studentBrandSoft;
+      fg = AppColors.studentBrand;
       label = AppStrings.studentTodayPill;
     }
     return Container(
@@ -257,7 +252,7 @@ class _InstructionsCard extends StatelessWidget {
             style: AppTextStyles.manrope(
               fontSize: 10,
               fontWeight: FontWeight.w800,
-              color: AppColors.studentBrandAccent,
+              color: AppColors.orangeTag,
               letterSpacing: 1.2,
             ),
           ),
@@ -401,23 +396,23 @@ class _AttachmentIcon extends StatelessWidget {
     late final IconData icon;
     switch (kind) {
       case AssignmentAttachmentKind.document:
-        bg = AppColors.attachmentDocumentBg;
-        fg = AppColors.attachmentDocumentColor;
+        bg = AppColors.studentPresentBg;
+        fg = AppColors.studentPresentText;
         icon = Icons.description_rounded;
         break;
       case AssignmentAttachmentKind.image:
-        bg = AppColors.attachmentImageBg;
-        fg = AppColors.attachmentImageColor;
+        bg = AppColors.studentBrandSoft;
+        fg = AppColors.orangeTag;
         icon = Icons.image_rounded;
         break;
       case AssignmentAttachmentKind.video:
-        bg = AppColors.attachmentImageBg;
-        fg = AppColors.attachmentImageColor;
+        bg = AppColors.studentBrandSoft;
+        fg = AppColors.orangeTag;
         icon = Icons.videocam_rounded;
         break;
       case AssignmentAttachmentKind.audio:
-        bg = AppColors.attachmentImageBg;
-        fg = AppColors.attachmentImageColor;
+        bg = AppColors.studentBrandSoft;
+        fg = AppColors.orangeTag;
         icon = Icons.audiotrack_rounded;
         break;
     }
@@ -459,7 +454,7 @@ class _PendingBanner extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppSpacing.s14),
       decoration: BoxDecoration(
-        color: AppColors.studentPendingBannerBg,
+        color: AppColors.amberLight,
         borderRadius: BorderRadius.circular(AppSpacing.s14),
       ),
       child: Row(
@@ -470,7 +465,7 @@ class _PendingBanner extends StatelessWidget {
             child: Icon(
               Icons.notifications_active_outlined,
               size: 20,
-              color: AppColors.studentPendingBannerText,
+              color: AppColors.studentTomorrowPillText,
             ),
           ),
           AppSpacing.h12,
@@ -484,7 +479,7 @@ class _PendingBanner extends StatelessWidget {
                   style: AppTextStyles.manrope(
                     fontSize: 13,
                     fontWeight: FontWeight.w800,
-                    color: AppColors.studentPendingBannerText,
+                    color: AppColors.studentTomorrowPillText,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -492,7 +487,7 @@ class _PendingBanner extends StatelessWidget {
                   assignment.pendingNote ?? '',
                   style: AppTextStyles.lexend(
                     fontSize: 12,
-                    color: AppColors.studentPendingBannerText,
+                    color: AppColors.studentTomorrowPillText,
                     height: 1.4,
                   ),
                 ),
@@ -515,7 +510,7 @@ class _CompletedBanner extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppSpacing.s14),
       decoration: BoxDecoration(
-        color: AppColors.studentCompletedBannerBg,
+        color: AppColors.studentPresentBg,
         borderRadius: BorderRadius.circular(AppSpacing.s14),
       ),
       child: Row(
@@ -526,7 +521,7 @@ class _CompletedBanner extends StatelessWidget {
             child: Icon(
               Icons.check_rounded,
               size: 20,
-              color: AppColors.studentCompletedBannerText,
+              color: AppColors.studentPresentText,
             ),
           ),
           AppSpacing.h12,
@@ -540,7 +535,7 @@ class _CompletedBanner extends StatelessWidget {
                   style: AppTextStyles.manrope(
                     fontSize: 13,
                     fontWeight: FontWeight.w800,
-                    color: AppColors.studentCompletedBannerText,
+                    color: AppColors.studentPresentText,
                   ),
                 ),
                 if (assignment.gradeNote != null) ...[
@@ -549,7 +544,7 @@ class _CompletedBanner extends StatelessWidget {
                     assignment.gradeNote!,
                     style: AppTextStyles.lexend(
                       fontSize: 12,
-                      color: AppColors.studentCompletedBannerText,
+                      color: AppColors.studentPresentText,
                       height: 1.4,
                     ),
                   ),

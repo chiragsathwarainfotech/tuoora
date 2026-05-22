@@ -260,7 +260,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
           decoration: BoxDecoration(
             color: AppColors.white,
             borderRadius: BorderRadius.circular(AppSpacing.s24),
-            border: Border.all(color: AppColors.divider),
+            border: Border.all(color: AppColors.background),
           ),
           child: Column(
             children: [
@@ -366,7 +366,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
           const Divider(
             height: AppSpacing.s2,
             indent: AppSpacing.s88,
-            color: AppColors.divider,
+            color: AppColors.background,
           ),
       ],
     );

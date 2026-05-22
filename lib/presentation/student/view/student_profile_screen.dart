@@ -20,7 +20,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.studentBg,
+      backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
         child: Obx(() {
           if (controller.isLoading.value) {
@@ -104,7 +104,11 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
               Container(
                 height: 70,
                 decoration: const BoxDecoration(
-                  color: Color(0xFFDF7634),
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [AppColors.primaryBrand, AppColors.instBrandOrange],
+                  ),
                   borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
                 ),
               ),
@@ -141,7 +145,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
                         Text(
                           'Member since   ${header.memberSince}',
                           style: AppTextStyles.lexend(
-                            fontSize: 11,
+                            fontSize: 12,
                             color: AppColors.textSecondary,
                           ),
                         ),
@@ -164,18 +168,22 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
                   return Container(
                     width: 72,
                     height: 72,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFFEF2F2),
-                      shape: BoxShape.circle,
-                    ),
+                    decoration: const BoxDecoration(shape: BoxShape.circle),
                     clipBehavior: Clip.antiAlias,
                     child: imagePath.isNotEmpty
-                        ? Image.file(File(imagePath), fit: BoxFit.cover)
+                        ? Image.file(
+                            File(imagePath),
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, _, _) =>
+                                const _AvatarPersonFallback(),
+                          )
                         : (header.avatarUrl.isNotEmpty &&
                                   header.avatarUrl.startsWith('http')
                               ? Image.network(
                                   header.avatarUrl,
                                   fit: BoxFit.cover,
+                                  errorBuilder: (_, _, _) =>
+                                      const _AvatarPersonFallback(),
                                 )
                               : Center(
                                   child: Text(
@@ -183,7 +191,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
                                     style: AppTextStyles.manrope(
                                       fontSize: 28,
                                       fontWeight: FontWeight.w900,
-                                      color: const Color(0xFF78350F),
+                                      color: AppColors.primaryBrand,
                                     ),
                                   ),
                                 )),
@@ -194,8 +202,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
                   bottom: -4,
                   child: GestureDetector(
                     onTap: () {
-                      Get.find<StudentProfileController>()
-                          .showImagePickerOptions();
+                      controller.showImagePickerOptions();
                     },
                     child: Container(
                       padding: const EdgeInsets.all(2),
@@ -206,7 +213,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
                       child: Container(
                         padding: const EdgeInsets.all(2),
                         decoration: const BoxDecoration(
-                          color: Color(0xFF92400E),
+                          color: AppColors.primaryBrand,
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(
@@ -233,15 +240,15 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
           child: _buildStatCard(
             label: 'ATTENDANCE',
             value: '${stats.attendancePct}%',
-            valueColor: const Color(0xFF0F766E),
+            valueColor: AppColors.greenText,
           ),
         ),
         const SizedBox(width: 8),
         Expanded(
           child: _buildStatCard(
-            label: 'COMPLETED',
+            label: 'ASSIGNMENT COMPLETED',
             value: '${stats.assignmentsPct}%',
-            valueColor: const Color(0xFF78350F),
+            valueColor: AppColors.brandAppBarColor,
           ),
         ),
       ],
@@ -349,8 +356,8 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
               child: ProfileGridAction(
                 icon: Icons.show_chart_rounded,
                 label: 'Reports',
-                iconBgColor: const Color(0xFFFEF2F2),
-                iconColor: const Color(0xFF7F1D1D),
+                iconBgColor: AppColors.errorBg,
+                iconColor: AppColors.studentBrand,
                 onTap: () => Get.toNamed(AppRoutes.studentReports),
               ),
             ),
@@ -359,8 +366,8 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
               child: ProfileGridAction(
                 icon: Icons.book_outlined,
                 label: 'Study\nmaterial',
-                iconBgColor: const Color(0xFFFEF9C3),
-                iconColor: const Color(0xFF713F12),
+                iconBgColor: AppColors.amberLight,
+                iconColor: AppColors.brandAppBarColor,
                 onTap: () => Get.toNamed(AppRoutes.studentStudyMaterial),
               ),
             ),
@@ -373,8 +380,8 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
               child: ProfileGridAction(
                 icon: Icons.domain_rounded,
                 label: 'Institute',
-                iconBgColor: const Color(0xFFDCFCE7),
-                iconColor: const Color(0xFF14532D),
+                iconBgColor: AppColors.studentPresentBg,
+                iconColor: AppColors.greenText,
                 onTap: () => Get.toNamed(AppRoutes.studentInstitute),
               ),
             ),
@@ -383,8 +390,8 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
               child: ProfileGridAction(
                 icon: Icons.chat_bubble_outline_rounded,
                 label: 'Chat',
-                iconBgColor: const Color(0xFFFEF2F2),
-                iconColor: const Color(0xFF78350F),
+                iconBgColor: AppColors.errorBg,
+                iconColor: AppColors.studentBrand,
                 onTap: () => Get.toNamed(AppRoutes.studentChat),
               ),
             ),
@@ -397,8 +404,8 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
               child: ProfileGridAction(
                 icon: Icons.download_rounded,
                 label: 'Receipts',
-                iconBgColor: const Color(0xFFCCFBF1),
-                iconColor: const Color(0xFF134E4A),
+                iconBgColor: AppColors.subjectPhysicsSoft,
+                iconColor: AppColors.greenText,
                 onTap: () => Get.toNamed(AppRoutes.studentReceiptsList),
               ),
             ),
@@ -526,7 +533,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
         Get.offAllNamed(AppRoutes.login, arguments: 'STUDENT');
       },
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFFFEF2F2),
+        backgroundColor: AppColors.errorBg,
         elevation: 0,
         padding: const EdgeInsets.symmetric(vertical: 16),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -536,7 +543,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
         children: [
           const Icon(
             Icons.arrow_forward_rounded,
-            color: Color(0xFF991B1B),
+            color: AppColors.error,
             size: 18,
           ),
           const SizedBox(width: 8),
@@ -545,11 +552,22 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
             style: AppTextStyles.manrope(
               fontSize: 14,
               fontWeight: FontWeight.w800,
-              color: const Color(0xFF991B1B),
+              color: AppColors.error,
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class _AvatarPersonFallback extends StatelessWidget {
+  const _AvatarPersonFallback();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Icon(Icons.person_rounded, size: 44, color: AppColors.studentBrand),
     );
   }
 }

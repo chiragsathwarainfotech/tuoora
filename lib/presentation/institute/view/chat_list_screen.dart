@@ -106,7 +106,7 @@ class _ChatCard extends StatelessWidget {
             border: Border.all(
               color: hasUnread
                   ? AppColors.primaryBrand.withValues(alpha: 0.25)
-                  : AppColors.divider,
+                  : AppColors.background,
               width: 1,
             ),
             boxShadow: [

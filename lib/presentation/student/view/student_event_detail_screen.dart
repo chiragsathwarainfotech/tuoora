@@ -57,7 +57,7 @@ class StudentEventDetailScreen extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(AppSpacing.s12),
         gradient: const LinearGradient(
-          colors: [Color(0xFF5EEAD4), Color(0xFF0F766E)],
+          colors: [AppColors.turquoiseBlue, AppColors.surfieGreen],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -65,7 +65,6 @@ class StudentEventDetailScreen extends StatelessWidget {
       padding: const EdgeInsets.all(AppSpacing.s16),
       child: Stack(
         children: [
-          // Simulated circles pattern
           Positioned(
             right: -50,
             top: -20,
@@ -240,16 +239,16 @@ class StudentEventDetailScreen extends StatelessWidget {
         children: [
           _buildAttachmentRow(
             Icons.description,
-            const Color(0xFF15803D),
-            const Color(0xFFDCFCE7),
+            AppColors.studentPresentText,
+            AppColors.studentPresentBg,
             'Schedule_ScienceDay.pdf',
             'Document - 120 KB',
           ),
           const Divider(height: 1, color: AppColors.borderGrey),
           _buildAttachmentRow(
             Icons.image,
-            const Color(0xFF92400E),
-            const Color(0xFFFEF3C7),
+            AppColors.studentTomorrowPillText,
+            AppColors.amberLight,
             'Floor_plan_HallA.png',
             'Image - 480 KB',
           ),

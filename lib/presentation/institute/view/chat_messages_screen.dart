@@ -333,7 +333,7 @@ class ChatMessagesScreen extends GetView<ChatController> {
                   height: 200,
                   width: 200,
                   alignment: Alignment.center,
-                  color: AppColors.divider.withValues(alpha: 0.3),
+                  color: AppColors.background.withValues(alpha: 0.3),
                   child: const SizedBox(
                     width: 24,
                     height: 24,
@@ -350,7 +350,7 @@ class ChatMessagesScreen extends GetView<ChatController> {
     height: 120,
     width: 200,
     alignment: Alignment.center,
-    color: AppColors.divider.withValues(alpha: 0.3),
+    color: AppColors.background.withValues(alpha: 0.3),
     child: Icon(
       Icons.broken_image_outlined,
       color: isMe ? AppColors.white : AppColors.textTertiary,
@@ -460,9 +460,8 @@ class ChatMessagesScreen extends GetView<ChatController> {
   }
 
   Widget _buildStatusTick(MessageStatus status) {
-    // Colors picked so they read well against the brand-coloured bubble.
-    const sentColor = Color(0xCCFFFFFF); // muted white
-    const readColor = Color(0xFF38BDF8); // sky-400, classic blue tick
+    const sentColor = AppColors.studentTabInactiveBg;
+    const readColor = AppColors.subjectPhysics;
 
     switch (status) {
       case MessageStatus.sending:

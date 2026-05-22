@@ -47,7 +47,7 @@ class StudentHolidayDetailScreen extends StatelessWidget {
         color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.s12),
         gradient: const LinearGradient(
-          colors: [Color(0xFFFFF7ED), AppColors.white],
+          colors: [AppColors.warningBg, AppColors.white],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
@@ -131,12 +131,12 @@ class StudentHolidayDetailScreen extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: const Color(0xFFDCFCE7),
+              color: AppColors.studentPresentBg,
               borderRadius: BorderRadius.circular(8),
             ),
             child: const Icon(
               Icons.arrow_forward,
-              color: Color(0xFF15803D),
+              color: AppColors.studentPresentText,
               size: 20,
             ),
           ),

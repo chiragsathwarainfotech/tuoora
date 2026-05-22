@@ -13,7 +13,7 @@ class StudentNotificationPreferencesScreen
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.studentBg,
+      backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

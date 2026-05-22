@@ -165,7 +165,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
             child: LinearProgressIndicator(
               value: 0.68,
               minHeight: AppSpacing.s12,
-              backgroundColor: AppColors.reportBorder,
+              backgroundColor: AppColors.background,
               valueColor: const AlwaysStoppedAnimation<Color>(
                 AppColors.primaryBrand,
               ),
@@ -181,7 +181,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
       margin: AppSpacing.x28,
       padding: AppSpacing.all6,
       decoration: BoxDecoration(
-        color: AppColors.divider,
+        color: AppColors.background,
         borderRadius: BorderRadius.circular(AppSpacing.s20),
       ),
       child: Row(
@@ -236,11 +236,11 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
       margin: AppSpacing.x28,
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
-        color: const Color(0xFF0052C2),
+        color: AppColors.studentUpdateIconColor,
         borderRadius: BorderRadius.circular(32),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF0052C2).withValues(alpha: 0.25),
+            color: AppColors.studentProgressBlue,
             blurRadius: AppSpacing.s20,
             offset: const Offset(0, AppSpacing.s10),
           ),
@@ -348,7 +348,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: const Color(0xFF0052C2),
+                            color: AppColors.studentUpdateIconColor,
                             width: AppSpacing.s2,
                           ),
                         ),
@@ -488,7 +488,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
           Container(
             padding: AppSpacing.all16,
             decoration: BoxDecoration(
-              color: AppColors.reportBorder,
+              color: AppColors.background,
               borderRadius: BorderRadius.circular(AppSpacing.s16),
             ),
             child: Row(
@@ -513,7 +513,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                         ? AppColors.error
                         : (isActive
                               ? AppColors.primaryBrand
-                              : const Color(0xFF475569)),
+                              : AppColors.textDarkGrey),
                     size: AppSpacing.s16,
                   ),
                 ),
@@ -554,7 +554,9 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: AppSpacing.s14),
               decoration: BoxDecoration(
-                color: isActive ? const Color(0xFF0052C2) : AppColors.divider,
+                color: isActive
+                    ? AppColors.studentUpdateIconColor
+                    : AppColors.background,
                 borderRadius: BorderRadius.circular(AppSpacing.s16),
               ),
               child: Center(
@@ -579,7 +581,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
       margin: AppSpacing.x28,
       padding: AppSpacing.all32,
       decoration: BoxDecoration(
-        color: AppColors.divider,
+        color: AppColors.background,
         borderRadius: BorderRadius.circular(AppSpacing.s32),
       ),
       child: Column(

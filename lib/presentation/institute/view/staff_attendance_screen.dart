@@ -70,7 +70,7 @@ class StaffAttendanceScreen extends GetView<StaffController> {
               AppColors.successGreen,
             ),
           ),
-          Container(width: 1, height: 40, color: AppColors.divider),
+          Container(width: 1, height: 40, color: AppColors.background),
           Expanded(
             child: _buildSummaryItem(
               Icons.cancel,
@@ -159,11 +159,11 @@ class StaffAttendanceScreen extends GetView<StaffController> {
             ],
           ),
           AppSpacing.v24,
-          const Divider(height: 1, color: AppColors.divider),
+          const Divider(height: 1, color: AppColors.background),
           AppSpacing.v24,
           _buildCalendarGrid(controller.selectedAttendanceMonth.value),
           AppSpacing.v24,
-          const Divider(height: 1, color: AppColors.divider),
+          const Divider(height: 1, color: AppColors.background),
           AppSpacing.v24,
           _buildLegend(),
         ],

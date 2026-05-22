@@ -4,17 +4,13 @@ import 'package:get/get.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/enums/app_enums.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/widgets/student_bottom_nav.dart';
 import 'package:tuoora/presentation/student/controllers/assignments_controller.dart';
 import 'package:tuoora/presentation/student/models/assignment_model.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
 
-/// Student → Assignments tab.
-///
-/// Pure UI; all state and seed data live in [AssignmentsController]. The
-/// screen reacts to the controller's `Rx` lists via `Obx`, so swapping mock
-/// data for an API call later requires no changes here.
 class StudentAssignmentsScreen extends GetView<AssignmentsController> {
   final bool showBottomNav;
 
@@ -23,7 +19,7 @@ class StudentAssignmentsScreen extends GetView<AssignmentsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.studentBg,
+      backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
         bottom: false,
         child: Column(
@@ -63,6 +59,17 @@ class StudentAssignmentsScreen extends GetView<AssignmentsController> {
                     ),
                     const SizedBox(height: AppSpacing.s16),
                     Obx(() {
+                      if (controller.isLoading.value) {
+                        return const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(32.0),
+                            child: CircularProgressIndicator(
+                              color: AppColors.primaryBrand,
+                            ),
+                          ),
+                        );
+                      }
+
                       final items = controller.activeItems;
                       if (items.isEmpty) {
                         return _EmptyState(active: controller.activeTab.value);
@@ -87,8 +94,9 @@ class StudentAssignmentsScreen extends GetView<AssignmentsController> {
           ],
         ),
       ),
-      bottomNavigationBar:
-          showBottomNav ? const StudentBottomNav(currentIndex: 1) : null,
+      bottomNavigationBar: showBottomNav
+          ? const StudentBottomNav(currentIndex: 1)
+          : null,
     );
   }
 
@@ -216,9 +224,18 @@ class _SegmentedProgressBar extends StatelessWidget {
         height: 6,
         child: Row(
           children: const [
-            Expanded(flex: 5, child: ColoredBox(color: AppColors.studentProgressOrange)),
-            Expanded(flex: 4, child: ColoredBox(color: AppColors.studentProgressBlue)),
-            Expanded(flex: 3, child: ColoredBox(color: AppColors.studentProgressGreen)),
+            Expanded(
+              flex: 5,
+              child: ColoredBox(color: AppColors.studentProgressOrange),
+            ),
+            Expanded(
+              flex: 4,
+              child: ColoredBox(color: AppColors.studentProgressBlue),
+            ),
+            Expanded(
+              flex: 3,
+              child: ColoredBox(color: AppColors.successGreen),
+            ),
           ],
         ),
       ),
@@ -239,9 +256,9 @@ class _SubjectAvatarStack extends StatelessWidget {
         children: [
           _SubjectAvatar(
             offset: 0,
-            bg: AppColors.subjectMathSoft,
+            bg: AppColors.studentBrandSoft,
             icon: Icons.functions_rounded,
-            iconColor: AppColors.subjectMath,
+            iconColor: AppColors.studentProgressOrange,
           ),
           _SubjectAvatar(
             offset: 22,
@@ -292,8 +309,6 @@ class _SubjectAvatar extends StatelessWidget {
     );
   }
 }
-
-// ───────────────────────────────────────────────────────── Segmented tabs
 
 class _SegmentedTabs extends StatelessWidget {
   final int activeIndex;
@@ -361,9 +376,7 @@ class _TabButton extends StatelessWidget {
           horizontal: AppSpacing.s12,
         ),
         decoration: BoxDecoration(
-          color: isActive
-              ? AppColors.studentTabActiveBg
-              : AppColors.studentTabInactiveBg,
+          color: isActive ? AppColors.white : AppColors.studentTabInactiveBg,
           borderRadius: BorderRadius.circular(AppSpacing.s10),
           boxShadow: isActive
               ? [
@@ -383,7 +396,7 @@ class _TabButton extends StatelessWidget {
               fontWeight: FontWeight.w800,
               color: isActive
                   ? AppColors.textPrimary
-                  : AppColors.studentTabInactiveText,
+                  : AppColors.textTertiary,
             ),
           ),
         ),
@@ -424,87 +437,94 @@ class _AssignmentCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(AppSpacing.s16),
             child: IntrinsicHeight(
               child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(width: 5, color: item.stripe),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(AppSpacing.s14),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: AppSpacing.s40,
-                        height: AppSpacing.s40,
-                        decoration: BoxDecoration(
-                          color: item.iconBg,
-                          borderRadius: BorderRadius.circular(AppSpacing.s12),
-                        ),
-                        child: Icon(item.icon, color: item.iconColor, size: 20),
-                      ),
-                      AppSpacing.h12,
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              item.title,
-                              style: AppTextStyles.manrope(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w800,
-                                color: item.isCompleted
-                                    ? AppColors.studentCompletedTitle
-                                    : AppColors.textPrimary,
-                              ).copyWith(
-                                decoration: item.isCompleted
-                                    ? TextDecoration.lineThrough
-                                    : TextDecoration.none,
-                                decorationColor:
-                                    AppColors.studentCompletedTitle,
-                                decorationThickness: 1.5,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(width: 5, color: item.stripe),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(AppSpacing.s14),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: AppSpacing.s40,
+                            height: AppSpacing.s40,
+                            decoration: BoxDecoration(
+                              color: item.iconBg,
+                              borderRadius: BorderRadius.circular(
+                                AppSpacing.s12,
                               ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
                             ),
-                            const SizedBox(height: 4),
-                            Text.rich(
-                              TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: item.subjectLabel,
-                                    style: AppTextStyles.manrope(
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.w800,
-                                      color: item.stripe,
-                                      letterSpacing: 0.6,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: '  ·  ${item.dueLabel}',
-                                    style: AppTextStyles.manrope(
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w800,
-                                      color: AppColors.textTertiary,
-                                      letterSpacing: 0.6,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+                            child: Icon(
+                              item.icon,
+                              color: item.iconColor,
+                              size: 20,
                             ),
-                          ],
-                        ),
+                          ),
+                          AppSpacing.h12,
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  item.title,
+                                  style:
+                                      AppTextStyles.manrope(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w800,
+                                        color: item.isCompleted
+                                            ? AppColors.textMuted
+                                            : AppColors.textPrimary,
+                                      ).copyWith(
+                                        decoration: item.isCompleted
+                                            ? TextDecoration.lineThrough
+                                            : TextDecoration.none,
+                                        decorationColor:
+                                            AppColors.textMuted,
+                                        decorationThickness: 1.5,
+                                      ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(height: 4),
+                                Text.rich(
+                                  TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: item.subjectLabel,
+                                        style: AppTextStyles.manrope(
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.w800,
+                                          color: item.stripe,
+                                          letterSpacing: 0.6,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: '  ·  ${item.dueLabel}',
+                                        style: AppTextStyles.manrope(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w800,
+                                          color: AppColors.textTertiary,
+                                          letterSpacing: 0.6,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          ),
+                          AppSpacing.h8,
+                          _DuePill(badge: item.badge),
+                        ],
                       ),
-                      AppSpacing.h8,
-                      _DuePill(badge: item.badge),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
             ),
           ),
         ),
@@ -525,18 +545,18 @@ class _DuePill extends StatelessWidget {
     late final String label;
     switch (badge) {
       case AssignmentBadge.today:
-        bg = AppColors.studentTodayPillBg;
-        fg = AppColors.studentTodayPillText;
+        bg = AppColors.studentBrandSoft;
+        fg = AppColors.studentBrand;
         label = AppStrings.studentTodayPill;
         break;
       case AssignmentBadge.tomorrow:
-        bg = AppColors.studentTomorrowPillBg;
+        bg = AppColors.amberLight;
         fg = AppColors.studentTomorrowPillText;
         label = AppStrings.studentTomorrowPill;
         break;
       case AssignmentBadge.done:
-        bg = AppColors.studentDonePillBg;
-        fg = AppColors.studentDonePillText;
+        bg = AppColors.studentPresentBg;
+        fg = AppColors.studentPresentText;
         label = AppStrings.studentDonePill;
         break;
     }

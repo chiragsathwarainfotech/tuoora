@@ -1,82 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
+import 'package:tuoora/presentation/student/controllers/student_reports_controller.dart';
 
 enum ReportPeriod { thisWeek, fourWeeks, twelveWeeks }
 
-class ReportData {
-  final String label;
-  final double attendance;
-  final double completed;
-  final double pending;
-
-  ReportData(this.label, this.attendance, this.completed, this.pending);
-}
-
-class StudentReportsScreen extends StatelessWidget {
-  final Rx<ReportPeriod> selectedPeriod = ReportPeriod.thisWeek.obs;
-
-  StudentReportsScreen({super.key});
-
-  final Map<ReportPeriod, List<ReportData>> mockData = {
-    ReportPeriod.thisWeek: [
-      ReportData('Mon', 1.0, 1.0, 0.0),
-      ReportData('Tue', 1.0, 1.0, 0.0),
-      ReportData('Wed', 0.0, 0.0, 0.0),
-      ReportData('Thu', 1.0, 1.0, 0.0),
-      ReportData('Fri', 1.0, 0.5, 0.5),
-      ReportData('Sat', 1.0, 0.0, 0.0),
-    ],
-    ReportPeriod.fourWeeks: [
-      ReportData('W1', 0.4, 0.6, 0.1),
-      ReportData('W2', 0.8, 0.7, 0.0),
-      ReportData('W3', 0.5, 0.9, 0.1),
-      ReportData('W4', 0.6, 0.8, 0.2),
-    ],
-    ReportPeriod.twelveWeeks: [
-      ReportData('W1', 0.3, 0.5, 0.2),
-      ReportData('W2', 0.5, 0.6, 0.1),
-      ReportData('W3', 0.6, 0.7, 0.2),
-      ReportData('W4', 0.4, 0.6, 0.3),
-      ReportData('W5', 0.7, 0.7, 0.0),
-      ReportData('W6', 0.5, 0.7, 0.1),
-      ReportData('W7', 0.6, 0.7, 0.0),
-      ReportData('W8', 0.4, 0.6, 0.2),
-      ReportData('W9', 0.7, 0.9, 0.0),
-      ReportData('W10', 0.6, 0.8, 0.1),
-      ReportData('W11', 0.5, 0.7, 0.2),
-      ReportData('W12', 0.6, 0.7, 0.3),
-    ],
-  };
-
-  final Map<ReportPeriod, Map<String, String>> mockStats = {
-    ReportPeriod.thisWeek: {
-      'att_pct': '100%',
-      'att_sub': '5 of 5 days',
-      'ass_pct': '80%',
-      'ass_sub': '4 completed · 1 pending',
-    },
-    ReportPeriod.fourWeeks: {
-      'att_pct': '94%',
-      'att_sub': '17 of 18 days',
-      'ass_pct': '88%',
-      'ass_sub': '28 completed · 4 pending',
-    },
-    ReportPeriod.twelveWeeks: {
-      'att_pct': '92%',
-      'att_sub': '52 of 56 days',
-      'ass_pct': '85%',
-      'ass_sub': '75 completed · 13 pending',
-    },
-  };
+class StudentReportsScreen extends GetView<StudentReportsController> {
+  const StudentReportsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.studentBg,
+      backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
         child: Column(
           children: [
@@ -90,9 +29,9 @@ class StudentReportsScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   children: [
-                    Obx(() => _buildAttendanceCard(selectedPeriod.value)),
+                    _buildAttendanceCard(),
                     const SizedBox(height: 16),
-                    Obx(() => _buildAssignmentsCard(selectedPeriod.value)),
+                    _buildAssignmentsCard(),
                   ],
                 ),
               ),
@@ -123,10 +62,10 @@ class StudentReportsScreen extends StatelessWidget {
   }
 
   Widget _buildSegmentButton(String text, ReportPeriod period) {
-    final isSelected = selectedPeriod.value == period;
+    final isSelected = controller.selectedPeriod.value == period;
     return Expanded(
       child: GestureDetector(
-        onTap: () => selectedPeriod.value = period,
+        onTap: () => controller.changePeriod(period),
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: isSelected
@@ -157,10 +96,7 @@ class StudentReportsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildAttendanceCard(ReportPeriod period) {
-    final data = mockData[period]!;
-    final stats = mockStats[period]!;
-
+  Widget _buildAttendanceCard() {
     return GestureDetector(
       onTap: () => Get.offAllNamed(AppRoutes.studentAttendance),
       child: Container(
@@ -172,115 +108,123 @@ class StudentReportsScreen extends StatelessWidget {
             color: AppColors.borderGrey.withValues(alpha: 0.5),
           ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFDCFCE7),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Icon(
-                    Icons.calendar_today_rounded,
-                    size: 18,
-                    color: Color(0xFF14532D),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    'Attendance',
-                    style: AppTextStyles.manrope(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.textPrimary,
+        child: Obx(() {
+          if (controller.isLoading.value) return _buildCardShimmer();
+
+          final data = controller.reportData.value;
+          if (data == null) return const SizedBox();
+
+          final attendance = data.attendance;
+          final summary = attendance.summary;
+          final weeks = attendance.weeks;
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: AppColors.studentPresentBg,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Icon(
+                      Icons.calendar_today_rounded,
+                      size: 18,
+                      color: AppColors.greenText,
                     ),
                   ),
-                ),
-                const Icon(
-                  Icons.chevron_right_rounded,
-                  color: AppColors.textTertiary,
-                  size: 20,
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.baseline,
-              textBaseline: TextBaseline.alphabetic,
-              children: [
-                Text(
-                  stats['att_pct']!,
-                  style: AppTextStyles.manrope(
-                    fontSize: 28,
-                    fontWeight: FontWeight.w800,
-                    color: const Color(0xFF14532D),
-                    height: 1,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  stats['att_sub']!,
-                  style: AppTextStyles.lexend(
-                    fontSize: 11,
-                    color: AppColors.textSecondary,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 24),
-            SizedBox(
-              height: 100,
-              width: double.infinity,
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    bottom: 20,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: CustomPaint(
-                        painter: LineChartPainter(
-                          data.map((e) => e.attendance).toList(),
-                        ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      'Attendance',
+                      style: AppTextStyles.manrope(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.textPrimary,
                       ),
                     ),
                   ),
-                  Positioned(
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: data
-                          .map(
-                            (e) => Text(
-                              e.label,
-                              textAlign: TextAlign.center,
-                              style: AppTextStyles.lexend(
-                                fontSize: 9, // Reduced slightly to fit 12 weeks
-                                color: AppColors.textSecondary,
-                              ),
-                            ),
-                          )
-                          .toList(),
+                  const Icon(
+                    Icons.chevron_right_rounded,
+                    color: AppColors.textTertiary,
+                    size: 20,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                textBaseline: TextBaseline.alphabetic,
+                children: [
+                  Text(
+                    '${attendance.pct}%',
+                    style: AppTextStyles.manrope(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.greenText,
+                      height: 1,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    '${summary.present} of ${summary.total} days',
+                    style: AppTextStyles.lexend(
+                      fontSize: 11,
+                      color: AppColors.textSecondary,
                     ),
                   ),
                 ],
               ),
-            ),
-          ],
-        ),
+              const SizedBox(height: 24),
+              SizedBox(
+                height: 100,
+                width: double.infinity,
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      bottom: 20,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: CustomPaint(
+                          painter: LineChartPainter(
+                            weeks.map((e) => e.pct / 100.0).toList(),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: weeks
+                            .map(
+                              (e) => Text(
+                                e.label,
+                                textAlign: TextAlign.center,
+                                style: AppTextStyles.lexend(
+                                  fontSize: 9,
+                                  color: AppColors.textSecondary,
+                                ),
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
+        }),
       ),
     );
   }
 
-  Widget _buildAssignmentsCard(ReportPeriod period) {
-    final data = mockData[period]!;
-    final stats = mockStats[period]!;
-
+  Widget _buildAssignmentsCard() {
     return GestureDetector(
       onTap: () => Get.offAllNamed(AppRoutes.studentHomework),
       child: Container(
@@ -292,130 +236,145 @@ class StudentReportsScreen extends StatelessWidget {
             color: AppColors.borderGrey.withValues(alpha: 0.5),
           ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFEF9C3),
-                    borderRadius: BorderRadius.circular(8),
+        child: Obx(() {
+          if (controller.isLoading.value) return _buildCardShimmer();
+
+          final data = controller.reportData.value;
+          if (data == null) return const SizedBox();
+
+          final assignments = data.assignments;
+          final summary = assignments.summary;
+          final weeks = assignments.weeks;
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: AppColors.amberLight,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Icon(
+                      Icons.book_outlined,
+                      size: 18,
+                      color: AppColors.brandAppBarColor,
+                    ),
                   ),
-                  child: const Icon(
-                    Icons.book_outlined,
-                    size: 18,
-                    color: Color(0xFF713F12),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      'Assignments',
+                      style: AppTextStyles.manrope(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
                   ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    'Assignments',
+                  const Icon(
+                    Icons.chevron_right_rounded,
+                    color: AppColors.textTertiary,
+                    size: 20,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                textBaseline: TextBaseline.alphabetic,
+                children: [
+                  Text(
+                    '${assignments.pct}%',
                     style: AppTextStyles.manrope(
-                      fontSize: 14,
+                      fontSize: 28,
                       fontWeight: FontWeight.w800,
                       color: AppColors.textPrimary,
+                      height: 1,
                     ),
                   ),
-                ),
-                const Icon(
-                  Icons.chevron_right_rounded,
-                  color: AppColors.textTertiary,
-                  size: 20,
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.baseline,
-              textBaseline: TextBaseline.alphabetic,
-              children: [
-                Text(
-                  stats['ass_pct']!,
-                  style: AppTextStyles.manrope(
-                    fontSize: 28,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.textPrimary,
-                    height: 1,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  stats['ass_sub']!,
-                  style: AppTextStyles.lexend(
-                    fontSize: 11,
-                    color: AppColors.textSecondary,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 24),
-            SizedBox(
-              height: 120,
-              width: double.infinity,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: data.map((e) {
-                  final double maxBarHeight = 80;
-                  // Avoid overflow if data somehow exceeds 1.0 total
-                  final double total = e.completed + e.pending;
-                  final double scale = total > 1.0 ? 1.0 / total : 1.0;
-                  final double compH = e.completed * scale * maxBarHeight;
-                  final double pendH = e.pending * scale * maxBarHeight;
-
-                  return Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: period == ReportPeriod.thisWeek
-                            ? 6.0
-                            : period == ReportPeriod.fourWeeks
-                            ? 4.0
-                            : 2.0,
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          if (pendH > 0)
-                            Container(
-                              color: const Color(0xFFF97316),
-                              height: pendH,
-                              width: double.infinity,
-                            ),
-                          if (compH > 0)
-                            Container(
-                              color: const Color(0xFF166534),
-                              height: compH,
-                              width: double.infinity,
-                            ),
-                          const SizedBox(height: 6),
-                          Text(
-                            e.label,
-                            style: AppTextStyles.lexend(
-                              fontSize: 10,
-                              color: AppColors.textSecondary,
-                            ),
-                            maxLines: 1,
-                          ),
-                        ],
-                      ),
+                  const SizedBox(width: 8),
+                  Text(
+                    '${summary.completed} completed - ${summary.pending} pending',
+                    style: AppTextStyles.lexend(
+                      fontSize: 11,
+                      color: AppColors.textSecondary,
                     ),
-                  );
-                }).toList(),
+                  ),
+                ],
               ),
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                _buildLegendItem(const Color(0xFF166534), 'Completed'),
-                const SizedBox(width: 16),
-                _buildLegendItem(const Color(0xFFF97316), 'Pending'),
-              ],
-            ),
-          ],
-        ),
+              const SizedBox(height: 24),
+              SizedBox(
+                height: 120,
+                width: double.infinity,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: weeks.map((e) {
+                    final double maxBarHeight = 80;
+                    final double total = (e.completed + e.pending).toDouble();
+                    final double scale = total > 0 ? 1.0 / total : 1.0;
+                    final double compH = e.completed * scale * maxBarHeight;
+                    final double pendH = e.pending * scale * maxBarHeight;
+
+                    return Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal:
+                              controller.selectedPeriod.value ==
+                                  ReportPeriod.thisWeek
+                              ? 6.0
+                              : controller.selectedPeriod.value ==
+                                    ReportPeriod.fourWeeks
+                              ? 4.0
+                              : 2.0,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            if (pendH > 0)
+                              Container(
+                                color: AppColors.instBrandOrange,
+                                height: pendH,
+                                width: double.infinity,
+                              ),
+                            if (compH > 0)
+                              Container(
+                                color: AppColors.greenText,
+                                height: compH,
+                                width: double.infinity,
+                              ),
+                            const SizedBox(height: 6),
+                            Text(
+                              e.label,
+                              style: AppTextStyles.lexend(
+                                fontSize: 10,
+                                color: AppColors.textSecondary,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.visible,
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+              const SizedBox(height: 24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildLegendItem(AppColors.greenText, 'Completed'),
+                  const SizedBox(width: 16),
+                  _buildLegendItem(AppColors.instBrandOrange, 'Pending'),
+                ],
+              ),
+            ],
+          );
+        }),
       ),
     );
   }
@@ -443,6 +402,44 @@ class StudentReportsScreen extends StatelessWidget {
       ],
     );
   }
+
+  Widget _buildCardShimmer() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 34,
+                height: 34,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Container(width: 100, height: 16, color: Colors.white),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: [
+              Container(width: 60, height: 28, color: Colors.white),
+              const SizedBox(width: 8),
+              Container(width: 120, height: 11, color: Colors.white),
+            ],
+          ),
+          const SizedBox(height: 24),
+          Container(height: 100, width: double.infinity, color: Colors.white),
+        ],
+      ),
+    );
+  }
 }
 
 class LineChartPainter extends CustomPainter {
@@ -455,16 +452,16 @@ class LineChartPainter extends CustomPainter {
     if (data.isEmpty) return;
 
     final paint = Paint()
-      ..color = const Color(0xFF166534)
+      ..color = AppColors.greenText
       ..strokeWidth = 2
       ..style = PaintingStyle.stroke;
 
     final fillPaint = Paint()
-      ..color = const Color(0xFFDCFCE7).withValues(alpha: 0.8)
+      ..color = AppColors.studentPresentBg.withValues(alpha: 0.8)
       ..style = PaintingStyle.fill;
 
     final pointPaint = Paint()
-      ..color = const Color(0xFF166534)
+      ..color = AppColors.greenText
       ..style = PaintingStyle.fill;
 
     final pointInnerPaint = Paint()
@@ -474,7 +471,8 @@ class LineChartPainter extends CustomPainter {
     final path = Path();
     final fillPath = Path();
 
-    final double stepX = size.width / (data.length - 1);
+    final double stepX =
+        size.width / (data.length - 1 == 0 ? 1 : data.length - 1);
     final double maxY = size.height;
 
     List<Offset> points = [];
@@ -495,7 +493,10 @@ class LineChartPainter extends CustomPainter {
       }
     }
 
-    fillPath.lineTo(points.last.dx, maxY); // down to bottom right
+    fillPath.lineTo(
+      points.isNotEmpty ? points.last.dx : 0,
+      maxY,
+    ); // down to bottom right
     fillPath.close();
 
     canvas.drawPath(fillPath, fillPaint);

@@ -42,7 +42,7 @@ class CreateChatScreen extends GetView<ChatController> {
                             itemCount: controller.filteredParticipants.length,
                             separatorBuilder: (_, _) => const Divider(
                               height: 1,
-                              color: AppColors.divider,
+                              color: AppColors.background,
                             ),
                             itemBuilder: (context, index) {
                               final participant =

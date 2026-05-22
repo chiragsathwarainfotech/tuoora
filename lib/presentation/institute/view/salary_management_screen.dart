@@ -131,7 +131,7 @@ class SalaryManagementScreen extends GetView<StaffController> {
           decoration: BoxDecoration(
             color: AppColors.white,
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: AppColors.divider),
+            border: Border.all(color: AppColors.background),
           ),
           child: Column(
             children: [
@@ -154,7 +154,7 @@ class SalaryManagementScreen extends GetView<StaffController> {
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: controller.globalSalaryList.length,
                 separatorBuilder: (_, _) =>
-                    const Divider(height: 1, color: AppColors.divider),
+                    const Divider(height: 1, color: AppColors.background),
                 itemBuilder: (context, index) {
                   final salary = controller.globalSalaryList[index];
                   final date = DateFormat(

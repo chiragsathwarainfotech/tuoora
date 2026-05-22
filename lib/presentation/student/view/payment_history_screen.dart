@@ -24,7 +24,7 @@ class PaymentHistoryScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back_ios_new,
-            color: Color(0xFF1F2937),
+            color: AppColors.darkSlate,
             size: 20,
           ),
           onPressed: () => Get.back(),
@@ -34,7 +34,7 @@ class PaymentHistoryScreen extends StatelessWidget {
           style: AppTextStyles.manrope(
             fontSize: 18,
             fontWeight: FontWeight.w800,
-            color: const Color(0xFF1F2937),
+            color: AppColors.darkSlate,
           ),
         ),
         centerTitle: true,
@@ -107,4 +107,3 @@ class PaymentHistoryScreen extends StatelessWidget {
     );
   }
 }
-

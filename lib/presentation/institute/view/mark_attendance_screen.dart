@@ -157,7 +157,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
           child: _buildBulkButton(
             label: 'All Absent',
             icon: Icons.person_off_rounded,
-            color: const Color(0xFF7C2D12),
+            color: AppColors.brandAppBarColor,
             onTap: () => controller.markAllAbsent(),
           ),
         ),
@@ -280,7 +280,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
           _buildToggleOption(
             label: 'ABSENT',
             isSelected: !isPresent,
-            color: const Color(0xFF7C2D12),
+            color: AppColors.activeTracker,
             onTap: isEditable
                 ? () => controller.toggleStatus(student, false)
                 : null,

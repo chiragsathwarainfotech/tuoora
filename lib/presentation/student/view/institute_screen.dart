@@ -122,14 +122,14 @@ class InstituteScreen extends StatelessWidget {
           const Divider(
             height: AppSpacing.s48,
             thickness: 1,
-            color: AppColors.divider,
+            color: AppColors.background,
           ),
           _buildInfoTile(
             icon: Icons.person_outline_rounded,
             label: 'Owner & Founder',
             value: 'Dr. Alistair Aeon',
             iconColor: AppColors.primaryBrand,
-            bgColor: Color(0xFFEFF6FF),
+            bgColor: AppColors.studentUpdateIconBg,
           ),
           AppSpacing.v16,
           _buildInfoTile(
@@ -137,7 +137,7 @@ class InstituteScreen extends StatelessWidget {
             label: 'Email Address',
             value: 'info@aeon.edu',
             iconColor: AppColors.primaryBrand,
-            bgColor: Color(0xFFEFF6FF),
+            bgColor: AppColors.studentUpdateIconBg,
           ),
           AppSpacing.v16,
           _buildInfoTile(
@@ -145,7 +145,7 @@ class InstituteScreen extends StatelessWidget {
             label: 'Phone Number',
             value: '+1 (555) 0100',
             iconColor: AppColors.primaryBrand,
-            bgColor: Color(0xFFEFF6FF),
+            bgColor: AppColors.studentUpdateIconBg,
           ),
           AppSpacing.v16,
           _buildInfoTile(
@@ -153,8 +153,8 @@ class InstituteScreen extends StatelessWidget {
             label: 'Physical Address',
             value:
                 '1221 Academic Circle, Innovation District, San Francisco, CA 94105, USA',
-            iconColor: Color(0xFF92400E),
-            bgColor: Color(0xFFFEF3C7),
+            iconColor: AppColors.studentTomorrowPillText,
+            bgColor: AppColors.amberLight,
           ),
         ],
       ),
@@ -237,17 +237,17 @@ class InstituteScreen extends StatelessWidget {
             children: [
               _buildSocialIcon(
                 Icons.link,
-                const Color(0xFF0077B5),
+                AppColors.studentUpdateIconColor,
               ), // LinkedIn (approx)
               AppSpacing.h16,
               _buildSocialIcon(
                 Icons.flutter_dash,
-                const Color(0xFF1DA1F2),
+                AppColors.studentProgressBlue,
               ), // Twitter (approx)
               AppSpacing.h16,
               _buildSocialIcon(
                 Icons.facebook,
-                const Color(0xFF1877F2),
+                AppColors.studentProgressBlue,
               ), // Facebook
             ],
           ),
@@ -261,7 +261,7 @@ class InstituteScreen extends StatelessWidget {
       height: AppSpacing.s52,
       width: AppSpacing.s52,
       decoration: BoxDecoration(
-        color: const Color(0xFFEFF6FF),
+        color: AppColors.studentUpdateIconBg,
         shape: BoxShape.circle,
       ),
       child: Icon(icon, color: color, size: 24),

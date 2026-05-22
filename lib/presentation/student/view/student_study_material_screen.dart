@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/presentation/student/controllers/student_study_material_controller.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
+import 'package:tuoora/data/models/student_resource_model.dart';
 
 class StudentStudyMaterialScreen
     extends GetView<StudentStudyMaterialController> {
@@ -12,7 +15,7 @@ class StudentStudyMaterialScreen
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.studentBg,
+      backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
         child: Column(
           children: [
@@ -21,24 +24,39 @@ class StudentStudyMaterialScreen
               showDefaultActions: false,
             ),
             const SizedBox(height: 16),
-            _buildFilters(),
-            const SizedBox(height: 16),
             Expanded(
-              child: Obx(
-                () => ListView.separated(
+              child: Obx(() {
+                if (controller.isLoading.value) {
+                  return ListView.separated(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    itemCount: 4,
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 12),
+                    itemBuilder: (context, index) => _buildShimmerCard(),
+                  );
+                }
+
+                if (controller.resources.isEmpty) {
+                  return const Center(child: Text('No study material found'));
+                }
+
+                return ListView.separated(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 8,
                   ),
-                  itemCount: controller.filteredMaterials.length,
+                  itemCount: controller.resources.length,
                   separatorBuilder: (context, index) =>
                       const SizedBox(height: 12),
                   itemBuilder: (context, index) {
-                    final item = controller.filteredMaterials[index];
+                    final item = controller.resources[index];
                     return _buildMaterialCard(item);
                   },
-                ),
-              ),
+                );
+              }),
             ),
           ],
         ),
@@ -46,57 +64,19 @@ class StudentStudyMaterialScreen
     );
   }
 
-  Widget _buildFilters() {
-    return SizedBox(
-      height: 36,
-      child: ListView.separated(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        scrollDirection: Axis.horizontal,
-        itemCount: controller.subjects.length,
-        separatorBuilder: (context, index) => const SizedBox(width: 8),
-        itemBuilder: (context, index) {
-          final subject = controller.subjects[index];
-          return Obx(() {
-            final isSelected = controller.selectedSubject.value == subject;
-            return GestureDetector(
-              onTap: () => controller.selectSubject(subject),
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
-                ),
-                decoration: BoxDecoration(
-                  color: isSelected ? AppColors.studentBrand : AppColors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  border: isSelected
-                      ? null
-                      : Border.all(
-                          color: AppColors.borderGrey.withValues(alpha: 0.5),
-                        ),
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  subject,
-                  style: AppTextStyles.manrope(
-                    fontSize: 12,
-                    fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
-                    color: isSelected
-                        ? AppColors.white
-                        : AppColors.textSecondary,
-                  ),
-                ),
-              ),
-            );
-          });
-        },
-      ),
-    );
-  }
+  Widget _buildMaterialCard(StudentResourceModel item) {
+    final hash = item.subject.hashCode;
+    final isDark = hash % 2 == 0;
+    final bgColor = isDark
+        ? AppColors.studentBrandSoft
+        : AppColors.studentPresentBg;
+    final textColor = isDark ? AppColors.error : AppColors.errorRed;
 
-  Widget _buildMaterialCard(Map<String, dynamic> item) {
+    final isVideo = item.fileType.toLowerCase() == 'video';
+
     return GestureDetector(
       onTap: () =>
-          Get.toNamed('/student/study-material/detail', arguments: item),
+          Get.toNamed(AppRoutes.studentStudyMaterialDetail, arguments: item),
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
@@ -118,20 +98,20 @@ class StudentStudyMaterialScreen
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: Color(item['subjectBgColor']),
+                    color: bgColor,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
-                    item['subject'],
+                    item.subject,
                     style: AppTextStyles.manrope(
                       fontSize: 10,
                       fontWeight: FontWeight.w800,
-                      color: Color(item['subjectTextColor']),
+                      color: textColor,
                     ),
                   ),
                 ),
                 Text(
-                  item['date'],
+                  item.date,
                   style: AppTextStyles.lexend(
                     fontSize: 11,
                     color: AppColors.textTertiary,
@@ -141,7 +121,7 @@ class StudentStudyMaterialScreen
             ),
             const SizedBox(height: 12),
             Text(
-              item['title'],
+              item.title,
               style: AppTextStyles.manrope(
                 fontSize: 14,
                 fontWeight: FontWeight.w800,
@@ -150,18 +130,20 @@ class StudentStudyMaterialScreen
             ),
             const SizedBox(height: 8),
             Text(
-              item['description'],
+              item.description,
               style: AppTextStyles.lexend(
                 fontSize: 12,
                 color: AppColors.textSecondary,
                 height: 1.4,
               ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
             const SizedBox(height: 16),
             Row(
               children: [
                 Icon(
-                  item['isVideo']
+                  isVideo
                       ? Icons.play_circle_outline_rounded
                       : Icons.insert_drive_file_outlined,
                   size: 14,
@@ -169,7 +151,7 @@ class StudentStudyMaterialScreen
                 ),
                 const SizedBox(width: 4),
                 Text(
-                  '${item['fileCount']} file${item['fileCount'] > 1 ? 's' : ''}',
+                  '1 file',
                   style: AppTextStyles.lexend(
                     fontSize: 11,
                     color: AppColors.textSecondary,
@@ -177,23 +159,41 @@ class StudentStudyMaterialScreen
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  '·',
+                  '•',
                   style: AppTextStyles.lexend(
                     fontSize: 11,
                     color: AppColors.textTertiary,
                   ),
                 ),
                 const SizedBox(width: 8),
-                Text(
-                  item['teacher'],
-                  style: AppTextStyles.lexend(
-                    fontSize: 11,
-                    color: AppColors.textSecondary,
+                Expanded(
+                  child: Text(
+                    item.batchName,
+                    style: AppTextStyles.lexend(
+                      fontSize: 11,
+                      color: AppColors.textSecondary,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ],
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildShimmerCard() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        height: 140,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
         ),
       ),
     );

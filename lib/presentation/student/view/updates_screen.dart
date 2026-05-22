@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/presentation/student/controllers/student_notifications_controller.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
 
-class UpdatesScreen extends StatelessWidget {
+class UpdatesScreen extends GetView<StudentNotificationsController> {
   const UpdatesScreen({super.key});
 
   @override
@@ -21,188 +21,184 @@ class UpdatesScreen extends StatelessWidget {
               showDefaultActions: false,
             ),
             Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.s16,
-                  vertical: AppSpacing.s12,
-                ),
-                child: Column(
-                  children: [
-                    _buildNotificationCard(
-                      icon: Icons.currency_rupee,
-                      iconBg: const Color(0xFFFEF3C7),
-                      iconColor: const Color(0xFF92400E),
-                      title: 'Fee reminder • ₹4,500 due 25 May',
-                      time: '2h ago',
-                      description:
-                          'Your May 2026 tuition fee is due in 6 days. Tap to pay or view invoice.',
-                      showChevron: true,
-                      onTap: () => Get.toNamed(
-                        AppRoutes.studentFeeReminder,
-                        arguments: {'isPaid': false},
-                      ),
+              child: Obx(() {
+                if (controller.isLoading.value && controller.items.isEmpty) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: AppColors.studentBrand,
                     ),
-                    const SizedBox(height: AppSpacing.s12),
-                    _buildNotificationCard(
-                      icon: Icons.chrome_reader_mode_outlined,
-                      iconBg: const Color(0xFFFEF3C7),
-                      iconColor: const Color(0xFF92400E),
-                      title: 'New assignment added',
-                      time: '4h ago',
-                      description:
-                          'Trigonometry — Ch. 8 exercises assigned by Mr. Verma. Due today, 11:59 PM.',
+                  );
+                }
+                final displays = controller.displays;
+                if (displays.isEmpty) {
+                  return _EmptyState(onRefresh: controller.load);
+                }
+                return RefreshIndicator(
+                  color: AppColors.studentBrand,
+                  onRefresh: controller.load,
+                  child: ListView.separated(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.s16,
+                      vertical: AppSpacing.s12,
                     ),
-                    const SizedBox(height: AppSpacing.s12),
-                    _buildNotificationCard(
-                      icon: Icons.auto_awesome,
-                      iconBg: const Color(0xFFCCFBF1),
-                      iconColor: const Color(0xFF0F766E),
-                      title: 'Science Day exhibition',
-                      time: 'Today',
-                      description:
-                          'Saturday 24 May, 10 AM. Set up your project by 9:30. Parents welcome.',
-                      showChevron: true,
-                      onTap: () => Get.toNamed(AppRoutes.studentEventDetail),
-                    ),
-                    const SizedBox(height: AppSpacing.s12),
-                    _buildNotificationCard(
-                      icon: Icons.notifications_none_outlined,
-                      iconBg: const Color(0xFFFEF2F2),
-                      iconColor: const Color(0xFF991B1B),
-                      title: 'Daily update from Mr. Verma',
-                      time: '4h ago',
-                      description:
-                          'Today we covered identities sin²+cos²=1 and complementary angle formulas.',
-                    ),
-                    const SizedBox(height: AppSpacing.s12),
-                    _buildNotificationCard(
-                      icon: Icons.calendar_today_outlined,
-                      iconBg: const Color(0xFFFEF3C7),
-                      iconColor: const Color(0xFF92400E),
-                      title: 'Holiday • Buddha Purnima',
-                      time: 'Tomorrow',
-                      description:
-                          'Institute is closed on Wednesday 21 May. Classes resume Thursday at 8 AM.',
-                      showChevron: true,
-                      onTap: () => Get.toNamed(AppRoutes.studentHolidayDetail),
-                    ),
-                    const SizedBox(height: AppSpacing.s12),
-                    _buildNotificationCard(
-                      icon: Icons.calendar_today_outlined,
-                      iconBg: const Color(0xFFDCFCE7),
-                      iconColor: const Color(0xFF15803D),
-                      title: 'Marked present',
-                      time: 'Mon',
-                      description:
-                          'You were marked present on 17 May at 8:00 AM (Math + Science).',
-                    ),
-                    const SizedBox(height: AppSpacing.s12),
-                    _buildNotificationCard(
-                      icon: Icons.calendar_today_outlined,
-                      iconBg: const Color(0xFFDCFCE7),
-                      iconColor: const Color(0xFF15803D),
-                      title: 'Marked absent',
-                      time: '13 May',
-                      description:
-                          'You were marked absent on 13 May. Reason recorded by parent: sick leave.',
-                    ),
-                  ],
-                ),
-              ),
+                    itemCount: displays.length,
+                    separatorBuilder: (_, _) =>
+                        const SizedBox(height: AppSpacing.s12),
+                    itemBuilder: (context, index) {
+                      final d = displays[index];
+                      return _NotificationCard(
+                        display: d,
+                        onTap: () => controller.openNotification(d.raw),
+                      );
+                    },
+                  ),
+                );
+              }),
             ),
           ],
         ),
       ),
     );
   }
+}
 
-  Widget _buildNotificationCard({
-    required IconData icon,
-    required Color iconBg,
-    required Color iconColor,
-    required String title,
-    required String time,
-    required String description,
-    bool showChevron = false,
-    VoidCallback? onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(AppSpacing.s16),
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(AppSpacing.s12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.02),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: iconBg,
-                borderRadius: BorderRadius.circular(8),
+class _NotificationCard extends StatelessWidget {
+  final StudentNotificationDisplay display;
+  final VoidCallback onTap;
+
+  const _NotificationCard({required this.display, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: AppColors.white,
+      borderRadius: BorderRadius.circular(AppSpacing.s12),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppSpacing.s12),
+        child: Ink(
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(AppSpacing.s12),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.02),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
               ),
-              child: Icon(icon, color: iconColor, size: 20),
-            ),
-            AppSpacing.h16,
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          title,
-                          style: AppTextStyles.manrope(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.textPrimary,
+            ],
+          ),
+          padding: const EdgeInsets.all(AppSpacing.s16),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: display.iconBg,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(display.icon, color: display.iconColor, size: 20),
+              ),
+              AppSpacing.h16,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            display.title,
+                            style: AppTextStyles.manrope(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w800,
+                              color: AppColors.textPrimary,
+                            ),
                           ),
                         ),
-                      ),
-                      Text(
-                        time,
-                        style: AppTextStyles.lexend(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w400,
-                          color: AppColors.textTertiary,
-                        ),
-                      ),
-                      if (showChevron) ...[
-                        AppSpacing.h4,
-                        const Icon(
-                          Icons.chevron_right,
-                          size: 16,
-                          color: AppColors.textMuted,
-                        ),
+                        if (display.timeAgo.isNotEmpty)
+                          Text(
+                            display.timeAgo,
+                            style: AppTextStyles.lexend(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w400,
+                              color: AppColors.textTertiary,
+                            ),
+                          ),
+                        if (display.showChevron) ...[
+                          AppSpacing.h4,
+                          const Icon(
+                            Icons.chevron_right,
+                            size: 16,
+                            color: AppColors.textMuted,
+                          ),
+                        ],
                       ],
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    description,
-                    style: AppTextStyles.lexend(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      color: AppColors.textSecondary,
-                      height: 1.4,
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 4),
+                    Text(
+                      display.message,
+                      style: AppTextStyles.lexend(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        color: AppColors.textSecondary,
+                        height: 1.4,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _EmptyState extends StatelessWidget {
+  final Future<void> Function() onRefresh;
+  const _EmptyState({required this.onRefresh});
+
+  @override
+  Widget build(BuildContext context) {
+    return RefreshIndicator(
+      color: AppColors.studentBrand,
+      onRefresh: onRefresh,
+      child: ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.all(AppSpacing.s24),
+        children: [
+          const SizedBox(height: 80),
+          Center(
+            child: Container(
+              width: 72,
+              height: 72,
+              decoration: const BoxDecoration(
+                color: AppColors.studentBrandSoft,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.notifications_none_rounded,
+                color: AppColors.studentBrand,
+                size: 32,
               ),
             ),
-          ],
-        ),
+          ),
+          const SizedBox(height: AppSpacing.s16),
+          Center(
+            child: Text(
+              "You're all caught up.",
+              style: AppTextStyles.lexend(
+                fontSize: 13,
+                color: AppColors.textSecondary,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

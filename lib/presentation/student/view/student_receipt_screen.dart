@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
@@ -15,81 +16,102 @@ class StudentReceiptScreen extends GetView<FeesController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.studentBg,
+      backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
         bottom: false,
-        child: Obx(() {
-          final statement = controller.selectedStatement.value;
-          if (statement == null) {
-            return const Center(child: Text('No receipt selected'));
-          }
-          return _Body(
-            statement: statement,
-            profile: controller.billingProfile.value,
-          );
-        }),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const StudentAppBar(
+              title: AppStrings.studentReceiptTitle,
+              showDefaultActions: false,
+            ),
+            Expanded(
+              child: Obx(() {
+                if (controller.isReceiptLoading.value &&
+                    controller.currentReceipt.value == null) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: AppColors.studentBrand,
+                    ),
+                  );
+                }
+                final receipt = controller.currentReceipt.value;
+                if (receipt == null) {
+                  return const Center(child: Text('No receipt selected'));
+                }
+                return _Body(
+                  receipt: receipt,
+                  statement: controller.selectedStatement.value,
+                  isDownloading: controller.isDownloading.value,
+                  onDownload: controller.downloadCurrentReceipt,
+                );
+              }),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
 class _Body extends StatelessWidget {
-  final FeeStatement statement;
-  final StudentBillingProfile profile;
+  final StudentReceipt receipt;
+  final FeeStatement? statement;
+  final bool isDownloading;
+  final Future<void> Function() onDownload;
 
-  const _Body({required this.statement, required this.profile});
+  const _Body({
+    required this.receipt,
+    required this.statement,
+    required this.isDownloading,
+    required this.onDownload,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        const StudentAppBar(
-          title: AppStrings.studentReceiptTitle,
-          showDefaultActions: false,
-        ),
-        Expanded(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(
-              AppSpacing.s16,
-              AppSpacing.s4,
-              AppSpacing.s16,
-              AppSpacing.s24,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _ReceiptCard(statement: statement, profile: profile),
-                const SizedBox(height: AppSpacing.s12),
-                const _ActionRow(),
-                const SizedBox(height: AppSpacing.s16),
-                Center(
-                  child: Text(
-                    AppStrings.studentReceiptFooter,
-                    style: AppTextStyles.lexend(
-                      fontSize: 11,
-                      color: AppColors.textTertiary,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ],
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.s16,
+        AppSpacing.s4,
+        AppSpacing.s16,
+        AppSpacing.s24,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _ReceiptCard(receipt: receipt, statement: statement),
+          const SizedBox(height: AppSpacing.s12),
+          _ActionRow(isDownloading: isDownloading, onDownload: onDownload),
+          const SizedBox(height: AppSpacing.s16),
+          Center(
+            child: Text(
+              AppStrings.studentReceiptFooter,
+              style: AppTextStyles.lexend(
+                fontSize: 11,
+                color: AppColors.textTertiary,
+              ),
+              textAlign: TextAlign.center,
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
 
 class _ReceiptCard extends StatelessWidget {
-  final FeeStatement statement;
-  final StudentBillingProfile profile;
+  final StudentReceipt receipt;
+  final FeeStatement? statement;
 
-  const _ReceiptCard({required this.statement, required this.profile});
+  const _ReceiptCard({required this.receipt, required this.statement});
 
   @override
   Widget build(BuildContext context) {
+    final monthHeader =
+        statement?.monthHeader ??
+        (receipt.date.isNotEmpty ? receipt.date.toUpperCase() : 'RECEIPT');
+    final isPaid = statement?.isPaid ?? true;
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
@@ -109,7 +131,7 @@ class _ReceiptCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              statement.monthHeader,
+              monthHeader,
               style: AppTextStyles.manrope(
                 fontSize: 10,
                 fontWeight: FontWeight.w800,
@@ -123,7 +145,7 @@ class _ReceiptCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    '₹${_formatThousands(statement.amountInRupees)}',
+                    '₹${receipt.amount}',
                     style: AppTextStyles.manrope(
                       fontSize: 26,
                       fontWeight: FontWeight.w800,
@@ -132,42 +154,29 @@ class _ReceiptCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                _StatusPill(isPaid: statement.isPaid),
+                _StatusPill(isPaid: isPaid),
               ],
             ),
             const SizedBox(height: AppSpacing.s16),
             _DashedDivider(color: AppColors.borderGrey.withValues(alpha: 0.8)),
             _DetailRow(
               label: AppStrings.studentReceiptStudent,
-              value: profile.studentName,
+              value: receipt.studentName,
             ),
             _DetailRow(
               label: AppStrings.studentReceiptRollNo,
-              value: profile.rollNumber,
+              value: receipt.rollNo,
             ),
             _DetailRow(
               label: AppStrings.studentReceiptInstitute,
-              value: profile.instituteName,
+              value: receipt.instituteName,
             ),
             _DetailRow(
               label: AppStrings.studentReceiptInvoiceNo,
-              value: statement.id,
+              value: receipt.receiptNumber,
             ),
-            _DetailRow(
-              label: AppStrings.studentReceiptPeriod,
-              value: statement.periodLabel,
-            ),
-            _DetailRow(
-              label: AppStrings.studentReceiptDueDate,
-              value: statement.dueDateShort,
-            ),
-            if (statement.lateFeeLabel != null)
-              _DetailRow(
-                label: AppStrings.studentReceiptLateFee,
-                value: statement.lateFeeLabel!,
-                isLast: true,
-                valueColor: AppColors.studentBrand,
-              ),
+            _DetailRow(label: 'Payment method', value: receipt.paymentMethod),
+            _DetailRow(label: 'Date', value: receipt.date, isLast: true),
           ],
         ),
       ),
@@ -179,13 +188,11 @@ class _DetailRow extends StatelessWidget {
   final String label;
   final String value;
   final bool isLast;
-  final Color? valueColor;
 
   const _DetailRow({
     required this.label,
     required this.value,
     this.isLast = false,
-    this.valueColor,
   });
 
   @override
@@ -215,7 +222,7 @@ class _DetailRow extends StatelessWidget {
                   textAlign: TextAlign.right,
                   style: AppTextStyles.lexend(
                     fontSize: 12,
-                    color: valueColor ?? AppColors.textPrimary,
+                    color: AppColors.textPrimary,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -269,11 +276,9 @@ class _StatusPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bg = isPaid
-        ? AppColors.studentDonePillBg
-        : AppColors.studentTodayPillBg;
-    final fg = isPaid
-        ? AppColors.studentDonePillText
-        : AppColors.studentBrandAccent;
+        ? AppColors.studentPresentBg
+        : AppColors.studentBrandSoft;
+    final fg = isPaid ? AppColors.studentPresentText : AppColors.orangeTag;
     final label = isPaid
         ? AppStrings.studentFeesPillPaid
         : AppStrings.studentFeesPillPending;
@@ -298,7 +303,10 @@ class _StatusPill extends StatelessWidget {
 // ────────────────────────────────────────────────────────── Action row
 
 class _ActionRow extends StatelessWidget {
-  const _ActionRow();
+  final bool isDownloading;
+  final Future<void> Function() onDownload;
+
+  const _ActionRow({required this.isDownloading, required this.onDownload});
 
   @override
   Widget build(BuildContext context) {
@@ -306,14 +314,13 @@ class _ActionRow extends StatelessWidget {
       children: [
         Expanded(
           child: _ActionButton(
-            label: AppStrings.studentReceiptDownload,
+            label: isDownloading
+                ? AppStrings.studentAttachmentDownloadStarted
+                : AppStrings.studentReceiptDownload,
             icon: Icons.download_rounded,
             isPrimary: false,
-            onTap: () => Get.snackbar(
-              AppStrings.studentReceiptDownload,
-              AppStrings.studentAttachmentDownloadStarted,
-              snackPosition: SnackPosition.BOTTOM,
-            ),
+            isLoading: isDownloading,
+            onTap: isDownloading ? null : onDownload,
           ),
         ),
         AppSpacing.h12,
@@ -322,11 +329,8 @@ class _ActionRow extends StatelessWidget {
             label: AppStrings.studentReceiptContact,
             icon: Icons.call_rounded,
             isPrimary: true,
-            onTap: () => Get.snackbar(
-              AppStrings.studentReceiptContact,
-              'Calling institute…',
-              snackPosition: SnackPosition.BOTTOM,
-            ),
+            isLoading: false,
+            onTap: () => Get.toNamed(AppRoutes.studentInstitute),
           ),
         ),
       ],
@@ -338,12 +342,14 @@ class _ActionButton extends StatelessWidget {
   final String label;
   final IconData icon;
   final bool isPrimary;
-  final VoidCallback onTap;
+  final bool isLoading;
+  final VoidCallback? onTap;
 
   const _ActionButton({
     required this.label,
     required this.icon,
     required this.isPrimary,
+    required this.isLoading,
     required this.onTap,
   });
 
@@ -373,7 +379,17 @@ class _ActionButton extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 18, color: fg),
+              if (isLoading)
+                SizedBox(
+                  width: 16,
+                  height: 16,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation(fg),
+                  ),
+                )
+              else
+                Icon(icon, size: 18, color: fg),
               AppSpacing.h8,
               Text(
                 label,
@@ -389,15 +405,4 @@ class _ActionButton extends StatelessWidget {
       ),
     );
   }
-}
-
-String _formatThousands(int value) {
-  if (value < 1000) return value.toString();
-  final s = value.toString();
-  final buf = StringBuffer();
-  for (var i = 0; i < s.length; i++) {
-    if (i != 0 && (s.length - i) % 3 == 0) buf.write(',');
-    buf.write(s[i]);
-  }
-  return buf.toString();
 }

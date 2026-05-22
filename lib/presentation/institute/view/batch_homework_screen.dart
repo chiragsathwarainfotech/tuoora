@@ -145,8 +145,8 @@ class BatchHomeworkScreen extends StatelessWidget {
                         ),
                         decoration: BoxDecoration(
                           color: isActive
-                              ? const Color(0xFFE0F2FE)
-                              : AppColors.divider,
+                              ? AppColors.subjectPhysicsSoft
+                              : AppColors.background,
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(

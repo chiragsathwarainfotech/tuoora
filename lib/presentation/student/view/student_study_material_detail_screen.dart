@@ -5,6 +5,7 @@ import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/presentation/student/controllers/student_study_material_detail_controller.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
 import 'package:tuoora/presentation/student/widgets/student_attachment_tile.dart';
+import 'package:tuoora/data/models/student_resource_model.dart';
 
 class StudentStudyMaterialDetailScreen
     extends GetView<StudentStudyMaterialDetailController> {
@@ -15,11 +16,11 @@ class StudentStudyMaterialDetailScreen
     final material = controller.material;
 
     return Scaffold(
-      backgroundColor: AppColors.studentBg,
+      backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
         child: Column(
           children: [
-            StudentAppBar(title: material['title'], showDefaultActions: false),
+            StudentAppBar(title: material.title, showDefaultActions: false),
             const SizedBox(height: 16),
             Expanded(
               child: ListView(
@@ -44,7 +45,7 @@ class StudentStudyMaterialDetailScreen
                         onTap: () => controller.openAttachment(attachment),
                       ),
                     );
-                  }).toList(),
+                  }),
                 ],
               ),
             ),
@@ -54,7 +55,14 @@ class StudentStudyMaterialDetailScreen
     );
   }
 
-  Widget _buildHeaderCard(Map<String, dynamic> item) {
+  Widget _buildHeaderCard(StudentResourceModel item) {
+    final hash = item.subject.hashCode;
+    final isDark = hash % 2 == 0;
+    final bgColor = isDark
+        ? AppColors.studentBrandSoft
+        : AppColors.studentPresentBg;
+    final textColor = isDark ? AppColors.error : AppColors.errorRed;
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -70,31 +78,35 @@ class StudentStudyMaterialDetailScreen
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: Color(item['subjectBgColor']),
+                  color: bgColor,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
-                  item['subject'],
+                  item.subject,
                   style: AppTextStyles.manrope(
                     fontSize: 10,
                     fontWeight: FontWeight.w800,
-                    color: Color(item['subjectTextColor']),
+                    color: textColor,
                   ),
                 ),
               ),
               const SizedBox(width: 8),
-              Text(
-                '${item['teacher']} · ${item['date']}',
-                style: AppTextStyles.lexend(
-                  fontSize: 11,
-                  color: AppColors.textTertiary,
+              Expanded(
+                child: Text(
+                  '${item.batchName} • ${item.date}',
+                  style: AppTextStyles.lexend(
+                    fontSize: 11,
+                    color: AppColors.textTertiary,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
           ),
           const SizedBox(height: 12),
           Text(
-            item['description'],
+            item.description,
             style: AppTextStyles.lexend(
               fontSize: 12,
               color: AppColors.textSecondary,

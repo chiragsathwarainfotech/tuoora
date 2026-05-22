@@ -134,7 +134,7 @@ class HomeworkRatingScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFEAECF0)),
+        border: Border.all(color: AppColors.successBg),
       ),
       child: Column(
         children: [
@@ -188,7 +188,7 @@ class HomeworkRatingScreen extends StatelessWidget {
             borderRadius: BorderRadius.circular(4),
             child: LinearProgressIndicator(
               value: progress,
-              backgroundColor: const Color(0xFFF2F4F7),
+              backgroundColor: AppColors.successBg,
               color: AppColors.primaryBrand,
               minHeight: 8,
             ),
@@ -228,9 +228,7 @@ class HomeworkRatingScreen extends StatelessWidget {
             color: isSelected ? AppColors.primaryBrand : AppColors.white,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
-              color: isSelected
-                  ? AppColors.primaryBrand
-                  : const Color(0xFFD0D5DD),
+              color: isSelected ? AppColors.primaryBrand : AppColors.successBg,
             ),
           ),
           child: Text(
@@ -329,7 +327,7 @@ class HomeworkRatingScreen extends StatelessWidget {
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF2F4F7),
+                    color: AppColors.successBg,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
@@ -384,7 +382,7 @@ class HomeworkRatingScreen extends StatelessWidget {
               onPressed: () =>
                   controller.sendReminder(sub.studentId.toString()),
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF667085),
+                backgroundColor: AppColors.textSecondary,
                 minimumSize: const Size(double.infinity, 44),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -467,9 +465,9 @@ class HomeworkRatingScreen extends StatelessWidget {
   Color _getStatusColor(String status) {
     switch (status.toUpperCase()) {
       case 'SUBMITTED':
-        return const Color(0xFF12B76A);
+        return AppColors.darkGreen;
       case 'PENDING':
-        return const Color(0xFFF04438);
+        return AppColors.bohoRed;
       default:
         return AppColors.textTertiary;
     }

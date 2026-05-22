@@ -102,7 +102,7 @@ class LogAttendanceScreen extends GetView<StaffController> {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.divider),
+        border: Border.all(color: AppColors.background),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,7 +140,7 @@ class LogAttendanceScreen extends GetView<StaffController> {
             decoration: BoxDecoration(
               color: AppColors.white,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: AppColors.divider),
+              border: Border.all(color: AppColors.background),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.05),
@@ -279,7 +279,7 @@ class LogAttendanceScreen extends GetView<StaffController> {
         color: isSelected ? color.withValues(alpha: 0.05) : AppColors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isSelected ? color : AppColors.divider,
+          color: isSelected ? color : AppColors.background,
           width: 1.5,
         ),
       ),

@@ -139,7 +139,7 @@ class ReportBatchItemCard extends StatelessWidget {
               child: LinearProgressIndicator(
                 value: progress,
                 minHeight: 6,
-                backgroundColor: AppColors.reportBorder,
+                backgroundColor: AppColors.background,
                 color: AppColors.primaryBrand,
               ),
             ),
@@ -171,7 +171,7 @@ class ReportStudentItemCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.reportBorder),
+        border: Border.all(color: AppColors.background),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

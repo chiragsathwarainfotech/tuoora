@@ -51,28 +51,28 @@ class InstituteUpdatesScreen extends StatelessWidget {
                         final category = update.category;
                         switch (category) {
                           case UpdateCategory.Academic:
-                            iconBg = const Color(0xFFEFF6FF);
-                            iconColor = const Color(0xFF1E40AF);
+                            iconBg = AppColors.studentUpdateIconBg;
+                            iconColor = AppColors.studentUpdateIconColor;
                             icon = Icons.school_rounded;
                             break;
                           case UpdateCategory.Administrative:
-                            iconBg = const Color(0xFFF1F5F9);
-                            iconColor = const Color(0xFF475569);
+                            iconBg = AppColors.background;
+                            iconColor = AppColors.textSecondary;
                             icon = Icons.admin_panel_settings_rounded;
                             break;
                           case UpdateCategory.Emergency:
-                            iconBg = const Color(0xFFFEF2F2);
-                            iconColor = Colors.redAccent;
+                            iconBg = AppColors.errorBg;
+                            iconColor = AppColors.errorRed;
                             icon = Icons.error_rounded;
                             break;
                           case UpdateCategory.Event:
-                            iconBg = const Color(0xFFFDF2F8);
-                            iconColor = const Color(0xFF9D174D);
+                            iconBg = AppColors.errorBg;
+                            iconColor = AppColors.bohoRed;
                             icon = Icons.celebration_rounded;
                             break;
                           case UpdateCategory.Other:
-                            iconBg = const Color(0xFFFFF7ED);
-                            iconColor = const Color(0xFF9A3412);
+                            iconBg = AppColors.warningBg;
+                            iconColor = AppColors.studentTomorrowPillText;
                             icon = Icons.campaign_rounded;
                             break;
                         }
@@ -163,7 +163,7 @@ class InstituteUpdatesScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppColors.white,
                 borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: AppColors.reportBorder, width: 1.5),
+                border: Border.all(color: AppColors.background, width: 1.5),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.02),

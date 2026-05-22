@@ -1,3 +1,4 @@
+import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
@@ -5,8 +6,6 @@ import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../config/app_routes.dart';
 
 class InstituteSubscriptionScreen extends StatelessWidget {
   const InstituteSubscriptionScreen({super.key});
@@ -74,17 +73,15 @@ class InstituteSubscriptionScreen extends StatelessWidget {
               Container(
                 padding: AppSpacing.x14.add(AppSpacing.y8),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF16A34A).withValues(alpha: 0.15),
+                  color: AppColors.studentPresentText,
                   borderRadius: BorderRadius.circular(AppSpacing.s20),
-                  border: Border.all(
-                    color: const Color(0xFF4ADE80).withValues(alpha: 0.4),
-                  ),
+                  border: Border.all(color: AppColors.successGreen),
                 ),
                 child: Row(
                   children: [
                     const Icon(
                       Icons.circle,
-                      color: Color(0xFF4ADE80),
+                      color: AppColors.darkGreen,
                       size: AppSpacing.s10,
                     ),
                     AppSpacing.h8,
@@ -167,7 +164,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.s20),
-        border: Border.all(color: AppColors.divider),
+        border: Border.all(color: AppColors.background),
       ),
       child: Column(
         children: [
@@ -198,7 +195,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
             child: const LinearProgressIndicator(
               value: 0.84,
               minHeight: AppSpacing.s12,
-              backgroundColor: AppColors.divider,
+              backgroundColor: AppColors.background,
               color: AppColors.primaryBrand,
             ),
           ),
@@ -281,7 +278,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.s24),
-        border: Border.all(color: AppColors.divider),
+        border: Border.all(color: AppColors.background),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -417,7 +414,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.s16),
-        border: Border.all(color: AppColors.divider),
+        border: Border.all(color: AppColors.background),
       ),
       child: Row(
         children: [
@@ -503,7 +500,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.s16),
-        border: Border.all(color: AppColors.divider),
+        border: Border.all(color: AppColors.background),
       ),
       child: Row(
         children: [
@@ -556,7 +553,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
               Container(
                 padding: AppSpacing.x6.add(AppSpacing.y2),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF0FDF4),
+                  color: AppColors.studentPresentBg,
                   borderRadius: BorderRadius.circular(AppSpacing.s4),
                 ),
                 child: Text(
@@ -564,7 +561,7 @@ class InstituteSubscriptionScreen extends StatelessWidget {
                   style: AppTextStyles.manrope(
                     fontSize: AppSpacing.s10,
                     fontWeight: FontWeight.w900,
-                    color: const Color(0xFF16A34A),
+                    color: AppColors.studentPresentText,
                   ),
                 ),
               ),

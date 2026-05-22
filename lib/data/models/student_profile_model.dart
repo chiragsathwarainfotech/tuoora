@@ -19,6 +19,15 @@ class StudentProfileModel {
       info: StudentProfileInfo.fromJson(json['info'] ?? {}),
     );
   }
+
+  StudentProfileModel copyWithAvatarUrl(String newAvatarUrl) {
+    return StudentProfileModel(
+      header: header.copyWithAvatarUrl(newAvatarUrl),
+      stats: stats,
+      studentQr: studentQr,
+      info: info,
+    );
+  }
 }
 
 class StudentProfileHeader {
@@ -52,6 +61,19 @@ class StudentProfileHeader {
       subject: json['subject'] ?? '',
       rollNo: json['roll_no'] ?? '',
       memberSince: json['member_since'] ?? '',
+    );
+  }
+
+  StudentProfileHeader copyWithAvatarUrl(String newAvatarUrl) {
+    return StudentProfileHeader(
+      name: name,
+      initials: initials,
+      avatarUrl: newAvatarUrl,
+      standard: standard,
+      batchName: batchName,
+      subject: subject,
+      rollNo: rollNo,
+      memberSince: memberSince,
     );
   }
 }

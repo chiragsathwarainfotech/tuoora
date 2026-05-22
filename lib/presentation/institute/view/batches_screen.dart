@@ -225,7 +225,7 @@ class _BatchesScreenState extends State<BatchesScreen> {
                             Container(
                               width: AppSpacing.s2,
                               height: AppSpacing.s16,
-                              color: AppColors.divider,
+                              color: AppColors.background,
                             ),
                             AppSpacing.h16,
                             Text(

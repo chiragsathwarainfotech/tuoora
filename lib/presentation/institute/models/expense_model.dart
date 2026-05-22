@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
 
 class ExpenseCategory {
   final int id;
@@ -83,17 +84,17 @@ class ExpenseModel {
   Color get iconBgColor {
     switch (category?.name) {
       case 'Bills':
-        return const Color(0xFFEFF6FF);
+        return AppColors.studentUpdateIconBg;
       case 'Shopping':
-        return const Color(0xFFFFF7ED);
+        return AppColors.warningBg;
       case 'Entertainment':
-        return const Color(0xFFFAF5FF);
+        return AppColors.scaffoldBg;
       case 'Food & Drink':
-        return const Color(0xFFECFDF5);
+        return AppColors.successBg;
       case 'Transport':
-        return const Color(0xFFF1F5F9);
+        return AppColors.background;
       default:
-        return const Color(0xFFF3F4F6);
+        return AppColors.background;
     }
   }
 }

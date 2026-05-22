@@ -1,50 +1,47 @@
 import 'package:get/get.dart';
+import 'package:tuoora/core/enums/app_enums.dart';
 import 'package:tuoora/presentation/student/models/assignment_model.dart';
-import 'package:tuoora/presentation/student/controllers/assignments_controller.dart';
 import 'package:tuoora/config/app_routes.dart';
+import 'package:tuoora/data/models/student_resource_model.dart';
+import 'package:tuoora/presentation/student/controllers/attachment_preview_controller.dart';
 
 class StudentStudyMaterialDetailController extends GetxController {
-  final Map<String, dynamic> material = Get.arguments ?? {
-    'subject': 'Mathematics',
-    'date': 'Today',
-    'title': 'Trigonometry — quick reference',
-    'description': 'All Class X trig identities, complementary-angle formulas, and sign chart on one page. Print and stick inside your notebook.',
-    'fileCount': 1,
-    'isVideo': false,
-    'teacher': 'Mr. R. Verma',
-    'subjectBgColor': 0xFFFEF2F2,
-    'subjectTextColor': 0xFF991B1B,
-  };
+  late final StudentResourceModel material;
+  late final List<AssignmentAttachment> attachments;
 
-  final attachments = <AssignmentAttachment>[
-    const AssignmentAttachment(
-      id: 'doc_1',
-      name: 'Trig identities cheat sheet.pdf',
-      sizeLabel: '180 KB',
-      kind: AssignmentAttachmentKind.document,
-      pageCount: 3,
-    ),
-    const AssignmentAttachment(
-      id: 'vid_1',
-      name: 'Reflection concepts.mp4',
-      sizeLabel: '38 MB',
-      kind: AssignmentAttachmentKind.video,
-      durationLabel: '6:02',
-    ),
-    const AssignmentAttachment(
-      id: 'img_1',
-      name: 'Functional groups chart.png',
-      sizeLabel: '720 KB',
-      kind: AssignmentAttachmentKind.image,
-    ),
-  ];
+  @override
+  void onInit() {
+    super.onInit();
+    material = Get.arguments as StudentResourceModel;
+
+    // Convert the single file into an AssignmentAttachment so we can reuse the tile
+    attachments = [
+      AssignmentAttachment(
+        id: material.id.toString(),
+        name: material.fileUrl.split('/').last,
+        sizeLabel: material.fileSize,
+        kind: _getKind(material.fileType),
+        url: material.fileUrl,
+      ),
+    ];
+  }
+
+  AssignmentAttachmentKind _getKind(String type) {
+    final lowerType = type.toLowerCase();
+    if (lowerType.contains('video')) return AssignmentAttachmentKind.video;
+    if (lowerType.contains('image')) return AssignmentAttachmentKind.image;
+    if (lowerType.contains('audio')) return AssignmentAttachmentKind.audio;
+    return AssignmentAttachmentKind.document;
+  }
 
   void openAttachment(AssignmentAttachment attachment) {
-    if (!Get.isRegistered<AssignmentsController>()) {
-      Get.put(AssignmentsController());
-    }
-    final assignmentsCtrl = Get.find<AssignmentsController>();
-    assignmentsCtrl.selectedAttachment.value = attachment;
-    Get.toNamed(AppRoutes.studentAttachmentPreview);
+    Get.toNamed(
+      AppRoutes.studentAttachmentPreview,
+      arguments: AttachmentPreviewArgs(
+        attachment: attachment,
+        sourceType: AttachmentSourceType.resource,
+        sourceId: material.id.toString(),
+      ),
+    );
   }
 }

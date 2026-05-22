@@ -1,120 +1,161 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import 'package:tuoora/config/app_routes.dart';
+import 'package:tuoora/core/api/api_client.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
-import 'package:tuoora/core/enums/app_enums.dart';
+import 'package:tuoora/core/services/download_service.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
+import 'package:tuoora/data/repositories/student_fees_repository.dart';
 import 'package:tuoora/presentation/student/models/fee_model.dart';
 
-/// Controller for the student-side Fees tab + Receipt + Pay-fees screens.
-///
-/// Holds the summary (paid / pending split), the list of monthly
-/// statements, the currently-selected statement (for the receipt screen),
-/// and helper methods to drive navigation. Mock seeds match the design
-/// screenshots; swap [loadFees] for a repository call when the API lands.
 class FeesController extends GetxController {
-  /// Header card aggregate.
+  final RxBool isLoading = true.obs;
+  final RxBool isReceiptLoading = false.obs;
+  final RxBool isDownloading = false.obs;
+  final RxDouble downloadProgress = 0.0.obs;
+
+  /// Aggregate header card values. Defaults are all-zero until the first
+  /// fetch resolves.
   final Rx<FeeSummary> summary = const FeeSummary(
-    totalInRupees: 22500,
-    paidInRupees: 13500,
-    pendingInRupees: 9000,
-    billedMonths: 5,
-    pendingMonthsLabel: '2 months · May - Feb',
+    totalInRupees: 0,
+    paidInRupees: 0,
+    pendingInRupees: 0,
+    billedMonths: 0,
+    pendingMonthsLabel: '',
   ).obs;
 
-  /// Monthly statement list. First entry is the most-recent month.
+  /// Fees list rendered on the Fees tab.
   final RxList<FeeStatement> statements = <FeeStatement>[].obs;
 
-  /// Set when the user taps a statement; read by the receipt screen.
+  /// Set when the user taps a statement; consumed by the receipt screen
+  /// for the header/period/amount values that the receipt-detail API
+  /// does not return on its own.
   final Rxn<FeeStatement> selectedStatement = Rxn<FeeStatement>();
 
-  /// Identity data shown on the receipt + pay-fees screens.
+  /// Latest receipt payload from `/student/receipts/{id}` — populated by
+  /// [openReceipt] / [openReceiptById].
+  final Rxn<StudentReceipt> currentReceipt = Rxn<StudentReceipt>();
+
+  /// Identity data shown on the Pay-fees screen. Receipt screen now
+  /// reads directly from [currentReceipt] instead.
   final Rx<StudentBillingProfile> billingProfile = const StudentBillingProfile(
-    studentName: 'Aarav Sharma',
-    rollNumber: 'STU-2026-041',
-    instituteName: 'Saraswati Coaching Centre',
-    instituteUpiHandle: 'saraswati@ybl',
+    studentName: '',
+    rollNumber: '',
+    instituteName: '',
+    instituteUpiHandle: '',
   ).obs;
+
+  late final StudentFeesRepository _repository;
 
   @override
   void onInit() {
     super.onInit();
+    _repository = StudentFeesRepository(Get.find<ApiClient>());
     loadFees();
   }
 
-  void loadFees() {
-    statements.assignAll(_seedStatements);
+  Future<void> loadFees() async {
+    try {
+      isLoading.value = true;
+      final data = await _repository.getFees();
+      statements.assignAll(data.fees);
+      summary.value = data.summary;
+    } catch (_) {
+      AppSnackBar.error('Failed to load fees');
+    } finally {
+      isLoading.value = false;
+    }
   }
 
-  /// Opens the receipt screen for the given [statement].
-  void openReceipt(FeeStatement statement) {
+  /// Opens the receipt screen for [statement] and fetches the receipt
+  /// detail from the API. The screen renders a spinner while loading.
+  Future<void> openReceipt(FeeStatement statement) async {
     selectedStatement.value = statement;
+    currentReceipt.value = null;
     Get.toNamed(AppRoutes.studentFeeReceipt);
+    await _fetchReceipt(statement.feeId);
   }
 
-  /// Opens the Pay-fees (UPI QR) screen. The screen reads
-  /// [summary] + [billingProfile] directly — no extra state to set.
+  /// Opens the receipt screen by id alone (used from the receipts-list
+  /// screen which has no [FeeStatement] context).
+  Future<void> openReceiptById(int feeId) async {
+    selectedStatement.value = null;
+    currentReceipt.value = null;
+    Get.toNamed(AppRoutes.studentFeeReceipt);
+    await _fetchReceipt(feeId);
+  }
+
+  Future<void> _fetchReceipt(int feeId) async {
+    try {
+      isReceiptLoading.value = true;
+      currentReceipt.value = await _repository.getReceipt(feeId);
+    } catch (_) {
+      AppSnackBar.error('Failed to load receipt');
+    } finally {
+      isReceiptLoading.value = false;
+    }
+  }
+
+  /// Downloads the receipt PDF for the currently-open receipt. The
+  /// receipt screen wires its download button to this.
+  Future<void> downloadCurrentReceipt() async {
+    final receipt = currentReceipt.value;
+    if (receipt == null) return;
+    await _downloadReceipt(receipt);
+  }
+
+  Future<void> _downloadReceipt(StudentReceipt receipt) async {
+    if (isDownloading.value) return;
+    try {
+      isDownloading.value = true;
+      downloadProgress.value = 0.0;
+
+      Get.snackbar(
+        'Downloading',
+        'Please wait, your receipt is being downloaded...',
+        snackPosition: SnackPosition.BOTTOM,
+        showProgressIndicator: true,
+        backgroundColor: AppColors.primaryBrand,
+        colorText: AppColors.white,
+      );
+
+      final bytes = await _repository.downloadFeeReceipt(
+        receipt.id,
+        onProgress: (p) => downloadProgress.value = p,
+      );
+
+      final downloadService = Get.find<DownloadService>();
+      final fileName = receipt.receiptNumber.isNotEmpty
+          ? '${receipt.receiptNumber}.pdf'
+          : 'receipt-${receipt.id}.pdf';
+      await downloadService.saveFile(
+        bytes: Uint8List.fromList(bytes),
+        fileName: fileName,
+      );
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Failed to download receipt: ${e.toString().replaceAll('Exception: ', '')}',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.redAccent,
+        colorText: AppColors.white,
+      );
+    } finally {
+      isDownloading.value = false;
+      downloadProgress.value = 0.0;
+    }
+  }
+
   void openPayFees() {
     Get.toNamed(AppRoutes.studentPayFees);
   }
 
-  /// Copy-to-clipboard handler for the UPI handle on the pay-fees screen.
   Future<void> copyUpiHandle() async {
     final handle = billingProfile.value.instituteUpiHandle;
     await Clipboard.setData(ClipboardData(text: handle));
     AppSnackBar.success(handle, title: AppStrings.studentPayFeesCopyHint);
   }
-
-  // ────────────────────────────────────────────────────────── mock seeds
-
-  static const _seedStatements = <FeeStatement>[
-    FeeStatement(
-      id: 'INV-2026-05',
-      periodLabel: 'May 2026',
-      monthHeader: 'MAY 2026',
-      amountInRupees: 4500,
-      status: FeeStatus.pending,
-      dateLabel: 'Due 25 May',
-      dueDateShort: '25 May',
-      lateFeeLabel: '₹100 after due date',
-    ),
-    FeeStatement(
-      id: 'INV-2026-04',
-      periodLabel: 'April 2026',
-      monthHeader: 'APRIL 2026',
-      amountInRupees: 4500,
-      status: FeeStatus.paid,
-      dateLabel: 'Paid 02 Apr · UPI · PhonePe',
-      dueDateShort: '25 Apr',
-    ),
-    FeeStatement(
-      id: 'INV-2026-03',
-      periodLabel: 'March 2026',
-      monthHeader: 'MARCH 2026',
-      amountInRupees: 4500,
-      status: FeeStatus.paid,
-      dateLabel: 'Paid 04 Mar · Cash',
-      dueDateShort: '25 Mar',
-    ),
-    FeeStatement(
-      id: 'INV-2026-02',
-      periodLabel: 'Feb 2026',
-      monthHeader: 'FEB 2026',
-      amountInRupees: 4500,
-      status: FeeStatus.pending,
-      dateLabel: 'Due 25 Feb',
-      dueDateShort: '25 Feb',
-      lateFeeLabel: '₹100 after due date',
-    ),
-    FeeStatement(
-      id: 'INV-2026-01',
-      periodLabel: 'Jan 2026',
-      monthHeader: 'JAN 2026',
-      amountInRupees: 4500,
-      status: FeeStatus.paid,
-      dateLabel: 'Paid 03 Jan · UPI · GPay',
-      dueDateShort: '25 Jan',
-    ),
-  ];
 }

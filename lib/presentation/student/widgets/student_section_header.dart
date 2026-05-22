@@ -63,7 +63,7 @@ class StudentSectionHeader extends StatelessWidget {
               style: AppTextStyles.manrope(
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
-                color: actionColor ?? AppColors.studentBrandAccent,
+                color: actionColor ?? AppColors.orangeTag,
               ),
             ),
           ),

@@ -2,6 +2,7 @@ import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/enums/app_enums.dart';
+import 'package:tuoora/presentation/institute/controllers/institute_profile_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
@@ -10,9 +11,7 @@ import 'package:tuoora/core/widgets/app_info_box.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'dart:io';
-import '../controllers/institute_profile_controller.dart';
 
 class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
   const InstituteEditProfileScreen({super.key});

@@ -7,7 +7,22 @@ class ApiConstants {
   static const String instituteVerifyOtp = '/institute/verify-otp';
   static const String studentLogin = '/student/login';
   static const String studentProfile = '/student/profile';
+  static const String studentProfileAvatar = '/student/profile/avatar';
   static const String studentFeedback = '/student/feedback';
+  static const String studentHomeworks = '/student/homeworks';
+  static String studentHomeworkDetail(int id) => '/student/homeworks/$id';
+  static String studentHomeworkAttachment(int id) => '/student/homeworks/$id/attachment';
+  static String studentHomeworkAttachmentDownload(int id) => '/student/homeworks/$id/attachment/download';
+  static const String studentAttendance = '/student/attendance';
+  static const String studentReport = '/student/report';
+  static const String studentInstitute = '/student/institute';
+  static const String studentResources = '/student/resources';
+  static const String studentDashboard = '/student/dashboard';
+  static const String studentFees = '/student/fees';
+  static const String studentReceipts = '/student/receipts';
+  static String studentReceiptDetail(int id) => '/student/receipts/$id';
+  static String studentFeeDownload(int id) => '/student/fees/$id/download';
+  static const String studentNotifications = '/student/notifications';
 
   // Institute Endpoints
   static const String instituteStudents = '/institute/students';

@@ -121,7 +121,7 @@ class StaffListScreen extends GetView<StaffController> {
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.divider),
+          border: Border.all(color: AppColors.background),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.02),

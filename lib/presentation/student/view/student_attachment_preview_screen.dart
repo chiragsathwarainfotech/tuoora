@@ -5,30 +5,20 @@ import 'package:get/get.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/enums/app_enums.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
-import 'package:tuoora/presentation/student/controllers/assignments_controller.dart';
+import 'package:tuoora/presentation/student/controllers/attachment_preview_controller.dart';
 import 'package:tuoora/presentation/student/models/assignment_model.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
 
-/// Student → Attachment preview.
-///
-/// One screen for every attachment kind. The preview surface swaps based
-/// on [AssignmentAttachment.kind]; the file-info row + Download / Share
-/// buttons are shared.
-///
-/// Currently the previews are visual shells. When real URLs land in the
-/// model, plug them in:
-///   • image  → [CachedNetworkImage]
-///   • video  → `chewie` + `video_player` (already in pubspec)
-///   • pdf    → `flutter_pdfview` (already in pubspec)
-///   • audio  → a simple audio player package
-class StudentAttachmentPreviewScreen extends GetView<AssignmentsController> {
+class StudentAttachmentPreviewScreen
+    extends GetView<AttachmentPreviewController> {
   const StudentAttachmentPreviewScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.studentBg,
+      backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
         bottom: false,
         child: Obx(() {
@@ -36,6 +26,24 @@ class StudentAttachmentPreviewScreen extends GetView<AssignmentsController> {
           if (attachment == null) {
             return const Center(
               child: Text(AppStrings.studentAttachmentNoneSelected),
+            );
+          }
+          if (controller.isAttachmentLoading.value) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                StudentAppBar(
+                  title: attachment.name,
+                  showDefaultActions: false,
+                ),
+                const Expanded(
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      color: AppColors.primaryBrand,
+                    ),
+                  ),
+                ),
+              ],
             );
           }
           return _Body(attachment: attachment);
@@ -81,8 +89,6 @@ class _Body extends StatelessWidget {
   }
 }
 
-// ───────────────────────────────────────────────────────── Preview surface
-
 class _PreviewSurface extends StatelessWidget {
   final AssignmentAttachment attachment;
 
@@ -114,16 +120,15 @@ class _ImagePreview extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(AppSpacing.s14),
       child: Container(
-        color: AppColors.attachmentPreviewBg,
+        color: AppColors.background,
         constraints: const BoxConstraints(minHeight: 240),
         child: url != null && url.isNotEmpty
             ? CachedNetworkImage(
                 imageUrl: url,
                 fit: BoxFit.contain,
                 placeholder: (_, _) => const _LoadingPlaceholder(),
-                errorWidget: (_, _, _) => const _ErrorPlaceholder(
-                  icon: Icons.broken_image_outlined,
-                ),
+                errorWidget: (_, _, _) =>
+                    const _ErrorPlaceholder(icon: Icons.broken_image_outlined),
               )
             : const _ErrorPlaceholder(icon: Icons.image_outlined),
       ),
@@ -143,10 +148,9 @@ class _VideoPreview extends StatelessWidget {
       borderRadius: BorderRadius.circular(AppSpacing.s14),
       child: Container(
         height: 220,
-        color: AppColors.attachmentVideoSurface,
+        color: AppColors.attachmentShareButton,
         child: Stack(
           children: [
-            // Play button centered.
             Center(
               child: Container(
                 width: 64,
@@ -157,12 +161,11 @@ class _VideoPreview extends StatelessWidget {
                 ),
                 child: const Icon(
                   Icons.play_arrow_rounded,
-                  color: AppColors.attachmentVideoSurface,
+                  color: AppColors.attachmentShareButton,
                   size: 36,
                 ),
               ),
             ),
-            // Timeline + duration markers along the bottom.
             Positioned(
               left: 16,
               right: 16,
@@ -220,15 +223,12 @@ class _DocumentPreview extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppSpacing.s14),
       decoration: BoxDecoration(
-        color: AppColors.attachmentPreviewBg,
+        color: AppColors.background,
         borderRadius: BorderRadius.circular(AppSpacing.s14),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Faux first-page preview (skeleton paragraphs). When a real URL
-          // exists, swap this Column for `PDFView(filePath: ...)` from
-          // `flutter_pdfview`.
           Container(
             padding: const EdgeInsets.all(AppSpacing.s16),
             decoration: BoxDecoration(
@@ -264,7 +264,7 @@ class _DocumentPreview extends StatelessWidget {
                       child: Container(
                         height: 8,
                         decoration: BoxDecoration(
-                          color: AppColors.attachmentSkeletonBar,
+                          color: AppColors.borderGrey,
                           borderRadius: BorderRadius.circular(4),
                         ),
                       ),
@@ -321,7 +321,7 @@ class _AudioPreview extends StatelessWidget {
       height: 180,
       padding: const EdgeInsets.all(AppSpacing.s14),
       decoration: BoxDecoration(
-        color: AppColors.attachmentImageBg,
+        color: AppColors.studentBrandSoft,
         borderRadius: BorderRadius.circular(AppSpacing.s14),
       ),
       child: Column(
@@ -343,7 +343,7 @@ class _AudioPreview extends StatelessWidget {
             ),
             child: const Icon(
               Icons.play_arrow_rounded,
-              color: AppColors.attachmentImageColor,
+              color: AppColors.orangeTag,
               size: 36,
             ),
           ),
@@ -353,7 +353,7 @@ class _AudioPreview extends StatelessWidget {
             style: AppTextStyles.manrope(
               fontSize: 13,
               fontWeight: FontWeight.w800,
-              color: AppColors.attachmentImageColor,
+              color: AppColors.orangeTag,
             ),
           ),
         ],
@@ -389,14 +389,10 @@ class _ErrorPlaceholder extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 240,
-      child: Center(
-        child: Icon(icon, size: 48, color: AppColors.textTertiary),
-      ),
+      child: Center(child: Icon(icon, size: 48, color: AppColors.textTertiary)),
     );
   }
 }
-
-// ───────────────────────────────────────────────────────── File info card
 
 class _FileInfoCard extends StatelessWidget {
   final AssignmentAttachment attachment;
@@ -486,23 +482,23 @@ class _InfoIcon extends StatelessWidget {
     late final IconData icon;
     switch (kind) {
       case AssignmentAttachmentKind.document:
-        bg = AppColors.attachmentDocumentBg;
-        fg = AppColors.attachmentDocumentColor;
+        bg = AppColors.studentPresentBg;
+        fg = AppColors.studentPresentText;
         icon = Icons.description_rounded;
         break;
       case AssignmentAttachmentKind.image:
-        bg = AppColors.attachmentImageBg;
-        fg = AppColors.attachmentImageColor;
+        bg = AppColors.studentBrandSoft;
+        fg = AppColors.orangeTag;
         icon = Icons.image_rounded;
         break;
       case AssignmentAttachmentKind.video:
-        bg = AppColors.attachmentImageBg;
-        fg = AppColors.attachmentImageColor;
+        bg = AppColors.studentBrandSoft;
+        fg = AppColors.orangeTag;
         icon = Icons.smart_display_rounded;
         break;
       case AssignmentAttachmentKind.audio:
-        bg = AppColors.attachmentImageBg;
-        fg = AppColors.attachmentImageColor;
+        bg = AppColors.studentBrandSoft;
+        fg = AppColors.orangeTag;
         icon = Icons.audiotrack_rounded;
         break;
     }
@@ -518,8 +514,6 @@ class _InfoIcon extends StatelessWidget {
   }
 }
 
-// ────────────────────────────────────────────────────────── Action buttons
-
 class _ActionRow extends StatelessWidget {
   final AssignmentAttachment attachment;
 
@@ -534,11 +528,8 @@ class _ActionRow extends StatelessWidget {
             label: AppStrings.studentAttachmentDownload,
             icon: Icons.download_rounded,
             isPrimary: false,
-            onTap: () => Get.snackbar(
-              attachment.name,
-              AppStrings.studentAttachmentDownloadStarted,
-              snackPosition: SnackPosition.BOTTOM,
-            ),
+            onTap: () =>
+                Get.find<AttachmentPreviewController>().downloadAttachment(),
           ),
         ),
         AppSpacing.h12,

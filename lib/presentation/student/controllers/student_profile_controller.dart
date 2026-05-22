@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -5,14 +7,19 @@ import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/api/api_client.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/data/models/student_profile_model.dart';
 import 'package:tuoora/data/repositories/student_profile_repository.dart';
 
 class StudentProfileController extends GetxController {
+  /// Local path of the most-recently-picked image. Shown immediately
+  /// after picking so the avatar updates without waiting on the upload.
+  /// Cleared on upload failure so the UI reverts to the prior avatar.
   final RxString profileImagePath = ''.obs;
   final ImagePicker _picker = ImagePicker();
 
   final RxBool isLoading = true.obs;
+  final RxBool isUploadingAvatar = false.obs;
   final Rxn<StudentProfileModel> profileData = Rxn<StudentProfileModel>();
   late final StudentProfileRepository _repository;
 
@@ -37,8 +44,28 @@ class StudentProfileController extends GetxController {
 
   Future<void> pickImage(ImageSource source) async {
     final XFile? image = await _picker.pickImage(source: source);
-    if (image != null) {
-      profileImagePath.value = image.path;
+    if (image == null) return;
+
+    final previousLocalPath = profileImagePath.value;
+    profileImagePath.value = image.path;
+
+    try {
+      isUploadingAvatar.value = true;
+      final newAvatarUrl = await _repository.uploadAvatar(File(image.path));
+
+      final existing = profileData.value;
+      if (existing != null) {
+        profileData.value = existing.copyWithAvatarUrl(newAvatarUrl);
+      }
+      AppSnackBar.success('Profile photo updated');
+    } catch (e) {
+      profileImagePath.value = previousLocalPath;
+      AppSnackBar.error(
+        e.toString().replaceAll('Exception: ', ''),
+        title: 'Upload failed',
+      );
+    } finally {
+      isUploadingAvatar.value = false;
     }
   }
 

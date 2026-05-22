@@ -24,7 +24,7 @@ class StudentPayFeesScreen extends GetView<FeesController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.studentBg,
+      backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
         bottom: false,
         child: Obx(() {
@@ -225,7 +225,7 @@ class _UpiCard extends StatelessWidget {
                 vertical: 4,
               ),
               decoration: BoxDecoration(
-                color: AppColors.attachmentPreviewBg,
+                color: AppColors.background,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Row(
@@ -325,10 +325,7 @@ class _QrLikePainter extends CustomPainter {
       for (var x = 0; x < cells; x++) {
         if (_isFinderArea(x, y, cells)) continue;
         if (rng.nextBool() && rng.nextBool()) {
-          canvas.drawRect(
-            Rect.fromLTWH(x * cell, y * cell, cell, cell),
-            paint,
-          );
+          canvas.drawRect(Rect.fromLTWH(x * cell, y * cell, cell, cell), paint);
         }
       }
     }
@@ -386,7 +383,7 @@ class _OpenInGooglePayButton extends StatelessWidget {
                 style: AppTextStyles.manrope(
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
-                  color: const Color(0xFF4285F4),
+                  color: AppColors.studentProgressBlue,
                 ),
               ),
               Text(
@@ -428,7 +425,7 @@ class _PaymentAppRow extends StatelessWidget {
         Expanded(
           child: _AppButton(
             label: AppStrings.studentPayFeesAppPhonePe,
-            labelColor: const Color(0xFF5F259F),
+            labelColor: AppColors.primaryBrand,
             onTap: () => _snack(AppStrings.studentPayFeesAppPhonePe),
           ),
         ),

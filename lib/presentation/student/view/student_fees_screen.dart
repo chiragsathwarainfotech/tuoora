@@ -26,7 +26,7 @@ class StudentFeesScreen extends GetView<FeesController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.studentBg,
+      backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
         bottom: false,
         child: Column(
@@ -37,55 +37,89 @@ class StudentFeesScreen extends GetView<FeesController> {
               isRoot: true,
             ),
             Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(
-                  AppSpacing.s16,
-                  AppSpacing.s4,
-                  AppSpacing.s16,
-                  AppSpacing.s24,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Obx(() => _SummaryCard(summary: controller.summary.value)),
-                    const SizedBox(height: AppSpacing.s12),
-                    Obx(() {
-                      final pending = controller.summary.value.pendingInRupees;
-                      return _PayNowButton(
-                        pendingAmount: pending,
-                        onTap: pending > 0 ? controller.openPayFees : null,
-                      );
-                    }),
-                    const SizedBox(height: AppSpacing.s24),
-                    const StudentSectionHeader(
-                      title: AppStrings.studentFeesStatementsTitle,
+              child: Obx(() {
+                if (controller.isLoading.value &&
+                    controller.statements.isEmpty) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: AppColors.studentBrand,
                     ),
-                    const SizedBox(height: AppSpacing.s12),
-                    Obx(
-                      () => Column(
-                        children: [
-                          for (var i = 0;
-                              i < controller.statements.length;
-                              i++) ...[
-                            if (i > 0) const SizedBox(height: AppSpacing.s10),
-                            _StatementRow(
-                              statement: controller.statements[i],
-                              onTap: () => controller
-                                  .openReceipt(controller.statements[i]),
+                  );
+                }
+                return RefreshIndicator(
+                  color: AppColors.studentBrand,
+                  onRefresh: controller.loadFees,
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: const EdgeInsets.fromLTRB(
+                      AppSpacing.s16,
+                      AppSpacing.s4,
+                      AppSpacing.s16,
+                      AppSpacing.s24,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        _SummaryCard(summary: controller.summary.value),
+                        const SizedBox(height: AppSpacing.s12),
+                        _PayNowButton(
+                          pendingAmount:
+                              controller.summary.value.pendingInRupees,
+                          onTap: controller.summary.value.pendingInRupees > 0
+                              ? controller.openPayFees
+                              : null,
+                        ),
+                        const SizedBox(height: AppSpacing.s24),
+                        const StudentSectionHeader(
+                          title: AppStrings.studentFeesStatementsTitle,
+                        ),
+                        const SizedBox(height: AppSpacing.s12),
+                        if (controller.statements.isEmpty)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: AppSpacing.s24,
                             ),
-                          ],
-                        ],
-                      ),
+                            child: Center(
+                              child: Text(
+                                'No fee statements yet.',
+                                style: AppTextStyles.lexend(
+                                  fontSize: 13,
+                                  color: AppColors.textSecondary,
+                                ),
+                              ),
+                            ),
+                          )
+                        else
+                          Column(
+                            children: [
+                              for (
+                                var i = 0;
+                                i < controller.statements.length;
+                                i++
+                              ) ...[
+                                if (i > 0)
+                                  const SizedBox(height: AppSpacing.s10),
+                                _StatementRow(
+                                  statement: controller.statements[i],
+                                  onTap: () => controller.openReceipt(
+                                    controller.statements[i],
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
+                  ),
+                );
+              }),
             ),
           ],
         ),
       ),
-      bottomNavigationBar:
-          showBottomNav ? const StudentBottomNav(currentIndex: 2) : null,
+      bottomNavigationBar: showBottomNav
+          ? const StudentBottomNav(currentIndex: 2)
+          : null,
     );
   }
 }
@@ -167,7 +201,7 @@ class _SummaryCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              _LegendDot(color: AppColors.feesPaidDot),
+              _LegendDot(color: AppColors.studentPresentText),
               const SizedBox(width: 6),
               Text(
                 '${AppStrings.studentFeesLegendPaid} '
@@ -179,7 +213,7 @@ class _SummaryCard extends StatelessWidget {
                 ),
               ),
               AppSpacing.h16,
-              _LegendDot(color: AppColors.feesPendingDot),
+              _LegendDot(color: AppColors.orangeTag),
               const SizedBox(width: 6),
               Text(
                 '${AppStrings.studentFeesLegendPending} '
@@ -253,7 +287,7 @@ class _RingPainter extends CustomPainter {
       radius: (size.shortestSide - stroke) / 2,
     );
     final track = Paint()
-      ..color = AppColors.feesProgressTrack
+      ..color = AppColors.studentBrandSoft
       ..style = PaintingStyle.stroke
       ..strokeWidth = stroke
       ..strokeCap = StrokeCap.round;
@@ -291,7 +325,7 @@ class _SplitProgressBar extends StatelessWidget {
           children: [
             Expanded(
               flex: paidFlex == 0 ? 0 : paidFlex,
-              child: const ColoredBox(color: AppColors.feesPaidDot),
+              child: const ColoredBox(color: AppColors.studentPresentText),
             ),
             Expanded(
               flex: pendingFlex == 0 ? 0 : pendingFlex,
@@ -300,7 +334,7 @@ class _SplitProgressBar extends StatelessWidget {
                   gradient: LinearGradient(
                     colors: [
                       AppColors.studentProgressOrange,
-                      AppColors.feesProgressTrack,
+                      AppColors.studentBrandSoft,
                     ],
                   ),
                 ),
@@ -476,7 +510,7 @@ class _StatusDot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = isPaid ? AppColors.feesPaidDot : AppColors.feesPendingDot;
+    final color = isPaid ? AppColors.studentPresentText : AppColors.orangeTag;
     return Container(
       width: 14,
       height: 14,
@@ -497,11 +531,9 @@ class _StatusPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bg = isPaid
-        ? AppColors.studentDonePillBg
-        : AppColors.studentTodayPillBg;
-    final fg = isPaid
-        ? AppColors.studentDonePillText
-        : AppColors.studentTodayPillText;
+        ? AppColors.studentPresentBg
+        : AppColors.studentBrandSoft;
+    final fg = isPaid ? AppColors.studentPresentText : AppColors.studentBrand;
     final label = isPaid
         ? AppStrings.studentFeesPillPaid
         : AppStrings.studentFeesPillPending;

@@ -121,7 +121,7 @@ class _AppMonthPickerState extends State<AppMonthPicker> {
                                     ? AppColors.primaryBrand.withValues(
                                       alpha: 0.1,
                                     )
-                                    : AppColors.divider.withValues(alpha: 0.5)),
+                                    : AppColors.background.withValues(alpha: 0.5)),
                       ),
                     ),
                     child: Center(

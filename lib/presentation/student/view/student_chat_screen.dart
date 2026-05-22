@@ -66,49 +66,59 @@ class StudentChatScreen extends StatelessWidget {
         ),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1.0),
-          child: Container(color: AppColors.divider, height: 1.0),
+          child: Container(color: AppColors.background, height: 1.0),
         ),
       ),
       body: Column(
         children: [
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s16, vertical: AppSpacing.s24),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.s16,
+                vertical: AppSpacing.s24,
+              ),
               child: Column(
                 children: [
                   _buildDateDivider('MON'),
                   const SizedBox(height: AppSpacing.s16),
                   _buildReceivedMessage(
-                      'Good morning Aarav. Reminder: Surprise test on Light on Monday 10 AM.',
-                      '9:02 AM'),
+                    'Good morning Aarav. Reminder: Surprise test on Light on Monday 10 AM.',
+                    '9:02 AM',
+                  ),
                   const SizedBox(height: AppSpacing.s12),
                   _buildReceivedMessage(
-                      'Topics: reflection, mirrors, ray diagrams. Bring your geometry box.',
-                      '9:02 AM'),
+                    'Topics: reflection, mirrors, ray diagrams. Bring your geometry box.',
+                    '9:02 AM',
+                  ),
                   const SizedBox(height: AppSpacing.s12),
                   _buildSentMessage('Got it sir, thank you 🙏', '11:14 AM'),
                   const SizedBox(height: AppSpacing.s24),
-                  
+
                   _buildDateDivider('WED'),
                   const SizedBox(height: AppSpacing.s16),
                   _buildReceivedMessage(
-                      'Today we covered Trigonometry — Ch. 8 identities. Practice Q.1–Q.10.',
-                      '4:12 PM'),
+                    'Today we covered Trigonometry — Ch. 8 identities. Practice Q.1–Q.10.',
+                    '4:12 PM',
+                  ),
                   const SizedBox(height: AppSpacing.s12),
                   _buildSentMessage(
-                      'Sir, in Q.7 can we use the complementary angle formula directly?',
-                      '7:48 PM'),
+                    'Sir, in Q.7 can we use the complementary angle formula directly?',
+                    '7:48 PM',
+                  ),
                   const SizedBox(height: AppSpacing.s12),
                   _buildReceivedMessage(
-                      'Yes, that\'s the cleanest approach. Show one substitution step in your working.',
-                      '8:01 PM'),
+                    'Yes, that\'s the cleanest approach. Show one substitution step in your working.',
+                    '8:01 PM',
+                  ),
                   const SizedBox(height: AppSpacing.s24),
-                  
+
                   _buildDateDivider('THU'),
                   const SizedBox(height: AppSpacing.s16),
-                  _buildEventMessage('Assignment added: Carbon compounds worksheet (Chemistry). Due 22 May.'),
+                  _buildEventMessage(
+                    'Assignment added: Carbon compounds worksheet (Chemistry). Due 22 May.',
+                  ),
                   const SizedBox(height: AppSpacing.s24),
-                  
+
                   _buildDateDivider('TODAY'),
                 ],
               ),
@@ -281,7 +291,7 @@ class StudentChatScreen extends StatelessWidget {
   Widget _buildDateDivider(String date) {
     return Row(
       children: [
-        const Expanded(child: Divider(color: AppColors.divider)),
+        const Expanded(child: Divider(color: AppColors.background)),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s16),
           child: Text(
@@ -294,7 +304,7 @@ class StudentChatScreen extends StatelessWidget {
             ),
           ),
         ),
-        const Expanded(child: Divider(color: AppColors.divider)),
+        const Expanded(child: Divider(color: AppColors.background)),
       ],
     );
   }
@@ -347,7 +357,7 @@ class StudentChatScreen extends StatelessWidget {
             padding: const EdgeInsets.all(AppSpacing.s16),
             margin: const EdgeInsets.only(left: 64),
             decoration: BoxDecoration(
-              color: AppColors.studentBrandAccent,
+              color: AppColors.orangeTag,
               borderRadius: BorderRadius.circular(AppSpacing.s8),
             ),
             child: Text(
@@ -378,16 +388,23 @@ class StudentChatScreen extends StatelessWidget {
     return Align(
       alignment: Alignment.center,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s16, vertical: AppSpacing.s12),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.s16,
+          vertical: AppSpacing.s12,
+        ),
         margin: const EdgeInsets.symmetric(horizontal: AppSpacing.s32),
         decoration: BoxDecoration(
-          color: AppColors.studentTomorrowPillBg,
+          color: AppColors.amberLight,
           borderRadius: BorderRadius.circular(AppSpacing.s8),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.description_outlined, size: 14, color: AppColors.studentBrandAccent),
+            Icon(
+              Icons.description_outlined,
+              size: 14,
+              color: AppColors.orangeTag,
+            ),
             AppSpacing.h8,
             Expanded(
               child: Text(

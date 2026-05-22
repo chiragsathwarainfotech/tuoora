@@ -151,11 +151,11 @@ class ExpensesScreen extends GetView<ExpenseController> {
   }
 
   Color _getIconColor(Color bgColor) {
-    if (bgColor == const Color(0xFFFFF7ED)) return const Color(0xFF9A3412);
-    if (bgColor == const Color(0xFFEFF6FF)) return const Color(0xFF1E40AF);
-    if (bgColor == const Color(0xFFFAF5FF)) return const Color(0xFF6B21A8);
-    if (bgColor == const Color(0xFFECFDF5)) return const Color(0xFF065F46);
-    if (bgColor == const Color(0xFFF1F5F9)) return const Color(0xFF475569);
+    if (bgColor == AppColors.successBg) return AppColors.activeTracker;
+    if (bgColor == AppColors.successBg) return AppColors.studentUpdateIconColor;
+    if (bgColor == AppColors.successBg) return AppColors.subjectPhysics;
+    if (bgColor == AppColors.successBg) return AppColors.greenText;
+    if (bgColor == AppColors.successBg) return AppColors.textMuted;
 
     return AppColors.primaryBrand;
   }

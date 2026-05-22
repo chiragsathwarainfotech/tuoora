@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import '../constants/app_colors.dart';
-import '../theme/app_spacing.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/theme/app_spacing.dart';
 
-/// A simple card widget that follows the app's design system.
 class AppCard extends StatelessWidget {
   final Widget child;
   final EdgeInsetsGeometry? padding;
@@ -13,7 +12,7 @@ class AppCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.surface,
+      color: AppColors.white,
       elevation: elevation ?? 2.0,
       borderRadius: BorderRadius.circular(AppSpacing.s16),
       child: Padding(
@@ -23,4 +22,3 @@ class AppCard extends StatelessWidget {
     );
   }
 }
-

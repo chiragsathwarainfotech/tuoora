@@ -55,7 +55,7 @@ class StudentFeeReminderScreen extends StatelessWidget {
       height: 140,
       padding: const EdgeInsets.all(AppSpacing.s24),
       decoration: BoxDecoration(
-        color: paid ? const Color(0xFF15803D) : const Color(0xFF92400E),
+        color: paid ? AppColors.studentPresentText : AppColors.studentTomorrowPillText,
         borderRadius: BorderRadius.circular(AppSpacing.s12),
       ),
       child: Stack(
@@ -127,8 +127,8 @@ class StudentFeeReminderScreen extends StatelessWidget {
             'Status',
             paid ? 'Paid' : 'Pending',
             valueColor: paid
-                ? const Color(0xFF15803D)
-                : const Color(0xFF92400E),
+                ? AppColors.studentPresentText
+                : AppColors.studentTomorrowPillText,
             isValueBold: true,
           ),
           const Divider(height: 1, color: AppColors.borderGrey),
@@ -226,8 +226,8 @@ class StudentFeeReminderScreen extends StatelessWidget {
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: paid
-            ? const Color(0xFF15803D)
-            : const Color(0xFF92400E),
+            ? AppColors.studentPresentText
+            : AppColors.studentTomorrowPillText,
         minimumSize: const Size.fromHeight(56),
         padding: const EdgeInsets.symmetric(vertical: 16),
         shape: RoundedRectangleBorder(

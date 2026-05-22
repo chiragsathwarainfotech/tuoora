@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/enums/app_enums.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/student/models/assignment_model.dart';
 
@@ -9,7 +10,11 @@ class StudentAttachmentTile extends StatelessWidget {
   final AssignmentAttachment attachment;
   final VoidCallback? onTap;
 
-  const StudentAttachmentTile({super.key, required this.attachment, this.onTap});
+  const StudentAttachmentTile({
+    super.key,
+    required this.attachment,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -99,23 +104,23 @@ class StudentAttachmentIcon extends StatelessWidget {
     late final IconData icon;
     switch (kind) {
       case AssignmentAttachmentKind.document:
-        bg = AppColors.attachmentDocumentBg;
-        fg = AppColors.attachmentDocumentColor;
+        bg = AppColors.studentPresentBg;
+        fg = AppColors.studentPresentText;
         icon = Icons.description_rounded;
         break;
       case AssignmentAttachmentKind.image:
-        bg = AppColors.attachmentImageBg;
-        fg = AppColors.attachmentImageColor;
+        bg = AppColors.studentBrandSoft;
+        fg = AppColors.orangeTag;
         icon = Icons.image_rounded;
         break;
       case AssignmentAttachmentKind.video:
-        bg = AppColors.attachmentImageBg;
-        fg = AppColors.attachmentImageColor;
+        bg = AppColors.studentBrandSoft;
+        fg = AppColors.orangeTag;
         icon = Icons.videocam_rounded;
         break;
       case AssignmentAttachmentKind.audio:
-        bg = AppColors.attachmentImageBg;
-        fg = AppColors.attachmentImageColor;
+        bg = AppColors.studentBrandSoft;
+        fg = AppColors.orangeTag;
         icon = Icons.audiotrack_rounded;
         break;
     }

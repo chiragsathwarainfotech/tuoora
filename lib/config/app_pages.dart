@@ -56,6 +56,9 @@ import 'package:tuoora/presentation/student/view/student_holiday_detail_screen.d
 import 'package:tuoora/presentation/student/view/student_reports_screen.dart';
 import 'package:tuoora/presentation/student/view/student_institute_screen.dart';
 import 'package:tuoora/presentation/student/view/student_receipts_list_screen.dart';
+import 'package:tuoora/presentation/student/controllers/student_receipts_list_controller.dart';
+import 'package:tuoora/presentation/student/controllers/fees_controller.dart';
+import 'package:tuoora/presentation/student/controllers/student_notifications_controller.dart';
 import 'package:tuoora/presentation/student/view/student_notification_preferences_screen.dart';
 import 'package:tuoora/presentation/student/controllers/student_notification_preferences_controller.dart';
 import 'package:tuoora/presentation/student/view/student_study_material_screen.dart';
@@ -125,6 +128,11 @@ class AppPages {
     GetPage(
       name: AppRoutes.studentNotifications,
       page: () => const shared.UpdatesScreen(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut<StudentNotificationsController>(
+          () => StudentNotificationsController(),
+        );
+      }),
     ),
     GetPage(
       name: AppRoutes.studentHomework,
@@ -186,7 +194,16 @@ class AppPages {
     GetPage(
       name: AppRoutes.studentReceiptsList,
       page: () => const StudentReceiptsListScreen(),
-      binding: StudentBinding(),
+      binding: BindingsBuilder(() {
+        // FeesController owns the receipt screen state — make sure it
+        // exists so taps from the list can hand off cleanly.
+        if (!Get.isRegistered<FeesController>()) {
+          Get.lazyPut<FeesController>(() => FeesController(), fenix: true);
+        }
+        Get.lazyPut<StudentReceiptsListController>(
+          () => StudentReceiptsListController(),
+        );
+      }),
     ),
     GetPage(
       name: AppRoutes.studentNotificationPreferences,

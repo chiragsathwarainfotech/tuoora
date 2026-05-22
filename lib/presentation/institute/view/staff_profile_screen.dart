@@ -57,7 +57,7 @@ class StaffProfileScreen extends GetView<StaffController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildProfileHeader(staff),
-                      const Divider(height: 1, color: AppColors.divider),
+                      const Divider(height: 1, color: AppColors.background),
                       _buildInfoSection(staff),
                       AppSpacing.v40,
                       _buildActionButtons(),
@@ -171,7 +171,7 @@ class StaffProfileScreen extends GetView<StaffController> {
           Container(
             height: 40,
             width: 1,
-            color: AppColors.divider,
+            color: AppColors.background,
             margin: AppSpacing.x24,
           ),
           Expanded(

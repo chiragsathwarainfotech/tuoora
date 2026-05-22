@@ -1,0 +1,210 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import 'package:tuoora/config/app_routes.dart';
+import 'package:tuoora/core/api/api_client.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
+import 'package:tuoora/data/models/student_notification_model.dart';
+import 'package:tuoora/data/repositories/student_notifications_repository.dart';
+import 'package:tuoora/presentation/student/controllers/assignments_controller.dart';
+import 'package:tuoora/presentation/student/controllers/student_controller.dart';
+
+/// View-model for a single notification row. Encapsulates the icon /
+/// colour / time-ago decisions so the screen widget stays declarative.
+class StudentNotificationDisplay {
+  final StudentNotification raw;
+  final IconData icon;
+  final Color iconBg;
+  final Color iconColor;
+  final String timeAgo;
+  final bool showChevron;
+
+  const StudentNotificationDisplay({
+    required this.raw,
+    required this.icon,
+    required this.iconBg,
+    required this.iconColor,
+    required this.timeAgo,
+    required this.showChevron,
+  });
+
+  String get title => raw.title;
+  String get message => raw.message;
+  bool get isRead => raw.isRead;
+}
+
+class StudentNotificationsController extends GetxController {
+  final RxBool isLoading = true.obs;
+  final RxList<StudentNotification> items = <StudentNotification>[].obs;
+
+  late final StudentNotificationsRepository _repository;
+
+  @override
+  void onInit() {
+    super.onInit();
+    _repository = StudentNotificationsRepository(Get.find<ApiClient>());
+    load();
+  }
+
+  Future<void> load() async {
+    try {
+      isLoading.value = true;
+      final list = await _repository.getNotifications();
+      items.assignAll(list);
+    } catch (_) {
+      AppSnackBar.error('Failed to load notifications');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  List<StudentNotificationDisplay> get displays =>
+      items.map(_toDisplay).toList();
+
+  /// Routes notification taps to the right screen based on [n.kind].
+  /// Types we don't know how to deep-link into stay on the list (no
+  /// jarring no-op navigation).
+  void openNotification(StudentNotification n) {
+    final refId = n.referenceIdInt;
+    switch (n.kind) {
+      case NotificationKind.homework:
+      case NotificationKind.homeworkReminder:
+      case NotificationKind.homeworkGraded:
+        if (refId != null) _openHomework(refId);
+        break;
+      case NotificationKind.attendance:
+        _switchTab(3);
+        break;
+      case NotificationKind.resource:
+        Get.toNamed(AppRoutes.studentStudyMaterial);
+        break;
+      case NotificationKind.batchAssignment:
+      case NotificationKind.batchRemoval:
+        Get.toNamed(AppRoutes.studentInstitute);
+        break;
+      case NotificationKind.dailyUpdate:
+      case NotificationKind.unknown:
+        break;
+    }
+  }
+
+  void _openHomework(int id) {
+    if (!Get.isRegistered<AssignmentsController>()) {
+      Get.put(AssignmentsController());
+    }
+    Get.find<AssignmentsController>().openAssignmentById(id);
+  }
+
+  void _switchTab(int index) {
+    if (Get.isRegistered<StudentController>()) {
+      Get.back();
+      Get.find<StudentController>().changePage(index);
+    }
+  }
+
+  StudentNotificationDisplay _toDisplay(StudentNotification n) {
+    final v = _visualsFor(n.kind);
+    return StudentNotificationDisplay(
+      raw: n,
+      icon: v.icon,
+      iconBg: v.bg,
+      iconColor: v.fg,
+      timeAgo: _formatTimeAgo(n.createdAt),
+      showChevron: _isDeepLinkable(n),
+    );
+  }
+
+  bool _isDeepLinkable(StudentNotification n) {
+    switch (n.kind) {
+      case NotificationKind.homework:
+      case NotificationKind.homeworkReminder:
+      case NotificationKind.homeworkGraded:
+        return n.referenceIdInt != null;
+      case NotificationKind.attendance:
+      case NotificationKind.resource:
+      case NotificationKind.batchAssignment:
+      case NotificationKind.batchRemoval:
+        return true;
+      case NotificationKind.dailyUpdate:
+      case NotificationKind.unknown:
+        return false;
+    }
+  }
+
+  _NotificationVisuals _visualsFor(NotificationKind k) {
+    switch (k) {
+      case NotificationKind.homework:
+      case NotificationKind.homeworkReminder:
+        return const _NotificationVisuals(
+          icon: Icons.chrome_reader_mode_outlined,
+          bg: AppColors.amberLight,
+          fg: AppColors.studentTomorrowPillText,
+        );
+      case NotificationKind.homeworkGraded:
+        return const _NotificationVisuals(
+          icon: Icons.auto_awesome,
+          bg: AppColors.studentBrandSoft,
+          fg: AppColors.studentBrand,
+        );
+      case NotificationKind.attendance:
+        return const _NotificationVisuals(
+          icon: Icons.calendar_today_outlined,
+          bg: AppColors.studentPresentBg,
+          fg: AppColors.studentPresentText,
+        );
+      case NotificationKind.resource:
+        return const _NotificationVisuals(
+          icon: Icons.menu_book_outlined,
+          bg: AppColors.subjectPhysicsSoft,
+          fg: AppColors.darkGreen,
+        );
+      case NotificationKind.dailyUpdate:
+        return const _NotificationVisuals(
+          icon: Icons.campaign_outlined,
+          bg: AppColors.errorBg,
+          fg: AppColors.error,
+        );
+      case NotificationKind.batchAssignment:
+      case NotificationKind.batchRemoval:
+        return const _NotificationVisuals(
+          icon: Icons.groups_outlined,
+          bg: AppColors.studentUpdateIconBg,
+          fg: AppColors.studentUpdateIconColor,
+        );
+      case NotificationKind.unknown:
+        return const _NotificationVisuals(
+          icon: Icons.notifications_none_outlined,
+          bg: AppColors.borderGrey,
+          fg: AppColors.textDarkGrey,
+        );
+    }
+  }
+
+  String _formatTimeAgo(DateTime? dt) {
+    if (dt == null) return '';
+    final diff = DateTime.now().difference(dt);
+    if (diff.inMinutes < 1) return 'Just now';
+    if (diff.inMinutes < 60) return '${diff.inMinutes}m ago';
+    if (diff.inHours < 24) return '${diff.inHours}h ago';
+    if (diff.inDays == 1) return 'Yesterday';
+    if (diff.inDays < 7) return '${diff.inDays}d ago';
+
+    const months = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+    ];
+    return '${dt.day} ${months[dt.month - 1]}';
+  }
+}
+
+class _NotificationVisuals {
+  final IconData icon;
+  final Color bg;
+  final Color fg;
+  const _NotificationVisuals({
+    required this.icon,
+    required this.bg,
+    required this.fg,
+  });
+}

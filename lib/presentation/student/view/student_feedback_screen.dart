@@ -12,7 +12,7 @@ class StudentFeedbackScreen extends GetView<StudentFeedbackController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.studentBg,
+      backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -93,14 +93,10 @@ class StudentFeedbackScreen extends GetView<StudentFeedbackController> {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(
-            color: isSelected
-                ? const Color(0xFFFEF2F2)
-                : const Color(0xFFF3F4F6),
+            color: isSelected ? AppColors.errorBg : AppColors.background,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
-              color: isSelected
-                  ? const Color(0xFF991B1B)
-                  : AppColors.borderGrey,
+              color: isSelected ? AppColors.error : AppColors.borderGrey,
             ),
           ),
           child: Column(
@@ -112,9 +108,7 @@ class StudentFeedbackScreen extends GetView<StudentFeedbackController> {
                 style: AppTextStyles.lexend(
                   fontSize: 11,
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                  color: isSelected
-                      ? const Color(0xFF991B1B)
-                      : AppColors.textSecondary,
+                  color: isSelected ? AppColors.error : AppColors.textSecondary,
                 ),
               ),
             ],
@@ -146,7 +140,7 @@ class StudentFeedbackScreen extends GetView<StudentFeedbackController> {
           const SizedBox(height: 12),
           Container(
             decoration: BoxDecoration(
-              color: const Color(0xFFF9FAFB),
+              color: AppColors.scaffoldBg,
               borderRadius: BorderRadius.circular(8),
               border: Border.all(color: AppColors.borderGrey),
             ),
@@ -179,10 +173,8 @@ class StudentFeedbackScreen extends GetView<StudentFeedbackController> {
       return ElevatedButton(
         onPressed: isLoading ? null : controller.submitFeedback,
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF92400E),
-          disabledBackgroundColor: const Color(
-            0xFF92400E,
-          ).withValues(alpha: 0.5),
+          backgroundColor: AppColors.studentTomorrowPillText,
+          disabledBackgroundColor: AppColors.studentTomorrowPillText,
           padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           elevation: 0,

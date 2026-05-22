@@ -34,3 +34,7 @@ enum MessageStatus { sending, sent, delivered, read, failed }
 enum FeedbackRating { loveIt, useful, meh, broken }
 
 enum FeeStatus { paid, pending }
+
+enum AssignmentBadge { today, tomorrow, done }
+
+enum AssignmentAttachmentKind { document, image, video, audio }

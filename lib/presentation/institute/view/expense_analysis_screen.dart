@@ -187,15 +187,15 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
   Color _getCategoryColor(String category) {
     switch (category) {
       case 'Bills':
-        return const Color(0xFF3B82F6);
+        return AppColors.studentProgressBlue;
       case 'Shopping':
-        return const Color(0xFFF59E0B);
+        return AppColors.warningAmber;
       case 'Entertainment':
-        return const Color(0xFF8B5CF6);
+        return AppColors.orangeDue;
       case 'Food & Drink':
-        return const Color(0xFF10B981);
+        return AppColors.successGreen;
       case 'Transport':
-        return const Color(0xFF6366F1);
+        return AppColors.subjectPhysics;
       default:
         return AppColors.primaryBrand;
     }

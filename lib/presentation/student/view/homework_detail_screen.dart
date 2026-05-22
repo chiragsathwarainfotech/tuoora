@@ -74,7 +74,7 @@ class _StudentHomeworkDetailScreenState
       width: double.infinity,
       padding: AppSpacing.all32,
       decoration: BoxDecoration(
-        color: const Color(0xFF004494),
+        color: AppColors.studentUpdateIconColor,
         borderRadius: BorderRadius.circular(AppSpacing.s32),
         boxShadow: [
           BoxShadow(
@@ -130,7 +130,7 @@ class _StudentHomeworkDetailScreenState
                 _isSubmitted ? 'Status: Submitted' : 'Status: Pending',
                 _isSubmitted
                     ? AppColors.darkGreen.withValues(alpha: 0.8)
-                    : const Color(0xFF8B4513).withValues(alpha: 0.8),
+                    : AppColors.studentTomorrowPillText.withValues(alpha: 0.8),
               ),
             ],
           ),
@@ -188,7 +188,7 @@ class _StudentHomeworkDetailScreenState
               Container(
                 padding: AppSpacing.all10,
                 decoration: BoxDecoration(
-                  color: AppColors.divider,
+                  color: AppColors.background,
                   borderRadius: BorderRadius.circular(AppSpacing.s10),
                 ),
                 child: const Icon(
@@ -215,7 +215,7 @@ class _StudentHomeworkDetailScreenState
             style: AppTextStyles.lexend(
               fontSize: 13,
               fontWeight: FontWeight.w400,
-              color: const Color(0xFF475569),
+              color: AppColors.textSecondary,
               height: 1.6,
             ),
           ),
@@ -242,7 +242,7 @@ class _StudentHomeworkDetailScreenState
           Container(
             padding: AppSpacing.all20,
             decoration: BoxDecoration(
-              color: const Color(0xFFEEF2FF),
+              color: AppColors.scaffoldBg,
               borderRadius: BorderRadius.circular(AppSpacing.s16),
               border: const Border(
                 left: BorderSide(
@@ -288,7 +288,7 @@ class _StudentHomeworkDetailScreenState
               style: AppTextStyles.lexend(
                 fontSize: 13,
                 fontWeight: FontWeight.w400,
-                color: const Color(0xFF475569),
+                color: AppColors.textSecondary,
                 height: 1.4,
               ),
             ),
@@ -302,7 +302,7 @@ class _StudentHomeworkDetailScreenState
     return Container(
       padding: AppSpacing.all16,
       decoration: BoxDecoration(
-        color: AppColors.reportBorder,
+        color: AppColors.background,
         borderRadius: BorderRadius.circular(AppSpacing.s20),
       ),
       child: Row(
@@ -414,7 +414,7 @@ class _StudentHomeworkDetailScreenState
         decoration: BoxDecoration(
           color: AppColors.scaffoldBg,
           borderRadius: BorderRadius.circular(AppSpacing.s16),
-          border: Border.all(color: const Color(0xFFEDF2F7)),
+          border: Border.all(color: AppColors.borderGrey),
         ),
         child: Row(
           children: [
@@ -466,7 +466,7 @@ class _StudentHomeworkDetailScreenState
     return Container(
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
-        color: AppColors.divider,
+        color: AppColors.background,
         borderRadius: BorderRadius.circular(AppSpacing.s20),
       ),
       child: Column(
@@ -499,7 +499,7 @@ class _StudentHomeworkDetailScreenState
             child: LinearProgressIndicator(
               value: _progress,
               minHeight: AppSpacing.s12,
-              backgroundColor: const Color(0xFFD1D9E4),
+              backgroundColor: AppColors.borderLightGray,
               valueColor: const AlwaysStoppedAnimation<Color>(
                 AppColors.primaryBrand,
               ),

@@ -79,7 +79,7 @@ class AttendanceHistoryScreen extends GetView<StaffController> {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppColors.divider),
+        border: Border.all(color: AppColors.background),
       ),
       child: Row(
         children: [

@@ -86,7 +86,7 @@ class _Body extends StatelessWidget {
           const SizedBox(height: AppSpacing.s16),
           Center(
             child: Text(
-              AppStrings.studentReceiptFooter,
+              'This is a system generated receipt and doesn\'t require a signature.',
               style: AppTextStyles.lexend(
                 fontSize: 11,
                 color: AppColors.textTertiary,
@@ -275,9 +275,7 @@ class _StatusPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = isPaid
-        ? AppColors.studentPresentBg
-        : AppColors.studentBrandSoft;
+    final bg = isPaid ? AppColors.studentPresentBg : AppColors.studentBrandSoft;
     final fg = isPaid ? AppColors.studentPresentText : AppColors.orangeTag;
     final label = isPaid
         ? AppStrings.studentFeesPillPaid
@@ -299,8 +297,6 @@ class _StatusPill extends StatelessWidget {
     );
   }
 }
-
-// ────────────────────────────────────────────────────────── Action row
 
 class _ActionRow extends StatelessWidget {
   final bool isDownloading;

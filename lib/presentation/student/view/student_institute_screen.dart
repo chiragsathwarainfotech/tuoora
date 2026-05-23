@@ -1,3 +1,4 @@
+import 'package:tuoora/core/widgets/app_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -188,33 +189,13 @@ class StudentInstituteScreen extends GetView<StudentInstituteController> {
   }
 
   Widget _buildChatButton() {
-    return ElevatedButton(
+    return AppButton(
+      label: 'Chat with institute',
+      icon: Icons.chat_bubble_outline_rounded,
+      backgroundColor: AppColors.studentTomorrowPillText,
+      borderRadius: 8,
+      padding: const EdgeInsets.symmetric(vertical: 16),
       onPressed: () => Get.toNamed(AppRoutes.studentChat),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.studentTomorrowPillText,
-        elevation: 0,
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(
-            Icons.chat_bubble_outline_rounded,
-            color: AppColors.white,
-            size: 18,
-          ),
-          const SizedBox(width: 8),
-          Text(
-            'Chat with institute',
-            style: AppTextStyles.manrope(
-              fontSize: 14,
-              fontWeight: FontWeight.w800,
-              color: AppColors.white,
-            ),
-          ),
-        ],
-      ),
     );
   }
 

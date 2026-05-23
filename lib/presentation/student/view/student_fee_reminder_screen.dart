@@ -1,3 +1,4 @@
+import 'package:tuoora/core/widgets/app_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/presentation/student/controllers/fees_controller.dart';
@@ -209,7 +210,14 @@ class StudentFeeReminderScreen extends StatelessWidget {
   }
 
   Widget _buildActionButton(bool paid) {
-    return ElevatedButton(
+    return AppButton(
+      label: 'Open invoice',
+      icon: Icons.currency_rupee,
+      backgroundColor: paid
+          ? AppColors.studentPresentText
+          : AppColors.studentTomorrowPillText,
+      borderRadius: 8,
+      padding: const EdgeInsets.symmetric(vertical: 16),
       onPressed: () {
         final FeesController controller = Get.find<FeesController>();
         if (controller.statements.isNotEmpty) {
@@ -224,31 +232,6 @@ class StudentFeeReminderScreen extends StatelessWidget {
           Get.toNamed(AppRoutes.studentFeeReceipt);
         }
       },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: paid
-            ? AppColors.studentPresentText
-            : AppColors.studentTomorrowPillText,
-        minimumSize: const Size.fromHeight(56),
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppSpacing.s8),
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.currency_rupee, color: AppColors.white, size: 16),
-          AppSpacing.h8,
-          Text(
-            'Open invoice',
-            style: AppTextStyles.manrope(
-              fontSize: 14,
-              fontWeight: FontWeight.w800,
-              color: AppColors.white,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

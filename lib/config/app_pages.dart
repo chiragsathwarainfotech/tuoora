@@ -49,7 +49,8 @@ import 'package:tuoora/presentation/student/view/student_assignment_detail_scree
 import 'package:tuoora/presentation/student/view/student_attachment_preview_screen.dart';
 import 'package:tuoora/presentation/student/view/student_pay_fees_screen.dart';
 import 'package:tuoora/presentation/student/view/student_receipt_screen.dart';
-import 'package:tuoora/presentation/student/view/student_chat_screen.dart';
+
+import 'package:tuoora/presentation/student/view/student_chat_messages_screen.dart';
 import 'package:tuoora/presentation/student/view/student_fee_reminder_screen.dart';
 import 'package:tuoora/presentation/student/view/student_event_detail_screen.dart';
 import 'package:tuoora/presentation/student/view/student_holiday_detail_screen.dart';
@@ -171,9 +172,10 @@ class AppPages {
       name: AppRoutes.studentFeeHistory,
       page: () => const PaymentHistoryScreen(title: 'Fee History'),
     ),
+    
     GetPage(
       name: AppRoutes.studentChat,
-      page: () => const StudentChatScreen(),
+      page: () => const StudentChatMessagesScreen(),
     ),
     GetPage(
       name: AppRoutes.studentFeeReminder,

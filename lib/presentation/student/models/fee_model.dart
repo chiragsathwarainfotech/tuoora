@@ -1,10 +1,7 @@
 import 'package:tuoora/core/enums/app_enums.dart';
 
 class FeeStatement {
-  /// Backend fee id used for receipt + download API calls.
   final int feeId;
-
-  /// Display id (e.g. `#30`). Shown in the row + on the receipt card.
   final String id;
   final String periodLabel;
   final String monthHeader;
@@ -60,8 +57,18 @@ class FeeStatement {
     try {
       final dt = DateTime.parse(iso);
       const months = [
-        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
       ];
       return '${dt.day} ${months[dt.month - 1]}';
     } catch (_) {

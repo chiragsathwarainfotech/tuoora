@@ -1,3 +1,4 @@
+import 'package:tuoora/core/widgets/app_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
@@ -170,43 +171,15 @@ class StudentFeedbackScreen extends GetView<StudentFeedbackController> {
   Widget _buildSubmitButton() {
     return Obx(() {
       final isLoading = controller.isLoading.value;
-      return ElevatedButton(
+      return AppButton(
+        label: 'Send to Tuoora',
+        icon: Icons.arrow_forward_rounded,
+        backgroundColor: AppColors.studentTomorrowPillText,
+        borderRadius: 8,
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        isLoading: isLoading,
+        isDisabled: isLoading,
         onPressed: isLoading ? null : controller.submitFeedback,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.studentTomorrowPillText,
-          disabledBackgroundColor: AppColors.studentTomorrowPillText,
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          elevation: 0,
-        ),
-        child: isLoading
-            ? const SizedBox(
-                width: 24,
-                height: 24,
-                child: CircularProgressIndicator(
-                  color: AppColors.white,
-                  strokeWidth: 2,
-                ),
-              )
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    Icons.arrow_forward_rounded,
-                    color: AppColors.white,
-                    size: 18,
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    'Send to Tuoora',
-                    style: AppTextStyles.manrope(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.white,
-                    ),
-                  ),
-                ],
-              ),
       );
     });
   }

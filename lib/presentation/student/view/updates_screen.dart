@@ -108,6 +108,7 @@ class _NotificationCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
                           child: Text(
@@ -119,21 +120,12 @@ class _NotificationCard extends StatelessWidget {
                             ),
                           ),
                         ),
-                        if (display.timeAgo.isNotEmpty)
-                          Text(
-                            display.timeAgo,
-                            style: AppTextStyles.lexend(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w400,
-                              color: AppColors.textTertiary,
-                            ),
-                          ),
                         if (display.showChevron) ...[
                           AppSpacing.h4,
                           const Icon(
                             Icons.chevron_right,
-                            size: 16,
-                            color: AppColors.textMuted,
+                            size: 18,
+                            color: AppColors.textPrimary,
                           ),
                         ],
                       ],
@@ -142,12 +134,21 @@ class _NotificationCard extends StatelessWidget {
                     Text(
                       display.message,
                       style: AppTextStyles.lexend(
-                        fontSize: 12,
+                        fontSize: 14,
                         fontWeight: FontWeight.w400,
                         color: AppColors.textSecondary,
-                        height: 1.4,
                       ),
                     ),
+                    const SizedBox(height: 4),
+                    if (display.timeAgo.isNotEmpty)
+                      Text(
+                        display.timeAgo,
+                        style: AppTextStyles.lexend(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primaryBrand,
+                        ),
+                      ),
                   ],
                 ),
               ),

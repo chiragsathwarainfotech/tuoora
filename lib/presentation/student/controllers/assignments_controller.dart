@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:tuoora/config/app_routes.dart';
+import 'package:tuoora/core/enums/app_enums.dart';
 import 'package:tuoora/presentation/student/models/assignment_model.dart';
 import 'package:tuoora/core/api/api_client.dart';
 import 'package:tuoora/data/repositories/student_homework_repository.dart';
@@ -75,9 +76,6 @@ class AssignmentsController extends GetxController {
     }
   }
 
-  /// Opens the assignment detail screen for [id] alone — used by
-  /// notification taps where we only have the homework id and not a
-  /// pre-built [Assignment] from the list.
   Future<void> openAssignmentById(int id) async {
     selectedAssignment.value = null;
     Get.toNamed(AppRoutes.studentAssignmentDetail);

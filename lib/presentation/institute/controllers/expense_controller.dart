@@ -160,8 +160,9 @@ class ExpenseController extends GetxController {
     final currentView = selectedAnalysisMonth.value;
     // Cannot go beyond current month
     if (currentView.year < now.year) return true;
-    if (currentView.year == now.year && currentView.month < now.month)
+    if (currentView.year == now.year && currentView.month < now.month) {
       return true;
+    }
     return false;
   }
 

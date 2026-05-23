@@ -17,6 +17,8 @@ class AppRoutes {
   static const String studentInstitute = '/student/institute';
   static const String studentFeeHistory = '/student/fee-history';
   static const String studentChat = '/student/chat';
+  static const String studentCreateChat = '/student/chats/create';
+  static const String studentChatMessages = '/student/chats/messages';
   static const String studentFeeReminder = '/student/fee-reminder';
   static const String studentEventDetail = '/student/event-detail';
   static const String studentHolidayDetail = '/student/holiday-detail';

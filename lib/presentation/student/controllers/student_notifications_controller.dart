@@ -4,11 +4,11 @@ import 'package:get/get.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/api/api_client.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/enums/app_enums.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/data/models/student_notification_model.dart';
 import 'package:tuoora/data/repositories/student_notifications_repository.dart';
 import 'package:tuoora/presentation/student/controllers/assignments_controller.dart';
-import 'package:tuoora/presentation/student/controllers/student_controller.dart';
 
 /// View-model for a single notification row. Encapsulates the icon /
 /// colour / time-ago decisions so the screen widget stays declarative.
@@ -66,25 +66,23 @@ class StudentNotificationsController extends GetxController {
   /// Types we don't know how to deep-link into stay on the list (no
   /// jarring no-op navigation).
   void openNotification(StudentNotification n) {
+    if (!_isDeepLinkable(n)) return;
     final refId = n.referenceIdInt;
     switch (n.kind) {
       case NotificationKind.homework:
       case NotificationKind.homeworkReminder:
-      case NotificationKind.homeworkGraded:
         if (refId != null) _openHomework(refId);
         break;
-      case NotificationKind.attendance:
-        _switchTab(3);
-        break;
-      case NotificationKind.resource:
-        Get.toNamed(AppRoutes.studentStudyMaterial);
-        break;
-      case NotificationKind.batchAssignment:
-      case NotificationKind.batchRemoval:
-        Get.toNamed(AppRoutes.studentInstitute);
-        break;
       case NotificationKind.dailyUpdate:
-      case NotificationKind.unknown:
+        Get.toNamed(AppRoutes.studentEventDetail);
+        break;
+      case NotificationKind.holidays:
+        Get.toNamed(AppRoutes.studentHolidayDetail);
+        break;
+      case NotificationKind.paymentReceiver:
+        Get.toNamed(AppRoutes.studentFeeHistory);
+        break;
+      default:
         break;
     }
   }
@@ -94,13 +92,6 @@ class StudentNotificationsController extends GetxController {
       Get.put(AssignmentsController());
     }
     Get.find<AssignmentsController>().openAssignmentById(id);
-  }
-
-  void _switchTab(int index) {
-    if (Get.isRegistered<StudentController>()) {
-      Get.back();
-      Get.find<StudentController>().changePage(index);
-    }
   }
 
   StudentNotificationDisplay _toDisplay(StudentNotification n) {
@@ -117,17 +108,13 @@ class StudentNotificationsController extends GetxController {
 
   bool _isDeepLinkable(StudentNotification n) {
     switch (n.kind) {
-      case NotificationKind.homework:
-      case NotificationKind.homeworkReminder:
-      case NotificationKind.homeworkGraded:
-        return n.referenceIdInt != null;
-      case NotificationKind.attendance:
-      case NotificationKind.resource:
-      case NotificationKind.batchAssignment:
-      case NotificationKind.batchRemoval:
-        return true;
       case NotificationKind.dailyUpdate:
-      case NotificationKind.unknown:
+      case NotificationKind.holidays:
+      case NotificationKind.paymentReceiver:
+      case NotificationKind.homeworkReminder:
+      case NotificationKind.homework:
+        return true;
+      default:
         return false;
     }
   }
@@ -172,7 +159,19 @@ class StudentNotificationsController extends GetxController {
           bg: AppColors.studentUpdateIconBg,
           fg: AppColors.studentUpdateIconColor,
         );
-      case NotificationKind.unknown:
+      case NotificationKind.holidays:
+        return const _NotificationVisuals(
+          icon: Icons.celebration_outlined,
+          bg: AppColors.studentPresentBg,
+          fg: AppColors.studentPresentText,
+        );
+      case NotificationKind.paymentReceiver:
+        return const _NotificationVisuals(
+          icon: Icons.currency_rupee,
+          bg: AppColors.amberLight,
+          fg: AppColors.studentTomorrowPillText,
+        );
+      default:
         return const _NotificationVisuals(
           icon: Icons.notifications_none_outlined,
           bg: AppColors.borderGrey,
@@ -191,8 +190,18 @@ class StudentNotificationsController extends GetxController {
     if (diff.inDays < 7) return '${diff.inDays}d ago';
 
     const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
     ];
     return '${dt.day} ${months[dt.month - 1]}';
   }

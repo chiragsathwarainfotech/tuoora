@@ -595,7 +595,8 @@ class ChatController extends GetxController {
       _filterChats();
     }
 
-    Get.toNamed(AppRoutes.instituteChatMessages);
+    final isStudent = Get.currentRoute.startsWith('/student');
+    Get.toNamed(isStudent ? AppRoutes.studentChat : AppRoutes.instituteChatMessages);
   }
 
   /// Called when the user leaves the chat messages screen (via system back,
@@ -627,9 +628,9 @@ class ChatController extends GetxController {
       );
       _removeChatLocally(target.id);
       // If we're sitting on the chat-messages route, pop back to the list.
-      if (Get.currentRoute == AppRoutes.instituteChatMessages) {
+      if (Get.currentRoute == AppRoutes.instituteChatMessages || Get.currentRoute == AppRoutes.studentChat) {
         Get.until(
-          (route) => route.settings.name != AppRoutes.instituteChatMessages,
+          (route) => route.settings.name != AppRoutes.instituteChatMessages && route.settings.name != AppRoutes.studentChat,
         );
       }
       closeChat();
@@ -658,9 +659,9 @@ class ChatController extends GetxController {
     }
     _removeChatLocally(id);
     if (selectedChat.value?.id == id) {
-      if (Get.currentRoute == AppRoutes.instituteChatMessages) {
+      if (Get.currentRoute == AppRoutes.instituteChatMessages || Get.currentRoute == AppRoutes.studentChat) {
         Get.until(
-          (route) => route.settings.name != AppRoutes.instituteChatMessages,
+          (route) => route.settings.name != AppRoutes.instituteChatMessages && route.settings.name != AppRoutes.studentChat,
         );
       }
       closeChat();

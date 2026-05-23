@@ -21,10 +21,11 @@ class StudentAssignmentDetailScreen extends GetView<AssignmentsController> {
       body: SafeArea(
         bottom: false,
         child: Obx(() {
-          if (controller.isDetailLoading.value)
+          if (controller.isDetailLoading.value) {
             return const Center(
               child: CircularProgressIndicator(color: AppColors.primaryBrand),
             );
+          }
           final assignment = controller.selectedAssignment.value;
           if (assignment == null) {
             return const Center(

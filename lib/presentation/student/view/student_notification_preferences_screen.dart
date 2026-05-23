@@ -40,24 +40,6 @@ class StudentNotificationPreferencesScreen
                     ),
                     const SizedBox(height: 8),
                     _buildCategoriesCard(),
-                    const SizedBox(height: 24),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.check_circle_outline_rounded,
-                          size: 14,
-                          color: AppColors.textTertiary,
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          'Changes save automatically.',
-                          style: AppTextStyles.lexend(
-                            fontSize: 12,
-                            color: AppColors.textSecondary,
-                          ),
-                        ),
-                      ],
-                    ),
                   ],
                 ),
               ),

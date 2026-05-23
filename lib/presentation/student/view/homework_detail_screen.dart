@@ -1,3 +1,4 @@
+import 'package:tuoora/core/widgets/app_button.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
@@ -526,7 +527,15 @@ class _StudentHomeworkDetailScreenState
               ]
             : null,
       ),
-      child: ElevatedButton(
+      child: AppButton(
+        label: _isSubmitted ? 'Submitted' : 'Submit Assignment',
+        icon: _isSubmitted
+            ? Icons.check_circle_rounded
+            : Icons.note_add_rounded,
+        backgroundColor: AppColors.primaryBrand,
+        isDisabled: !isEnabled,
+        borderRadius: 20,
+        padding: const EdgeInsets.symmetric(vertical: 20),
         onPressed: isEnabled
             ? () {
                 setState(() => _isSubmitted = true);
@@ -540,43 +549,6 @@ class _StudentHomeworkDetailScreenState
                 );
               }
             : null,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primaryBrand,
-          disabledBackgroundColor: AppColors.borderLightGray,
-          padding: const EdgeInsets.symmetric(vertical: AppSpacing.s12),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppSpacing.s20),
-          ),
-          elevation: 0,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                _isSubmitted
-                    ? Icons.check_circle_rounded
-                    : Icons.note_add_rounded,
-                color: isEnabled || _isSubmitted
-                    ? AppColors.white
-                    : Colors.grey.shade500,
-                size: AppSpacing.s20,
-              ),
-              AppSpacing.h12,
-              Text(
-                _isSubmitted ? 'Submitted' : 'Submit Assignment',
-                style: AppTextStyles.manrope(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w800,
-                  color: isEnabled || _isSubmitted
-                      ? AppColors.white
-                      : Colors.grey.shade500,
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

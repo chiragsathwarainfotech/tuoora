@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 import 'package:tuoora/core/api/api_client.dart';
+import 'package:tuoora/core/enums/app_enums.dart';
 import 'package:tuoora/data/models/student_report_model.dart';
 import 'package:tuoora/data/repositories/student_report_repository.dart';
-import 'package:tuoora/presentation/student/view/student_reports_screen.dart'; // For ReportPeriod enum
 
 class StudentReportsController extends GetxController {
   final selectedPeriod = ReportPeriod.fourWeeks.obs;
@@ -16,8 +16,7 @@ class StudentReportsController extends GetxController {
     super.onInit();
     _repository = StudentReportRepository(Get.find<ApiClient>());
     fetchReport();
-    
-    // Listen to tab changes
+
     ever(selectedPeriod, (_) => fetchReport());
   }
 
@@ -35,7 +34,9 @@ class StudentReportsController extends GetxController {
   Future<void> fetchReport() async {
     try {
       isLoading.value = true;
-      final data = await _repository.getReport(period: _getPeriodValue(selectedPeriod.value));
+      final data = await _repository.getReport(
+        period: _getPeriodValue(selectedPeriod.value),
+      );
       reportData.value = data;
     } catch (e) {
       Get.snackbar('Error', 'Failed to load reports');

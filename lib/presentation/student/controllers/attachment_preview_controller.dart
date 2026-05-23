@@ -5,17 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/api_constants.dart';
+import 'package:tuoora/core/enums/app_enums.dart';
 import 'package:tuoora/core/services/download_service.dart';
 import 'package:tuoora/core/services/auth_service.dart';
 import 'package:tuoora/presentation/student/models/assignment_model.dart';
 
-enum AttachmentSourceType { assignment, resource }
-
 class AttachmentPreviewArgs {
   final AssignmentAttachment attachment;
   final AttachmentSourceType sourceType;
-  final String sourceId; // ID of the assignment or resource
-  final Future<void> Function()? onLoadPreview; // Optional function to load preview url
+  final String sourceId;
+  final Future<void> Function()? onLoadPreview;
 
   AttachmentPreviewArgs({
     required this.attachment,
@@ -26,7 +25,8 @@ class AttachmentPreviewArgs {
 }
 
 class AttachmentPreviewController extends GetxController {
-  final Rxn<AssignmentAttachment> selectedAttachment = Rxn<AssignmentAttachment>();
+  final Rxn<AssignmentAttachment> selectedAttachment =
+      Rxn<AssignmentAttachment>();
   final RxBool isAttachmentLoading = false.obs;
   final RxBool isDownloading = false.obs;
   final RxDouble downloadProgress = 0.0.obs;
@@ -37,13 +37,13 @@ class AttachmentPreviewController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    
+
     if (Get.arguments is AttachmentPreviewArgs) {
       final args = Get.arguments as AttachmentPreviewArgs;
       selectedAttachment.value = args.attachment;
       sourceType = args.sourceType;
       sourceId = args.sourceId;
-      
+
       if (args.onLoadPreview != null) {
         _loadPreview(args.onLoadPreview!);
       }
@@ -121,9 +121,10 @@ class AttachmentPreviewController extends GetxController {
 
         await downloadService.saveFile(bytes: bytes, fileName: fullFileName);
       } else {
-        throw Exception('Failed to download file. Status: ${response.statusCode}');
+        throw Exception(
+          'Failed to download file. Status: ${response.statusCode}',
+        );
       }
-
     } catch (e) {
       Get.snackbar(
         'Error',

@@ -4,10 +4,9 @@ import 'package:shimmer/shimmer.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/enums/app_enums.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
 import 'package:tuoora/presentation/student/controllers/student_reports_controller.dart';
-
-enum ReportPeriod { thisWeek, fourWeeks, twelveWeeks }
 
 class StudentReportsScreen extends GetView<StudentReportsController> {
   const StudentReportsScreen({super.key});

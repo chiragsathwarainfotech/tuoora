@@ -1,28 +1,4 @@
-/// Discriminator for `/student/notifications` rows. The `value` matches
-/// the API `type` string so we can round-trip without a switch in
-/// callers.
-enum NotificationKind {
-  homework('homework'),
-  homeworkReminder('homework_reminder'),
-  homeworkGraded('homework_graded'),
-  attendance('attendance'),
-  resource('resource'),
-  dailyUpdate('daily_update'),
-  batchAssignment('batch_assignment'),
-  batchRemoval('batch_removal'),
-  unknown('');
-
-  final String value;
-  const NotificationKind(this.value);
-
-  static NotificationKind fromString(String? raw) {
-    if (raw == null) return NotificationKind.unknown;
-    for (final k in NotificationKind.values) {
-      if (k.value == raw) return k;
-    }
-    return NotificationKind.unknown;
-  }
-}
+import 'package:tuoora/core/enums/app_enums.dart';
 
 class StudentNotification {
   final int id;
@@ -30,11 +6,7 @@ class StudentNotification {
   final String message;
   final String? image;
   final NotificationKind kind;
-
-  /// API id the notification points to (e.g. homework id, resource id).
-  /// Returned as a string by the API; parsed lazily via [referenceIdInt].
   final String? referenceId;
-
   final bool isRead;
   final DateTime? createdAt;
 

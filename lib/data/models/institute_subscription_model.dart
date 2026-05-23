@@ -1,0 +1,109 @@
+class SubscriptionPlan {
+  final int id;
+  final String name;
+  final String price;
+  final int durationDays;
+  final int trialDays;
+  final int status;
+
+  SubscriptionPlan({
+    required this.id,
+    required this.name,
+    required this.price,
+    required this.durationDays,
+    required this.trialDays,
+    required this.status,
+  });
+
+  factory SubscriptionPlan.fromJson(Map<String, dynamic> json) {
+    return SubscriptionPlan(
+      id: json['id'] ?? 0,
+      name: json['name'] ?? '',
+      price: json['price']?.toString() ?? '0',
+      durationDays: json['duration_days'] ?? 0,
+      trialDays: json['trial_days'] ?? 0,
+      status: json['status'] ?? 0,
+    );
+  }
+}
+
+class SubscriptionDetails {
+  final String planName;
+  final String status;
+  final DateTime? expiresAt;
+  final int studentsEnrolled;
+  final int studentLimit;
+
+  SubscriptionDetails({
+    required this.planName,
+    required this.status,
+    this.expiresAt,
+    required this.studentsEnrolled,
+    required this.studentLimit,
+  });
+
+  factory SubscriptionDetails.fromJson(Map<String, dynamic> json) {
+    return SubscriptionDetails(
+      planName: json['plan_name'] ?? 'No Active Plan',
+      status: json['status'] ?? 'Inactive',
+      expiresAt: json['expires_at'] != null ? DateTime.parse(json['expires_at']) : null,
+      studentsEnrolled: json['students_enrolled'] ?? 0,
+      studentLimit: json['student_limit'] ?? 0,
+    );
+  }
+}
+
+class SubscriptionHistory {
+  final int id;
+  final String planName;
+  final String amount;
+  final DateTime? startDate;
+  final DateTime? endDate;
+  final String status;
+
+  SubscriptionHistory({
+    required this.id,
+    required this.planName,
+    required this.amount,
+    this.startDate,
+    this.endDate,
+    required this.status,
+  });
+
+  factory SubscriptionHistory.fromJson(Map<String, dynamic> json) {
+    return SubscriptionHistory(
+      id: json['id'] ?? 0,
+      planName: json['plan_name'] ?? '',
+      amount: json['amount']?.toString() ?? '0',
+      startDate: json['start_date'] != null ? DateTime.parse(json['start_date']) : null,
+      endDate: json['end_date'] != null ? DateTime.parse(json['end_date']) : null,
+      status: json['status'] ?? '',
+    );
+  }
+}
+
+class InstituteSubscriptionData {
+  final SubscriptionDetails subscription;
+  final List<SubscriptionPlan> plans;
+  final List<SubscriptionHistory> history;
+
+  InstituteSubscriptionData({
+    required this.subscription,
+    required this.plans,
+    required this.history,
+  });
+
+  factory InstituteSubscriptionData.fromJson(Map<String, dynamic> json) {
+    return InstituteSubscriptionData(
+      subscription: SubscriptionDetails.fromJson(json['subscription'] ?? {}),
+      plans: (json['plans'] as List?)
+              ?.map((e) => SubscriptionPlan.fromJson(e))
+              .toList() ??
+          [],
+      history: (json['history'] as List?)
+              ?.map((e) => SubscriptionHistory.fromJson(e))
+              .toList() ??
+          [],
+    );
+  }
+}

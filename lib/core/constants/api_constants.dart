@@ -41,6 +41,8 @@ class ApiConstants {
   static const String instituteStaffDepartments =
       '/institute/staff-departments';
   static const String instituteSalaries = '/institute/salaries';
+  static const String instituteSubscriptionAllData =
+      '/institute/subscriptions/all-data';
 
   static String removeStudentFromBatch(int batchId) =>
       '/institute/batches/$batchId/remove-student';
@@ -77,4 +79,3 @@ class ApiConstants {
   static const String chatConversation = '/chat/conversation';
   static String chatMessages(String userId) => '/chat/messages/$userId';
 }
-

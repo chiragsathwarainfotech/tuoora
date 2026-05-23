@@ -1,3 +1,4 @@
+import 'package:tuoora/data/repositories/student_notifications_repository.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/presentation/institute/bindings/institute_binding.dart';
 import 'package:tuoora/presentation/institute/view/batches_screen.dart';
@@ -211,7 +212,9 @@ class AppPages {
       name: AppRoutes.studentNotificationPreferences,
       page: () => const StudentNotificationPreferencesScreen(),
       binding: BindingsBuilder(() {
-        Get.lazyPut<StudentNotificationPreferencesController>(() => StudentNotificationPreferencesController());
+        Get.lazyPut<StudentNotificationPreferencesController>(() => StudentNotificationPreferencesController(
+          StudentNotificationsRepository(Get.find()),
+        ));
       }),
     ),
     GetPage(

@@ -19,4 +19,20 @@ class StudentNotificationsRepository {
         .map((e) => StudentNotification.fromJson(e as Map<String, dynamic>))
         .toList();
   }
+
+  Future<Map<String, dynamic>> getNotificationSettings() async {
+    final response = await _apiClient.get(ApiConstants.studentNotificationSettings);
+    if (response.status.hasError) {
+      throw Exception('Failed to load notification settings: ${response.statusText}');
+    }
+    return response.body['data'] as Map<String, dynamic>? ?? {};
+  }
+
+  Future<Map<String, dynamic>> updateNotificationSettings(Map<String, dynamic> data) async {
+    final response = await _apiClient.post(ApiConstants.studentNotificationSettings, data);
+    if (response.status.hasError) {
+      throw Exception('Failed to update notification settings: ${response.statusText}');
+    }
+    return response.body['data'] as Map<String, dynamic>? ?? {};
+  }
 }

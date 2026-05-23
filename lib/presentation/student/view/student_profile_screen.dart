@@ -105,9 +105,12 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
                 height: 70,
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
+                    colors: [
+                      AppColors.brandAppBarColor,
+                      AppColors.primaryBrand,
+                    ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [AppColors.primaryBrand, AppColors.instBrandOrange],
                   ),
                   borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
                 ),
@@ -567,7 +570,11 @@ class _AvatarPersonFallback extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Center(
-      child: Icon(Icons.person_rounded, size: 44, color: AppColors.studentBrand),
+      child: Icon(
+        Icons.person_rounded,
+        size: 44,
+        color: AppColors.studentBrand,
+      ),
     );
   }
 }

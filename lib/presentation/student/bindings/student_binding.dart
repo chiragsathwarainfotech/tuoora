@@ -1,3 +1,7 @@
+import 'package:tuoora/core/api/api_client.dart';
+import 'package:tuoora/data/repositories_impl/chat_repository_impl.dart';
+import 'package:tuoora/presentation/institute/controllers/chat_controller.dart';
+import 'package:tuoora/core/services/chat_socket_service.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/core/services/download_service.dart';
 import 'package:tuoora/presentation/student/controllers/assignments_controller.dart';
@@ -48,6 +52,17 @@ class StudentBinding extends Bindings {
       () => StudentDashboardController(),
       fenix: true,
     );
+    Get.lazyPut<ChatRepositoryImpl>(
+      () => ChatRepositoryImpl(Get.find<ApiClient>()),
+      fenix: true,
+    );
+    Get.lazyPut<ChatController>(
+      () => ChatController(Get.find<ChatRepositoryImpl>()),
+      fenix: true,
+    );
+    if (!Get.isRegistered<ChatSocketService>()) {
+      Get.put<ChatSocketService>(ChatSocketService(), permanent: true);
+    }
     if (!Get.isRegistered<DownloadService>()) {
       Get.put<DownloadService>(DownloadService(), permanent: true);
     }

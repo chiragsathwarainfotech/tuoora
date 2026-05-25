@@ -1,3 +1,4 @@
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
 import 'dart:io';
 
@@ -26,6 +27,7 @@ class StudentChatMessagesScreen extends StatefulWidget {
 
 class _StudentChatMessagesScreenState extends State<StudentChatMessagesScreen> {
   final controller = Get.find<ChatController>();
+  bool isInitializing = true;
 
   @override
   void initState() {
@@ -34,6 +36,11 @@ class _StudentChatMessagesScreenState extends State<StudentChatMessagesScreen> {
   }
 
   Future<void> _initChat() async {
+    // Wait for the controller to load chats if it's currently doing so
+    if (controller.chatsList.isEmpty) {
+      await controller.fetchChats();
+    }
+
     // If chat is already selected and it's the institute, return
     if (controller.selectedChat.value != null && controller.selectedChat.value!.participantRole.toLowerCase() == 'institute') {
       return;
@@ -44,15 +51,16 @@ class _StudentChatMessagesScreenState extends State<StudentChatMessagesScreen> {
       (p) => p.role.toLowerCase() == 'institute',
     );
     if (institute != null) {
-      final composedId = '_';
-      final existing = controller.chatsList.firstWhereOrNull((c) => c.id == composedId);
+      // Find the actual existing chat instead of using a fake composedId
+      final existing = controller.chatsList.firstWhereOrNull((c) => c.participantId == institute.id || c.participantRole.toLowerCase() == 'institute');
+      
       if (existing != null) {
         controller.selectedChat.value = existing;
         controller.messages.clear();
-        controller.fetchMessages(existing.id);
+        await controller.fetchMessages(existing.id);
       } else {
         final newChat = Chat(
-          id: composedId,
+          id: '_', // Temporary fake ID for UI, backend will create real chat on first message
           participantName: institute.name,
           participantId: institute.id,
           participantImage: institute.image,
@@ -65,6 +73,11 @@ class _StudentChatMessagesScreenState extends State<StudentChatMessagesScreen> {
         controller.selectedChat.value = newChat;
         controller.messages.clear();
       }
+    }
+    if (mounted) {
+      setState(() {
+        isInitializing = false;
+      });
     }
   }
 
@@ -160,11 +173,7 @@ class _StudentChatMessagesScreenState extends State<StudentChatMessagesScreen> {
           child: Column(
             children: [
               Expanded(
-                child: Obx(() {
-                  if (controller.isLoading.value &&
-                      controller.messages.isEmpty) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
+                child: isInitializing ? const CommonLoading() : Obx(() { if (controller.isLoading.value && controller.messages.isEmpty) { return const CommonLoading(); }
 
                   if (controller.messages.isEmpty) {
                     return _buildEmptyChatView();
@@ -824,3 +833,5 @@ class _StudentChatMessagesScreenState extends State<StudentChatMessagesScreen> {
     }
   }
 }
+
+

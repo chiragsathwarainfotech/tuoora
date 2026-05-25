@@ -146,7 +146,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
                         ),
                         const SizedBox(width: 6),
                         Text(
-                          'Member since   ${header.memberSince}',
+                          'Member since: ${header.memberSince}',
                           style: AppTextStyles.lexend(
                             fontSize: 12,
                             color: AppColors.textSecondary,

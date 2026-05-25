@@ -27,7 +27,6 @@ import 'package:tuoora/presentation/institute/controllers/chat_controller.dart';
 import 'package:tuoora/presentation/institute/controllers/staff_controller.dart';
 import 'package:tuoora/presentation/institute/controllers/expense_controller.dart';
 import 'package:tuoora/core/api/api_client.dart';
-import 'package:tuoora/core/services/chat_socket_service.dart';
 import 'package:tuoora/core/services/download_service.dart';
 import 'package:get/get.dart';
 
@@ -71,7 +70,8 @@ class InstituteBinding extends Bindings {
     );
     Get.lazyPut<ReportsController>(() => ReportsController(), fenix: true);
     Get.lazyPut<InstituteSubscriptionController>(
-      () => InstituteSubscriptionController(Get.find<InstituteRepositoryImpl>()),
+      () =>
+          InstituteSubscriptionController(Get.find<InstituteRepositoryImpl>()),
       fenix: true,
     );
     Get.lazyPut<InstituteProfileController>(
@@ -124,4 +124,3 @@ class InstituteBinding extends Bindings {
     }
   }
 }
-

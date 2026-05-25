@@ -1,3 +1,4 @@
+import 'package:tuoora/core/services/chat_socket_service.dart';
 import 'package:tuoora/presentation/institute/controllers/institute_subscription_controller.dart';
 import 'package:tuoora/data/repositories/auth_repository.dart';
 import 'package:tuoora/data/repositories_impl/auth_repository_impl.dart';

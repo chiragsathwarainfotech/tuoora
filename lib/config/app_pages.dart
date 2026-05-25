@@ -33,24 +33,23 @@ import 'package:tuoora/presentation/institute/view/homework_rating_screen.dart';
 import 'package:tuoora/presentation/institute/view/batch_resources_screen.dart';
 import 'package:tuoora/presentation/institute/view/resource_detail_screen.dart';
 import 'package:tuoora/presentation/institute/view/students_registry_screen.dart';
+import 'package:tuoora/presentation/student/bindings.dart';
 import 'package:tuoora/presentation/student/view/payment_history_screen.dart';
 import 'package:tuoora/presentation/shared/bindings/auth_binding.dart';
 import 'package:tuoora/presentation/institute/bindings/forgot_password_binding.dart';
 import 'package:tuoora/presentation/shared/view/login_screen.dart';
 import 'package:tuoora/presentation/institute/view/forgot_password_screen.dart';
 import 'package:tuoora/presentation/institute/view/reset_password_screen.dart';
-import 'package:tuoora/presentation/student/view/student_profile_screen.dart'
-    as shared;
+// import 'package:tuoora/presentation/student/view/student_profile_screen.dart'
+//     as shared;
 import 'package:tuoora/presentation/student/view/student_notification_screen.dart'
     as shared;
 import 'package:tuoora/presentation/student/view/student_main_screen.dart';
-import 'package:tuoora/presentation/student/bindings/student_binding.dart';
 import 'package:tuoora/presentation/student/view/homework_detail_screen.dart';
 import 'package:tuoora/presentation/student/view/student_assignment_detail_screen.dart';
 import 'package:tuoora/presentation/student/view/student_attachment_preview_screen.dart';
 import 'package:tuoora/presentation/student/view/student_pay_fees_screen.dart';
 import 'package:tuoora/presentation/student/view/student_receipt_screen.dart';
-
 import 'package:tuoora/presentation/student/view/student_chat_messages_screen.dart';
 import 'package:tuoora/presentation/student/view/student_fee_reminder_screen.dart';
 import 'package:tuoora/presentation/student/view/student_event_detail_screen.dart';
@@ -125,7 +124,7 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.studentSettings,
-      page: () => const shared.StudentProfileScreen(),
+      page: () => const StudentProfileScreen(),
     ),
     GetPage(
       name: AppRoutes.studentNotifications,

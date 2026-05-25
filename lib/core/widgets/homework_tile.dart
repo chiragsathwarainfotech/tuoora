@@ -44,7 +44,7 @@ class HomeworkTile extends StatelessWidget {
               width: AppSpacing.s44,
               height: AppSpacing.s44,
               decoration: BoxDecoration(
-                color: AppColors.reportBorder,
+                color: AppColors.background,
                 borderRadius: BorderRadius.circular(AppSpacing.s12),
               ),
               child: Icon(

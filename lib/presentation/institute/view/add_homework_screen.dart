@@ -35,12 +35,14 @@ class AddHomeworkScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Obx(() => AppInputField(
-                      label: AppStrings.instHomeworkSubjectLabel,
-                      controller: controller.titleController,
-                      hint: AppStrings.instHomeworkSubjectHint,
-                      errorText: controller.titleError.value,
-                    )),
+                    Obx(
+                      () => AppInputField(
+                        label: AppStrings.instHomeworkSubjectLabel,
+                        controller: controller.titleController,
+                        hint: AppStrings.instHomeworkSubjectHint,
+                        errorText: controller.titleError.value,
+                      ),
+                    ),
                     AppSpacing.v24,
                     const InstituteLabel(AppStrings.instDueDateLabel),
                     _buildDatePicker(context, controller),
@@ -154,7 +156,7 @@ class AddHomeworkScreen extends StatelessWidget {
             color: AppColors.white,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: const Color(0xFFD0D5DD),
+              color: AppColors.successBg,
               style: BorderStyle.solid,
             ),
           ),
@@ -175,7 +177,7 @@ class AddHomeworkScreen extends StatelessWidget {
                       style: AppTextStyles.manrope(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
-                        color: const Color(0xFF101828),
+                        color: AppColors.textPrimary,
                       ),
                     ),
                     AppSpacing.v4,
@@ -208,7 +210,10 @@ class AddHomeworkScreen extends StatelessWidget {
                     AppSpacing.v12,
                     TextButton.icon(
                       onPressed: controller.removeAttachment,
-                      icon: const Icon(Icons.delete_outline_rounded, color: AppColors.bohoRed),
+                      icon: const Icon(
+                        Icons.delete_outline_rounded,
+                        color: AppColors.bohoRed,
+                      ),
                       label: Text(
                         'Remove',
                         style: AppTextStyles.manrope(
@@ -237,4 +242,3 @@ class AddHomeworkScreen extends StatelessWidget {
     );
   }
 }
-

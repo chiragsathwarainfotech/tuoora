@@ -1,9 +1,9 @@
-import 'package:tuoora/core/constants/app_colors.dart';
+﻿import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/controllers/staff_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
-import 'package:tuoora/presentation/shared/widgets/common_state_widget.dart';
+import 'package:tuoora/presentation/institute/widgets/common_state_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -70,7 +70,7 @@ class StaffAttendanceScreen extends GetView<StaffController> {
               AppColors.successGreen,
             ),
           ),
-          Container(width: 1, height: 40, color: AppColors.divider),
+          Container(width: 1, height: 40, color: AppColors.background),
           Expanded(
             child: _buildSummaryItem(
               Icons.cancel,
@@ -159,11 +159,11 @@ class StaffAttendanceScreen extends GetView<StaffController> {
             ],
           ),
           AppSpacing.v24,
-          const Divider(height: 1, color: AppColors.divider),
+          const Divider(height: 1, color: AppColors.background),
           AppSpacing.v24,
           _buildCalendarGrid(controller.selectedAttendanceMonth.value),
           AppSpacing.v24,
-          const Divider(height: 1, color: AppColors.divider),
+          const Divider(height: 1, color: AppColors.background),
           AppSpacing.v24,
           _buildLegend(),
         ],

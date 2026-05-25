@@ -1,0 +1,133 @@
+﻿import 'package:tuoora/core/widgets/app_button.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
+import 'package:tuoora/presentation/institute/controllers/forgot_password_controller.dart';
+import 'package:flutter/material.dart';
+import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:get/get.dart';
+
+class ForgotPasswordScreen extends GetView<ForgotPasswordController> {
+  const ForgotPasswordScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.scaffoldBg,
+      body: SafeArea(
+        child: Column(
+          children: [
+            InstituteAppBar(
+              title: 'Forgot Password',
+              onBackTap: () => Get.back(),
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: AppSpacing.all24,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      'Enter your institutional email address and we\'ll send you a security code to reset your access key.',
+                      style: AppTextStyles.lexend(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.blueSapphire,
+                        height: 1.5,
+                      ),
+                    ),
+                    AppSpacing.v40,
+                    Container(
+                      padding: const EdgeInsets.all(AppSpacing.s28),
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(AppSpacing.s32),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.04),
+                            blurRadius: AppSpacing.s24,
+                            offset: const Offset(0, AppSpacing.s12),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            'INSTITUTIONAL EMAIL',
+                            style: AppTextStyles.manrope(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w800,
+                              color: AppColors.brandAppBarColor,
+                              letterSpacing: 1.0,
+                            ),
+                          ),
+                          AppSpacing.v8,
+                          _buildTextField(
+                            controller: controller.emailController,
+                            hint: 'your@email.com',
+                            prefixIcon: Icons.alternate_email,
+                            keyboardType: TextInputType.emailAddress,
+                          ),
+                          AppSpacing.v32,
+                          Obx(
+                            () => AppButton(
+                              label: 'Send Recovery Code',
+                              onPressed: controller.sendOtp,
+                              isLoading: controller.isLoading.value,
+                              backgroundColor: AppColors.primaryBrand,
+                              foregroundColor: AppColors.white,
+                              borderRadius: AppSpacing.s24,
+                              padding: const EdgeInsets.symmetric(
+                                vertical: AppSpacing.s18,
+                              ),
+                              fontSize: 16,
+                              fullWidth: true,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String hint,
+    required IconData prefixIcon,
+    TextInputType? keyboardType,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.paleSilver,
+        borderRadius: BorderRadius.circular(AppSpacing.s16),
+      ),
+      child: TextField(
+        controller: controller,
+        keyboardType: keyboardType,
+        style: AppTextStyles.lexend(fontSize: 14, color: AppColors.textPrimary),
+        decoration: InputDecoration(
+          hintText: hint,
+          hintStyle: AppTextStyles.lexend(
+            fontSize: 14,
+            color: AppColors.blueSapphire,
+          ),
+          prefixIcon: Icon(
+            prefixIcon,
+            color: AppColors.blueSapphire,
+            size: AppSpacing.s20,
+          ),
+          border: InputBorder.none,
+          contentPadding: AppSpacing.all16,
+        ),
+      ),
+    );
+  }
+}

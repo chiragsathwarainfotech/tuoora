@@ -106,28 +106,28 @@ class InstituteNotificationsScreen extends GetView<NotificationController> {
     switch (notification.type.toLowerCase()) {
       case 'announcement':
         icon = Icons.campaign_rounded;
-        iconBg = const Color(0xFFFEF3C7);
-        iconColor = const Color(0xFFD97706);
+        iconBg = AppColors.amberLight;
+        iconColor = AppColors.orangeDue;
         badge = 'ANNOUNCEMENT';
-        badgeColor = const Color(0xFFD97706);
+        badgeColor = AppColors.orangeDue;
         break;
       case 'urgent':
         icon = Icons.warning_amber_rounded;
-        iconBg = const Color(0xFFFEE2E2);
-        iconColor = const Color(0xFFEF4444);
+        iconBg = AppColors.errorBg;
+        iconColor = AppColors.errorRed;
         badge = 'URGENT';
-        badgeColor = const Color(0xFFEF4444);
+        badgeColor = AppColors.errorRed;
         break;
       case 'update':
         icon = Icons.update_rounded;
-        iconBg = const Color(0xFFDBEAFE);
-        iconColor = const Color(0xFF2563EB);
+        iconBg = AppColors.studentUpdateIconBg;
+        iconColor = AppColors.studentUpdateIconColor;
         badge = 'UPDATE';
-        badgeColor = const Color(0xFF2563EB);
+        badgeColor = AppColors.studentUpdateIconColor;
         break;
       default:
         icon = Icons.notifications_rounded;
-        iconBg = AppColors.reportBorder;
+        iconBg = AppColors.background;
         iconColor = AppColors.textSecondary;
         badge = 'INFO';
         badgeColor = AppColors.textTertiary;
@@ -212,7 +212,7 @@ class InstituteNotificationsScreen extends GetView<NotificationController> {
                   notification.message,
                   style: AppTextStyles.lexend(
                     fontSize: 13,
-                    color: const Color(0xFF475569),
+                    color: AppColors.textSecondary,
                     height: 1.5,
                   ),
                 ),

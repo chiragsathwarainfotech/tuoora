@@ -45,7 +45,7 @@ class BillingHistoryScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.s16),
-        border: Border.all(color: AppColors.divider),
+        border: Border.all(color: AppColors.background),
       ),
       child: Row(
         children: [
@@ -99,7 +99,7 @@ class BillingHistoryScreen extends StatelessWidget {
               Container(
                 padding: AppSpacing.x8.add(AppSpacing.y4),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF0FDF4),
+                  color: AppColors.successBg,
                   borderRadius: BorderRadius.circular(AppSpacing.s6),
                 ),
                 child: Text(
@@ -107,7 +107,7 @@ class BillingHistoryScreen extends StatelessWidget {
                   style: AppTextStyles.manrope(
                     fontSize: 10,
                     fontWeight: FontWeight.w900,
-                    color: const Color(0xFF16A34A),
+                    color: AppColors.studentPresentText,
                     letterSpacing: 0.5,
                   ),
                 ),
@@ -119,4 +119,3 @@ class BillingHistoryScreen extends StatelessWidget {
     );
   }
 }
-

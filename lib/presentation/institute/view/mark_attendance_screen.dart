@@ -1,11 +1,11 @@
-import 'package:tuoora/core/constants/app_colors.dart';
+﻿import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/controllers/attendance_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_bottom_button.dart';
 import 'package:tuoora/core/widgets/app_search_field.dart';
-import 'package:tuoora/presentation/shared/widgets/common_state_widget.dart';
+import 'package:tuoora/presentation/institute/widgets/common_state_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -157,7 +157,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
           child: _buildBulkButton(
             label: 'All Absent',
             icon: Icons.person_off_rounded,
-            color: const Color(0xFF7C2D12),
+            color: AppColors.brandAppBarColor,
             onTap: () => controller.markAllAbsent(),
           ),
         ),
@@ -280,7 +280,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
           _buildToggleOption(
             label: 'ABSENT',
             isSelected: !isPresent,
-            color: const Color(0xFF7C2D12),
+            color: AppColors.activeTracker,
             onTap: isEditable
                 ? () => controller.toggleStatus(student, false)
                 : null,

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  // Design system colors (Academic Atelier)
   static const Color primary = Color(0xFF003F87);
   static const Color primaryContainer = Color(0xFF0056B3);
   static const Color surface = Color(0xFFF9F9FF);
@@ -54,4 +53,3 @@ class AppTheme {
     ),
   );
 }
-

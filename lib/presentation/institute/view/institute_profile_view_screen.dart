@@ -99,7 +99,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
                     width: 100,
                     height: 100,
                     decoration: BoxDecoration(
-                      color: AppColors.reportBorder,
+                      color: AppColors.background,
                       borderRadius: BorderRadius.circular(32),
                       image: p.logoUrl != null
                           ? DecorationImage(
@@ -185,7 +185,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.reportBorder, width: 1.5),
+        border: Border.all(color: AppColors.background, width: 1.5),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -308,7 +308,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
       height: 1.5,
-      color: AppColors.reportBorder,
+      color: AppColors.background,
     );
   }
 

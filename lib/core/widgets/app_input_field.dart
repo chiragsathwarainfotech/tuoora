@@ -92,8 +92,8 @@ class AppInputField extends StatelessWidget {
                 fillColor ??
                 (isProfile
                     ? (enabled
-                          ? AppColors.inputBg
-                          : AppColors.inputBg.withValues(alpha: 0.5))
+                          ? AppColors.background
+                          : AppColors.background.withValues(alpha: 0.5))
                     : (enabled
                           ? AppColors.paleSilver
                           : AppColors.paleSilver.withValues(alpha: 0.5))),

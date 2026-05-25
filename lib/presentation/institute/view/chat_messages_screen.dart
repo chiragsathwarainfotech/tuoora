@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/enums/app_enums.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/core/widgets/common_dialog.dart';
@@ -14,8 +15,6 @@ import 'package:tuoora/data/models/chat_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-enum _ChatMenuAction { delete }
 
 class ChatMessagesScreen extends GetView<ChatController> {
   const ChatMessagesScreen({super.key});
@@ -38,20 +37,20 @@ class ChatMessagesScreen extends GetView<ChatController> {
                   title: chat?.participantName ?? 'Chat',
                   subtitle: chat?.participantRole,
                   actions: [
-                    PopupMenuButton<_ChatMenuAction>(
+                    PopupMenuButton<ChatMenuAction>(
                       icon: const Icon(
                         Icons.more_vert_rounded,
                         color: AppColors.primaryBrand,
                       ),
                       onSelected: (action) {
                         switch (action) {
-                          case _ChatMenuAction.delete:
+                          case ChatMenuAction.delete:
                             _confirmDeleteConversation(chat);
                         }
                       },
                       itemBuilder: (_) => [
-                        PopupMenuItem<_ChatMenuAction>(
-                          value: _ChatMenuAction.delete,
+                        PopupMenuItem<ChatMenuAction>(
+                          value: ChatMenuAction.delete,
                           child: Row(
                             children: [
                               const Icon(
@@ -334,7 +333,7 @@ class ChatMessagesScreen extends GetView<ChatController> {
                   height: 200,
                   width: 200,
                   alignment: Alignment.center,
-                  color: AppColors.divider.withValues(alpha: 0.3),
+                  color: AppColors.background.withValues(alpha: 0.3),
                   child: const SizedBox(
                     width: 24,
                     height: 24,
@@ -351,7 +350,7 @@ class ChatMessagesScreen extends GetView<ChatController> {
     height: 120,
     width: 200,
     alignment: Alignment.center,
-    color: AppColors.divider.withValues(alpha: 0.3),
+    color: AppColors.background.withValues(alpha: 0.3),
     child: Icon(
       Icons.broken_image_outlined,
       color: isMe ? AppColors.white : AppColors.textTertiary,
@@ -461,9 +460,8 @@ class ChatMessagesScreen extends GetView<ChatController> {
   }
 
   Widget _buildStatusTick(MessageStatus status) {
-    // Colors picked so they read well against the brand-coloured bubble.
-    const sentColor = Color(0xCCFFFFFF); // muted white
-    const readColor = Color(0xFF38BDF8); // sky-400, classic blue tick
+    const sentColor = AppColors.studentTabInactiveBg;
+    const readColor = AppColors.subjectPhysics;
 
     switch (status) {
       case MessageStatus.sending:

@@ -1,10 +1,10 @@
-import 'package:tuoora/core/constants/app_colors.dart';
+﻿import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/controllers/expense_controller.dart';
 import 'package:tuoora/presentation/institute/models/expense_model.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
-import 'package:tuoora/presentation/shared/widgets/common_state_widget.dart';
+import 'package:tuoora/presentation/institute/widgets/common_state_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/presentation/institute/widgets/month_selector_widget.dart';
@@ -65,7 +65,7 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
   Widget _buildTotalSpendingCard(ExpenseAnalysis? analysis) {
     final NumberFormat currencyFormat = NumberFormat.currency(
       locale: 'en_IN',
-      symbol: '₹',
+      symbol: 'â‚¹',
       decimalDigits: 2,
     );
 
@@ -122,7 +122,7 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
           Text(
             analysis != null
                 ? currencyFormat.format(analysis.totalSpending)
-                : '₹0.00',
+                : 'â‚¹0.00',
             style: AppTextStyles.manrope(
               fontSize: 36,
               fontWeight: FontWeight.w800,
@@ -157,7 +157,7 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
           padding: const EdgeInsets.only(bottom: 16),
           child: _buildCategoryProgressItem(
             cat.categoryName,
-            '₹${cat.amount.toStringAsFixed(2)}',
+            'â‚¹${cat.amount.toStringAsFixed(2)}',
             cat.percentage / 100,
             _getCategoryIcon(cat.categoryName),
             _getCategoryColor(cat.categoryName),
@@ -187,15 +187,15 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
   Color _getCategoryColor(String category) {
     switch (category) {
       case 'Bills':
-        return const Color(0xFF3B82F6);
+        return AppColors.studentProgressBlue;
       case 'Shopping':
-        return const Color(0xFFF59E0B);
+        return AppColors.warningAmber;
       case 'Entertainment':
-        return const Color(0xFF8B5CF6);
+        return AppColors.orangeDue;
       case 'Food & Drink':
-        return const Color(0xFF10B981);
+        return AppColors.successGreen;
       case 'Transport':
-        return const Color(0xFF6366F1);
+        return AppColors.subjectPhysics;
       default:
         return AppColors.primaryBrand;
     }

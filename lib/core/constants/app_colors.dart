@@ -3,11 +3,8 @@ import 'package:flutter/material.dart';
 class AppColors {
   // --- Layout & Backgrounds ---
   static const Color scaffoldBg = Color(0xFFF8F9FB);
-  static const Color loginBg = Color(0xFFF8F9FD);
   static const Color white = Colors.white;
-  static const Color inputBg = Color(0xFFF4F5F7);
   static const Color background = Color(0xFFF5F5F5);
-  static const Color surface = Color(0xFFFFFFFF);
 
   // --- Brand & Primary Colors ---
   static const Color primaryBrand = Color(0xFFB45309);
@@ -16,6 +13,8 @@ class AppColors {
   static const Color instBrandOrange = Color(0xFFFF6600);
   static const Color instBrandOrangeLight = Color(0xFFFF8800);
   static const Color brandAppBarColor = Color(0xFF663322);
+  static const Color activeTracker = Color(0xFF9b3f00);
+  static const Color inActiveTracker = Color(0xFFd9dcde);
 
   // --- Typography ---
   static const Color textPrimary = Color(0xFF111827);
@@ -25,10 +24,8 @@ class AppColors {
   static const Color textDarkGrey = Color(0xFF374151);
 
   // --- Dividers & Borders ---
-  static const Color divider = Color(0xFFF3F4F6);
   static const Color borderGrey = Color(0xFFE5E7EB);
   static const Color borderLightGray = Color(0xFFD1D5DB);
-  static const Color reportBorder = Color(0xFFF1F5F9);
 
   // --- Status & Functional ---
   static const Color successGreen = Color(0xFF10B981);
@@ -49,5 +46,21 @@ class AppColors {
   static const Color error = Color(0xFFB00020);
   static const Color blueSapphire = Color(0xFF917B6B);
   static const Color paleSilver = Color(0xFFEBEBEB);
-}
 
+  // --- Student App Theme ---
+  static const Color studentBrand = Color(0xFF7B2D1A);
+  static const Color studentBrandSoft = Color(0xFFFCE9DF);
+  static const Color studentTomorrowPillText = Color(0xFF92400E);
+  static const Color studentPresentBg = Color(0xFFDCFCE7);
+  static const Color studentPresentText = Color(0xFF15803D);
+  static const Color studentUpdateIconBg = Color(0xFFDBEAFE);
+  static const Color studentUpdateIconColor = Color(0xFF1D4ED8);
+  static const Color studentProgressOrange = Color(0xFFE07A2A);
+  static const Color studentProgressBlue = Color(0xFF3B82F6);
+  static const Color subjectPhysics = Color(0xFF06B6D4);
+  static const Color subjectPhysicsSoft = Color(0xFFCFFAFE);
+  static const Color attachmentShareButton = Color(0xFF111111);
+  static const Color studentTabInactiveBg = Color(0xFFF1EFEC);
+  static const Color turquoiseBlue = Color(0xFF5EEAD4);
+  static const Color surfieGreen = Color(0xFF0F766E);
+}

@@ -1,71 +1,63 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class StudentBottomNav extends StatelessWidget {
   final int currentIndex;
   final Function(int)? onTap;
   const StudentBottomNav({super.key, required this.currentIndex, this.onTap});
 
+  static const _items = <_NavItem>[
+    _NavItem(
+      icon: Icons.home_rounded,
+      label: 'Home',
+      route: AppRoutes.studentDashboard,
+    ),
+    _NavItem(
+      icon: Icons.assignment_outlined,
+      label: 'Assignments',
+      route: AppRoutes.studentHomework,
+    ),
+    _NavItem(
+      icon: Icons.currency_rupee_rounded,
+      label: 'Fees',
+      route: AppRoutes.studentFeeHistory,
+    ),
+    _NavItem(
+      icon: Icons.calendar_month_outlined,
+      label: 'Att',
+      route: AppRoutes.studentAttendance,
+    ),
+    _NavItem(
+      icon: Icons.person_outline_rounded,
+      label: 'Profile',
+      route: AppRoutes.studentSettings,
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(AppSpacing.s24),
-          topRight: Radius.circular(AppSpacing.s24),
-        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            offset: const Offset(0, -4),
-            blurRadius: AppSpacing.s16,
+            color: Colors.black.withValues(alpha: 0.04),
+            offset: const Offset(0, -2),
+            blurRadius: 12,
           ),
         ],
       ),
-      child: ClipRRect(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(AppSpacing.s24),
-          topRight: Radius.circular(AppSpacing.s24),
-        ),
-        child: SafeArea(
-          child: Container(
-            height: AppSpacing.s72,
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.s12,
-              vertical: AppSpacing.s8,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildNavItem(
-                  0,
-                  Icons.home_rounded,
-                  'Home',
-                  AppRoutes.studentDashboard,
-                ),
-                _buildNavItem(
-                  1,
-                  Icons.calendar_today_rounded,
-                  'Attendance',
-                  AppRoutes.studentAttendance,
-                ),
-                _buildNavItem(
-                  2,
-                  Icons.menu_book_rounded,
-                  'Homework',
-                  AppRoutes.studentHomework,
-                ),
-                _buildNavItem(
-                  3,
-                  Icons.business_rounded,
-                  'Institute',
-                  AppRoutes.studentInstitute,
-                ),
-              ],
+      child: SafeArea(
+        child: SizedBox(
+          height: AppSpacing.s64,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: List.generate(
+              _items.length,
+              (i) => _buildNavItem(i, _items[i]),
             ),
           ),
         ),
@@ -73,13 +65,9 @@ class StudentBottomNav extends StatelessWidget {
     );
   }
 
-  Widget _buildNavItem(int index, IconData icon, String label, String route) {
-    final bool isSelected = currentIndex == index;
-
-    final Color activeBgColor = AppColors.skyBlueLight;
-    final Color itemColor = isSelected
-        ? AppColors.primaryBrand
-        : AppColors.navyMuted;
+  Widget _buildNavItem(int index, _NavItem item) {
+    final isSelected = currentIndex == index;
+    final color = isSelected ? AppColors.studentBrand : AppColors.textMuted;
 
     return Expanded(
       child: GestureDetector(
@@ -88,48 +76,37 @@ class StudentBottomNav extends StatelessWidget {
           if (onTap != null) {
             onTap!(index);
           } else if (currentIndex != index) {
-            Get.offAllNamed(route);
+            Get.offAllNamed(item.route);
           }
         },
-        child: Center(
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 250),
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.s16,
-              vertical: AppSpacing.s8,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(item.icon, color: color, size: 22),
+            const SizedBox(height: 2),
+            Text(
+              item.label,
+              style: TextStyle(
+                fontFamily: 'Manrope',
+                fontSize: 10,
+                fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
+                color: color,
+              ),
             ),
-            decoration: BoxDecoration(
-              color: isSelected ? activeBgColor : Colors.transparent,
-              borderRadius: BorderRadius.circular(AppSpacing.s20),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(icon, color: itemColor, size: AppSpacing.s22),
-                const SizedBox(height: AppSpacing.s4),
-                Flexible(
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(
-                      label,
-                      style: TextStyle(
-                        fontFamily: 'Manrope',
-                        fontSize: 10,
-                        fontWeight: isSelected
-                            ? FontWeight.w800
-                            : FontWeight.w600,
-                        color: itemColor,
-                        letterSpacing: 0.3,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          ],
         ),
       ),
     );
   }
+}
+
+class _NavItem {
+  final IconData icon;
+  final String label;
+  final String route;
+  const _NavItem({
+    required this.icon,
+    required this.label,
+    required this.route,
+  });
 }

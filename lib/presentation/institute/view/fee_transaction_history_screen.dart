@@ -51,7 +51,7 @@ class FeeTransactionHistoryScreen extends StatelessWidget {
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [AppColors.primaryBrand, Color(0xFF005C70)],
+          colors: [AppColors.primaryBrand, AppColors.textDarkGrey],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -217,7 +217,7 @@ class FeeTransactionHistoryScreen extends StatelessWidget {
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFE7F6EC),
+                      color: AppColors.warningBg,
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(
@@ -225,7 +225,7 @@ class FeeTransactionHistoryScreen extends StatelessWidget {
                       style: AppTextStyles.lexend(
                         fontSize: 10,
                         fontWeight: FontWeight.w600,
-                        color: const Color(0xFF039855),
+                        color: AppColors.greenText,
                       ),
                     ),
                   ),

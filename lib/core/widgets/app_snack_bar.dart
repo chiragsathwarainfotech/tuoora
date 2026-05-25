@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
 
 class AppSnackBar {
   static void success(String message, {String title = 'Success'}) {

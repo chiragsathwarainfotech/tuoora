@@ -11,7 +11,7 @@ class RoleSelectionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.loginBg,
+      backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: AppSpacing.x24,
@@ -39,15 +39,6 @@ class RoleSelectionScreen extends StatelessWidget {
                 iconColor: AppColors.primaryBrand,
                 onTap: () =>
                     Get.toNamed(AppRoutes.login, arguments: 'INSTITUTE'),
-              ),
-              AppSpacing.v16,
-              _buildRoleCard(
-                title: 'Login as Parent',
-                subtitle:
-                    "Monitor your child's progress and manage fee payments.",
-                icon: Icons.family_restroom_rounded,
-                iconColor: AppColors.primaryBrand,
-                onTap: () => Get.toNamed(AppRoutes.login, arguments: 'PARENT'),
               ),
               AppSpacing.v16,
               _buildRoleCard(

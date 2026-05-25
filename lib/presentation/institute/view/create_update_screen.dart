@@ -503,7 +503,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
           Container(
             padding: AppSpacing.all12,
             decoration: BoxDecoration(
-              color: const Color(0xFFEFF6FF),
+              color: AppColors.successBg,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(icon, color: AppColors.primaryBrand, size: 20),

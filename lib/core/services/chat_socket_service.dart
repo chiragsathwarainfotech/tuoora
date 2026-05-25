@@ -109,8 +109,6 @@ class ChatSocketService extends GetxService {
   Stream<MessageAck> get onMessageRead => _onMessageRead.stream;
   Stream<ChatDeleted> get onChatDeleted => _onChatDeleted.stream;
 
-  // ---------------------------------------------------------------- public
-
   Future<void> connect({
     required String myUserId,
     required String myUserType,
@@ -365,8 +363,6 @@ class ChatSocketService extends GetxService {
     }
   }
 
-  // -------------------------------------------------------- event routing
-
   static const _sentEvents = [
     'MessageSent',
     '.MessageSent',
@@ -398,22 +394,24 @@ class ChatSocketService extends GetxService {
       _logDebug('→ MessageSent dispatched (id=${data['id']})');
       _emitMessageSent(data);
     } else if (_receivedEvents.contains(name)) {
-      _logDebug('→ MessageReceived dispatched (id=${data['id'] ?? data['message_id']})');
+      _logDebug(
+        '→ MessageReceived dispatched (id=${data['id'] ?? data['message_id']})',
+      );
       _emitAck(_onMessageReceived, data, 'received_at');
     } else if (_readEvents.contains(name)) {
-      _logDebug('→ MessageRead dispatched (id=${data['id'] ?? data['message_id']})');
+      _logDebug(
+        '→ MessageRead dispatched (id=${data['id'] ?? data['message_id']})',
+      );
       _emitAck(_onMessageRead, data, 'read_at');
     } else if (_chatDeletedEvents.contains(name)) {
-      // Payload field names aren't strictly specified — accept either the
-      // request shape (`user_id` / `user_type`) or commonly-seen variants.
-      final userId = (data['user_id'] ??
-              data['deleted_with_id'] ??
-              data['other_user_id'])
-          ?.toString();
-      final userType = (data['user_type'] ??
-              data['deleted_with_type'] ??
-              data['other_user_type'])
-          ?.toString();
+      final userId =
+          (data['user_id'] ?? data['deleted_with_id'] ?? data['other_user_id'])
+              ?.toString();
+      final userType =
+          (data['user_type'] ??
+                  data['deleted_with_type'] ??
+                  data['other_user_type'])
+              ?.toString();
       _logDebug('→ ChatDeleted dispatched (user=${userType}_$userId)');
       _onChatDeleted.add(ChatDeleted(userId: userId, userType: userType));
     } else {

@@ -1,3 +1,4 @@
+import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
@@ -226,7 +227,7 @@ class InstituteSubscriptionScreen
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.s24),
-        border: Border.all(color: AppColors.divider),
+        border: Border.all(color: AppColors.background),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -340,7 +341,7 @@ class InstituteSubscriptionScreen
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.s16),
-        border: Border.all(color: AppColors.divider),
+        border: Border.all(color: AppColors.background),
       ),
       child: Row(
         children: [

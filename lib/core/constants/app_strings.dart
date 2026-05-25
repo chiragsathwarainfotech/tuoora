@@ -14,7 +14,6 @@ class AppStrings {
 
   // Dashboards
   static const String studentOverviewLabel = 'STUDENT OVERVIEW';
-  static const String parentDashboardLabel = 'PARENT DASHBOARD';
 
   static const String instCourseManagementHeader = 'Course Management';
   static const String instDeleteBatchTitle = 'Delete Batch';
@@ -435,7 +434,8 @@ class AppStrings {
   static const String instAddLeadTitle = 'Add Lead';
   static const String instEditLeadTitle = 'Edit Lead';
   static const String instLeadInfoHeading = 'Lead Information';
-  static const String instLeadInfoSubtitle = 'Update contact and course preferences';
+  static const String instLeadInfoSubtitle =
+      'Update contact and course preferences';
   static const String instFullNameLabel = 'FULL NAME';
   static const String instFullNameHint = 'e.g. Alex Rivera';
   static const String instEmailAddressLabel = 'EMAIL ADDRESS';
@@ -445,13 +445,15 @@ class AppStrings {
   static const String instAddressLabel = 'ADDRESS';
   static const String instAddressHint = 'e.g. 123 Business Way, Suite 100';
   static const String instReferenceLabel = 'REFERENCE';
-  static const String instReferenceHint = 'e.g. LinkedIn, Referral, Google Search';
+  static const String instReferenceHint =
+      'e.g. LinkedIn, Referral, Google Search';
   static const String instCourseSelectionHeading = 'COURSE SELECTION';
   static const String instCourseSelectionLabel = 'COURSE SELECTION';
   static const String instCourseSelectionHint = 'Enter course name';
   static const String instInteractionNotesHeading = 'INTERACTION NOTES';
   static const String instInteractionNotesLabel = 'INTERACTION NOTES';
-  static const String instInteractionNotesHint = 'Add any specific details or past interactions with the lead...';
+  static const String instInteractionNotesHint =
+      'Add any specific details or past interactions with the lead...';
   static const String instSaveLeadBtn = 'Save Lead';
   static const String instActiveProspectTag = 'ACTIVE PROSPECT';
   static const String instInteractionHistoryHeading = 'INTERACTION HISTORY';
@@ -469,9 +471,96 @@ class AppStrings {
   static const String instSaveNoteBtn = 'Save Note';
   static const String instNoNotesFound = 'No notes found';
   static const String instDeleteNoteTitle = 'Delete Note';
-  static const String instDeleteNoteConfirm = 'Are you sure you want to delete this note?';
+  static const String instDeleteNoteConfirm =
+      'Are you sure you want to delete this note?';
   static const String instBookmarkedNotes = 'Bookmarked Notes';
   static const String instNoBookmarkedNotesFound = 'No Bookmarked Notes Found';
-  static const String instNoBookmarkedNotesSubtitle = 'You haven\'t bookmarked any notes yet.';
-}
+  static const String instNoBookmarkedNotesSubtitle =
+      'You haven\'t bookmarked any notes yet.';
 
+  // Student — Assignments tab
+  static const String studentAssignmentsTitle = 'Assignments';
+  static const String studentAssignmentsStillToDo = 'Still to do this week';
+  static const String studentAssignmentsCompletedBy = 'marked complete by';
+  static const String studentAssignmentsTabPending = 'Pending';
+  static const String studentAssignmentsTabCompleted = 'Completed';
+  static const String studentAssignmentsEmptyPending =
+      'You\'re all caught up — no pending work right now.';
+  static const String studentAssignmentsEmptyCompleted =
+      'No completed assignments to show yet.';
+  static const String studentDueToday = 'DUE TODAY';
+  static const String studentDueTomorrow = 'DUE TOMORROW';
+  static const String studentTodayPill = 'Today';
+  static const String studentTomorrowPill = 'Tomorrow';
+  static const String studentSubjectMathematics = 'MATHEMATICS';
+  static const String studentSubjectPhysics = 'PHYSICS';
+  static const String studentSubjectChemistry = 'CHEMISTRY';
+  static const String studentDonePill = 'Done';
+
+  // Student — Assignment detail screen
+  static const String studentAssignmentDetailDueLabel = 'DUE';
+  static const String studentAssignmentDetailInstructions = 'INSTRUCTIONS';
+  static const String studentAssignmentDetailAttachments = 'ATTACHMENTS';
+  static const String studentAssignmentDetailAssignedBy = 'Assigned by:';
+  static const String studentAssignmentDetailCompletedPill = 'Completed';
+  static const String studentAssignmentDetailPendingTitle = 'Pending';
+  static const String studentAssignmentAttachmentDocument = 'Document';
+  static const String studentAssignmentAttachmentImage = 'Image';
+  static const String studentAssignmentAttachmentVideo = 'Video';
+  static const String studentAssignmentAttachmentAudio = 'Audio';
+
+  // Student — Attachment preview screen.
+  static const String studentAttachmentDownload = 'Download';
+  static const String studentAttachmentShare = 'Share';
+  static const String studentAttachmentDownloadStarted = 'Downloading…';
+  static const String studentAttachmentShareStarted = 'Sharing…';
+  static const String studentAttachmentNoneSelected = 'No attachment selected';
+
+  // Student — Fees tab.
+  static const String studentFeesTitle = 'Your fees';
+  static const String studentFeesPaidPercent = 'PAID';
+  static const String studentFeesBilledAcross = 'billed across';
+  static const String studentFeesMonths = 'months';
+  static const String studentFeesLegendPaid = 'PAID';
+  static const String studentFeesLegendPending = 'PENDING';
+  static const String studentFeesPayNowPrefix = 'Pay ₹';
+  static const String studentFeesPayNowSuffix = 'now';
+  static const String studentFeesStatementsTitle = 'STATEMENT';
+  static const String studentFeesPillPending = 'Pending';
+  static const String studentFeesPillPaid = 'Paid';
+  static const String studentFeesDuePrefix = 'Due';
+  static const String studentFeesPaidPrefix = 'Paid';
+
+  // Student — Receipt screen.
+  static const String studentReceiptTitle = 'Receipt';
+  static const String studentReceiptStudent = 'Student';
+  static const String studentReceiptRollNo = 'Roll no.';
+  static const String studentReceiptInstitute = 'Institute';
+  static const String studentReceiptInvoiceNo = 'Invoice no.';
+  static const String studentReceiptPeriod = 'Period';
+  static const String studentReceiptDueDate = 'Due date';
+  static const String studentReceiptLateFee = 'Late fee';
+  static const String studentReceiptDownload = 'Download';
+  static const String studentReceiptContact = 'Contact';
+
+  // Student — Pay Fees screen.
+  static const String studentPayFeesTitle = 'Pay fees';
+  static const String studentPayFeesOutstanding = 'TOTAL OUTSTANDING';
+  static const String studentPayFeesScanWith = 'SCAN WITH ANY UPI APP';
+  static const String studentPayFeesOpenInGooglePay = 'Open in Google Pay';
+  static const String studentPayFeesAppPhonePe = 'PhonePe';
+  static const String studentPayFeesAppPaytm = 'Paytm';
+  static const String studentPayFeesAppAnyUpi = 'Any UPI';
+  static const String studentPayFeesHowItWorks = 'HOW IT WORKS';
+  static const String studentPayFeesStep1 =
+      'Tap "Open in Google Pay" or scan the QR with any UPI app.';
+  static const String studentPayFeesStep2Prefix = 'Confirm the amount';
+  static const String studentPayFeesStep2Suffix = 'and pay to';
+  static const String studentPayFeesStep3 =
+      'The institute will mark your fee as paid once received — usually '
+      'within a few minutes.';
+  static const String studentPayFeesDisclaimer =
+      'Payments go directly to the institute\'s UPI account. Tuoora '
+      'never holds your money.';
+  static const String studentPayFeesCopyHint = 'UPI handle copied';
+}

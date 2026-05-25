@@ -26,15 +26,6 @@ class AuthRepository implements AuthRepositoryImpl {
     return _handleResponse(response, 'STUDENT');
   }
 
-  @override
-  Future<User> loginParent(String email, String password) async {
-    final response = await _apiClient.post(
-      ApiConstants.parentLogin,
-      {'email': email, 'password': password},
-    );
-    return _handleResponse(response, 'PARENT');
-  }
-
   User _handleResponse(dynamic response, String role) {
     if (response.status.hasError) {
       throw Exception(response.body?['message'] ?? 'Login failed');

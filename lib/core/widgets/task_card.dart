@@ -20,7 +20,7 @@ class TaskCard extends StatelessWidget {
     super.key,
     required this.icon,
     this.iconColor = AppTheme.primary,
-    this.iconBgColor = const Color(0xFFF0F4FC),
+    this.iconBgColor = AppColors.background,
     required this.title,
     required this.subject,
     required this.statusText,
@@ -135,7 +135,7 @@ class TaskCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(4),
                   child: LinearProgressIndicator(
                     value: progressValue,
-                    backgroundColor: AppColors.divider,
+                    backgroundColor: AppColors.background,
                     valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primary),
                   ),
                 ),

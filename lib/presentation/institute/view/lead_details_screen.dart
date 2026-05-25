@@ -150,7 +150,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
           _buildContactRow(Icons.email_rounded, 'EMAIL', lead.email),
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 16),
-            child: Divider(height: 1, color: AppColors.divider),
+            child: Divider(height: 1, color: AppColors.background),
           ),
           _buildContactRow(Icons.phone_rounded, 'PHONE', lead.phone),
         ],

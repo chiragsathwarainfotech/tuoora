@@ -128,7 +128,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                 decoration: BoxDecoration(
                   color: AppColors.white,
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.divider),
+                  border: Border.all(color: AppColors.background),
                 ),
                 child: ListView.separated(
                   shrinkWrap: true,
@@ -433,7 +433,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
         color: AppColors.scaffoldBg,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: AppColors.divider,
+          color: AppColors.background,
           width: 1.5,
           style: BorderStyle.solid,
         ),
@@ -528,7 +528,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: AppColors.divider,
+                  color: AppColors.background,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -711,7 +711,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
       padding: AppSpacing.all24,
       decoration: const BoxDecoration(
         color: AppColors.white,
-        border: Border(top: BorderSide(color: AppColors.divider, width: 1)),
+        border: Border(top: BorderSide(color: AppColors.background, width: 1)),
       ),
       child: AppButton(
         label: AppStrings.instSaveFeeBtn,

@@ -7,6 +7,7 @@ import 'config/app_routes.dart';
 import 'config/app_theme.dart';
 import 'package:tuoora/core/api/api_client.dart';
 import 'package:tuoora/core/services/auth_service.dart';
+import 'package:tuoora/core/services/notifications/notification_router.dart';
 import 'package:tuoora/core/services/push_notification_service.dart';
 import 'package:tuoora/firebase_options.dart';
 import 'package:get_storage/get_storage.dart';
@@ -20,6 +21,7 @@ void main() async {
 
   Get.put(ApiClient());
   await Get.putAsync(() => AuthService().init());
+  await Get.putAsync(() => NotificationRouter().init());
   await Get.putAsync(() => PushNotificationService().init());
 
   runApp(const FeeEasyApp());

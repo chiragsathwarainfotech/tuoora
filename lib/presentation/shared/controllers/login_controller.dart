@@ -41,8 +41,6 @@ class LoginController extends GetxController {
         user = await _authRepository.loginInstitute(email, password);
       } else if (role == 'STUDENT') {
         user = await _authRepository.loginStudent(email, password);
-      } else if (role == 'PARENT') {
-        user = await _authRepository.loginParent(email, password);
       }
 
       if (user != null) {
@@ -70,8 +68,6 @@ class LoginController extends GetxController {
       Get.offAllNamed(AppRoutes.instituteDashboard);
     } else if (role == 'STUDENT') {
       Get.offAllNamed(AppRoutes.studentDashboard);
-    } else if (role == 'PARENT') {
-      Get.offAllNamed(AppRoutes.parentDashboard);
     }
   }
 

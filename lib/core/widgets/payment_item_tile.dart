@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../core/constants/app_images.dart';
-import '../../core/constants/app_text_styles.dart';
-import '../../core/theme/app_spacing.dart';
+import 'package:tuoora/core/constants/app_images.dart';
+import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/theme/app_spacing.dart';
 
 class PaymentItemTile extends StatelessWidget {
   final String title;
@@ -46,7 +46,7 @@ class PaymentItemTile extends StatelessWidget {
             width: AppSpacing.s44,
             height: AppSpacing.s44,
             decoration: const BoxDecoration(
-              color: Color(0xFFECFDF5),
+              color: AppColors.successBg,
               shape: BoxShape.circle,
             ),
             child: const Icon(
@@ -99,7 +99,7 @@ class PaymentItemTile extends StatelessWidget {
                   child: Container(
                     padding: AppSpacing.all6,
                     decoration: BoxDecoration(
-                      color: AppColors.reportBorder,
+                      color: AppColors.background,
                       borderRadius: BorderRadius.circular(AppSpacing.s8),
                     ),
                     child: SvgPicture.asset(

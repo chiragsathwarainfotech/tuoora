@@ -9,6 +9,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:tuoora/core/api/api_client.dart';
 import 'package:tuoora/core/constants/api_constants.dart';
 import 'package:tuoora/core/services/auth_service.dart';
+import 'package:tuoora/core/services/notifications/notification_router.dart';
 
 /// Top-level background message handler.
 /// Required by FCM — must be a top-level (or static) function so the OS can
@@ -35,6 +36,17 @@ class PushNotificationService extends GetxService {
 
   static const String _tokenStorageKey = 'fcm_token';
   static const String _syncedTokenStorageKey = 'fcm_token_synced';
+  /// Fingerprint (data-payload + title + body) of the most recent
+  /// `getInitialMessage()` we've already routed. Persisted across kills.
+  ///
+  /// On Android, `getInitialMessage()` returns the activity's launch-intent
+  /// message every cold start until a *new* notification overwrites it —
+  /// the OS does NOT clear it when the user opens the app normally from
+  /// the launcher. We can't rely on `messageId` either (it's sometimes
+  /// null or re-wrapped). Hashing the actual payload is the only stable
+  /// signal that "we've already handled this exact tap".
+  static const String _consumedInitialFingerprintKey =
+      'fcm_consumed_initial_fingerprint';
   static const String _androidChannelId = 'tuoora_default_channel';
   static const String _androidChannelName = 'Tuoora Notifications';
   static const String _androidChannelDesc =
@@ -73,8 +85,19 @@ class PushNotificationService extends GetxService {
     await _local.initialize(
       initSettings,
       onDidReceiveNotificationResponse: (response) {
-        if (response.payload != null && response.payload!.isNotEmpty) {
-          _lastMessageJson.value = response.payload;
+        final payload = response.payload;
+        if (payload == null || payload.isEmpty) return;
+        _lastMessageJson.value = payload;
+        // The payload we wrote earlier was the JSON-encoded data map.
+        // Decode and hand it to the router so the user lands on the same
+        // screen they would from a system-tray tap.
+        try {
+          final decoded = jsonDecode(payload);
+          if (decoded is Map<String, dynamic>) {
+            _routePayload(decoded);
+          }
+        } catch (e) {
+          if (kDebugMode) print('[FCM] local-tap payload decode failed: $e');
         }
       },
     );
@@ -201,7 +224,41 @@ class PushNotificationService extends GetxService {
   Future<void> _checkInitialMessage() async {
     // If the app was launched by tapping a notification (terminated state).
     final initial = await _fcm.getInitialMessage();
-    if (initial != null) _onMessageOpened(initial);
+    if (initial == null) return;
+
+    // De-duplicate by payload fingerprint, not by messageId — see comment
+    // on [_consumedInitialFingerprintKey] for why.
+    final fingerprint = _fingerprintOf(initial);
+    final lastConsumed =
+        _storage.read<String>(_consumedInitialFingerprintKey);
+    if (kDebugMode) {
+      print(
+        '[FCM] initial message id=${initial.messageId} '
+        'fingerprint=$fingerprint lastConsumed=$lastConsumed',
+      );
+    }
+    if (lastConsumed == fingerprint) {
+      if (kDebugMode) {
+        print('[FCM] skipping cached launch-intent message');
+      }
+      return;
+    }
+
+    await _storage.write(_consumedInitialFingerprintKey, fingerprint);
+    _onMessageOpened(initial);
+  }
+
+  /// Produces a stable fingerprint for a [RemoteMessage] from its
+  /// user-visible payload. Two messages with the same data + title + body
+  /// hash to the same value regardless of `messageId` (which Android can
+  /// re-wrap or omit when re-handing the same cached launch intent).
+  String _fingerprintOf(RemoteMessage m) {
+    final parts = <String>[
+      jsonEncode(m.data),
+      m.notification?.title ?? '',
+      m.notification?.body ?? '',
+    ];
+    return parts.join('|');
   }
 
   void _onForegroundMessage(RemoteMessage message) {
@@ -242,9 +299,18 @@ class PushNotificationService extends GetxService {
       print('[FCM-tap] ${message.messageId} data=${message.data}');
     }
     _lastMessageJson.value = jsonEncode(message.data);
-    // TODO: route based on payload, e.g.:
-    // final type = message.data['type'];
-    // if (type == 'lead') Get.toNamed(AppRoutes.leadDetail, arguments: ...);
+    _routePayload(message.data);
+  }
+
+  /// Hands the FCM `data` map to [NotificationRouter]. Safe to call even
+  /// when the router isn't registered yet (e.g. very early init) — we just
+  /// drop the tap in that case.
+  void _routePayload(Map<String, dynamic> data) {
+    if (!Get.isRegistered<NotificationRouter>()) {
+      if (kDebugMode) print('[FCM] router not ready, dropping tap');
+      return;
+    }
+    Get.find<NotificationRouter>().route(data);
   }
 
   /// Subscribe to a topic (broadcast channel) — server sends to topic name.

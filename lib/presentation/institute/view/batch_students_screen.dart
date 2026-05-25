@@ -123,16 +123,16 @@ class BatchStudentsScreen extends StatelessWidget {
                 child: CircleAvatar(
                   radius: 18,
                   backgroundColor: [
-                    const Color(0xFFFFEAD5),
-                    const Color(0xFFD1FADF),
-                    const Color(0xFFE0F2FE),
+                    AppColors.warningBg,
+                    AppColors.successBg,
+                    AppColors.greenBg,
                   ][index % 3],
                   child: Text(
                     controller.assignedStudents[index].student.name[0],
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
-                      color: Colors.grey.shade800,
+                      color: AppColors.textDarkGrey,
                     ),
                   ),
                 ),
@@ -149,7 +149,7 @@ class BatchStudentsScreen extends StatelessWidget {
                 ),
                 child: CircleAvatar(
                   radius: 18,
-                  backgroundColor: const Color(0xFFEAECF0),
+                  backgroundColor: AppColors.borderGrey,
                   child: Text(
                     '+${controller.assignedStudents.length - 3}',
                     style: AppTextStyles.manrope(
@@ -228,7 +228,7 @@ class BatchStudentsScreen extends StatelessWidget {
                         style: AppTextStyles.manrope(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
-                          color: const Color(0xFF101828),
+                          color: AppColors.textPrimary,
                         ),
                       ),
                       Text(

@@ -41,7 +41,7 @@ import 'package:tuoora/presentation/institute/view/forgot_password_screen.dart';
 import 'package:tuoora/presentation/institute/view/reset_password_screen.dart';
 import 'package:tuoora/presentation/student/view/student_profile_screen.dart'
     as shared;
-import 'package:tuoora/presentation/student/view/updates_screen.dart'
+import 'package:tuoora/presentation/student/view/student_notification_screen.dart'
     as shared;
 import 'package:tuoora/presentation/student/view/student_main_screen.dart';
 import 'package:tuoora/presentation/student/bindings/student_binding.dart';
@@ -129,7 +129,7 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.studentNotifications,
-      page: () => const shared.UpdatesScreen(),
+      page: () => const shared.StudentNotificationScreen(),
       binding: BindingsBuilder(() {
         Get.lazyPut<StudentNotificationsController>(
           () => StudentNotificationsController(),
@@ -173,7 +173,7 @@ class AppPages {
       name: AppRoutes.studentFeeHistory,
       page: () => const PaymentHistoryScreen(title: 'Fee History'),
     ),
-    
+
     GetPage(
       name: AppRoutes.studentChat,
       page: () => const StudentChatMessagesScreen(),
@@ -190,10 +190,7 @@ class AppPages {
       name: AppRoutes.studentHolidayDetail,
       page: () => const StudentHolidayDetailScreen(),
     ),
-    GetPage(
-      name: AppRoutes.studentReports,
-      page: () => StudentReportsScreen(),
-    ),
+    GetPage(name: AppRoutes.studentReports, page: () => StudentReportsScreen()),
     GetPage(
       name: AppRoutes.studentReceiptsList,
       page: () => const StudentReceiptsListScreen(),
@@ -212,30 +209,38 @@ class AppPages {
       name: AppRoutes.studentNotificationPreferences,
       page: () => const StudentNotificationPreferencesScreen(),
       binding: BindingsBuilder(() {
-        Get.lazyPut<StudentNotificationPreferencesController>(() => StudentNotificationPreferencesController(
-          StudentNotificationsRepository(Get.find()),
-        ));
+        Get.lazyPut<StudentNotificationPreferencesController>(
+          () => StudentNotificationPreferencesController(
+            StudentNotificationsRepository(Get.find()),
+          ),
+        );
       }),
     ),
     GetPage(
       name: AppRoutes.studentStudyMaterial,
       page: () => const StudentStudyMaterialScreen(),
       binding: BindingsBuilder(() {
-        Get.lazyPut<StudentStudyMaterialController>(() => StudentStudyMaterialController());
+        Get.lazyPut<StudentStudyMaterialController>(
+          () => StudentStudyMaterialController(),
+        );
       }),
     ),
     GetPage(
       name: AppRoutes.studentStudyMaterialDetail,
       page: () => const StudentStudyMaterialDetailScreen(),
       binding: BindingsBuilder(() {
-        Get.lazyPut<StudentStudyMaterialDetailController>(() => StudentStudyMaterialDetailController());
+        Get.lazyPut<StudentStudyMaterialDetailController>(
+          () => StudentStudyMaterialDetailController(),
+        );
       }),
     ),
     GetPage(
       name: AppRoutes.studentFeedback,
       page: () => const StudentFeedbackScreen(),
       binding: BindingsBuilder(() {
-        Get.lazyPut<StudentFeedbackController>(() => StudentFeedbackController());
+        Get.lazyPut<StudentFeedbackController>(
+          () => StudentFeedbackController(),
+        );
       }),
     ),
     // Institute routes
@@ -517,4 +522,3 @@ class AppPages {
     ),
   ];
 }
-

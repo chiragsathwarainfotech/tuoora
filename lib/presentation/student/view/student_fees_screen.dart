@@ -13,11 +13,6 @@ import 'package:tuoora/presentation/student/models/fee_model.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
 import 'package:tuoora/presentation/student/widgets/student_section_header.dart';
 
-/// Student → Fees tab.
-///
-/// Pure UI; all data lives in [FeesController]. Reads via `Obx` so a
-/// future API call only needs to update the controller — the screen
-/// reacts.
 class StudentFeesScreen extends GetView<FeesController> {
   final bool showBottomNav;
 
@@ -530,9 +525,7 @@ class _StatusPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = isPaid
-        ? AppColors.studentPresentBg
-        : AppColors.studentBrandSoft;
+    final bg = isPaid ? AppColors.studentPresentBg : AppColors.studentBrandSoft;
     final fg = isPaid ? AppColors.studentPresentText : AppColors.studentBrand;
     final label = isPaid
         ? AppStrings.studentFeesPillPaid

@@ -2,12 +2,12 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/widgets/student_bottom_nav.dart';
 import 'package:tuoora/presentation/student/controllers/attendance_history_controller.dart';
+import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
 import 'package:tuoora/presentation/student/widgets/student_section_header.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -23,7 +23,21 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
         bottom: false,
         child: Column(
           children: [
-            _buildHeader(),
+            StudentAppBar(
+              isRoot: true,
+              titleWidget: Obx(
+                () => Text(
+                  '${controller.currentMonthName} ${controller.currentYear}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTextStyles.manrope(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+              ),
+            ),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.fromLTRB(
@@ -56,43 +70,6 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
       bottomNavigationBar: showBottomNav
           ? const StudentBottomNav(currentIndex: 3)
           : null,
-    );
-  }
-
-  Widget _buildHeader() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(
-        AppSpacing.s16,
-        AppSpacing.s12,
-        AppSpacing.s16,
-        AppSpacing.s8,
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Obx(
-              () => Text(
-                '${controller.currentMonthName} ${controller.currentYear}',
-                style: AppTextStyles.manrope(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-            ),
-          ),
-          HeaderIconButton(
-            icon: Icons.chat_bubble_outline_rounded,
-            onTap: () => Get.toNamed(AppRoutes.studentChat),
-          ),
-          AppSpacing.h8,
-          HeaderIconButton(
-            icon: Icons.notifications_none_rounded,
-            hasBadge: true,
-            onTap: () => Get.toNamed(controller.updatesRoute),
-          ),
-        ],
-      ),
     );
   }
 
@@ -671,53 +648,6 @@ Widget _buildCalendarGridShimmer() {
       ),
     ),
   );
-}
-
-class HeaderIconButton extends StatelessWidget {
-  final IconData icon;
-  final bool hasBadge;
-  final VoidCallback onTap;
-  const HeaderIconButton({
-    super.key,
-    required this.icon,
-    required this.onTap,
-    this.hasBadge = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: AppSpacing.s40,
-        height: AppSpacing.s40,
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(AppSpacing.s12),
-          border: Border.all(color: AppColors.borderGrey),
-        ),
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Center(child: Icon(icon, size: 18, color: AppColors.textPrimary)),
-            if (hasBadge)
-              Positioned(
-                top: 8,
-                right: 8,
-                child: Container(
-                  width: 8,
-                  height: 8,
-                  decoration: const BoxDecoration(
-                    color: AppColors.bohoRed,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ),
-          ],
-        ),
-      ),
-    );
-  }
 }
 
 class _SummaryRingPainter extends CustomPainter {

@@ -6,6 +6,7 @@ import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/widgets/student_bottom_nav.dart';
 import 'package:tuoora/presentation/student/controllers/student_controller.dart';
+import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
 import 'package:tuoora/presentation/student/widgets/student_section_header.dart';
 import 'package:tuoora/presentation/student/controllers/assignments_controller.dart';
 import 'package:tuoora/presentation/student/controllers/student_dashboard_controller.dart';
@@ -39,9 +40,12 @@ class StudentDashboard extends GetView<StudentDashboardController> {
 
           return Column(
             children: [
-              _Header(
-                firstName: controller.studentFirstName,
-                initials: controller.studentInitials,
+              StudentAppBar(
+                isRoot: true,
+                titleWidget: _GreetingTitle(
+                  firstName: controller.studentFirstName,
+                  initials: controller.studentInitials,
+                ),
               ),
               Expanded(
                 child: SingleChildScrollView(
@@ -187,116 +191,48 @@ class StudentDashboard extends GetView<StudentDashboardController> {
   }
 }
 
-class _Header extends StatelessWidget {
+class _GreetingTitle extends StatelessWidget {
   final String firstName;
   final String initials;
-  const _Header({required this.firstName, required this.initials});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(
-        AppSpacing.s16,
-        AppSpacing.s12,
-        AppSpacing.s16,
-        AppSpacing.s8,
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: GestureDetector(
-              onTap: () {
-                if (Get.isRegistered<StudentController>()) {
-                  Get.find<StudentController>().changePage(4);
-                }
-              },
-              behavior: HitTestBehavior.opaque,
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    radius: AppSpacing.s18,
-                    backgroundColor: AppColors.studentBrandSoft,
-                    child: Text(
-                      initials,
-                      style: AppTextStyles.manrope(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.studentBrand,
-                      ),
-                    ),
-                  ),
-                  AppSpacing.h12,
-                  Expanded(
-                    child: Text(
-                      'Hi, $firstName',
-                      style: AppTextStyles.manrope(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.textPrimary,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          _HeaderIconButton(
-            icon: Icons.chat_bubble_outline_rounded,
-            onTap: () => Get.toNamed(AppRoutes.studentChat),
-          ),
-          AppSpacing.h8,
-          _HeaderIconButton(
-            icon: Icons.notifications_none_rounded,
-            hasBadge: true,
-            onTap: () => Get.toNamed(AppRoutes.studentNotifications),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _HeaderIconButton extends StatelessWidget {
-  final IconData icon;
-  final bool hasBadge;
-  final VoidCallback onTap;
-  const _HeaderIconButton({
-    required this.icon,
-    required this.onTap,
-    this.hasBadge = false,
-  });
+  const _GreetingTitle({required this.firstName, required this.initials});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: AppSpacing.s40,
-        height: AppSpacing.s40,
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(AppSpacing.s12),
-          border: Border.all(color: AppColors.borderGrey),
-        ),
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Center(child: Icon(icon, size: 18, color: AppColors.textPrimary)),
-            if (hasBadge)
-              Positioned(
-                top: 8,
-                right: 8,
-                child: Container(
-                  width: 8,
-                  height: 8,
-                  decoration: const BoxDecoration(
-                    color: AppColors.bohoRed,
-                    shape: BoxShape.circle,
-                  ),
-                ),
+      onTap: () {
+        if (Get.isRegistered<StudentController>()) {
+          Get.find<StudentController>().changePage(4);
+        }
+      },
+      behavior: HitTestBehavior.opaque,
+      child: Row(
+        children: [
+          CircleAvatar(
+            radius: AppSpacing.s18,
+            backgroundColor: AppColors.studentBrandSoft,
+            child: Text(
+              initials,
+              style: AppTextStyles.manrope(
+                fontSize: 12,
+                fontWeight: FontWeight.w800,
+                color: AppColors.studentBrand,
               ),
-          ],
-        ),
+            ),
+          ),
+          AppSpacing.h12,
+          Expanded(
+            child: Text(
+              'Hi, $firstName',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTextStyles.manrope(
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+                color: AppColors.textPrimary,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

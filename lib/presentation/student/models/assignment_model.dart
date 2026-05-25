@@ -50,6 +50,11 @@ class Assignment {
   final String? completedNote;
   final String? gradeNote;
 
+  /// True when the assignment was due before today and the student hasn't
+  /// submitted yet. The list UI uses this to dull the row and disable taps
+  /// (the student can't act on it anymore).
+  final bool isOverdue;
+
   const Assignment({
     required this.id,
     required this.title,
@@ -67,6 +72,7 @@ class Assignment {
     this.pendingNote,
     this.completedNote,
     this.gradeNote,
+    this.isOverdue = false,
   });
 
   bool get isCompleted => badge == AssignmentBadge.done;
@@ -123,14 +129,15 @@ class Assignment {
     }
 
     String dueLabelText = rawDue ?? '';
+    int? dueDiffDays;
     if (parsedDue != null) {
       final now = DateTime.now();
       final today = DateTime(now.year, now.month, now.day);
       final dueDay = DateTime(parsedDue.year, parsedDue.month, parsedDue.day);
-      final diff = dueDay.difference(today).inDays;
-      if (diff == 0) {
+      dueDiffDays = dueDay.difference(today).inDays;
+      if (dueDiffDays == 0) {
         dueLabelText = 'Today';
-      } else if (diff == 1) {
+      } else if (dueDiffDays == 1) {
         dueLabelText = 'Tomorrow';
       } else {
         const months = [
@@ -150,6 +157,12 @@ class Assignment {
         dueLabelText = '${parsedDue.day} ${months[parsedDue.month - 1]}';
       }
     }
+
+    // Overdue: API flag wins, otherwise compute from the date diff.
+    // Completed work is never "overdue" regardless of date.
+    final bool overdue = !isCompleted &&
+        (json['is_overdue'] == true ||
+            (dueDiffDays != null && dueDiffDays < 0));
 
     AssignmentBadge badge = AssignmentBadge.today;
     if (isCompleted) {
@@ -186,9 +199,10 @@ class Assignment {
       instructions: json['description'],
       assignedBy: 'Batch: ${json['batch_name']}',
       attachments: attachments,
-      pendingNote: json['is_overdue'] == true ? 'Overdue' : null,
+      pendingNote: overdue ? 'Overdue' : null,
       completedNote: completedNoteStr,
       gradeNote: gradeNoteStr,
+      isOverdue: overdue,
     );
   }
 }

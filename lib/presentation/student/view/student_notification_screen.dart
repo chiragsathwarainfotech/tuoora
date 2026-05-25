@@ -6,8 +6,9 @@ import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/student/controllers/student_notifications_controller.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
 
-class UpdatesScreen extends GetView<StudentNotificationsController> {
-  const UpdatesScreen({super.key});
+class StudentNotificationScreen
+    extends GetView<StudentNotificationsController> {
+  const StudentNotificationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

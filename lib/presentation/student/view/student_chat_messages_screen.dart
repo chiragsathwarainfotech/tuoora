@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
@@ -32,52 +33,74 @@ class _StudentChatMessagesScreenState extends State<StudentChatMessagesScreen> {
   @override
   void initState() {
     super.initState();
-    _initChat();
+    // Defer to after the first frame. `_initChat` mutates `selectedChat`
+    // synchronously when `chatsList` is already populated (e.g. when this
+    // screen was opened from a notification tap — the handler pre-seeded
+    // the chat and the controller already fetched chats). Running that
+    // mutation inside initState's synchronous tail triggers Obx widgets
+    // to setState() during build → exception, screen unmounts, navigation
+    // unwinds.
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _initChat();
+    });
   }
 
   Future<void> _initChat() async {
-    // Wait for the controller to load chats if it's currently doing so
-    if (controller.chatsList.isEmpty) {
-      await controller.fetchChats();
-    }
-
-    // If chat is already selected and it's the institute, return
-    if (controller.selectedChat.value != null && controller.selectedChat.value!.participantRole.toLowerCase() == 'institute') {
-      return;
-    }
-    
-    await controller.fetchParticipants();
-    final institute = controller.availableParticipants.firstWhereOrNull(
-      (p) => p.role.toLowerCase() == 'institute',
-    );
-    if (institute != null) {
-      // Find the actual existing chat instead of using a fake composedId
-      final existing = controller.chatsList.firstWhereOrNull((c) => c.participantId == institute.id || c.participantRole.toLowerCase() == 'institute');
-      
-      if (existing != null) {
-        controller.selectedChat.value = existing;
-        controller.messages.clear();
-        await controller.fetchMessages(existing.id);
-      } else {
-        final newChat = Chat(
-          id: '_', // Temporary fake ID for UI, backend will create real chat on first message
-          participantName: institute.name,
-          participantId: institute.id,
-          participantImage: institute.image,
-          lastMessage: '',
-          lastMessageTime: '',
-          participantRole: institute.role,
-          myId: '',
-          myRole: '',
-        );
-        controller.selectedChat.value = newChat;
-        controller.messages.clear();
+    try {
+      // Step 1: ensure the chat list is loaded.
+      if (controller.chatsList.isEmpty) {
+        await controller.fetchChats();
       }
-    }
-    if (mounted) {
-      setState(() {
-        isInitializing = false;
-      });
+
+      // Step 2: pick the chat to open. Priority order:
+      //   1. A real institute chat already in the list (preferred — has a
+      //      proper backend id so fetchMessages works).
+      //   2. A pre-seeded selectedChat (e.g. from a notification tap).
+      //   3. A stub built from the institute participant lookup (first-ever
+      //      chat — backend will mint the real id on first message send).
+      Chat? targetChat = controller.chatsList.firstWhereOrNull(
+        (c) => c.participantRole.toLowerCase() == 'institute',
+      );
+
+      targetChat ??= controller.selectedChat.value;
+
+      if (targetChat == null) {
+        await controller.fetchParticipants();
+        final institute = controller.availableParticipants.firstWhereOrNull(
+          (p) => p.role.toLowerCase() == 'institute',
+        );
+        if (institute != null) {
+          targetChat = Chat(
+            id: '_', // Temporary id; backend mints the real one on send.
+            participantName: institute.name,
+            participantId: institute.id,
+            participantImage: institute.image,
+            lastMessage: '',
+            lastMessageTime: '',
+            participantRole: institute.role,
+            myId: '',
+            myRole: '',
+          );
+        }
+      }
+
+      // Step 3: commit + load history. Skip fetchMessages for the stub
+      // chat (id = '_') since the backend wouldn't know what to return.
+      if (targetChat != null) {
+        controller.selectedChat.value = targetChat;
+        controller.messages.clear();
+        if (targetChat.id != '_') {
+          await controller.fetchMessages(targetChat.id);
+        }
+      }
+    } finally {
+      // Always flip the spinner off — earlier versions of this method had a
+      // branch that returned early and left it true forever.
+      if (mounted) {
+        setState(() {
+          isInitializing = false;
+        });
+      }
     }
   }
 

@@ -415,11 +415,17 @@ class _AssignmentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
+    // Overdue rows: nothing the student can do anymore — disable tap so
+    // the InkWell shows no ripple, and dull the whole card so it visually
+    // reads as inactive (like an expired offer tile).
+    final bool disabled = item.isOverdue;
+    final VoidCallback? effectiveOnTap = disabled ? null : onTap;
+
+    final card = Material(
       color: AppColors.white,
       borderRadius: BorderRadius.circular(AppSpacing.s16),
       child: InkWell(
-        onTap: onTap,
+        onTap: effectiveOnTap,
         borderRadius: BorderRadius.circular(AppSpacing.s16),
         child: Ink(
           decoration: BoxDecoration(
@@ -501,11 +507,11 @@ class _AssignmentCard extends StatelessWidget {
                                         ),
                                       ),
                                       TextSpan(
-                                        text: '  ·  ${item.dueLabel}',
+                                        text: _statusSuffix(item),
                                         style: AppTextStyles.manrope(
                                           fontSize: 10,
                                           fontWeight: FontWeight.w800,
-                                          color: AppColors.textTertiary,
+                                          color: _statusColor(item),
                                           letterSpacing: 0.6,
                                         ),
                                       ),
@@ -517,8 +523,15 @@ class _AssignmentCard extends StatelessWidget {
                               ],
                             ),
                           ),
-                          AppSpacing.h8,
-                          _DuePill(badge: item.badge),
+                          // Right-side pill: shown ONLY for completed items
+                          // ("Done"). Pending items now communicate their
+                          // due-ness inline via "Due: <date>" on the line
+                          // above, so a separate Today/Tomorrow pill is
+                          // redundant.
+                          if (item.isCompleted) ...[
+                            AppSpacing.h8,
+                            _DuePill(badge: item.badge),
+                          ],
                         ],
                       ),
                     ),
@@ -530,6 +543,32 @@ class _AssignmentCard extends StatelessWidget {
         ),
       ),
     );
+
+    // "Expired offer" look: knock the whole row's opacity down so it
+    // visually reads as inactive. AbsorbPointer guarantees no tap or
+    // hover effect lands even if a child has its own GestureDetector.
+    if (disabled) {
+      return AbsorbPointer(
+        child: Opacity(opacity: 0.55, child: card),
+      );
+    }
+    return card;
+  }
+
+  /// Inline suffix after the subject label. Three buckets:
+  ///   - Completed → "Submitted" (no date — completion is the message)
+  ///   - Overdue   → `Was due on …` (past-tense, signals missed)
+  ///   - Active    → `Due: …` (action-oriented, keeps urgency)
+  static String _statusSuffix(Assignment item) {
+    if (item.isCompleted) return '  ·  Submitted';
+    if (item.isOverdue) return '  ·  Was due on ${item.dueLabel}';
+    return '  ·  Due: ${item.dueLabel}';
+  }
+
+  static Color _statusColor(Assignment item) {
+    if (item.isCompleted) return AppColors.studentPresentText;
+    if (item.isOverdue) return AppColors.bohoRed;
+    return AppColors.textTertiary;
   }
 }
 

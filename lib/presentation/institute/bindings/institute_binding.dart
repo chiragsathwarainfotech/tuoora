@@ -1,3 +1,4 @@
+import 'package:tuoora/presentation/institute/controllers/institute_subscription_controller.dart';
 import 'package:tuoora/data/repositories/auth_repository.dart';
 import 'package:tuoora/data/repositories_impl/auth_repository_impl.dart';
 import 'package:tuoora/data/repositories/daily_update_repository.dart';
@@ -69,6 +70,10 @@ class InstituteBinding extends Bindings {
       fenix: true,
     );
     Get.lazyPut<ReportsController>(() => ReportsController(), fenix: true);
+    Get.lazyPut<InstituteSubscriptionController>(
+      () => InstituteSubscriptionController(Get.find<InstituteRepositoryImpl>()),
+      fenix: true,
+    );
     Get.lazyPut<InstituteProfileController>(
       () => InstituteProfileController(Get.find<InstituteRepositoryImpl>()),
       fenix: true,

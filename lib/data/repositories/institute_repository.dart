@@ -1,3 +1,4 @@
+import 'package:tuoora/data/models/institute_subscription_model.dart';
 import 'dart:io';
 import 'package:tuoora/presentation/institute/models/expense_model.dart';
 import 'package:tuoora/core/api/api_client.dart';
@@ -847,6 +848,23 @@ class InstituteRepository implements InstituteRepositoryImpl {
     );
     if (response.status.hasError) {
       _handleError(response, 'Failed to log salary');
+    }
+  }
+
+  @override
+  Future<InstituteSubscriptionData> getSubscriptionData() async {
+    try {
+      final response = await _apiClient.get(
+        ApiConstants.instituteSubscriptionAllData,
+      );
+
+      final body = response.body;
+      if (body == null || body['data'] == null) {
+        throw Exception('Failed to parse subscription data');
+      }
+      return InstituteSubscriptionData.fromJson(body['data']);
+    } catch (e) {
+      throw Exception(e.toString());
     }
   }
 }

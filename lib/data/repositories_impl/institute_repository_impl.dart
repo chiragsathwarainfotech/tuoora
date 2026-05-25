@@ -1,3 +1,4 @@
+import 'package:tuoora/data/models/institute_subscription_model.dart';
 import 'package:tuoora/data/models/batch_model.dart';
 import 'package:tuoora/data/models/institute_profile_model.dart';
 import 'package:tuoora/data/models/staff_model.dart';
@@ -12,6 +13,7 @@ import 'package:tuoora/data/models/notification_model.dart';
 
 abstract class InstituteRepositoryImpl {
   Future<InstituteProfile> getProfile();
+  Future<InstituteSubscriptionData> getSubscriptionData();
   Future<void> updateProfile(Map<String, dynamic> data);
 
   // Authentication

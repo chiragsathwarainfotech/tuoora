@@ -396,7 +396,7 @@ class InstituteSubscriptionScreen
               Container(
                 padding: AppSpacing.x6.add(AppSpacing.y2),
                 decoration: BoxDecoration(
-                  color: AppColors.divider,
+                  color: AppColors.background,
                   borderRadius: BorderRadius.circular(AppSpacing.s4),
                 ),
                 child: Text(

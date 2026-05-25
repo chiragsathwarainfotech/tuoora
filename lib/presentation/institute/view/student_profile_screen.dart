@@ -12,7 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class StudentProfileScreen extends GetView<InstituteStudentController> {
-  const StudentProfileScreen({super.key});
+  final bool showBottomNav;
+  const StudentProfileScreen({super.key, this.showBottomNav = true});
 
   @override
   Widget build(BuildContext context) {

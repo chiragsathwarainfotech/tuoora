@@ -9,7 +9,8 @@ import 'package:tuoora/presentation/institute/view/add_student_screen.dart';
 import 'package:tuoora/presentation/institute/view/batch_details_screen.dart';
 import 'package:tuoora/presentation/institute/view/institute_profile_view_screen.dart';
 import 'package:tuoora/presentation/institute/view/mark_attendance_screen.dart';
-import 'package:tuoora/presentation/institute/view/student_profile_screen.dart';
+import 'package:tuoora/presentation/institute/view/student_profile_screen.dart'
+    as institute_student_profile;
 import 'package:tuoora/presentation/institute/view/record_fee_screen.dart';
 import 'package:tuoora/presentation/institute/view/edit_profile_screen.dart';
 import 'package:tuoora/presentation/institute/view/institute_security_screen.dart';
@@ -40,8 +41,7 @@ import 'package:tuoora/presentation/institute/bindings/forgot_password_binding.d
 import 'package:tuoora/presentation/shared/view/login_screen.dart';
 import 'package:tuoora/presentation/institute/view/forgot_password_screen.dart';
 import 'package:tuoora/presentation/institute/view/reset_password_screen.dart';
-// import 'package:tuoora/presentation/student/view/student_profile_screen.dart'
-//     as shared;
+import 'package:tuoora/presentation/student/view/student_profile_screen.dart';
 import 'package:tuoora/presentation/student/view/student_notification_screen.dart'
     as shared;
 import 'package:tuoora/presentation/student/view/student_main_screen.dart';
@@ -290,7 +290,7 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.instituteStudentProfile,
-      page: () => const StudentProfileScreen(),
+      page: () => const institute_student_profile.StudentProfileScreen(),
       binding: InstituteBinding(),
     ),
     GetPage(

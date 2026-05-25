@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:fee_easy/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
 
 class AppTextStyles {
   // ============================================
@@ -75,7 +75,7 @@ class AppTextStyles {
     fontSize: 10,
     fontWeight: FontWeight.w800,
     letterSpacing: 1.5,
-    color: AppColors.primaryBlue,
+    color: AppColors.primaryBrand,
   );
 
   static TextStyle get overlineMuted => manrope(
@@ -104,7 +104,7 @@ class AppTextStyles {
   static TextStyle get largeAmount => manrope(
     fontSize: 32,
     fontWeight: FontWeight.w800,
-    color: Colors.white,
+    color: AppColors.white,
     height: 1.0,
   );
 
@@ -138,6 +138,7 @@ class AppTextStyles {
   static TextStyle button = TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.w500,
-    color: Colors.white,
+    color: AppColors.white,
   );
 }
+

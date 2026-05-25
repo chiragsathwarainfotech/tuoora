@@ -1,20 +1,40 @@
-import 'package:fee_easy/core/constants/app_text_styles.dart';
-import 'package:fee_easy/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/app_button.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class StudentHomeworkDetailScreen extends StatelessWidget {
+class StudentHomeworkDetailScreen extends StatefulWidget {
   const StudentHomeworkDetailScreen({super.key});
+
+  @override
+  State<StudentHomeworkDetailScreen> createState() =>
+      _StudentHomeworkDetailScreenState();
+}
+
+class _StudentHomeworkDetailScreenState
+    extends State<StudentHomeworkDetailScreen> {
+  double _progress = 0.05; // Starting at 5%
+  bool _isSubmitted = false;
+
+  void _incrementProgress() {
+    setState(() {
+      if (_progress < 1.0) {
+        _progress = (_progress + 0.50).clamp(0.0, 1.0);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF9FAFC),
+      backgroundColor: AppColors.scaffoldBg,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF1E3A8A)),
+          icon: const Icon(Icons.arrow_back, color: AppColors.primaryBrand),
           onPressed: () => Get.back(),
         ),
         title: Text(
@@ -22,15 +42,9 @@ class StudentHomeworkDetailScreen extends StatelessWidget {
           style: AppTextStyles.manrope(
             fontSize: 18,
             fontWeight: FontWeight.w800,
-            color: const Color(0xFF1E3A8A),
+            color: AppColors.primaryBrand,
           ),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.more_vert, color: Color(0xFF1E3A8A)),
-            onPressed: () {},
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         padding: AppSpacing.x24,
@@ -61,11 +75,11 @@ class StudentHomeworkDetailScreen extends StatelessWidget {
       width: double.infinity,
       padding: AppSpacing.all32,
       decoration: BoxDecoration(
-        color: const Color(0xFF004494),
+        color: AppColors.studentUpdateIconColor,
         borderRadius: BorderRadius.circular(AppSpacing.s32),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF003781).withValues(alpha: 0.2),
+            color: AppColors.primaryBrand.withValues(alpha: 0.2),
             blurRadius: AppSpacing.s20,
             offset: const Offset(0, AppSpacing.s10),
           ),
@@ -80,7 +94,7 @@ class StudentHomeworkDetailScreen extends StatelessWidget {
               vertical: AppSpacing.s8,
             ),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.15),
+              color: AppColors.white.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(AppSpacing.s12),
             ),
             child: Text(
@@ -88,7 +102,7 @@ class StudentHomeworkDetailScreen extends StatelessWidget {
               style: AppTextStyles.manrope(
                 fontSize: 10,
                 fontWeight: FontWeight.w800,
-                color: Colors.white,
+                color: AppColors.white,
                 letterSpacing: 1.2,
               ),
             ),
@@ -99,7 +113,7 @@ class StudentHomeworkDetailScreen extends StatelessWidget {
             style: AppTextStyles.manrope(
               fontSize: 32,
               fontWeight: FontWeight.w800,
-              color: Colors.white,
+              color: AppColors.white,
               height: 1.1,
             ),
           ),
@@ -109,13 +123,15 @@ class StudentHomeworkDetailScreen extends StatelessWidget {
               _buildStatusChip(
                 Icons.calendar_month_outlined,
                 'Due: Oct 24, 2023',
-                Colors.white.withValues(alpha: 0.1),
+                AppColors.white.withValues(alpha: 0.1),
               ),
               AppSpacing.h12,
               _buildStatusChip(
                 Icons.access_time_rounded,
-                'Status: Pending',
-                const Color(0xFF8B4513).withValues(alpha: 0.8),
+                _isSubmitted ? 'Status: Submitted' : 'Status: Pending',
+                _isSubmitted
+                    ? AppColors.darkGreen.withValues(alpha: 0.8)
+                    : AppColors.studentTomorrowPillText.withValues(alpha: 0.8),
               ),
             ],
           ),
@@ -136,14 +152,14 @@ class StudentHomeworkDetailScreen extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(icon, color: Colors.white, size: AppSpacing.s14),
+          Icon(icon, color: AppColors.white, size: AppSpacing.s14),
           AppSpacing.h6,
           Text(
             label,
             style: AppTextStyles.manrope(
               fontSize: 11,
               fontWeight: FontWeight.w700,
-              color: Colors.white,
+              color: AppColors.white,
             ),
           ),
         ],
@@ -155,7 +171,7 @@ class StudentHomeworkDetailScreen extends StatelessWidget {
     return Container(
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.s28),
         boxShadow: [
           BoxShadow(
@@ -173,12 +189,12 @@ class StudentHomeworkDetailScreen extends StatelessWidget {
               Container(
                 padding: AppSpacing.all10,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFE5E9EF),
+                  color: AppColors.background,
                   borderRadius: BorderRadius.circular(AppSpacing.s10),
                 ),
                 child: const Icon(
                   Icons.description,
-                  color: Color(0xFF003781),
+                  color: AppColors.primaryBrand,
                   size: AppSpacing.s18,
                 ),
               ),
@@ -188,7 +204,7 @@ class StudentHomeworkDetailScreen extends StatelessWidget {
                 style: AppTextStyles.manrope(
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
-                  color: const Color(0xFF1E293B),
+                  color: AppColors.darkSlate,
                   height: 1.2,
                 ),
               ),
@@ -200,7 +216,7 @@ class StudentHomeworkDetailScreen extends StatelessWidget {
             style: AppTextStyles.lexend(
               fontSize: 13,
               fontWeight: FontWeight.w400,
-              color: const Color(0xFF475569),
+              color: AppColors.textSecondary,
               height: 1.6,
             ),
           ),
@@ -210,7 +226,7 @@ class StudentHomeworkDetailScreen extends StatelessWidget {
             style: AppTextStyles.manrope(
               fontSize: 14,
               fontWeight: FontWeight.w800,
-              color: const Color(0xFF1E293B),
+              color: AppColors.darkSlate,
             ),
           ),
           AppSpacing.v12,
@@ -227,11 +243,11 @@ class StudentHomeworkDetailScreen extends StatelessWidget {
           Container(
             padding: AppSpacing.all20,
             decoration: BoxDecoration(
-              color: const Color(0xFFEEF2FF),
+              color: AppColors.scaffoldBg,
               borderRadius: BorderRadius.circular(AppSpacing.s16),
               border: const Border(
                 left: BorderSide(
-                  color: Color(0xFF003781),
+                  color: AppColors.primaryBrand,
                   width: AppSpacing.s4,
                 ),
               ),
@@ -242,7 +258,7 @@ class StudentHomeworkDetailScreen extends StatelessWidget {
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
                 fontStyle: FontStyle.italic,
-                color: const Color(0xFF1E3A8A),
+                color: AppColors.primaryBrand,
                 height: 1.5,
               ),
             ),
@@ -263,7 +279,7 @@ class StudentHomeworkDetailScreen extends StatelessWidget {
             child: Icon(
               Icons.circle,
               size: AppSpacing.s6,
-              color: Color(0xFF94A3B8),
+              color: AppColors.textMuted,
             ),
           ),
           AppSpacing.h12,
@@ -273,7 +289,7 @@ class StudentHomeworkDetailScreen extends StatelessWidget {
               style: AppTextStyles.lexend(
                 fontSize: 13,
                 fontWeight: FontWeight.w400,
-                color: const Color(0xFF475569),
+                color: AppColors.textSecondary,
                 height: 1.4,
               ),
             ),
@@ -287,7 +303,7 @@ class StudentHomeworkDetailScreen extends StatelessWidget {
     return Container(
       padding: AppSpacing.all16,
       decoration: BoxDecoration(
-        color: const Color(0xFFF1F5F9),
+        color: AppColors.background,
         borderRadius: BorderRadius.circular(AppSpacing.s20),
       ),
       child: Row(
@@ -305,7 +321,7 @@ class StudentHomeworkDetailScreen extends StatelessWidget {
                 style: AppTextStyles.manrope(
                   fontSize: 9,
                   fontWeight: FontWeight.w800,
-                  color: const Color(0xFF94A3B8),
+                  color: AppColors.textMuted,
                   letterSpacing: 0.8,
                 ),
               ),
@@ -315,7 +331,7 @@ class StudentHomeworkDetailScreen extends StatelessWidget {
                 style: AppTextStyles.manrope(
                   fontSize: 15,
                   fontWeight: FontWeight.w800,
-                  color: const Color(0xFF1E293B),
+                  color: AppColors.darkSlate,
                 ),
               ),
             ],
@@ -333,7 +349,7 @@ class StudentHomeworkDetailScreen extends StatelessWidget {
           children: [
             const Icon(
               Icons.link_rounded,
-              color: Color(0xFF003781),
+              color: AppColors.primaryBrand,
               size: AppSpacing.s24,
             ),
             AppSpacing.h12,
@@ -342,7 +358,7 @@ class StudentHomeworkDetailScreen extends StatelessWidget {
               style: AppTextStyles.manrope(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
-                color: const Color(0xFF111827),
+                color: AppColors.textPrimary,
               ),
             ),
           ],
@@ -351,7 +367,7 @@ class StudentHomeworkDetailScreen extends StatelessWidget {
         Container(
           padding: AppSpacing.all24,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             borderRadius: BorderRadius.circular(AppSpacing.s28),
             boxShadow: [
               BoxShadow(
@@ -374,6 +390,15 @@ class StudentHomeworkDetailScreen extends StatelessWidget {
                 'PROBLEM SET',
                 Icons.description_rounded,
               ),
+              AppSpacing.v24,
+              Text(
+                'Tip: Open both files to reach 100% progress.',
+                style: AppTextStyles.lexend(
+                  fontSize: 11,
+                  color: AppColors.textTertiary,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
             ],
           ),
         ),
@@ -382,58 +407,58 @@ class StudentHomeworkDetailScreen extends StatelessWidget {
   }
 
   Widget _buildFileCard(String name, String type, IconData icon) {
-    return Container(
-      padding: AppSpacing.all16,
-      decoration: BoxDecoration(
-        color: const Color(0xFFF8FAFC),
-        borderRadius: BorderRadius.circular(AppSpacing.s16),
-        border: Border.all(color: const Color(0xFFEDF2F7)),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: AppSpacing.all10,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(AppSpacing.s10),
+    return InkWell(
+      onTap: _incrementProgress,
+      borderRadius: BorderRadius.circular(AppSpacing.s16),
+      child: Container(
+        padding: AppSpacing.all16,
+        decoration: BoxDecoration(
+          color: AppColors.scaffoldBg,
+          borderRadius: BorderRadius.circular(AppSpacing.s16),
+          border: Border.all(color: AppColors.borderGrey),
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: AppSpacing.all10,
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(AppSpacing.s10),
+              ),
+              child: Icon(icon, color: AppColors.error, size: AppSpacing.s18),
             ),
-            child: Icon(
-              icon,
-              color: const Color(0xFF991B1B),
-              size: AppSpacing.s18,
-            ),
-          ),
-          AppSpacing.h16,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  name,
-                  style: AppTextStyles.manrope(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w800,
-                    color: const Color(0xFF1E293B),
+            AppSpacing.h16,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    style: AppTextStyles.manrope(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.darkSlate,
+                    ),
                   ),
-                ),
-                Text(
-                  type,
-                  style: AppTextStyles.manrope(
-                    fontSize: 9,
-                    fontWeight: FontWeight.w800,
-                    color: const Color(0xFF94A3B8),
-                    letterSpacing: 0.5,
+                  Text(
+                    type,
+                    style: AppTextStyles.manrope(
+                      fontSize: 9,
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.textMuted,
+                      letterSpacing: 0.5,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          const Icon(
-            Icons.file_download_outlined,
-            color: Color(0xFF64748B),
-            size: AppSpacing.s22,
-          ),
-        ],
+            const Icon(
+              Icons.file_download_outlined,
+              color: AppColors.textTertiary,
+              size: AppSpacing.s22,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -442,7 +467,7 @@ class StudentHomeworkDetailScreen extends StatelessWidget {
     return Container(
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
-        color: const Color(0xFFE5E9EF),
+        color: AppColors.background,
         borderRadius: BorderRadius.circular(AppSpacing.s20),
       ),
       child: Column(
@@ -455,16 +480,16 @@ class StudentHomeworkDetailScreen extends StatelessWidget {
                 style: AppTextStyles.manrope(
                   fontSize: 10,
                   fontWeight: FontWeight.w800,
-                  color: const Color(0xFF64748B),
+                  color: AppColors.textTertiary,
                   letterSpacing: 1.0,
                 ),
               ),
               Text(
-                '0%',
+                '${(_progress * 100).toInt()}%',
                 style: AppTextStyles.manrope(
                   fontSize: 12,
                   fontWeight: FontWeight.w800,
-                  color: const Color(0xFF111827),
+                  color: AppColors.textPrimary,
                 ),
               ),
             ],
@@ -472,11 +497,13 @@ class StudentHomeworkDetailScreen extends StatelessWidget {
           AppSpacing.v12,
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: const LinearProgressIndicator(
-              value: 0.05,
+            child: LinearProgressIndicator(
+              value: _progress,
               minHeight: AppSpacing.s12,
-              backgroundColor: Color(0xFFD1D9E4),
-              valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF003781)),
+              backgroundColor: AppColors.borderLightGray,
+              valueColor: const AlwaysStoppedAnimation<Color>(
+                AppColors.primaryBrand,
+              ),
             ),
           ),
         ],
@@ -485,38 +512,43 @@ class StudentHomeworkDetailScreen extends StatelessWidget {
   }
 
   Widget _buildSubmitButton() {
+    final bool isEnabled = _progress >= 1.0 && !_isSubmitted;
+
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: AppSpacing.s20),
       decoration: BoxDecoration(
-        color: const Color(0xFF003781),
-        borderRadius: BorderRadius.circular(AppSpacing.s20),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFF003781).withValues(alpha: 0.3),
-            blurRadius: AppSpacing.s20,
-            offset: const Offset(0, AppSpacing.s10),
-          ),
-        ],
+        boxShadow: isEnabled
+            ? [
+                BoxShadow(
+                  color: AppColors.primaryBrand.withValues(alpha: 0.3),
+                  blurRadius: AppSpacing.s20,
+                  offset: const Offset(0, AppSpacing.s10),
+                ),
+              ]
+            : null,
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(
-            Icons.note_add_rounded,
-            color: Colors.white,
-            size: AppSpacing.s20,
-          ),
-          AppSpacing.h12,
-          Text(
-            'Submit Assignment',
-            style: AppTextStyles.manrope(
-              fontSize: 16,
-              fontWeight: FontWeight.w800,
-              color: Colors.white,
-            ),
-          ),
-        ],
+      child: AppButton(
+        label: _isSubmitted ? 'Submitted' : 'Submit Assignment',
+        icon: _isSubmitted
+            ? Icons.check_circle_rounded
+            : Icons.note_add_rounded,
+        backgroundColor: AppColors.primaryBrand,
+        isDisabled: !isEnabled,
+        borderRadius: 20,
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        onPressed: isEnabled
+            ? () {
+                setState(() => _isSubmitted = true);
+                Get.snackbar(
+                  'Success',
+                  'Homework submitted successfully!',
+                  backgroundColor: AppColors.darkGreen,
+                  colorText: AppColors.white,
+                  snackPosition: SnackPosition.BOTTOM,
+                  margin: const EdgeInsets.all(16),
+                );
+              }
+            : null,
       ),
     );
   }

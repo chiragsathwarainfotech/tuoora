@@ -1,145 +1,195 @@
-import 'package:fee_easy/core/constants/app_colors.dart';
-import 'package:fee_easy/core/constants/app_strings.dart';
-import 'package:fee_easy/core/constants/app_text_styles.dart';
-import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
-import 'package:fee_easy/core/theme/app_spacing.dart';
+﻿import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/presentation/institute/controllers/attendance_controller.dart';
+import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
+import 'package:tuoora/presentation/institute/widgets/institute_bottom_button.dart';
+import 'package:tuoora/core/widgets/app_search_field.dart';
+import 'package:tuoora/presentation/institute/widgets/common_state_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class MarkAttendanceScreen extends StatefulWidget {
+class MarkAttendanceScreen extends GetView<AttendanceController> {
   const MarkAttendanceScreen({super.key});
-
-  @override
-  State<MarkAttendanceScreen> createState() => _MarkAttendanceScreenState();
-}
-
-class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
-  // Using simple list for mock state
-  final List<Map<String, dynamic>> students = [
-    {
-      'name': 'Aria Smith',
-      'id': 'PHY-2023-001',
-      'isPresent': true,
-      'avatar': 'https://i.pravatar.cc/150?u=aria',
-    },
-    {
-      'name': 'Julian Chen',
-      'id': 'PHY-2023-042',
-      'isPresent': true,
-      'avatar': 'https://i.pravatar.cc/150?u=julian',
-    },
-    {
-      'name': 'Elena Rodriguez',
-      'id': 'PHY-2023-115',
-      'isPresent': false,
-      'avatar': 'https://i.pravatar.cc/150?u=elena',
-    },
-    {
-      'name': 'Marcus Wright',
-      'id': 'PHY-2023-089',
-      'isPresent': true,
-      'avatar': 'https://i.pravatar.cc/150?u=marcus',
-    },
-    {
-      'name': 'Sarah Jenkins',
-      'id': 'PHY-2023-201',
-      'isPresent': true,
-      'avatar': 'https://i.pravatar.cc/150?u=sarah',
-    },
-  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
-        child: Column(
-          children: [
-            const InstituteAppBar(title: 'Mark Attendance'),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: AppSpacing.x24.add(AppSpacing.y16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _buildBatchHeader(),
-                    AppSpacing.v24,
-                    _buildBulkActionButton(),
-                    AppSpacing.v24,
-                    _buildSearchBar(),
-                    AppSpacing.v24,
-                    ...students.map(
-                      (student) => Padding(
-                        padding: AppSpacing.bottom16,
-                        child: _buildStudentCard(student),
+        child: Obx(
+          () => Stack(
+            children: [
+              Column(
+                children: [
+                  InstituteAppBar(
+                    title: 'Mark Attendance',
+                    onBackTap: () => Get.back(),
+                  ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: AppSpacing.x24.add(
+                        const EdgeInsets.only(top: 8, bottom: 16),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          _buildBatchHeader(controller, context),
+                          AppSpacing.v24,
+                          if (controller.isEditable) ...[
+                            _buildBulkActionButtons(controller),
+                            AppSpacing.v24,
+                          ],
+                          _buildSearchBar(controller),
+                          AppSpacing.v24,
+                          CommonStateWidget(
+                            isLoading: controller.isLoading.value,
+                            isEmpty: controller.filteredStudents.isEmpty,
+                            emptyTitle: 'No students found',
+                            emptySubtitle:
+                                'There are no students assigned to this batch or matching your search.',
+                            emptyIcon: Icons.group_off_rounded,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: controller.filteredStudents
+                                  .map(
+                                    (student) => Padding(
+                                      padding: AppSpacing.bottom16,
+                                      child: _buildStudentCard(
+                                        controller,
+                                        student,
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ),
-            _buildSubmitButton(),
-          ],
+            ],
+          ),
         ),
+      ),
+      bottomNavigationBar: Obx(
+        () => (controller.isEditable && controller.allStudents.isNotEmpty)
+            ? InstituteBottomButton(
+                label: 'Submit Attendance',
+                icon: Icons.check_circle_rounded,
+                onTap: () => controller.submitAttendance(),
+              )
+            : const SizedBox.shrink(),
       ),
     );
   }
 
-  Widget _buildBatchHeader() {
+  Widget _buildBatchHeader(
+    AttendanceController controller,
+    BuildContext context,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          AppStrings.instBatchPhysics,
+          controller.batch.title,
           style: AppTextStyles.manrope(
-            fontSize: 28,
+            fontSize: 24,
             fontWeight: FontWeight.w800,
             color: AppColors.textPrimary,
           ),
         ),
-        AppSpacing.v4,
-        Text(
-          'October 24, 2023 • Tuesday',
-          style: AppTextStyles.manrope(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: AppColors.textSecondary,
+        AppSpacing.v12,
+        GestureDetector(
+          onTap: () => controller.selectDate(context),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              color: AppColors.paleSilver,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.calendar_today_outlined,
+                  size: 18,
+                  color: AppColors.textPrimary,
+                ),
+                AppSpacing.h12,
+                Text(
+                  controller.formattedDate,
+                  style: AppTextStyles.manrope(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                AppSpacing.h12,
+                const Icon(
+                  Icons.keyboard_arrow_down_rounded,
+                  size: 20,
+                  color: AppColors.textPrimary,
+                ),
+              ],
+            ),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildBulkActionButton() {
+  Widget _buildBulkActionButtons(AttendanceController controller) {
+    return Row(
+      children: [
+        Expanded(
+          child: _buildBulkButton(
+            label: 'All Present',
+            icon: Icons.done_all_rounded,
+            color: AppColors.primaryBrand,
+            onTap: () => controller.markAllPresent(),
+          ),
+        ),
+        AppSpacing.h16,
+        Expanded(
+          child: _buildBulkButton(
+            label: 'All Absent',
+            icon: Icons.person_off_rounded,
+            color: AppColors.brandAppBarColor,
+            onTap: () => controller.markAllAbsent(),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBulkButton({
+    required String label,
+    required IconData icon,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
     return OutlinedButton(
-      onPressed: () {
-        setState(() {
-          for (var s in students) {
-            s['isPresent'] = true;
-          }
-        });
-      },
+      onPressed: onTap,
       style: OutlinedButton.styleFrom(
-        side: const BorderSide(color: Color(0xFFD1D5DB)),
+        side: BorderSide(color: color.withValues(alpha: 0.3)),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        padding: AppSpacing.y16,
-        backgroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        backgroundColor: AppColors.white,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(
-            Icons.done_all_rounded,
-            color: Color(0xFF1E3A8A),
-            size: AppSpacing.s20,
-          ),
+          Icon(icon, color: color, size: 18),
           AppSpacing.h8,
           Text(
-            AppStrings.instMarkAllPresent,
+            label,
             style: AppTextStyles.manrope(
-              fontSize: 16,
-              fontWeight: FontWeight.w800,
-              color: const Color(0xFF1E3A8A),
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+              color: color,
             ),
           ),
         ],
@@ -147,58 +197,40 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
     );
   }
 
-  Widget _buildSearchBar() {
-    return Container(
-      padding: AppSpacing.x16,
-      decoration: BoxDecoration(
-        color: const Color(0xFFE5E7EB).withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: TextField(
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          icon: const Icon(Icons.search, color: AppColors.textMuted),
-          hintText: AppStrings.instSearchStudentHintAlt,
-          hintStyle: AppTextStyles.manrope(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: AppColors.textMuted,
-          ),
-        ),
-      ),
+  Widget _buildSearchBar(AttendanceController controller) {
+    return AppSearchField(
+      hintText: 'Search student by name or ID...',
+      onChanged: (value) => controller.searchQuery.value = value,
     );
   }
 
-  Widget _buildStudentCard(Map<String, dynamic> student) {
+  Widget _buildStudentCard(
+    AttendanceController controller,
+    AttendanceStudent student,
+  ) {
     return Container(
       padding: AppSpacing.all16,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: const Color(0xFFE5E7EB).withValues(alpha: 0.5),
-        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
             blurRadius: 10,
-            offset: const Offset(0, AppSpacing.s4),
+            offset: const Offset(0, 4),
           ),
         ],
       ),
       child: Row(
         children: [
-          CircleAvatar(
-            radius: 20,
-            backgroundImage: NetworkImage(student['avatar']),
-          ),
-          AppSpacing.h12,
+          _buildStudentAvatar(student.profileImageUrl, student.name),
+          AppSpacing.h16,
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  student['name'],
+                  student.name,
                   style: AppTextStyles.manrope(
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
@@ -206,7 +238,7 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
                   ),
                 ),
                 Text(
-                  'ID: ${student['id']}',
+                  'ID: ${student.id}',
                   style: AppTextStyles.manrope(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
@@ -216,98 +248,118 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
               ],
             ),
           ),
-          _buildStatusToggle(student),
+          _buildStatusToggle(controller, student),
         ],
       ),
     );
   }
 
-  Widget _buildStatusToggle(Map<String, dynamic> student) {
-    bool isPresent = student['isPresent'];
+  Widget _buildStatusToggle(
+    AttendanceController controller,
+    AttendanceStudent student,
+  ) {
+    bool isPresent = student.isPresent;
+    final isEditable = controller.isEditable;
+
     return Container(
-      height: AppSpacing.s36,
+      height: 36,
       decoration: BoxDecoration(
-        color: AppColors.instStatusPickerBg,
-        borderRadius: BorderRadius.circular(8),
+        color: AppColors.paleSilver,
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
         children: [
-          GestureDetector(
-            onTap: () => setState(() => student['isPresent'] = true),
-            child: Container(
-              padding: AppSpacing.x12,
-              decoration: BoxDecoration(
-                color: isPresent ? const Color(0xFF1E3A8A) : Colors.transparent,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              alignment: Alignment.center,
-              child: Text(
-                AppStrings.instStatusPresentRaw,
-                style: AppTextStyles.manrope(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w900,
-                  color: isPresent ? Colors.white : AppColors.textSecondary,
-                  letterSpacing: 0.5,
-                ),
-              ),
-            ),
+          _buildToggleOption(
+            label: 'PRESENT',
+            isSelected: isPresent,
+            color: AppColors.primaryBrand,
+            onTap: isEditable
+                ? () => controller.toggleStatus(student, true)
+                : null,
           ),
-          GestureDetector(
-            onTap: () => setState(() => student['isPresent'] = false),
-            child: Container(
-              padding: AppSpacing.x12,
-              decoration: BoxDecoration(
-                color: !isPresent
-                    ? const Color(0xFF7C2D12)
-                    : Colors.transparent,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              alignment: Alignment.center,
-              child: Text(
-                AppStrings.instStatusAbsentRaw,
-                style: AppTextStyles.manrope(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w900,
-                  color: !isPresent ? Colors.white : AppColors.textSecondary,
-                  letterSpacing: 0.5,
-                ),
-              ),
-            ),
+          _buildToggleOption(
+            label: 'ABSENT',
+            isSelected: !isPresent,
+            color: AppColors.activeTracker,
+            onTap: isEditable
+                ? () => controller.toggleStatus(student, false)
+                : null,
           ),
         ],
       ),
     );
   }
 
-  Widget _buildSubmitButton() {
-    return Container(
-      padding: AppSpacing.all24,
-      decoration: BoxDecoration(
-        color: AppColors.scaffoldBg,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, -AppSpacing.s4),
-          ),
-        ],
-      ),
-      child: ElevatedButton(
-        onPressed: () => Get.back(),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF005AC1),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          minimumSize: const Size(double.infinity, AppSpacing.s56),
-          elevation: 0,
+  Widget _buildToggleOption({
+    required String label,
+    required bool isSelected,
+    required Color color,
+    required VoidCallback? onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        decoration: BoxDecoration(
+          color: isSelected ? color : Colors.transparent,
+          borderRadius: BorderRadius.circular(8),
         ),
+        alignment: Alignment.center,
         child: Text(
-          AppStrings.instSubmitAttendance,
+          label,
           style: AppTextStyles.manrope(
-            fontSize: 18,
+            fontSize: 10,
+            fontWeight: FontWeight.w900,
+            color: isSelected ? AppColors.white : AppColors.textSecondary,
+            letterSpacing: 0.5,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStudentAvatar(String? imageUrl, String name) {
+    if (imageUrl != null &&
+        imageUrl.isNotEmpty &&
+        imageUrl.startsWith('http') &&
+        !imageUrl.contains('ui-avatars.com')) {
+      return Container(
+        width: 48,
+        height: 48,
+        decoration: BoxDecoration(
+          color: AppColors.primaryBrandLight,
+          shape: BoxShape.circle,
+          image: DecorationImage(
+            image: NetworkImage(imageUrl),
+            fit: BoxFit.cover,
+          ),
+        ),
+      );
+    }
+
+    final names = name.trim().split(' ');
+    String initials = '';
+    if (names.isNotEmpty) {
+      initials += names[0][0].toUpperCase();
+      if (names.length > 1) {
+        initials += names[names.length - 1][0].toUpperCase();
+      }
+    }
+
+    return Container(
+      width: 48,
+      height: 48,
+      decoration: BoxDecoration(
+        color: AppColors.primaryBrandLight,
+        shape: BoxShape.circle,
+      ),
+      child: Center(
+        child: Text(
+          initials,
+          style: AppTextStyles.manrope(
+            fontSize: 16,
             fontWeight: FontWeight.w800,
-            color: Colors.white,
+            color: AppColors.primaryBrand,
           ),
         ),
       ),

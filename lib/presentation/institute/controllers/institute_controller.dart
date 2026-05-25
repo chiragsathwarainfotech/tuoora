@@ -1,29 +1,13 @@
-import 'package:fee_easy/config/app_routes.dart';
-import 'package:fee_easy/core/constants/app_strings.dart';
+import 'package:tuoora/config/app_routes.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
+import 'package:tuoora/data/models/student_model.dart';
+import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
+import 'package:tuoora/data/repositories_impl/student_repository_impl.dart';
+import 'package:tuoora/presentation/institute/models/fee_record.dart';
+import 'package:tuoora/core/services/download_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-class Student {
-  final String name;
-  final String id;
-  final String grade;
-  final String batch;
-  final String status;
-  final String imageUrl;
-  final bool showOnlineBadge;
-  final bool isPending;
-
-  Student({
-    required this.name,
-    required this.id,
-    required this.grade,
-    required this.batch,
-    required this.status,
-    required this.imageUrl,
-    this.showOnlineBadge = false,
-    this.isPending = false,
-  });
-}
 
 class InstituteController extends GetxController {
   final _currentIndex = 0.obs;
@@ -31,75 +15,166 @@ class InstituteController extends GetxController {
 
   late PageController pageController;
 
-  // Student Registry Logic
+  final StudentRepositoryImpl _studentRepository =
+      Get.find<StudentRepositoryImpl>();
+  final InstituteRepositoryImpl _instituteRepository =
+      Get.find<InstituteRepositoryImpl>();
   final selectedFilter = AppStrings.instFilterAll.obs;
   final students = <Student>[].obs;
-  final filteredStudents = <Student>[].obs;
+  final isLoadingStudents = false.obs;
+
+  // Pagination & Search
+  final searchQuery = ''.obs;
+  final currentPage = 1.obs;
+  final hasMore = true.obs;
+  final isLoadMore = false.obs;
+
+  // Fees State
+  final feeRecords = <FeeRecord>[].obs;
+  final isLoadingFees = false.obs;
+  final currentMonthTotal = 0.0.obs;
+  final feesCurrentPage = 1.obs;
+  final feesHasMore = true.obs;
 
   @override
   void onInit() {
     super.onInit();
     _setInitialIndex();
     pageController = PageController(initialPage: _currentIndex.value);
-    _loadMockStudents();
+    debounce(
+      searchQuery,
+      (_) => fetchStudents(reset: true),
+      time: const Duration(milliseconds: 500),
+    );
+    fetchStudents();
+    fetchFees();
   }
 
-  void _loadMockStudents() {
-    students.assignAll([
-      Student(
-        name: 'Arjun Malhotra',
-        id: 'STU-2024-001',
-        grade: '10th Std',
-        batch: 'Evening • Batch A',
-        status: 'Active',
-        imageUrl: 'https://i.pravatar.cc/150?img=11',
-        showOnlineBadge: true,
-      ),
-      Student(
-        name: 'Sarah Jenkins',
-        id: 'STU-2024-042',
-        grade: '12th Std',
-        batch: 'Morning • Advanced',
-        status: 'Pending',
-        imageUrl: 'https://i.pravatar.cc/150?img=32',
-        isPending: true,
-      ),
-      Student(
-        name: 'Rahul Sharma',
-        id: 'STU-2024-105',
-        grade: '10th Std',
-        batch: 'Evening • Batch B',
-        status: 'Active',
-        imageUrl: 'https://i.pravatar.cc/150?img=12',
-      ),
-      Student(
-        name: 'Priya Gupta',
-        id: 'STU-2024-089',
-        grade: '9th Std',
-        batch: 'Evening • Batch A',
-        status: 'Active',
-        imageUrl: 'https://i.pravatar.cc/150?img=44',
-        showOnlineBadge: true,
-      ),
-    ]);
-    _applyFilter();
+  Future<void> fetchFees({bool reset = false}) async {
+    if (reset) {
+      feesCurrentPage.value = 1;
+      feesHasMore.value = true;
+    }
+
+    if (isLoadingFees.value || (!feesHasMore.value && !reset)) return;
+
+    try {
+      isLoadingFees.value = true;
+      final result = await _instituteRepository.listFees(
+        page: feesCurrentPage.value,
+      );
+
+      if (reset) {
+        feeRecords.assignAll(result.items);
+      } else {
+        feeRecords.addAll(result.items);
+      }
+
+      currentMonthTotal.value = result.currentMonthTotal;
+
+      if (result.items.isEmpty || result.items.length < 10) {
+        feesHasMore.value = false;
+      } else {
+        feesCurrentPage.value++;
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Failed to fetch fees: $e',
+        backgroundColor: Colors.red.withValues(alpha: 0.7),
+        colorText: AppColors.white,
+      );
+    } finally {
+      isLoadingFees.value = false;
+    }
   }
 
-  void setFilter(String filter) {
-    selectedFilter.value = filter;
-    _applyFilter();
+  Future<void> refreshFees() => fetchFees(reset: true);
+
+  Future<void> downloadFeeReport() async {
+    try {
+      Get.snackbar(
+        'Downloading',
+        'Preparing your financial report...',
+        backgroundColor: AppColors.primaryBrand,
+        colorText: AppColors.white,
+        snackPosition: SnackPosition.BOTTOM,
+        showProgressIndicator: true,
+      );
+
+      final bytes = await _instituteRepository.exportFees();
+
+      final downloadService = Get.find<DownloadService>();
+      final fileName =
+          'Fee_Report_${DateTime.now().millisecondsSinceEpoch}.pdf';
+
+      await downloadService.saveFile(
+        bytes: bytes,
+        fileName: fileName,
+        successMessage: 'Record download successfully',
+      );
+    } catch (e) {
+      Get.snackbar(
+        'Download Error',
+        e.toString().replaceAll('Exception: ', ''),
+        backgroundColor: Colors.redAccent,
+        colorText: AppColors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
   }
 
-  void _applyFilter() {
-    if (selectedFilter.value == AppStrings.instFilterAll) {
-      filteredStudents.assignAll(students);
-    } else if (selectedFilter.value == AppStrings.instFilter10th) {
-      filteredStudents.assignAll(students.where((s) => s.grade.contains('10th')));
-    } else if (selectedFilter.value == AppStrings.instFilter9th) {
-      filteredStudents.assignAll(students.where((s) => s.grade.contains('9th')));
-    } else if (selectedFilter.value == AppStrings.instFilterBatches) {
-      // Logic for batches filter if needed
-      filteredStudents.assignAll(students);
+  Future<void> fetchStudents({bool reset = false}) async {
+    if (reset) {
+      currentPage.value = 1;
+      hasMore.value = true;
+    }
+
+    if (isLoadingStudents.value || (!hasMore.value && !reset)) return;
+
+    try {
+      if (reset || students.isEmpty) {
+        isLoadingStudents.value = true;
+      } else {
+        isLoadMore.value = true;
+      }
+
+      final result = await _studentRepository.listStudents(
+        search: searchQuery.value,
+        page: currentPage.value,
+      );
+
+      if (reset) {
+        students.assignAll(result);
+      } else {
+        students.addAll(result);
+      }
+
+      if (result.isEmpty || result.length < 10) {
+        hasMore.value = false;
+      } else {
+        currentPage.value++;
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Failed to fetch students: $e',
+        backgroundColor: Colors.red.withValues(alpha: 0.7),
+        colorText: AppColors.white,
+      );
+    } finally {
+      isLoadingStudents.value = false;
+      isLoadMore.value = false;
+    }
+  }
+
+  void onSearchChanged(String query) {
+    searchQuery.value = query;
+  }
+
+  void loadMoreStudents() {
+    if (hasMore.value && !isLoadingStudents.value && !isLoadMore.value) {
+      fetchStudents();
     }
   }
 
@@ -120,7 +195,7 @@ class InstituteController extends GetxController {
 
   void changePage(int index) {
     if (_currentIndex.value == index) return;
-    
+
     _currentIndex.value = index;
     pageController.animateToPage(
       index,
@@ -133,6 +208,19 @@ class InstituteController extends GetxController {
     _currentIndex.value = index;
     if (pageController.hasClients) {
       pageController.jumpToPage(index);
+    }
+  }
+
+  void addStudent(Student student) {
+    students.insert(0, student);
+    students.refresh();
+  }
+
+  void updateStudent(Student student) {
+    final index = students.indexWhere((s) => s.id == student.id);
+    if (index != -1) {
+      students[index] = student;
+      students.refresh();
     }
   }
 

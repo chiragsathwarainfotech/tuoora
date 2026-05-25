@@ -1,6 +1,6 @@
-import 'package:fee_easy/core/constants/app_colors.dart';
-import 'package:fee_easy/core/constants/app_text_styles.dart';
-import 'package:fee_easy/core/theme/app_spacing.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
 
 class HomeworkTile extends StatelessWidget {
@@ -28,7 +28,7 @@ class HomeworkTile extends StatelessWidget {
       child: Container(
         padding: AppSpacing.all16,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(AppSpacing.s20),
           boxShadow: [
             BoxShadow(
@@ -44,10 +44,14 @@ class HomeworkTile extends StatelessWidget {
               width: AppSpacing.s44,
               height: AppSpacing.s44,
               decoration: BoxDecoration(
-                color: const Color(0xFFF1F5F9),
+                color: AppColors.background,
                 borderRadius: BorderRadius.circular(AppSpacing.s12),
               ),
-              child: Icon(icon, color: AppColors.primaryBlue, size: AppSpacing.s20),
+              child: Icon(
+                icon,
+                color: AppColors.primaryBrand,
+                size: AppSpacing.s20,
+              ),
             ),
             AppSpacing.h16,
             Expanded(
@@ -92,7 +96,7 @@ class HomeworkTile extends StatelessWidget {
                     style: AppTextStyles.manrope(
                       fontSize: 10,
                       fontWeight: FontWeight.w800,
-                      color: const Color(0xFF2B5CCB),
+                      color: AppColors.primaryBrand,
                     ),
                   ),
                 ],

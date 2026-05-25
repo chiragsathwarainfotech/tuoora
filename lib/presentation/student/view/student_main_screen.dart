@@ -1,13 +1,12 @@
-import 'package:fee_easy/core/widgets/student_bottom_nav.dart';
-import 'package:fee_easy/presentation/student/controllers/student_controller.dart';
-import 'package:fee_easy/presentation/student/view/dashboard.dart';
-import 'package:fee_easy/presentation/student/view/homework_center.dart';
-import 'package:fee_easy/presentation/shared/view/attendance_screen.dart'
-    as shared;
-import 'package:fee_easy/presentation/shared/view/institute_screen.dart'
-    as shared;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tuoora/core/widgets/student_bottom_nav.dart';
+import 'package:tuoora/presentation/institute/view/student_profile_screen.dart';
+import 'package:tuoora/presentation/student/controllers/student_controller.dart';
+import 'package:tuoora/presentation/student/view/attendance_screen.dart';
+import 'package:tuoora/presentation/student/view/dashboard.dart';
+import 'package:tuoora/presentation/student/view/student_assignments_screen.dart';
+import 'package:tuoora/presentation/student/view/student_fees_screen.dart';
 
 class StudentMainScreen extends GetView<StudentController> {
   const StudentMainScreen({super.key});
@@ -20,9 +19,10 @@ class StudentMainScreen extends GetView<StudentController> {
         physics: const NeverScrollableScrollPhysics(),
         children: const [
           StudentDashboard(showBottomNav: false),
-          shared.AttendanceScreen(showBottomNav: false),
-          StudentHomeworkScreen(showBottomNav: false),
-          shared.InstituteScreen(showBottomNav: false),
+          StudentAssignmentsScreen(showBottomNav: false),
+          StudentFeesScreen(showBottomNav: false),
+          AttendanceScreen(showBottomNav: false),
+          StudentProfileScreen(showBottomNav: false),
         ],
       ),
       bottomNavigationBar: Obx(

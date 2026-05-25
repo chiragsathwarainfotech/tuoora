@@ -1,8 +1,8 @@
+import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../core/constants/app_strings.dart';
-import '../../core/constants/app_text_styles.dart';
-import '../../core/theme/app_spacing.dart';
 
 class PortalAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -23,7 +23,7 @@ class PortalAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       elevation: 0,
       centerTitle: false,
       title: Row(
@@ -43,7 +43,7 @@ class PortalAppBar extends StatelessWidget implements PreferredSizeWidget {
             style: AppTextStyles.manrope(
               fontSize: 18,
               fontWeight: FontWeight.w800,
-              color: const Color(0xFF1E3A8A),
+              color: AppColors.brandAppBarColor,
             ),
           ),
         ],
@@ -51,10 +51,11 @@ class PortalAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         IconButton(
           onPressed: () => Get.toNamed(notificationsRoute),
-          icon: notificationIcon ??
+          icon:
+              notificationIcon ??
               const Icon(
                 Icons.notifications_none_rounded,
-                color: Color(0xFF111827),
+                color: AppColors.brandAppBarColor,
                 size: AppSpacing.s26,
               ),
         ),
@@ -66,3 +67,4 @@ class PortalAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
+

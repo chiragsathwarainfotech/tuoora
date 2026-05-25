@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
     <key>CFBundleIdentifier</key>
-    <string>com.example.feeEasy</string>
+    <string>com.app.tuoora</string>
     <key>CFBundleName</key>
-    <string>FeeEasy</string>
+    <string>Tuoora</string>
     <key>CFBundleDisplayName</key>
-    <string>FeeEasy</string>
+    <string>Tuoora</string>
     <key>CFBundleVersion</key>
     <string>1</string>
     <key>CFBundleShortVersionString</key>
@@ -24,5 +24,9 @@
         <string>UIInterfaceOrientationLandscapeLeft</string>
         <string>UIInterfaceOrientationLandscapeRight</string>
     </array>
+    <key>NSCameraUsageDescription</key>
+    <string>We need access to your camera to take student profile photos.</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>We need access to your photo library to select student profile photos.</string>
 </dict>
 </plist>

@@ -1,34 +1,104 @@
-import 'package:fee_easy/config/app_routes.dart';
-import 'package:fee_easy/core/constants/app_colors.dart';
-import 'package:fee_easy/core/constants/app_text_styles.dart';
-import 'package:fee_easy/core/theme/app_spacing.dart';
-import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
-import 'package:fee_easy/presentation/institute/view/create_update_screen.dart';
+﻿import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/enums/app_enums.dart';
+import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
+import 'package:tuoora/presentation/institute/view/create_update_screen.dart';
+import 'package:tuoora/presentation/institute/widgets/common_state_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tuoora/presentation/institute/controllers/updates_controller.dart';
+import 'package:intl/intl.dart';
 
 class InstituteUpdatesScreen extends StatelessWidget {
   const InstituteUpdatesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<UpdatesController>();
+
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
         child: Column(
           children: [
-            const InstituteAppBar(title: 'Updates Hub', isRoot: false),
+            const InstituteAppBar(title: 'Updates', isRoot: false),
             Expanded(
-              child: SingleChildScrollView(
-                padding: AppSpacing.all24,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildTimelineHeader(),
-                    AppSpacing.v24,
-                    _buildTimelineList(),
-                  ],
-                ),
+              child: RefreshIndicator(
+                onRefresh: () => controller.fetchUpdates(),
+                color: AppColors.primaryBrand,
+                child: Obx(() {
+                  return CommonStateWidget(
+                    isLoading: controller.isLoading.value,
+                    isEmpty: controller.updatesList.isEmpty,
+                    emptyTitle: 'No Updates Found',
+                    emptySubtitle:
+                        'Broadcast your first update to students and parents to keep them informed.',
+                    emptyIcon: Icons.campaign_outlined,
+                    child: ListView.builder(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 24,
+                      ),
+                      itemCount: controller.updatesList.length,
+                      itemBuilder: (context, index) {
+                        final update = controller.updatesList[index];
+
+                        Color iconBg;
+                        Color iconColor;
+                        IconData icon;
+
+                        final category = update.category;
+                        switch (category) {
+                          case UpdateCategory.Academic:
+                            iconBg = AppColors.studentUpdateIconBg;
+                            iconColor = AppColors.studentUpdateIconColor;
+                            icon = Icons.school_rounded;
+                            break;
+                          case UpdateCategory.Administrative:
+                            iconBg = AppColors.background;
+                            iconColor = AppColors.textSecondary;
+                            icon = Icons.admin_panel_settings_rounded;
+                            break;
+                          case UpdateCategory.Emergency:
+                            iconBg = AppColors.errorBg;
+                            iconColor = AppColors.errorRed;
+                            icon = Icons.error_rounded;
+                            break;
+                          case UpdateCategory.Event:
+                            iconBg = AppColors.errorBg;
+                            iconColor = AppColors.bohoRed;
+                            icon = Icons.celebration_rounded;
+                            break;
+                          case UpdateCategory.Other:
+                            iconBg = AppColors.warningBg;
+                            iconColor = AppColors.studentTomorrowPillText;
+                            icon = Icons.campaign_rounded;
+                            break;
+                        }
+
+                        return _buildTimelineItem(
+                          title: update.topic ?? "No Topic",
+                          subtitle: update.description,
+                          icon: icon,
+                          iconBg: iconBg,
+                          iconColor: iconColor,
+                          badgeText: update.category.name.toUpperCase(),
+                          badgeBg: iconBg,
+                          badgeTextColor: iconColor,
+                          timeText: update.timeAgo,
+                          audienceText: update.audience,
+                          dateText: update.createdAt != null
+                              ? DateFormat(
+                                  'yyyy-dd-MMM',
+                                ).format(update.createdAt!)
+                              : 'Recent',
+                          isLast: index == controller.updatesList.length - 1,
+                        );
+                      },
+                    ),
+                  );
+                }),
               ),
             ),
           ],
@@ -36,84 +106,15 @@ class InstituteUpdatesScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Get.to(() => const CreateUpdateScreen()),
-        backgroundColor: const Color(0xFF0051B3),
-        elevation: 4,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: const Icon(Icons.add, color: Colors.white, size: 28),
+        backgroundColor: AppColors.primaryBrand,
+        child: const Icon(Icons.add, color: AppColors.white),
       ),
     );
   }
 
-  Widget _buildTimelineHeader() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          'Recent Timeline',
-          style: AppTextStyles.manrope(
-            fontSize: 22,
-            fontWeight: FontWeight.w800,
-            color: AppColors.textPrimary,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildTimelineList() {
-    return ListView(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      children: [
-        _buildTimelineItem(
-          icon: Icons.request_quote_rounded,
-          iconBg: const Color(0xFFDBEAFE),
-          iconColor: const Color(0xFF1E40AF),
-          badgeText: 'FEE REMINDER',
-          badgeBg: const Color(0xFFDBEAFE),
-          badgeTextColor: const Color(0xFF1E40AF),
-          timeText: '2h ago',
-          title: 'March Tuition Fee Reminder',
-          subtitleIcon: Icons.people_outline_rounded,
-          subtitleText: '452 Students',
-          dateText: 'Mar 15, 2024',
-          isFirst: true,
-        ),
-        _buildTimelineItem(
-          icon: Icons.menu_book_rounded,
-          iconBg: const Color(0xFFFFEDD5),
-          iconColor: const Color(0xFFC2410C),
-          badgeText: 'HOMEWORK',
-          badgeBg: const Color(0xFFFFEDD5),
-          badgeTextColor: const Color(0xFFC2410C),
-          timeText: '1d ago',
-          title: 'Final Semester Project Guidelines',
-          subtitleIcon: Icons.people_outline_rounded,
-          subtitleText: 'Grade 10 - Batch A',
-          dateText: 'Mar 14, 2024',
-        ),
-        _buildTimelineItem(
-          icon: Icons.campaign_rounded,
-          iconBg: const Color(0xFF003D99),
-          iconColor: Colors.white,
-          badgeText: 'ANNOUNCEMENT',
-          badgeBg: const Color(0xFFDBEAFE),
-          badgeTextColor: const Color(0xFF1E40AF),
-          secondaryBadge: 'URGENT',
-          secondaryBadgeBg: const Color(0xFFB91C1C),
-          timeText: '3d ago',
-          title: 'Annual Sports Day Schedule',
-          subtitleIcon: Icons.people_outline_rounded,
-          subtitleText: 'All Batches',
-          dateText: 'Mar 12, 2024',
-          isLast: true,
-          hasCardBorder: true,
-        ),
-      ],
-    );
-  }
-
   Widget _buildTimelineItem({
+    required String title,
+    required String subtitle,
     required IconData icon,
     required Color iconBg,
     required Color iconColor,
@@ -121,157 +122,151 @@ class InstituteUpdatesScreen extends StatelessWidget {
     required Color badgeBg,
     required Color badgeTextColor,
     required String timeText,
-    required String title,
-    required IconData subtitleIcon,
-    required String subtitleText,
+    required String audienceText,
     required String dateText,
-    String? secondaryBadge,
-    Color? secondaryBadgeBg,
-    bool isFirst = false,
     bool isLast = false,
-    bool hasCardBorder = false,
   }) {
     return IntrinsicHeight(
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Left Timeline Sidebar
-          Column(
-            children: [
-              Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  color: iconBg,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(icon, color: iconColor, size: 24),
-              ),
-              if (!isLast)
-                Expanded(
-                  child: Container(
-                    width: 2,
-                    margin: const EdgeInsets.symmetric(vertical: 8),
-                    color: const Color(0xFFE5E7EB),
-                  ),
-                ),
-            ],
-          ),
-          AppSpacing.h16,
-          // Content Card
-          Expanded(
+          SizedBox(
+            width: 48,
             child: Column(
               children: [
                 Container(
-                  margin: const EdgeInsets.only(bottom: 24),
-                  padding: AppSpacing.all20,
+                  width: 48,
+                  height: 48,
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                    border: hasCardBorder
-                        ? Border.all(color: const Color(0xFFDBEAFE), width: 2)
-                        : null,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.04),
-                        blurRadius: 15,
-                        offset: const Offset(0, 5),
+                    color: iconBg,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(icon, color: iconColor, size: 24),
+                ),
+                if (!isLast)
+                  Expanded(
+                    child: Container(
+                      width: 1,
+                      color: AppColors.borderGrey,
+                      margin: const EdgeInsets.symmetric(vertical: 4),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          AppSpacing.h16,
+          // Right side: Content Card
+          Expanded(
+            child: Container(
+              margin: const EdgeInsets.only(bottom: 24),
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(color: AppColors.background, width: 1.5),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.02),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: badgeBg.withValues(alpha: 0.5),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          badgeText,
+                          style: AppTextStyles.manrope(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w800,
+                            color: badgeTextColor,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        timeText,
+                        style: AppTextStyles.lexend(
+                          fontSize: 11,
+                          color: AppColors.textMuted,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ],
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  AppSpacing.v12,
+                  Text(
+                    title,
+                    style: AppTextStyles.manrope(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                  if (subtitle.isNotEmpty && subtitle != title) ...[
+                    AppSpacing.v8,
+                    Text(
+                      subtitle,
+                      style: AppTextStyles.lexend(
+                        fontSize: 13,
+                        color: AppColors.textSecondary,
+                        height: 1.4,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                  AppSpacing.v16,
+                  Row(
                     children: [
-                      Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 4,
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.people_alt_outlined,
+                              size: 16,
+                              color: AppColors.textMuted.withValues(alpha: 0.8),
                             ),
-                            decoration: BoxDecoration(
-                              color: badgeBg,
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            child: Text(
-                              badgeText,
-                              style: AppTextStyles.manrope(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w900,
-                                color: badgeTextColor,
-                                letterSpacing: 0.5,
-                              ),
-                            ),
-                          ),
-                          if (secondaryBadge != null) ...[
                             AppSpacing.h8,
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                color: secondaryBadgeBg,
-                                borderRadius: BorderRadius.circular(6),
-                              ),
+                            Expanded(
                               child: Text(
-                                secondaryBadge,
-                                style: AppTextStyles.manrope(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w900,
-                                  color: Colors.white,
-                                  letterSpacing: 0.5,
+                                audienceText,
+                                style: AppTextStyles.lexend(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.textSecondary,
                                 ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                           ],
-                          const Spacer(),
-                          Text(
-                            timeText,
-                            style: AppTextStyles.lexend(
-                              fontSize: 11,
-                              color: AppColors.textTertiary,
-                            ),
-                          ),
-                        ],
-                      ),
-                      AppSpacing.v16,
-                      Text(
-                        title,
-                        style: AppTextStyles.manrope(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w800,
-                          color: AppColors.textPrimary,
                         ),
                       ),
-                      AppSpacing.v16,
                       Row(
                         children: [
                           Icon(
-                            subtitleIcon,
-                            size: 16,
-                            color: AppColors.textSecondary,
-                          ),
-                          AppSpacing.h8,
-                          Text(
-                            subtitleText,
-                            style: AppTextStyles.manrope(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.textSecondary,
-                            ),
-                          ),
-                          AppSpacing.h16,
-                          const Icon(
                             Icons.calendar_today_outlined,
                             size: 14,
-                            color: AppColors.textSecondary,
+                            color: AppColors.textMuted.withValues(alpha: 0.8),
                           ),
                           AppSpacing.h8,
                           Text(
                             dateText,
-                            style: AppTextStyles.manrope(
-                              fontSize: 13,
+                            style: AppTextStyles.lexend(
+                              fontSize: 12,
                               fontWeight: FontWeight.w600,
                               color: AppColors.textSecondary,
                             ),
@@ -280,8 +275,8 @@ class InstituteUpdatesScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],

@@ -1,103 +1,154 @@
-import 'package:fee_easy/core/constants/app_colors.dart';
-import 'package:fee_easy/core/constants/app_text_styles.dart';
-import 'package:fee_easy/core/theme/app_spacing.dart';
-import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/enums/app_enums.dart';
+import 'package:tuoora/data/models/batch_model.dart';
+import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
+import 'package:tuoora/core/widgets/app_button.dart';
+import 'package:tuoora/core/widgets/app_input_field.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
+import 'package:tuoora/presentation/institute/controllers/updates_controller.dart';
+import 'package:get/get.dart';
 
-class CreateUpdateScreen extends StatefulWidget {
+class CreateUpdateScreen extends GetView<UpdatesController> {
   const CreateUpdateScreen({super.key});
 
   @override
-  State<CreateUpdateScreen> createState() => _CreateUpdateScreenState();
-}
-
-class _CreateUpdateScreenState extends State<CreateUpdateScreen> {
-  String selectedCategory = 'Fee Reminder';
-  bool appNotificationEnabled = true;
-  bool whatsappEnabled = false;
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.scaffoldBg,
-      body: SafeArea(
-        child: Column(
-          children: [
-            const InstituteAppBar(title: 'Create Update', isRoot: false),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: AppSpacing.all24,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Select Category',
-                      style: AppTextStyles.manrope(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.textSecondary,
-                      ),
+    return Stack(
+      children: [
+        Scaffold(
+          backgroundColor: AppColors.scaffoldBg,
+          body: SafeArea(
+            child: Column(
+              children: [
+                const InstituteAppBar(title: 'Create Update', isRoot: false),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: AppSpacing.all24,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Select Category',
+                          style: AppTextStyles.manrope(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.brandAppBarColor,
+                          ),
+                        ),
+                        AppSpacing.v16,
+                        _buildCategorySelection(controller),
+                        AppSpacing.v32,
+                        _buildTargetAudienceCard(controller),
+                        AppSpacing.v32,
+                        Obx(
+                          () => AppInputField(
+                            label: 'Topic',
+                            hint: 'e.g., Q3 Fee Installment Reminder',
+                            controller: controller.subjectController,
+                            labelSpacing: 12.0,
+                            errorText: controller.triedToSave.value
+                                ? controller.subjectError.value
+                                : null,
+                            textStyle: AppTextStyles.manrope(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.textPrimary,
+                            ),
+                          ),
+                        ),
+                        AppSpacing.v32,
+                        Obx(
+                          () => AppInputField(
+                            label: 'Message Content',
+                            hint: 'Write your message here...',
+                            controller: controller.messageController,
+                            maxLines: 6,
+                            labelSpacing: 12.0,
+                            errorText: controller.triedToSave.value
+                                ? controller.messageError.value
+                                : null,
+                            textStyle: AppTextStyles.manrope(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.textPrimary,
+                            ),
+                          ),
+                        ),
+                        AppSpacing.v32,
+                        _buildAttachmentSection(controller),
+                        AppSpacing.v32,
+                        _buildBroadcastChannels(controller),
+                        AppSpacing.v40,
+                      ],
                     ),
-                    AppSpacing.v16,
-                    _buildCategorySelection(),
-                    AppSpacing.v32,
-                    _buildTargetAudienceCard(),
-                    AppSpacing.v32,
-                    _buildInputField('Subject', 'e.g., Q3 Fee Installment Reminder'),
-                    AppSpacing.v32,
-                    _buildInputField('Message Content', 'Write your message here...', maxLines: 6),
-                    AppSpacing.v32,
-                    _buildAttachmentButton(),
-                    AppSpacing.v32,
-                    _buildBroadcastChannels(),
-                    AppSpacing.v40,
-                  ],
+                  ),
+                ),
+                Padding(
+                  padding: AppSpacing.all24,
+                  child: _buildBroadcastButton(controller),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Obx(() {
+          if (controller.isCreating.value) {
+            return Container(
+              color: Colors.black.withValues(alpha: 0.3),
+              child: const Center(child: CommonLoading()),
+            );
+          }
+          return const SizedBox.shrink();
+        }),
+      ],
+    );
+  }
+
+  Widget _buildCategorySelection(UpdatesController controller) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Obx(
+        () => Row(
+          children: UpdateCategory.values.map((cat) {
+            final isSelected = controller.selectedCategory.value == cat;
+            return GestureDetector(
+              onTap: () => controller.selectedCategory.value = cat,
+              child: Container(
+                margin: const EdgeInsets.only(right: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 12,
+                ),
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? AppColors.primaryBrand
+                      : AppColors.paleSilver,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  cat.name,
+                  style: AppTextStyles.manrope(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: isSelected ? AppColors.white : AppColors.textPrimary,
+                  ),
                 ),
               ),
-            ),
-            _buildBroadcastButton(),
-          ],
+            );
+          }).toList(),
         ),
       ),
     );
   }
 
-  Widget _buildCategorySelection() {
-    final categories = ['Fee Reminder', 'Event', 'Holiday', 'Notice'];
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: categories.map((cat) {
-          final isSelected = selectedCategory == cat;
-          return GestureDetector(
-            onTap: () => setState(() => selectedCategory = cat),
-            child: Container(
-              margin: const EdgeInsets.only(right: 12),
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-              decoration: BoxDecoration(
-                color: isSelected ? const Color(0xFF003D82) : const Color(0xFFE5E7EB),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Text(
-                cat,
-                style: AppTextStyles.manrope(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  color: isSelected ? Colors.white : AppColors.textPrimary,
-                ),
-              ),
-            ),
-          );
-        }).toList(),
-      ),
-    );
-  }
-
-  Widget _buildTargetAudienceCard() {
+  Widget _buildTargetAudienceCard(UpdatesController controller) {
     return Container(
       padding: AppSpacing.all20,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -114,120 +165,284 @@ class _CreateUpdateScreenState extends State<CreateUpdateScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Target Audience',
+                'Recipient',
                 style: AppTextStyles.manrope(
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
-                  color: const Color(0xFF003D82),
+                  color: AppColors.brandAppBarColor,
                 ),
               ),
-              const Icon(Icons.people_outline_rounded, color: AppColors.textMuted, size: 20),
+              const Icon(
+                Icons.people_outline_rounded,
+                color: AppColors.textMuted,
+                size: 20,
+              ),
             ],
           ),
           AppSpacing.v16,
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             decoration: BoxDecoration(
-              color: const Color(0xFFE5E7EB),
+              color: AppColors.paleSilver,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<String>(
-                value: 'All Students',
-                isExpanded: true,
-                icon: const Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.textPrimary),
-                items: ['All Students', 'Specific Batch', 'Specific Grade'].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(
-                      value,
-                      style: AppTextStyles.manrope(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimary,
+            child: Obx(
+              () => DropdownButtonHideUnderline(
+                child: DropdownButton<UpdateRecipient>(
+                  value: controller.selectedRecipient.value,
+                  isExpanded: true,
+                  icon: const Icon(
+                    Icons.keyboard_arrow_down_rounded,
+                    color: AppColors.textPrimary,
+                  ),
+                  items: UpdateRecipient.values.map((UpdateRecipient value) {
+                    return DropdownMenuItem<UpdateRecipient>(
+                      value: value,
+                      child: Text(
+                        value.name.capitalizeFirst!,
+                        style: AppTextStyles.manrope(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textPrimary,
+                        ),
                       ),
-                    ),
-                  );
-                }).toList(),
-                onChanged: (_) {},
+                    );
+                  }).toList(),
+                  onChanged: (val) => val != null
+                      ? controller.selectedRecipient.value = val
+                      : null,
+                ),
               ),
             ),
           ),
+          Obx(() {
+            if (controller.selectedRecipient.value != UpdateRecipient.parents) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AppSpacing.v24,
+                  Text(
+                    'Target Audience',
+                    style: AppTextStyles.manrope(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.brandAppBarColor,
+                    ),
+                  ),
+                  AppSpacing.v12,
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.paleSilver,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<UpdateTargetType>(
+                        value: controller.selectedAudience.value,
+                        isExpanded: true,
+                        icon: const Icon(
+                          Icons.keyboard_arrow_down_rounded,
+                          color: AppColors.textPrimary,
+                        ),
+                        items: UpdateTargetType.values.map((
+                          UpdateTargetType value,
+                        ) {
+                          String label = value == UpdateTargetType.all
+                              ? 'All Students'
+                              : 'Specific Batch';
+                          return DropdownMenuItem<UpdateTargetType>(
+                            value: value,
+                            child: Text(
+                              label,
+                              style: AppTextStyles.manrope(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.textPrimary,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (val) => val != null
+                            ? controller.selectedAudience.value = val
+                            : null,
+                      ),
+                    ),
+                  ),
+                  if (controller.selectedAudience.value ==
+                      UpdateTargetType.batch) ...[
+                    AppSpacing.v24,
+                    Text(
+                      'Select Batch',
+                      style: AppTextStyles.manrope(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.brandAppBarColor,
+                      ),
+                    ),
+                    AppSpacing.v12,
+                    Obx(() {
+                      if (controller.isLoadingBatches.value) {
+                        return const CommonLoading(size: 24, strokeWidth: 2);
+                      }
+                      if (controller.availableBatches.isEmpty) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Text(
+                            'No batches found',
+                            style: AppTextStyles.manrope(
+                              fontSize: 14,
+                              color: Colors.redAccent,
+                            ),
+                          ),
+                        );
+                      }
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.paleSilver,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<Batch>(
+                            value: controller.selectedBatch.value,
+                            isExpanded: true,
+                            icon: const Icon(
+                              Icons.keyboard_arrow_down_rounded,
+                              color: AppColors.textPrimary,
+                            ),
+                            items: controller.availableBatches.map((
+                              Batch value,
+                            ) {
+                              return DropdownMenuItem<Batch>(
+                                value: value,
+                                child: Text(
+                                  '${value.name} • ${value.subject}',
+                                  style: AppTextStyles.manrope(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.textPrimary,
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (val) => val != null
+                                ? controller.selectedBatch.value = val
+                                : null,
+                          ),
+                        ),
+                      );
+                    }),
+                  ],
+                ],
+              );
+            }
+            return const SizedBox.shrink();
+          }),
         ],
       ),
     );
   }
 
-  Widget _buildInputField(String label, String hint, {int maxLines = 1}) {
+  Widget _buildAttachmentSection(UpdatesController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: AppTextStyles.manrope(
-            fontSize: 14,
-            fontWeight: FontWeight.w700,
-            color: AppColors.textSecondary,
-          ),
-        ),
-        AppSpacing.v12,
-        TextField(
-          maxLines: maxLines,
-          decoration: InputDecoration(
-            hintText: hint,
-            hintStyle: AppTextStyles.lexend(
-              fontSize: 14,
-              color: AppColors.textTertiary,
-            ),
-            filled: true,
-            fillColor: const Color(0xFFE5E7EB),
-            border: OutlineInputBorder(
+        GestureDetector(
+          onTap: () => controller.pickAttachments(),
+          child: Container(
+            width: double.infinity,
+            padding: AppSpacing.y20,
+            decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide.none,
+              border: Border.all(color: AppColors.textMuted, width: 1),
             ),
-            contentPadding: AppSpacing.all16,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.attach_file_rounded,
+                  color: AppColors.primaryBrand,
+                  size: 20,
+                ),
+                AppSpacing.h12,
+                Text(
+                  'Add Attachment (Image/PDF)',
+                  style: AppTextStyles.manrope(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.primaryBrand,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
+        Obx(() {
+          if (controller.attachments.isEmpty) return const SizedBox.shrink();
+          return Column(
+            children: [
+              AppSpacing.v16,
+              ...controller.attachments.asMap().entries.map((entry) {
+                final index = entry.key;
+                final fileName = entry.value.split('/').last;
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: AppColors.borderGrey),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        fileName.toLowerCase().endsWith('.pdf')
+                            ? Icons.picture_as_pdf
+                            : Icons.image,
+                        size: 20,
+                        color: AppColors.primaryBrand,
+                      ),
+                      AppSpacing.h12,
+                      Expanded(
+                        child: Text(
+                          fileName,
+                          style: AppTextStyles.manrope(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () => controller.removeAttachment(index),
+                        child: const Icon(
+                          Icons.close,
+                          size: 18,
+                          color: Colors.redAccent,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }),
+            ],
+          );
+        }),
       ],
     );
   }
 
-  Widget _buildAttachmentButton() {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: OutlinedButton(
-        onPressed: () {},
-        style: OutlinedButton.styleFrom(
-          side: const BorderSide(color: Color(0xFF94A3B8), width: 1, style: BorderStyle.solid),
-          padding: AppSpacing.y20,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.attach_file_rounded, color: Color(0xFF003082), size: 20),
-            AppSpacing.h12,
-            Text(
-              'Add Attachment (Image/PDF)',
-              style: AppTextStyles.manrope(
-                fontSize: 14,
-                fontWeight: FontWeight.w800,
-                color: const Color(0xFF003082),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildBroadcastChannels() {
+  Widget _buildBroadcastChannels(UpdatesController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -235,25 +450,29 @@ class _CreateUpdateScreenState extends State<CreateUpdateScreen> {
           'Broadcast Channels',
           style: AppTextStyles.manrope(
             fontSize: 14,
-            fontWeight: FontWeight.w700,
-            color: AppColors.textSecondary,
+            fontWeight: FontWeight.w800,
+            color: AppColors.brandAppBarColor,
           ),
         ),
         AppSpacing.v16,
-        _buildChannelItem(
-          icon: Icons.notifications_rounded,
-          title: 'App Notification',
-          subtitle: 'Push to student devices',
-          value: appNotificationEnabled,
-          onChanged: (val) => setState(() => appNotificationEnabled = val),
+        Obx(
+          () => _buildChannelItem(
+            icon: Icons.notifications_rounded,
+            title: 'App Notification',
+            subtitle: 'Push to devices',
+            value: controller.appNotificationEnabled.value,
+            onChanged: (val) => controller.appNotificationEnabled.value = val,
+          ),
         ),
         AppSpacing.v16,
-        _buildChannelItem(
-          icon: Icons.chat_bubble_rounded,
-          title: 'WhatsApp Message',
-          subtitle: 'Direct to registered number',
-          value: whatsappEnabled,
-          onChanged: (val) => setState(() => whatsappEnabled = val),
+        Obx(
+          () => _buildChannelItem(
+            icon: Icons.chat_bubble_rounded,
+            title: 'WhatsApp Message',
+            subtitle: 'Direct message',
+            value: controller.whatsappEnabled.value,
+            onChanged: (val) => controller.whatsappEnabled.value = val,
+          ),
         ),
       ],
     );
@@ -269,7 +488,7 @@ class _CreateUpdateScreenState extends State<CreateUpdateScreen> {
     return Container(
       padding: AppSpacing.all16,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -284,10 +503,10 @@ class _CreateUpdateScreenState extends State<CreateUpdateScreen> {
           Container(
             padding: AppSpacing.all12,
             decoration: BoxDecoration(
-              color: const Color(0xFFEFF6FF),
+              color: AppColors.successBg,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(icon, color: const Color(0xFF1E40AF), size: 20),
+            child: Icon(icon, color: AppColors.primaryBrand, size: 20),
           ),
           AppSpacing.h16,
           Expanded(
@@ -315,42 +534,18 @@ class _CreateUpdateScreenState extends State<CreateUpdateScreen> {
           Switch.adaptive(
             value: value,
             onChanged: onChanged,
-            activeColor: const Color(0xFF003082),
+            activeThumbColor: AppColors.primaryBrand,
           ),
         ],
       ),
     );
   }
 
-  Widget _buildBroadcastButton() {
-    return Container(
-      padding: AppSpacing.all24,
-      width: double.infinity,
-      child: ElevatedButton(
-        onPressed: () {},
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF0051B3),
-          padding: AppSpacing.y20,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.send_rounded, color: Colors.white, size: 20),
-            AppSpacing.h12,
-            Text(
-              'Broadcast Update',
-              style: AppTextStyles.manrope(
-                fontSize: 16,
-                fontWeight: FontWeight.w800,
-                color: Colors.white,
-              ),
-            ),
-          ],
-        ),
-      ),
+  Widget _buildBroadcastButton(UpdatesController controller) {
+    return AppButton(
+      label: 'Broadcast Update',
+      icon: Icons.send_rounded,
+      onPressed: () => controller.broadcastUpdate(),
     );
   }
 }

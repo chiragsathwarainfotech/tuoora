@@ -1,13 +1,19 @@
-import 'package:fee_easy/config/app_routes.dart';
-import 'package:fee_easy/core/constants/app_colors.dart';
-import 'package:fee_easy/core/constants/app_strings.dart';
-import 'package:fee_easy/core/constants/app_text_styles.dart';
-import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
-import 'package:fee_easy/core/theme/app_spacing.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
+import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/enums/app_enums.dart';
+import 'package:tuoora/presentation/institute/controllers/institute_profile_controller.dart';
+import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
+import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/app_button.dart';
+import 'package:tuoora/core/widgets/app_input_field.dart';
+import 'package:tuoora/core/widgets/app_info_box.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'dart:io';
 
-class InstituteEditProfileScreen extends StatelessWidget {
+class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
   const InstituteEditProfileScreen({super.key});
 
   @override
@@ -15,31 +21,38 @@ class InstituteEditProfileScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
-        child: Column(
-          children: [
-            const InstituteAppBar(
-              title: 'Edit Institute Profile',
-              isRoot: false,
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: AppSpacing.all24,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _buildLogoSection(),
-                    AppSpacing.v32,
-                    _buildFormSection(),
-                    AppSpacing.v24,
-                    _buildSecurityNotice(),
-                    AppSpacing.v40,
-                    _buildActionButtons(),
-                    AppSpacing.v40,
-                  ],
-                ),
+        child: Obx(
+          () => Stack(
+            children: [
+              Column(
+                children: [
+                  const InstituteAppBar(
+                    title: 'Edit Institute Profile',
+                    isRoot: false,
+                  ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: AppSpacing.all24,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          _buildLogoSection(),
+                          AppSpacing.v32,
+                          _buildFormSection(),
+                          AppSpacing.v24,
+                          _buildSecurityNotice(),
+                          AppSpacing.v40,
+                          _buildActionButtons(),
+                          AppSpacing.v40,
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
+              if (controller.isLoading.value) const CommonLoading(),
+            ],
+          ),
         ),
       ),
     );
@@ -50,50 +63,64 @@ class InstituteEditProfileScreen extends StatelessWidget {
       children: [
         Stack(
           children: [
-            Container(
-              width: 140,
-              height: 140,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(32),
-                border: Border.all(color: AppColors.borderGrey, width: 2),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 20,
-                    offset: const Offset(0, 10),
-                  ),
-                ],
-              ),
-              child: const Center(
-                child: Icon(
-                  Icons.school_rounded,
-                  size: 64,
-                  color: AppColors.instPrimaryBlue,
-                ),
+            Obx(
+              () => SizedBox(
+                width: 140,
+                height: 140,
+                child: controller.profileImagePath.value == null
+                    ? const Center(
+                        child: Icon(
+                          Icons.school_rounded,
+                          size: 64,
+                          color: AppColors.primaryBrand,
+                        ),
+                      )
+                    : ClipRRect(
+                        borderRadius: BorderRadius.circular(32),
+                        child:
+                            controller.profileImagePath.value!.startsWith(
+                                  'http',
+                                ) ||
+                                !controller.profileImagePath.value!.contains(
+                                  '/',
+                                )
+                            ? Image.network(
+                                controller.profileImagePath.value!,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    const Icon(Icons.error),
+                              )
+                            : Image.file(
+                                File(controller.profileImagePath.value!),
+                                fit: BoxFit.cover,
+                              ),
+                      ),
               ),
             ),
             Positioned(
               bottom: 8,
               right: 8,
-              child: Container(
-                padding: AppSpacing.all10,
-                decoration: BoxDecoration(
-                  color: AppColors.instPrimaryBlue,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white, width: 3),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.instPrimaryBlue.withValues(alpha: 0.3),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: const Icon(
-                  Icons.camera_alt_rounded,
-                  color: Colors.white,
-                  size: 18,
+              child: GestureDetector(
+                onTap: () => controller.pickImage(),
+                child: Container(
+                  padding: AppSpacing.all10,
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryBrand,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: AppColors.white, width: 3),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.primaryBrand.withValues(alpha: 0.3),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: const Icon(
+                    Icons.camera_alt_rounded,
+                    color: AppColors.white,
+                    size: 18,
+                  ),
                 ),
               ),
             ),
@@ -105,7 +132,7 @@ class InstituteEditProfileScreen extends StatelessWidget {
           style: AppTextStyles.manrope(
             fontSize: 14,
             fontWeight: FontWeight.w800,
-            color: AppColors.instPrimaryBlue,
+            color: AppColors.primaryBrand,
           ),
         ),
       ],
@@ -116,7 +143,7 @@ class InstituteEditProfileScreen extends StatelessWidget {
     return Container(
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
@@ -133,7 +160,7 @@ class InstituteEditProfileScreen extends StatelessWidget {
             children: [
               const Icon(
                 Icons.business_rounded,
-                color: AppColors.instPrimaryBlue,
+                color: AppColors.primaryBrand,
                 size: 20,
               ),
               AppSpacing.h12,
@@ -142,185 +169,125 @@ class InstituteEditProfileScreen extends StatelessWidget {
                 style: AppTextStyles.manrope(
                   fontSize: 12,
                   fontWeight: FontWeight.w900,
-                  color: AppColors.instPrimaryBlue,
+                  color: AppColors.primaryBrand,
                   letterSpacing: 1.2,
                 ),
               ),
             ],
           ),
           AppSpacing.v24,
-          _buildInputField(
-            label: AppStrings.instInstituteNameLabel,
-            initialValue: "St. Augustine's Institute",
-            icon: Icons.school_outlined,
+          Obx(
+            () => AppInputField(
+              label: AppStrings.instInstituteNameLabel,
+              controller: controller.nameController,
+              icon: Icons.school_outlined,
+              variant: AppInputFieldVariant.profile,
+              errorText: controller.instituteNameError.value,
+            ),
           ),
           AppSpacing.v20,
-          _buildInputField(
-            label: AppStrings.instOwnerNameLabel,
-            initialValue: 'Dr. Elizabeth Sterling',
-            icon: Icons.person_outline_rounded,
+          Obx(
+            () => AppInputField(
+              label: AppStrings.instOwnerNameLabel,
+              controller: controller.ownerController,
+              icon: Icons.person_outline_rounded,
+              variant: AppInputFieldVariant.profile,
+              errorText: controller.ownerNameError.value,
+            ),
           ),
           AppSpacing.v20,
-          _buildInputField(
-            label: AppStrings.instContactEmailLabel,
-            initialValue: 'admin@st-augustine.edu',
-            icon: Icons.alternate_email_rounded,
+          Obx(
+            () => AppInputField(
+              label: AppStrings.instContactEmailLabel,
+              controller: controller.emailController,
+              icon: Icons.alternate_email_rounded,
+              keyboardType: TextInputType.emailAddress,
+              enabled: false,
+              variant: AppInputFieldVariant.profile,
+              errorText: controller.emailError.value,
+            ),
           ),
           AppSpacing.v20,
-          _buildInputField(
-            label: AppStrings.instPhoneNumberLabel,
-            initialValue: '+44 20 7946 0123',
-            icon: Icons.phone_iphone_rounded,
+          Obx(
+            () => AppInputField(
+              label: AppStrings.instPhoneNumberLabel,
+              controller: controller.phoneController,
+              icon: Icons.phone_iphone_rounded,
+              keyboardType: TextInputType.number,
+              variant: AppInputFieldVariant.profile,
+              errorText: controller.phoneError.value,
+            ),
           ),
           AppSpacing.v20,
-          _buildInputField(
-            label: 'Institute Address',
-            initialValue: 'Academic District, Cambridge, UK',
+          AppInputField(
+            label: 'Address Line 1',
+            controller: controller.addressLine1Controller,
             icon: Icons.location_on_outlined,
-            isLast: true,
+            variant: AppInputFieldVariant.profile,
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildInputField({
-    required String label,
-    required String initialValue,
-    required IconData icon,
-    bool isLast = false,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: AppTextStyles.manrope(
-            fontSize: 12,
-            fontWeight: FontWeight.w800,
-            color: AppColors.textMuted,
-            letterSpacing: 0.5,
+          AppSpacing.v20,
+          AppInputField(
+            label: 'Address Line 2',
+            controller: controller.addressLine2Controller,
+            icon: Icons.location_on_outlined,
+            variant: AppInputFieldVariant.profile,
           ),
-        ),
-        AppSpacing.v8,
-        Container(
-          padding: AppSpacing.x16.add(AppSpacing.y16),
-          decoration: BoxDecoration(
-            color: AppColors.inputBg,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.borderGrey.withValues(alpha: 0.5)),
+          AppSpacing.v20,
+          AppInputField(
+            label: 'City',
+            controller: controller.cityController,
+            icon: Icons.location_city_rounded,
+            variant: AppInputFieldVariant.profile,
           ),
-          child: Row(
-            children: [
-              Icon(icon, color: AppColors.instPrimaryBlue, size: 20),
-              AppSpacing.h16,
-              Expanded(
-                child: Text(
-                  initialValue,
-                  style: AppTextStyles.manrope(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-              ),
-            ],
+          AppSpacing.v20,
+          AppInputField(
+            label: 'State',
+            controller: controller.stateController,
+            icon: Icons.map_rounded,
+            variant: AppInputFieldVariant.profile,
           ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSecurityNotice() {
-    return Container(
-      padding: AppSpacing.all20,
-      decoration: BoxDecoration(
-        color: const Color(0xFFF0FDF4),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFDCFCE7)),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Icon(
-            Icons.verified_user_rounded,
-            color: Color(0xFF166534),
-            size: 20,
+          AppSpacing.v20,
+          AppInputField(
+            label: 'Country',
+            controller: controller.countryController,
+            icon: Icons.public_rounded,
+            variant: AppInputFieldVariant.profile,
           ),
-          AppSpacing.h16,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  AppStrings.instSecurityNote,
-                  style: AppTextStyles.manrope(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w800,
-                    color: const Color(0xFF166534),
-                  ),
-                ),
-                AppSpacing.v4,
-                Text(
-                  AppStrings.instSecurityNoteDesc,
-                  style: AppTextStyles.lexend(
-                    fontSize: 12,
-                    color: const Color(0xFF15803D),
-                    height: 1.5,
-                  ),
-                ),
-              ],
+          AppSpacing.v20,
+          Obx(
+            () => AppInputField(
+              label: 'Pincode',
+              controller: controller.pincodeController,
+              icon: Icons.pin_drop_rounded,
+              keyboardType: TextInputType.number,
+              variant: AppInputFieldVariant.profile,
+              errorText: controller.pincodeError.value,
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildSecurityNotice() {
+    return const AppInfoBox(
+      icon: Icons.verified_user_rounded,
+      title: AppStrings.instSecurityNote,
+      description: AppStrings.instSecurityNoteDesc,
     );
   }
 
   Widget _buildActionButtons() {
     return Column(
       children: [
-        GestureDetector(
-          onTap: () {
-            Get.back();
-            Get.snackbar(
-              'Profile Updated',
-              'Institute details have been successfully saved.',
-              backgroundColor: const Color(0xFF027A48),
-              colorText: Colors.white,
-              snackPosition: SnackPosition.BOTTOM,
-              margin: AppSpacing.all16,
-            );
-          },
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: AppSpacing.s18),
-            decoration: BoxDecoration(
-              color: AppColors.instDarkBtnBlue,
-              borderRadius: BorderRadius.circular(AppSpacing.s12),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.instDarkBtnBlue.withValues(alpha: 0.2),
-                  blurRadius: AppSpacing.s16,
-                  offset: const Offset(0, AppSpacing.s8),
-                ),
-              ],
-            ),
-            child: Center(
-              child: Text(
-                'Save Profile Changes',
-                style: AppTextStyles.manrope(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
+        AppButton(
+          label: 'Save Profile Changes',
+          icon: Icons.check_circle_outline_rounded,
+          onPressed: () => controller.saveProfile(),
         ),
         AppSpacing.v16,
         GestureDetector(
-          onTap: () => Get.back(),
+          onTap: () => controller.discardChanges(),
           child: Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: AppSpacing.s18),

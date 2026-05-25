@@ -1,97 +1,116 @@
-import 'package:fee_easy/config/app_routes.dart';
-import 'package:fee_easy/presentation/institute/bindings/institute_binding.dart';
-import 'package:fee_easy/presentation/institute/view/institute_main_screen.dart';
-import 'package:fee_easy/presentation/institute/view/dashboard.dart';
-import 'package:fee_easy/presentation/institute/view/edit_student_profile_screen.dart';
-import 'package:fee_easy/presentation/institute/view/students_registry_screen.dart';
-import 'package:fee_easy/presentation/institute/view/add_student_screen.dart';
-import 'package:fee_easy/presentation/institute/view/batch_details_screen.dart';
-import 'package:fee_easy/presentation/institute/view/batches_screen.dart';
-import 'package:fee_easy/presentation/institute/view/attendance_marking_screen.dart';
-import 'package:fee_easy/presentation/institute/view/mark_attendance_screen.dart';
-import 'package:fee_easy/presentation/institute/view/student_profile_screen.dart';
-import 'package:fee_easy/presentation/institute/view/fees_screen.dart';
-import 'package:fee_easy/presentation/institute/view/record_fee_screen.dart';
-import 'package:fee_easy/presentation/institute/view/edit_profile_screen.dart';
-import 'package:fee_easy/presentation/institute/view/institute_profile_view_screen.dart';
-import 'package:fee_easy/presentation/institute/view/institute_security_screen.dart';
-import 'package:fee_easy/presentation/institute/view/institute_subscription_screen.dart';
-import 'package:fee_easy/presentation/institute/view/institute_whatsapp_screen.dart';
-import 'package:fee_easy/presentation/institute/view/fee_reports_screen.dart';
-import 'package:fee_easy/presentation/institute/view/institute_updates_screen.dart';
-import 'package:fee_easy/presentation/institute/view/create_update_screen.dart';
-import 'package:fee_easy/presentation/institute/view/institute_notifications_screen.dart';
-import 'package:fee_easy/presentation/parent/view/parent_main_screen.dart';
-import 'package:fee_easy/presentation/shared/view/payment_history_screen.dart';
-import 'package:fee_easy/presentation/parent/view/homework_tracker_screen.dart';
-import 'package:fee_easy/presentation/parent/view/homework_detail_screen.dart';
-import 'package:fee_easy/presentation/parent/view/attendance_history_screen.dart';
-import 'package:fee_easy/presentation/parent/bindings/parent_binding.dart';
-import 'package:fee_easy/presentation/shared/view/login_screen.dart';
-import 'package:fee_easy/presentation/shared/view/student_profile_screen.dart'
+import 'package:tuoora/data/repositories/student_notifications_repository.dart';
+import 'package:tuoora/config/app_routes.dart';
+import 'package:tuoora/presentation/institute/bindings/institute_binding.dart';
+import 'package:tuoora/presentation/institute/view/batches_screen.dart';
+import 'package:tuoora/presentation/institute/view/fee_transaction_history_screen.dart';
+import 'package:tuoora/presentation/institute/view/fees_screen.dart';
+import 'package:tuoora/presentation/institute/view/institute_main_screen.dart';
+import 'package:tuoora/presentation/institute/view/add_student_screen.dart';
+import 'package:tuoora/presentation/institute/view/batch_details_screen.dart';
+import 'package:tuoora/presentation/institute/view/institute_profile_view_screen.dart';
+import 'package:tuoora/presentation/institute/view/mark_attendance_screen.dart';
+import 'package:tuoora/presentation/institute/view/student_profile_screen.dart';
+import 'package:tuoora/presentation/institute/view/record_fee_screen.dart';
+import 'package:tuoora/presentation/institute/view/edit_profile_screen.dart';
+import 'package:tuoora/presentation/institute/view/institute_security_screen.dart';
+import 'package:tuoora/presentation/institute/view/institute_subscription_screen.dart';
+import 'package:tuoora/presentation/institute/view/institute_whatsapp_screen.dart';
+import 'package:tuoora/presentation/institute/view/fee_report_screen.dart';
+import 'package:tuoora/presentation/institute/view/attendance_report_screen.dart';
+import 'package:tuoora/presentation/institute/view/performance_report_screen.dart';
+import 'package:tuoora/presentation/institute/view/reports_screen.dart';
+import 'package:tuoora/presentation/institute/view/institute_updates_screen.dart';
+import 'package:tuoora/presentation/institute/view/create_update_screen.dart';
+import 'package:tuoora/presentation/institute/view/batch_report_detail_screen.dart';
+import 'package:tuoora/presentation/institute/view/institute_notifications_screen.dart';
+import 'package:tuoora/presentation/institute/view/billing_history_screen.dart';
+import 'package:tuoora/presentation/institute/view/add_edit_batch_screen.dart';
+import 'package:tuoora/presentation/institute/view/batch_students_screen.dart';
+import 'package:tuoora/presentation/institute/view/assign_to_batch_screen.dart';
+import 'package:tuoora/presentation/institute/view/batch_homework_screen.dart';
+import 'package:tuoora/presentation/institute/view/add_homework_screen.dart';
+import 'package:tuoora/presentation/institute/view/homework_rating_screen.dart';
+import 'package:tuoora/presentation/institute/view/batch_resources_screen.dart';
+import 'package:tuoora/presentation/institute/view/resource_detail_screen.dart';
+import 'package:tuoora/presentation/institute/view/students_registry_screen.dart';
+import 'package:tuoora/presentation/student/view/payment_history_screen.dart';
+import 'package:tuoora/presentation/shared/bindings/auth_binding.dart';
+import 'package:tuoora/presentation/institute/bindings/forgot_password_binding.dart';
+import 'package:tuoora/presentation/shared/view/login_screen.dart';
+import 'package:tuoora/presentation/institute/view/forgot_password_screen.dart';
+import 'package:tuoora/presentation/institute/view/reset_password_screen.dart';
+import 'package:tuoora/presentation/student/view/student_profile_screen.dart'
     as shared;
-import 'package:fee_easy/presentation/shared/view/updates_screen.dart'
+import 'package:tuoora/presentation/student/view/student_notification_screen.dart'
     as shared;
-import 'package:fee_easy/presentation/student/view/student_main_screen.dart';
-import 'package:fee_easy/presentation/student/bindings/student_binding.dart';
-import 'package:fee_easy/presentation/student/view/homework_detail_screen.dart';
-import 'package:fee_easy/presentation/shared/view/role_selection_screen.dart';
+import 'package:tuoora/presentation/student/view/student_main_screen.dart';
+import 'package:tuoora/presentation/student/bindings/student_binding.dart';
+import 'package:tuoora/presentation/student/view/homework_detail_screen.dart';
+import 'package:tuoora/presentation/student/view/student_assignment_detail_screen.dart';
+import 'package:tuoora/presentation/student/view/student_attachment_preview_screen.dart';
+import 'package:tuoora/presentation/student/view/student_pay_fees_screen.dart';
+import 'package:tuoora/presentation/student/view/student_receipt_screen.dart';
+
+import 'package:tuoora/presentation/student/view/student_chat_messages_screen.dart';
+import 'package:tuoora/presentation/student/view/student_fee_reminder_screen.dart';
+import 'package:tuoora/presentation/student/view/student_event_detail_screen.dart';
+import 'package:tuoora/presentation/student/view/student_holiday_detail_screen.dart';
+import 'package:tuoora/presentation/student/view/student_reports_screen.dart';
+import 'package:tuoora/presentation/student/view/student_institute_screen.dart';
+import 'package:tuoora/presentation/student/view/student_receipts_list_screen.dart';
+import 'package:tuoora/presentation/student/controllers/student_receipts_list_controller.dart';
+import 'package:tuoora/presentation/student/controllers/fees_controller.dart';
+import 'package:tuoora/presentation/student/controllers/student_notifications_controller.dart';
+import 'package:tuoora/presentation/student/view/student_notification_preferences_screen.dart';
+import 'package:tuoora/presentation/student/controllers/student_notification_preferences_controller.dart';
+import 'package:tuoora/presentation/student/view/student_study_material_screen.dart';
+import 'package:tuoora/presentation/student/controllers/student_study_material_controller.dart';
+import 'package:tuoora/presentation/student/view/student_study_material_detail_screen.dart';
+import 'package:tuoora/presentation/student/controllers/student_study_material_detail_controller.dart';
+import 'package:tuoora/presentation/student/view/student_feedback_screen.dart';
+import 'package:tuoora/presentation/student/controllers/student_feedback_controller.dart';
+import 'package:tuoora/presentation/shared/view/role_selection_screen.dart';
+import 'package:tuoora/presentation/shared/bindings/splash_binding.dart';
+import 'package:tuoora/presentation/shared/view/splash_screen.dart';
+import 'package:tuoora/presentation/institute/bindings/signup_binding.dart';
+import 'package:tuoora/presentation/institute/view/institute_signup_screen.dart';
+import 'package:tuoora/presentation/institute/view/institute_otp_screen.dart';
+import 'package:tuoora/presentation/institute/view/institute_profile_setup_screen.dart';
+import 'package:tuoora/presentation/institute/view/leads_management_screen.dart';
+import 'package:tuoora/presentation/institute/view/add_edit_lead_screen.dart';
+import 'package:tuoora/presentation/institute/view/lead_details_screen.dart';
+import 'package:tuoora/presentation/institute/view/notes_list_screen.dart';
+import 'package:tuoora/presentation/institute/view/add_edit_note_screen.dart';
+import 'package:tuoora/presentation/institute/view/chat_list_screen.dart';
+import 'package:tuoora/presentation/institute/view/create_chat_screen.dart';
+import 'package:tuoora/presentation/institute/view/chat_messages_screen.dart';
+import 'package:tuoora/presentation/institute/view/staff_main_screen.dart';
+import 'package:tuoora/presentation/institute/view/staff_profile_screen.dart';
+import 'package:tuoora/presentation/institute/view/add_edit_staff_screen.dart';
+import 'package:tuoora/presentation/institute/view/salary_history_screen.dart';
+import 'package:tuoora/presentation/institute/view/staff_attendance_screen.dart';
+import 'package:tuoora/presentation/institute/view/log_attendance_screen.dart';
+import 'package:tuoora/presentation/institute/view/add_salary_screen.dart';
+import 'package:tuoora/presentation/institute/view/expenses_screen.dart';
+import 'package:tuoora/presentation/institute/view/add_expense_screen.dart';
+import 'package:tuoora/presentation/institute/view/expense_analysis_screen.dart';
 import 'package:get/get.dart';
 
 class AppPages {
   static final pages = [
     GetPage(
-        name: AppRoutes.roleSelection, page: () => const RoleSelectionScreen()),
-    GetPage(name: AppRoutes.login, page: () => const LoginScreen()),
-    // Parent routes
-    GetPage(
-      name: AppRoutes.parentDashboard,
-      page: () => const ParentMainScreen(),
-      binding: ParentBinding(),
+      name: AppRoutes.splash,
+      page: () => const SplashScreen(),
+      binding: SplashBinding(),
     ),
     GetPage(
-      name: AppRoutes.parentFees,
-      page: () => const ParentMainScreen(),
-      binding: ParentBinding(),
+      name: AppRoutes.roleSelection,
+      page: () => const RoleSelectionScreen(),
     ),
     GetPage(
-      name: AppRoutes.parentAttendance,
-      page: () => const ParentMainScreen(),
-      binding: ParentBinding(),
-    ),
-    GetPage(
-      name: AppRoutes.parentReports,
-      page: () => const ParentMainScreen(),
-      binding: ParentBinding(),
-    ),
-    GetPage(
-      name: AppRoutes.parentInstitute,
-      page: () => const ParentMainScreen(),
-      binding: ParentBinding(),
-    ),
-    GetPage(
-      name: AppRoutes.parentStudentProfile,
-      page: () => const shared.StudentProfileScreen(),
-    ),
-    GetPage(
-      name: AppRoutes.parentUpdates,
-      page: () => const shared.UpdatesScreen(),
-    ),
-    GetPage(
-      name: AppRoutes.parentRecentPayments,
-      page: () => const PaymentHistoryScreen(title: 'Recent Payments'),
-    ),
-    GetPage(
-      name: AppRoutes.parentHomeworkTracker,
-      page: () => const HomeworkTrackerScreen(),
-    ),
-    GetPage(
-      name: AppRoutes.parentAttendanceHistory,
-      page: () => const AttendanceHistoryScreen(),
-    ),
-    GetPage(
-      name: AppRoutes.parentHomeworkDetail,
-      page: () => const HomeworkDetailScreen(),
+      name: AppRoutes.login,
+      page: () => const LoginScreen(),
+      binding: AuthBinding(),
     ),
     // Student routes
     GetPage(
@@ -110,7 +129,12 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.studentNotifications,
-      page: () => const shared.UpdatesScreen(),
+      page: () => const shared.StudentNotificationScreen(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut<StudentNotificationsController>(
+          () => StudentNotificationsController(),
+        );
+      }),
     ),
     GetPage(
       name: AppRoutes.studentHomework,
@@ -122,13 +146,102 @@ class AppPages {
       page: () => const StudentHomeworkDetailScreen(),
     ),
     GetPage(
-      name: AppRoutes.studentInstitute,
-      page: () => const StudentMainScreen(),
+      name: AppRoutes.studentAssignmentDetail,
+      page: () => const StudentAssignmentDetailScreen(),
       binding: StudentBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.studentAttachmentPreview,
+      page: () => const StudentAttachmentPreviewScreen(),
+      binding: StudentBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.studentFeeReceipt,
+      page: () => const StudentReceiptScreen(),
+      binding: StudentBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.studentPayFees,
+      page: () => const StudentPayFeesScreen(),
+      binding: StudentBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.studentInstitute,
+      page: () => const StudentInstituteScreen(),
     ),
     GetPage(
       name: AppRoutes.studentFeeHistory,
       page: () => const PaymentHistoryScreen(title: 'Fee History'),
+    ),
+
+    GetPage(
+      name: AppRoutes.studentChat,
+      page: () => const StudentChatMessagesScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.studentFeeReminder,
+      page: () => const StudentFeeReminderScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.studentEventDetail,
+      page: () => const StudentEventDetailScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.studentHolidayDetail,
+      page: () => const StudentHolidayDetailScreen(),
+    ),
+    GetPage(name: AppRoutes.studentReports, page: () => StudentReportsScreen()),
+    GetPage(
+      name: AppRoutes.studentReceiptsList,
+      page: () => const StudentReceiptsListScreen(),
+      binding: BindingsBuilder(() {
+        // FeesController owns the receipt screen state — make sure it
+        // exists so taps from the list can hand off cleanly.
+        if (!Get.isRegistered<FeesController>()) {
+          Get.lazyPut<FeesController>(() => FeesController(), fenix: true);
+        }
+        Get.lazyPut<StudentReceiptsListController>(
+          () => StudentReceiptsListController(),
+        );
+      }),
+    ),
+    GetPage(
+      name: AppRoutes.studentNotificationPreferences,
+      page: () => const StudentNotificationPreferencesScreen(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut<StudentNotificationPreferencesController>(
+          () => StudentNotificationPreferencesController(
+            StudentNotificationsRepository(Get.find()),
+          ),
+        );
+      }),
+    ),
+    GetPage(
+      name: AppRoutes.studentStudyMaterial,
+      page: () => const StudentStudyMaterialScreen(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut<StudentStudyMaterialController>(
+          () => StudentStudyMaterialController(),
+        );
+      }),
+    ),
+    GetPage(
+      name: AppRoutes.studentStudyMaterialDetail,
+      page: () => const StudentStudyMaterialDetailScreen(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut<StudentStudyMaterialDetailController>(
+          () => StudentStudyMaterialDetailController(),
+        );
+      }),
+    ),
+    GetPage(
+      name: AppRoutes.studentFeedback,
+      page: () => const StudentFeedbackScreen(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut<StudentFeedbackController>(
+          () => StudentFeedbackController(),
+        );
+      }),
     ),
     // Institute routes
     GetPage(
@@ -137,73 +250,94 @@ class AppPages {
       binding: InstituteBinding(),
     ),
     GetPage(
-      name: AppRoutes.instituteStudents,
+      name: AppRoutes.instituteMain,
       page: () => const InstituteMainScreen(),
       binding: InstituteBinding(),
     ),
     GetPage(
-      name: AppRoutes.instituteAddStudent,
-      page: () => const AddStudentScreen(),
+      name: AppRoutes.instituteStudents,
+      page: () => const StudentsRegistryScreen(),
+      binding: InstituteBinding(),
     ),
     GetPage(
-      name: AppRoutes.instituteEditStudentProfile,
-      page: () => const EditStudentProfileScreen(),
+      name: AppRoutes.instituteAddEditStudent,
+      page: () => const AddEditStudentScreen(),
       binding: InstituteBinding(),
     ),
     GetPage(
       name: AppRoutes.instituteFees,
-      page: () => const InstituteMainScreen(),
+      page: () => const InstituteFeesScreen(),
       binding: InstituteBinding(),
     ),
     GetPage(
       name: AppRoutes.instituteRecordFee,
       page: () => const RecordFeeScreen(),
+      binding: InstituteBinding(),
     ),
     GetPage(
       name: AppRoutes.instituteBatchDetails,
       page: () => const BatchDetailsScreen(),
-    ),
-    GetPage(
-      name: AppRoutes.instituteBatches,
-      page: () => const InstituteMainScreen(),
       binding: InstituteBinding(),
     ),
     GetPage(
-      name: AppRoutes.instituteAttendanceMarking,
-      page: () => const AttendanceMarkingScreen(),
+      name: AppRoutes.instituteBatches,
+      page: () => const BatchesScreen(),
+      binding: InstituteBinding(),
     ),
     GetPage(
       name: AppRoutes.instituteMarkAttendance,
       page: () => const MarkAttendanceScreen(),
+      binding: InstituteBinding(),
     ),
     GetPage(
       name: AppRoutes.instituteStudentProfile,
       page: () => const StudentProfileScreen(),
+      binding: InstituteBinding(),
     ),
     GetPage(
       name: AppRoutes.instituteEditProfile,
       page: () => const InstituteEditProfileScreen(),
+      binding: InstituteBinding(),
     ),
     GetPage(
       name: AppRoutes.instituteProfile,
-      page: () => const InstituteMainScreen(),
+      page: () => const InstituteProfileViewScreen(),
       binding: InstituteBinding(),
     ),
     GetPage(
       name: AppRoutes.instituteSecurity,
       page: () => const InstituteSecurityScreen(),
+      binding: InstituteBinding(),
     ),
     GetPage(
       name: AppRoutes.instituteSubscription,
       page: () => const InstituteSubscriptionScreen(),
+      binding: InstituteBinding(),
     ),
     GetPage(
       name: AppRoutes.instituteWhatsApp,
       page: () => const InstituteWhatsAppScreen(),
+      binding: InstituteBinding(),
     ),
     GetPage(
-      name: AppRoutes.instituteFeeReports,
-      page: () => const FeeReportsScreen(),
+      name: AppRoutes.instituteReports,
+      page: () => const ReportsScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteFeeReport,
+      page: () => const FeeReportScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteAttendanceReport,
+      page: () => const AttendanceReportScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.institutePerformanceReport,
+      page: () => const PerformanceReportScreen(),
+      binding: InstituteBinding(),
     ),
     GetPage(
       name: AppRoutes.instituteUpdates,
@@ -218,6 +352,172 @@ class AppPages {
     GetPage(
       name: AppRoutes.instituteNotifications,
       page: () => const InstituteNotificationsScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteBillingHistory,
+      page: () => const BillingHistoryScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteAddBatch,
+      page: () => const AddEditBatchScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteEditBatch,
+      page: () => const AddEditBatchScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteFeeTransactionHistory,
+      page: () => const FeeTransactionHistoryScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteSignup,
+      page: () => const InstituteSignupScreen(),
+      binding: SignupBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteOtp,
+      page: () => const InstituteOtpScreen(),
+      binding: SignupBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteProfileSetup,
+      page: () => const InstituteProfileSetupScreen(),
+      binding: SignupBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteBatchReportDetail,
+      page: () => const BatchReportDetailScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteForgotPassword,
+      page: () => const ForgotPasswordScreen(),
+      binding: ForgotPasswordBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteResetPassword,
+      page: () => const ResetPasswordScreen(),
+      binding: ForgotPasswordBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteBatchStudents,
+      page: () => const BatchStudentsScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteAssignToBatch,
+      page: () => const AssignToBatchScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteBatchHomework,
+      page: () => const BatchHomeworkScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteAddHomework,
+      page: () => const AddHomeworkScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteHomeworkRating,
+      page: () => const HomeworkRatingScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteBatchResources,
+      page: () => const BatchResourcesScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteResourceDetail,
+      page: () => const ResourceDetailScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteLeads,
+      page: () => const LeadsManagementScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteAddEditLead,
+      page: () => const AddEditLeadScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteLeadDetails,
+      page: () => const LeadDetailsScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteNotes,
+      page: () => const NotesListScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteAddEditNote,
+      page: () => const AddEditNoteScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteChats,
+      page: () => const ChatListScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteCreateChat,
+      page: () => const CreateChatScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteChatMessages,
+      page: () => const ChatMessagesScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteStaffs,
+      page: () => const StaffMainScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteStaffDetails,
+      page: () => const StaffProfileScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteAddEditStaff,
+      page: () => const AddEditStaffScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteSalaryHistory,
+      page: () => const SalaryHistoryScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteStaffAttendance,
+      page: () => const StaffAttendanceScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteLogStaffAttendance,
+      page: () => const LogAttendanceScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteAddSalary,
+      page: () => const AddSalaryScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteExpenses,
+      page: () => const ExpensesScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteAddExpense,
+      page: () => const AddExpenseScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteExpenseAnalysis,
+      page: () => const ExpenseAnalysisScreen(),
       binding: InstituteBinding(),
     ),
   ];

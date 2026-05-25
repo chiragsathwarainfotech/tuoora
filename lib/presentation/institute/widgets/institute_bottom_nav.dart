@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:fee_easy/config/app_routes.dart';
-import 'package:fee_easy/core/constants/app_colors.dart';
-import 'package:fee_easy/core/constants/app_strings.dart';
-import 'package:fee_easy/core/theme/app_spacing.dart';
+import 'package:tuoora/config/app_routes.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
+import 'package:tuoora/core/theme/app_spacing.dart';
 
 class InstituteBottomNav extends StatelessWidget {
   final int currentIndex;
@@ -14,7 +14,7 @@ class InstituteBottomNav extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(24),
           topRight: Radius.circular(24),
@@ -39,11 +39,26 @@ class InstituteBottomNav extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildNavItem(0, Icons.grid_view_rounded, AppStrings.instNavDashboard),
-                _buildNavItem(1, Icons.people_alt_outlined, AppStrings.instNavStudents),
-                _buildNavItem(2, Icons.groups_outlined, AppStrings.instNavBatches),
-                _buildNavItem(3, Icons.account_balance_wallet_outlined, AppStrings.instNavFees),
-                _buildNavItem(4, Icons.person_rounded, 'Profile'),
+                _buildNavItem(
+                  0,
+                  Icons.grid_view_rounded,
+                  AppStrings.instNavDashboard,
+                ),
+                _buildNavItem(
+                  1,
+                  Icons.people_alt_outlined,
+                  AppStrings.instNavStudents,
+                ),
+                _buildNavItem(
+                  2,
+                  Icons.groups_outlined,
+                  AppStrings.instNavBatches,
+                ),
+                _buildNavItem(
+                  3,
+                  Icons.account_balance_wallet_outlined,
+                  AppStrings.instNavFees,
+                ),
               ],
             ),
           ),
@@ -55,8 +70,14 @@ class InstituteBottomNav extends StatelessWidget {
   Widget _buildNavItem(int index, IconData icon, String label) {
     final bool isSelected = currentIndex == index;
     final Color itemColor = isSelected
-        ? AppColors.instAccentBlue
-        : AppColors.instNavInactive;
+        ? AppColors.primaryBrand
+        : AppColors.textMuted;
+
+    final Widget iconWidget = Icon(
+      icon,
+      color: itemColor,
+      size: AppSpacing.s22,
+    );
 
     return Expanded(
       child: GestureDetector(
@@ -67,14 +88,14 @@ class InstituteBottomNav extends StatelessWidget {
             duration: const Duration(milliseconds: 250),
             padding: AppSpacing.x16.add(AppSpacing.y8),
             decoration: BoxDecoration(
-              color: isSelected ? AppColors.instNavActive : Colors.transparent,
+              color: isSelected ? AppColors.primaryBrand : Colors.transparent,
               borderRadius: BorderRadius.circular(16),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(icon, color: itemColor, size: AppSpacing.s22),
+                iconWidget,
                 AppSpacing.v4,
                 Flexible(
                   child: FittedBox(
@@ -121,9 +142,6 @@ class InstituteBottomNav extends StatelessWidget {
         break;
       case 3:
         Get.offAllNamed(AppRoutes.instituteFees);
-        break;
-      case 4:
-        Get.offAllNamed(AppRoutes.instituteProfile);
         break;
     }
   }

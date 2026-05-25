@@ -1,67 +1,75 @@
-import 'package:fee_easy/core/constants/app_colors.dart';
-import 'package:fee_easy/core/constants/app_strings.dart';
-import 'package:fee_easy/core/constants/app_text_styles.dart';
-import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
-import 'package:fee_easy/core/theme/app_spacing.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
+import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/widgets/toggle_switch.dart';
+import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
+import 'package:tuoora/core/widgets/app_button.dart';
+import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/app_info_box.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
 
-class InstituteWhatsAppScreen extends StatefulWidget {
+import 'package:tuoora/presentation/institute/controllers/whatsapp_controller.dart';
+import 'package:get/get.dart';
+
+class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
   const InstituteWhatsAppScreen({super.key});
-
-  @override
-  State<InstituteWhatsAppScreen> createState() =>
-      _InstituteWhatsAppScreenState();
-}
-
-class _InstituteWhatsAppScreenState extends State<InstituteWhatsAppScreen> {
-  bool feesReminders = true;
-  bool attendanceAlerts = true;
-  bool homeworkUpdates = false;
-  bool holidayNotices = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
-        child: Column(
+        child: Stack(
           children: [
-            const InstituteAppBar(title: 'WhatsApp Integration', isRoot: false),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: AppSpacing.all24,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      AppStrings.instWhatsAppIntegration,
-                      style: AppTextStyles.manrope(
-                        fontSize: AppSpacing.s28,
-                        fontWeight: FontWeight.w800,
-                        color: const Color(0xFF003082),
-                      ),
-                    ),
-                    AppSpacing.v12,
-                    Text(
-                      AppStrings.instWhatsAppConfigDesc,
-                      style: AppTextStyles.lexend(
-                        fontSize: 14,
-                        height: 1.6,
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
-                    AppSpacing.v32,
-                    _buildMetaConfigCard(),
-                    AppSpacing.v24,
-                    _buildHowToFindBox(),
-                    AppSpacing.v48,
-                    _buildAutomatedAlertsSection(),
-                    AppSpacing.v48,
-                    _buildImpactBanner(),
-                    AppSpacing.v40,
-                  ],
+            Column(
+              children: [
+                const InstituteAppBar(
+                  title: 'WhatsApp Integration',
+                  isRoot: false,
                 ),
-              ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: AppSpacing.all24,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          AppStrings.instWhatsAppIntegration,
+                          style: AppTextStyles.manrope(
+                            fontSize: AppSpacing.s28,
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.brandAppBarColor,
+                          ),
+                        ),
+                        AppSpacing.v12,
+                        Text(
+                          AppStrings.instWhatsAppConfigDesc,
+                          style: AppTextStyles.lexend(
+                            fontSize: 14,
+                            height: 1.6,
+                            color: AppColors.blueSapphire,
+                          ),
+                        ),
+                        AppSpacing.v32,
+                        _buildMetaConfigCard(),
+                        AppSpacing.v24,
+                        _buildHowToFindBox(),
+                        AppSpacing.v48,
+                        _buildAutomatedAlertsSection(),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Obx(
+              () => controller.isLoading.value
+                  ? Container(
+                      color: Colors.black.withValues(alpha: 0.3),
+                      child: const CommonLoading(color: AppColors.white),
+                    )
+                  : const SizedBox.shrink(),
             ),
           ],
         ),
@@ -73,7 +81,7 @@ class _InstituteWhatsAppScreenState extends State<InstituteWhatsAppScreen> {
     return Container(
       padding: AppSpacing.all28,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.s24),
         boxShadow: [
           BoxShadow(
@@ -91,12 +99,12 @@ class _InstituteWhatsAppScreenState extends State<InstituteWhatsAppScreen> {
               Container(
                 padding: AppSpacing.all10,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFE0E7FF),
+                  color: AppColors.primaryBrandLight,
                   borderRadius: BorderRadius.circular(AppSpacing.s10),
                 ),
                 child: const Icon(
                   Icons.settings_input_component_rounded,
-                  color: Color(0xFF4338CA),
+                  color: AppColors.primaryBrand,
                   size: AppSpacing.s24,
                 ),
               ),
@@ -110,14 +118,14 @@ class _InstituteWhatsAppScreenState extends State<InstituteWhatsAppScreen> {
                       style: AppTextStyles.manrope(
                         fontSize: AppSpacing.s18,
                         fontWeight: FontWeight.w800,
-                        color: AppColors.textPrimary,
+                        color: AppColors.brandAppBarColor,
                       ),
                     ),
                     Text(
                       AppStrings.instLinkWhatsAppAccount,
                       style: AppTextStyles.lexend(
                         fontSize: 12,
-                        color: AppColors.textTertiary,
+                        color: AppColors.blueSapphire,
                       ),
                     ),
                   ],
@@ -128,40 +136,42 @@ class _InstituteWhatsAppScreenState extends State<InstituteWhatsAppScreen> {
           AppSpacing.v32,
           _buildInputLabel(AppStrings.instAccessToken),
           AppSpacing.v12,
-          _buildTextField('••••••••••••••••••••••••••••••••', true),
+          _buildTextField(
+            hint: '••••••••••••••••••••••••••••••••',
+            controller: controller.accessTokenController,
+          ),
+          AppSpacing.v24,
+          _buildInputLabel(AppStrings.instPhoneLabel),
+          AppSpacing.v12,
+          _buildTextField(
+            hint: '1234567890',
+            controller: controller.phoneNumberController,
+            keyboardType: TextInputType.phone,
+          ),
           AppSpacing.v24,
           _buildInputLabel(AppStrings.instPhoneNumberId),
           AppSpacing.v12,
-          _buildTextField('1059...', false),
+          _buildTextField(
+            hint: '1059...',
+            controller: controller.phoneNumberIdController,
+            keyboardType: TextInputType.number,
+          ),
           AppSpacing.v24,
           _buildInputLabel(AppStrings.instBusinessAccountId),
           AppSpacing.v12,
-          _buildTextField('2941...', false),
+          _buildTextField(
+            hint: '2941...',
+            controller: controller.businessAccountIdController,
+            keyboardType: TextInputType.number,
+          ),
           AppSpacing.v32,
-          ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF0055BB),
-              foregroundColor: Colors.white,
-              padding: AppSpacing.y20,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(AppSpacing.s12),
-              ),
-              elevation: 0,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.verified_user_rounded, size: AppSpacing.s18),
-                AppSpacing.h8,
-                Text(
-                  AppStrings.instVerifyApiBtn,
-                  style: AppTextStyles.manrope(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-              ],
+          Obx(
+            () => AppButton(
+              label: controller.currentSettings.value != null
+                  ? 'Update Settings'
+                  : AppStrings.instVerifyApiBtn,
+              icon: Icons.verified_user_rounded,
+              onPressed: () => controller.saveSettings(),
             ),
           ),
         ],
@@ -175,74 +185,50 @@ class _InstituteWhatsAppScreenState extends State<InstituteWhatsAppScreen> {
       style: AppTextStyles.manrope(
         fontSize: AppSpacing.s12,
         fontWeight: FontWeight.w800,
-        color: AppColors.textDarkGrey,
+        color: AppColors.brandAppBarColor,
         letterSpacing: 0.5,
       ),
     );
   }
 
-  Widget _buildTextField(String hint, bool isPassword) {
+  Widget _buildTextField({
+    required String hint,
+    required TextEditingController controller,
+    TextInputType keyboardType = TextInputType.text,
+  }) {
     return Container(
-      padding: AppSpacing.x16.add(AppSpacing.y18),
+      padding: AppSpacing.x16.add(AppSpacing.y2),
       decoration: BoxDecoration(
-        color: const Color(0xFFF3F4F6),
+        color: AppColors.paleSilver,
         borderRadius: BorderRadius.circular(AppSpacing.s12),
       ),
-      child: Text(
-        hint,
+      child: TextField(
+        controller: controller,
+        keyboardType: keyboardType,
         style: AppTextStyles.lexend(
           fontSize: AppSpacing.s14,
-          color: AppColors.textSecondary,
+          color: AppColors.textPrimary,
+        ),
+        decoration: InputDecoration(
+          hintText: hint,
+          hintStyle: AppTextStyles.lexend(
+            fontSize: AppSpacing.s14,
+            color: AppColors.blueSapphire,
+          ),
+          border: InputBorder.none,
+          contentPadding: const EdgeInsets.symmetric(vertical: 16),
         ),
       ),
     );
   }
 
   Widget _buildHowToFindBox() {
-    return Container(
-      padding: AppSpacing.all20,
-      decoration: BoxDecoration(
-        color: const Color(0xFFEFF6FF),
-        borderRadius: BorderRadius.circular(AppSpacing.s16),
-        border: Border.all(
-          color: const Color(0xFFBFDBFE).withValues(alpha: 0.5),
-        ),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Icon(
-            Icons.info_rounded,
-            color: Color(0xFF1E40AF),
-            size: AppSpacing.s20,
-          ),
-          AppSpacing.h16,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  AppStrings.instHowToFindThese,
-                  style: AppTextStyles.manrope(
-                    fontSize: AppSpacing.s16,
-                    fontWeight: FontWeight.w800,
-                    color: const Color(0xFF1E40AF),
-                  ),
-                ),
-                AppSpacing.v8,
-                Text(
-                  AppStrings.instHowToFindDesc,
-                  style: AppTextStyles.lexend(
-                    fontSize: AppSpacing.s14,
-                    height: 1.5,
-                    color: const Color(0xFF1E40AF).withValues(alpha: 0.8),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return const AppInfoBox(
+      icon: Icons.info_rounded,
+      title: AppStrings.instHowToFindThese,
+      description: AppStrings.instHowToFindDesc,
+      titleFontSize: AppSpacing.s16,
+      descFontSize: AppSpacing.s14,
     );
   }
 
@@ -254,7 +240,7 @@ class _InstituteWhatsAppScreenState extends State<InstituteWhatsAppScreen> {
           children: [
             const Icon(
               Icons.notification_add_rounded,
-              color: Color(0xFF003082),
+              color: AppColors.primaryBrand,
               size: AppSpacing.s24,
             ),
             AppSpacing.h12,
@@ -263,7 +249,7 @@ class _InstituteWhatsAppScreenState extends State<InstituteWhatsAppScreen> {
               style: AppTextStyles.manrope(
                 fontSize: AppSpacing.s20,
                 fontWeight: FontWeight.w800,
-                color: const Color(0xFF003082),
+                color: AppColors.primaryBrand,
               ),
             ),
           ],
@@ -272,49 +258,49 @@ class _InstituteWhatsAppScreenState extends State<InstituteWhatsAppScreen> {
         Container(
           padding: AppSpacing.y8,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             borderRadius: BorderRadius.circular(AppSpacing.s24),
-            border: Border.all(color: const Color(0xFFF3F4F6)),
+            border: Border.all(color: AppColors.background),
           ),
           child: Column(
             children: [
-              _buildToggleItem(
-                Icons.account_balance_wallet_rounded,
-                const Color(0xFFFFE4E1),
-                const Color(0xFFB91C1C),
-                AppStrings.instFeesReminders,
-                AppStrings.instFeesRemindersDesc,
-                feesReminders,
-                (v) => setState(() => feesReminders = v),
+              Obx(
+                () => _buildToggleItem(
+                  Icons.account_balance_wallet_rounded,
+                  AppStrings.instFeesReminders,
+                  AppStrings.instFeesRemindersDesc,
+                  controller.feesReminders.value,
+                  (v) => controller.feesReminders.value = v,
+                ),
               ),
-              _buildToggleItem(
-                Icons.person_outline_rounded,
-                const Color(0xFFE0E7FF),
-                const Color(0xFF4338CA),
-                AppStrings.instAttendanceAlerts,
-                AppStrings.instAttendanceAlertsDesc,
-                attendanceAlerts,
-                (v) => setState(() => attendanceAlerts = v),
+              Obx(
+                () => _buildToggleItem(
+                  Icons.person_outline_rounded,
+                  AppStrings.instAttendanceAlerts,
+                  AppStrings.instAttendanceAlertsDesc,
+                  controller.attendanceAlerts.value,
+                  (v) => controller.attendanceAlerts.value = v,
+                ),
               ),
-              _buildToggleItem(
-                Icons.auto_stories_rounded,
-                const Color(0xFFE0F2FE),
-                const Color(0xFF0369A1),
-                AppStrings.instHomeworkUpdates,
-                AppStrings.instHomeworkUpdatesDesc,
-                homeworkUpdates,
-                (v) => setState(() => homeworkUpdates = v),
-                showDivider: true,
+              Obx(
+                () => _buildToggleItem(
+                  Icons.auto_stories_rounded,
+                  AppStrings.instHomeworkUpdates,
+                  AppStrings.instHomeworkUpdatesDesc,
+                  controller.homeworkUpdates.value,
+                  (v) => controller.homeworkUpdates.value = v,
+                  showDivider: true,
+                ),
               ),
-              _buildToggleItem(
-                Icons.campaign_rounded,
-                const Color(0xFFF3F4F6),
-                const Color(0xFF4B5563),
-                AppStrings.instHolidayNotices,
-                AppStrings.instHolidayNoticesDesc,
-                holidayNotices,
-                (v) => setState(() => holidayNotices = v),
-                showDivider: false,
+              Obx(
+                () => _buildToggleItem(
+                  Icons.campaign_rounded,
+                  AppStrings.instHolidayNotices,
+                  AppStrings.instHolidayNoticesDesc,
+                  controller.holidayNotices.value,
+                  (v) => controller.holidayNotices.value = v,
+                  showDivider: false,
+                ),
               ),
             ],
           ),
@@ -325,8 +311,6 @@ class _InstituteWhatsAppScreenState extends State<InstituteWhatsAppScreen> {
 
   Widget _buildToggleItem(
     IconData icon,
-    Color iconBg,
-    Color iconColor,
     String title,
     String subtitle,
     bool value,
@@ -342,10 +326,14 @@ class _InstituteWhatsAppScreenState extends State<InstituteWhatsAppScreen> {
               Container(
                 padding: AppSpacing.all12,
                 decoration: BoxDecoration(
-                  color: iconBg,
+                  color: AppColors.primaryBrandLight,
                   borderRadius: BorderRadius.circular(AppSpacing.s14),
                 ),
-                child: Icon(icon, color: iconColor, size: AppSpacing.s24),
+                child: Icon(
+                  icon,
+                  color: AppColors.primaryBrand,
+                  size: AppSpacing.s24,
+                ),
               ),
               AppSpacing.h16,
               Expanded(
@@ -357,25 +345,20 @@ class _InstituteWhatsAppScreenState extends State<InstituteWhatsAppScreen> {
                       style: AppTextStyles.manrope(
                         fontSize: AppSpacing.s16,
                         fontWeight: FontWeight.w800,
-                        color: AppColors.textPrimary,
+                        color: AppColors.brandAppBarColor,
                       ),
                     ),
                     Text(
                       subtitle,
                       style: AppTextStyles.lexend(
                         fontSize: AppSpacing.s12,
-                        color: AppColors.textTertiary,
+                        color: AppColors.blueSapphire,
                       ),
                     ),
                   ],
                 ),
               ),
-              Switch(
-                value: value,
-                onChanged: onChanged,
-                activeThumbColor: Colors.white,
-                activeTrackColor: const Color(0xFF1E40AF),
-              ),
+              ToggleSwitch(value: value, onChanged: onChanged),
             ],
           ),
         ),
@@ -383,51 +366,8 @@ class _InstituteWhatsAppScreenState extends State<InstituteWhatsAppScreen> {
           const Divider(
             height: AppSpacing.s2,
             indent: AppSpacing.s88,
-            color: Color(0xFFF3F4F6),
+            color: AppColors.background,
           ),
-      ],
-    );
-  }
-
-  Widget _buildImpactBanner() {
-    return Column(
-      children: [
-        Text(
-          AppStrings.instImpactQuote,
-          textAlign: TextAlign.center,
-          style: AppTextStyles.lexend(
-            fontSize: AppSpacing.s14,
-            height: 1.5,
-            color: AppColors.textTertiary,
-          ).copyWith(fontStyle: FontStyle.italic),
-        ),
-        AppSpacing.v24,
-        Container(
-          width: double.infinity,
-          height: AppSpacing.s160,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(AppSpacing.s20),
-            image: const DecorationImage(
-              image: NetworkImage(
-                'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=800',
-              ),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(AppSpacing.s20),
-              gradient: LinearGradient(
-                begin: Alignment.bottomCenter,
-                end: Alignment.topCenter,
-                colors: [
-                  Colors.black.withValues(alpha: 0.6),
-                  Colors.transparent,
-                ],
-              ),
-            ),
-          ),
-        ),
       ],
     );
   }

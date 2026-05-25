@@ -1,103 +1,127 @@
-import 'package:fee_easy/config/app_routes.dart';
-import 'package:fee_easy/core/constants/app_colors.dart';
-import 'package:fee_easy/core/constants/app_strings.dart';
-import 'package:fee_easy/core/constants/app_text_styles.dart';
-import 'package:fee_easy/core/theme/app_spacing.dart';
-import 'package:fee_easy/presentation/institute/widgets/institute_bottom_nav.dart';
-import 'package:fee_easy/presentation/institute/widgets/institute_drawer.dart';
-import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
+﻿import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
+import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/presentation/institute/controllers/batch_controller.dart';
+import 'package:tuoora/presentation/institute/models/batch_model.dart';
+import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
+import 'package:tuoora/presentation/institute/widgets/common_state_widget.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tuoora/config/app_routes.dart';
 
-import 'package:fee_easy/presentation/institute/widgets/institute_root_scaffold.dart';
+class BatchesScreen extends StatefulWidget {
+  const BatchesScreen({super.key});
 
-class BatchesScreen extends StatelessWidget {
-  final bool showShell;
-  const BatchesScreen({super.key, this.showShell = true});
+  @override
+  State<BatchesScreen> createState() => _BatchesScreenState();
+}
+
+class _BatchesScreenState extends State<BatchesScreen> {
+  final controller = Get.find<BatchController>();
+  final _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (controller.batchesList.isEmpty) {
+        controller.loadBatches(isRefresh: true);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      controller.loadBatches(isRefresh: false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return InstituteRootScaffold(
-      title: 'Active Batches',
-      currentIndex: 2,
-      showShell: showShell,
-      body: SingleChildScrollView(
-        padding: AppSpacing.all24,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _buildHeader(),
-            AppSpacing.v32,
-            _buildBatchCard(
-              'Mathematics - 10th Std',
-              '08:00 AM - 09:30 AM',
-              '42 Students',
-              'Lab A',
-              AppStrings.instStatusHighCapacity,
-              AppColors.instStatusHighCapacityBg,
-              AppColors.instBorderHighCapacity,
+    return Scaffold(
+      backgroundColor: AppColors.scaffoldBg,
+      body: Stack(
+        children: [
+          SafeArea(
+            child: Column(
+              children: [
+                InstituteAppBar(
+                  title: AppStrings.instNavBatches,
+                  onBackTap: () => Get.back(),
+                ),
+                Expanded(
+                  child: RefreshIndicator(
+                    onRefresh: () => controller.loadBatches(isRefresh: true),
+                    color: AppColors.primaryBrand,
+                    child: Obx(() {
+                      return CommonStateWidget(
+                        isLoading: controller.isLoading.value,
+                        isEmpty: controller.batchesList.isEmpty,
+                        emptyTitle: 'No Batches Found',
+                        emptySubtitle:
+                            'Tap the + button to create your first batch and start managing students.',
+                        emptyIcon: Icons.school_outlined,
+                        child: ListView.separated(
+                          controller: _scrollController,
+                          padding: AppSpacing.all24,
+                          itemCount:
+                              controller.batchesList.length +
+                              (controller.isMoreLoading.value ? 1 : 0),
+                          separatorBuilder: (context, index) => AppSpacing.v16,
+                          itemBuilder: (context, index) {
+                            if (index < controller.batchesList.length) {
+                              final batch = controller.batchesList[index];
+                              return _buildBatchCard(batch);
+                            } else {
+                              return const Center(
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: CommonLoading(
+                                    size: 20,
+                                    strokeWidth: 2,
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                        ),
+                      );
+                    }),
+                  ),
+                ),
+              ],
             ),
-            AppSpacing.v16,
-            _buildBatchCard(
-              'Physics - Advanced',
-              '10:30 AM - 12:00 PM',
-              '50 Students',
-              'Hall 3',
-              AppStrings.instStatusFull,
-              AppColors.instStatusFullBg,
-              AppColors.instBorderFull,
-            ),
-            AppSpacing.v16,
-            _buildBatchCard(
-              'Literature 101',
-              '02:00 PM - 03:30 PM',
-              '18 Students',
-              'Room 12',
-              AppStrings.instStatusOpen,
-              AppColors.instStatusOpenBg,
-              AppColors.instBorderOpen,
-              statusTextColor: AppColors.instStatusOpenText,
-            ),
-            AppSpacing.v32,
-            _buildAnalyticsSection(),
-            AppSpacing.v24,
-          ],
-        ),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          controller.initAddMode();
+          Get.toNamed(AppRoutes.instituteAddBatch);
+        },
+        backgroundColor: AppColors.primaryBrand,
+        child: const Icon(Icons.add, color: AppColors.white, size: 28),
       ),
     );
   }
 
-  Widget _buildHeader() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          AppStrings.instActiveBatchesSubtitle,
-          style: AppTextStyles.lexend(
-            fontSize: 14,
-            fontWeight: FontWeight.w400,
-            color: AppColors.textTertiary,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildBatchCard(
-    String title,
-    String time,
-    String students,
-    String location,
-    String statusLabel,
-    Color statusBg,
-    Color leftBorderColor, {
-    Color statusTextColor = Colors.white,
-  }) {
+  Widget _buildBatchCard(BatchModel batch) {
     return GestureDetector(
-      onTap: () => Get.toNamed(AppRoutes.instituteBatchDetails),
+      onTap: () =>
+          Get.toNamed(AppRoutes.instituteBatchDetails, arguments: batch),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(AppSpacing.s16),
           boxShadow: [
             BoxShadow(
@@ -112,7 +136,7 @@ class BatchesScreen extends StatelessWidget {
           child: IntrinsicHeight(
             child: Row(
               children: [
-                Container(width: AppSpacing.s4, color: leftBorderColor),
+                Container(width: AppSpacing.s4, color: batch.leftBorderColor),
                 Expanded(
                   child: Padding(
                     padding: AppSpacing.all20,
@@ -121,41 +145,45 @@ class BatchesScreen extends StatelessWidget {
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Expanded(
                               child: Text(
-                                title,
+                                batch.title,
                                 style: AppTextStyles.manrope(
                                   fontSize: 18,
                                   fontWeight: FontWeight.w800,
-                                  color: const Color(0xFF1E3A8A),
+                                  color: AppColors.primaryBrand,
                                 ),
                               ),
                             ),
-                            AppSpacing.h8,
                             Container(
                               padding: const EdgeInsets.symmetric(
-                                horizontal: AppSpacing.s10,
-                                vertical: AppSpacing.s6,
+                                horizontal: 10,
+                                vertical: 4,
                               ),
                               decoration: BoxDecoration(
-                                color: statusBg,
-                                borderRadius: BorderRadius.circular(
-                                  AppSpacing.s8,
-                                ),
+                                color: batch.statusBg.withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
-                                statusLabel,
+                                batch.statusLabel,
                                 style: AppTextStyles.manrope(
-                                  fontSize: 9,
-                                  fontWeight: FontWeight.w900,
-                                  color: statusTextColor,
-                                  letterSpacing: 0.5,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w800,
+                                  color: batch.statusBg,
                                 ),
                               ),
                             ),
                           ],
+                        ),
+                        AppSpacing.v4,
+                        Text(
+                          batch.subject,
+                          style: AppTextStyles.manrope(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.primaryBrand,
+                          ),
                         ),
                         AppSpacing.v12,
                         Row(
@@ -167,7 +195,7 @@ class BatchesScreen extends StatelessWidget {
                             ),
                             AppSpacing.h8,
                             Text(
-                              time,
+                              batch.time,
                               style: AppTextStyles.manrope(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
@@ -176,19 +204,17 @@ class BatchesScreen extends StatelessWidget {
                             ),
                           ],
                         ),
-                        AppSpacing.v16,
-                        const Divider(color: AppColors.divider),
                         AppSpacing.v12,
                         Row(
                           children: [
                             Icon(
                               Icons.people_outline_rounded,
                               size: AppSpacing.s18,
-                              color: AppColors.instAccentBlue,
+                              color: AppColors.primaryBrand,
                             ),
                             AppSpacing.h8,
                             Text(
-                              students,
+                              batch.studentCount,
                               style: AppTextStyles.manrope(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w700,
@@ -199,74 +225,15 @@ class BatchesScreen extends StatelessWidget {
                             Container(
                               width: AppSpacing.s2,
                               height: AppSpacing.s16,
-                              color: AppColors.divider,
+                              color: AppColors.background,
                             ),
                             AppSpacing.h16,
-                            Icon(
-                              Icons.location_on_outlined,
-                              size: AppSpacing.s18,
-                              color: AppColors.instAccentBlue,
-                            ),
-                            AppSpacing.h8,
                             Text(
-                              location,
+                              'â‚¹${batch.baseFee.toStringAsFixed(0)}',
                               style: AppTextStyles.manrope(
                                 fontSize: 14,
-                                fontWeight: FontWeight.w700,
-                                color: AppColors.textPrimary,
-                              ),
-                            ),
-                          ],
-                        ),
-                        AppSpacing.v20,
-                        Row(
-                          children: [
-                            Expanded(
-                              child: ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF004CB2),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                      AppSpacing.s10,
-                                    ),
-                                  ),
-                                  padding: AppSpacing.y12,
-                                  elevation: 0,
-                                ),
-                                child: Text(
-                                  AppStrings.instAssignBtn,
-                                  style: AppTextStyles.manrope(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w800,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            AppSpacing.h12,
-                            Expanded(
-                              child: OutlinedButton(
-                                onPressed: () {},
-                                style: OutlinedButton.styleFrom(
-                                  side: const BorderSide(
-                                    color: Color(0xFFD1D5DB),
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                      AppSpacing.s10,
-                                    ),
-                                  ),
-                                  padding: AppSpacing.y12,
-                                ),
-                                child: Text(
-                                  AppStrings.instEditBtn,
-                                  style: AppTextStyles.manrope(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w800,
-                                    color: AppColors.instAccentBlue,
-                                  ),
-                                ),
+                                fontWeight: FontWeight.w800,
+                                color: AppColors.primaryBrand,
                               ),
                             ),
                           ],
@@ -279,141 +246,6 @@ class BatchesScreen extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildAnalyticsSection() {
-    return Container(
-      padding: AppSpacing.all24,
-      decoration: BoxDecoration(
-        color: const Color(0xFFF8F9FB),
-        borderRadius: BorderRadius.circular(AppSpacing.s24),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            AppStrings.instBatchAnalytics,
-            style: AppTextStyles.manrope(
-              fontSize: 18,
-              fontWeight: FontWeight.w800,
-              color: AppColors.textPrimary,
-            ),
-          ),
-          Text(
-            AppStrings.instRealTimeResource,
-            style: AppTextStyles.lexend(
-              fontSize: 12,
-              color: AppColors.textTertiary,
-            ),
-          ),
-          AppSpacing.v32,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                AppStrings.instOverallCapacity,
-                style: AppTextStyles.manrope(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.textDarkGrey,
-                  letterSpacing: 0.5,
-                ),
-              ),
-              Text(
-                '84%',
-                style: AppTextStyles.manrope(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w800,
-                  color: const Color(0xFF1E40AF),
-                ),
-              ),
-            ],
-          ),
-          AppSpacing.v12,
-          ClipRRect(
-            borderRadius: BorderRadius.circular(AppSpacing.s10),
-            child: const LinearProgressIndicator(
-              value: 0.84,
-              minHeight: AppSpacing.s12,
-              backgroundColor: Color(0xFFE5E7EB),
-              color: Color(0xFF005AC1),
-            ),
-          ),
-          AppSpacing.v12,
-          Text(
-            AppStrings.instSeatOccupancy,
-            style: AppTextStyles.lexend(
-              fontSize: 12,
-              color: AppColors.textSecondary,
-            ).copyWith(fontStyle: FontStyle.italic),
-          ),
-          AppSpacing.v32,
-          Row(
-            children: [
-              Expanded(
-                child: _buildSmallAnalyticsCard(
-                  AppStrings.instAvgAttendanceLabelAlt,
-                  '92.4%',
-                  const Color(0xFF1E40AF),
-                ),
-              ),
-              AppSpacing.h16,
-              Expanded(
-                child: _buildSmallAnalyticsCard(
-                  AppStrings.instResourcesLabel,
-                  AppStrings.instResourceOptimal,
-                  const Color(0xFF7C2D12),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSmallAnalyticsCard(
-    String label,
-    String value,
-    Color valueColor,
-  ) {
-    return Container(
-      padding: AppSpacing.all16,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.s12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
-            blurRadius: AppSpacing.s8,
-            offset: const Offset(0, AppSpacing.s2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: AppTextStyles.manrope(
-              fontSize: 9,
-              fontWeight: FontWeight.w800,
-              color: AppColors.textTertiary,
-              letterSpacing: 0.5,
-            ),
-          ),
-          AppSpacing.v6,
-          Text(
-            value,
-            style: AppTextStyles.manrope(
-              fontSize: 18,
-              fontWeight: FontWeight.w800,
-              color: valueColor,
-            ),
-          ),
-        ],
       ),
     );
   }

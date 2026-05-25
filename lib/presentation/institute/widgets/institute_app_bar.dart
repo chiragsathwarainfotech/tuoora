@@ -1,13 +1,16 @@
-import 'package:fee_easy/config/app_routes.dart';
-import 'package:fee_easy/core/constants/app_colors.dart';
-import 'package:fee_easy/core/constants/app_text_styles.dart';
-import 'package:fee_easy/core/theme/app_spacing.dart';
+import 'package:tuoora/config/app_routes.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class InstituteAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
+  final String? subtitle;
   final bool isRoot;
+  final bool hideLeading;
+  final bool showDefaultActions;
   final VoidCallback? onBackTap;
   final VoidCallback? onMenuTap;
   final List<Widget>? actions;
@@ -15,7 +18,10 @@ class InstituteAppBar extends StatelessWidget implements PreferredSizeWidget {
   const InstituteAppBar({
     super.key,
     required this.title,
+    this.subtitle,
     this.isRoot = false,
+    this.hideLeading = false,
+    this.showDefaultActions = true,
     this.onBackTap,
     this.onMenuTap,
     this.actions,
@@ -30,22 +36,44 @@ class InstituteAppBar extends StatelessWidget implements PreferredSizeWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              _buildLeadingButton(context),
-              AppSpacing.h16,
-              Text(
-                title,
-                style: AppTextStyles.manrope(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.instAccentBlue,
+          Expanded(
+            child: Row(
+              children: [
+                if (!hideLeading) _buildLeadingButton(context),
+                if (!hideLeading) AppSpacing.h16,
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyles.manrope(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.brandAppBarColor,
+                        ),
+                      ),
+                      if (subtitle != null)
+                        Text(
+                          subtitle!,
+                          style: AppTextStyles.lexend(
+                            fontSize: 12,
+                            color: AppColors.textTertiary,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           if (actions != null) Row(children: actions!),
-          if (isRoot && actions == null) _buildDefaultRootActions(),
+          if (isRoot && actions == null && showDefaultActions)
+            _buildDefaultRootActions(),
         ],
       ),
     );
@@ -60,14 +88,14 @@ class InstituteAppBar extends StatelessWidget implements PreferredSizeWidget {
         width: AppSpacing.s40,
         height: AppSpacing.s40,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(color: AppColors.borderGrey),
         ),
         child: Center(
           child: Icon(
             isRoot ? Icons.menu_rounded : Icons.arrow_back_ios_new_rounded,
-            color: AppColors.instAccentBlue,
+            color: AppColors.brandAppBarColor,
             size: isRoot ? AppSpacing.s22 : AppSpacing.s18,
           ),
         ),
@@ -79,10 +107,19 @@ class InstituteAppBar extends StatelessWidget implements PreferredSizeWidget {
     return Row(
       children: [
         GestureDetector(
+          onTap: () => Get.toNamed(AppRoutes.instituteChats),
+          child: const Icon(
+            Icons.chat_bubble_outline_rounded,
+            color: AppColors.brandAppBarColor,
+            size: AppSpacing.s24,
+          ),
+        ),
+        AppSpacing.h16,
+        GestureDetector(
           onTap: () => Get.toNamed(AppRoutes.instituteNotifications),
           child: const Icon(
             Icons.notifications_none_rounded,
-            color: AppColors.instAccentBlue,
+            color: AppColors.brandAppBarColor,
             size: AppSpacing.s26,
           ),
         ),
@@ -93,3 +130,4 @@ class InstituteAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => const Size.fromHeight(80);
 }
+

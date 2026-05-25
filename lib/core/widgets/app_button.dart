@@ -1,58 +1,85 @@
-import 'package:fee_easy/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
-import 'package:fee_easy/core/constants/app_text_styles.dart';
 
 class AppButton extends StatelessWidget {
   final String label;
-  final VoidCallback onPressed;
-  final Color backgroundColor;
-  final Color foregroundColor;
-  final EdgeInsetsGeometry padding;
-  final double fontSize;
-  final FontWeight fontWeight;
-  final double borderRadius;
-  final double elevation;
+  final VoidCallback? onPressed;
+  final bool isLoading;
+  final bool isDisabled;
+  final IconData? icon;
+  final Color? backgroundColor;
+  final Color? foregroundColor;
+  final double? width;
+  final bool hasShadow;
   final bool fullWidth;
+  final double borderRadius;
+  final EdgeInsetsGeometry? padding;
+  final double? fontSize;
+  final Color? borderColor;
+  final FontWeight? fontWeight;
 
   const AppButton({
     super.key,
     required this.label,
     required this.onPressed,
-    this.backgroundColor = AppColors.intenseBlue,
-    this.foregroundColor = Colors.white,
-    this.padding = const EdgeInsets.symmetric(vertical: 16),
-    this.fontSize = 14,
-    this.fontWeight = FontWeight.w700,
-    this.borderRadius = 16.0,
-    this.elevation = 0,
-    this.fullWidth = false,
+    this.isLoading = false,
+    this.isDisabled = false,
+    this.icon,
+    this.backgroundColor,
+    this.foregroundColor,
+    this.width,
+    this.hasShadow = true,
+    this.fullWidth = true,
+    this.borderRadius = 12.0,
+    this.padding,
+    this.fontSize,
+    this.borderColor,
+    this.fontWeight,
   });
 
   @override
   Widget build(BuildContext context) {
-    Widget button = ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: backgroundColor,
-        foregroundColor: foregroundColor,
-        padding: padding,
-        elevation: elevation,
-        shape: RoundedRectangleBorder(
+    final bool effectivelyDisabled = isDisabled || isLoading || onPressed == null;
+    final Color bgColor = backgroundColor ?? AppColors.primaryBrand;
+    final Color contentColor = foregroundColor ?? AppColors.white;
+
+    return GestureDetector(
+      onTap: effectivelyDisabled ? null : onPressed,
+      child: Container(
+        width: width ?? (fullWidth ? double.infinity : null),
+        padding: padding ?? const EdgeInsets.symmetric(vertical: AppSpacing.s18),
+        decoration: BoxDecoration(
+          color: effectivelyDisabled ? AppColors.textMuted : bgColor,
           borderRadius: BorderRadius.circular(borderRadius),
+          border: borderColor != null ? Border.all(color: borderColor!) : null,
         ),
-      ),
-      child: Text(
-        label,
-        style: AppTextStyles.manrope(
-          fontSize: fontSize,
-          fontWeight: fontWeight,
+        child: Center(
+          child: isLoading
+              ? CommonLoading(color: contentColor, size: 20)
+              : Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (icon != null) ...[
+                      Icon(icon, color: contentColor, size: 18),
+                      const SizedBox(width: 8),
+                    ],
+                    Text(
+                      label,
+                      style: AppTextStyles.manrope(
+                        fontSize: fontSize ?? 14,
+                        fontWeight: fontWeight ?? FontWeight.w800,
+                        color: contentColor,
+                      ),
+                    ),
+                  ],
+                ),
         ),
       ),
     );
-
-    if (fullWidth) {
-      return SizedBox(width: double.infinity, child: button);
-    }
-    return button;
   }
 }
+

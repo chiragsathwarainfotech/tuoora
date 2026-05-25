@@ -1,7 +1,7 @@
-import 'package:fee_easy/config/app_routes.dart';
-import 'package:fee_easy/core/constants/app_colors.dart';
-import 'package:fee_easy/core/theme/app_spacing.dart';
-import 'package:fee_easy/core/constants/app_text_styles.dart';
+import 'package:tuoora/config/app_routes.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,7 +11,7 @@ class RoleSelectionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.loginBg,
+      backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: AppSpacing.x24,
@@ -22,7 +22,7 @@ class RoleSelectionScreen extends StatelessWidget {
               _buildLogo(),
               AppSpacing.v40,
               Text(
-                'FeeEasy',
+                'Tuoora',
                 textAlign: TextAlign.center,
                 style: AppTextStyles.manrope(
                   fontSize: 32,
@@ -36,25 +36,16 @@ class RoleSelectionScreen extends StatelessWidget {
                 title: 'Login as Institute',
                 subtitle: 'Manage students, batches, and academic operations.',
                 icon: Icons.business_rounded,
-                iconColor: AppColors.primaryBlue,
+                iconColor: AppColors.primaryBrand,
                 onTap: () =>
                     Get.toNamed(AppRoutes.login, arguments: 'INSTITUTE'),
-              ),
-              AppSpacing.v16,
-              _buildRoleCard(
-                title: 'Login as Parent',
-                subtitle:
-                    "Monitor your child's progress and manage fee payments.",
-                icon: Icons.family_restroom_rounded,
-                iconColor: AppColors.primaryBlue,
-                onTap: () => Get.toNamed(AppRoutes.login, arguments: 'PARENT'),
               ),
               AppSpacing.v16,
               _buildRoleCard(
                 title: 'Login as Student',
                 subtitle: 'View your classes, fees, homework and more.',
                 icon: Icons.school_rounded,
-                iconColor: AppColors.primaryBlue,
+                iconColor: AppColors.primaryBrand,
                 onTap: () => Get.toNamed(AppRoutes.login, arguments: 'STUDENT'),
               ),
             ],
@@ -71,11 +62,11 @@ class RoleSelectionScreen extends StatelessWidget {
         width: 160,
         height: 160,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 15,
               offset: const Offset(0, 5),
             ),
@@ -88,9 +79,9 @@ class RoleSelectionScreen extends StatelessWidget {
             fit: BoxFit.cover,
             errorBuilder: (context, error, stackTrace) {
               return Container(
-                color: AppColors.primaryBlue,
+                color: AppColors.primaryBrand,
                 child: const Center(
-                  child: Icon(Icons.school, color: Colors.white, size: 64),
+                  child: Icon(Icons.school, color: AppColors.white, size: 64),
                 ),
               );
             },
@@ -112,12 +103,12 @@ class RoleSelectionScreen extends StatelessWidget {
       child: Container(
         padding: AppSpacing.all16,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: const Color(0xFFE5E7EB), width: 1),
+          border: Border.all(color: AppColors.borderGrey, width: 1),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.03),
+              color: Colors.black.withValues(alpha: 0.03),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
@@ -129,7 +120,7 @@ class RoleSelectionScreen extends StatelessWidget {
               width: AppSpacing.s72,
               height: AppSpacing.s72,
               decoration: BoxDecoration(
-                color: iconColor.withOpacity(0.12),
+                color: iconColor.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Center(child: Icon(icon, color: iconColor, size: 32)),

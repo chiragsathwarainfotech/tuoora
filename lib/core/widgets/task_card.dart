@@ -1,6 +1,7 @@
-import 'package:fee_easy/config/app_theme.dart';
+import 'package:tuoora/config/app_theme.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:fee_easy/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/constants/app_text_styles.dart';
 
 class TaskCard extends StatelessWidget {
   final IconData icon;
@@ -19,7 +20,7 @@ class TaskCard extends StatelessWidget {
     super.key,
     required this.icon,
     this.iconColor = AppTheme.primary,
-    this.iconBgColor = const Color(0xFFF0F4FC),
+    this.iconBgColor = AppColors.background,
     required this.title,
     required this.subject,
     required this.statusText,
@@ -38,7 +39,7 @@ class TaskCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -68,7 +69,7 @@ class TaskCard extends StatelessWidget {
                     style: AppTextStyles.lexend(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
-                      color: const Color(0xFF111827),
+                      color: AppColors.textPrimary,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -89,7 +90,7 @@ class TaskCard extends StatelessWidget {
                         width: 4,
                         height: 4,
                         decoration: const BoxDecoration(
-                          color: Color(0xFFD1D5DB),
+                          color: AppColors.borderLightGray,
                           shape: BoxShape.circle,
                         ),
                       ),
@@ -116,11 +117,15 @@ class TaskCard extends StatelessWidget {
             if (completed)
               Container(
                 decoration: const BoxDecoration(
-                  color: Color(0xFF10B981),
+                  color: AppColors.successGreen,
                   shape: BoxShape.circle,
                 ),
                 padding: const EdgeInsets.all(2),
-                child: const Icon(Icons.check, color: Colors.white, size: 16),
+                child: const Icon(
+                  Icons.check,
+                  color: AppColors.white,
+                  size: 16,
+                ),
               )
             else if (progressValue != null)
               SizedBox(
@@ -130,7 +135,7 @@ class TaskCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(4),
                   child: LinearProgressIndicator(
                     value: progressValue,
-                    backgroundColor: const Color(0xFFF3F4F6),
+                    backgroundColor: AppColors.background,
                     valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primary),
                   ),
                 ),
@@ -138,7 +143,11 @@ class TaskCard extends StatelessWidget {
 
             if (showChevron) ...[
               const SizedBox(width: 12),
-              const Icon(Icons.chevron_right, color: Color(0xFF9CA3AF), size: 20),
+              const Icon(
+                Icons.chevron_right,
+                color: AppColors.textMuted,
+                size: 20,
+              ),
             ],
           ],
         ),

@@ -1,17 +1,7 @@
 class AppRoutes {
+  static const String splash = '/';
   static const String roleSelection = '/role-selection';
   static const String login = '/login';
-  static const String parentDashboard = '/parent/dashboard';
-  static const String parentFees = '/parent/fees';
-  static const String parentAttendance = '/parent/attendance';
-  static const String parentReports = '/parent/reports';
-  static const String parentInstitute = '/parent/institute';
-  static const String parentStudentProfile = '/parent/student-profile';
-  static const String parentUpdates = '/parent/updates';
-  static const String parentRecentPayments = '/parent/recent-payments';
-  static const String parentHomeworkTracker = '/parent/homework-tracker';
-  static const String parentAttendanceHistory = '/parent/attendance-history';
-  static const String parentHomeworkDetail = '/parent/homework-detail';
 
   static const String studentDashboard = '/student/dashboard';
   static const String studentAttendance = '/student/attendance';
@@ -19,17 +9,33 @@ class AppRoutes {
   static const String studentNotifications = '/student/notifications';
   static const String studentHomework = '/student/homework';
   static const String studentHomeworkDetail = '/student/homework-detail';
+  static const String studentAssignmentDetail = '/student/assignment-detail';
+  static const String studentAttachmentPreview =
+      '/student/attachment-preview';
+  static const String studentFeeReceipt = '/student/fee-receipt';
+  static const String studentPayFees = '/student/pay-fees';
   static const String studentInstitute = '/student/institute';
   static const String studentFeeHistory = '/student/fee-history';
+  static const String studentChat = '/student/chat';
+  static const String studentCreateChat = '/student/chats/create';
+  static const String studentChatMessages = '/student/chats/messages';
+  static const String studentFeeReminder = '/student/fee-reminder';
+  static const String studentEventDetail = '/student/event-detail';
+  static const String studentHolidayDetail = '/student/holiday-detail';
+  static const String studentReports = '/student/reports';
+  static const String studentReceiptsList = '/student/receipts-list';
+  static const String studentNotificationPreferences = '/student/notification-preferences';
+  static const String studentStudyMaterial = '/student/study-material';
+  static const String studentStudyMaterialDetail = '/student/study-material/detail';
+  static const String studentFeedback = '/student/feedback';
 
   static const String instituteDashboard = '/institute/dashboard';
   static const String instituteStudents = '/institute/students';
   static const String instituteStudentProfile = '/institute/students/profile';
-  static const String instituteAddStudent = '/institute/students/add';
+  static const String instituteAddEditStudent = '/institute/students/add/edit';
   static const String instituteFees = '/institute/fees';
   static const String instituteRecordFee = '/institute/fees/record';
   static const String instituteBatches = '/institute/batches';
-  static const String instituteAttendanceMarking = '/institute/batches/marking';
   static const String instituteMarkAttendance = '/institute/batches/mark';
   static const String instituteBatchDetails = '/institute/batches/details';
   static const String instituteEditProfile = '/institute/edit-profile';
@@ -37,9 +43,56 @@ class AppRoutes {
   static const String instituteSecurity = '/institute/profile/security';
   static const String instituteSubscription = '/institute/profile/subscription';
   static const String instituteWhatsApp = '/institute/profile/whatsapp';
-  static const String instituteEditStudentProfile = '/institute/students/edit';
-  static const String instituteFeeReports = '/institute/reports/fee';
+  static const String instituteFeeReport = '/institute/reports/fee-main';
+  static const String instituteAttendanceReport =
+      '/institute/reports/attendance';
+  static const String institutePerformanceReport =
+      '/institute/reports/performance';
   static const String instituteUpdates = '/institute/updates';
   static const String instituteCreateUpdate = '/institute/updates/create';
   static const String instituteNotifications = '/institute/notifications';
+  static const String instituteMain = '/institute/main';
+  static const String instituteBillingHistory =
+      '/institute/profile/billing-history';
+  static const String instituteAddBatch = '/institute/batches/add';
+  static const String instituteEditBatch = '/institute/batches/edit';
+  static const String instituteFeeTransactionHistory =
+      '/institute/students/transaction-history';
+  static const String instituteSignup = '/institute/signup';
+  static const String instituteOtp = '/institute/otp';
+  static const String instituteProfileSetup = '/institute/profile-setup';
+  static const String instituteBatchReportDetail = '/institute/reports/detail';
+  static const String instituteReports = '/institute/reports';
+  static const String instituteForgotPassword = '/institute/forgot-password';
+  static const String instituteResetPassword = '/institute/reset-password';
+  static const String instituteBatchStudents = '/institute/batches/students';
+  static const String instituteAssignToBatch = '/institute/batches/assign';
+  static const String instituteBatchHomework = '/institute/batches/homework';
+  static const String instituteAddHomework = '/institute/batches/homework/add';
+  static const String instituteHomeworkRating =
+      '/institute/batches/homework/rating';
+  static const String instituteBatchResources = '/institute/batches/resources';
+  static const String instituteResourceDetail =
+      '/institute/batches/resources/detail';
+  static const String instituteLeads = '/institute/leads';
+  static const String instituteAddEditLead = '/institute/leads/add-edit';
+  static const String instituteLeadDetails = '/institute/leads/details';
+  static const String instituteNotes = '/institute/notes';
+  static const String instituteAddEditNote = '/institute/notes/add-edit';
+  static const String instituteChats = '/institute/chats';
+  static const String instituteCreateChat = '/institute/chats/create';
+  static const String instituteChatMessages = '/institute/chats/messages';
+  static const String instituteStaffs = '/institute/staffs';
+  static const String instituteStaffDetails = '/institute/staffs/details';
+  static const String instituteAddEditStaff = '/institute/staffs/add-edit';
+  static const String instituteSalaryHistory =
+      '/institute/staffs/salary-history';
+  static const String instituteStaffAttendance = '/institute/staffs/attendance';
+  static const String instituteLogStaffAttendance =
+      '/institute/staffs/log-attendance';
+  static const String instituteAddSalary = '/institute/staffs/add-salary';
+  static const String instituteExpenses = '/institute/expenses';
+  static const String instituteAddExpense = '/institute/expenses/add';
+  static const String instituteExpenseAnalysis = '/institute/expenses/analysis';
 }
+

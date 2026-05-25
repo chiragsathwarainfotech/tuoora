@@ -1,10 +1,11 @@
-import 'package:fee_easy/core/widgets/app_button.dart';
-import 'package:fee_easy/config/app_routes.dart';
-import 'package:fee_easy/core/constants/app_colors.dart';
-import 'package:fee_easy/core/constants/app_strings.dart';
-import 'package:fee_easy/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/app_button.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
+import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/presentation/shared/controllers/login_controller.dart';
+import 'package:tuoora/config/app_routes.dart';
 import 'package:flutter/material.dart';
-import 'package:fee_easy/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:get/get.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -15,9 +16,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final controller = Get.find<LoginController>();
   String _selectedRole = 'STUDENT';
-  bool _obscureText = true;
-  bool _stayAuthenticated = false;
 
   @override
   void initState() {
@@ -28,19 +28,13 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _handleLogin() {
-    if (_selectedRole == 'PARENT') {
-      Get.offAllNamed(AppRoutes.parentDashboard);
-    } else if (_selectedRole == 'INSTITUTE') {
-      Get.offAllNamed(AppRoutes.instituteDashboard);
-    } else {
-      Get.offAllNamed(AppRoutes.studentDashboard);
-    }
+    controller.login(_selectedRole);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.loginBg,
+      backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -52,14 +46,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   Container(
                     width: AppSpacing.s40,
                     height: AppSpacing.s40,
-                    decoration: const BoxDecoration(
-                      color: AppColors.iconBgLightBlue,
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryBrandLight,
                       shape: BoxShape.circle,
                     ),
                     child: const Center(
                       child: Icon(
                         Icons.school,
-                        color: AppColors.primaryBlue,
+                        color: AppColors.primaryBrand,
                         size: AppSpacing.s24,
                       ),
                     ),
@@ -70,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: AppTextStyles.manrope(
                       fontSize: 22,
                       fontWeight: FontWeight.w800,
-                      color: AppColors.primaryBlue,
+                      color: AppColors.primaryBrand,
                     ),
                   ),
                 ],
@@ -81,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 style: AppTextStyles.manrope(
                   fontSize: 12,
                   fontWeight: FontWeight.w800,
-                  color: AppColors.primaryBlue,
+                  color: AppColors.primaryBrand,
                   letterSpacing: 1.5,
                 ),
               ),
@@ -91,7 +85,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 style: AppTextStyles.manrope(
                   fontSize: 28,
                   fontWeight: FontWeight.w800,
-                  color: AppColors.textPrimary,
+                  color: AppColors.blueSapphire,
+                  height: 1.5,
                 ),
               ),
               AppSpacing.v8,
@@ -101,18 +96,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 style: AppTextStyles.lexend(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
-                  color: AppColors.textTertiary,
+                  color: AppColors.blueSapphire,
                   height: 1.5,
                 ),
               ),
               AppSpacing.v32,
-
-              // Main Authentication Card
               Container(
                 margin: AppSpacing.x24,
                 padding: const EdgeInsets.all(AppSpacing.s28),
                 decoration: BoxDecoration(
-                  color: AppColors.cardBg,
+                  color: AppColors.white,
                   borderRadius: BorderRadius.circular(AppSpacing.s32),
                   boxShadow: [
                     BoxShadow(
@@ -125,26 +118,23 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // Identifier Field
                     Text(
                       'IDENTIFIER',
                       style: AppTextStyles.manrope(
                         fontSize: 10,
                         fontWeight: FontWeight.w800,
-                        color: AppColors.textDarkGrey,
+                        color: AppColors.brandAppBarColor,
                         letterSpacing: 1.0,
                       ),
                     ),
                     AppSpacing.v8,
                     _buildTextField(
+                      controller: controller.emailController,
                       hint: 'Phone or Institutional Email',
                       prefixIcon: Icons.alternate_email,
                       keyboardType: TextInputType.emailAddress,
                     ),
-
                     AppSpacing.v24,
-
-                    // Access Key Field
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -153,12 +143,21 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: AppTextStyles.manrope(
                             fontSize: 10,
                             fontWeight: FontWeight.w800,
-                            color: AppColors.textDarkGrey,
+                            color: AppColors.brandAppBarColor,
                             letterSpacing: 1.0,
                           ),
                         ),
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            if (_selectedRole == 'INSTITUTE') {
+                              Get.toNamed(AppRoutes.instituteForgotPassword);
+                            } else {
+                              Get.snackbar(
+                                'Coming Soon',
+                                'Recovery for this role will be available soon.',
+                              );
+                            }
+                          },
                           style: TextButton.styleFrom(
                             padding: EdgeInsets.zero,
                             minimumSize: Size.zero,
@@ -169,7 +168,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             style: AppTextStyles.manrope(
                               fontSize: 10,
                               fontWeight: FontWeight.w800,
-                              color: AppColors.primaryBlue,
+                              color: AppColors.primaryBrand,
                               letterSpacing: 1.0,
                             ),
                           ),
@@ -177,119 +176,120 @@ class _LoginScreenState extends State<LoginScreen> {
                       ],
                     ),
                     AppSpacing.v8,
-                    _buildTextField(
-                      hint: '••••••••',
-                      prefixIcon: Icons.lock_outline,
-                      obscureText: _obscureText,
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _obscureText
-                              ? Icons.visibility_outlined
-                              : Icons.visibility_off_outlined,
-                          color: AppColors.textMuted,
-                          size: AppSpacing.s20,
+                    Obx(
+                      () => _buildTextField(
+                        controller: controller.passwordController,
+                        hint: '••••••••',
+                        prefixIcon: Icons.lock_outline,
+                        obscureText: controller.obscurePassword.value,
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            controller.obscurePassword.value
+                                ? Icons.visibility_outlined
+                                : Icons.visibility_off_outlined,
+                            color: AppColors.textMuted,
+                            size: AppSpacing.s20,
+                          ),
+                          onPressed: controller.togglePasswordVisibility,
                         ),
-                        onPressed: () {
-                          setState(() {
-                            _obscureText = !_obscureText;
-                          });
-                        },
                       ),
                     ),
-
                     AppSpacing.v24,
-
-                    // Checkbox
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: AppSpacing.s24,
-                          height: AppSpacing.s24,
-                          child: Checkbox(
-                            value: _stayAuthenticated,
-                            onChanged: (value) {
-                              setState(() {
-                                _stayAuthenticated = value ?? false;
-                              });
-                            },
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                AppSpacing.s6,
+                    Obx(
+                      () => Row(
+                        children: [
+                          SizedBox(
+                            width: AppSpacing.s24,
+                            height: AppSpacing.s24,
+                            child: Checkbox(
+                              value: controller.stayAuthenticated.value,
+                              onChanged: (value) =>
+                                  controller.toggleStayAuthenticated(),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                  AppSpacing.s6,
+                                ),
                               ),
+                              side: BorderSide(
+                                color: AppColors.borderLightGray,
+                                width: 1.5,
+                              ),
+                              activeColor: AppColors.primaryBrand,
                             ),
-                            side: BorderSide(
-                              color: AppColors.borderLightGray,
-                              width: 1.5,
+                          ),
+                          AppSpacing.h12,
+                          Text(
+                            AppStrings.stayAuthenticated,
+                            style: AppTextStyles.lexend(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.blueSapphire,
                             ),
-                            activeColor: AppColors.primaryBlue,
                           ),
-                        ),
-                        AppSpacing.h12,
-                        Text(
-                          AppStrings.stayAuthenticated,
-                          style: AppTextStyles.lexend(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                            color: AppColors.textSecondary,
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-
                     AppSpacing.v32,
-
-                    // Login Button using common AppButton
-                    AppButton(
-                      label: AppStrings.signInButton,
-                      onPressed: _handleLogin,
-                      backgroundColor: AppColors.primaryBlue,
-                      foregroundColor: Colors.white,
-                      borderRadius: AppSpacing.s24,
-                      padding: const EdgeInsets.symmetric(
-                        vertical: AppSpacing.s18,
+                    Obx(
+                      () => AppButton(
+                        label: AppStrings.signInButton,
+                        onPressed: _handleLogin,
+                        isLoading: controller.isLoading.value,
+                        backgroundColor: AppColors.primaryBrand,
+                        foregroundColor: AppColors.white,
+                        borderRadius: AppSpacing.s24,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: AppSpacing.s18,
+                        ),
+                        fontSize: 16,
+                        fullWidth: true,
                       ),
-                      fontSize: 16,
-                      fullWidth: true,
                     ),
                   ],
                 ),
               ),
-
-              AppSpacing.v32,
-
-              // Bottom Footer
-              RichText(
-                text: TextSpan(
-                  text: AppStrings.enrolmentText,
-                  style: AppTextStyles.lexend(
-                    fontSize: 14,
-                    color: AppColors.textSecondary,
-                    fontWeight: FontWeight.w500,
+              if (_selectedRole == 'INSTITUTE') ...[
+                AppSpacing.v32,
+                Padding(
+                  padding: AppSpacing.x24,
+                  child: Row(
+                    children: [
+                      const Expanded(child: Divider()),
+                      Padding(
+                        padding: AppSpacing.x16,
+                        child: Text(
+                          'OR EXPAND YOUR REACH',
+                          style: AppTextStyles.manrope(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.brandAppBarColor,
+                            letterSpacing: 1.0,
+                          ),
+                        ),
+                      ),
+                      const Expanded(child: Divider()),
+                    ],
                   ),
-                  children: [
-                    TextSpan(
-                      text: AppStrings.enrolmentLink,
-                      style: AppTextStyles.lexend(
-                        color: AppColors.primaryBlue,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
                 ),
-              ),
-
-              AppSpacing.v24,
-
-              // Support & Security Cards
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildBottomCard(Icons.help_outline, 'SUPPORT'),
-                  AppSpacing.h16,
-                  _buildBottomCard(Icons.security, 'SECURITY'),
-                ],
-              ),
-
+                AppSpacing.v32,
+                Padding(
+                  padding: AppSpacing.x24,
+                  child: AppButton(
+                    label: 'Institute Registration',
+                    onPressed: () => Get.toNamed(AppRoutes.instituteSignup),
+                    icon: Icons.storefront_outlined,
+                    backgroundColor: AppColors.white,
+                    foregroundColor: AppColors.primaryBrand,
+                    borderColor: AppColors.borderGrey,
+                    borderRadius: AppSpacing.s16,
+                    padding: const EdgeInsets.symmetric(
+                      vertical: AppSpacing.s18,
+                    ),
+                    fontSize: 16,
+                    fullWidth: true,
+                  ),
+                ),
+              ],
               AppSpacing.v32,
             ],
           ),
@@ -299,6 +299,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _buildTextField({
+    TextEditingController? controller,
     required String hint,
     required IconData prefixIcon,
     bool obscureText = false,
@@ -307,10 +308,11 @@ class _LoginScreenState extends State<LoginScreen> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.inputBg,
+        color: AppColors.paleSilver,
         borderRadius: BorderRadius.circular(AppSpacing.s16),
       ),
       child: TextField(
+        controller: controller,
         obscureText: obscureText,
         keyboardType: keyboardType,
         style: AppTextStyles.lexend(fontSize: 14, color: AppColors.textPrimary),
@@ -318,50 +320,17 @@ class _LoginScreenState extends State<LoginScreen> {
           hintText: hint,
           hintStyle: AppTextStyles.lexend(
             fontSize: 14,
-            color: AppColors.textMuted,
+            color: AppColors.blueSapphire,
           ),
           prefixIcon: Icon(
             prefixIcon,
-            color: AppColors.textMuted,
+            color: AppColors.blueSapphire,
             size: AppSpacing.s20,
           ),
           suffixIcon: suffixIcon,
           border: InputBorder.none,
           contentPadding: AppSpacing.all16,
         ),
-      ),
-    );
-  }
-
-  Widget _buildBottomCard(IconData icon, String title) {
-    return Container(
-      width: AppSpacing.s140,
-      padding: AppSpacing.y16,
-      decoration: BoxDecoration(
-        color: AppColors.cardBg,
-        borderRadius: BorderRadius.circular(AppSpacing.s16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
-            blurRadius: AppSpacing.s10,
-            offset: const Offset(0, AppSpacing.s4),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Icon(icon, color: AppColors.primaryBlue, size: AppSpacing.s20),
-          AppSpacing.v8,
-          Text(
-            title,
-            style: AppTextStyles.manrope(
-              fontSize: 10,
-              fontWeight: FontWeight.w800,
-              color: AppColors.textSecondary,
-              letterSpacing: 1.0,
-            ),
-          ),
-        ],
       ),
     );
   }

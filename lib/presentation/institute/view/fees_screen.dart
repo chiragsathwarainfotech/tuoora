@@ -1,217 +1,102 @@
-import 'package:fee_easy/core/constants/app_colors.dart';
-import 'package:fee_easy/core/constants/app_strings.dart';
-import 'package:fee_easy/core/constants/app_text_styles.dart';
-import 'package:fee_easy/config/app_routes.dart';
-import 'package:fee_easy/presentation/institute/widgets/institute_app_bar.dart';
-import 'package:fee_easy/presentation/institute/widgets/institute_bottom_nav.dart';
-import 'package:fee_easy/core/theme/app_spacing.dart';
+import 'package:tuoora/config/app_routes.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
+import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/presentation/institute/controllers/institute_controller.dart';
+import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:get/get.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-import 'package:fee_easy/presentation/institute/widgets/institute_root_scaffold.dart';
-
-class InstituteFeesScreen extends StatelessWidget {
-  final bool showShell;
-  const InstituteFeesScreen({super.key, this.showShell = true});
+class InstituteFeesScreen extends GetView<InstituteController> {
+  const InstituteFeesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return InstituteRootScaffold(
-      title: 'Financial Ledger',
-      currentIndex: 3,
-      showShell: showShell,
-      body: SingleChildScrollView(
-        padding: AppSpacing.x24,
+    return Scaffold(
+      backgroundColor: AppColors.scaffoldBg,
+      body: SafeArea(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AppSpacing.v16,
-            _buildTotalCollectedCard(),
-            AppSpacing.v16,
-            _buildTotalPendingCard(),
-            AppSpacing.v16,
-            _buildFinancialReportCard(),
-            AppSpacing.v32,
-            _buildRegistryHeader(),
-            AppSpacing.v16,
-            _buildRegistryList(),
-            AppSpacing.v32,
+            InstituteAppBar(
+              title: AppStrings.instFeesTitle,
+              onBackTap: () => Get.back(),
+            ),
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: () => controller.refreshFees(),
+                color: AppColors.primaryBrand,
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: AppSpacing.x24,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      AppSpacing.v16,
+                      Obx(
+                        () => _buildTotalCollectedCard(
+                          controller.currentMonthTotal.value,
+                        ),
+                      ),
+                      AppSpacing.v32,
+                      _buildRegistryHeader(controller),
+                      AppSpacing.v16,
+                      _buildRegistryList(controller),
+                      AppSpacing.v32,
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        heroTag: 'fees_fab_unique_tag',
+        onPressed: () => Get.toNamed(AppRoutes.instituteRecordFee),
+        backgroundColor: AppColors.primaryBrand,
+        child: const Icon(Icons.add, color: AppColors.white, size: 28),
+      ),
     );
   }
 
-  Widget _buildTotalCollectedCard() {
+  Widget _buildTotalCollectedCard(double amount) {
     return Container(
       padding: AppSpacing.all24,
+      width: double.infinity,
       decoration: BoxDecoration(
-        color: AppColors.instFeesCollectedBg,
+        color: AppColors.primaryBrand,
         borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.instFeesCollectedBg.withValues(alpha: 0.2),
-            blurRadius: 15,
-            offset: const Offset(0, AppSpacing.s8),
-          ),
-        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            AppStrings.instTotalCollected,
+            AppStrings.instCurrentMonthCollected,
             style: AppTextStyles.manrope(
               fontSize: 12,
               fontWeight: FontWeight.w800,
-              color: Colors.white.withValues(alpha: 0.7),
+              color: AppColors.white.withValues(alpha: 0.7),
               letterSpacing: 1.2,
             ),
           ),
           AppSpacing.v12,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                AppStrings.instTotalCollectedAmount,
-                style: AppTextStyles.manrope(
-                  fontSize: 32,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.white,
-                ),
-              ),
-              Container(
-                padding: AppSpacing.x10.add(AppSpacing.y6),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(Icons.trending_up, color: Colors.white, size: AppSpacing.s16),
-                    AppSpacing.h4,
-                    Text(
-                      '12%',
-                      style: AppTextStyles.manrope(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTotalPendingCard() {
-    return Container(
-      padding: AppSpacing.all24,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.borderGrey),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
           Text(
-            AppStrings.instTotalPending,
+            '₹${NumberFormat('#,##,###.##').format(amount)}',
             style: AppTextStyles.manrope(
-              fontSize: 12,
+              fontSize: 32,
               fontWeight: FontWeight.w800,
-              color: AppColors.textTertiary,
-              letterSpacing: 1.2,
+              color: AppColors.white,
             ),
-          ),
-          AppSpacing.v12,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                AppStrings.instTotalPendingAmount,
-                style: AppTextStyles.manrope(
-                  fontSize: 32,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-              Text(
-                '42 Invoices',
-                style: AppTextStyles.manrope(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.redDot,
-                ),
-              ),
-            ],
           ),
         ],
       ),
     );
   }
 
-  Widget _buildFinancialReportCard() {
-    return Container(
-      padding: AppSpacing.all20,
-      decoration: BoxDecoration(
-        color: AppColors.instFeesReportBg,
-        borderRadius: BorderRadius.circular(24),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: AppSpacing.all12,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: const Icon(Icons.analytics_outlined, color: AppColors.instFeesCollectedBg),
-          ),
-          AppSpacing.h16,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  AppStrings.instFinancialReport,
-                  style: AppTextStyles.manrope(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.instPrimaryBlue,
-                  ),
-                ),
-                Text(
-                  AppStrings.instMonthlyBreakdown,
-                  style: AppTextStyles.manrope(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.instPrimaryBlue.withValues(alpha: 0.6),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.instFeesDownloadBtn,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              elevation: 0,
-              padding: AppSpacing.x16.add(AppSpacing.y12),
-            ),
-            child: const Icon(Icons.download_rounded, color: Colors.white, size: AppSpacing.s20),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildRegistryHeader() {
+  Widget _buildRegistryHeader(InstituteController controller) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -224,85 +109,152 @@ class InstituteFeesScreen extends StatelessWidget {
           ),
         ),
         GestureDetector(
-          onTap: () => Get.toNamed(AppRoutes.instituteRecordFee),
+          behavior: HitTestBehavior.translucent,
+          onTap: () => controller.downloadFeeReport(),
           child: Container(
             padding: AppSpacing.all8,
             decoration: BoxDecoration(
-              color: AppColors.instAccentBlue,
-              borderRadius: BorderRadius.circular(10),
+              color: AppColors.primaryBrand,
+              borderRadius: BorderRadius.circular(8),
             ),
-            child: const Icon(Icons.add, color: Colors.white, size: AppSpacing.s20),
+            child: const Icon(Icons.download, color: AppColors.white, size: 26),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildRegistryList() {
-    return Column(
-      children: [
-        _buildFeeItem('Arjun Malhotra', '₹2,500', 'Paid', AppColors.instFeesPaidBadgeBg, AppColors.instFeesPaidText),
-        AppSpacing.v12,
-        _buildFeeItem('Sarah Jenkins', '₹2,500', 'Due', AppColors.instFeesDueBadgeBg, AppColors.instFeesDueText),
-        AppSpacing.v12,
-        _buildFeeItem('Rahul Sharma', '₹2,500', 'Paid', AppColors.instFeesPaidBadgeBg, AppColors.instFeesPaidText),
-        AppSpacing.v12,
-        _buildFeeItem('Priya Gupta', '₹2,500', 'Due', AppColors.instFeesDueBadgeBg, AppColors.instFeesDueText),
-      ],
-    );
+  Widget _buildRegistryList(InstituteController controller) {
+    return Obx(() {
+      if (controller.isLoadingFees.value && controller.feeRecords.isEmpty) {
+        return const Center(
+          child: Padding(padding: EdgeInsets.all(32.0), child: CommonLoading()),
+        );
+      }
+
+      if (controller.feeRecords.isEmpty) {
+        return Center(
+          child: Column(
+            children: [
+              AppSpacing.v48,
+              Icon(
+                Icons.receipt_long_outlined,
+                size: 64,
+                color: AppColors.primaryBrand,
+              ),
+              AppSpacing.v16,
+              Text(
+                'No fee records found',
+                style: AppTextStyles.manrope(
+                  fontSize: 18,
+                  color: AppColors.brandAppBarColor,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ],
+          ),
+        );
+      }
+
+      return Column(
+        children: controller.feeRecords.map((record) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: AppSpacing.s12),
+            child: _buildFeeItem(
+              record.student?.name ?? 'Unknown Student',
+              '₹${record.totalAmount}',
+              'ID: ${record.studentId}',
+              record.date,
+            ),
+          );
+        }).toList(),
+      );
+    });
   }
 
-  Widget _buildFeeItem(String name, String amount, String status, Color statusBg, Color statusText) {
+  Widget _buildFeeItem(
+    String name,
+    String amount,
+    String studentId,
+    DateTime date,
+  ) {
     return Container(
       padding: AppSpacing.all16,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: AppColors.borderGrey),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.02),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Row(
         children: [
           CircleAvatar(
-            backgroundColor: AppColors.instFeesAvatarBg,
-            child: Text(name[0], style: const TextStyle(color: AppColors.textSecondary)),
+            radius: 24,
+            backgroundColor: AppColors.primaryBrandLight,
+            child: Text(
+              name.isNotEmpty ? name[0] : '?',
+              style: AppTextStyles.manrope(
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+                color: AppColors.primaryBrand,
+              ),
+            ),
           ),
           AppSpacing.h16,
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  name,
-                  style: AppTextStyles.manrope(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.textPrimary,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      name,
+                      style: AppTextStyles.manrope(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                    Text(
+                      amount,
+                      style: AppTextStyles.manrope(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.primaryBrand,
+                      ),
+                    ),
+                  ],
                 ),
-                Text(
-                  amount,
-                  style: AppTextStyles.manrope(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.textTertiary,
-                  ),
+                AppSpacing.v4,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      studentId,
+                      style: AppTextStyles.manrope(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textTertiary,
+                      ),
+                    ),
+                    Text(
+                      DateFormat('dd MMM, yyyy').format(date),
+                      style: AppTextStyles.manrope(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textTertiary,
+                      ),
+                    ),
+                  ],
                 ),
               ],
-            ),
-          ),
-          Container(
-            padding: AppSpacing.x12.add(AppSpacing.y6),
-            decoration: BoxDecoration(
-              color: statusBg,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Text(
-              status,
-              style: AppTextStyles.manrope(
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-                color: statusText,
-              ),
             ),
           ),
         ],

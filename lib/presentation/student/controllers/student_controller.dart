@@ -1,6 +1,6 @@
-import 'package:fee_easy/config/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tuoora/config/app_routes.dart';
 
 class StudentController extends GetxController {
   final _currentIndex = 0.obs;
@@ -16,15 +16,21 @@ class StudentController extends GetxController {
   }
 
   void _setInitialIndex() {
-    final route = Get.currentRoute;
-    if (route == AppRoutes.studentAttendance) {
-      _currentIndex.value = 1;
-    } else if (route == AppRoutes.studentHomework) {
-      _currentIndex.value = 2;
-    } else if (route == AppRoutes.studentInstitute) {
-      _currentIndex.value = 3;
-    } else {
-      _currentIndex.value = 0;
+    switch (Get.currentRoute) {
+      case AppRoutes.studentHomework:
+        _currentIndex.value = 1;
+        break;
+      case AppRoutes.studentFeeHistory:
+        _currentIndex.value = 2;
+        break;
+      case AppRoutes.studentAttendance:
+        _currentIndex.value = 3;
+        break;
+      case AppRoutes.studentSettings:
+        _currentIndex.value = 4;
+        break;
+      default:
+        _currentIndex.value = 0;
     }
   }
 

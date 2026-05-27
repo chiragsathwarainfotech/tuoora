@@ -1,6 +1,8 @@
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_images.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/app_action_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -9,6 +11,11 @@ class CommonDialog extends StatelessWidget {
   final String? description;
   final Widget? body;
   final IconData? icon;
+
+  /// Path to an SVG asset (e.g. [AppImages.icDelete]). Takes precedence
+  /// over [icon] when supplied. Renders via [AppActionIcon] so the SVG
+  /// adopts [iconColor] and the standard 32 dp dialog-icon size.
+  final String? svgAsset;
   final Color iconColor;
   final Color iconBgColor;
   final String confirmText;
@@ -24,6 +31,7 @@ class CommonDialog extends StatelessWidget {
     this.description,
     this.body,
     this.icon,
+    this.svgAsset,
     this.iconColor = AppColors.bohoRed,
     this.iconBgColor = AppColors.errorBg,
     this.confirmText = 'Confirm',
@@ -39,6 +47,7 @@ class CommonDialog extends StatelessWidget {
     String? description,
     Widget? body,
     IconData? icon,
+    String? svgAsset,
     Color iconColor = AppColors.bohoRed,
     Color iconBgColor = AppColors.errorBg,
     String confirmText = 'Confirm',
@@ -54,6 +63,7 @@ class CommonDialog extends StatelessWidget {
         description: description,
         body: body,
         icon: icon,
+        svgAsset: svgAsset,
         iconColor: iconColor,
         iconBgColor: iconBgColor,
         confirmText: confirmText,
@@ -76,12 +86,12 @@ class CommonDialog extends StatelessWidget {
     show(
       title: title,
       description: description,
-      icon: Icons.delete_outline_rounded,
-      iconColor: AppColors.bohoRed,
-      iconBgColor: AppColors.errorBg,
+      svgAsset: AppImages.icDelete,
+      iconColor: AppColors.primaryBrand,
+      iconBgColor: AppColors.primaryBrandLight,
       confirmText: confirmText,
       cancelText: cancelText,
-      confirmButtonColor: AppColors.bohoRed,
+      confirmButtonColor: AppColors.primaryBrand,
       onConfirm: onConfirm,
     );
   }
@@ -89,9 +99,13 @@ class CommonDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      insetPadding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.s16,
+        vertical: AppSpacing.s24,
+      ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       child: Container(
-        padding: AppSpacing.all32,
+        padding: AppSpacing.all16,
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(24),
@@ -102,7 +116,7 @@ class CommonDialog extends StatelessWidget {
               ? CrossAxisAlignment.stretch
               : CrossAxisAlignment.center,
           children: [
-            if (icon != null) ...[
+            if (icon != null || svgAsset != null) ...[
               Center(
                 child: Container(
                   padding: AppSpacing.all16,
@@ -110,7 +124,16 @@ class CommonDialog extends StatelessWidget {
                     color: iconBgColor,
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(icon, color: iconColor, size: 32),
+                  // SVG asset takes precedence over IconData when both
+                  // are provided. The colour filter on AppActionIcon
+                  // tints the SVG paths to match [iconColor].
+                  child: svgAsset != null
+                      ? AppActionIcon(
+                          asset: svgAsset!,
+                          color: iconColor,
+                          size: 32,
+                        )
+                      : Icon(icon, color: iconColor, size: 32),
                 ),
               ),
               AppSpacing.v24,
@@ -118,7 +141,7 @@ class CommonDialog extends StatelessWidget {
             Text(
               title,
               textAlign: body != null ? TextAlign.left : TextAlign.center,
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 20,
                 fontWeight: FontWeight.w800,
                 color: AppColors.textPrimary,
@@ -129,7 +152,7 @@ class CommonDialog extends StatelessWidget {
               Text(
                 description!,
                 textAlign: body != null ? TextAlign.left : TextAlign.center,
-                style: AppTextStyles.lexend(
+                style: AppTextStyles.outfit(
                   fontSize: 14,
                   height: 1.5,
                   color: AppColors.textTertiary,
@@ -153,7 +176,7 @@ class CommonDialog extends StatelessWidget {
                       ),
                       child: Text(
                         cancelText,
-                        style: AppTextStyles.manrope(
+                        style: AppTextStyles.outfit(
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
                           color: AppColors.textSecondary,
@@ -180,7 +203,7 @@ class CommonDialog extends StatelessWidget {
                       ),
                       child: Text(
                         confirmText,
-                        style: AppTextStyles.manrope(
+                        style: AppTextStyles.outfit(
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
                           color: AppColors.white,
@@ -197,4 +220,3 @@ class CommonDialog extends StatelessWidget {
     );
   }
 }
-

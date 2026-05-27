@@ -34,7 +34,7 @@ class StudentReceiptsListScreen extends GetView<StudentReceiptsListController> {
                       padding: const EdgeInsets.all(AppSpacing.s24),
                       child: Text(
                         'No receipts available yet.',
-                        style: AppTextStyles.lexend(
+                        style: AppTextStyles.outfit(
                           fontSize: 13,
                           color: AppColors.textSecondary,
                         ),
@@ -57,7 +57,7 @@ class StudentReceiptsListScreen extends GetView<StudentReceiptsListController> {
                           padding: const EdgeInsets.only(bottom: AppSpacing.s8),
                           child: Text(
                             '${items.length} ${items.length == 1 ? "receipt" : "receipts"} available',
-                            style: AppTextStyles.lexend(
+                            style: AppTextStyles.outfit(
                               fontSize: 12,
                               color: AppColors.textSecondary,
                             ),
@@ -127,7 +127,7 @@ class _ReceiptCard extends StatelessWidget {
                       receipt.receiptNumber.isNotEmpty
                           ? receipt.receiptNumber
                           : 'Receipt #${receipt.id}',
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 14,
                         fontWeight: FontWeight.w800,
                         color: AppColors.textPrimary,
@@ -142,7 +142,7 @@ class _ReceiptCard extends StatelessWidget {
                         if (receipt.paymentMethod.isNotEmpty)
                           receipt.paymentMethod,
                       ].join('  ·  '),
-                      style: AppTextStyles.lexend(
+                      style: AppTextStyles.outfit(
                         fontSize: 11,
                         color: AppColors.textSecondary,
                       ),
@@ -155,7 +155,7 @@ class _ReceiptCard extends StatelessWidget {
               AppSpacing.h8,
               Text(
                 '₹${receipt.amount}',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 14,
                   fontWeight: FontWeight.w800,
                   color: AppColors.textPrimary,

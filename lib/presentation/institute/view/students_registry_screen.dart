@@ -33,7 +33,7 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
                     onRefresh: () => controller.fetchStudents(reset: true),
                     color: AppColors.primaryBrand,
                     child: Padding(
-                      padding: AppSpacing.x24,
+                      padding: AppSpacing.x16,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -140,10 +140,10 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
         );
       },
       child: Container(
-        padding: AppSpacing.all16,
+        padding: AppSpacing.cardPadding,
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.03),
@@ -163,7 +163,7 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
                 children: [
                   Text(
                     name,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 16,
                       fontWeight: FontWeight.w800,
                       color: AppColors.textPrimary,
@@ -182,7 +182,7 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
                           AppSpacing.h4,
                           Text(
                             grade,
-                            style: AppTextStyles.lexend(
+                            style: AppTextStyles.outfit(
                               fontSize: AppSpacing.s16,
                               fontWeight: FontWeight.w500,
                               color: AppColors.textSecondary,
@@ -238,7 +238,7 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
       child: Center(
         child: Text(
           initials,
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 20,
             fontWeight: FontWeight.w800,
             color: AppColors.primaryBrand,

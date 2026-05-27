@@ -41,7 +41,7 @@ class StudentPayFeesScreen extends GetView<FeesController> {
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.fromLTRB(
                     AppSpacing.s16,
-                    AppSpacing.s4,
+                    AppSpacing.s16,
                     AppSpacing.s16,
                     AppSpacing.s24,
                   ),
@@ -74,7 +74,7 @@ class StudentPayFeesScreen extends GetView<FeesController> {
                         child: Text(
                           AppStrings.studentPayFeesDisclaimer,
                           textAlign: TextAlign.center,
-                          style: AppTextStyles.lexend(
+                          style: AppTextStyles.outfit(
                             fontSize: 11,
                             color: AppColors.textTertiary,
                             height: 1.4,
@@ -118,7 +118,7 @@ class _OutstandingCard extends StatelessWidget {
               opacity: 0.15,
               child: Text(
                 '₹',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 120,
                   fontWeight: FontWeight.w800,
                   color: AppColors.white,
@@ -135,7 +135,7 @@ class _OutstandingCard extends StatelessWidget {
               children: [
                 Text(
                   AppStrings.studentPayFeesOutstanding,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 10,
                     fontWeight: FontWeight.w800,
                     color: AppColors.white.withValues(alpha: 0.7),
@@ -145,7 +145,7 @@ class _OutstandingCard extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   '₹${_formatThousands(summary.pendingInRupees)}',
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 28,
                     fontWeight: FontWeight.w800,
                     color: AppColors.white,
@@ -155,7 +155,7 @@ class _OutstandingCard extends StatelessWidget {
                 const SizedBox(height: 6),
                 Text(
                   summary.pendingMonthsLabel,
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 12,
                     color: AppColors.white.withValues(alpha: 0.85),
                     fontWeight: FontWeight.w500,
@@ -184,7 +184,7 @@ class _UpiCard extends StatelessWidget {
       padding: const EdgeInsets.all(AppSpacing.s16),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.s14),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
@@ -197,7 +197,7 @@ class _UpiCard extends StatelessWidget {
         children: [
           Text(
             AppStrings.studentPayFeesScanWith,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 10,
               fontWeight: FontWeight.w800,
               color: AppColors.textTertiary,
@@ -209,7 +209,7 @@ class _UpiCard extends StatelessWidget {
           const SizedBox(height: AppSpacing.s12),
           Text(
             profile.instituteName,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 14,
               fontWeight: FontWeight.w800,
               color: AppColors.textPrimary,
@@ -233,7 +233,7 @@ class _UpiCard extends StatelessWidget {
                 children: [
                   Text(
                     profile.instituteUpiHandle,
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 12,
                       color: AppColors.textSecondary,
                       fontWeight: FontWeight.w600,
@@ -291,7 +291,7 @@ class _QrPlaceholder extends StatelessWidget {
                 alignment: Alignment.center,
                 child: Text(
                   'T',
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
                     color: AppColors.studentBrand,
@@ -380,7 +380,7 @@ class _OpenInGooglePayButton extends StatelessWidget {
             children: [
               Text(
                 'G',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
                   color: AppColors.studentProgressBlue,
@@ -388,7 +388,7 @@ class _OpenInGooglePayButton extends StatelessWidget {
               ),
               Text(
                 'Pay',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
                   color: AppColors.white,
@@ -397,7 +397,7 @@ class _OpenInGooglePayButton extends StatelessWidget {
               AppSpacing.h12,
               Text(
                 AppStrings.studentPayFeesOpenInGooglePay,
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
                   color: AppColors.white,
@@ -492,7 +492,7 @@ class _AppButton extends StatelessWidget {
               label,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 13,
                 fontWeight: FontWeight.w800,
                 color: labelColor,
@@ -519,7 +519,7 @@ class _HowItWorksCard extends StatelessWidget {
       padding: const EdgeInsets.all(AppSpacing.s14),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.s14),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -533,7 +533,7 @@ class _HowItWorksCard extends StatelessWidget {
         children: [
           Text(
             AppStrings.studentPayFeesHowItWorks,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 11,
               fontWeight: FontWeight.w800,
               color: AppColors.textTertiary,
@@ -580,7 +580,7 @@ class _Step extends StatelessWidget {
           alignment: Alignment.center,
           child: Text(
             '$index',
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 11,
               fontWeight: FontWeight.w800,
               color: AppColors.studentBrand,
@@ -591,7 +591,7 @@ class _Step extends StatelessWidget {
         Expanded(
           child: Text(
             text,
-            style: AppTextStyles.lexend(
+            style: AppTextStyles.outfit(
               fontSize: 12,
               color: AppColors.textSecondary,
               height: 1.5,

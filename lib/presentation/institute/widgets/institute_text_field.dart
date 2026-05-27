@@ -1,6 +1,7 @@
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/input_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -29,9 +30,9 @@ class InstituteTextField extends StatelessWidget {
       children: [
         Text(
           label,
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 14,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.brandAppBarColor,
           ),
         ),
@@ -39,26 +40,34 @@ class InstituteTextField extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             color: AppColors.paleSilver,
-            borderRadius: BorderRadius.circular(12),
+            // Institute design system: 4dp corner radius on text fields.
+            borderRadius: BorderRadius.circular(4),
           ),
           child: TextField(
             controller: controller,
             maxLines: maxLines,
             keyboardType: keyboardType,
             inputFormatters: inputFormatters,
-            style: AppTextStyles.manrope(
+            // Vertical-centre single-line entries so hint/text/icon all
+            // sit on the same baseline. Multi-line still flows from top.
+            textAlignVertical:
+                maxLines == 1 ? TextAlignVertical.center : null,
+            style: AppTextStyles.outfit(
               fontSize: 14,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w400,
               color: AppColors.textPrimary,
             ),
             decoration: InputDecoration(
               hintText: hint,
-              hintStyle: AppTextStyles.manrope(
+              hintStyle: AppTextStyles.outfit(
                 fontSize: 14,
+                fontWeight: FontWeight.w400,
                 color: AppColors.blueSapphire,
               ),
               border: InputBorder.none,
-              contentPadding: AppSpacing.all16,
+              // Single source of truth — see [InputStyles.contentPadding]
+              // for why this is 12 dp vertical (prefix-icon-friendly).
+              contentPadding: InputStyles.contentPadding,
             ),
           ),
         ),

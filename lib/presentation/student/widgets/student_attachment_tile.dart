@@ -23,12 +23,12 @@ class StudentAttachmentTile extends StatelessWidget {
       borderRadius: BorderRadius.circular(AppSpacing.s14),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(AppSpacing.s14),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         child: Ink(
           padding: const EdgeInsets.all(AppSpacing.s12),
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(AppSpacing.s14),
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.02),
@@ -48,7 +48,7 @@ class StudentAttachmentTile extends StatelessWidget {
                   children: [
                     Text(
                       attachment.name,
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 13,
                         fontWeight: FontWeight.w800,
                         color: AppColors.textPrimary,
@@ -59,7 +59,7 @@ class StudentAttachmentTile extends StatelessWidget {
                     const SizedBox(height: 2),
                     Text(
                       '${_kindLabel(attachment.kind)} · ${attachment.sizeLabel}',
-                      style: AppTextStyles.lexend(
+                      style: AppTextStyles.outfit(
                         fontSize: 11,
                         color: AppColors.textTertiary,
                       ),

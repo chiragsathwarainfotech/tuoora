@@ -68,7 +68,7 @@ class StudentFeeReminderScreen extends StatelessWidget {
               opacity: 0.15,
               child: Text(
                 '₹',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 120,
                   fontWeight: FontWeight.w800,
                   color: AppColors.white,
@@ -83,7 +83,7 @@ class StudentFeeReminderScreen extends StatelessWidget {
             children: [
               Text(
                 'MAY 2026',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 10,
                   fontWeight: FontWeight.w800,
                   color: AppColors.white,
@@ -92,7 +92,7 @@ class StudentFeeReminderScreen extends StatelessWidget {
               ),
               Text(
                 '₹4,500',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 36,
                   fontWeight: FontWeight.w800,
                   color: AppColors.white,
@@ -100,7 +100,7 @@ class StudentFeeReminderScreen extends StatelessWidget {
               ),
               Text(
                 paid ? 'Paid on 20 May 2026' : '25 May 2026 - 6 days left',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
                   color: AppColors.white,
@@ -154,7 +154,7 @@ class StudentFeeReminderScreen extends StatelessWidget {
         children: [
           Text(
             label,
-            style: AppTextStyles.lexend(
+            style: AppTextStyles.outfit(
               fontSize: 13,
               fontWeight: FontWeight.w400,
               color: AppColors.textTertiary,
@@ -162,7 +162,7 @@ class StudentFeeReminderScreen extends StatelessWidget {
           ),
           Text(
             value,
-            style: AppTextStyles.lexend(
+            style: AppTextStyles.outfit(
               fontSize: 13,
               fontWeight: isValueBold ? FontWeight.w500 : FontWeight.w400,
               color: valueColor ?? AppColors.textPrimary,
@@ -196,7 +196,7 @@ class StudentFeeReminderScreen extends StatelessWidget {
           Expanded(
             child: Text(
               'A late fee of ₹100 applies after the due date. Pay in cash at the institute or transfer via UPI.',
-              style: AppTextStyles.lexend(
+              style: AppTextStyles.outfit(
                 fontSize: 13,
                 fontWeight: FontWeight.w400,
                 color: AppColors.textSecondary,

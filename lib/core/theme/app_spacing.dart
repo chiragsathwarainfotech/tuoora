@@ -115,9 +115,39 @@ class AppSpacing {
   static const EdgeInsets right16 = EdgeInsets.only(right: s16);
 
   // Semantic Spacing
-  static const screenPadding = EdgeInsets.symmetric(
-    horizontal: s28,
-    vertical: s24,
+  ///
+  /// Design-system screen padding: 16 dp on left, right, and top.
+  /// Bottom is 16 dp too — screens that want a different bottom should
+  /// use [screenPaddingTop] (no bottom) or [screenPaddingWithBottom].
+  static const EdgeInsets screenPadding = EdgeInsets.fromLTRB(
+    s16,
+    s16,
+    s16,
+    s16,
   );
+
+  /// Spec L:16, R:16, T:16, B:0 — for screens that supply their own
+  /// bottom padding (e.g. scrollable bodies needing a tall safe-area
+  /// gap below the last card).
+  static const EdgeInsets screenPaddingTop = EdgeInsets.fromLTRB(
+    s16,
+    s16,
+    s16,
+    0,
+  );
+
+  /// Same as [screenPadding] but with a caller-controlled bottom.
+  static EdgeInsets screenPaddingWithBottom(double bottom) =>
+      EdgeInsets.fromLTRB(s16, s16, s16, bottom);
+
   static const headerPaddingLarge = EdgeInsets.fromLTRB(s28, s40, s28, s32);
+
+  // ============================================
+  // Card design-system tokens
+  // ============================================
+  /// Corner radius for any card surface (8 dp).
+  static const double cardRadius = s8;
+
+  /// Internal padding for any card surface (8 dp on all sides).
+  static const EdgeInsets cardPadding = EdgeInsets.all(s8);
 }

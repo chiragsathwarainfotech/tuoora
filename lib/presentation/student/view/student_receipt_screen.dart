@@ -73,7 +73,7 @@ class _Body extends StatelessWidget {
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(
         AppSpacing.s16,
-        AppSpacing.s4,
+        AppSpacing.s16,
         AppSpacing.s16,
         AppSpacing.s24,
       ),
@@ -87,7 +87,7 @@ class _Body extends StatelessWidget {
           Center(
             child: Text(
               'This is a system generated receipt and doesn\'t require a signature.',
-              style: AppTextStyles.lexend(
+              style: AppTextStyles.outfit(
                 fontSize: 11,
                 color: AppColors.textTertiary,
               ),
@@ -115,7 +115,7 @@ class _ReceiptCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.s16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
@@ -132,7 +132,7 @@ class _ReceiptCard extends StatelessWidget {
           children: [
             Text(
               monthHeader,
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 10,
                 fontWeight: FontWeight.w800,
                 color: AppColors.textTertiary,
@@ -146,7 +146,7 @@ class _ReceiptCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     '₹${receipt.amount}',
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 26,
                       fontWeight: FontWeight.w800,
                       color: AppColors.textPrimary,
@@ -208,7 +208,7 @@ class _DetailRow extends StatelessWidget {
               Expanded(
                 child: Text(
                   label,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                     color: AppColors.textTertiary,
@@ -220,7 +220,7 @@ class _DetailRow extends StatelessWidget {
                 child: Text(
                   value,
                   textAlign: TextAlign.right,
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 12,
                     color: AppColors.textPrimary,
                     fontWeight: FontWeight.w600,
@@ -288,7 +288,7 @@ class _StatusPill extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: AppTextStyles.manrope(
+        style: AppTextStyles.outfit(
           fontSize: 11,
           fontWeight: FontWeight.w800,
           color: fg,
@@ -389,7 +389,7 @@ class _ActionButton extends StatelessWidget {
               AppSpacing.h8,
               Text(
                 label,
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 13,
                   fontWeight: FontWeight.w800,
                   color: fg,

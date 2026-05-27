@@ -80,7 +80,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
   Widget _buildSectionTitle(String title) {
     return Text(
       title,
-      style: AppTextStyles.manrope(
+      style: AppTextStyles.outfit(
         fontSize: 12,
         fontWeight: FontWeight.w800,
         color: AppColors.textSecondary,
@@ -122,7 +122,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
                   children: [
                     Text(
                       header.name,
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 18,
                         fontWeight: FontWeight.w800,
                         color: AppColors.textPrimary,
@@ -131,7 +131,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
                     const SizedBox(height: 2),
                     Text(
                       'Class ${header.standard} • ${header.subject} • Roll ${header.rollNo}',
-                      style: AppTextStyles.lexend(
+                      style: AppTextStyles.outfit(
                         fontSize: 11,
                         color: AppColors.textSecondary,
                       ),
@@ -147,7 +147,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
                         const SizedBox(width: 6),
                         Text(
                           'Member since: ${header.memberSince}',
-                          style: AppTextStyles.lexend(
+                          style: AppTextStyles.outfit(
                             fontSize: 12,
                             color: AppColors.textSecondary,
                           ),
@@ -191,7 +191,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
                               : Center(
                                   child: Text(
                                     header.initials,
-                                    style: AppTextStyles.manrope(
+                                    style: AppTextStyles.outfit(
                                       fontSize: 28,
                                       fontWeight: FontWeight.w900,
                                       color: AppColors.primaryBrand,
@@ -275,7 +275,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
         children: [
           Text(
             label,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 10,
               fontWeight: FontWeight.w800,
               color: AppColors.textTertiary,
@@ -284,7 +284,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
           const SizedBox(height: 6),
           Text(
             value,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 20,
               fontWeight: FontWeight.w800,
               color: valueColor ?? AppColors.textPrimary,
@@ -318,7 +318,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
               children: [
                 Text(
                   'STUDENT QR',
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 10,
                     fontWeight: FontWeight.w800,
                     color: AppColors.textTertiary,
@@ -327,7 +327,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
                 const SizedBox(height: 2),
                 Text(
                   qr.displayId,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
                     color: AppColors.textPrimary,
@@ -336,7 +336,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
                 const SizedBox(height: 4),
                 Text(
                   qr.hint,
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 11,
                     color: AppColors.textSecondary,
                     height: 1.4,
@@ -460,7 +460,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
             width: 60,
             child: Text(
               label,
-              style: AppTextStyles.lexend(
+              style: AppTextStyles.outfit(
                 fontSize: 13,
                 color: AppColors.textTertiary,
               ),
@@ -470,7 +470,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
             child: Text(
               value,
               textAlign: TextAlign.right,
-              style: AppTextStyles.lexend(
+              style: AppTextStyles.outfit(
                 fontSize: 13,
                 fontWeight: FontWeight.w500,
                 color: AppColors.textPrimary,
@@ -552,7 +552,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
           const SizedBox(width: 8),
           Text(
             'Log out',
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 14,
               fontWeight: FontWeight.w800,
               color: AppColors.error,

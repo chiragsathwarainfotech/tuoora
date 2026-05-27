@@ -40,7 +40,7 @@ class PortalAppBar extends StatelessWidget implements PreferredSizeWidget {
           AppSpacing.h12,
           Text(
             title,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 18,
               fontWeight: FontWeight.w800,
               color: AppColors.brandAppBarColor,

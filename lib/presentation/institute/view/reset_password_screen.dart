@@ -29,7 +29,7 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
                   children: [
                     Text(
                       'A verification code has been sent to your email. Enter it below along with your new access key.',
-                      style: AppTextStyles.lexend(
+                      style: AppTextStyles.outfit(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                         color: AppColors.textTertiary,
@@ -41,7 +41,7 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
                       padding: const EdgeInsets.all(AppSpacing.s28),
                       decoration: BoxDecoration(
                         color: AppColors.white,
-                        borderRadius: BorderRadius.circular(AppSpacing.s32),
+                        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withValues(alpha: 0.04),
@@ -55,7 +55,7 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
                         children: [
                           Text(
                             'VERIFICATION CODE',
-                            style: AppTextStyles.manrope(
+                            style: AppTextStyles.outfit(
                               fontSize: 10,
                               fontWeight: FontWeight.w800,
                               color: AppColors.brandAppBarColor,
@@ -72,7 +72,7 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
                           AppSpacing.v24,
                           Text(
                             'NEW ACCESS KEY',
-                            style: AppTextStyles.manrope(
+                            style: AppTextStyles.outfit(
                               fontSize: 10,
                               fontWeight: FontWeight.w800,
                               color: AppColors.brandAppBarColor,
@@ -123,7 +123,7 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
                                   controller.canResend.value
                                       ? "Didn't receive the code? "
                                       : "Resend code in ",
-                                  style: AppTextStyles.lexend(
+                                  style: AppTextStyles.outfit(
                                     fontSize: 14,
                                     color: AppColors.blueSapphire,
                                   ),
@@ -137,7 +137,7 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
                                             : controller.resendOtp,
                                         child: Text(
                                           'Resend Code',
-                                          style: AppTextStyles.manrope(
+                                          style: AppTextStyles.outfit(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w800,
                                             color: AppColors.primaryBrand,
@@ -146,7 +146,7 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
                                       )
                                     : Text(
                                         '00:${controller.timerSeconds.value.toString().padLeft(2, '0')}',
-                                        style: AppTextStyles.manrope(
+                                        style: AppTextStyles.outfit(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w800,
                                           color: AppColors.primaryBrand,
@@ -185,10 +185,10 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
         controller: controller,
         obscureText: obscureText,
         keyboardType: keyboardType,
-        style: AppTextStyles.lexend(fontSize: 14, color: AppColors.textPrimary),
+        style: AppTextStyles.outfit(fontSize: 14, color: AppColors.textPrimary),
         decoration: InputDecoration(
           hintText: hint,
-          hintStyle: AppTextStyles.lexend(
+          hintStyle: AppTextStyles.outfit(
             fontSize: 14,
             color: AppColors.blueSapphire,
           ),

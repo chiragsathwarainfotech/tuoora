@@ -27,7 +27,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                   const InstituteAppBar(title: 'Record Fee'),
                   Expanded(
                     child: SingleChildScrollView(
-                      padding: AppSpacing.x24.add(AppSpacing.y16),
+                      padding: AppSpacing.x16.add(AppSpacing.y16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
@@ -63,7 +63,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
@@ -85,7 +85,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
               AppSpacing.h8,
               Text(
                 AppStrings.instStudentInfoLabel,
-                style: AppTextStyles.lexend(
+                style: AppTextStyles.outfit(
                   fontSize: 12,
                   fontWeight: FontWeight.w800,
                   color: AppColors.brandAppBarColor,
@@ -111,7 +111,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                   padding: const EdgeInsets.only(top: 8, left: 4),
                   child: Text(
                     controller.studentError.value!,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 12,
                       color: Colors.redAccent,
                       fontWeight: FontWeight.w500,
@@ -146,14 +146,14 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                       ),
                       title: Text(
                         student.name,
-                        style: AppTextStyles.manrope(
+                        style: AppTextStyles.outfit(
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
                       subtitle: Text(
                         student.id.toString(),
-                        style: AppTextStyles.lexend(
+                        style: AppTextStyles.outfit(
                           fontSize: 12,
                           color: AppColors.textTertiary,
                         ),
@@ -183,7 +183,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                       children: [
                         Text(
                           controller.selectedStudent.value!.name,
-                          style: AppTextStyles.manrope(
+                          style: AppTextStyles.outfit(
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
                             color: AppColors.textPrimary,
@@ -191,7 +191,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                         ),
                         Text(
                           'Batch: ${controller.selectedStudent.value!.currentBatchName}',
-                          style: AppTextStyles.lexend(
+                          style: AppTextStyles.outfit(
                             fontSize: 12,
                             color: AppColors.textSecondary,
                           ),
@@ -203,7 +203,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                     onTap: () => controller.changeStudent(),
                     child: Text(
                       'Change',
-                      style: AppTextStyles.lexend(
+                      style: AppTextStyles.outfit(
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
                         color: AppColors.primaryBrand,
@@ -223,7 +223,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
@@ -237,7 +237,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
         children: [
           Text(
             AppStrings.instAmountLabel,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 14,
               fontWeight: FontWeight.w800,
               color: AppColors.brandAppBarColor,
@@ -268,12 +268,12 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                         border: InputBorder.none,
                         isDense: true,
                         contentPadding: EdgeInsets.zero,
-                        hintStyle: AppTextStyles.lexend(
+                        hintStyle: AppTextStyles.outfit(
                           fontSize: 15,
                           color: AppColors.blueSapphire,
                         ),
                       ),
-                      style: AppTextStyles.lexend(
+                      style: AppTextStyles.outfit(
                         fontSize: 15,
                         color: AppColors.textPrimary,
                         fontWeight: FontWeight.w700,
@@ -295,7 +295,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                 padding: const EdgeInsets.only(top: 8, left: 4),
                 child: Text(
                   controller.amountError.value!,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 12,
                     color: Colors.redAccent,
                     fontWeight: FontWeight.w500,
@@ -308,7 +308,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
           AppSpacing.v20,
           Text(
             'Record Date',
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 14,
               fontWeight: FontWeight.w800,
               color: AppColors.brandAppBarColor,
@@ -331,7 +331,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                       DateFormat(
                         'dd MMM, yyyy',
                       ).format(controller.selectedRecordDate.value),
-                      style: AppTextStyles.lexend(
+                      style: AppTextStyles.outfit(
                         fontSize: 15,
                         color: AppColors.textPrimary,
                         fontWeight: FontWeight.w700,
@@ -350,7 +350,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
           AppSpacing.v20,
           Text(
             AppStrings.instPaymentMethodLabel,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 14,
               fontWeight: FontWeight.w800,
               color: AppColors.brandAppBarColor,
@@ -412,7 +412,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
             AppSpacing.h12,
             Text(
               label,
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 14,
                 fontWeight: FontWeight.w800,
                 color: isActive
@@ -444,7 +444,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
             padding: AppSpacing.all12,
             decoration: BoxDecoration(
               color: AppColors.white,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.05),
@@ -461,7 +461,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
           AppSpacing.v16,
           Text(
             AppStrings.instAutoReceiptTitle,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 16,
               fontWeight: FontWeight.w800,
               color: AppColors.textPrimary,
@@ -471,7 +471,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
           Text(
             AppStrings.instAutoReceiptDesc,
             textAlign: TextAlign.center,
-            style: AppTextStyles.lexend(
+            style: AppTextStyles.outfit(
               fontSize: 11,
               color: AppColors.textTertiary,
               height: 1.4,
@@ -485,7 +485,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
               children: [
                 Text(
                   AppStrings.instPreviewReceipt,
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                     color: AppColors.primaryBrand,
@@ -537,7 +537,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
             Text(
               'Receipt Preview',
               textAlign: TextAlign.center,
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 20,
                 fontWeight: FontWeight.w800,
                 color: AppColors.textPrimary,
@@ -567,7 +567,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
               children: [
                 Text(
                   'Total Amount',
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
                     color: AppColors.textPrimary,
@@ -575,7 +575,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                 ),
                 Text(
                   '₹${controller.amount.value}',
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 24,
                     fontWeight: FontWeight.w800,
                     color: AppColors.primaryBrand,
@@ -595,7 +595,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
               ),
               child: Text(
                 'Close Preview',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
                   color: AppColors.white,
@@ -619,7 +619,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
         children: [
           Text(
             label,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 14,
               fontWeight: FontWeight.w600,
               color: AppColors.textTertiary,
@@ -636,7 +636,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
               ),
               child: Text(
                 value,
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
                   color: value == AppStrings.instStatusPaid
@@ -648,7 +648,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
           else
             Text(
               value,
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
                 color: AppColors.textPrimary,
@@ -696,7 +696,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
       child: Center(
         child: Text(
           initials,
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: size * 0.4,
             fontWeight: FontWeight.w800,
             color: AppColors.primaryBrand,

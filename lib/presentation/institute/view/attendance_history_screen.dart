@@ -98,7 +98,7 @@ class AttendanceHistoryScreen extends GetView<StaffController> {
                         children: [
                           Text(
                             name,
-                            style: AppTextStyles.manrope(
+                            style: AppTextStyles.outfit(
                               fontSize: 16,
                               fontWeight: FontWeight.w800,
                               color: AppColors.textPrimary,
@@ -106,7 +106,7 @@ class AttendanceHistoryScreen extends GetView<StaffController> {
                           ),
                           Text(
                             date,
-                            style: AppTextStyles.manrope(
+                            style: AppTextStyles.outfit(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
                               color: AppColors.textTertiary,
@@ -122,7 +122,7 @@ class AttendanceHistoryScreen extends GetView<StaffController> {
                   AppSpacing.v4,
                   Text(
                     '"$remark"',
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 13,
                       fontWeight: FontWeight.w400,
                       color: AppColors.textSecondary,
@@ -156,7 +156,7 @@ class AttendanceHistoryScreen extends GetView<StaffController> {
           AppSpacing.h6,
           Text(
             status,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 12,
               fontWeight: FontWeight.w700,
               color: color,
@@ -205,7 +205,7 @@ class AttendanceHistoryScreen extends GetView<StaffController> {
       child: Center(
         child: Text(
           getInitials(name),
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: size * 0.4,
             fontWeight: FontWeight.w800,
             color: AppColors.primaryBrand,

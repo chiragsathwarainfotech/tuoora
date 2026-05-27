@@ -5,6 +5,7 @@ import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/enums/app_enums.dart';
+import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
 import 'package:tuoora/presentation/student/controllers/student_reports_controller.dart';
 
@@ -70,7 +71,7 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
           decoration: isSelected
               ? BoxDecoration(
                   color: AppColors.white,
-                  borderRadius: BorderRadius.circular(6),
+                  borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withValues(alpha: 0.05),
@@ -82,7 +83,7 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
           alignment: Alignment.center,
           child: Text(
             text,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 12,
               fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
               color: isSelected
@@ -138,7 +139,7 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
                   Expanded(
                     child: Text(
                       'Attendance',
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 14,
                         fontWeight: FontWeight.w800,
                         color: AppColors.textPrimary,
@@ -159,7 +160,7 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
                 children: [
                   Text(
                     '${attendance.pct}%',
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 28,
                       fontWeight: FontWeight.w800,
                       color: AppColors.greenText,
@@ -169,7 +170,7 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
                   const SizedBox(width: 8),
                   Text(
                     '${summary.present} of ${summary.total} days',
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 11,
                       color: AppColors.textSecondary,
                     ),
@@ -204,7 +205,7 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
                               (e) => Text(
                                 e.label,
                                 textAlign: TextAlign.center,
-                                style: AppTextStyles.lexend(
+                                style: AppTextStyles.outfit(
                                   fontSize: 9,
                                   color: AppColors.textSecondary,
                                 ),
@@ -266,7 +267,7 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
                   Expanded(
                     child: Text(
                       'Assignments',
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 14,
                         fontWeight: FontWeight.w800,
                         color: AppColors.textPrimary,
@@ -287,7 +288,7 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
                 children: [
                   Text(
                     '${assignments.pct}%',
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 28,
                       fontWeight: FontWeight.w800,
                       color: AppColors.textPrimary,
@@ -297,7 +298,7 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
                   const SizedBox(width: 8),
                   Text(
                     '${summary.completed} completed - ${summary.pending} pending',
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 11,
                       color: AppColors.textSecondary,
                     ),
@@ -348,7 +349,7 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
                             const SizedBox(height: 6),
                             Text(
                               e.label,
-                              style: AppTextStyles.lexend(
+                              style: AppTextStyles.outfit(
                                 fontSize: 10,
                                 color: AppColors.textSecondary,
                               ),
@@ -393,7 +394,7 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
         const SizedBox(width: 6),
         Text(
           label,
-          style: AppTextStyles.lexend(
+          style: AppTextStyles.outfit(
             fontSize: 11,
             color: AppColors.textSecondary,
           ),

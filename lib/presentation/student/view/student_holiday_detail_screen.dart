@@ -62,7 +62,7 @@ class StudentHolidayDetailScreen extends StatelessWidget {
           const SizedBox(height: AppSpacing.s16),
           Text(
             'Buddha Purnima',
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 22,
               fontWeight: FontWeight.w900,
               color: AppColors.textPrimary,
@@ -71,7 +71,7 @@ class StudentHolidayDetailScreen extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             'Wednesday, 21 May 2026',
-            style: AppTextStyles.lexend(
+            style: AppTextStyles.outfit(
               fontSize: 13,
               fontWeight: FontWeight.w400,
               color: AppColors.textTertiary,
@@ -84,7 +84,7 @@ class StudentHolidayDetailScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
               child: Text(
                 'INSTITUTE CLOSED',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 10,
                   fontWeight: FontWeight.w800,
                   color: AppColors.textSecondary,
@@ -108,7 +108,7 @@ class StudentHolidayDetailScreen extends StatelessWidget {
       ),
       child: Text(
         'Marks the birth of Gautama Buddha. The institute will remain closed for the day. There are no assignment deadlines on this day; pending submissions roll over to Thursday.',
-        style: AppTextStyles.lexend(
+        style: AppTextStyles.outfit(
           fontSize: 13,
           fontWeight: FontWeight.w400,
           color: AppColors.textSecondary,
@@ -147,7 +147,7 @@ class StudentHolidayDetailScreen extends StatelessWidget {
               children: [
                 Text(
                   'CLASSES RESUME',
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 10,
                     fontWeight: FontWeight.w800,
                     color: AppColors.textTertiary,
@@ -156,7 +156,7 @@ class StudentHolidayDetailScreen extends StatelessWidget {
                 ),
                 Text(
                   'Thursday, 22 May 2026 at 8:00 AM',
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 13,
                     fontWeight: FontWeight.w800,
                     color: AppColors.textPrimary,

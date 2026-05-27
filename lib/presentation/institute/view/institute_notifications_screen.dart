@@ -37,7 +37,7 @@ class InstituteNotificationsScreen extends GetView<NotificationController> {
                         Text(
                           'Error: ${controller.errorMessage.value}',
                           textAlign: TextAlign.center,
-                          style: AppTextStyles.manrope(
+                          style: AppTextStyles.outfit(
                             color: AppColors.errorRed,
                           ),
                         ),
@@ -64,7 +64,7 @@ class InstituteNotificationsScreen extends GetView<NotificationController> {
                         AppSpacing.v16,
                         Text(
                           'No notifications yet',
-                          style: AppTextStyles.manrope(
+                          style: AppTextStyles.outfit(
                             fontSize: 16,
                             color: AppColors.textSecondary,
                             fontWeight: FontWeight.w600,
@@ -79,7 +79,7 @@ class InstituteNotificationsScreen extends GetView<NotificationController> {
                   onRefresh: () => controller.refreshNotifications(),
                   color: AppColors.primaryBrand,
                   child: ListView.separated(
-                    padding: AppSpacing.x24.add(AppSpacing.y16),
+                    padding: AppSpacing.x16.add(AppSpacing.y16),
                     itemCount: controller.notifications.length,
                     separatorBuilder: (context, index) => AppSpacing.v16,
                     itemBuilder: (context, index) {
@@ -138,7 +138,7 @@ class InstituteNotificationsScreen extends GetView<NotificationController> {
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -180,7 +180,7 @@ class InstituteNotificationsScreen extends GetView<NotificationController> {
                       ),
                       child: Text(
                         badge,
-                        style: AppTextStyles.manrope(
+                        style: AppTextStyles.outfit(
                           fontSize: 10,
                           fontWeight: FontWeight.w900,
                           color: AppColors.white,
@@ -189,7 +189,7 @@ class InstituteNotificationsScreen extends GetView<NotificationController> {
                     ),
                     Text(
                       _getRelativeTime(notification.createdAt),
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 12,
                         color: AppColors.textMuted,
                         fontWeight: FontWeight.w600,
@@ -200,7 +200,7 @@ class InstituteNotificationsScreen extends GetView<NotificationController> {
                 AppSpacing.v12,
                 Text(
                   notification.title,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 18,
                     fontWeight: FontWeight.w800,
                     color: AppColors.darkSlate,
@@ -210,7 +210,7 @@ class InstituteNotificationsScreen extends GetView<NotificationController> {
                 AppSpacing.v8,
                 Text(
                   notification.message,
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 13,
                     color: AppColors.textSecondary,
                     height: 1.5,

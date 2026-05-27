@@ -21,11 +21,11 @@ class InstituteSignupScreen extends GetView<SignupController> {
               _buildHeader(),
               AppSpacing.v32,
               Container(
-                margin: AppSpacing.x24,
+                margin: AppSpacing.x16,
                 padding: const EdgeInsets.all(AppSpacing.s28),
                 decoration: BoxDecoration(
                   color: AppColors.white,
-                  borderRadius: BorderRadius.circular(AppSpacing.s32),
+                  borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withValues(alpha: 0.04),
@@ -99,7 +99,7 @@ class InstituteSignupScreen extends GetView<SignupController> {
                 children: [
                   Text(
                     'Already have an account? ',
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 14,
                       color: AppColors.blueSapphire,
                     ),
@@ -108,7 +108,7 @@ class InstituteSignupScreen extends GetView<SignupController> {
                     onTap: () => Get.back(),
                     child: Text(
                       'Sign In',
-                      style: AppTextStyles.lexend(
+                      style: AppTextStyles.outfit(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
                         color: AppColors.primaryBrand,
@@ -149,7 +149,7 @@ class InstituteSignupScreen extends GetView<SignupController> {
             AppSpacing.h12,
             Text(
               'Tuoora',
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 22,
                 fontWeight: FontWeight.w800,
                 color: AppColors.primaryBrand,
@@ -160,7 +160,7 @@ class InstituteSignupScreen extends GetView<SignupController> {
         AppSpacing.v32,
         Text(
           'REGISTRATION',
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 12,
             fontWeight: FontWeight.w800,
             color: AppColors.primaryBrand,
@@ -171,7 +171,7 @@ class InstituteSignupScreen extends GetView<SignupController> {
         Text(
           'Complete these steps to register your institute.',
           textAlign: TextAlign.center,
-          style: AppTextStyles.lexend(
+          style: AppTextStyles.outfit(
             fontSize: 14,
             fontWeight: FontWeight.w500,
             color: AppColors.blueSapphire,
@@ -185,7 +185,7 @@ class InstituteSignupScreen extends GetView<SignupController> {
   Widget _buildLabel(String text) {
     return Text(
       text,
-      style: AppTextStyles.manrope(
+      style: AppTextStyles.outfit(
         fontSize: 10,
         fontWeight: FontWeight.w800,
         color: AppColors.brandAppBarColor,
@@ -211,10 +211,10 @@ class InstituteSignupScreen extends GetView<SignupController> {
         controller: controller,
         obscureText: obscureText,
         keyboardType: keyboardType,
-        style: AppTextStyles.lexend(fontSize: 14, color: AppColors.textPrimary),
+        style: AppTextStyles.outfit(fontSize: 14, color: AppColors.textPrimary),
         decoration: InputDecoration(
           hintText: hint,
-          hintStyle: AppTextStyles.lexend(
+          hintStyle: AppTextStyles.outfit(
             fontSize: 14,
             color: AppColors.blueSapphire,
           ),

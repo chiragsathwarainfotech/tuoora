@@ -31,7 +31,8 @@ class InstituteBottomButton extends StatelessWidget {
           disabledBackgroundColor:
               backgroundColor?.withValues(alpha: 0.6) ??
               AppColors.primaryBrand.withValues(alpha: 0.6),
-          minimumSize: const Size(double.infinity, 56),
+          // Design-system button height (was 56 → 48 per spec).
+          minimumSize: const Size(double.infinity, 48),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
@@ -55,7 +56,7 @@ class InstituteBottomButton extends StatelessWidget {
                   ],
                   Text(
                     label,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 18,
                       fontWeight: FontWeight.w800,
                       color: AppColors.white,

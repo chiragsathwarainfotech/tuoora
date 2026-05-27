@@ -129,7 +129,7 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
         AppSpacing.v16,
         Text(
           AppStrings.instChangeLogo,
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 14,
             fontWeight: FontWeight.w800,
             color: AppColors.primaryBrand,
@@ -144,7 +144,7 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -166,7 +166,7 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
               AppSpacing.h12,
               Text(
                 'INSTITUTE INFORMATION',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 12,
                   fontWeight: FontWeight.w900,
                   color: AppColors.primaryBrand,
@@ -299,7 +299,7 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
             child: Center(
               child: Text(
                 'Discard Changes',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 14,
                   fontWeight: FontWeight.w800,
                   color: AppColors.textSecondary,

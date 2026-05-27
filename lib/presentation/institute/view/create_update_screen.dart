@@ -32,7 +32,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                       children: [
                         Text(
                           'Select Category',
-                          style: AppTextStyles.manrope(
+                          style: AppTextStyles.outfit(
                             fontSize: 14,
                             fontWeight: FontWeight.w800,
                             color: AppColors.brandAppBarColor,
@@ -52,7 +52,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                             errorText: controller.triedToSave.value
                                 ? controller.subjectError.value
                                 : null,
-                            textStyle: AppTextStyles.manrope(
+                            textStyle: AppTextStyles.outfit(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
                               color: AppColors.textPrimary,
@@ -70,7 +70,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                             errorText: controller.triedToSave.value
                                 ? controller.messageError.value
                                 : null,
-                            textStyle: AppTextStyles.manrope(
+                            textStyle: AppTextStyles.outfit(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
                               color: AppColors.textPrimary,
@@ -130,7 +130,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                 ),
                 child: Text(
                   cat.name,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                     color: isSelected ? AppColors.white : AppColors.textPrimary,
@@ -149,7 +149,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
       padding: AppSpacing.all20,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -166,7 +166,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
             children: [
               Text(
                 'Recipient',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
                   color: AppColors.brandAppBarColor,
@@ -200,7 +200,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                       value: value,
                       child: Text(
                         value.name.capitalizeFirst!,
-                        style: AppTextStyles.manrope(
+                        style: AppTextStyles.outfit(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                           color: AppColors.textPrimary,
@@ -223,7 +223,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                   AppSpacing.v24,
                   Text(
                     'Target Audience',
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 14,
                       fontWeight: FontWeight.w800,
                       color: AppColors.brandAppBarColor,
@@ -257,7 +257,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                             value: value,
                             child: Text(
                               label,
-                              style: AppTextStyles.manrope(
+                              style: AppTextStyles.outfit(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
                                 color: AppColors.textPrimary,
@@ -276,7 +276,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                     AppSpacing.v24,
                     Text(
                       'Select Batch',
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 14,
                         fontWeight: FontWeight.w800,
                         color: AppColors.brandAppBarColor,
@@ -292,7 +292,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
                           child: Text(
                             'No batches found',
-                            style: AppTextStyles.manrope(
+                            style: AppTextStyles.outfit(
                               fontSize: 14,
                               color: Colors.redAccent,
                             ),
@@ -323,7 +323,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                                 value: value,
                                 child: Text(
                                   '${value.name} • ${value.subject}',
-                                  style: AppTextStyles.manrope(
+                                  style: AppTextStyles.outfit(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
                                     color: AppColors.textPrimary,
@@ -373,7 +373,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                 AppSpacing.h12,
                 Text(
                   'Add Attachment (Image/PDF)',
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
                     color: AppColors.primaryBrand,
@@ -415,7 +415,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                       Expanded(
                         child: Text(
                           fileName,
-                          style: AppTextStyles.manrope(
+                          style: AppTextStyles.outfit(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
                           ),
@@ -448,7 +448,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
       children: [
         Text(
           'Broadcast Channels',
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 14,
             fontWeight: FontWeight.w800,
             color: AppColors.brandAppBarColor,
@@ -489,7 +489,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
       padding: AppSpacing.all16,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -515,7 +515,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
               children: [
                 Text(
                   title,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
                     color: AppColors.textPrimary,
@@ -523,7 +523,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                 ),
                 Text(
                   subtitle,
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 11,
                     color: AppColors.textTertiary,
                   ),

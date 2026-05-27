@@ -103,7 +103,7 @@ class StudentStudyMaterialScreen
                   ),
                   child: Text(
                     item.subject,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 10,
                       fontWeight: FontWeight.w800,
                       color: textColor,
@@ -112,7 +112,7 @@ class StudentStudyMaterialScreen
                 ),
                 Text(
                   item.date,
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 11,
                     color: AppColors.textTertiary,
                   ),
@@ -122,7 +122,7 @@ class StudentStudyMaterialScreen
             const SizedBox(height: 12),
             Text(
               item.title,
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 14,
                 fontWeight: FontWeight.w800,
                 color: AppColors.textPrimary,
@@ -131,7 +131,7 @@ class StudentStudyMaterialScreen
             const SizedBox(height: 8),
             Text(
               item.description,
-              style: AppTextStyles.lexend(
+              style: AppTextStyles.outfit(
                 fontSize: 12,
                 color: AppColors.textSecondary,
                 height: 1.4,
@@ -152,7 +152,7 @@ class StudentStudyMaterialScreen
                 const SizedBox(width: 4),
                 Text(
                   '1 file',
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 11,
                     color: AppColors.textSecondary,
                   ),
@@ -160,7 +160,7 @@ class StudentStudyMaterialScreen
                 const SizedBox(width: 8),
                 Text(
                   '•',
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 11,
                     color: AppColors.textTertiary,
                   ),
@@ -169,7 +169,7 @@ class StudentStudyMaterialScreen
                 Expanded(
                   child: Text(
                     item.batchName,
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 11,
                       color: AppColors.textSecondary,
                     ),

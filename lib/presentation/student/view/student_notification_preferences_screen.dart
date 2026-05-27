@@ -32,7 +32,7 @@ class StudentNotificationPreferencesScreen
                     const SizedBox(height: 24),
                     Text(
                       'CATEGORIES',
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 12,
                         fontWeight: FontWeight.w800,
                         color: AppColors.textSecondary,
@@ -79,7 +79,7 @@ class StudentNotificationPreferencesScreen
               children: [
                 Text(
                   'Mute everything',
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
                     color: AppColors.textPrimary,
@@ -88,7 +88,7 @@ class StudentNotificationPreferencesScreen
                 const SizedBox(height: 4),
                 Text(
                   'Stops all push alerts. In-app notifications still appear.',
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 11,
                     color: AppColors.textSecondary,
                   ),
@@ -208,7 +208,7 @@ class StudentNotificationPreferencesScreen
               children: [
                 Text(
                   title,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 14,
                     fontWeight: value ? FontWeight.w800 : FontWeight.w700,
                     color: AppColors.textPrimary,
@@ -217,7 +217,7 @@ class StudentNotificationPreferencesScreen
                 const SizedBox(height: 2),
                 Text(
                   subtitle,
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 11,
                     color: AppColors.textSecondary,
                   ),

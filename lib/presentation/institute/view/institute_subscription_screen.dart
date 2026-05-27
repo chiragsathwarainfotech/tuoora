@@ -36,7 +36,7 @@ class InstituteSubscriptionScreen
                   return Center(
                     child: Text(
                       'Failed to load subscription data.',
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 16,
                         color: AppColors.textPrimary,
                       ),
@@ -86,7 +86,7 @@ class InstituteSubscriptionScreen
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(AppSpacing.s16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: isActive
@@ -126,7 +126,7 @@ class InstituteSubscriptionScreen
                     AppSpacing.h8,
                     Text(
                       isActive ? 'ACTIVE PLAN' : 'NO ACTIVE PLAN',
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: AppSpacing.s10,
                         fontWeight: FontWeight.w900,
                         color: AppColors.white,
@@ -140,7 +140,7 @@ class InstituteSubscriptionScreen
           AppSpacing.v12,
           Text(
             sub.planName,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: AppSpacing.s32,
               fontWeight: FontWeight.w800,
               color: AppColors.white,
@@ -149,7 +149,7 @@ class InstituteSubscriptionScreen
           if (isActive && sub.expiresAt != null)
             Text(
               'Expires on ${DateFormat.yMMMd().format(sub.expiresAt!)}',
-              style: AppTextStyles.lexend(
+              style: AppTextStyles.outfit(
                 fontSize: AppSpacing.s14,
                 color: Colors.white70,
               ),
@@ -162,7 +162,7 @@ class InstituteSubscriptionScreen
             children: [
               Text(
                 'LATEST BILLING',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: AppSpacing.s12,
                   fontWeight: FontWeight.w700,
                   color: Colors.white,
@@ -173,7 +173,7 @@ class InstituteSubscriptionScreen
                   children: [
                     TextSpan(
                       text: amount,
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: AppSpacing.s24,
                         fontWeight: FontWeight.w800,
                         color: AppColors.white,
@@ -197,7 +197,7 @@ class InstituteSubscriptionScreen
       children: [
         Text(
           'Available Plans',
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: AppSpacing.s20,
             fontWeight: FontWeight.w800,
             color: AppColors.primaryBrand,
@@ -233,7 +233,7 @@ class InstituteSubscriptionScreen
         children: [
           Text(
             plan.name,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: AppSpacing.s22,
               fontWeight: FontWeight.w800,
               color: AppColors.brandAppBarColor,
@@ -244,7 +244,7 @@ class InstituteSubscriptionScreen
           AppSpacing.v4,
           Text(
             'Days: ${plan.durationDays}',
-            style: AppTextStyles.lexend(
+            style: AppTextStyles.outfit(
               fontSize: AppSpacing.s14,
               color: AppColors.blueSapphire,
             ),
@@ -252,7 +252,7 @@ class InstituteSubscriptionScreen
           AppSpacing.v12,
           Text(
             plan.price,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 32,
               fontWeight: FontWeight.w800,
               color: AppColors.brandAppBarColor,
@@ -272,7 +272,7 @@ class InstituteSubscriptionScreen
                   AppSpacing.h12,
                   Text(
                     'Trial Days: ${plan.trialDays}',
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: AppSpacing.s14,
                       color: AppColors.blueSapphire,
                     ),
@@ -292,7 +292,7 @@ class InstituteSubscriptionScreen
                 AppSpacing.h12,
                 Text(
                   plan.status == 1 ? 'Active Plan' : 'Inactive Plan',
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: AppSpacing.s14,
                     color: AppColors.blueSapphire,
                   ),
@@ -313,7 +313,7 @@ class InstituteSubscriptionScreen
       children: [
         Text(
           AppStrings.instRecentBilling,
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: AppSpacing.s18,
             fontWeight: FontWeight.w800,
             color: AppColors.primaryBrand,
@@ -363,7 +363,7 @@ class InstituteSubscriptionScreen
               children: [
                 Text(
                   item.planName,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: AppSpacing.s14,
                     fontWeight: FontWeight.w800,
                     color: AppColors.brandAppBarColor,
@@ -373,7 +373,7 @@ class InstituteSubscriptionScreen
                 ),
                 Text(
                   dateStr,
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: AppSpacing.s12,
                     color: AppColors.blueSapphire,
                   ),
@@ -386,7 +386,7 @@ class InstituteSubscriptionScreen
             children: [
               Text(
                 item.amount,
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: AppSpacing.s14,
                   fontWeight: FontWeight.w800,
                   color: AppColors.brandAppBarColor,
@@ -400,7 +400,7 @@ class InstituteSubscriptionScreen
                 ),
                 child: Text(
                   item.status.toUpperCase(),
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: AppSpacing.s10,
                     fontWeight: FontWeight.w900,
                     color: AppColors.successGreen,

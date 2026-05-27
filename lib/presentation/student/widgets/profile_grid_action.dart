@@ -46,7 +46,7 @@ class ProfileGridAction extends StatelessWidget {
             Expanded(
               child: Text(
                 label,
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 13,
                   fontWeight: FontWeight.w800,
                   color: AppColors.textPrimary,

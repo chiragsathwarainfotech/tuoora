@@ -86,7 +86,7 @@ class SalaryManagementScreen extends GetView<StaffController> {
               children: [
                 Text(
                   'Total Paid this Month â€¢ ${DateFormat('MMMM yyyy').format(controller.selectedSalaryMonth.value)}',
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: AppColors.white.withValues(alpha: 0.8),
@@ -94,8 +94,8 @@ class SalaryManagementScreen extends GetView<StaffController> {
                 ),
                 AppSpacing.v8,
                 Text(
-                  'â‚¹${controller.totalGlobalSalaryAmount.value}',
-                  style: AppTextStyles.manrope(
+                  '₹${controller.totalGlobalSalaryAmount.value}',
+                  style: AppTextStyles.outfit(
                     fontSize: 42,
                     fontWeight: FontWeight.w800,
                     color: AppColors.white,
@@ -140,7 +140,7 @@ class SalaryManagementScreen extends GetView<StaffController> {
                 children: [
                   Text(
                     'Payout History',
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 18,
                       fontWeight: FontWeight.w800,
                       color: AppColors.textPrimary,
@@ -163,7 +163,7 @@ class SalaryManagementScreen extends GetView<StaffController> {
                   return _buildPayoutItem(
                     salary.staff?.fullName ?? 'Unknown Staff',
                     '$date â€¢ ${salary.paymentMethod}',
-                    'â‚¹${salary.netSalary}',
+                    '₹${salary.netSalary}',
                     salary.staff?.profileUrl ?? '',
                   );
                 },
@@ -193,7 +193,7 @@ class SalaryManagementScreen extends GetView<StaffController> {
               children: [
                 Text(
                   name,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 15,
                     fontWeight: FontWeight.w800,
                     color: AppColors.textPrimary,
@@ -201,7 +201,7 @@ class SalaryManagementScreen extends GetView<StaffController> {
                 ),
                 Text(
                   sub,
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 12,
                     color: AppColors.textTertiary,
                   ),
@@ -214,7 +214,7 @@ class SalaryManagementScreen extends GetView<StaffController> {
             children: [
               Text(
                 amount,
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 15,
                   fontWeight: FontWeight.w800,
                   color: AppColors.textPrimary,
@@ -222,7 +222,7 @@ class SalaryManagementScreen extends GetView<StaffController> {
               ),
               Text(
                 'PAID',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 10,
                   fontWeight: FontWeight.w800,
                   color: AppColors.successGreen,
@@ -261,7 +261,7 @@ class SalaryManagementScreen extends GetView<StaffController> {
     return Center(
       child: Text(
         getInitials(name),
-        style: AppTextStyles.manrope(
+        style: AppTextStyles.outfit(
           fontSize: 14,
           fontWeight: FontWeight.w800,
           color: AppColors.primaryBrand,

@@ -12,6 +12,8 @@ import 'package:tuoora/core/widgets/common_dialog.dart';
 import 'package:tuoora/presentation/institute/controllers/chat_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/data/models/chat_model.dart';
+import 'package:tuoora/core/constants/app_images.dart';
+import 'package:tuoora/core/widgets/app_action_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -53,15 +55,11 @@ class ChatMessagesScreen extends GetView<ChatController> {
                           value: ChatMenuAction.delete,
                           child: Row(
                             children: [
-                              const Icon(
-                                Icons.delete_outline_rounded,
-                                color: AppColors.bohoRed,
-                                size: 20,
-                              ),
+                              const AppActionIcon(asset: AppImages.icDelete, size: 20),
                               const SizedBox(width: 12),
                               Text(
                                 'Delete chat',
-                                style: AppTextStyles.lexend(
+                                style: AppTextStyles.outfit(
                                   fontSize: 14,
                                   color: AppColors.bohoRed,
                                   fontWeight: FontWeight.w600,
@@ -126,7 +124,7 @@ class ChatMessagesScreen extends GetView<ChatController> {
           AppSpacing.v24,
           Text(
             'Say Hello to ${chat?.participantName ?? 'them'}!',
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 18,
               fontWeight: FontWeight.w800,
               color: AppColors.textPrimary,
@@ -135,7 +133,7 @@ class ChatMessagesScreen extends GetView<ChatController> {
           AppSpacing.v8,
           Text(
             'Type a message to start your conversation.',
-            style: AppTextStyles.lexend(
+            style: AppTextStyles.outfit(
               fontSize: 14,
               color: AppColors.textSecondary,
             ),
@@ -189,7 +187,7 @@ class ChatMessagesScreen extends GetView<ChatController> {
                   : EdgeInsets.only(top: hasAttachment ? 8 : 0),
               child: Text(
                 message.content,
-                style: AppTextStyles.lexend(
+                style: AppTextStyles.outfit(
                   fontSize: 14,
                   color: isMe ? AppColors.white : AppColors.textPrimary,
                   height: 1.4,
@@ -207,7 +205,7 @@ class ChatMessagesScreen extends GetView<ChatController> {
                 children: [
                   Text(
                     message.timestamp,
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 10,
                       color: isMe
                           ? AppColors.white.withValues(alpha: 0.7)
@@ -257,7 +255,7 @@ class ChatMessagesScreen extends GetView<ChatController> {
                     const SizedBox(width: 4),
                     Text(
                       'Tap to retry',
-                      style: AppTextStyles.lexend(
+                      style: AppTextStyles.outfit(
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
                         color: Colors.redAccent,
@@ -437,7 +435,7 @@ class ChatMessagesScreen extends GetView<ChatController> {
                     label,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
                       color: textColor,
@@ -445,7 +443,7 @@ class ChatMessagesScreen extends GetView<ChatController> {
                   ),
                   Text(
                     sublabel,
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 11,
                       color: textColor.withValues(alpha: 0.7),
                     ),
@@ -516,7 +514,7 @@ class ChatMessagesScreen extends GetView<ChatController> {
                   Expanded(
                     child: TextField(
                       controller: controller.messageController,
-                      style: AppTextStyles.lexend(fontSize: 14),
+                      style: AppTextStyles.outfit(fontSize: 14),
                       decoration: const InputDecoration(
                         hintText: 'Type a message...',
                         border: InputBorder.none,
@@ -634,7 +632,7 @@ class ChatMessagesScreen extends GetView<ChatController> {
           const SizedBox(height: 8),
           Text(
             label,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 10,
               fontWeight: FontWeight.w700,
               color: AppColors.textSecondary,

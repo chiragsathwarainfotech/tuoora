@@ -77,7 +77,7 @@ class StudentAppBar extends StatelessWidget implements PreferredSizeWidget {
           title!,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 22,
             fontWeight: FontWeight.w800,
             color: AppColors.textPrimary,
@@ -86,7 +86,7 @@ class StudentAppBar extends StatelessWidget implements PreferredSizeWidget {
         if (subtitle != null)
           Text(
             subtitle!,
-            style: AppTextStyles.lexend(
+            style: AppTextStyles.outfit(
               fontSize: 12,
               color: AppColors.textTertiary,
               fontWeight: FontWeight.w500,

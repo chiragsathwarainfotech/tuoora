@@ -43,7 +43,7 @@ class AppInfoBox extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: titleFontSize ?? 14,
                     fontWeight: FontWeight.w800,
                     color: themeColor,
@@ -52,7 +52,7 @@ class AppInfoBox extends StatelessWidget {
                 AppSpacing.v4,
                 Text(
                   description,
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: descFontSize ?? 12,
                     height: 1.5,
                     color: themeColor.withValues(alpha: 0.8),

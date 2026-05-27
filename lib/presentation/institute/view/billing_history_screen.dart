@@ -68,7 +68,7 @@ class BillingHistoryScreen extends StatelessWidget {
               children: [
                 Text(
                   id,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: AppSpacing.s16,
                     fontWeight: FontWeight.w800,
                     color: AppColors.brandAppBarColor,
@@ -76,7 +76,7 @@ class BillingHistoryScreen extends StatelessWidget {
                 ),
                 Text(
                   date,
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: AppSpacing.s14,
                     color: AppColors.textTertiary,
                   ),
@@ -89,7 +89,7 @@ class BillingHistoryScreen extends StatelessWidget {
             children: [
               Text(
                 '₹$amount',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: AppSpacing.s16,
                   fontWeight: FontWeight.w800,
                   color: AppColors.brandAppBarColor,
@@ -104,7 +104,7 @@ class BillingHistoryScreen extends StatelessWidget {
                 ),
                 child: Text(
                   'PAID',
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 10,
                     fontWeight: FontWeight.w900,
                     color: AppColors.studentPresentText,

@@ -51,7 +51,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
@@ -104,7 +104,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
       children: [
         Text(
           'CATEGORY',
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 14,
             fontWeight: FontWeight.w800,
             color: AppColors.brandAppBarColor,
@@ -133,7 +133,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
                     isExpanded: true,
                     hint: Text(
                       'Select Category',
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: AppColors.textSecondary,
@@ -146,7 +146,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
                         value: category,
                         child: Text(
                           category.name,
-                          style: AppTextStyles.manrope(
+                          style: AppTextStyles.outfit(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                             color: AppColors.textPrimary,
@@ -167,7 +167,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
                   padding: const EdgeInsets.only(top: 8, left: 4),
                   child: Text(
                     controller.categoryError.value!,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 12,
                       color: Colors.redAccent,
                       fontWeight: FontWeight.w500,
@@ -187,7 +187,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
       children: [
         Text(
           'DATE',
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 14,
             fontWeight: FontWeight.w800,
             color: AppColors.brandAppBarColor,
@@ -219,7 +219,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
                     DateFormat(
                       'MMM dd, yyyy',
                     ).format(controller.selectedDate.value),
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                       color: AppColors.textPrimary,
@@ -240,7 +240,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
       children: [
         Text(
           'PAYMENT TYPE',
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 14,
             fontWeight: FontWeight.w800,
             color: AppColors.brandAppBarColor,
@@ -290,7 +290,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
         child: Center(
           child: Text(
             label,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 14,
               fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
               color: isSelected ? AppColors.white : AppColors.textSecondary,
@@ -331,7 +331,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
                 controller.selectedReceiptPath.value != null
                     ? controller.selectedReceiptPath.value!.split('/').last
                     : 'Add Receipt',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
                   color: AppColors.primaryBrand,

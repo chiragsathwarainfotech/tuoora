@@ -99,7 +99,7 @@ class PerformanceReportScreen extends StatelessWidget {
         Expanded(
           child: Text(
             title,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 18,
               fontWeight: FontWeight.w800,
               color: AppColors.textPrimary,
@@ -125,7 +125,7 @@ class PerformanceReportScreen extends StatelessWidget {
                 AppSpacing.h8,
                 Text(
                   'Export',
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 12,
                     fontWeight: FontWeight.w800,
                     color: AppColors.white,

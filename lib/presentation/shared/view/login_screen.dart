@@ -61,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   AppSpacing.h12,
                   Text(
                     AppStrings.appName,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 22,
                       fontWeight: FontWeight.w800,
                       color: AppColors.primaryBrand,
@@ -72,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
               AppSpacing.v32,
               Text(
                 AppStrings.loginHeader,
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 12,
                   fontWeight: FontWeight.w800,
                   color: AppColors.primaryBrand,
@@ -82,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
               AppSpacing.v8,
               Text(
                 AppStrings.loginWelcome,
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 28,
                   fontWeight: FontWeight.w800,
                   color: AppColors.blueSapphire,
@@ -93,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Text(
                 AppStrings.loginSubtitle,
                 textAlign: TextAlign.center,
-                style: AppTextStyles.lexend(
+                style: AppTextStyles.outfit(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   color: AppColors.blueSapphire,
@@ -120,7 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     Text(
                       'IDENTIFIER',
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 10,
                         fontWeight: FontWeight.w800,
                         color: AppColors.brandAppBarColor,
@@ -140,7 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         Text(
                           'ACCESS KEY',
-                          style: AppTextStyles.manrope(
+                          style: AppTextStyles.outfit(
                             fontSize: 10,
                             fontWeight: FontWeight.w800,
                             color: AppColors.brandAppBarColor,
@@ -165,7 +165,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           child: Text(
                             'RECOVER?',
-                            style: AppTextStyles.manrope(
+                            style: AppTextStyles.outfit(
                               fontSize: 10,
                               fontWeight: FontWeight.w800,
                               color: AppColors.primaryBrand,
@@ -220,7 +220,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           AppSpacing.h12,
                           Text(
                             AppStrings.stayAuthenticated,
-                            style: AppTextStyles.lexend(
+                            style: AppTextStyles.outfit(
                               fontSize: 13,
                               fontWeight: FontWeight.w500,
                               color: AppColors.blueSapphire,
@@ -259,7 +259,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         padding: AppSpacing.x16,
                         child: Text(
                           'OR EXPAND YOUR REACH',
-                          style: AppTextStyles.manrope(
+                          style: AppTextStyles.outfit(
                             fontSize: 10,
                             fontWeight: FontWeight.w800,
                             color: AppColors.brandAppBarColor,
@@ -315,10 +315,10 @@ class _LoginScreenState extends State<LoginScreen> {
         controller: controller,
         obscureText: obscureText,
         keyboardType: keyboardType,
-        style: AppTextStyles.lexend(fontSize: 14, color: AppColors.textPrimary),
+        style: AppTextStyles.outfit(fontSize: 14, color: AppColors.textPrimary),
         decoration: InputDecoration(
           hintText: hint,
-          hintStyle: AppTextStyles.lexend(
+          hintStyle: AppTextStyles.outfit(
             fontSize: 14,
             color: AppColors.blueSapphire,
           ),

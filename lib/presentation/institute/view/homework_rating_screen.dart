@@ -31,7 +31,7 @@ class HomeworkRatingScreen extends StatelessWidget {
             ),
             Expanded(
               child: SingleChildScrollView(
-                padding: AppSpacing.x24.add(AppSpacing.y16),
+                padding: AppSpacing.x16.add(AppSpacing.y16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -79,7 +79,7 @@ class HomeworkRatingScreen extends StatelessWidget {
           children: [
             Text(
               hw.subject.toUpperCase(),
-              style: AppTextStyles.lexend(
+              style: AppTextStyles.outfit(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
                 color: AppColors.primaryBrand,
@@ -94,7 +94,7 @@ class HomeworkRatingScreen extends StatelessWidget {
               ),
               child: Text(
                 'BATCH ${hw.batchId}',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 10,
                   fontWeight: FontWeight.w800,
                   color: AppColors.primaryBrand,
@@ -106,7 +106,7 @@ class HomeworkRatingScreen extends StatelessWidget {
         AppSpacing.v8,
         Text(
           hw.title,
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 28,
             fontWeight: FontWeight.w800,
             color: AppColors.textPrimary,
@@ -115,7 +115,7 @@ class HomeworkRatingScreen extends StatelessWidget {
         AppSpacing.v8,
         Text(
           hw.description,
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 16,
             color: AppColors.textPrimary,
           ),
@@ -151,7 +151,7 @@ class HomeworkRatingScreen extends StatelessWidget {
                   AppSpacing.h8,
                   Text(
                     AppStrings.instGradingProgressLabel,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
                       color: AppColors.textSecondary,
@@ -164,7 +164,7 @@ class HomeworkRatingScreen extends StatelessWidget {
                   children: [
                     TextSpan(
                       text: '$submitted/$total ',
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 24,
                         fontWeight: FontWeight.w800,
                         color: AppColors.primaryBrand,
@@ -172,7 +172,7 @@ class HomeworkRatingScreen extends StatelessWidget {
                     ),
                     TextSpan(
                       text: AppStrings.instSubmittedTag,
-                      style: AppTextStyles.lexend(
+                      style: AppTextStyles.outfit(
                         fontSize: 10,
                         fontWeight: FontWeight.w600,
                         color: AppColors.textTertiary,
@@ -233,7 +233,7 @@ class HomeworkRatingScreen extends StatelessWidget {
           ),
           child: Text(
             label,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 14,
               fontWeight: FontWeight.w700,
               color: isSelected ? AppColors.white : AppColors.textSecondary,
@@ -254,7 +254,7 @@ class HomeworkRatingScreen extends StatelessWidget {
       padding: AppSpacing.all16,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -275,7 +275,7 @@ class HomeworkRatingScreen extends StatelessWidget {
                   children: [
                     Text(
                       sub.studentName,
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
                         color: AppColors.textPrimary,
@@ -283,7 +283,7 @@ class HomeworkRatingScreen extends StatelessWidget {
                     ),
                     Text(
                       'ID: #${sub.studentId}',
-                      style: AppTextStyles.lexend(
+                      style: AppTextStyles.outfit(
                         fontSize: 12,
                         color: AppColors.textTertiary,
                       ),
@@ -299,7 +299,7 @@ class HomeworkRatingScreen extends StatelessWidget {
                 ),
                 child: Text(
                   sub.status,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 10,
                     fontWeight: FontWeight.w800,
                     color: _getStatusColor(sub.status),
@@ -314,7 +314,7 @@ class HomeworkRatingScreen extends StatelessWidget {
               children: [
                 Text(
                   AppStrings.instScoreLabel,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: AppColors.textSecondary,
@@ -346,7 +346,7 @@ class HomeworkRatingScreen extends StatelessWidget {
                       AppSpacing.h12,
                       Text(
                         sub.score.toStringAsFixed(0),
-                        style: AppTextStyles.manrope(
+                        style: AppTextStyles.outfit(
                           fontSize: 16,
                           fontWeight: FontWeight.w800,
                           color: AppColors.primaryBrand,
@@ -370,7 +370,7 @@ class HomeworkRatingScreen extends StatelessWidget {
                 AppSpacing.h8,
                 Text(
                   '/ 10',
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 14,
                     color: AppColors.textTertiary,
                   ),
@@ -400,7 +400,7 @@ class HomeworkRatingScreen extends StatelessWidget {
                   AppSpacing.h8,
                   Text(
                     AppStrings.instSendReminderBtn,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
                       color: AppColors.white,
@@ -452,7 +452,7 @@ class HomeworkRatingScreen extends StatelessWidget {
       child: Center(
         child: Text(
           initials,
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 16,
             fontWeight: FontWeight.w800,
             color: AppColors.primaryBrand,

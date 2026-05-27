@@ -49,7 +49,7 @@ class ExpensesScreen extends GetView<ExpenseController> {
                   return Center(
                     child: Text(
                       'No expenses found',
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 16,
                         color: AppColors.textTertiary,
                       ),
@@ -89,7 +89,7 @@ class ExpensesScreen extends GetView<ExpenseController> {
       padding: AppSpacing.all16,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
@@ -119,7 +119,7 @@ class ExpensesScreen extends GetView<ExpenseController> {
               children: [
                 Text(
                   expense.category?.name ?? "",
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
                     color: AppColors.textPrimary,
@@ -128,7 +128,7 @@ class ExpensesScreen extends GetView<ExpenseController> {
                 AppSpacing.v4,
                 Text(
                   dateFormat.format(expense.date),
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 12,
                     fontWeight: FontWeight.w400,
                     color: AppColors.textTertiary,
@@ -139,7 +139,7 @@ class ExpensesScreen extends GetView<ExpenseController> {
           ),
           Text(
             currencyFormat.format(expense.amount),
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 16,
               fontWeight: FontWeight.w700,
               color: AppColors.textPrimary,

@@ -29,7 +29,7 @@ class AddEditLeadScreen extends GetView<LeadsController> {
             ),
             Expanded(
               child: SingleChildScrollView(
-                padding: AppSpacing.x24.add(AppSpacing.y16),
+                padding: AppSpacing.x16.add(AppSpacing.y16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -86,7 +86,7 @@ class AddEditLeadScreen extends GetView<LeadsController> {
         AppSpacing.h12,
         Text(
           title,
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 16,
             fontWeight: FontWeight.w800,
             color: AppColors.primaryBrand,

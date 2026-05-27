@@ -21,11 +21,11 @@ class InstituteOtpScreen extends GetView<SignupController> {
               _buildHeader(),
               AppSpacing.v40,
               Container(
-                margin: AppSpacing.x24,
+                margin: AppSpacing.x16,
                 padding: const EdgeInsets.all(AppSpacing.s28),
                 decoration: BoxDecoration(
                   color: AppColors.white,
-                  borderRadius: BorderRadius.circular(AppSpacing.s32),
+                  borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withValues(alpha: 0.04),
@@ -64,7 +64,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
                             if (!controller.canResend.value)
                               Text(
                                 'Resend code in 00:${controller.timerSeconds.value.toString().padLeft(2, '0')}',
-                                style: AppTextStyles.manrope(
+                                style: AppTextStyles.outfit(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
                                   color: AppColors.blueSapphire,
@@ -75,7 +75,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
                                 onPressed: controller.resendOtp,
                                 child: Text(
                                   'Resend Code',
-                                  style: AppTextStyles.manrope(
+                                  style: AppTextStyles.outfit(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w700,
                                     color: AppColors.primaryBrand,
@@ -121,7 +121,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
             AppSpacing.h12,
             Text(
               'Verification',
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 22,
                 fontWeight: FontWeight.w800,
                 color: AppColors.primaryBrand,
@@ -132,7 +132,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
         AppSpacing.v32,
         Text(
           'CHECK YOUR EMAIL',
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 12,
             fontWeight: FontWeight.w800,
             color: AppColors.brandAppBarColor,
@@ -142,7 +142,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
         AppSpacing.v8,
         Text(
           'OTP Verification',
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 28,
             fontWeight: FontWeight.w800,
             color: AppColors.brandAppBarColor,
@@ -150,11 +150,11 @@ class InstituteOtpScreen extends GetView<SignupController> {
         ),
         AppSpacing.v8,
         Padding(
-          padding: AppSpacing.x24,
+          padding: AppSpacing.x16,
           child: RichText(
             textAlign: TextAlign.center,
             text: TextSpan(
-              style: AppTextStyles.lexend(
+              style: AppTextStyles.outfit(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
                 color: AppColors.blueSapphire,
@@ -166,7 +166,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
                 ),
                 TextSpan(
                   text: controller.emailController.text,
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                     color: AppColors.brandAppBarColor,
@@ -184,7 +184,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
     return Text(
       text,
       textAlign: TextAlign.center,
-      style: AppTextStyles.manrope(
+      style: AppTextStyles.outfit(
         fontSize: 10,
         fontWeight: FontWeight.w800,
         color: AppColors.brandAppBarColor,
@@ -204,7 +204,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
         keyboardType: TextInputType.number,
         maxLength: 6,
         textAlign: TextAlign.center,
-        style: AppTextStyles.manrope(
+        style: AppTextStyles.outfit(
           fontSize: 24,
           fontWeight: FontWeight.w800,
           color: AppColors.brandAppBarColor,

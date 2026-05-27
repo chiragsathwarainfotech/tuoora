@@ -30,7 +30,7 @@ class StudentStudyMaterialDetailScreen
                   const SizedBox(height: 24),
                   Text(
                     'FILES',
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 12,
                       fontWeight: FontWeight.w800,
                       color: AppColors.textSecondary,
@@ -83,7 +83,7 @@ class StudentStudyMaterialDetailScreen
                 ),
                 child: Text(
                   item.subject,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 10,
                     fontWeight: FontWeight.w800,
                     color: textColor,
@@ -94,7 +94,7 @@ class StudentStudyMaterialDetailScreen
               Expanded(
                 child: Text(
                   '${item.batchName} • ${item.date}',
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 11,
                     color: AppColors.textTertiary,
                   ),
@@ -107,7 +107,7 @@ class StudentStudyMaterialDetailScreen
           const SizedBox(height: 12),
           Text(
             item.description,
-            style: AppTextStyles.lexend(
+            style: AppTextStyles.outfit(
               fontSize: 12,
               color: AppColors.textSecondary,
               height: 1.4,

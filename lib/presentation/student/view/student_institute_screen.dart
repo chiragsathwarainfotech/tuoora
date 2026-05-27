@@ -48,7 +48,7 @@ class StudentInstituteScreen extends GetView<StudentInstituteController> {
                       const SizedBox(height: 32),
                       Text(
                         'LOCATION',
-                        style: AppTextStyles.manrope(
+                        style: AppTextStyles.outfit(
                           fontSize: 12,
                           fontWeight: FontWeight.w800,
                           color: AppColors.textSecondary,
@@ -96,7 +96,7 @@ class StudentInstituteScreen extends GetView<StudentInstituteController> {
                           const CircularProgressIndicator(),
                       errorWidget: (context, url, error) => Text(
                         institute.initials,
-                        style: AppTextStyles.manrope(
+                        style: AppTextStyles.outfit(
                           fontSize: 24,
                           fontWeight: FontWeight.w800,
                           color: AppColors.white,
@@ -106,7 +106,7 @@ class StudentInstituteScreen extends GetView<StudentInstituteController> {
                   )
                 : Text(
                     institute.initials,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 24,
                       fontWeight: FontWeight.w800,
                       color: AppColors.white,
@@ -116,7 +116,7 @@ class StudentInstituteScreen extends GetView<StudentInstituteController> {
           const SizedBox(height: 16),
           Text(
             institute.name,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 16,
               fontWeight: FontWeight.w800,
               color: AppColors.textPrimary,
@@ -170,14 +170,14 @@ class StudentInstituteScreen extends GetView<StudentInstituteController> {
         children: [
           Text(
             label,
-            style: AppTextStyles.lexend(
+            style: AppTextStyles.outfit(
               fontSize: 13,
               color: AppColors.textTertiary,
             ),
           ),
           Text(
             value,
-            style: AppTextStyles.lexend(
+            style: AppTextStyles.outfit(
               fontSize: 13,
               fontWeight: FontWeight.w500,
               color: AppColors.textPrimary,
@@ -275,7 +275,7 @@ class StudentInstituteScreen extends GetView<StudentInstituteController> {
                     children: [
                       Text(
                         displayAddr1,
-                        style: AppTextStyles.manrope(
+                        style: AppTextStyles.outfit(
                           fontSize: 14,
                           fontWeight: FontWeight.w800,
                           color: AppColors.textPrimary,
@@ -287,7 +287,7 @@ class StudentInstituteScreen extends GetView<StudentInstituteController> {
                         const SizedBox(height: 4),
                         Text(
                           displayAddr2,
-                          style: AppTextStyles.lexend(
+                          style: AppTextStyles.outfit(
                             fontSize: 11,
                             color: AppColors.textSecondary,
                           ),
@@ -334,7 +334,7 @@ class StudentInstituteScreen extends GetView<StudentInstituteController> {
                       const SizedBox(width: 6),
                       Text(
                         'Directions',
-                        style: AppTextStyles.manrope(
+                        style: AppTextStyles.outfit(
                           fontSize: 12,
                           fontWeight: FontWeight.w700,
                           color: AppColors.textPrimary,

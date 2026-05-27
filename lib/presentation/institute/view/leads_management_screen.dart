@@ -1,7 +1,9 @@
 ﻿import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_images.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/app_action_icon.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
 import 'package:tuoora/core/widgets/common_dialog.dart';
 import 'package:tuoora/presentation/institute/controllers/leads_controller.dart';
@@ -27,7 +29,7 @@ class LeadsManagementScreen extends GetView<LeadsController> {
             const InstituteAppBar(title: AppStrings.instLeadsManagementTitle),
             Expanded(
               child: Padding(
-                padding: AppSpacing.x24,
+                padding: AppSpacing.x16,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -120,7 +122,7 @@ class LeadsManagementScreen extends GetView<LeadsController> {
         padding: AppSpacing.all20,
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.05),
@@ -146,7 +148,7 @@ class LeadsManagementScreen extends GetView<LeadsController> {
                               .join('')
                               .toUpperCase()
                         : '?',
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 14,
                       fontWeight: FontWeight.w800,
                       color: AppColors.primaryBrand,
@@ -160,7 +162,7 @@ class LeadsManagementScreen extends GetView<LeadsController> {
                     children: [
                       Text(
                         lead.fullName,
-                        style: AppTextStyles.manrope(
+                        style: AppTextStyles.outfit(
                           fontSize: 16,
                           fontWeight: FontWeight.w800,
                           color: AppColors.textPrimary,
@@ -168,7 +170,7 @@ class LeadsManagementScreen extends GetView<LeadsController> {
                       ),
                       Text(
                         '${AppStrings.instAppliedSuffix} ${dateFormat.format(lead.createdAt)}',
-                        style: AppTextStyles.lexend(
+                        style: AppTextStyles.outfit(
                           fontSize: 12,
                           color: AppColors.textTertiary,
                         ),
@@ -191,7 +193,7 @@ class LeadsManagementScreen extends GetView<LeadsController> {
                   AppSpacing.h12,
                   Text(
                     lead.courseSelection!,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                       color: AppColors.textSecondary,
@@ -210,7 +212,7 @@ class LeadsManagementScreen extends GetView<LeadsController> {
                 AppSpacing.h12,
                 Text(
                   lead.phone,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
                     color: AppColors.textSecondary,
@@ -232,18 +234,18 @@ class LeadsManagementScreen extends GetView<LeadsController> {
                   ),
                 ),
                 AppSpacing.h12,
-                _buildActionBtn(Icons.edit_outlined, () {
+                _buildActionBtn(AppImages.icEdit, () {
                   controller.prepareForEdit(lead);
                   Get.toNamed(AppRoutes.instituteAddEditLead);
                 }),
                 AppSpacing.h12,
-                _buildActionBtn(Icons.delete_outline_rounded, () {
+                _buildActionBtn(AppImages.icDelete, () {
                   CommonDialog.showDeleteConfirmation(
                     title: 'Delete Lead',
                     description: 'Are you sure you want to delete this lead?',
                     onConfirm: () => controller.deleteLead(lead.id),
                   );
-                }, isDanger: true),
+                }),
               ],
             ),
           ],
@@ -252,11 +254,7 @@ class LeadsManagementScreen extends GetView<LeadsController> {
     );
   }
 
-  Widget _buildActionBtn(
-    IconData icon,
-    VoidCallback onTap, {
-    bool isDanger = false,
-  }) {
+  Widget _buildActionBtn(String asset, VoidCallback onTap) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -266,11 +264,7 @@ class LeadsManagementScreen extends GetView<LeadsController> {
           borderRadius: BorderRadius.circular(8),
           border: Border.all(color: AppColors.borderGrey),
         ),
-        child: Icon(
-          icon,
-          color: isDanger ? Colors.red : AppColors.textSecondary,
-          size: 20,
-        ),
+        child: AppActionIcon(asset: asset, size: 20),
       ),
     );
   }

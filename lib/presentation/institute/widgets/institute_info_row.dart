@@ -34,7 +34,7 @@ class InstituteInfoRow extends StatelessWidget {
           Expanded(
             child: Text(
               text,
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
                 color: AppColors.textPrimary,

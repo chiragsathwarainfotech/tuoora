@@ -60,7 +60,7 @@ class HomeworkTile extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 15,
                       fontWeight: FontWeight.w800,
                       color: AppColors.textPrimary,
@@ -69,7 +69,7 @@ class HomeworkTile extends StatelessWidget {
                   AppSpacing.v4,
                   Text(
                     subject,
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 11,
                       fontWeight: FontWeight.w400,
                       color: AppColors.textTertiary,
@@ -83,7 +83,7 @@ class HomeworkTile extends StatelessWidget {
               children: [
                 Text(
                   dueDate,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 12,
                     fontWeight: FontWeight.w800,
                     color: AppColors.textPrimary,
@@ -93,7 +93,7 @@ class HomeworkTile extends StatelessWidget {
                   AppSpacing.v4,
                   Text(
                     status!,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 10,
                       fontWeight: FontWeight.w800,
                       color: AppColors.primaryBrand,

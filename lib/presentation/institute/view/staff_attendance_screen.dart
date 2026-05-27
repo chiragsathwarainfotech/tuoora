@@ -99,7 +99,7 @@ class StaffAttendanceScreen extends GetView<StaffController> {
             AppSpacing.h12,
             Text(
               count,
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 32,
                 fontWeight: FontWeight.w800,
                 color: AppColors.textPrimary,
@@ -109,7 +109,7 @@ class StaffAttendanceScreen extends GetView<StaffController> {
         ),
         Text(
           label,
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 12,
             fontWeight: FontWeight.w700,
             color: AppColors.textTertiary,
@@ -143,7 +143,7 @@ class StaffAttendanceScreen extends GetView<StaffController> {
                 DateFormat(
                   'MMMM yyyy',
                 ).format(controller.selectedAttendanceMonth.value),
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
                   color: AppColors.textPrimary,
@@ -244,7 +244,7 @@ class StaffAttendanceScreen extends GetView<StaffController> {
                   width: 32,
                   child: Text(
                     d,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
                       color: AppColors.textMuted,
@@ -285,7 +285,7 @@ class StaffAttendanceScreen extends GetView<StaffController> {
             child: Center(
               child: Text(
                 date,
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
                   color: AppColors.textPrimary,
@@ -340,7 +340,7 @@ class StaffAttendanceScreen extends GetView<StaffController> {
         AppSpacing.h8,
         Text(
           label,
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 10,
             fontWeight: FontWeight.w800,
             color: AppColors.textTertiary,
@@ -386,7 +386,7 @@ class StaffAttendanceScreen extends GetView<StaffController> {
                 latestRemark != null
                     ? '${DateFormat('MMM dd').format(DateTime.parse(latestRemark.date)).toUpperCase()} REMARKS'
                     : 'LATEST REMARKS',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 12,
                   fontWeight: FontWeight.w800,
                   color: AppColors.textTertiary,
@@ -398,7 +398,7 @@ class StaffAttendanceScreen extends GetView<StaffController> {
           AppSpacing.v20,
           Text(
             latestRemark?.note ?? 'No remarks for this month.',
-            style: AppTextStyles.lexend(
+            style: AppTextStyles.outfit(
               fontSize: 15,
               fontWeight: FontWeight.w400,
               color: AppColors.textSecondary,

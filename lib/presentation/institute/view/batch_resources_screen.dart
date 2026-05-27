@@ -51,7 +51,7 @@ class BatchResourcesScreen extends StatelessWidget {
                         AppSpacing.v16,
                         Text(
                           'No resources found',
-                          style: AppTextStyles.manrope(
+                          style: AppTextStyles.outfit(
                             fontSize: 16,
                             color: AppColors.textMuted,
                             fontWeight: FontWeight.w600,
@@ -89,7 +89,7 @@ class BatchResourcesScreen extends StatelessWidget {
         padding: AppSpacing.all16,
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.02),
@@ -119,7 +119,7 @@ class BatchResourcesScreen extends StatelessWidget {
                 children: [
                   Text(
                     resource.subject,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                       color: AppColors.textPrimary,
@@ -130,7 +130,7 @@ class BatchResourcesScreen extends StatelessWidget {
                     resource.description,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 12,
                       color: AppColors.textTertiary,
                     ),
@@ -146,7 +146,7 @@ class BatchResourcesScreen extends StatelessWidget {
                       AppSpacing.h4,
                       Text(
                         DateFormat('MMM dd, yyyy').format(resource.uploadedAt),
-                        style: AppTextStyles.lexend(
+                        style: AppTextStyles.outfit(
                           fontSize: 10,
                           color: AppColors.textMuted,
                         ),
@@ -228,7 +228,7 @@ class BatchResourcesScreen extends StatelessWidget {
                       fileName.isEmpty
                           ? AppStrings.instAttachFileHint
                           : fileName,
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 14,
                         fontWeight: fileName.isEmpty
                             ? FontWeight.w500
@@ -248,7 +248,7 @@ class BatchResourcesScreen extends StatelessWidget {
               padding: const EdgeInsets.only(top: 8, left: 4),
               child: Text(
                 controller.fileError.value!,
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 12,
                   color: Colors.redAccent,
                   fontWeight: FontWeight.w500,

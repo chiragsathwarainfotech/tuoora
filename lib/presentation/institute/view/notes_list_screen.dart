@@ -9,6 +9,8 @@ import 'package:tuoora/presentation/institute/widgets/common_state_widget.dart';
 import 'package:tuoora/data/models/note_model.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/widgets/app_search_field.dart';
+import 'package:tuoora/core/constants/app_images.dart';
+import 'package:tuoora/core/widgets/app_action_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -43,7 +45,7 @@ class NotesListScreen extends GetView<NotesController> {
             ),
             Expanded(
               child: Padding(
-                padding: AppSpacing.x24,
+                padding: AppSpacing.x16,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -153,7 +155,7 @@ class NotesListScreen extends GetView<NotesController> {
         padding: AppSpacing.all20,
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.05),
@@ -174,7 +176,7 @@ class NotesListScreen extends GetView<NotesController> {
                     children: [
                       Text(
                         note.title,
-                        style: AppTextStyles.manrope(
+                        style: AppTextStyles.outfit(
                           fontSize: 16,
                           fontWeight: FontWeight.w800,
                           color: AppColors.textPrimary,
@@ -195,7 +197,7 @@ class NotesListScreen extends GetView<NotesController> {
                         ),
                         child: Text(
                           note.category,
-                          style: AppTextStyles.manrope(
+                          style: AppTextStyles.outfit(
                             fontSize: 10,
                             fontWeight: FontWeight.w800,
                             color: catColor,
@@ -229,7 +231,7 @@ class NotesListScreen extends GetView<NotesController> {
               note.content,
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
-              style: AppTextStyles.lexend(
+              style: AppTextStyles.outfit(
                 fontSize: 13,
                 color: AppColors.textSecondary,
                 height: 1.5,
@@ -241,18 +243,14 @@ class NotesListScreen extends GetView<NotesController> {
               children: [
                 Text(
                   dateFormat.format(note.createdAt),
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 11,
                     color: AppColors.textTertiary,
                   ),
                 ),
                 GestureDetector(
                   onTap: () => _showDeleteConfirmation(note),
-                  child: const Icon(
-                    Icons.delete_outline_rounded,
-                    color: AppColors.bohoRed,
-                    size: 18,
-                  ),
+                  child: const AppActionIcon(asset: AppImages.icDelete, size: 18),
                 ),
               ],
             ),

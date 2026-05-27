@@ -31,7 +31,7 @@ class QuickActionCard extends StatelessWidget {
               const SizedBox(height: 12),
               Text(
                 label,
-                style: AppTextStyles.lexend(
+                style: AppTextStyles.outfit(
                   fontSize: 14,
                   color: Theme.of(context).colorScheme.onSurface,
                 ),

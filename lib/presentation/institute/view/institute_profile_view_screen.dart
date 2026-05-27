@@ -5,6 +5,8 @@ import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/controllers/institute_profile_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
+import 'package:tuoora/core/constants/app_images.dart';
+import 'package:tuoora/core/widgets/app_action_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -80,7 +82,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.04),
@@ -127,11 +129,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
                           color: AppColors.primaryBrand,
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(
-                          Icons.edit_rounded,
-                          color: AppColors.white,
-                          size: 16,
-                        ),
+                        child: const AppActionIcon(asset: AppImages.icEdit, size: 16),
                       ),
                     ),
                   ),
@@ -143,7 +141,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
                 children: [
                   Text(
                     p.instituteName ?? p.name,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 22,
                       fontWeight: FontWeight.w800,
                       color: AppColors.primaryBrand,
@@ -152,7 +150,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
                   AppSpacing.v4,
                   Text(
                     'Owner: ${p.name}',
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 14,
                       color: AppColors.textSecondary,
                       fontWeight: FontWeight.w500,
@@ -195,7 +193,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
             Icons.contact_page_rounded,
           ),
           Padding(
-            padding: AppSpacing.x24,
+            padding: AppSpacing.x16,
             child: Column(
               children: [
                 _buildInfoRow(Icons.email_outlined, 'Email', p.email),
@@ -211,7 +209,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
             Icons.location_on_rounded,
           ),
           Padding(
-            padding: AppSpacing.x24,
+            padding: AppSpacing.x16,
             child: _buildInfoRow(
               Icons.map_outlined,
               'Address',
@@ -292,7 +290,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
           AppSpacing.h12,
           Text(
             title.toUpperCase(),
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 11,
               fontWeight: FontWeight.w900,
               color: AppColors.primaryBrand,
@@ -326,7 +324,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
               children: [
                 Text(
                   label,
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 10,
                     color: AppColors.textMuted,
                     fontWeight: FontWeight.w600,
@@ -335,7 +333,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
                 AppSpacing.v2,
                 Text(
                   value,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                     color: AppColors.textPrimary,
@@ -383,7 +381,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 14,
                       fontWeight: FontWeight.w800,
                       color: iconColor ?? AppColors.textPrimary,
@@ -391,7 +389,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
                   ),
                   Text(
                     subtitle,
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 11,
                       color: AppColors.textMuted,
                     ),
@@ -419,18 +417,18 @@ class InstituteProfileViewScreen extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text(
           'Logout',
-          style: AppTextStyles.manrope(fontWeight: FontWeight.w800),
+          style: AppTextStyles.outfit(fontWeight: FontWeight.w800),
         ),
         content: Text(
           'Are you sure you want to log out from your account?',
-          style: AppTextStyles.lexend(color: AppColors.textSecondary),
+          style: AppTextStyles.outfit(color: AppColors.textSecondary),
         ),
         actions: [
           TextButton(
             onPressed: () => Get.back(),
             child: Text(
               'Cancel',
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 color: AppColors.textSecondary,
                 fontWeight: FontWeight.w700,
               ),
@@ -449,7 +447,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
             ),
             child: Text(
               'Logout',
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 color: AppColors.white,
                 fontWeight: FontWeight.w800,
               ),

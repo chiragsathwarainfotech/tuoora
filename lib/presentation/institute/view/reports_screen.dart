@@ -78,7 +78,7 @@ class ReportsScreen extends StatelessWidget {
         padding: AppSpacing.all24,
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           boxShadow: [
             BoxShadow(
               color: color.withValues(alpha: 0.08),
@@ -104,7 +104,7 @@ class ReportsScreen extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
                       color: AppColors.brandAppBarColor,
@@ -113,7 +113,7 @@ class ReportsScreen extends StatelessWidget {
                   AppSpacing.v4,
                   Text(
                     subtitle,
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 13,
                       color: AppColors.textTertiary,
                       height: 1.4,

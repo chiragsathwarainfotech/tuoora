@@ -150,7 +150,7 @@ class AssignToBatchScreen extends StatelessWidget {
               child: Stack(
                 children: [
                   SingleChildScrollView(
-                    padding: AppSpacing.x24.add(AppSpacing.y16),
+                    padding: AppSpacing.x16.add(AppSpacing.y16),
                     child: Column(
                       children: [
                         _buildSearchSection(controller),
@@ -217,7 +217,7 @@ class AssignToBatchScreen extends StatelessWidget {
             margin: const EdgeInsets.only(top: 4),
             decoration: BoxDecoration(
               color: AppColors.white,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.1),
@@ -240,11 +240,11 @@ class AssignToBatchScreen extends StatelessWidget {
                   ),
                   title: Text(
                     student.name,
-                    style: AppTextStyles.manrope(fontWeight: FontWeight.w700),
+                    style: AppTextStyles.outfit(fontWeight: FontWeight.w700),
                   ),
                   subtitle: Text(
                     student.id.toString(),
-                    style: AppTextStyles.lexend(fontSize: 12),
+                    style: AppTextStyles.outfit(fontSize: 12),
                   ),
                   trailing: const Icon(
                     Icons.add_circle_outline_rounded,
@@ -275,7 +275,7 @@ class AssignToBatchScreen extends StatelessWidget {
               AppSpacing.v16,
               Text(
                 'No students selected yet',
-                style: AppTextStyles.lexend(color: AppColors.textMuted),
+                style: AppTextStyles.outfit(color: AppColors.textMuted),
               ),
             ],
           ),
@@ -322,7 +322,7 @@ class AssignToBatchScreen extends StatelessWidget {
                       children: [
                         Text(
                           bs.student.name,
-                          style: AppTextStyles.manrope(
+                          style: AppTextStyles.outfit(
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
                             color: AppColors.textPrimary,
@@ -330,7 +330,7 @@ class AssignToBatchScreen extends StatelessWidget {
                         ),
                         Text(
                           'ID: ${bs.student.id}',
-                          style: AppTextStyles.lexend(
+                          style: AppTextStyles.outfit(
                             fontSize: 12,
                             color: AppColors.textMuted,
                           ),
@@ -379,7 +379,7 @@ class AssignToBatchScreen extends StatelessWidget {
                                 val,
                               ),
                               keyboardType: TextInputType.number,
-                              style: AppTextStyles.manrope(
+                              style: AppTextStyles.outfit(
                                 fontWeight: FontWeight.w700,
                               ),
                               decoration: const InputDecoration(

@@ -100,14 +100,14 @@ class AppStrings {
   static const String instStudentIdentity = 'Student Identity';
   static const String instUploadPhotoDesc =
       'Upload student photo for\ndigital ID';
-  static const String instStudentNameLabel = 'Student Name';
-  static const String instStudentNameHint = 'Full Name';
+  static const String instStudentNameLabel = 'Name';
+  static const String instStudentNameHint = 'Enter Name';
   static const String instParentNameLabel = 'Parent Name';
-  static const String instParentNameHint = "Father or Mother's Name";
+  static const String instParentNameHint = "Enter Parent name";
   static const String instPhoneLabel = 'Phone Number';
-  static const String instPhoneHint = '+91 00000 00000';
-  static const String instGradeLabel = 'Grade / Standard';
-  static const String instGradeHint = 'Select Grade';
+  static const String instPhoneHint = 'Enter number';
+  static const String instGradeLabel = 'Graduation';
+  static const String instGradeHint = 'Enter Graduation';
   static const String instBatchAssignmentLabel = 'Batch Assignment';
   static const String instMorningBatch = 'Morning Batch';
   static const String instMorningTime = '08:00 AM -\n10:00 AM';
@@ -117,13 +117,12 @@ class AppStrings {
   static const String instMonthlyFeeLabel = 'Standard Monthly\nFee';
   static const String instMonthlyFeeAmount = '₹2,500.00';
   static const String instEditStructureBtn = 'Edit\nStructure';
-  static const String instStudentEmailLabel = 'Student Email';
-  static const String instStudentDobLabel = 'Date of Birth';
-  static const String instSelectBatchLabel = 'Select Batch';
+  static const String instStudentEmailLabel = 'Email';
+  static const String instStudentEmailHint = 'Enter Email';
+  static const String instStudentDobLabel = 'DOB';
+  static const String instSelectDobHint = 'Select DOB';
   static const String instFeeTransactionHistoryTitle = 'Transaction History';
   static const String instConfirmBtn = 'Confirm and Save Student';
-  static const String instNameHint = 'Full Name';
-  static const String instGuardianHint = "Father or Mother's Name";
   static const String instStudentPhotoLabel = 'Student Photo';
   static const String instStudentPhotoHint =
       'Upload student photo for digital ID';
@@ -285,7 +284,6 @@ class AppStrings {
       'Academic & Contact Information';
   static const String instBatchNameLabel = 'BATCH NAME';
   static const String instAdmissionDateLabel = 'DATE OF ADMISSION';
-  static const String instGuardianNameLabel = 'GUARDIAN NAME';
   static const String instProfilePhoneLabel = 'PHONE NUMBER';
   static const String instGuardianPhoneLabel = 'GUARDIAN PHONE NUMBER';
   static const String instResAddressLabel = 'RESIDENTIAL ADDRESS';

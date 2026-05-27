@@ -77,11 +77,11 @@ class _NotificationCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(AppSpacing.s12),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(AppSpacing.s12),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         child: Ink(
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(AppSpacing.s12),
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.02),
@@ -114,7 +114,7 @@ class _NotificationCard extends StatelessWidget {
                         Expanded(
                           child: Text(
                             display.title,
-                            style: AppTextStyles.manrope(
+                            style: AppTextStyles.outfit(
                               fontSize: 14,
                               fontWeight: FontWeight.w800,
                               color: AppColors.textPrimary,
@@ -134,7 +134,7 @@ class _NotificationCard extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       display.message,
-                      style: AppTextStyles.lexend(
+                      style: AppTextStyles.outfit(
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
                         color: AppColors.textSecondary,
@@ -144,7 +144,7 @@ class _NotificationCard extends StatelessWidget {
                     if (display.timeAgo.isNotEmpty)
                       Text(
                         display.timeAgo,
-                        style: AppTextStyles.lexend(
+                        style: AppTextStyles.outfit(
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
                           color: AppColors.primaryBrand,
@@ -194,7 +194,7 @@ class _EmptyState extends StatelessWidget {
           Center(
             child: Text(
               "You're all caught up.",
-              style: AppTextStyles.lexend(
+              style: AppTextStyles.outfit(
                 fontSize: 13,
                 color: AppColors.textSecondary,
               ),

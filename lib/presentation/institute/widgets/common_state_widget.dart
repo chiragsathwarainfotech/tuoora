@@ -44,7 +44,7 @@ class CommonStateWidget extends StatelessWidget {
             AppSpacing.v24,
             Text(
               emptyTitle,
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
                 color: AppColors.brandAppBarColor,
@@ -56,7 +56,7 @@ class CommonStateWidget extends StatelessWidget {
               child: Text(
                 emptySubtitle,
                 textAlign: TextAlign.center,
-                style: AppTextStyles.lexend(
+                style: AppTextStyles.outfit(
                   fontSize: 14,
                   color: AppColors.textTertiary,
                 ),

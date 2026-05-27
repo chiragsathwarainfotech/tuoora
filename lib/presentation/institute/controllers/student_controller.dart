@@ -269,7 +269,7 @@ class InstituteStudentController extends GetxController {
               ),
               title: Text(
                 'Camera',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
                   color: AppColors.textPrimary,
@@ -288,7 +288,7 @@ class InstituteStudentController extends GetxController {
               ),
               title: Text(
                 'Gallery',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
                   color: AppColors.textPrimary,

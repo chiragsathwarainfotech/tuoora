@@ -51,7 +51,7 @@ class BatchReportDetailScreen extends StatelessWidget {
                       AppSpacing.v32,
                       Text(
                         'Student Breakdown',
-                        style: AppTextStyles.manrope(
+                        style: AppTextStyles.outfit(
                           fontSize: 18,
                           fontWeight: FontWeight.w800,
                           color: AppColors.textPrimary,

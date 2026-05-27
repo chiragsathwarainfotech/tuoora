@@ -44,11 +44,11 @@ class StaffMainScreen extends GetView<StaffController> {
             backgroundColor: AppColors.white,
             selectedItemColor: AppColors.primaryBrand,
             unselectedItemColor: AppColors.textTertiary,
-            selectedLabelStyle: AppTextStyles.manrope(
+            selectedLabelStyle: AppTextStyles.outfit(
               fontSize: 12,
               fontWeight: FontWeight.w700,
             ),
-            unselectedLabelStyle: AppTextStyles.manrope(
+            unselectedLabelStyle: AppTextStyles.outfit(
               fontSize: 12,
               fontWeight: FontWeight.w600,
             ),

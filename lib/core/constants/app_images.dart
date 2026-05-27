@@ -22,5 +22,14 @@ class AppImages {
   // --- Status & Tracking Icons ---
   static const String icCheck = '$_iconsPath/ic_check.svg';
   static const String icClose = '$_iconsPath/ic_close.svg';
+
+  // --- Action Icons (edit / delete) ---
+  /// Pencil icon used wherever an edit affordance is shown.
+  /// Render via [AppActionIcon] to get the standard primary-brand tint.
+  static const String icEdit = '$_iconsPath/ic_edit.svg';
+
+  /// Trash icon used wherever a delete affordance is shown.
+  /// Render via [AppActionIcon] to get the standard primary-brand tint.
+  static const String icDelete = '$_iconsPath/ic_delete.svg';
 }
 

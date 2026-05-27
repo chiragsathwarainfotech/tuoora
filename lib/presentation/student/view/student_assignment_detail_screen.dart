@@ -57,7 +57,7 @@ class _DetailBody extends StatelessWidget {
           child: SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(
               AppSpacing.s16,
-              AppSpacing.s4,
+              AppSpacing.s16,
               AppSpacing.s16,
               AppSpacing.s24,
             ),
@@ -118,7 +118,7 @@ class _DueCard extends StatelessWidget {
       padding: const EdgeInsets.all(AppSpacing.s14),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.s14),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -150,7 +150,7 @@ class _DueCard extends StatelessWidget {
               children: [
                 Text(
                   AppStrings.studentAssignmentDetailDueLabel,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 10,
                     fontWeight: FontWeight.w800,
                     color: AppColors.orangeTag,
@@ -160,7 +160,7 @@ class _DueCard extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   assignment.dueDateFullText ?? assignment.dueLabel,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
                     color: AppColors.textPrimary,
@@ -212,7 +212,7 @@ class _StatusPill extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: AppTextStyles.manrope(
+        style: AppTextStyles.outfit(
           fontSize: 11,
           fontWeight: FontWeight.w700,
           color: fg,
@@ -235,7 +235,7 @@ class _InstructionsCard extends StatelessWidget {
       padding: const EdgeInsets.all(AppSpacing.s14),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.s14),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -250,7 +250,7 @@ class _InstructionsCard extends StatelessWidget {
         children: [
           Text(
             AppStrings.studentAssignmentDetailInstructions,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 10,
               fontWeight: FontWeight.w800,
               color: AppColors.orangeTag,
@@ -260,7 +260,7 @@ class _InstructionsCard extends StatelessWidget {
           const SizedBox(height: AppSpacing.s8),
           Text(
             assignment.instructions ?? '—',
-            style: AppTextStyles.lexend(
+            style: AppTextStyles.outfit(
               fontSize: 13,
               color: AppColors.textSecondary,
               height: 1.5,
@@ -278,7 +278,7 @@ class _InstructionsCard extends StatelessWidget {
                 children: [
                   TextSpan(
                     text: '${AppStrings.studentAssignmentDetailAssignedBy} ',
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 11,
                       fontWeight: FontWeight.w800,
                       color: AppColors.textPrimary,
@@ -286,7 +286,7 @@ class _InstructionsCard extends StatelessWidget {
                   ),
                   TextSpan(
                     text: assignment.assignedBy!,
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 11,
                       color: AppColors.textSecondary,
                     ),
@@ -316,12 +316,12 @@ class _AttachmentTile extends StatelessWidget {
       borderRadius: BorderRadius.circular(AppSpacing.s14),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(AppSpacing.s14),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         child: Ink(
           padding: const EdgeInsets.all(AppSpacing.s12),
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(AppSpacing.s14),
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.02),
@@ -341,7 +341,7 @@ class _AttachmentTile extends StatelessWidget {
                   children: [
                     Text(
                       attachment.name,
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 13,
                         fontWeight: FontWeight.w800,
                         color: AppColors.textPrimary,
@@ -352,7 +352,7 @@ class _AttachmentTile extends StatelessWidget {
                     const SizedBox(height: 2),
                     Text(
                       '${_kindLabel(attachment.kind)} · ${attachment.sizeLabel}',
-                      style: AppTextStyles.lexend(
+                      style: AppTextStyles.outfit(
                         fontSize: 11,
                         color: AppColors.textTertiary,
                       ),
@@ -477,7 +477,7 @@ class _PendingBanner extends StatelessWidget {
               children: [
                 Text(
                   AppStrings.studentAssignmentDetailPendingTitle,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 13,
                     fontWeight: FontWeight.w800,
                     color: AppColors.studentTomorrowPillText,
@@ -486,7 +486,7 @@ class _PendingBanner extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   assignment.pendingNote ?? '',
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 12,
                     color: AppColors.studentTomorrowPillText,
                     height: 1.4,
@@ -533,7 +533,7 @@ class _CompletedBanner extends StatelessWidget {
               children: [
                 Text(
                   assignment.completedNote ?? '',
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 13,
                     fontWeight: FontWeight.w800,
                     color: AppColors.studentPresentText,
@@ -543,7 +543,7 @@ class _CompletedBanner extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     assignment.gradeNote!,
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 12,
                       color: AppColors.studentPresentText,
                       height: 1.4,

@@ -81,7 +81,7 @@ class _BatchesScreenState extends State<BatchesScreen> {
                           itemBuilder: (context, index) {
                             if (index < controller.batchesList.length) {
                               final batch = controller.batchesList[index];
-                              return _buildBatchCard(batch);
+                              return _buildBatchCard(batch, index);
                             } else {
                               return const Center(
                                 child: Padding(
@@ -115,14 +115,28 @@ class _BatchesScreenState extends State<BatchesScreen> {
     );
   }
 
-  Widget _buildBatchCard(BatchModel batch) {
+  /// Same rotating accent palette as the institute dashboard tiles, so the
+  /// stripe colour on each batch card matches the design-system rhythm.
+  /// Deterministic by index — the same batch always gets the same stripe
+  /// colour across rebuilds.
+  static const List<Color> _stripePalette = <Color>[
+    AppColors.instBrandOrange,
+    AppColors.successGreen,
+    AppColors.orangeTag,
+    AppColors.subjectPhysics,
+    AppColors.greenLight,
+  ];
+
+  Widget _buildBatchCard(BatchModel batch, int index) {
+    final Color accent = _stripePalette[index % _stripePalette.length];
+
     return GestureDetector(
       onTap: () =>
           Get.toNamed(AppRoutes.instituteBatchDetails, arguments: batch),
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(AppSpacing.s16),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.05),
@@ -136,7 +150,7 @@ class _BatchesScreenState extends State<BatchesScreen> {
           child: IntrinsicHeight(
             child: Row(
               children: [
-                Container(width: AppSpacing.s4, color: batch.leftBorderColor),
+                Container(width: AppSpacing.s4, color: accent),
                 Expanded(
                   child: Padding(
                     padding: AppSpacing.all20,
@@ -149,7 +163,7 @@ class _BatchesScreenState extends State<BatchesScreen> {
                             Expanded(
                               child: Text(
                                 batch.title,
-                                style: AppTextStyles.manrope(
+                                style: AppTextStyles.outfit(
                                   fontSize: 18,
                                   fontWeight: FontWeight.w800,
                                   color: AppColors.primaryBrand,
@@ -162,15 +176,15 @@ class _BatchesScreenState extends State<BatchesScreen> {
                                 vertical: 4,
                               ),
                               decoration: BoxDecoration(
-                                color: batch.statusBg.withValues(alpha: 0.1),
+                                color: accent,
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
                                 batch.statusLabel,
-                                style: AppTextStyles.manrope(
+                                style: AppTextStyles.outfit(
                                   fontSize: 10,
                                   fontWeight: FontWeight.w800,
-                                  color: batch.statusBg,
+                                  color: AppColors.white,
                                 ),
                               ),
                             ),
@@ -179,7 +193,7 @@ class _BatchesScreenState extends State<BatchesScreen> {
                         AppSpacing.v4,
                         Text(
                           batch.subject,
-                          style: AppTextStyles.manrope(
+                          style: AppTextStyles.outfit(
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
                             color: AppColors.primaryBrand,
@@ -196,7 +210,7 @@ class _BatchesScreenState extends State<BatchesScreen> {
                             AppSpacing.h8,
                             Text(
                               batch.time,
-                              style: AppTextStyles.manrope(
+                              style: AppTextStyles.outfit(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
                                 color: AppColors.textSecondary,
@@ -207,7 +221,7 @@ class _BatchesScreenState extends State<BatchesScreen> {
                         AppSpacing.v12,
                         Row(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.people_outline_rounded,
                               size: AppSpacing.s18,
                               color: AppColors.primaryBrand,
@@ -215,7 +229,7 @@ class _BatchesScreenState extends State<BatchesScreen> {
                             AppSpacing.h8,
                             Text(
                               batch.studentCount,
-                              style: AppTextStyles.manrope(
+                              style: AppTextStyles.outfit(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w700,
                                 color: AppColors.textPrimary,
@@ -229,8 +243,8 @@ class _BatchesScreenState extends State<BatchesScreen> {
                             ),
                             AppSpacing.h16,
                             Text(
-                              'â‚¹${batch.baseFee.toStringAsFixed(0)}',
-                              style: AppTextStyles.manrope(
+                              '₹${batch.baseFee.toStringAsFixed(0)}',
+                              style: AppTextStyles.outfit(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w800,
                                 color: AppColors.primaryBrand,

@@ -1,4 +1,5 @@
 import 'package:tuoora/core/widgets/app_button.dart';
+import 'package:tuoora/core/widgets/input_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
@@ -34,7 +35,7 @@ class StudentFeedbackScreen extends GetView<StudentFeedbackController> {
                     Center(
                       child: Text(
                         'We read everything. Replies come via chat.',
-                        style: AppTextStyles.lexend(
+                        style: AppTextStyles.outfit(
                           fontSize: 11,
                           color: AppColors.textTertiary,
                         ),
@@ -63,7 +64,7 @@ class StudentFeedbackScreen extends GetView<StudentFeedbackController> {
         children: [
           Text(
             "HOW'S IT GOING?",
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 12,
               fontWeight: FontWeight.w800,
               color: AppColors.textSecondary,
@@ -106,7 +107,7 @@ class StudentFeedbackScreen extends GetView<StudentFeedbackController> {
               const SizedBox(height: 8),
               Text(
                 rating.label,
-                style: AppTextStyles.lexend(
+                style: AppTextStyles.outfit(
                   fontSize: 11,
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                   color: isSelected ? AppColors.error : AppColors.textSecondary,
@@ -132,35 +133,23 @@ class StudentFeedbackScreen extends GetView<StudentFeedbackController> {
         children: [
           Text(
             'YOUR MESSAGE',
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 12,
               fontWeight: FontWeight.w800,
               color: AppColors.textSecondary,
             ),
           ),
           const SizedBox(height: 12),
-          Container(
-            decoration: BoxDecoration(
-              color: AppColors.scaffoldBg,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: AppColors.borderGrey),
-            ),
-            child: TextField(
-              controller: controller.messageController,
-              maxLines: 5,
-              style: AppTextStyles.lexend(
-                fontSize: 14,
-                color: AppColors.textPrimary,
-              ),
-              decoration: InputDecoration(
-                hintText: 'What would make Tuoora more useful to you?',
-                hintStyle: AppTextStyles.lexend(
-                  fontSize: 14,
-                  color: AppColors.textTertiary,
-                ),
-                border: InputBorder.none,
-                contentPadding: const EdgeInsets.all(12),
-              ),
+          TextField(
+            controller: controller.messageController,
+            maxLines: 5,
+            style: InputStyles.textStyle(),
+            // Uses the shared institute input design system: 4 dp radius,
+            // tight padding, Outfit hint. Border kept via the matching
+            // border colour through `fillColor: scaffoldBg`.
+            decoration: InputStyles.filled(
+              hintText: 'What would make Tuoora more useful to you?',
+              fillColor: AppColors.scaffoldBg,
             ),
           ),
         ],

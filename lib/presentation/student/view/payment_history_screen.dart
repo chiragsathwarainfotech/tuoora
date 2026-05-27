@@ -31,7 +31,7 @@ class PaymentHistoryScreen extends StatelessWidget {
         ),
         title: Text(
           title,
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 18,
             fontWeight: FontWeight.w800,
             color: AppColors.darkSlate,
@@ -97,7 +97,7 @@ class PaymentHistoryScreen extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: AppSpacing.s16),
       child: Text(
         month.toUpperCase(),
-        style: AppTextStyles.manrope(
+        style: AppTextStyles.outfit(
           fontSize: 12,
           fontWeight: FontWeight.w800,
           color: AppColors.textTertiary,

@@ -23,7 +23,7 @@ class StaffListScreen extends GetView<StaffController> {
             const InstituteAppBar(title: 'Staff Directory'),
             Expanded(
               child: Padding(
-                padding: AppSpacing.x24,
+                padding: AppSpacing.x16,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -120,7 +120,7 @@ class StaffListScreen extends GetView<StaffController> {
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           border: Border.all(color: AppColors.background),
           boxShadow: [
             BoxShadow(
@@ -139,7 +139,7 @@ class StaffListScreen extends GetView<StaffController> {
               padding: const EdgeInsets.symmetric(horizontal: 4),
               child: Text(
                 staff.fullName,
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 13,
                   fontWeight: FontWeight.w800,
                   color: AppColors.textPrimary,
@@ -154,7 +154,7 @@ class StaffListScreen extends GetView<StaffController> {
               padding: const EdgeInsets.symmetric(horizontal: 4),
               child: Text(
                 staff.role?.name ?? 'No Role',
-                style: AppTextStyles.lexend(
+                style: AppTextStyles.outfit(
                   fontSize: 10,
                   fontWeight: FontWeight.w400,
                   color: AppColors.textTertiary,
@@ -198,7 +198,7 @@ class StaffListScreen extends GetView<StaffController> {
       child: Center(
         child: Text(
           getInitials(name),
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: size * 0.4,
             fontWeight: FontWeight.w800,
             color: AppColors.primaryBrand,

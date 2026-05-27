@@ -7,6 +7,8 @@ import 'package:tuoora/data/models/staff_model.dart';
 import 'package:tuoora/presentation/institute/controllers/staff_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/core/widgets/app_search_field.dart';
+import 'package:tuoora/core/constants/app_images.dart';
+import 'package:tuoora/core/widgets/app_action_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -68,7 +70,7 @@ class LogAttendanceScreen extends GetView<StaffController> {
                     AppSpacing.v24,
                     Text(
                       'ATTENDANCE STATUS',
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 12,
                         fontWeight: FontWeight.w800,
                         color: AppColors.textTertiary,
@@ -109,7 +111,7 @@ class LogAttendanceScreen extends GetView<StaffController> {
         children: [
           Text(
             label,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 12,
               fontWeight: FontWeight.w800,
               color: AppColors.textTertiary,
@@ -139,7 +141,7 @@ class LogAttendanceScreen extends GetView<StaffController> {
             margin: const EdgeInsets.only(top: 8),
             decoration: BoxDecoration(
               color: AppColors.white,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
               border: Border.all(color: AppColors.background),
               boxShadow: [
                 BoxShadow(
@@ -165,14 +167,14 @@ class LogAttendanceScreen extends GetView<StaffController> {
                   ),
                   title: Text(
                     staff.fullName,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
                   subtitle: Text(
                     staff.role?.name ?? "",
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 12,
                       color: AppColors.textTertiary,
                     ),
@@ -207,14 +209,14 @@ class LogAttendanceScreen extends GetView<StaffController> {
               children: [
                 Text(
                   staff.fullName,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
                 Text(
                   staff.role?.name ?? "",
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 11,
                     color: AppColors.textTertiary,
                   ),
@@ -224,11 +226,7 @@ class LogAttendanceScreen extends GetView<StaffController> {
           ),
           IconButton(
             onPressed: () => controller.removeLogStaff(),
-            icon: const Icon(
-              Icons.delete_outline_rounded,
-              color: AppColors.bohoRed,
-              size: 20,
-            ),
+            icon: const AppActionIcon(asset: AppImages.icDelete, size: 20),
           ),
         ],
       ),
@@ -293,7 +291,7 @@ class LogAttendanceScreen extends GetView<StaffController> {
           AppSpacing.v12,
           Text(
             label,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 16,
               fontWeight: FontWeight.w700,
               color: isSelected ? color : AppColors.textTertiary,
@@ -343,7 +341,7 @@ class LogAttendanceScreen extends GetView<StaffController> {
       child: Center(
         child: Text(
           getInitials(name),
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: size * 0.4,
             fontWeight: FontWeight.w800,
             color: AppColors.primaryBrand,

@@ -20,24 +20,11 @@ class InstituteDashboard extends StatelessWidget {
           children: [
             _buildTopHeader(),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AppSpacing.v24,
-                  Text(
-                    'INSTITUTIONAL PORTAL',
-                    style: AppTextStyles.lexend(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.brandAppBarColor,
-                      letterSpacing: 1,
-                    ),
-                  ),
-                  AppSpacing.v24,
-                  _buildModulesGrid(),
-                ],
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 16.0,
               ),
+              child: _buildModulesGrid(),
             ),
           ],
         ),
@@ -57,7 +44,7 @@ class InstituteDashboard extends StatelessWidget {
               profileController.instituteName.value.isNotEmpty
                   ? profileController.instituteName.value
                   : 'Tuoora',
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 24,
                 fontWeight: FontWeight.w800,
                 color: AppColors.primaryBrand,
@@ -105,7 +92,7 @@ class InstituteDashboard extends StatelessWidget {
                                   ? profileController.instituteName.value[0]
                                         .toUpperCase()
                                   : 'I',
-                              style: AppTextStyles.manrope(
+                              style: AppTextStyles.outfit(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w800,
                                 color: AppColors.primaryBrand,
@@ -188,18 +175,27 @@ class InstituteDashboard extends StatelessWidget {
       itemCount: modules.length,
       itemBuilder: (context, index) {
         final item = modules[index];
-        return _buildGridItem(item);
+        final accent = _accentPalette[index % _accentPalette.length];
+        return _buildGridItem(item, accent);
       },
     );
   }
 
-  Widget _buildGridItem(ModuleItem item) {
+  static const List<Color> _accentPalette = <Color>[
+    AppColors.instBrandOrange,
+    AppColors.successGreen,
+    AppColors.orangeTag,
+    AppColors.subjectPhysics,
+    AppColors.greenLight,
+  ];
+
+  Widget _buildGridItem(ModuleItem item, Color accent) {
     return GestureDetector(
       onTap: item.onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(16),
+          color: accent.withValues(alpha: 0.12),
+          borderRadius: BorderRadius.circular(8),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.03),
@@ -213,17 +209,14 @@ class InstituteDashboard extends StatelessWidget {
           children: [
             Container(
               padding: const EdgeInsets.all(12),
-              decoration: const BoxDecoration(
-                color: AppColors.primaryBrandLight,
-                shape: BoxShape.circle,
-              ),
-              child: Icon(item.icon, color: AppColors.primaryBrand, size: 24),
+              decoration: BoxDecoration(color: accent, shape: BoxShape.circle),
+              child: Icon(item.icon, color: AppColors.white, size: 24),
             ),
             AppSpacing.v12,
             Text(
               item.title,
               textAlign: TextAlign.center,
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
                 color: AppColors.textPrimary,

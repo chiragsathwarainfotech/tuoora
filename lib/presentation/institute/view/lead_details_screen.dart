@@ -28,7 +28,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
               const InstituteAppBar(title: AppStrings.instLeadDetailsTitle),
               Expanded(
                 child: SingleChildScrollView(
-                  padding: AppSpacing.x24.add(AppSpacing.y16),
+                  padding: AppSpacing.x16.add(AppSpacing.y16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -74,7 +74,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
@@ -100,7 +100,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
                 ),
                 child: Text(
                   lead.status,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 10,
                     fontWeight: FontWeight.w800,
                     color: AppColors.primaryBrand,
@@ -110,7 +110,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
               ),
               Text(
                 '${AppStrings.instAppliedSuffix} ${dateFormat.format(lead.createdAt)}',
-                style: AppTextStyles.lexend(
+                style: AppTextStyles.outfit(
                   fontSize: 12,
                   color: AppColors.textTertiary,
                 ),
@@ -120,7 +120,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
           AppSpacing.v16,
           Text(
             lead.fullName,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 28,
               fontWeight: FontWeight.w800,
               color: AppColors.primaryBrand,
@@ -136,7 +136,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
       padding: AppSpacing.all20,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
@@ -169,7 +169,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
             children: [
               Text(
                 label,
-                style: AppTextStyles.lexend(
+                style: AppTextStyles.outfit(
                   fontSize: 10,
                   fontWeight: FontWeight.w700,
                   color: AppColors.textTertiary,
@@ -179,7 +179,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
               AppSpacing.v4,
               Text(
                 value,
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
                   color: AppColors.textPrimary,
@@ -203,7 +203,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
       padding: AppSpacing.all20,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
@@ -221,7 +221,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
               AppSpacing.h12,
               Text(
                 label,
-                style: AppTextStyles.lexend(
+                style: AppTextStyles.outfit(
                   fontSize: 10,
                   fontWeight: FontWeight.w700,
                   color: AppColors.textTertiary,
@@ -233,7 +233,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
           AppSpacing.v12,
           Text(
             value,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 16,
               fontWeight: FontWeight.w700,
               color: AppColors.textPrimary,
@@ -243,7 +243,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
             AppSpacing.v4,
             Text(
               subtitle,
-              style: AppTextStyles.lexend(
+              style: AppTextStyles.outfit(
                 fontSize: 13,
                 color: AppColors.textSecondary,
               ),
@@ -268,7 +268,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
             AppSpacing.h12,
             Text(
               AppStrings.instInteractionHistoryHeading,
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 16,
                 fontWeight: FontWeight.w800,
                 color: AppColors.primaryBrand,
@@ -296,7 +296,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
                     AppSpacing.h8,
                     Text(
                       'Add Note',
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
                         color: AppColors.primaryBrand,
@@ -358,7 +358,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
               padding: AppSpacing.all16,
               decoration: BoxDecoration(
                 color: AppColors.white,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.02),
@@ -375,7 +375,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
                     children: [
                       Text(
                         item.title,
-                        style: AppTextStyles.manrope(
+                        style: AppTextStyles.outfit(
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
                           color: AppColors.textPrimary,
@@ -383,7 +383,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
                       ),
                       Text(
                         DateFormat('MMM dd, yyyy').format(item.createdAt),
-                        style: AppTextStyles.lexend(
+                        style: AppTextStyles.outfit(
                           fontSize: 10,
                           fontWeight: FontWeight.w500,
                           color: AppColors.textTertiary,
@@ -394,7 +394,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
                   AppSpacing.v8,
                   Text(
                     item.note,
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 12,
                       color: AppColors.textSecondary,
                       height: 1.4,
@@ -449,7 +449,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
                 children: [
                   Text(
                     'Add Interaction Note',
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 18,
                       fontWeight: FontWeight.w800,
                       color: AppColors.primaryBrand,
@@ -511,7 +511,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
       children: [
         Text(
           label,
-          style: AppTextStyles.lexend(
+          style: AppTextStyles.outfit(
             fontSize: 10,
             fontWeight: FontWeight.w700,
             color: AppColors.textTertiary,
@@ -531,13 +531,13 @@ class LeadDetailsScreen extends GetView<LeadsController> {
           child: TextField(
             controller: controller,
             maxLines: maxLines,
-            style: AppTextStyles.lexend(
+            style: AppTextStyles.outfit(
               fontSize: 14,
               color: AppColors.textPrimary,
             ),
             decoration: InputDecoration(
               hintText: hint,
-              hintStyle: AppTextStyles.lexend(
+              hintStyle: AppTextStyles.outfit(
                 fontSize: 14,
                 color: AppColors.blueSapphire,
               ),
@@ -550,7 +550,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
           const SizedBox(height: 4),
           Text(
             errorText,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 11,
               color: Colors.redAccent,
               fontWeight: FontWeight.w500,

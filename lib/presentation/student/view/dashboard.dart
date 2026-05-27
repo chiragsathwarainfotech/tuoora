@@ -51,7 +51,7 @@ class StudentDashboard extends GetView<StudentDashboardController> {
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.fromLTRB(
                     AppSpacing.s16,
-                    AppSpacing.s8,
+                    AppSpacing.s16,
                     AppSpacing.s16,
                     AppSpacing.s24,
                   ),
@@ -212,7 +212,7 @@ class _GreetingTitle extends StatelessWidget {
             backgroundColor: AppColors.studentBrandSoft,
             child: Text(
               initials,
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 12,
                 fontWeight: FontWeight.w800,
                 color: AppColors.studentBrand,
@@ -225,7 +225,7 @@ class _GreetingTitle extends StatelessWidget {
               'Hi, $firstName',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
                 color: AppColors.textPrimary,
@@ -249,7 +249,7 @@ class _TodayClassCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.s20),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
@@ -270,7 +270,7 @@ class _TodayClassCard extends StatelessWidget {
                 opacity: 0.08,
                 child: Text(
                   'S',
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 160,
                     fontWeight: FontWeight.w800,
                     color: AppColors.studentBrand,
@@ -296,7 +296,7 @@ class _TodayClassCard extends StatelessWidget {
                       children: [
                         Text(
                           display.dayNumber,
-                          style: AppTextStyles.manrope(
+                          style: AppTextStyles.outfit(
                             fontSize: 26,
                             fontWeight: FontWeight.w800,
                             color: AppColors.white,
@@ -306,7 +306,7 @@ class _TodayClassCard extends StatelessWidget {
                         const SizedBox(height: 2),
                         Text(
                           display.monthLabel,
-                          style: AppTextStyles.manrope(
+                          style: AppTextStyles.outfit(
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
                             color: AppColors.white,
@@ -324,7 +324,7 @@ class _TodayClassCard extends StatelessWidget {
                         children: [
                           Text(
                             '${display.weekdayLabel}  •  ${display.headerLabel}',
-                            style: AppTextStyles.manrope(
+                            style: AppTextStyles.outfit(
                               fontSize: 10,
                               fontWeight: FontWeight.w800,
                               color: AppColors.textTertiary,
@@ -334,7 +334,7 @@ class _TodayClassCard extends StatelessWidget {
                           const SizedBox(height: 4),
                           Text(
                             display.subject,
-                            style: AppTextStyles.manrope(
+                            style: AppTextStyles.outfit(
                               fontSize: 18,
                               fontWeight: FontWeight.w800,
                               color: AppColors.textPrimary,
@@ -345,7 +345,7 @@ class _TodayClassCard extends StatelessWidget {
                           const SizedBox(height: 2),
                           Text(
                             display.subtitle,
-                            style: AppTextStyles.lexend(
+                            style: AppTextStyles.outfit(
                               fontSize: 11,
                               fontWeight: FontWeight.w400,
                               color: AppColors.textTertiary,
@@ -396,7 +396,7 @@ class _WeekStrip extends StatelessWidget {
           children: [
             Text(
               day.day,
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 10,
                 fontWeight: FontWeight.w700,
                 color: AppColors.textTertiary,
@@ -435,7 +435,7 @@ class _AssignmentTile extends StatelessWidget {
       padding: const EdgeInsets.all(AppSpacing.s14),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.s16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -466,7 +466,7 @@ class _AssignmentTile extends StatelessWidget {
               children: [
                 Text(
                   item.title,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
                     color: AppColors.textPrimary,
@@ -479,7 +479,7 @@ class _AssignmentTile extends StatelessWidget {
                   item.dueLabel.isEmpty
                       ? item.subject
                       : '${item.subject}  •  ${item.dueLabel}',
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 11,
                     fontWeight: FontWeight.w400,
                     color: AppColors.textTertiary,
@@ -502,7 +502,7 @@ class _AssignmentTile extends StatelessWidget {
             ),
             child: Text(
               item.status,
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 11,
                 fontWeight: FontWeight.w700,
                 color: pillText,
@@ -538,7 +538,7 @@ class _AttendanceCard extends StatelessWidget {
       padding: const EdgeInsets.all(AppSpacing.s14),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.s16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -565,7 +565,7 @@ class _AttendanceCard extends StatelessWidget {
               children: [
                 Text(
                   status,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
                     color: textColor,
@@ -574,7 +574,7 @@ class _AttendanceCard extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   detail,
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 11,
                     fontWeight: FontWeight.w400,
                     color: AppColors.textTertiary,
@@ -601,7 +601,7 @@ class _StudyMaterialTile extends StatelessWidget {
       padding: const EdgeInsets.all(AppSpacing.s14),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.s16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -632,7 +632,7 @@ class _StudyMaterialTile extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
                     color: AppColors.textPrimary,
@@ -641,7 +641,7 @@ class _StudyMaterialTile extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   meta,
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 11,
                     fontWeight: FontWeight.w400,
                     color: AppColors.textTertiary,
@@ -674,7 +674,7 @@ class _PendingFeeTile extends StatelessWidget {
       padding: const EdgeInsets.all(AppSpacing.s14),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.s16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -705,7 +705,7 @@ class _PendingFeeTile extends StatelessWidget {
               children: [
                 Text(
                   date,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
                     color: AppColors.textPrimary,
@@ -714,7 +714,7 @@ class _PendingFeeTile extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   "$dueAmount • $status",
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 12,
                     fontWeight: FontWeight.w400,
                     color: AppColors.textTertiary,
@@ -735,7 +735,7 @@ class _PendingFeeTile extends StatelessWidget {
             ),
             child: Text(
               'Pending',
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 11,
                 fontWeight: FontWeight.w700,
                 color: AppColors.studentTomorrowPillText,

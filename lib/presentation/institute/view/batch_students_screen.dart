@@ -8,6 +8,8 @@ import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_bottom_button.dart';
 import 'package:tuoora/core/widgets/common_dialog.dart';
 import 'package:tuoora/core/widgets/app_search_field.dart';
+import 'package:tuoora/core/constants/app_images.dart';
+import 'package:tuoora/core/widgets/app_action_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -29,7 +31,7 @@ class BatchStudentsScreen extends StatelessWidget {
             const InstituteAppBar(title: 'Batch Students'),
             Expanded(
               child: SingleChildScrollView(
-                padding: AppSpacing.x24.add(AppSpacing.y16),
+                padding: AppSpacing.x16.add(AppSpacing.y16),
                 child: Column(
                   children: [
                     _buildEnrolledHeader(controller),
@@ -60,7 +62,7 @@ class BatchStudentsScreen extends StatelessWidget {
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
@@ -78,7 +80,7 @@ class BatchStudentsScreen extends StatelessWidget {
               children: [
                 Text(
                   'TOTAL ENROLLED',
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
                     color: AppColors.textMuted,
@@ -88,7 +90,7 @@ class BatchStudentsScreen extends StatelessWidget {
                 AppSpacing.v4,
                 Text(
                   '${controller.assignedStudents.length}',
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 32,
                     fontWeight: FontWeight.w800,
                     color: AppColors.primaryBrand,
@@ -152,7 +154,7 @@ class BatchStudentsScreen extends StatelessWidget {
                   backgroundColor: AppColors.borderGrey,
                   child: Text(
                     '+${controller.assignedStudents.length - 3}',
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 10,
                       fontWeight: FontWeight.w700,
                       color: AppColors.textSecondary,
@@ -186,7 +188,7 @@ class BatchStudentsScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 40),
             child: Text(
               'No students found',
-              style: AppTextStyles.lexend(color: AppColors.textMuted),
+              style: AppTextStyles.outfit(color: AppColors.textMuted),
             ),
           ),
         );
@@ -203,7 +205,7 @@ class BatchStudentsScreen extends StatelessWidget {
             padding: AppSpacing.all12,
             decoration: BoxDecoration(
               color: AppColors.white,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.02),
@@ -225,7 +227,7 @@ class BatchStudentsScreen extends StatelessWidget {
                     children: [
                       Text(
                         bs.student.name,
-                        style: AppTextStyles.manrope(
+                        style: AppTextStyles.outfit(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                           color: AppColors.textPrimary,
@@ -233,7 +235,7 @@ class BatchStudentsScreen extends StatelessWidget {
                       ),
                       Text(
                         'ID: ${bs.student.id}',
-                        style: AppTextStyles.lexend(
+                        style: AppTextStyles.outfit(
                           fontSize: 12,
                           color: AppColors.textMuted,
                         ),
@@ -244,11 +246,7 @@ class BatchStudentsScreen extends StatelessWidget {
                 IconButton(
                   onPressed: () =>
                       _showRemoveConfirmation(context, controller, bs),
-                  icon: const Icon(
-                    Icons.delete_outline_rounded,
-                    color: AppColors.bohoRed,
-                    size: 24,
-                  ),
+                  icon: const AppActionIcon(asset: AppImages.icDelete, size: 24),
                 ),
               ],
             ),
@@ -310,7 +308,7 @@ class BatchStudentsScreen extends StatelessWidget {
       child: Center(
         child: Text(
           initials,
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 18,
             fontWeight: FontWeight.w800,
             color: AppColors.primaryBrand,

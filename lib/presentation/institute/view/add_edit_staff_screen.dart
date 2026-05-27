@@ -27,7 +27,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
             ),
             Expanded(
               child: SingleChildScrollView(
-                padding: AppSpacing.x24.add(AppSpacing.y16),
+                padding: AppSpacing.x16.add(AppSpacing.y16),
                 child: Form(
                   key: controller.addStaffFormKey,
                   child: Column(
@@ -54,7 +54,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
@@ -88,7 +88,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
                   children: [
                     Text(
                       'Role',
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 14,
                         fontWeight: FontWeight.w800,
                         color: AppColors.brandAppBarColor,
@@ -106,7 +106,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
                   children: [
                     Text(
                       'Department',
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 14,
                         fontWeight: FontWeight.w800,
                         color: AppColors.brandAppBarColor,
@@ -150,7 +150,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
           AppSpacing.v32,
           Text(
             'Employment Type',
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 14,
               fontWeight: FontWeight.w800,
               color: AppColors.brandAppBarColor,
@@ -272,7 +272,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
             children: [
               Text(
                 'Staff Photo',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
                   color: AppColors.textPrimary,
@@ -281,7 +281,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
               AppSpacing.v4,
               Text(
                 'Update professional information and profile picture',
-                style: AppTextStyles.lexend(
+                style: AppTextStyles.outfit(
                   fontSize: 13,
                   fontWeight: FontWeight.w400,
                   color: AppColors.textTertiary,
@@ -314,7 +314,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
               isExpanded: true,
               hint: Text(
                 'Select Role',
-                style: AppTextStyles.lexend(
+                style: AppTextStyles.outfit(
                   fontSize: 14,
                   color: AppColors.textTertiary,
                 ),
@@ -328,7 +328,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
                   value: role.id,
                   child: Text(
                     role.name,
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 14,
                       color: AppColors.textPrimary,
                       fontWeight: FontWeight.w500,
@@ -346,7 +346,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
             padding: const EdgeInsets.only(left: 4),
             child: Text(
               errorText,
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 12,
                 color: Colors.redAccent,
                 fontWeight: FontWeight.w500,
@@ -377,7 +377,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
               isExpanded: true,
               hint: Text(
                 'Select Dept',
-                style: AppTextStyles.lexend(
+                style: AppTextStyles.outfit(
                   fontSize: 14,
                   color: AppColors.textTertiary,
                 ),
@@ -391,7 +391,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
                   value: dept.id,
                   child: Text(
                     dept.name,
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 14,
                       color: AppColors.textPrimary,
                       fontWeight: FontWeight.w500,
@@ -409,7 +409,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
             padding: const EdgeInsets.only(left: 4),
             child: Text(
               errorText,
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 12,
                 color: Colors.redAccent,
                 fontWeight: FontWeight.w500,
@@ -433,7 +433,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
         child: Center(
           child: Text(
             label,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 14,
               fontWeight: FontWeight.w800,
               color: isSelected ? AppColors.white : AppColors.textSecondary,
@@ -473,7 +473,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
         child: Center(
           child: Text(
             'Discard Changes',
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 14,
               fontWeight: FontWeight.w800,
               color: AppColors.primaryBrand,

@@ -11,6 +11,13 @@ class AppTheme {
   static const Color onPrimary = AppColors.white;
   static const Color onSurface = Color(0xFF1A1C1E);
 
+  /// Design-system minimum tap height for every Material button.
+  /// Applied via `_buttonMinSize` to ElevatedButton, TextButton, and
+  /// OutlinedButton themes so raw buttons inherit it without per-call
+  /// `styleFrom(minimumSize: ...)` plumbing.
+  static const double _buttonHeight = 48;
+  static const Size _buttonMinSize = Size(0, _buttonHeight);
+
   static ThemeData lightTheme = ThemeData(
     useMaterial3: true,
     colorScheme: const ColorScheme.light(
@@ -22,18 +29,18 @@ class AppTheme {
     ),
     scaffoldBackgroundColor: background,
     textTheme: TextTheme(
-      headlineLarge: GoogleFonts.manrope(
+      headlineLarge: GoogleFonts.outfit(
         fontSize: 28,
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w700,
         color: onSurface,
       ),
-      headlineMedium: GoogleFonts.manrope(
+      headlineMedium: GoogleFonts.outfit(
         fontSize: 24,
         fontWeight: FontWeight.w600,
         color: onSurface,
       ),
-      bodyLarge: GoogleFonts.lexend(fontSize: 16, color: onSurface),
-      bodyMedium: GoogleFonts.lexend(fontSize: 14, color: onSurface),
+      bodyLarge: GoogleFonts.outfit(fontSize: 16, color: onSurface),
+      bodyMedium: GoogleFonts.outfit(fontSize: 14, color: onSurface),
     ),
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.transparent,
@@ -44,10 +51,29 @@ class AppTheme {
       style: ElevatedButton.styleFrom(
         backgroundColor: primary,
         foregroundColor: onPrimary,
+        minimumSize: _buttonMinSize,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-        textStyle: GoogleFonts.manrope(
+        textStyle: GoogleFonts.outfit(
           fontSize: 18,
           fontWeight: FontWeight.w600,
+        ),
+      ),
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        minimumSize: _buttonMinSize,
+        textStyle: GoogleFonts.outfit(
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        minimumSize: _buttonMinSize,
+        textStyle: GoogleFonts.outfit(
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
         ),
       ),
     ),

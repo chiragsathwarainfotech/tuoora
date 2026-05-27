@@ -30,7 +30,7 @@ class InstituteFeesScreen extends GetView<InstituteController> {
                 color: AppColors.primaryBrand,
                 child: SingleChildScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),
-                  padding: AppSpacing.x24,
+                  padding: AppSpacing.x16,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -75,7 +75,7 @@ class InstituteFeesScreen extends GetView<InstituteController> {
         children: [
           Text(
             AppStrings.instCurrentMonthCollected,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 12,
               fontWeight: FontWeight.w800,
               color: AppColors.white.withValues(alpha: 0.7),
@@ -85,7 +85,7 @@ class InstituteFeesScreen extends GetView<InstituteController> {
           AppSpacing.v12,
           Text(
             '₹${NumberFormat('#,##,###.##').format(amount)}',
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 32,
               fontWeight: FontWeight.w800,
               color: AppColors.white,
@@ -102,7 +102,7 @@ class InstituteFeesScreen extends GetView<InstituteController> {
       children: [
         Text(
           AppStrings.instFeeRegistry,
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 18,
             fontWeight: FontWeight.w800,
             color: AppColors.textPrimary,
@@ -145,7 +145,7 @@ class InstituteFeesScreen extends GetView<InstituteController> {
               AppSpacing.v16,
               Text(
                 'No fee records found',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 18,
                   color: AppColors.brandAppBarColor,
                   fontWeight: FontWeight.w800,
@@ -182,7 +182,7 @@ class InstituteFeesScreen extends GetView<InstituteController> {
       padding: AppSpacing.all16,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         border: Border.all(color: AppColors.borderGrey),
         boxShadow: [
           BoxShadow(
@@ -199,7 +199,7 @@ class InstituteFeesScreen extends GetView<InstituteController> {
             backgroundColor: AppColors.primaryBrandLight,
             child: Text(
               name.isNotEmpty ? name[0] : '?',
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
                 color: AppColors.primaryBrand,
@@ -216,7 +216,7 @@ class InstituteFeesScreen extends GetView<InstituteController> {
                   children: [
                     Text(
                       name,
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 16,
                         fontWeight: FontWeight.w800,
                         color: AppColors.textPrimary,
@@ -224,7 +224,7 @@ class InstituteFeesScreen extends GetView<InstituteController> {
                     ),
                     Text(
                       amount,
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 16,
                         fontWeight: FontWeight.w800,
                         color: AppColors.primaryBrand,
@@ -238,7 +238,7 @@ class InstituteFeesScreen extends GetView<InstituteController> {
                   children: [
                     Text(
                       studentId,
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
                         color: AppColors.textTertiary,
@@ -246,7 +246,7 @@ class InstituteFeesScreen extends GetView<InstituteController> {
                     ),
                     Text(
                       DateFormat('dd MMM, yyyy').format(date),
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                         color: AppColors.textTertiary,

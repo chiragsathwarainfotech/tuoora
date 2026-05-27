@@ -62,7 +62,7 @@ class PaymentItemTile extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 15,
                     fontWeight: FontWeight.w800,
                     color: AppColors.textPrimary,
@@ -71,7 +71,7 @@ class PaymentItemTile extends StatelessWidget {
                 AppSpacing.v4,
                 Text(
                   '$date • Ref: $ref',
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 11,
                     fontWeight: FontWeight.w400,
                     color: AppColors.textTertiary,
@@ -86,7 +86,7 @@ class PaymentItemTile extends StatelessWidget {
             children: [
               Text(
                 amount,
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
                   color: AppColors.textPrimary,

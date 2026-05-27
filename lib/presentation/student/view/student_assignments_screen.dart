@@ -33,7 +33,7 @@ class StudentAssignmentsScreen extends GetView<AssignmentsController> {
               child: SingleChildScrollView(
                 padding: const EdgeInsets.fromLTRB(
                   AppSpacing.s16,
-                  AppSpacing.s4,
+                  AppSpacing.s16,
                   AppSpacing.s16,
                   AppSpacing.s24,
                 ),
@@ -134,7 +134,7 @@ class _WeeklyProgressCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.s16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
@@ -154,7 +154,7 @@ class _WeeklyProgressCard extends StatelessWidget {
               children: [
                 Text(
                   '$remaining',
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 30,
                     fontWeight: FontWeight.w800,
                     color: AppColors.textPrimary,
@@ -165,7 +165,7 @@ class _WeeklyProgressCard extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 2, top: 6),
                   child: Text(
                     '/$total',
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
                       color: AppColors.textTertiary,
@@ -180,7 +180,7 @@ class _WeeklyProgressCard extends StatelessWidget {
                     children: [
                       Text(
                         AppStrings.studentAssignmentsStillToDo,
-                        style: AppTextStyles.manrope(
+                        style: AppTextStyles.outfit(
                           fontSize: 13,
                           fontWeight: FontWeight.w800,
                           color: AppColors.textPrimary,
@@ -189,7 +189,7 @@ class _WeeklyProgressCard extends StatelessWidget {
                       const SizedBox(height: 2),
                       Text(
                         '$completed ${AppStrings.studentAssignmentsCompletedBy} $teacherName',
-                        style: AppTextStyles.lexend(
+                        style: AppTextStyles.outfit(
                           fontSize: 11,
                           color: AppColors.textTertiary,
                         ),
@@ -377,7 +377,7 @@ class _TabButton extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           color: isActive ? AppColors.white : AppColors.studentTabInactiveBg,
-          borderRadius: BorderRadius.circular(AppSpacing.s10),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           boxShadow: isActive
               ? [
                   BoxShadow(
@@ -391,7 +391,7 @@ class _TabButton extends StatelessWidget {
         child: Center(
           child: Text(
             label,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 13,
               fontWeight: FontWeight.w800,
               color: isActive
@@ -426,11 +426,11 @@ class _AssignmentCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(AppSpacing.s16),
       child: InkWell(
         onTap: effectiveOnTap,
-        borderRadius: BorderRadius.circular(AppSpacing.s16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         child: Ink(
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(AppSpacing.s16),
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.03),
@@ -476,7 +476,7 @@ class _AssignmentCard extends StatelessWidget {
                                 Text(
                                   item.title,
                                   style:
-                                      AppTextStyles.manrope(
+                                      AppTextStyles.outfit(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w800,
                                         color: item.isCompleted
@@ -499,7 +499,7 @@ class _AssignmentCard extends StatelessWidget {
                                     children: [
                                       TextSpan(
                                         text: item.subjectLabel,
-                                        style: AppTextStyles.manrope(
+                                        style: AppTextStyles.outfit(
                                           fontSize: 11,
                                           fontWeight: FontWeight.w800,
                                           color: item.stripe,
@@ -508,7 +508,7 @@ class _AssignmentCard extends StatelessWidget {
                                       ),
                                       TextSpan(
                                         text: _statusSuffix(item),
-                                        style: AppTextStyles.manrope(
+                                        style: AppTextStyles.outfit(
                                           fontSize: 10,
                                           fontWeight: FontWeight.w800,
                                           color: _statusColor(item),
@@ -610,7 +610,7 @@ class _DuePill extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: AppTextStyles.manrope(
+        style: AppTextStyles.outfit(
           fontSize: 11,
           fontWeight: FontWeight.w700,
           color: fg,
@@ -653,7 +653,7 @@ class _EmptyState extends StatelessWidget {
           Text(
             msg,
             textAlign: TextAlign.center,
-            style: AppTextStyles.lexend(
+            style: AppTextStyles.outfit(
               fontSize: 13,
               color: AppColors.textSecondary,
               fontWeight: FontWeight.w500,

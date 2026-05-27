@@ -77,7 +77,7 @@ class SignupController extends GetxController {
           children: [
             Text(
               'Select Logo Source',
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
                 color: AppColors.textPrimary,
@@ -98,7 +98,7 @@ class SignupController extends GetxController {
               ),
               title: Text(
                 'Camera',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
                   color: AppColors.textPrimary,
@@ -121,7 +121,7 @@ class SignupController extends GetxController {
               ),
               title: Text(
                 'Gallery',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
                   color: AppColors.textPrimary,

@@ -32,7 +32,7 @@ class StudentChatScreen extends StatelessWidget {
               child: Center(
                 child: Text(
                   'SC',
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
                     color: AppColors.white,
@@ -46,7 +46,7 @@ class StudentChatScreen extends StatelessWidget {
               children: [
                 Text(
                   'Saraswati Coaching Centre',
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
                     color: AppColors.textPrimary,
@@ -54,7 +54,7 @@ class StudentChatScreen extends StatelessWidget {
                 ),
                 Text(
                   'Institute',
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 11,
                     fontWeight: FontWeight.w400,
                     color: AppColors.textTertiary,
@@ -161,7 +161,7 @@ class StudentChatScreen extends StatelessWidget {
                   children: [
                     Expanded(
                       child: TextField(
-                        style: AppTextStyles.lexend(fontSize: 14),
+                        style: AppTextStyles.outfit(fontSize: 14),
                         decoration: const InputDecoration(
                           hintText: 'Message the institute...',
                           border: InputBorder.none,
@@ -277,7 +277,7 @@ class StudentChatScreen extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             label,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 10,
               fontWeight: FontWeight.w700,
               color: AppColors.textSecondary,
@@ -296,7 +296,7 @@ class StudentChatScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s16),
           child: Text(
             date,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 10,
               fontWeight: FontWeight.w800,
               color: AppColors.textTertiary,
@@ -325,7 +325,7 @@ class StudentChatScreen extends StatelessWidget {
             ),
             child: Text(
               text,
-              style: AppTextStyles.lexend(
+              style: AppTextStyles.outfit(
                 fontSize: 13,
                 fontWeight: FontWeight.w400,
                 color: AppColors.textPrimary,
@@ -336,7 +336,7 @@ class StudentChatScreen extends StatelessWidget {
           const SizedBox(height: AppSpacing.s4),
           Text(
             time,
-            style: AppTextStyles.lexend(
+            style: AppTextStyles.outfit(
               fontSize: 10,
               fontWeight: FontWeight.w400,
               color: AppColors.textMuted,
@@ -362,7 +362,7 @@ class StudentChatScreen extends StatelessWidget {
             ),
             child: Text(
               text,
-              style: AppTextStyles.lexend(
+              style: AppTextStyles.outfit(
                 fontSize: 13,
                 fontWeight: FontWeight.w500,
                 color: AppColors.white,
@@ -373,7 +373,7 @@ class StudentChatScreen extends StatelessWidget {
           const SizedBox(height: AppSpacing.s4),
           Text(
             time,
-            style: AppTextStyles.lexend(
+            style: AppTextStyles.outfit(
               fontSize: 10,
               fontWeight: FontWeight.w400,
               color: AppColors.textMuted,
@@ -409,7 +409,7 @@ class StudentChatScreen extends StatelessWidget {
             Expanded(
               child: Text(
                 text,
-                style: AppTextStyles.lexend(
+                style: AppTextStyles.outfit(
                   fontSize: 11,
                   fontWeight: FontWeight.w400,
                   color: AppColors.textPrimary,

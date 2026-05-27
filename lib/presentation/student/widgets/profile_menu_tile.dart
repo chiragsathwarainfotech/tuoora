@@ -40,7 +40,7 @@ class ProfileMenuTile extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: AppTextStyles.lexend(
+                style: AppTextStyles.outfit(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   color: AppColors.textPrimary,
@@ -50,7 +50,7 @@ class ProfileMenuTile extends StatelessWidget {
             if (trailingText != null) ...[
               Text(
                 trailingText!,
-                style: AppTextStyles.lexend(
+                style: AppTextStyles.outfit(
                   fontSize: 12,
                   color: AppColors.textTertiary,
                 ),

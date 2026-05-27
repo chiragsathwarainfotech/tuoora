@@ -31,7 +31,7 @@ class BatchHomeworkScreen extends StatelessWidget {
               onBackTap: () => Get.back(),
             ),
             Padding(
-              padding: AppSpacing.x24.add(AppSpacing.y16),
+              padding: AppSpacing.x16.add(AppSpacing.y16),
               child: _buildSearchBar(controller),
             ),
             Expanded(
@@ -52,7 +52,7 @@ class BatchHomeworkScreen extends StatelessWidget {
                         : Icons.assignment_outlined,
                     child: SingleChildScrollView(
                       physics: const AlwaysScrollableScrollPhysics(),
-                      padding: AppSpacing.x24.add(AppSpacing.bottom16),
+                      padding: AppSpacing.x16.add(AppSpacing.bottom16),
                       child: Column(
                         children: controller.filteredHomeworks
                             .map((hw) => _buildHomeworkItem(hw, controller))
@@ -99,7 +99,7 @@ class BatchHomeworkScreen extends StatelessWidget {
         padding: AppSpacing.all16,
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.02),
@@ -131,7 +131,7 @@ class BatchHomeworkScreen extends StatelessWidget {
                       Expanded(
                         child: Text(
                           hw.title,
-                          style: AppTextStyles.manrope(
+                          style: AppTextStyles.outfit(
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
                             color: AppColors.textPrimary,
@@ -153,7 +153,7 @@ class BatchHomeworkScreen extends StatelessWidget {
                           isActive
                               ? AppStrings.instActiveLabel
                               : AppStrings.instClosedLabel,
-                          style: AppTextStyles.manrope(
+                          style: AppTextStyles.outfit(
                             fontSize: 10,
                             fontWeight: FontWeight.w800,
                             color: isActive
@@ -175,7 +175,7 @@ class BatchHomeworkScreen extends StatelessWidget {
                       AppSpacing.h8,
                       Text(
                         '${isActive ? AppStrings.instDueLabel : AppStrings.instEndedLabel} ${DateFormat('MMM dd, yyyy').format(hw.dueDate)}',
-                        style: AppTextStyles.lexend(
+                        style: AppTextStyles.outfit(
                           fontSize: 12,
                           color: AppColors.textTertiary,
                         ),
@@ -189,7 +189,7 @@ class BatchHomeworkScreen extends StatelessWidget {
                       AppSpacing.h8,
                       Text(
                         '${hw.submittedCount} ${AppStrings.instSubmissionsLabel}',
-                        style: AppTextStyles.lexend(
+                        style: AppTextStyles.outfit(
                           fontSize: 12,
                           color: AppColors.textTertiary,
                         ),

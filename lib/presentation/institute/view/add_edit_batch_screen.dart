@@ -88,7 +88,7 @@ class AddEditBatchScreen extends GetView<BatchController> {
                           padding: const EdgeInsets.only(bottom: 8.0),
                           child: Text(
                             controller.daysError.value!,
-                            style: AppTextStyles.manrope(
+                            style: AppTextStyles.outfit(
                               fontSize: 12,
                               color: Colors.redAccent,
                               fontWeight: FontWeight.w500,
@@ -120,7 +120,7 @@ class AddEditBatchScreen extends GetView<BatchController> {
         AppSpacing.h12,
         Text(
           title,
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 16,
             fontWeight: FontWeight.w800,
             color: AppColors.primaryBrand,
@@ -135,7 +135,7 @@ class AddEditBatchScreen extends GetView<BatchController> {
       padding: AppSpacing.all20,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -149,7 +149,7 @@ class AddEditBatchScreen extends GetView<BatchController> {
         children: [
           Text(
             AppStrings.instTimeSlot,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 12,
               fontWeight: FontWeight.w800,
               color: AppColors.textTertiary,
@@ -175,7 +175,7 @@ class AddEditBatchScreen extends GetView<BatchController> {
                   child: Obx(
                     () => Text(
                       '${controller.startTime.value.format(context)} — ${controller.endTime.value.format(context)}',
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
                         color: AppColors.textPrimary,
@@ -187,7 +187,7 @@ class AddEditBatchScreen extends GetView<BatchController> {
                   onPressed: () => _showTimeRangePicker(context),
                   child: Text(
                     AppStrings.instChangeBtn,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
                       color: AppColors.primaryBrand,
@@ -228,7 +228,7 @@ class AddEditBatchScreen extends GetView<BatchController> {
               ),
               child: Text(
                 day,
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
                   color: isSelected ? AppColors.white : AppColors.textSecondary,

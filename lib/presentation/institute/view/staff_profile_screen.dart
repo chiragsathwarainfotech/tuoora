@@ -6,6 +6,8 @@ import 'package:tuoora/presentation/institute/controllers/staff_controller.dart'
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/data/models/staff_model.dart';
 import 'package:tuoora/config/app_routes.dart';
+import 'package:tuoora/core/constants/app_images.dart';
+import 'package:tuoora/core/widgets/app_action_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -30,17 +32,11 @@ class StaffProfileScreen extends GetView<StaffController> {
                         controller.loadStaffForEdit(staff);
                         Get.toNamed(AppRoutes.instituteAddEditStaff);
                       },
-                      icon: const Icon(
-                        Icons.edit,
-                        color: AppColors.primaryBrand,
-                      ),
+                      icon: const AppActionIcon(asset: AppImages.icEdit),
                     ),
                     IconButton(
                       onPressed: () => _showDeleteConfirmation(),
-                      icon: const Icon(
-                        Icons.delete_outline_rounded,
-                        color: AppColors.bohoRed,
-                      ),
+                      icon: const AppActionIcon(asset: AppImages.icDelete),
                     ),
                   ],
                 ],
@@ -104,7 +100,7 @@ class StaffProfileScreen extends GetView<StaffController> {
               children: [
                 Text(
                   staff.fullName,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 22,
                     fontWeight: FontWeight.w800,
                     color: AppColors.textPrimary,
@@ -112,7 +108,7 @@ class StaffProfileScreen extends GetView<StaffController> {
                 ),
                 Text(
                   staff.role?.name ?? 'No Role',
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
                     color: AppColors.textSecondary,
@@ -145,7 +141,7 @@ class StaffProfileScreen extends GetView<StaffController> {
         AppSpacing.h12,
         Text(
           value,
-          style: AppTextStyles.lexend(
+          style: AppTextStyles.outfit(
             fontSize: 13,
             fontWeight: FontWeight.w400,
             color: iconColor,
@@ -172,7 +168,7 @@ class StaffProfileScreen extends GetView<StaffController> {
             height: 40,
             width: 1,
             color: AppColors.background,
-            margin: AppSpacing.x24,
+            margin: AppSpacing.x16,
           ),
           Expanded(
             child: _buildSimpleInfo(
@@ -196,7 +192,7 @@ class StaffProfileScreen extends GetView<StaffController> {
             AppSpacing.h6,
             Text(
               label,
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 11,
                 fontWeight: FontWeight.w700,
                 color: AppColors.textTertiary,
@@ -208,7 +204,7 @@ class StaffProfileScreen extends GetView<StaffController> {
         AppSpacing.v8,
         Text(
           value,
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 16,
             fontWeight: FontWeight.w600,
             color: AppColors.textPrimary,
@@ -220,7 +216,7 @@ class StaffProfileScreen extends GetView<StaffController> {
 
   Widget _buildActionButtons() {
     return Padding(
-      padding: AppSpacing.x24,
+      padding: AppSpacing.x16,
       child: Row(
         children: [
           Expanded(
@@ -257,7 +253,7 @@ class StaffProfileScreen extends GetView<StaffController> {
         padding: const EdgeInsets.symmetric(vertical: 18),
         decoration: BoxDecoration(
           color: isFilled ? AppColors.primaryBrand : AppColors.white,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           border: Border.all(color: AppColors.primaryBrand, width: 1.5),
           boxShadow: isFilled
               ? [
@@ -280,7 +276,7 @@ class StaffProfileScreen extends GetView<StaffController> {
             AppSpacing.h12,
             Text(
               label,
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 16,
                 fontWeight: FontWeight.w800,
                 color: isFilled ? AppColors.white : AppColors.primaryBrand,

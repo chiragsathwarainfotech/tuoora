@@ -15,6 +15,8 @@ import 'package:tuoora/core/widgets/common_dialog.dart';
 import 'package:tuoora/presentation/institute/controllers/chat_controller.dart';
 import 'package:tuoora/presentation/student/widgets/student_back_button.dart';
 import 'package:tuoora/data/models/chat_model.dart';
+import 'package:tuoora/core/constants/app_images.dart';
+import 'package:tuoora/core/widgets/app_action_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -132,7 +134,7 @@ class _StudentChatMessagesScreenState extends State<StudentChatMessagesScreen> {
                 children: [
                   Text(
                     chat?.participantName ?? 'Chat',
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 18,
                       fontWeight: FontWeight.w800,
                       color: AppColors.textPrimary,
@@ -141,7 +143,7 @@ class _StudentChatMessagesScreenState extends State<StudentChatMessagesScreen> {
                   if (chat?.participantRole != null)
                     Text(
                       chat!.participantRole,
-                      style: AppTextStyles.lexend(
+                      style: AppTextStyles.outfit(
                         fontSize: 12,
                         fontWeight: FontWeight.w400,
                         color: AppColors.textTertiary,
@@ -166,15 +168,11 @@ class _StudentChatMessagesScreenState extends State<StudentChatMessagesScreen> {
                       value: ChatMenuAction.delete,
                       child: Row(
                         children: [
-                          const Icon(
-                            Icons.delete_outline_rounded,
-                            color: AppColors.bohoRed,
-                            size: 20,
-                          ),
+                          const AppActionIcon(asset: AppImages.icDelete, size: 20),
                           const SizedBox(width: 12),
                           Text(
                             'Delete chat',
-                            style: AppTextStyles.lexend(
+                            style: AppTextStyles.outfit(
                               fontSize: 14,
                               color: AppColors.bohoRed,
                               fontWeight: FontWeight.w600,
@@ -248,7 +246,7 @@ class _StudentChatMessagesScreenState extends State<StudentChatMessagesScreen> {
           AppSpacing.v24,
           Text(
             'Say Hello to !',
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 18,
               fontWeight: FontWeight.w800,
               color: AppColors.textPrimary,
@@ -260,7 +258,7 @@ class _StudentChatMessagesScreenState extends State<StudentChatMessagesScreen> {
             child: Text(
               'Click below to start your conversation.',
               textAlign: TextAlign.center,
-              style: AppTextStyles.lexend(
+              style: AppTextStyles.outfit(
                 fontSize: 14,
                 color: AppColors.textSecondary,
               ),
@@ -327,7 +325,7 @@ class _StudentChatMessagesScreenState extends State<StudentChatMessagesScreen> {
                   : EdgeInsets.only(top: hasAttachment ? 8 : 0),
               child: Text(
                 message.content,
-                style: AppTextStyles.lexend(
+                style: AppTextStyles.outfit(
                   fontSize: 14,
                   color: isMe ? AppColors.white : AppColors.textPrimary,
                   height: 1.4,
@@ -345,7 +343,7 @@ class _StudentChatMessagesScreenState extends State<StudentChatMessagesScreen> {
                 children: [
                   Text(
                     message.timestamp,
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 10,
                       color: isMe
                           ? AppColors.white.withValues(alpha: 0.7)
@@ -395,7 +393,7 @@ class _StudentChatMessagesScreenState extends State<StudentChatMessagesScreen> {
                     const SizedBox(width: 4),
                     Text(
                       'Tap to retry',
-                      style: AppTextStyles.lexend(
+                      style: AppTextStyles.outfit(
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
                         color: Colors.redAccent,
@@ -575,7 +573,7 @@ class _StudentChatMessagesScreenState extends State<StudentChatMessagesScreen> {
                     label,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
                       color: textColor,
@@ -583,7 +581,7 @@ class _StudentChatMessagesScreenState extends State<StudentChatMessagesScreen> {
                   ),
                   Text(
                     sublabel,
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 11,
                       color: textColor.withValues(alpha: 0.7),
                     ),
@@ -654,7 +652,7 @@ class _StudentChatMessagesScreenState extends State<StudentChatMessagesScreen> {
                   Expanded(
                     child: TextField(
                       controller: controller.messageController,
-                      style: AppTextStyles.lexend(fontSize: 14),
+                      style: AppTextStyles.outfit(fontSize: 14),
                       decoration: const InputDecoration(
                         hintText: 'Type a message...',
                         border: InputBorder.none,
@@ -772,7 +770,7 @@ class _StudentChatMessagesScreenState extends State<StudentChatMessagesScreen> {
           const SizedBox(height: 8),
           Text(
             label,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 10,
               fontWeight: FontWeight.w700,
               color: AppColors.textSecondary,

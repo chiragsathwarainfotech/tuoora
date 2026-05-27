@@ -28,7 +28,7 @@ class FeeTransactionHistoryScreen extends StatelessWidget {
                     AppSpacing.v32,
                     Text(
                       'Past Transactions',
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 16,
                         fontWeight: FontWeight.w800,
                         color: AppColors.textPrimary,
@@ -55,7 +55,7 @@ class FeeTransactionHistoryScreen extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: AppColors.primaryBrand.withValues(alpha: 0.3),
@@ -72,14 +72,14 @@ class FeeTransactionHistoryScreen extends StatelessWidget {
             children: [
               Text(
                 'Total Fees Collected',
-                style: AppTextStyles.lexend(
+                style: AppTextStyles.outfit(
                   fontSize: 14,
                   color: AppColors.white.withValues(alpha: 0.7),
                 ),
               ),
               Text(
                 'Status',
-                style: AppTextStyles.lexend(
+                style: AppTextStyles.outfit(
                   fontSize: 14,
                   color: AppColors.white.withValues(alpha: 0.7),
                 ),
@@ -91,7 +91,7 @@ class FeeTransactionHistoryScreen extends StatelessWidget {
             children: [
               Text(
                 '₹12,450.00',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 28,
                   fontWeight: FontWeight.w800,
                   color: AppColors.white,
@@ -99,7 +99,7 @@ class FeeTransactionHistoryScreen extends StatelessWidget {
               ),
               Text(
                 'Active',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 14,
                   fontWeight: FontWeight.w800,
                   color: AppColors.white,
@@ -182,7 +182,7 @@ class FeeTransactionHistoryScreen extends StatelessWidget {
                   children: [
                     Text(
                       tx['date']!,
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
                         color: AppColors.textPrimary,
@@ -191,7 +191,7 @@ class FeeTransactionHistoryScreen extends StatelessWidget {
                     AppSpacing.v4,
                     Text(
                       'Payment via ${tx['method']}',
-                      style: AppTextStyles.lexend(
+                      style: AppTextStyles.outfit(
                         fontSize: 12,
                         color: AppColors.textTertiary,
                       ),
@@ -204,7 +204,7 @@ class FeeTransactionHistoryScreen extends StatelessWidget {
                 children: [
                   Text(
                     tx['amount']!,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 15,
                       fontWeight: FontWeight.w800,
                       color: AppColors.textPrimary,
@@ -222,7 +222,7 @@ class FeeTransactionHistoryScreen extends StatelessWidget {
                     ),
                     child: Text(
                       tx['status']!,
-                      style: AppTextStyles.lexend(
+                      style: AppTextStyles.outfit(
                         fontSize: 10,
                         fontWeight: FontWeight.w600,
                         color: AppColors.greenText,

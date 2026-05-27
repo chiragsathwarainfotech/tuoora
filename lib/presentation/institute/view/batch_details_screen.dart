@@ -9,6 +9,8 @@ import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_info_row.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_metric_card.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/constants/app_images.dart';
+import 'package:tuoora/core/widgets/app_action_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -45,26 +47,20 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
                     batchController.initEditMode(controller.batch);
                     Get.toNamed(AppRoutes.instituteEditBatch);
                   },
-                  icon: const Icon(
-                    Icons.edit_outlined,
-                    color: AppColors.primaryBrand,
-                  ),
+                  icon: const AppActionIcon(asset: AppImages.icEdit),
                 ),
                 IconButton(
                   onPressed: () => batchController.deleteBatchWithConfirmation(
                     controller.batch.id,
                   ),
-                  icon: const Icon(
-                    Icons.delete_outline_rounded,
-                    color: AppColors.bohoRed,
-                  ),
+                  icon: const AppActionIcon(asset: AppImages.icDelete),
                 ),
                 AppSpacing.h8,
               ],
             ),
             Expanded(
               child: SingleChildScrollView(
-                padding: AppSpacing.x24.add(AppSpacing.y16),
+                padding: AppSpacing.x16.add(AppSpacing.y16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -88,7 +84,7 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
@@ -113,7 +109,7 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
                 ),
                 child: Text(
                   AppStrings.instActiveBatchTag,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 9,
                     fontWeight: FontWeight.w800,
                     color: AppColors.primaryBrand,
@@ -124,7 +120,7 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
               AppSpacing.h12,
               Text(
                 'ID: #${batch.id.length > 4 ? batch.id.substring(0, 4) : batch.id}',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                   color: AppColors.textTertiary,
@@ -135,7 +131,7 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
           AppSpacing.v16,
           Text(
             batch.title,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 24,
               fontWeight: FontWeight.w800,
               color: AppColors.primaryBrand,
@@ -144,7 +140,7 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
           AppSpacing.v8,
           Text(
             batch.description,
-            style: AppTextStyles.lexend(
+            style: AppTextStyles.outfit(
               fontSize: 14,
               fontWeight: FontWeight.w400,
               color: AppColors.textSecondary,
@@ -216,7 +212,7 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
       children: [
         Text(
           AppStrings.instCourseManagementHeader,
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 20,
             fontWeight: FontWeight.w800,
             color: AppColors.textPrimary,
@@ -291,7 +287,7 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
         padding: AppSpacing.all12,
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.03),
@@ -308,7 +304,7 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
             Text(
               title,
               textAlign: TextAlign.center,
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 14,
                 fontWeight: FontWeight.w800,
                 color: AppColors.textPrimary,

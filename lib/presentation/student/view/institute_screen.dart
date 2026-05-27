@@ -51,7 +51,7 @@ class InstituteScreen extends StatelessWidget {
             AppSpacing.h12,
             Text(
               AppStrings.appName,
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
                 color: AppColors.primaryBrand,
@@ -86,7 +86,7 @@ class InstituteScreen extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.s32),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
@@ -112,7 +112,7 @@ class InstituteScreen extends StatelessWidget {
           AppSpacing.v20,
           Text(
             AppStrings.appName,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 24,
               fontWeight: FontWeight.w800,
               color: AppColors.textPrimary,
@@ -189,7 +189,7 @@ class InstituteScreen extends StatelessWidget {
               children: [
                 Text(
                   label,
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 11,
                     fontWeight: FontWeight.w400,
                     color: AppColors.textTertiary,
@@ -198,7 +198,7 @@ class InstituteScreen extends StatelessWidget {
                 AppSpacing.v2,
                 Text(
                   value,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                     color: AppColors.darkSlate,
@@ -226,7 +226,7 @@ class InstituteScreen extends StatelessWidget {
         children: [
           Text(
             'Connect with Us',
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 18,
               fontWeight: FontWeight.w800,
               color: AppColors.darkSlate,
@@ -274,7 +274,7 @@ class InstituteScreen extends StatelessWidget {
       padding: AppSpacing.all32,
       decoration: BoxDecoration(
         color: AppColors.primaryBrand,
-        borderRadius: BorderRadius.circular(AppSpacing.s32),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: AppColors.primaryBrand.withValues(alpha: 0.25),
@@ -296,7 +296,7 @@ class InstituteScreen extends StatelessWidget {
               AppSpacing.h12,
               Text(
                 'Our Presence',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
                   color: AppColors.white,
@@ -307,7 +307,7 @@ class InstituteScreen extends StatelessWidget {
           AppSpacing.v16,
           Text(
             'Located in the heart of the Innovation District, providing a world-class environment for academic excellence.',
-            style: AppTextStyles.lexend(
+            style: AppTextStyles.outfit(
               fontSize: 14,
               fontWeight: FontWeight.w400,
               color: AppColors.white.withValues(alpha: 0.8),

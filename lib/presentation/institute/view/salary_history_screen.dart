@@ -64,7 +64,7 @@ class SalaryHistoryScreen extends GetView<StaffController> {
       padding: AppSpacing.all20,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -94,7 +94,7 @@ class SalaryHistoryScreen extends GetView<StaffController> {
               children: [
                 Text(
                   monthStr,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
                     color: AppColors.textPrimary,
@@ -102,7 +102,7 @@ class SalaryHistoryScreen extends GetView<StaffController> {
                 ),
                 Text(
                   dateStr,
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 12,
                     color: AppColors.textTertiary,
                   ),
@@ -114,8 +114,8 @@ class SalaryHistoryScreen extends GetView<StaffController> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                'â‚¹${salary.netSalary}',
-                style: AppTextStyles.manrope(
+                '₹${salary.netSalary}',
+                style: AppTextStyles.outfit(
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
                   color: AppColors.textPrimary,
@@ -123,7 +123,7 @@ class SalaryHistoryScreen extends GetView<StaffController> {
               ),
               Text(
                 salary.paymentMethod,
-                style: AppTextStyles.lexend(
+                style: AppTextStyles.outfit(
                   fontSize: 10,
                   color: AppColors.primaryBrand,
                   fontWeight: FontWeight.w600,

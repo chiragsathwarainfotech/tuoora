@@ -54,7 +54,7 @@ class _AppMonthPickerState extends State<AppMonthPicker> {
                 ),
                 Text(
                   _viewYear.toString(),
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 20,
                     fontWeight: FontWeight.w800,
                     color: AppColors.textPrimary,
@@ -127,7 +127,7 @@ class _AppMonthPickerState extends State<AppMonthPicker> {
                     child: Center(
                       child: Text(
                         DateFormat('MMM').format(DateTime(2000, month)),
-                        style: AppTextStyles.manrope(
+                        style: AppTextStyles.outfit(
                           fontSize: 14,
                           fontWeight:
                               isSelected ? FontWeight.w800 : FontWeight.w600,
@@ -152,7 +152,7 @@ class _AppMonthPickerState extends State<AppMonthPicker> {
                   onPressed: () => Get.back(),
                   child: Text(
                     'Cancel',
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 15,
                       fontWeight: FontWeight.w700,
                       color: AppColors.textSecondary,
@@ -176,7 +176,7 @@ class _AppMonthPickerState extends State<AppMonthPicker> {
                   ),
                   child: Text(
                     'OK',
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 15,
                       fontWeight: FontWeight.w800,
                     ),

@@ -6,6 +6,8 @@ import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/presentation/institute/controllers/signup_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/constants/app_images.dart';
+import 'package:tuoora/core/widgets/app_action_icon.dart';
 import 'package:get/get.dart';
 
 class InstituteProfileSetupScreen extends GetView<SignupController> {
@@ -77,11 +79,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                                     color: AppColors.primaryBrand,
                                     shape: BoxShape.circle,
                                   ),
-                                  child: const Icon(
-                                    Icons.edit,
-                                    color: AppColors.white,
-                                    size: 14,
-                                  ),
+                                  child: const AppActionIcon(asset: AppImages.icEdit, size: 14),
                                 ),
                               ),
                             ],
@@ -202,7 +200,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
   Widget _buildSectionHeader(String title) {
     return Text(
       title,
-      style: AppTextStyles.manrope(
+      style: AppTextStyles.outfit(
         fontSize: 12,
         fontWeight: FontWeight.w800,
         color: AppColors.brandAppBarColor,
@@ -223,7 +221,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
       children: [
         Text(
           label,
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 12,
             fontWeight: FontWeight.w700,
             color: AppColors.brandAppBarColor,
@@ -241,7 +239,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
             controller: controller,
             enabled: enabled,
             keyboardType: keyboardType,
-            style: AppTextStyles.lexend(
+            style: AppTextStyles.outfit(
               fontSize: 14,
               color: enabled ? AppColors.textPrimary : AppColors.textMuted,
             ),

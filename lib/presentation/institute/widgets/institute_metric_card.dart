@@ -20,10 +20,10 @@ class InstituteMetricCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: AppSpacing.all16,
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.scaffoldBg,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -39,7 +39,7 @@ class InstituteMetricCard extends StatelessWidget {
         children: [
           Text(
             label.toUpperCase(),
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 10,
               fontWeight: FontWeight.w800,
               color: AppColors.textTertiary,
@@ -49,7 +49,7 @@ class InstituteMetricCard extends StatelessWidget {
           AppSpacing.v4,
           Text(
             value,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 20,
               fontWeight: FontWeight.w800,
               color: valueColor ?? AppColors.primaryBrand,

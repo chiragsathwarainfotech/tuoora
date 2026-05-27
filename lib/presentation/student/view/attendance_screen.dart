@@ -30,7 +30,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
                   '${controller.currentMonthName} ${controller.currentYear}',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 24,
                     fontWeight: FontWeight.w800,
                     color: AppColors.textPrimary,
@@ -42,7 +42,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
               child: SingleChildScrollView(
                 padding: const EdgeInsets.fromLTRB(
                   AppSpacing.s16,
-                  AppSpacing.s8,
+                  AppSpacing.s16,
                   AppSpacing.s16,
                   AppSpacing.s24,
                 ),
@@ -78,7 +78,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
       padding: const EdgeInsets.all(AppSpacing.s16),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.s12),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -123,7 +123,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
                 children: [
                   Text(
                     data.status,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 16,
                       fontWeight: FontWeight.w800,
                       color: isNotMarked
@@ -134,7 +134,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
                   const SizedBox(height: 2),
                   Text(
                     data.text,
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 11,
                       fontWeight: FontWeight.w400,
                       color: AppColors.textTertiary,
@@ -154,7 +154,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
       padding: const EdgeInsets.all(AppSpacing.s16),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.s12),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -185,7 +185,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
         Obx(
           () => Text(
             '${controller.currentMonthName} ${controller.currentYear}',
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 14,
               fontWeight: FontWeight.w800,
               color: AppColors.textPrimary,
@@ -239,7 +239,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
                     final todayStr = data?.calendar.todayLabel ?? 'TODAY';
                     return Text(
                       todayStr,
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 11,
                         fontWeight: FontWeight.w800,
                         color: AppColors.orangeTag,
@@ -252,7 +252,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
                 children: [
                   Text(
                     'GO TO TODAY',
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 11,
                       fontWeight: FontWeight.w800,
                       color: AppColors.orangeTag,
@@ -303,7 +303,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
                   child: Center(
                     child: Text(
                       day,
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 10,
                         fontWeight: FontWeight.w800,
                         color: AppColors.textTertiary,
@@ -396,7 +396,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
     Widget content = Center(
       child: Text(
         day,
-        style: AppTextStyles.manrope(
+        style: AppTextStyles.outfit(
           fontSize: 12,
           fontWeight: FontWeight.w700,
           color: fg,
@@ -460,7 +460,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
         AppSpacing.h4,
         Text(
           label,
-          style: AppTextStyles.lexend(
+          style: AppTextStyles.outfit(
             fontSize: 10,
             fontWeight: FontWeight.w400,
             color: AppColors.textSecondary,
@@ -475,7 +475,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
       padding: const EdgeInsets.all(AppSpacing.s16),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.s12),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -505,7 +505,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
                 child: Center(
                   child: Text(
                     '$percent%',
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 13,
                       fontWeight: FontWeight.w800,
                       color: AppColors.studentPresentText,
@@ -521,7 +521,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
                 children: [
                   Text(
                     summary.label,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 10,
                       fontWeight: FontWeight.w800,
                       color: AppColors.textTertiary,
@@ -530,7 +530,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
                   const SizedBox(height: 2),
                   Text(
                     '$percent%',
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 24,
                       fontWeight: FontWeight.w800,
                       color: AppColors.textPrimary,
@@ -539,7 +539,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
                   const SizedBox(height: 2),
                   Text(
                     '${summary.present} present - ${summary.absent} absent',
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 11,
                       fontWeight: FontWeight.w400,
                       color: AppColors.textTertiary,

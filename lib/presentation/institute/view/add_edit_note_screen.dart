@@ -49,7 +49,7 @@ class AddEditNoteScreen extends GetView<NotesController> {
             hint: AppStrings.instNoteTitleHint,
             controller: controller.titleController,
             errorText: controller.titleError.value,
-            textStyle: AppTextStyles.manrope(
+            textStyle: AppTextStyles.outfit(
               fontSize: 18,
               fontWeight: FontWeight.w700,
               color: AppColors.textPrimary,
@@ -66,7 +66,7 @@ class AddEditNoteScreen extends GetView<NotesController> {
             controller: controller.contentController,
             maxLines: 12,
             errorText: controller.contentError.value,
-            textStyle: AppTextStyles.lexend(
+            textStyle: AppTextStyles.outfit(
               fontSize: 14,
               color: AppColors.textSecondary,
               height: 1.6,
@@ -83,7 +83,7 @@ class AddEditNoteScreen extends GetView<NotesController> {
       children: [
         Text(
           'CATEGORY',
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 14,
             fontWeight: FontWeight.w800,
             color: AppColors.brandAppBarColor,
@@ -136,7 +136,7 @@ class AddEditNoteScreen extends GetView<NotesController> {
                             ),
                             child: Text(
                               cat.name,
-                              style: AppTextStyles.lexend(
+                              style: AppTextStyles.outfit(
                                 fontSize: 13,
                                 fontWeight: isSelected
                                     ? FontWeight.w600
@@ -158,7 +158,7 @@ class AddEditNoteScreen extends GetView<NotesController> {
                   padding: const EdgeInsets.only(top: 8, left: 4),
                   child: Text(
                     controller.categoryError.value!,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 12,
                       color: Colors.redAccent,
                       fontWeight: FontWeight.w500,

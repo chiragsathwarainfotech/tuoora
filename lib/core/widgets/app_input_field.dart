@@ -2,6 +2,7 @@ import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/enums/app_enums.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/input_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -78,7 +79,7 @@ class AppInputField extends StatelessWidget {
       children: [
         Text(
           label,
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: labelFontSize ?? (isProfile ? 12 : 14),
             fontWeight: labelFontWeight ?? FontWeight.w800,
             color: labelColor ?? AppColors.brandAppBarColor,
@@ -86,101 +87,14 @@ class AppInputField extends StatelessWidget {
           ),
         ),
         SizedBox(height: labelSpacing ?? 8.0),
-        Container(
-          decoration: BoxDecoration(
-            color:
-                fillColor ??
-                (isProfile
-                    ? (enabled
-                          ? AppColors.background
-                          : AppColors.background.withValues(alpha: 0.5))
-                    : (enabled
-                          ? AppColors.paleSilver
-                          : AppColors.paleSilver.withValues(alpha: 0.5))),
-            borderRadius: BorderRadius.circular(12),
-            border:
-                containerBorder ??
-                (errorText != null
-                    ? Border.all(color: Colors.redAccent, width: 1.5)
-                    : isProfile
-                    ? Border.all(
-                        color: AppColors.borderGrey.withValues(alpha: 0.5),
-                      )
-                    : null),
-          ),
-          child: TextFormField(
-            controller: controller,
-            readOnly: readOnly,
-            enabled: enabled,
-            onTap: onTap,
-            maxLines: maxLines,
-            keyboardType: keyboardType,
-            maxLength: maxLength,
-            inputFormatters: inputFormatters,
-            validator: validator,
-            onChanged: onChanged,
-            style:
-                textStyle ??
-                (isProfile
-                    ? AppTextStyles.manrope(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.textPrimary,
-                      )
-                    : AppTextStyles.lexend(
-                        fontSize: 14,
-                        color: AppColors.textPrimary,
-                        fontWeight: FontWeight.w500,
-                      )),
-            decoration: InputDecoration(
-              hintText: hint,
-              hintStyle:
-                  hintStyle ??
-                  AppTextStyles.lexend(
-                    fontSize: 14,
-                    color: AppColors.blueSapphire,
-                  ),
-              prefixIcon: icon != null
-                  ? Padding(
-                      padding: const EdgeInsets.only(left: 16, right: 16),
-                      child: Icon(
-                        icon,
-                        color:
-                            iconColor ??
-                            (isProfile
-                                ? AppColors.primaryBrand
-                                : AppColors.blueSapphire),
-                        size: iconSize ?? AppSpacing.s20,
-                      ),
-                    )
-                  : null,
-              prefixIconConstraints: const BoxConstraints(
-                minWidth: 0,
-                minHeight: 0,
-              ),
-              border: InputBorder.none,
-              enabledBorder: InputBorder.none,
-              disabledBorder: InputBorder.none,
-              errorBorder: InputBorder.none,
-              focusedErrorBorder: InputBorder.none,
-              errorStyle: const TextStyle(height: 0, color: Colors.transparent),
-              contentPadding:
-                  contentPadding ??
-                  (isProfile
-                      ? const EdgeInsets.symmetric(vertical: AppSpacing.s18)
-                      : AppSpacing.all16),
-              isDense: isProfile || isDense,
-              counterText: '',
-            ),
-          ),
-        ),
+        _buildField(isProfile: isProfile),
         if (errorText != null) ...[
           const SizedBox(height: 4),
           Padding(
             padding: const EdgeInsets.only(left: 4),
             child: Text(
               errorText!,
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 12,
                 color: Colors.redAccent,
                 fontWeight: FontWeight.w500,
@@ -189,6 +103,124 @@ class AppInputField extends StatelessWidget {
           ),
         ],
       ],
+    );
+  }
+
+  /// Lays out the icon + input as a Row instead of using
+  /// `InputDecoration.prefixIcon`. Material's prefix-icon slot enforces
+  /// a 48 dp tap-target which made the hint baseline drift relative to
+  /// the icon. A flat Row with `CrossAxisAlignment.center` puts them on
+  /// the exact same baseline, regardless of contentPadding/textAlignVertical
+  /// tweaks. The TextFormField gets an isCollapsed: true / borderless
+  /// InputDecoration so it occupies just its content height.
+  Widget _buildField({required bool isProfile}) {
+    final Color bgColor = fillColor ??
+        (isProfile
+            ? (enabled
+                ? AppColors.background
+                : AppColors.background.withValues(alpha: 0.5))
+            : (enabled
+                ? AppColors.paleSilver
+                : AppColors.paleSilver.withValues(alpha: 0.5)));
+    final BoxBorder? effectiveBorder = containerBorder ??
+        (errorText != null
+            ? Border.all(color: Colors.redAccent, width: 1.5)
+            : isProfile
+                ? Border.all(
+                    color: AppColors.borderGrey.withValues(alpha: 0.5),
+                  )
+                : null);
+    final TextStyle effectiveTextStyle = textStyle ??
+        (isProfile
+            ? AppTextStyles.outfit(
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+                color: AppColors.textPrimary,
+              )
+            : AppTextStyles.outfit(
+                fontSize: 14,
+                color: AppColors.textPrimary,
+                fontWeight: FontWeight.w500,
+              ));
+    final EdgeInsetsGeometry effectiveContentPadding = contentPadding ??
+        (isProfile
+            ? const EdgeInsets.symmetric(vertical: AppSpacing.s18)
+            : InputStyles.contentPadding);
+
+    final Widget textField = TextFormField(
+      controller: controller,
+      readOnly: readOnly,
+      enabled: enabled,
+      onTap: onTap,
+      maxLines: maxLines,
+      keyboardType: keyboardType,
+      maxLength: maxLength,
+      inputFormatters: inputFormatters,
+      validator: validator,
+      onChanged: onChanged,
+      textAlignVertical:
+          maxLines == 1 ? TextAlignVertical.center : null,
+      style: effectiveTextStyle,
+      decoration: InputDecoration(
+        hintText: hint,
+        hintStyle: hintStyle ??
+            AppTextStyles.outfit(
+              fontSize: 14,
+              color: AppColors.blueSapphire,
+            ),
+        border: InputBorder.none,
+        enabledBorder: InputBorder.none,
+        disabledBorder: InputBorder.none,
+        errorBorder: InputBorder.none,
+        focusedErrorBorder: InputBorder.none,
+        errorStyle: const TextStyle(height: 0, color: Colors.transparent),
+        // When the icon is laid out as a Row sibling we own the
+        // horizontal/vertical padding ourselves — the field should
+        // collapse to just its content area inside the Container.
+        isCollapsed: icon != null,
+        contentPadding: icon != null
+            ? EdgeInsets.symmetric(
+                vertical:
+                    (effectiveContentPadding.vertical / 2).clamp(0, 32).toDouble(),
+              )
+            : effectiveContentPadding,
+        isDense: isProfile || isDense,
+        counterText: '',
+      ),
+    );
+
+    final EdgeInsets paddingInsets = effectiveContentPadding.resolve(
+      TextDirection.ltr,
+    );
+
+    return Container(
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(InputStyles.borderRadius),
+        border: effectiveBorder,
+      ),
+      child: icon != null
+          ? Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: paddingInsets.left,
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    icon,
+                    color: iconColor ??
+                        (isProfile
+                            ? AppColors.primaryBrand
+                            : AppColors.blueSapphire),
+                    size: iconSize ?? AppSpacing.s20,
+                  ),
+                  SizedBox(width: paddingInsets.left),
+                  Expanded(child: textField),
+                ],
+              ),
+            )
+          : textField,
     );
   }
 }

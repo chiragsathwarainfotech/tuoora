@@ -28,7 +28,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
                   ),
                   Expanded(
                     child: SingleChildScrollView(
-                      padding: AppSpacing.x24.add(
+                      padding: AppSpacing.x16.add(
                         const EdgeInsets.only(top: 8, bottom: 16),
                       ),
                       child: Column(
@@ -95,7 +95,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
       children: [
         Text(
           controller.batch.title,
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 24,
             fontWeight: FontWeight.w800,
             color: AppColors.textPrimary,
@@ -121,7 +121,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
                 AppSpacing.h12,
                 Text(
                   controller.formattedDate,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                     color: AppColors.textPrimary,
@@ -186,7 +186,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
           AppSpacing.h8,
           Text(
             label,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 14,
               fontWeight: FontWeight.w700,
               color: color,
@@ -212,7 +212,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
       padding: AppSpacing.all16,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -231,7 +231,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
               children: [
                 Text(
                   student.name,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
                     color: AppColors.textPrimary,
@@ -239,7 +239,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
                 ),
                 Text(
                   'ID: ${student.id}',
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                     color: AppColors.textTertiary,
@@ -307,7 +307,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
         alignment: Alignment.center,
         child: Text(
           label,
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 10,
             fontWeight: FontWeight.w900,
             color: isSelected ? AppColors.white : AppColors.textSecondary,
@@ -356,7 +356,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
       child: Center(
         child: Text(
           initials,
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 16,
             fontWeight: FontWeight.w800,
             color: AppColors.primaryBrand,

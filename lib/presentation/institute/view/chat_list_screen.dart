@@ -24,7 +24,7 @@ class ChatListScreen extends GetView<ChatController> {
             const InstituteAppBar(title: 'Chats'),
             Expanded(
               child: Padding(
-                padding: AppSpacing.x24,
+                padding: AppSpacing.x16,
                 child: Column(
                   children: [
                     AppSpacing.v16,
@@ -138,7 +138,7 @@ class _ChatCard extends StatelessWidget {
                             chat.participantName.isEmpty
                                 ? 'Unknown'
                                 : chat.participantName,
-                            style: AppTextStyles.manrope(
+                            style: AppTextStyles.outfit(
                               fontSize: 15,
                               fontWeight: FontWeight.w700,
                               color: AppColors.textPrimary,
@@ -150,7 +150,7 @@ class _ChatCard extends StatelessWidget {
                         const SizedBox(width: 8),
                         Text(
                           chat.lastMessageTime,
-                          style: AppTextStyles.lexend(
+                          style: AppTextStyles.outfit(
                             fontSize: 11,
                             fontWeight: hasUnread
                                 ? FontWeight.w700
@@ -199,7 +199,7 @@ class _Avatar extends StatelessWidget {
       backgroundColor: AppColors.primaryBrandLight,
       child: Text(
         initial,
-        style: AppTextStyles.manrope(
+        style: AppTextStyles.outfit(
           fontSize: 18,
           fontWeight: FontWeight.w800,
           color: AppColors.primaryBrand,
@@ -243,7 +243,7 @@ class _RoleChip extends StatelessWidget {
       ),
       child: Text(
         display.toUpperCase(),
-        style: AppTextStyles.manrope(
+        style: AppTextStyles.outfit(
           fontSize: 9,
           fontWeight: FontWeight.w800,
           color: AppColors.primaryBrand,
@@ -273,7 +273,7 @@ class _PreviewLine extends StatelessWidget {
     if (caption.isEmpty) {
       return Text(
         'Tap to start chatting',
-        style: AppTextStyles.lexend(
+        style: AppTextStyles.outfit(
           fontSize: 13,
           color: AppColors.textTertiary,
           fontStyle: FontStyle.italic,
@@ -293,7 +293,7 @@ class _PreviewLine extends StatelessWidget {
         Flexible(
           child: Text(
             caption,
-            style: AppTextStyles.lexend(
+            style: AppTextStyles.outfit(
               fontSize: 13,
               color: color,
               fontWeight: weight,
@@ -350,7 +350,7 @@ class _UnreadBadge extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
       decoration: BoxDecoration(
         color: AppColors.primaryBrand,
-        borderRadius: BorderRadius.circular(11),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: AppColors.primaryBrand.withValues(alpha: 0.3),
@@ -364,7 +364,7 @@ class _UnreadBadge extends StatelessWidget {
         child: Text(
           label,
           textAlign: TextAlign.center,
-          style: AppTextStyles.lexend(
+          style: AppTextStyles.outfit(
             fontSize: 11,
             fontWeight: FontWeight.w800,
             color: AppColors.white,

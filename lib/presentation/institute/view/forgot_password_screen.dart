@@ -29,7 +29,7 @@ class ForgotPasswordScreen extends GetView<ForgotPasswordController> {
                   children: [
                     Text(
                       'Enter your institutional email address and we\'ll send you a security code to reset your access key.',
-                      style: AppTextStyles.lexend(
+                      style: AppTextStyles.outfit(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                         color: AppColors.blueSapphire,
@@ -41,7 +41,7 @@ class ForgotPasswordScreen extends GetView<ForgotPasswordController> {
                       padding: const EdgeInsets.all(AppSpacing.s28),
                       decoration: BoxDecoration(
                         color: AppColors.white,
-                        borderRadius: BorderRadius.circular(AppSpacing.s32),
+                        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withValues(alpha: 0.04),
@@ -55,7 +55,7 @@ class ForgotPasswordScreen extends GetView<ForgotPasswordController> {
                         children: [
                           Text(
                             'INSTITUTIONAL EMAIL',
-                            style: AppTextStyles.manrope(
+                            style: AppTextStyles.outfit(
                               fontSize: 10,
                               fontWeight: FontWeight.w800,
                               color: AppColors.brandAppBarColor,
@@ -112,10 +112,10 @@ class ForgotPasswordScreen extends GetView<ForgotPasswordController> {
       child: TextField(
         controller: controller,
         keyboardType: keyboardType,
-        style: AppTextStyles.lexend(fontSize: 14, color: AppColors.textPrimary),
+        style: AppTextStyles.outfit(fontSize: 14, color: AppColors.textPrimary),
         decoration: InputDecoration(
           hintText: hint,
-          hintStyle: AppTextStyles.lexend(
+          hintStyle: AppTextStyles.outfit(
             fontSize: 14,
             color: AppColors.blueSapphire,
           ),

@@ -8,6 +8,8 @@ import 'package:tuoora/presentation/institute/models/batch_model.dart';
 import 'package:tuoora/core/widgets/app_input_field.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_label.dart';
+import 'package:tuoora/core/constants/app_images.dart';
+import 'package:tuoora/core/widgets/app_action_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -31,7 +33,7 @@ class AddHomeworkScreen extends StatelessWidget {
             ),
             Expanded(
               child: SingleChildScrollView(
-                padding: AppSpacing.x24.add(AppSpacing.y16),
+                padding: AppSpacing.x16.add(AppSpacing.y16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -109,7 +111,7 @@ class AddHomeworkScreen extends StatelessWidget {
                         : DateFormat(
                             'MM/dd/yyyy',
                           ).format(controller.dueDate.value!),
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 14,
                       color: controller.dueDate.value == null
                           ? AppColors.textMuted
@@ -129,7 +131,7 @@ class AddHomeworkScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 8.0, left: 4.0),
                 child: Text(
                   controller.dateError.value!,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 12,
                     color: Colors.redAccent,
                     fontWeight: FontWeight.w500,
@@ -174,7 +176,7 @@ class AddHomeworkScreen extends StatelessWidget {
                     AppSpacing.v12,
                     Text(
                       AppStrings.instAddAttachmentBtn,
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
                         color: AppColors.textPrimary,
@@ -183,7 +185,7 @@ class AddHomeworkScreen extends StatelessWidget {
                     AppSpacing.v4,
                     Text(
                       AppStrings.instAddAttachmentDesc,
-                      style: AppTextStyles.lexend(
+                      style: AppTextStyles.outfit(
                         fontSize: 12,
                         color: AppColors.textTertiary,
                       ),
@@ -201,7 +203,7 @@ class AddHomeworkScreen extends StatelessWidget {
                     Text(
                       controller.selectedAttachment.value!.split('/').last,
                       textAlign: TextAlign.center,
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: AppColors.textPrimary,
@@ -210,13 +212,10 @@ class AddHomeworkScreen extends StatelessWidget {
                     AppSpacing.v12,
                     TextButton.icon(
                       onPressed: controller.removeAttachment,
-                      icon: const Icon(
-                        Icons.delete_outline_rounded,
-                        color: AppColors.bohoRed,
-                      ),
+                      icon: const AppActionIcon(asset: AppImages.icDelete),
                       label: Text(
                         'Remove',
-                        style: AppTextStyles.manrope(
+                        style: AppTextStyles.outfit(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                           color: AppColors.bohoRed,

@@ -3,26 +3,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 
 class AppTextStyles {
-  // ============================================
-  // BASE WRAPPERS (To replace direct GoogleFonts calls)
-  // ============================================
-  static TextStyle manrope({
-    double? fontSize,
-    FontWeight? fontWeight,
-    Color? color,
-    double? letterSpacing,
-    double? height,
-  }) {
-    return GoogleFonts.manrope(
-      fontSize: fontSize,
-      fontWeight: fontWeight,
-      color: color,
-      letterSpacing: letterSpacing,
-      height: height,
-    );
-  }
-
-  static TextStyle lexend({
+  /// App-wide font (Outfit). Use the recommended weight hierarchy:
+  ///   - `w700` for big headers / page titles
+  ///   - `w500` / `w600` for section headers
+  ///   - `w400` for body / subtitle / descriptions
+  static TextStyle outfit({
     double? fontSize,
     FontWeight? fontWeight,
     Color? color,
@@ -30,7 +15,7 @@ class AppTextStyles {
     double? height,
     FontStyle? fontStyle,
   }) {
-    return GoogleFonts.lexend(
+    return GoogleFonts.outfit(
       fontSize: fontSize,
       fontWeight: fontWeight,
       color: color,
@@ -42,58 +27,57 @@ class AppTextStyles {
 
   // ============================================
   // PREDESIGNED SEMANTIC STYLES
-  // Use these to eliminate redundant size/weight mappings globally!
   // ============================================
 
   // Headers (H1, H2, etc.)
-  static TextStyle get h1 => manrope(
+  static TextStyle get h1 => outfit(
     fontSize: 28,
-    fontWeight: FontWeight.w800,
+    fontWeight: FontWeight.w700,
     color: AppColors.textPrimary,
   );
 
-  static TextStyle get h2 => manrope(
+  static TextStyle get h2 => outfit(
     fontSize: 24,
-    fontWeight: FontWeight.w800,
+    fontWeight: FontWeight.w700,
     color: AppColors.textPrimary,
   );
 
-  static TextStyle get h3 => manrope(
+  static TextStyle get h3 => outfit(
     fontSize: 18,
-    fontWeight: FontWeight.w800,
+    fontWeight: FontWeight.w700,
     color: AppColors.textPrimary,
   );
 
-  static TextStyle get h4 => manrope(
+  static TextStyle get h4 => outfit(
     fontSize: 16,
-    fontWeight: FontWeight.w800,
+    fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
   );
 
-  // Overlines (Small spaced headers like 'PARENT DASHBOARD')
-  static TextStyle get overlineLabel => manrope(
+  // Overlines (small spaced headers like 'PARENT DASHBOARD')
+  static TextStyle get overlineLabel => outfit(
     fontSize: 10,
-    fontWeight: FontWeight.w800,
+    fontWeight: FontWeight.w600,
     letterSpacing: 1.5,
     color: AppColors.primaryBrand,
   );
 
-  static TextStyle get overlineMuted => manrope(
+  static TextStyle get overlineMuted => outfit(
     fontSize: 10,
-    fontWeight: FontWeight.w800,
+    fontWeight: FontWeight.w600,
     letterSpacing: 1.0,
     color: AppColors.textSecondary,
   );
 
-  // Body Texts
-  static TextStyle get bodyMuted => lexend(
+  // Body texts
+  static TextStyle get bodyMuted => outfit(
     fontSize: 14,
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w400,
     color: AppColors.textTertiary,
     height: 1.5,
   );
 
-  static TextStyle get bodySmall => lexend(
+  static TextStyle get bodySmall => outfit(
     fontSize: 12,
     fontWeight: FontWeight.w400,
     color: AppColors.textSecondary,
@@ -101,44 +85,42 @@ class AppTextStyles {
   );
 
   // Special UI elements
-  static TextStyle get largeAmount => manrope(
+  static TextStyle get largeAmount => outfit(
     fontSize: 32,
-    fontWeight: FontWeight.w800,
+    fontWeight: FontWeight.w700,
     color: AppColors.white,
     height: 1.0,
   );
 
-  static TextStyle get tinyBadge => manrope(
+  static TextStyle get tinyBadge => outfit(
     fontSize: 8,
-    fontWeight: FontWeight.w700,
+    fontWeight: FontWeight.w600,
     letterSpacing: 1.5,
     color: AppColors.textTertiary,
   );
 
   // ============================================
-  // LEGACY THEME STYLES (Merged from core/theme/)
+  // LEGACY THEME STYLES
+  // (kept for callers that haven't migrated to the semantic getters)
   // ============================================
-  static const TextStyle headline = TextStyle(
+  static TextStyle get headline => outfit(
     fontSize: 24,
     fontWeight: FontWeight.bold,
     color: AppColors.textPrimary,
   );
 
-  static final TextStyle subtitle = TextStyle(
+  static TextStyle get subtitle => outfit(
     fontSize: 18,
     fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
   );
 
-  static final TextStyle body = TextStyle(
+  static TextStyle get body => outfit(
     fontSize: 14,
+    fontWeight: FontWeight.w400,
     color: AppColors.textPrimary,
   );
 
-  static TextStyle button = TextStyle(
-    fontSize: 16,
-    fontWeight: FontWeight.w500,
-    color: AppColors.white,
-  );
+  static TextStyle get button =>
+      outfit(fontSize: 16, fontWeight: FontWeight.w500, color: AppColors.white);
 }
-

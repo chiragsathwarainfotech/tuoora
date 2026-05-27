@@ -36,7 +36,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
                       children: [
                         Text(
                           AppStrings.instWhatsAppIntegration,
-                          style: AppTextStyles.manrope(
+                          style: AppTextStyles.outfit(
                             fontSize: AppSpacing.s28,
                             fontWeight: FontWeight.w800,
                             color: AppColors.brandAppBarColor,
@@ -45,7 +45,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
                         AppSpacing.v12,
                         Text(
                           AppStrings.instWhatsAppConfigDesc,
-                          style: AppTextStyles.lexend(
+                          style: AppTextStyles.outfit(
                             fontSize: 14,
                             height: 1.6,
                             color: AppColors.blueSapphire,
@@ -82,7 +82,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
       padding: AppSpacing.all28,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.s24),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
@@ -115,7 +115,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
                   children: [
                     Text(
                       AppStrings.instMetaApiConfig,
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: AppSpacing.s18,
                         fontWeight: FontWeight.w800,
                         color: AppColors.brandAppBarColor,
@@ -123,7 +123,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
                     ),
                     Text(
                       AppStrings.instLinkWhatsAppAccount,
-                      style: AppTextStyles.lexend(
+                      style: AppTextStyles.outfit(
                         fontSize: 12,
                         color: AppColors.blueSapphire,
                       ),
@@ -182,7 +182,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
   Widget _buildInputLabel(String label) {
     return Text(
       label,
-      style: AppTextStyles.manrope(
+      style: AppTextStyles.outfit(
         fontSize: AppSpacing.s12,
         fontWeight: FontWeight.w800,
         color: AppColors.brandAppBarColor,
@@ -205,13 +205,13 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
       child: TextField(
         controller: controller,
         keyboardType: keyboardType,
-        style: AppTextStyles.lexend(
+        style: AppTextStyles.outfit(
           fontSize: AppSpacing.s14,
           color: AppColors.textPrimary,
         ),
         decoration: InputDecoration(
           hintText: hint,
-          hintStyle: AppTextStyles.lexend(
+          hintStyle: AppTextStyles.outfit(
             fontSize: AppSpacing.s14,
             color: AppColors.blueSapphire,
           ),
@@ -246,7 +246,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
             AppSpacing.h12,
             Text(
               AppStrings.instAutomatedAlerts,
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: AppSpacing.s20,
                 fontWeight: FontWeight.w800,
                 color: AppColors.primaryBrand,
@@ -342,7 +342,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
                   children: [
                     Text(
                       title,
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: AppSpacing.s16,
                         fontWeight: FontWeight.w800,
                         color: AppColors.brandAppBarColor,
@@ -350,7 +350,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
                     ),
                     Text(
                       subtitle,
-                      style: AppTextStyles.lexend(
+                      style: AppTextStyles.outfit(
                         fontSize: AppSpacing.s12,
                         color: AppColors.blueSapphire,
                       ),

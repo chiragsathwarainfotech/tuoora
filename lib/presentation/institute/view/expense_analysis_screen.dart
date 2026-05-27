@@ -35,7 +35,7 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
                       AppSpacing.v24,
                       Text(
                         'Categories Breakdown',
-                        style: AppTextStyles.manrope(
+                        style: AppTextStyles.outfit(
                           fontSize: 18,
                           fontWeight: FontWeight.w800,
                           color: AppColors.textPrimary,
@@ -65,7 +65,7 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
   Widget _buildTotalSpendingCard(ExpenseAnalysis? analysis) {
     final NumberFormat currencyFormat = NumberFormat.currency(
       locale: 'en_IN',
-      symbol: 'â‚¹',
+      symbol: '₹',
       decimalDigits: 2,
     );
 
@@ -74,7 +74,7 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
         color: AppColors.primaryBrand,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
@@ -91,7 +91,7 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
             children: [
               Text(
                 'Total Spending',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                   color: AppColors.white.withValues(alpha: 0.8),
@@ -109,7 +109,7 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
                   ),
                   child: Text(
                     analysis.monthName,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
                       color: AppColors.white,
@@ -122,8 +122,8 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
           Text(
             analysis != null
                 ? currencyFormat.format(analysis.totalSpending)
-                : 'â‚¹0.00',
-            style: AppTextStyles.manrope(
+                : '₹0.00',
+            style: AppTextStyles.outfit(
               fontSize: 36,
               fontWeight: FontWeight.w800,
               color: AppColors.white,
@@ -157,7 +157,7 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
           padding: const EdgeInsets.only(bottom: 16),
           child: _buildCategoryProgressItem(
             cat.categoryName,
-            'â‚¹${cat.amount.toStringAsFixed(2)}',
+            '₹${cat.amount.toStringAsFixed(2)}',
             cat.percentage / 100,
             _getCategoryIcon(cat.categoryName),
             _getCategoryColor(cat.categoryName),
@@ -212,7 +212,7 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
       padding: AppSpacing.all16,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -240,7 +240,7 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
                   children: [
                     Text(
                       title,
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
                         color: AppColors.textPrimary,
@@ -248,7 +248,7 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
                     ),
                     Text(
                       amount,
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: AppColors.textSecondary,
@@ -259,7 +259,7 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
               ),
               Text(
                 '${(progress * 100).toStringAsFixed(1)}%',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 14,
                   fontWeight: FontWeight.w800,
                   color: AppColors.textPrimary,

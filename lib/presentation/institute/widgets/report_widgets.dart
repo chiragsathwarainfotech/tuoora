@@ -22,7 +22,7 @@ class ReportSummaryCard extends StatelessWidget {
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
@@ -36,7 +36,7 @@ class ReportSummaryCard extends StatelessWidget {
         children: [
           Text(
             title,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 14,
               fontWeight: FontWeight.w700,
               color: AppColors.textPrimary,
@@ -45,7 +45,7 @@ class ReportSummaryCard extends StatelessWidget {
           AppSpacing.v8,
           Text(
             value,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 32,
               fontWeight: FontWeight.w800,
               color: valueColor ?? AppColors.primaryBrand,
@@ -83,7 +83,7 @@ class ReportBatchItemCard extends StatelessWidget {
         padding: AppSpacing.all20,
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.03),
@@ -97,7 +97,7 @@ class ReportBatchItemCard extends StatelessWidget {
           children: [
             Text(
               name,
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 16,
                 fontWeight: FontWeight.w800,
                 color: AppColors.textPrimary,
@@ -105,7 +105,7 @@ class ReportBatchItemCard extends StatelessWidget {
             ),
             Text(
               'Batch Strength: $strength Students',
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
                 color: AppColors.textTertiary,
@@ -117,7 +117,7 @@ class ReportBatchItemCard extends StatelessWidget {
               children: [
                 Text(
                   metricLabel,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                     color: AppColors.textTertiary,
@@ -125,7 +125,7 @@ class ReportBatchItemCard extends StatelessWidget {
                 ),
                 Text(
                   metricValue,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
                     color: AppColors.primaryBrand,
@@ -182,7 +182,7 @@ class ReportStudentItemCard extends StatelessWidget {
               children: [
                 Text(
                   name,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                     color: AppColors.textPrimary,
@@ -192,7 +192,7 @@ class ReportStudentItemCard extends StatelessWidget {
                   AppSpacing.v4,
                   Text(
                     subtitle!,
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                       color: AppColors.textTertiary,
@@ -210,7 +210,7 @@ class ReportStudentItemCard extends StatelessWidget {
             ),
             child: Text(
               metric,
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 12,
                 fontWeight: FontWeight.w800,
                 color: metricColor,

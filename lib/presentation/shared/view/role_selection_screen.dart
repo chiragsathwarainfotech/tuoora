@@ -24,7 +24,7 @@ class RoleSelectionScreen extends StatelessWidget {
               Text(
                 'Tuoora',
                 textAlign: TextAlign.center,
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 32,
                   fontWeight: FontWeight.w800,
                   color: AppColors.textPrimary,
@@ -132,7 +132,7 @@ class RoleSelectionScreen extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 17,
                       fontWeight: FontWeight.w800,
                       color: AppColors.textPrimary,
@@ -141,7 +141,7 @@ class RoleSelectionScreen extends StatelessWidget {
                   AppSpacing.v4,
                   Text(
                     subtitle,
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
                       color: AppColors.textTertiary,

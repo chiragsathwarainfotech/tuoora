@@ -22,7 +22,7 @@ class CreateChatScreen extends GetView<ChatController> {
             const InstituteAppBar(title: 'Select Member'),
             Expanded(
               child: Padding(
-                padding: AppSpacing.x24,
+                padding: AppSpacing.x16,
                 child: Column(
                   children: [
                     AppSpacing.v16,
@@ -79,7 +79,7 @@ class CreateChatScreen extends GetView<ChatController> {
         backgroundColor: AppColors.primaryBrandLight,
         child: Text(
           participant.name.substring(0, 1).toUpperCase(),
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 14,
             fontWeight: FontWeight.w800,
             color: AppColors.primaryBrand,
@@ -88,7 +88,7 @@ class CreateChatScreen extends GetView<ChatController> {
       ),
       title: Text(
         participant.name,
-        style: AppTextStyles.manrope(
+        style: AppTextStyles.outfit(
           fontSize: 16,
           fontWeight: FontWeight.w700,
           color: AppColors.textPrimary,
@@ -96,7 +96,7 @@ class CreateChatScreen extends GetView<ChatController> {
       ),
       subtitle: Text(
         participant.role,
-        style: AppTextStyles.lexend(
+        style: AppTextStyles.outfit(
           fontSize: 12,
           color: AppColors.textTertiary,
         ),

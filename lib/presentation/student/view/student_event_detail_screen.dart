@@ -33,7 +33,7 @@ class StudentEventDetailScreen extends StatelessWidget {
                     const SizedBox(height: AppSpacing.s24),
                     Text(
                       'ATTACHMENTS',
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 12,
                         fontWeight: FontWeight.w800,
                         color: AppColors.textTertiary,
@@ -110,7 +110,7 @@ class StudentEventDetailScreen extends StatelessWidget {
                 ),
                 child: Text(
                   'EVENT',
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 10,
                     fontWeight: FontWeight.w800,
                     color: Colors.white,
@@ -120,7 +120,7 @@ class StudentEventDetailScreen extends StatelessWidget {
               const Spacer(),
               Text(
                 'Science Day exhibition',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 22,
                   fontWeight: FontWeight.w900,
                   color: Colors.white,
@@ -129,7 +129,7 @@ class StudentEventDetailScreen extends StatelessWidget {
               const SizedBox(height: 4),
               Text(
                 'Saturday, 24 May 2026 - 10:00 AM - 1:00 PM',
-                style: AppTextStyles.lexend(
+                style: AppTextStyles.outfit(
                   fontSize: 12,
                   fontWeight: FontWeight.w400,
                   color: Colors.white,
@@ -171,7 +171,7 @@ class StudentEventDetailScreen extends StatelessWidget {
             width: 80,
             child: Text(
               label,
-              style: AppTextStyles.lexend(
+              style: AppTextStyles.outfit(
                 fontSize: 13,
                 fontWeight: FontWeight.w400,
                 color: AppColors.textTertiary,
@@ -181,7 +181,7 @@ class StudentEventDetailScreen extends StatelessWidget {
           Expanded(
             child: Text(
               value,
-              style: AppTextStyles.lexend(
+              style: AppTextStyles.outfit(
                 fontSize: 13,
                 fontWeight: FontWeight.w500,
                 color: AppColors.textPrimary,
@@ -207,7 +207,7 @@ class StudentEventDetailScreen extends StatelessWidget {
         children: [
           Text(
             'DETAILS',
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 10,
               fontWeight: FontWeight.w800,
               color: AppColors.textTertiary,
@@ -216,7 +216,7 @@ class StudentEventDetailScreen extends StatelessWidget {
           const SizedBox(height: AppSpacing.s12),
           Text(
             'Annual Science Day where students demo their term project. Set up by 9:30 AM, judging starts at 10:30. Bring your printed report, props and three pens. Parents are welcome from 10 AM onward — tea and snacks will be served outside the hall.',
-            style: AppTextStyles.lexend(
+            style: AppTextStyles.outfit(
               fontSize: 13,
               fontWeight: FontWeight.w400,
               color: AppColors.textSecondary,
@@ -283,7 +283,7 @@ class StudentEventDetailScreen extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
@@ -291,7 +291,7 @@ class StudentEventDetailScreen extends StatelessWidget {
                 ),
                 Text(
                   subtitle,
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 11,
                     fontWeight: FontWeight.w400,
                     color: AppColors.textTertiary,

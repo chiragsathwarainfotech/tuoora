@@ -162,7 +162,7 @@ class InstituteUpdatesScreen extends StatelessWidget {
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: AppColors.white,
-                borderRadius: BorderRadius.circular(24),
+                borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
                 border: Border.all(color: AppColors.background, width: 1.5),
                 boxShadow: [
                   BoxShadow(
@@ -189,7 +189,7 @@ class InstituteUpdatesScreen extends StatelessWidget {
                         ),
                         child: Text(
                           badgeText,
-                          style: AppTextStyles.manrope(
+                          style: AppTextStyles.outfit(
                             fontSize: 10,
                             fontWeight: FontWeight.w800,
                             color: badgeTextColor,
@@ -198,7 +198,7 @@ class InstituteUpdatesScreen extends StatelessWidget {
                       ),
                       Text(
                         timeText,
-                        style: AppTextStyles.lexend(
+                        style: AppTextStyles.outfit(
                           fontSize: 11,
                           color: AppColors.textMuted,
                           fontWeight: FontWeight.w500,
@@ -209,7 +209,7 @@ class InstituteUpdatesScreen extends StatelessWidget {
                   AppSpacing.v12,
                   Text(
                     title,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 18,
                       fontWeight: FontWeight.w800,
                       color: AppColors.textPrimary,
@@ -219,7 +219,7 @@ class InstituteUpdatesScreen extends StatelessWidget {
                     AppSpacing.v8,
                     Text(
                       subtitle,
-                      style: AppTextStyles.lexend(
+                      style: AppTextStyles.outfit(
                         fontSize: 13,
                         color: AppColors.textSecondary,
                         height: 1.4,
@@ -243,7 +243,7 @@ class InstituteUpdatesScreen extends StatelessWidget {
                             Expanded(
                               child: Text(
                                 audienceText,
-                                style: AppTextStyles.lexend(
+                                style: AppTextStyles.outfit(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
                                   color: AppColors.textSecondary,
@@ -265,7 +265,7 @@ class InstituteUpdatesScreen extends StatelessWidget {
                           AppSpacing.h8,
                           Text(
                             dateText,
-                            style: AppTextStyles.lexend(
+                            style: AppTextStyles.outfit(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
                               color: AppColors.textSecondary,

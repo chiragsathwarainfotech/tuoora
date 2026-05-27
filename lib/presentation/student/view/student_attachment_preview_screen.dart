@@ -68,7 +68,7 @@ class _Body extends StatelessWidget {
           child: SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(
               AppSpacing.s16,
-              AppSpacing.s4,
+              AppSpacing.s16,
               AppSpacing.s16,
               AppSpacing.s24,
             ),
@@ -185,7 +185,7 @@ class _VideoPreview extends StatelessWidget {
                     children: [
                       Text(
                         '0:00',
-                        style: AppTextStyles.lexend(
+                        style: AppTextStyles.outfit(
                           fontSize: 10,
                           color: AppColors.white.withValues(alpha: 0.85),
                           fontWeight: FontWeight.w500,
@@ -193,7 +193,7 @@ class _VideoPreview extends StatelessWidget {
                       ),
                       Text(
                         duration,
-                        style: AppTextStyles.lexend(
+                        style: AppTextStyles.outfit(
                           fontSize: 10,
                           color: AppColors.white.withValues(alpha: 0.85),
                           fontWeight: FontWeight.w500,
@@ -233,7 +233,7 @@ class _DocumentPreview extends StatelessWidget {
             padding: const EdgeInsets.all(AppSpacing.s16),
             decoration: BoxDecoration(
               color: AppColors.white,
-              borderRadius: BorderRadius.circular(AppSpacing.s12),
+              borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.04),
@@ -247,7 +247,7 @@ class _DocumentPreview extends StatelessWidget {
               children: [
                 Text(
                   _docHeadline(attachment.name),
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
                     color: AppColors.textPrimary,
@@ -280,7 +280,7 @@ class _DocumentPreview extends StatelessWidget {
             children: [
               Text(
                 'PAGE 1 OF $pages',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 10,
                   fontWeight: FontWeight.w800,
                   color: AppColors.textTertiary,
@@ -289,7 +289,7 @@ class _DocumentPreview extends StatelessWidget {
               ),
               Text(
                 '${ext.isEmpty ? 'FILE' : ext} · ${attachment.sizeLabel}',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 10,
                   fontWeight: FontWeight.w800,
                   color: AppColors.textTertiary,
@@ -350,7 +350,7 @@ class _AudioPreview extends StatelessWidget {
           const SizedBox(height: AppSpacing.s12),
           Text(
             duration,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 13,
               fontWeight: FontWeight.w800,
               color: AppColors.orangeTag,
@@ -405,7 +405,7 @@ class _FileInfoCard extends StatelessWidget {
       padding: const EdgeInsets.all(AppSpacing.s12),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.s14),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -425,7 +425,7 @@ class _FileInfoCard extends StatelessWidget {
               children: [
                 Text(
                   attachment.name,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 13,
                     fontWeight: FontWeight.w800,
                     color: AppColors.textPrimary,
@@ -436,7 +436,7 @@ class _FileInfoCard extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   _metaLine(attachment),
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 11,
                     color: AppColors.textTertiary,
                   ),
@@ -595,7 +595,7 @@ class _ActionButton extends StatelessWidget {
               ],
               Text(
                 label,
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 13,
                   fontWeight: FontWeight.w800,
                   color: fg,

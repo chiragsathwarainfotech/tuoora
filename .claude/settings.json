@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(perl -0ne ' *)",
+      "Bash(python tools/normalize_card_radius.py lib/presentation/institute/ lib/presentation/student/)",
+      "Bash(python tools/migrate_action_icons.py lib/presentation/institute/view/add_homework_screen.dart lib/presentation/institute/view/add_salary_screen.dart lib/presentation/institute/view/batch_details_screen.dart lib/presentation/institute/view/batch_students_screen.dart lib/presentation/institute/view/chat_messages_screen.dart lib/presentation/institute/view/institute_profile_setup_screen.dart lib/presentation/institute/view/institute_profile_view_screen.dart lib/presentation/institute/view/leads_management_screen.dart lib/presentation/institute/view/log_attendance_screen.dart lib/presentation/institute/view/notes_list_screen.dart lib/presentation/institute/view/resource_detail_screen.dart lib/presentation/institute/view/staff_profile_screen.dart lib/presentation/student/view/student_chat_messages_screen.dart)"
+    ]
+  }
+}

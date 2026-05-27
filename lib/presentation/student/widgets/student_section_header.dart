@@ -47,7 +47,7 @@ class StudentSectionHeader extends StatelessWidget {
       children: [
         Text(
           title,
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 11,
             fontWeight: FontWeight.w800,
             color: AppColors.textTertiary,
@@ -60,7 +60,7 @@ class StudentSectionHeader extends StatelessWidget {
             behavior: HitTestBehavior.opaque,
             child: Text(
               label,
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
                 color: actionColor ?? AppColors.orangeTag,

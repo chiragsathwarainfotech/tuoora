@@ -12,6 +12,8 @@ import 'package:get/get.dart';
 import 'package:tuoora/presentation/institute/controllers/resource_detail_controller.dart';
 import 'package:tuoora/core/widgets/common_dialog.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
+import 'package:tuoora/core/constants/app_images.dart';
+import 'package:tuoora/core/widgets/app_action_icon.dart';
 import 'package:chewie/chewie.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -45,7 +47,7 @@ class ResourceDetailScreen extends StatelessWidget {
                   ),
                   Expanded(
                     child: SingleChildScrollView(
-                      padding: AppSpacing.x24.add(AppSpacing.y16),
+                      padding: AppSpacing.x16.add(AppSpacing.y16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
@@ -53,7 +55,7 @@ class ResourceDetailScreen extends StatelessWidget {
                           AppSpacing.v32,
                           Text(
                             resource.subject,
-                            style: AppTextStyles.manrope(
+                            style: AppTextStyles.outfit(
                               fontSize: 24,
                               fontWeight: FontWeight.w800,
                               color: AppColors.textPrimary,
@@ -62,7 +64,7 @@ class ResourceDetailScreen extends StatelessWidget {
                           AppSpacing.v12,
                           Text(
                             resource.description,
-                            style: AppTextStyles.manrope(
+                            style: AppTextStyles.outfit(
                               fontSize: 16,
                               color: AppColors.textSecondary,
                               height: 1.5,
@@ -111,7 +113,7 @@ class ResourceDetailScreen extends StatelessWidget {
           : (resource.type == ResourceType.image ? 400 : 200),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
@@ -173,7 +175,7 @@ class ResourceDetailScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                     color: AppColors.textSecondary,
@@ -225,7 +227,7 @@ class ResourceDetailScreen extends StatelessWidget {
               controller.deleteResource(resource.id, resource.batchId),
         );
       },
-      icon: const Icon(Icons.delete_outline_rounded, color: AppColors.bohoRed),
+      icon: const AppActionIcon(asset: AppImages.icDelete),
     );
   }
 

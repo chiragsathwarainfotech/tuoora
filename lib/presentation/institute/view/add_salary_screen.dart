@@ -7,6 +7,8 @@ import 'package:tuoora/data/models/staff_model.dart';
 import 'package:tuoora/presentation/institute/controllers/staff_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/core/widgets/app_search_field.dart';
+import 'package:tuoora/core/constants/app_images.dart';
+import 'package:tuoora/core/widgets/app_action_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -72,7 +74,7 @@ class AddSalaryScreen extends GetView<StaffController> {
                     AppSpacing.v24,
                     Text(
                       'PAYMENT METHOD',
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 14,
                         fontWeight: FontWeight.w800,
                         color: AppColors.brandAppBarColor,
@@ -115,7 +117,7 @@ class AddSalaryScreen extends GetView<StaffController> {
         children: [
           Text(
             label,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 12,
               fontWeight: FontWeight.w800,
               color: AppColors.textTertiary,
@@ -145,7 +147,7 @@ class AddSalaryScreen extends GetView<StaffController> {
             margin: const EdgeInsets.only(top: 8),
             decoration: BoxDecoration(
               color: AppColors.white,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
               border: Border.all(color: AppColors.background),
               boxShadow: [
                 BoxShadow(
@@ -167,14 +169,14 @@ class AddSalaryScreen extends GetView<StaffController> {
                   leading: _buildStaffAvatar(staff.fullName, staff.profileUrl),
                   title: Text(
                     staff.fullName,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
                   subtitle: Text(
                     staff.role?.name ?? "",
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 12,
                       color: AppColors.textTertiary,
                     ),
@@ -209,14 +211,14 @@ class AddSalaryScreen extends GetView<StaffController> {
               children: [
                 Text(
                   staff.fullName,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
                 Text(
                   staff.role?.name ?? "",
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 11,
                     color: AppColors.textTertiary,
                   ),
@@ -226,11 +228,7 @@ class AddSalaryScreen extends GetView<StaffController> {
           ),
           IconButton(
             onPressed: () => controller.removeSalaryStaff(),
-            icon: const Icon(
-              Icons.delete_outline_rounded,
-              color: AppColors.bohoRed,
-              size: 20,
-            ),
+            icon: const AppActionIcon(asset: AppImages.icDelete, size: 20),
           ),
         ],
       ),
@@ -262,7 +260,7 @@ class AddSalaryScreen extends GetView<StaffController> {
     return Center(
       child: Text(
         getInitials(name),
-        style: AppTextStyles.manrope(
+        style: AppTextStyles.outfit(
           fontSize: 14,
           fontWeight: FontWeight.w800,
           color: AppColors.primaryBrand,
@@ -338,7 +336,7 @@ class AddSalaryScreen extends GetView<StaffController> {
           AppSpacing.v12,
           Text(
             label,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 16,
               fontWeight: FontWeight.w700,
               color: isSelected ? color : AppColors.textTertiary,
@@ -371,7 +369,7 @@ class AddSalaryScreen extends GetView<StaffController> {
                 children: [
                   Text(
                     'Total Disbursement',
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                       color: AppColors.textPrimary,
@@ -379,7 +377,7 @@ class AddSalaryScreen extends GetView<StaffController> {
                   ),
                   Text(
                     '₹$amount',
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 22,
                       fontWeight: FontWeight.w800,
                       color: AppColors.primaryBrand,
@@ -402,7 +400,7 @@ class AddSalaryScreen extends GetView<StaffController> {
                   Expanded(
                     child: Text(
                       'This payment will be recorded in the general ledger and deducted from the monthly payroll budget.',
-                      style: AppTextStyles.lexend(
+                      style: AppTextStyles.outfit(
                         fontSize: 12,
                         color: AppColors.textSecondary,
                       ),

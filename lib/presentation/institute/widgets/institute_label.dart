@@ -13,7 +13,7 @@ class InstituteLabel extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 8),
       child: Text(
         label,
-        style: AppTextStyles.manrope(
+        style: AppTextStyles.outfit(
           fontSize: 14,
           fontWeight: FontWeight.w800,
           color: AppColors.brandAppBarColor,

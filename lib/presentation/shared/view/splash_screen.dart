@@ -43,7 +43,7 @@ class SplashScreen extends GetView<SplashController> {
             AppSpacing.v24,
             Text(
               AppStrings.appName,
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 32,
                 fontWeight: FontWeight.w800,
                 color: AppColors.white,
@@ -52,7 +52,7 @@ class SplashScreen extends GetView<SplashController> {
             AppSpacing.v8,
             Text(
               'Finance Simplified',
-              style: AppTextStyles.lexend(
+              style: AppTextStyles.outfit(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
                 color: AppColors.white.withValues(alpha: 0.8),

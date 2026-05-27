@@ -49,7 +49,7 @@ class InstituteSecurityScreen extends GetView<SecurityController> {
       padding: AppSpacing.all28,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
@@ -63,7 +63,7 @@ class InstituteSecurityScreen extends GetView<SecurityController> {
         children: [
           Text(
             AppStrings.instUpdatePasswordLabel,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 18,
               fontWeight: FontWeight.w800,
               color: AppColors.brandAppBarColor,
@@ -126,7 +126,7 @@ class InstituteSecurityScreen extends GetView<SecurityController> {
       children: [
         Text(
           label,
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 14,
             fontWeight: FontWeight.w800,
             color: AppColors.textDarkGrey,
@@ -149,13 +149,13 @@ class InstituteSecurityScreen extends GetView<SecurityController> {
                   child: TextField(
                     controller: controller,
                     obscureText: !isVisible.value,
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 14,
                       color: AppColors.textPrimary,
                     ),
                     decoration: InputDecoration(
                       hintText: hint,
-                      hintStyle: AppTextStyles.lexend(
+                      hintStyle: AppTextStyles.outfit(
                         fontSize: 14,
                         color: AppColors.blueSapphire,
                       ),
@@ -186,7 +186,7 @@ class InstituteSecurityScreen extends GetView<SecurityController> {
             padding: const EdgeInsets.only(left: 4),
             child: Text(
               errorText,
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 12,
                 color: Colors.redAccent,
                 fontWeight: FontWeight.w500,

@@ -2,6 +2,7 @@ import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/status_badge.dart';
 import 'package:tuoora/presentation/institute/controllers/homework_rating_controller.dart';
 import 'package:tuoora/presentation/institute/models/homework_model.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
@@ -40,6 +41,24 @@ class HomeworkRatingScreen extends StatelessWidget {
                     _buildProgressSection(homework),
                     AppSpacing.v24,
                     _buildFilterSection(controller),
+                    // Single "Remind All Pending" CTA — replaces the per-card
+                    // reminder buttons. canEdit is derived from the immutable
+                    // homework arg, so it stays outside the Obx (avoids an
+                    // Obx with no reactive reads). Hidden on the Submitted
+                    // filter tab too — sending reminders only makes sense on
+                    // the All and Pending views.
+                    if (controller.canEdit)
+                      Obx(() {
+                        final pending = controller.pendingCount;
+                        final tab = controller.filterIndex.value;
+                        if (pending == 0 || tab == 1) {
+                          return const SizedBox.shrink();
+                        }
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 16),
+                          child: _buildRemindAllButton(controller, pending),
+                        );
+                      }),
                     AppSpacing.v24,
                     Obx(
                       () => Column(
@@ -291,25 +310,11 @@ class HomeworkRatingScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: _getStatusColor(sub.status).withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Text(
-                  sub.status,
-                  style: AppTextStyles.outfit(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w800,
-                    color: _getStatusColor(sub.status),
-                  ),
-                ),
-              ),
+              StatusBadge.fromLabel(sub.status),
             ],
           ),
-          AppSpacing.v16,
-          if (isSubmitted)
+          if (isSubmitted) ...[
+            AppSpacing.v16,
             Row(
               children: [
                 Text(
@@ -376,40 +381,50 @@ class HomeworkRatingScreen extends StatelessWidget {
                   ),
                 ),
               ],
-            )
-          else
-            ElevatedButton(
-              onPressed: () =>
-                  controller.sendReminder(sub.studentId.toString()),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.textSecondary,
-                minimumSize: const Size(double.infinity, 44),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  // Compact pill CTA on the right side. Replaces the old per-student
+  // "Send Reminder" buttons — one tap pings every pending student.
+  Widget _buildRemindAllButton(
+    HomeworkRatingController controller,
+    int pending,
+  ) {
+    return Align(
+      alignment: Alignment.centerRight,
+      child: Material(
+        color: AppColors.primaryBrand,
+        borderRadius: BorderRadius.circular(20),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(20),
+          onTap: controller.sendReminderToAllPending,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.notifications_active_rounded,
+                  size: 16,
+                  color: AppColors.white,
                 ),
-                elevation: 0,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    Icons.notifications_outlined,
-                    size: 18,
+                AppSpacing.h8,
+                Text(
+                  'Remind $pending Pending',
+                  style: AppTextStyles.outfit(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
                     color: AppColors.white,
                   ),
-                  AppSpacing.h8,
-                  Text(
-                    AppStrings.instSendReminderBtn,
-                    style: AppTextStyles.outfit(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.white,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-        ],
+          ),
+        ),
       ),
     );
   }
@@ -462,14 +477,4 @@ class HomeworkRatingScreen extends StatelessWidget {
     );
   }
 
-  Color _getStatusColor(String status) {
-    switch (status.toUpperCase()) {
-      case 'SUBMITTED':
-        return AppColors.darkGreen;
-      case 'PENDING':
-        return AppColors.bohoRed;
-      default:
-        return AppColors.textTertiary;
-    }
-  }
 }

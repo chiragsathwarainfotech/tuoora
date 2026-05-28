@@ -28,7 +28,7 @@ class AddEditNoteScreen extends GetView<NotesController> {
             ),
             Expanded(
               child: SingleChildScrollView(
-                padding: AppSpacing.all24,
+                padding: AppSpacing.screenPaddingTop,
                 child: Column(children: [_buildFormCard()]),
               ),
             ),
@@ -111,7 +111,7 @@ class AddEditNoteScreen extends GetView<NotesController> {
                       );
 
                       return Padding(
-                        padding: const EdgeInsets.only(right: 12),
+                        padding: const EdgeInsets.only(right: 10),
                         child: GestureDetector(
                           onTap: () {
                             controller.selectedCategoryName.value = cat.name;
@@ -125,7 +125,9 @@ class AddEditNoteScreen extends GetView<NotesController> {
                               color: isSelected
                                   ? catColor
                                   : AppColors.paleSilver.withValues(alpha: 0.5),
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(
+                                AppSpacing.cardRadius,
+                              ),
                               border: Border.all(
                                 color: isSelected
                                     ? catColor

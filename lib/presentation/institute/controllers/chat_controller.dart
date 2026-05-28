@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:record/record.dart';
 
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/services/auth_service.dart';
@@ -29,6 +30,17 @@ class ChatController extends GetxController {
   final messageController = TextEditingController();
   final scrollController = ScrollController();
 
+  /// True when the user has scrolled up far enough that the latest message
+  /// is off-screen — drives the floating "scroll to bottom" button.
+  final showScrollToBottom = false.obs;
+
+  // ----------------------------------------------------- voice recording
+  final AudioRecorder _recorder = AudioRecorder();
+  final isRecording = false.obs;
+  final recordSeconds = 0.obs;
+  Timer? _recordTimer;
+  String? _recordPath;
+
   final availableParticipants = <ChatParticipant>[].obs;
   final filteredParticipants = <ChatParticipant>[].obs;
   final participantSearchQuery = ''.obs;
@@ -49,6 +61,7 @@ class ChatController extends GetxController {
     super.onInit();
     _subscribeToSocketStreams();
     fetchChats();
+    scrollController.addListener(_onScroll);
 
     debounce(
       searchQuery,
@@ -69,9 +82,39 @@ class ChatController extends GetxController {
     _onMessageReadSub?.cancel();
     _onChatDeletedSub?.cancel();
     messageController.dispose();
+    scrollController.removeListener(_onScroll);
     scrollController.dispose();
+    _recordTimer?.cancel();
+    _recorder.dispose();
     super.onClose();
   }
+
+  // Formats the live recording timer as m:ss.
+  String get recordTimeLabel {
+    final s = recordSeconds.value;
+    final m = s ~/ 60;
+    final sec = (s % 60).toString().padLeft(2, '0');
+    return '$m:$sec';
+  }
+
+  // Shows the jump-to-bottom button once the user has scrolled more than
+  // ~300px away from the newest message (the list isn't reversed, so the
+  // bottom is maxScrollExtent).
+  void _onScroll() {
+    if (!scrollController.hasClients) return;
+    final pos = scrollController.position;
+    final distanceFromBottom = pos.maxScrollExtent - pos.pixels;
+    final shouldShow = distanceFromBottom > 300;
+    if (shouldShow != showScrollToBottom.value) {
+      showScrollToBottom.value = shouldShow;
+    }
+  }
+
+  /// Public entry point for the floating jump-to-bottom button. The list is
+  /// already laid out when the user taps, so scroll immediately rather than
+  /// waiting on a post-frame callback (which may not fire if no frame is
+  /// otherwise scheduled — that was why the button appeared to do nothing).
+  void scrollToBottom() => _scrollToExtent(animate: true);
 
   // ---------------------------------------------------------------- chats
 
@@ -165,7 +208,9 @@ class ChatController extends GetxController {
           '(impossible state from backend): $invariantBreaks',
         );
       }
-      _scrollToBottom();
+      // Initial load jumps straight to the bottom (no animation) so the chat
+      // opens already pinned to the latest message.
+      _scrollToBottom(animate: false);
     } catch (e) {
       AppSnackBar.error(
         'Failed to load messages: ${e.toString().replaceAll('Exception: ', '')}',
@@ -294,6 +339,22 @@ class ChatController extends GetxController {
       return;
     }
 
+    // Enforce per-type upload size limits before we optimistically add the
+    // bubble or hit the network.
+    final limitMb = _attachmentLimitMb(type);
+    if (limitMb != null) {
+      final sizeMb = await file.length() / (1024 * 1024);
+      if (sizeMb > limitMb) {
+        AppSnackBar.error(
+          '${_attachmentTypeLabel(type)} files must be under '
+          '${limitMb.toStringAsFixed(0)} MB. Selected file is '
+          '${sizeMb.toStringAsFixed(2)} MB.',
+          title: 'Maximum size limit',
+        );
+        return;
+      }
+    }
+
     final now = DateTime.now();
     final optimistic = Message(
       id: '',
@@ -340,6 +401,113 @@ class ChatController extends GetxController {
       );
     } finally {
       isSending.value = false;
+    }
+  }
+
+  // ----------------------------------------------------- voice recording
+
+  /// Begins recording a voice message. Requests mic permission first; if
+  /// denied, surfaces a snackbar and bails. The file is written to a temp
+  /// path and sent as an `audio` attachment when [stopAndSendRecording] runs.
+  Future<void> startRecording() async {
+    if (isRecording.value) return;
+    try {
+      if (!await _recorder.hasPermission()) {
+        AppSnackBar.error('Microphone permission is required to record.');
+        return;
+      }
+      final dir = Directory('${Directory.systemTemp.path}/tuoora_voice');
+      if (!await dir.exists()) await dir.create(recursive: true);
+      _recordPath =
+          '${dir.path}/voice_${DateTime.now().millisecondsSinceEpoch}.m4a';
+
+      await _recorder.start(
+        const RecordConfig(encoder: AudioEncoder.aacLc),
+        path: _recordPath!,
+      );
+      isRecording.value = true;
+      recordSeconds.value = 0;
+      _recordTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+        recordSeconds.value++;
+      });
+    } catch (e) {
+      isRecording.value = false;
+      AppSnackBar.error('Could not start recording: $e');
+    }
+  }
+
+  /// Discards the in-progress recording without sending.
+  Future<void> cancelRecording() async {
+    if (!isRecording.value) return;
+    _recordTimer?.cancel();
+    isRecording.value = false;
+    recordSeconds.value = 0;
+    try {
+      await _recorder.stop();
+    } catch (_) {}
+    final path = _recordPath;
+    _recordPath = null;
+    if (path != null) {
+      final f = File(path);
+      if (await f.exists()) await f.delete();
+    }
+  }
+
+  /// Stops recording and sends the captured clip as an audio attachment.
+  Future<void> stopAndSendRecording() async {
+    if (!isRecording.value) return;
+    _recordTimer?.cancel();
+    final seconds = recordSeconds.value;
+    isRecording.value = false;
+    recordSeconds.value = 0;
+
+    String? path;
+    try {
+      path = await _recorder.stop();
+    } catch (e) {
+      AppSnackBar.error('Could not finish recording: $e');
+      return;
+    }
+    path ??= _recordPath;
+    _recordPath = null;
+
+    // Ignore accidental ultra-short taps.
+    if (path == null || seconds < 1) {
+      if (path != null) {
+        final f = File(path);
+        if (await f.exists()) await f.delete();
+      }
+      return;
+    }
+    await sendAttachment(file: File(path), type: 'audio');
+  }
+
+  // Per-type upload caps (MB). Document is intentionally uncapped here.
+  double? _attachmentLimitMb(String type) {
+    switch (type) {
+      case 'image':
+        return 5;
+      case 'audio':
+        return 10;
+      case 'video':
+        return 20;
+      default:
+        return null;
+    }
+  }
+
+  String _attachmentTypeLabel(String type) {
+    switch (type) {
+      case 'image':
+        return 'Image';
+      case 'audio':
+        return 'Audio';
+      case 'video':
+        return 'Video';
+      case 'document':
+        return 'Document';
+      default:
+        return 'File';
     }
   }
 
@@ -674,15 +842,38 @@ class ChatController extends GetxController {
     _filterChats();
   }
 
-  void _scrollToBottom() {
-    Future.delayed(const Duration(milliseconds: 100), () {
-      if (scrollController.hasClients) {
-        scrollController.animateTo(
-          scrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeOut,
-        );
+  /// Scrolls the message list to the very bottom.
+  ///
+  /// We schedule the jump for AFTER the current frame is laid out, then do a
+  /// second pass on a short delay. The second pass is what fixes the
+  /// "stuck a few messages above the last one" bug: attachment bubbles
+  /// (images/videos) and multi-line text expand their height asynchronously,
+  /// so the first `maxScrollExtent` is an underestimate. Re-reading it after
+  /// layout settles lands us on the real bottom.
+  void _scrollToBottom({bool animate = true}) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollToExtent(animate: animate);
+      // Extra passes: lazy ListView.builder extents and late-loading
+      // attachments keep growing the list height after the first layout.
+      for (final ms in const [120, 300, 600]) {
+        Future.delayed(Duration(milliseconds: ms), () {
+          _scrollToExtent(animate: animate);
+        });
       }
     });
+  }
+
+  void _scrollToExtent({required bool animate}) {
+    if (!scrollController.hasClients) return;
+    final target = scrollController.position.maxScrollExtent;
+    if (animate) {
+      scrollController.animateTo(
+        target,
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeOut,
+      );
+    } else {
+      scrollController.jumpTo(target);
+    }
   }
 }

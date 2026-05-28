@@ -80,8 +80,21 @@ class HomeworkRatingController extends GetxController {
     }
   }
 
-  void sendReminder(String studentId) {
-    Get.snackbar('Reminder Sent', 'A reminder has been sent to the student.');
+  int get pendingCount => submissions.where((s) => !s.isSubmitted).length;
+
+  /// Sends a single bulk reminder to every student that hasn't submitted
+  /// yet. No-op when there's nothing pending or the homework is closed.
+  void sendReminderToAllPending() {
+    if (!canEdit) return;
+    final count = pendingCount;
+    if (count == 0) {
+      Get.snackbar('No Pending', 'All students have submitted this homework.');
+      return;
+    }
+    Get.snackbar(
+      'Reminder Sent',
+      'A reminder has been sent to $count pending student${count == 1 ? '' : 's'}.',
+    );
   }
 }
 

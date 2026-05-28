@@ -47,7 +47,6 @@ class InstituteDashboard extends StatelessWidget {
               style: AppTextStyles.outfit(
                 fontSize: 24,
                 fontWeight: FontWeight.w800,
-                color: AppColors.primaryBrand,
               ),
             ),
           ),
@@ -194,7 +193,7 @@ class InstituteDashboard extends StatelessWidget {
       onTap: item.onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: accent.withValues(alpha: 0.12),
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(8),
           boxShadow: [
             BoxShadow(
@@ -207,17 +206,13 @@ class InstituteDashboard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(color: accent, shape: BoxShape.circle),
-              child: Icon(item.icon, color: AppColors.white, size: 24),
-            ),
+            Icon(item.icon, color: accent, size: 48),
             AppSpacing.v12,
             Text(
               item.title,
               textAlign: TextAlign.center,
               style: AppTextStyles.outfit(
-                fontSize: 14,
+                fontSize: 16,
                 fontWeight: FontWeight.w700,
                 color: AppColors.textPrimary,
               ),

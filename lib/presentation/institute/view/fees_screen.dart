@@ -40,11 +40,10 @@ class InstituteFeesScreen extends GetView<InstituteController> {
                           controller.currentMonthTotal.value,
                         ),
                       ),
-                      AppSpacing.v32,
+                      AppSpacing.v24,
                       _buildRegistryHeader(controller),
                       AppSpacing.v16,
                       _buildRegistryList(controller),
-                      AppSpacing.v32,
                     ],
                   ),
                 ),
@@ -64,11 +63,11 @@ class InstituteFeesScreen extends GetView<InstituteController> {
 
   Widget _buildTotalCollectedCard(double amount) {
     return Container(
-      padding: AppSpacing.all24,
+      padding: AppSpacing.cardPadding,
       width: double.infinity,
       decoration: BoxDecoration(
         color: AppColors.primaryBrand,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -112,12 +111,12 @@ class InstituteFeesScreen extends GetView<InstituteController> {
           behavior: HitTestBehavior.translucent,
           onTap: () => controller.downloadFeeReport(),
           child: Container(
-            padding: AppSpacing.all8,
+            padding: AppSpacing.cardPadding,
             decoration: BoxDecoration(
               color: AppColors.primaryBrand,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
             ),
-            child: const Icon(Icons.download, color: AppColors.white, size: 26),
+            child: const Icon(Icons.download, color: AppColors.white, size: 24),
           ),
         ),
       ],
@@ -159,7 +158,7 @@ class InstituteFeesScreen extends GetView<InstituteController> {
       return Column(
         children: controller.feeRecords.map((record) {
           return Padding(
-            padding: const EdgeInsets.only(bottom: AppSpacing.s12),
+            padding: const EdgeInsets.only(bottom: AppSpacing.s10),
             child: _buildFeeItem(
               record.student?.name ?? 'Unknown Student',
               '₹${record.totalAmount}',
@@ -179,7 +178,7 @@ class InstituteFeesScreen extends GetView<InstituteController> {
     DateTime date,
   ) {
     return Container(
-      padding: AppSpacing.all16,
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.cardRadius),

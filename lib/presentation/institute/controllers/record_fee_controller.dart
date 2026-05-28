@@ -30,6 +30,18 @@ class RecordFeeController extends GetxController {
   final studentError = RxnString();
   final amountError = RxnString();
 
+  /// True when every required field has a usable value, so the Preview
+  /// Receipt action is safe to show. Mirrors the conditions [validateForm]
+  /// would assert without mutating the error fields.
+  bool get canPreview {
+    if (selectedStudent.value == null) return false;
+    final trimmed = amount.value.trim();
+    if (trimmed.isEmpty) return false;
+    final parsed = double.tryParse(trimmed);
+    if (parsed == null || parsed <= 0) return false;
+    return true;
+  }
+
   bool validateForm() {
     bool isValid = true;
 

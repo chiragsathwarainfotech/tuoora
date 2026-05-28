@@ -92,6 +92,7 @@ class AppStrings {
   // Institute Students Registry
   static const String instStudentRegistry = 'Student Registry';
   static const String instStudentSearchHint = 'Search by student name';
+  static const String instBatchSearchHint = 'Search by batch name';
   static const String instBadgeActive = 'ACTIVE';
   static const String instBadgePending = 'PENDING';
 
@@ -147,12 +148,12 @@ class AppStrings {
 
   // Institute Record Fee
   static const String instRecordFeeTitle = 'Record Fee';
-  static const String instStudentInfoLabel = 'STUDENT INFORMATION';
-  static const String instSearchStudentHint = 'Search Student...';
+  static const String instStudentInfoLabel = 'Student Scholar';
+  static const String instSearchStudentHint = 'Search Student';
   static const String instRecordStatusLabel = 'STATUS';
   static const String instStatusPartial = 'Partial';
   static const String instFeeMonthLabel = 'Fee Month';
-  static const String instAmountLabel = 'Amount (₹)';
+  static const String instAmountLabel = 'Amount';
   static const String instPaymentMethodLabel = 'Payment Method';
   static const String instPaymentCash = 'Cash';
   static const String instPaymentOnline = 'Online';
@@ -188,9 +189,11 @@ class AppStrings {
   static const String instBatchFeeLabelAlt = 'Batch Fee (₹)';
   static const String instBatchFeeHint = 'e.g., 2500';
   static const String instScheduleSettings = 'Schedule Settings';
-  static const String instTimeSlot = 'TIME SLOT';
+  static const String instTimeSlot = 'Time Slot';
   static const String instChangeBtn = 'Change';
-  static const String instActiveDaysLabel = 'ACTIVE DAYS';
+  static const String instActiveDaysLabel = 'Active Days';
+  static const String instBatchClassroomLabel = 'Classroom / Venue';
+  static const String instBatchClassroomHint = 'Enter class room';
   static const String instSaveBatchBtn = 'Save Batch Details';
 
   // Institute Batch Resources

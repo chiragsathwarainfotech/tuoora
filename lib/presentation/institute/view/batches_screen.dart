@@ -7,6 +7,8 @@ import 'package:tuoora/presentation/institute/models/batch_model.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/presentation/institute/widgets/common_state_widget.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
+import 'package:tuoora/core/widgets/app_search_field.dart';
+import 'package:tuoora/core/widgets/status_badge.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/config/app_routes.dart';
@@ -59,21 +61,36 @@ class _BatchesScreenState extends State<BatchesScreen> {
                   title: AppStrings.instNavBatches,
                   onBackTap: () => Get.back(),
                 ),
+                Padding(
+                  padding: AppSpacing.screenPadding,
+                  child: AppSearchField(
+                    hintText: AppStrings.instBatchSearchHint,
+                    onChanged: controller.onBatchSearchChanged,
+                  ),
+                ),
                 Expanded(
                   child: RefreshIndicator(
                     onRefresh: () => controller.loadBatches(isRefresh: true),
                     color: AppColors.primaryBrand,
                     child: Obx(() {
+                      final isSearching = controller.batchSearchQuery.value
+                          .trim()
+                          .isNotEmpty;
                       return CommonStateWidget(
                         isLoading: controller.isLoading.value,
                         isEmpty: controller.batchesList.isEmpty,
-                        emptyTitle: 'No Batches Found',
-                        emptySubtitle:
-                            'Tap the + button to create your first batch and start managing students.',
-                        emptyIcon: Icons.school_outlined,
+                        emptyTitle: isSearching
+                            ? 'No Batches Found'
+                            : 'No Batches Found',
+                        emptySubtitle: isSearching
+                            ? 'Try searching with a different name.'
+                            : 'Tap the + button to create your first batch and start managing students.',
+                        emptyIcon: isSearching
+                            ? Icons.search_off_rounded
+                            : Icons.school_outlined,
                         child: ListView.separated(
                           controller: _scrollController,
-                          padding: AppSpacing.all24,
+                          padding: AppSpacing.x16,
                           itemCount:
                               controller.batchesList.length +
                               (controller.isMoreLoading.value ? 1 : 0),
@@ -115,10 +132,6 @@ class _BatchesScreenState extends State<BatchesScreen> {
     );
   }
 
-  /// Same rotating accent palette as the institute dashboard tiles, so the
-  /// stripe colour on each batch card matches the design-system rhythm.
-  /// Deterministic by index — the same batch always gets the same stripe
-  /// colour across rebuilds.
   static const List<Color> _stripePalette = <Color>[
     AppColors.instBrandOrange,
     AppColors.successGreen,
@@ -146,14 +159,14 @@ class _BatchesScreenState extends State<BatchesScreen> {
           ],
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(AppSpacing.s16),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           child: IntrinsicHeight(
             child: Row(
               children: [
-                Container(width: AppSpacing.s4, color: accent),
+                Container(width: AppSpacing.s6, color: accent),
                 Expanded(
                   child: Padding(
-                    padding: AppSpacing.all20,
+                    padding: AppSpacing.all16,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -170,24 +183,7 @@ class _BatchesScreenState extends State<BatchesScreen> {
                                 ),
                               ),
                             ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                color: accent,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Text(
-                                batch.statusLabel,
-                                style: AppTextStyles.outfit(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w800,
-                                  color: AppColors.white,
-                                ),
-                              ),
-                            ),
+                            StatusBadge.fromLabel(batch.statusLabel),
                           ],
                         ),
                         AppSpacing.v4,

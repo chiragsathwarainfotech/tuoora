@@ -44,7 +44,7 @@ class Batch {
     return BatchModel(
       id: id.toString(),
       title: name,
-      time: '$startTime - $endTime',
+      time: '${_format12Hour(startTime)} - ${_format12Hour(endTime)}',
       subject: subject,
       studentCount: '${studentsCount ?? 0} Students',
       location: classroom ?? 'Main Hall',
@@ -58,6 +58,7 @@ class Batch {
       totalPaid: totalPaid,
       days: days,
       students: students,
+      classroom: classroom,
     );
   }
 
@@ -107,6 +108,25 @@ class Batch {
       'total_expected': totalExpected,
       'students': students?.map((s) => s.toJson()).toList(),
     };
+  }
+
+  // Converts a server-format time like "18:30" or "06:00 PM" into a 12-hour
+  // display string like "6:30 PM". Falls back to the original input if it
+  // cannot be parsed so we never blank out the schedule.
+  static String _format12Hour(String raw) {
+    if (raw.trim().isEmpty) return raw;
+    final cleaned = raw.trim();
+    final upper = cleaned.toUpperCase();
+    if (upper.contains('AM') || upper.contains('PM')) return cleaned;
+    final parts = cleaned.split(':');
+    if (parts.length < 2) return cleaned;
+    final h = int.tryParse(parts[0]);
+    final m = int.tryParse(parts[1]);
+    if (h == null || m == null) return cleaned;
+    final period = h >= 12 ? 'PM' : 'AM';
+    final hour12 = ((h + 11) % 12) + 1;
+    final mm = m.toString().padLeft(2, '0');
+    return '$hour12:$mm $period';
   }
 }
 

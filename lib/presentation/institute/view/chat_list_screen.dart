@@ -91,18 +91,16 @@ class _ChatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hasUnread = chat.unreadCount > 0;
-
     return Material(
       color: AppColors.white,
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       elevation: 0,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
         child: Ink(
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
             border: Border.all(
               color: hasUnread
                   ? AppColors.primaryBrand.withValues(alpha: 0.25)
@@ -117,7 +115,7 @@ class _ChatCard extends StatelessWidget {
               ),
             ],
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          padding: AppSpacing.cardPadding,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -163,9 +161,6 @@ class _ChatCard extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 4),
-                    if (chat.participantRole.isNotEmpty)
-                      _RoleChip(role: chat.participantRole),
-                    const SizedBox(height: 6),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -220,35 +215,6 @@ class _Avatar extends StatelessWidget {
         fit: BoxFit.cover,
         placeholder: (_, _) => fallback,
         errorWidget: (_, _, _) => fallback,
-      ),
-    );
-  }
-}
-
-class _RoleChip extends StatelessWidget {
-  final String role;
-
-  const _RoleChip({required this.role});
-
-  @override
-  Widget build(BuildContext context) {
-    // Convert backend-style "StudentParent" to "Parent" for display, and
-    // leave the rest as-is.
-    final display = role == 'StudentParent' ? 'Parent' : role;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-      decoration: BoxDecoration(
-        color: AppColors.primaryBrandLight,
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: Text(
-        display.toUpperCase(),
-        style: AppTextStyles.outfit(
-          fontSize: 9,
-          fontWeight: FontWeight.w800,
-          color: AppColors.primaryBrand,
-          letterSpacing: 0.6,
-        ),
       ),
     );
   }

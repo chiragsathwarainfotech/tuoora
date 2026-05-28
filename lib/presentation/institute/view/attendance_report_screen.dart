@@ -1,6 +1,7 @@
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/presentation/institute/widgets/export_report.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +42,7 @@ class AttendanceReportScreen extends StatelessWidget {
                     : 0.0;
 
                 return SingleChildScrollView(
-                  padding: AppSpacing.all24,
+                  padding: AppSpacing.all16,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -104,36 +105,8 @@ class AttendanceReportScreen extends StatelessWidget {
           ),
         ),
         AppSpacing.h16,
-        GestureDetector(
-          onTap: () => controller.exportReport('Attendance'),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            decoration: BoxDecoration(
-              color: AppColors.primaryBrand,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Row(
-              children: [
-                const Icon(
-                  Icons.file_download_outlined,
-                  color: AppColors.white,
-                  size: 16,
-                ),
-                AppSpacing.h8,
-                Text(
-                  'Export',
-                  style: AppTextStyles.outfit(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.white,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+        ExportReport(onTap: () => controller.exportReport('Attendance')),
       ],
     );
   }
 }
-

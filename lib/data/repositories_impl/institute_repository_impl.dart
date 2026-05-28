@@ -49,7 +49,7 @@ abstract class InstituteRepositoryImpl {
   Future<List<int>> exportPerformanceReport();
 
   // Batches Management
-  Future<BatchListResponse> listBatches({int page = 1});
+  Future<BatchListResponse> listBatches({int page = 1, String? search});
   Future<Batch> createBatch(Map<String, dynamic> data);
   Future<Batch> updateBatch(int id, Map<String, dynamic> data);
   Future<void> deleteBatch(int id);

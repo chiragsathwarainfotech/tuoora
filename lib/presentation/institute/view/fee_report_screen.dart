@@ -2,6 +2,7 @@ import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/controllers/reports_controller.dart';
+import 'package:tuoora/presentation/institute/widgets/export_report.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,10 @@ class FeeReportScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const InstituteAppBar(title: 'Fee Report', isRoot: false),
+            const InstituteAppBar(
+              title: 'Fee Collection Report',
+              isRoot: false,
+            ),
             Expanded(
               child: Obx(() {
                 if (controller.isFeeLoading.value) {
@@ -35,7 +39,7 @@ class FeeReportScreen extends StatelessWidget {
                 }
 
                 return SingleChildScrollView(
-                  padding: AppSpacing.all24,
+                  padding: AppSpacing.all16,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -101,36 +105,8 @@ class FeeReportScreen extends StatelessWidget {
           ),
         ),
         AppSpacing.h16,
-        GestureDetector(
-          onTap: () => controller.exportReport('Fee'),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            decoration: BoxDecoration(
-              color: AppColors.primaryBrand,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Row(
-              children: [
-                const Icon(
-                  Icons.file_download_outlined,
-                  color: AppColors.white,
-                  size: 16,
-                ),
-                AppSpacing.h8,
-                Text(
-                  'Export',
-                  style: AppTextStyles.outfit(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.white,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+        ExportReport(onTap: () => controller.exportReport('Fee')),
       ],
     );
   }
 }
-

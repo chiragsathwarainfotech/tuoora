@@ -1,3 +1,4 @@
+import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/presentation/institute/models/batch_model.dart';
 import 'package:tuoora/core/widgets/common_dialog.dart';
 import 'package:flutter/material.dart';
@@ -18,12 +19,25 @@ class BatchController extends GetxController {
   final currentPage = 1.obs;
   final lastPage = 1.obs;
 
+  // Debounced search for the batches list (separate from [searchQuery]
+  // which is used by the assign-students flow).
+  final batchSearchQuery = ''.obs;
+
   @override
   void onInit() {
     super.onInit();
     batchNameController.addListener(() => _clearError(batchNameError));
     subjectController.addListener(() => _clearError(subjectError));
     batchFeeController.addListener(() => _clearError(feeError));
+    debounce(
+      batchSearchQuery,
+      (_) => loadBatches(isRefresh: true),
+      time: const Duration(milliseconds: 500),
+    );
+  }
+
+  void onBatchSearchChanged(String query) {
+    batchSearchQuery.value = query;
   }
 
   void _clearError(RxnString error) {
@@ -37,6 +51,7 @@ class BatchController extends GetxController {
   final subjectController = TextEditingController();
   final descriptionController = TextEditingController();
   final batchFeeController = TextEditingController();
+  final classroomController = TextEditingController();
   final startTime = const TimeOfDay(hour: 0, minute: 0).obs;
   final endTime = const TimeOfDay(hour: 0, minute: 0).obs;
   final selectedDays = <String>[].obs;
@@ -98,7 +113,12 @@ class BatchController extends GetxController {
     }
 
     try {
-      final response = await _repository.listBatches(page: currentPage.value);
+      final response = await _repository.listBatches(
+        page: currentPage.value,
+        search: batchSearchQuery.value.trim().isEmpty
+            ? null
+            : batchSearchQuery.value.trim(),
+      );
       final uiBatches = response.items.map((b) => b.toUIModel()).toList();
 
       if (isRefresh) {
@@ -125,6 +145,7 @@ class BatchController extends GetxController {
     subjectController.clear();
     descriptionController.clear();
     batchFeeController.clear();
+    classroomController.clear();
     startTime.value = const TimeOfDay(hour: 0, minute: 0);
     endTime.value = const TimeOfDay(hour: 0, minute: 0);
     selectedDays.clear();
@@ -145,6 +166,7 @@ class BatchController extends GetxController {
     subjectController.text = batch.subject;
     descriptionController.text = batch.description;
     batchFeeController.text = batch.baseFee.toStringAsFixed(0);
+    classroomController.text = batch.classroom ?? '';
 
     final times = batch.time.split(' - ');
     if (times.length == 2) {
@@ -210,19 +232,84 @@ class BatchController extends GetxController {
   }
 
   Future<void> selectStartTime(BuildContext context) async {
-    final TimeOfDay? picked = await showTimePicker(
-      context: context,
-      initialTime: startTime.value,
+    final TimeOfDay? picked = await _showBrandedTimePicker(
+      context,
+      startTime.value,
     );
     if (picked != null) startTime.value = picked;
   }
 
   Future<void> selectEndTime(BuildContext context) async {
-    final TimeOfDay? picked = await showTimePicker(
-      context: context,
-      initialTime: endTime.value,
+    final TimeOfDay? picked = await _showBrandedTimePicker(
+      context,
+      endTime.value,
     );
     if (picked != null) endTime.value = picked;
+  }
+
+  // Wraps Material's [showTimePicker] so the dialog always renders in 12-hour
+  // mode with the app's brand palette instead of the default blue.
+  Future<TimeOfDay?> _showBrandedTimePicker(
+    BuildContext context,
+    TimeOfDay initial,
+  ) {
+    return showTimePicker(
+      context: context,
+      initialTime: initial,
+      builder: (ctx, child) {
+        return MediaQuery(
+          data: MediaQuery.of(ctx).copyWith(alwaysUse24HourFormat: false),
+          child: Theme(
+            data: Theme.of(ctx).copyWith(
+              colorScheme: Theme.of(ctx).colorScheme.copyWith(
+                primary: AppColors.primaryBrand,
+                onPrimary: AppColors.white,
+                secondary: AppColors.primaryBrand,
+                onSecondary: AppColors.white,
+                surface: AppColors.white,
+                onSurface: AppColors.textPrimary,
+              ),
+              timePickerTheme: TimePickerThemeData(
+                backgroundColor: AppColors.white,
+                hourMinuteTextColor: AppColors.textPrimary,
+                hourMinuteColor: WidgetStateColor.resolveWith(
+                  (states) => states.contains(WidgetState.selected)
+                      ? AppColors.primaryBrand
+                      : AppColors.primaryBrandLight,
+                ),
+                dayPeriodTextColor: WidgetStateColor.resolveWith(
+                  (states) => states.contains(WidgetState.selected)
+                      ? AppColors.white
+                      : AppColors.textSecondary,
+                ),
+                dayPeriodColor: WidgetStateColor.resolveWith(
+                  (states) => states.contains(WidgetState.selected)
+                      ? AppColors.primaryBrand
+                      : AppColors.primaryBrandLight,
+                ),
+                dialHandColor: AppColors.primaryBrand,
+                dialBackgroundColor: AppColors.primaryBrandLight,
+                dialTextColor: WidgetStateColor.resolveWith(
+                  (states) => states.contains(WidgetState.selected)
+                      ? AppColors.white
+                      : AppColors.textPrimary,
+                ),
+                entryModeIconColor: AppColors.primaryBrand,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+              textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(
+                  foregroundColor: AppColors.primaryBrand,
+                ),
+              ),
+            ),
+            child: child!,
+          ),
+        );
+      },
+    );
   }
 
   void deleteBatchWithConfirmation(String id) {
@@ -258,6 +345,7 @@ class BatchController extends GetxController {
       'end_time':
           '${endTime.value.hour.toString().padLeft(2, '0')}:${endTime.value.minute.toString().padLeft(2, '0')}',
       'days': selectedDays.toList(),
+      'classroom': classroomController.text.trim(),
     };
 
     try {
@@ -335,6 +423,7 @@ class BatchController extends GetxController {
     subjectController.dispose();
     descriptionController.dispose();
     batchFeeController.dispose();
+    classroomController.dispose();
     super.onClose();
   }
 }

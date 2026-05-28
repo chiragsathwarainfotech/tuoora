@@ -3,6 +3,7 @@ import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
+import 'package:tuoora/core/widgets/input_styles.dart';
 import 'package:tuoora/presentation/institute/controllers/batch_controller.dart';
 import 'package:tuoora/core/widgets/app_input_field.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
@@ -72,16 +73,11 @@ class AddEditBatchScreen extends GetView<BatchController> {
                         errorText: controller.feeError.value,
                       ),
                     ),
-                    AppSpacing.v32,
-                    _buildSectionHeader(
-                      Icons.access_time_filled_rounded,
-                      AppStrings.instScheduleSettings,
-                    ),
-                    AppSpacing.v20,
-                    _buildScheduleCard(context),
+                    AppSpacing.v24,
+                    const InstituteLabel(AppStrings.instTimeSlot),
+                    _buildTimeSlotField(context),
                     AppSpacing.v24,
                     const InstituteLabel(AppStrings.instActiveDaysLabel),
-                    AppSpacing.v4,
                     Obx(() {
                       if (controller.daysError.value != null) {
                         return Padding(
@@ -100,6 +96,12 @@ class AddEditBatchScreen extends GetView<BatchController> {
                     }),
                     AppSpacing.v12,
                     _buildDaysSelection(),
+                    AppSpacing.v24,
+                    AppInputField(
+                      label: AppStrings.instBatchClassroomLabel,
+                      controller: controller.classroomController,
+                      hint: AppStrings.instBatchClassroomHint,
+                    ),
                     AppSpacing.v32,
                     _buildSaveButton(context),
                     AppSpacing.v24,
@@ -113,91 +115,50 @@ class AddEditBatchScreen extends GetView<BatchController> {
     );
   }
 
-  Widget _buildSectionHeader(IconData icon, String title) {
-    return Row(
-      children: [
-        Icon(icon, color: AppColors.primaryBrand, size: 20),
-        AppSpacing.h12,
-        Text(
-          title,
-          style: AppTextStyles.outfit(
-            fontSize: 16,
-            fontWeight: FontWeight.w800,
-            color: AppColors.primaryBrand,
-          ),
+  Widget _buildTimeSlotField(BuildContext context) {
+    return GestureDetector(
+      onTap: () => _showTimeRangePicker(context),
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        // minHeight matches the rendered height of a single-line AppInputField
+        // (Material's default ~48 dp touch target), so the time slot sits at
+        // the exact same height as Batch Description / Batch Fee above it.
+        constraints: const BoxConstraints(minHeight: 48),
+        padding: InputStyles.contentPadding,
+        decoration: BoxDecoration(
+          color: AppColors.paleSilver,
+          borderRadius: BorderRadius.circular(InputStyles.borderRadius),
         ),
-      ],
-    );
-  }
-
-  Widget _buildScheduleCard(BuildContext context) {
-    return Container(
-      padding: AppSpacing.all20,
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            AppStrings.instTimeSlot,
-            style: AppTextStyles.outfit(
-              fontSize: 12,
-              fontWeight: FontWeight.w800,
-              color: AppColors.textTertiary,
-              letterSpacing: 0.5,
+        child: Row(
+          children: [
+            const Icon(
+              Icons.access_time_filled,
+              color: AppColors.blueSapphire,
+              size: AppSpacing.s20,
             ),
-          ),
-          AppSpacing.v16,
-          Container(
-            padding: AppSpacing.all16,
-            decoration: BoxDecoration(
-              color: AppColors.paleSilver,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Row(
-              children: [
-                const Icon(
-                  Icons.access_time_filled,
-                  color: AppColors.primaryBrand,
-                  size: 24,
-                ),
-                AppSpacing.h16,
-                Expanded(
-                  child: Obx(
-                    () => Text(
-                      '${controller.startTime.value.format(context)} — ${controller.endTime.value.format(context)}',
-                      style: AppTextStyles.outfit(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.textPrimary,
-                      ),
-                    ),
+            AppSpacing.h12,
+            Expanded(
+              child: Obx(
+                () => Text(
+                  '${controller.startTime.value.format(context)} — ${controller.endTime.value.format(context)}',
+                  style: AppTextStyles.outfit(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.textPrimary,
                   ),
                 ),
-                TextButton(
-                  onPressed: () => _showTimeRangePicker(context),
-                  child: Text(
-                    AppStrings.instChangeBtn,
-                    style: AppTextStyles.outfit(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.primaryBrand,
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
-        ],
+            Text(
+              AppStrings.instChangeBtn,
+              style: AppTextStyles.outfit(
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+                color: AppColors.primaryBrand,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -219,12 +180,12 @@ class AddEditBatchScreen extends GetView<BatchController> {
           return GestureDetector(
             onTap: () => controller.toggleDay(day),
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              padding: AppSpacing.cardPadding,
               decoration: BoxDecoration(
                 color: isSelected
                     ? AppColors.primaryBrand
                     : AppColors.paleSilver,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
               ),
               child: Text(
                 day,

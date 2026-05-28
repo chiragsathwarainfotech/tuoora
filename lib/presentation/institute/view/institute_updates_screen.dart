@@ -36,10 +36,7 @@ class InstituteUpdatesScreen extends StatelessWidget {
                         'Broadcast your first update to students and parents to keep them informed.',
                     emptyIcon: Icons.campaign_outlined,
                     child: ListView.builder(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 24,
-                      ),
+                      padding: AppSpacing.screenPaddingTop,
                       itemCount: controller.updatesList.length,
                       itemBuilder: (context, index) {
                         final update = controller.updatesList[index];
@@ -155,11 +152,10 @@ class InstituteUpdatesScreen extends StatelessWidget {
             ),
           ),
           AppSpacing.h16,
-          // Right side: Content Card
           Expanded(
             child: Container(
-              margin: const EdgeInsets.only(bottom: 24),
-              padding: const EdgeInsets.all(20),
+              margin: const EdgeInsets.only(bottom: 10),
+              padding: AppSpacing.cardPadding,
               decoration: BoxDecoration(
                 color: AppColors.white,
                 borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
@@ -179,13 +175,12 @@ class InstituteUpdatesScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 4,
-                        ),
+                        padding: AppSpacing.cardPadding,
                         decoration: BoxDecoration(
                           color: badgeBg.withValues(alpha: 0.5),
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(
+                            AppSpacing.cardRadius,
+                          ),
                         ),
                         child: Text(
                           badgeText,
@@ -220,9 +215,8 @@ class InstituteUpdatesScreen extends StatelessWidget {
                     Text(
                       subtitle,
                       style: AppTextStyles.outfit(
-                        fontSize: 13,
+                        fontSize: 12,
                         color: AppColors.textSecondary,
-                        height: 1.4,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,

@@ -11,6 +11,7 @@ import 'package:tuoora/presentation/institute/widgets/institute_metric_card.dart
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/constants/app_images.dart';
 import 'package:tuoora/core/widgets/app_action_icon.dart';
+import 'package:tuoora/core/widgets/status_badge.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -60,14 +61,13 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
             ),
             Expanded(
               child: SingleChildScrollView(
-                padding: AppSpacing.x16.add(AppSpacing.y16),
+                padding: AppSpacing.x16,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     _buildBatchHeader(),
-                    AppSpacing.v32,
+                    AppSpacing.v24,
                     _buildCourseManagementSection(),
-                    AppSpacing.v32,
                   ],
                 ),
               ),
@@ -81,7 +81,7 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
   Widget _buildBatchHeader() {
     final batch = controller.batch;
     return Container(
-      padding: AppSpacing.all24,
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
@@ -98,25 +98,7 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
         children: [
           Row(
             children: [
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.s10,
-                  vertical: AppSpacing.s6,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.primaryBrandLight,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  AppStrings.instActiveBatchTag,
-                  style: AppTextStyles.outfit(
-                    fontSize: 9,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.primaryBrand,
-                    letterSpacing: 0.5,
-                  ),
-                ),
-              ),
+              StatusBadge.fromLabel(AppStrings.instActiveBatchTag),
               AppSpacing.h12,
               Text(
                 'ID: #${batch.id.length > 4 ? batch.id.substring(0, 4) : batch.id}',
@@ -196,6 +178,14 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
             icon: Icons.calendar_month_rounded,
             text: batch.days.join(', '),
           ),
+          if (batch.classroom != null &&
+              batch.classroom!.trim().isNotEmpty) ...[
+            AppSpacing.v12,
+            InstituteInfoRow(
+              icon: Icons.location_on_rounded,
+              text: batch.classroom!,
+            ),
+          ],
           AppSpacing.v12,
           const InstituteInfoRow(
             icon: Icons.person_rounded,
@@ -206,7 +196,50 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
     );
   }
 
+  static const List<Color> _accentPalette = <Color>[
+    AppColors.instBrandOrange,
+    AppColors.successGreen,
+    AppColors.orangeTag,
+    AppColors.subjectPhysics,
+    AppColors.greenLight,
+  ];
+
   Widget _buildCourseManagementSection() {
+    final tiles = <_ManagementTileData>[
+      _ManagementTileData(
+        icon: Icons.people_alt_rounded,
+        title: AppStrings.instNavStudents,
+        onTap: () => Get.toNamed(
+          AppRoutes.instituteBatchStudents,
+          arguments: controller.batch,
+        ),
+      ),
+      _ManagementTileData(
+        icon: Icons.assignment_rounded,
+        title: 'Homework',
+        onTap: () => Get.toNamed(
+          AppRoutes.instituteBatchHomework,
+          arguments: controller.batch,
+        ),
+      ),
+      _ManagementTileData(
+        icon: Icons.checklist_rtl_rounded,
+        title: AppStrings.instAttendanceTitle,
+        onTap: () => Get.toNamed(
+          AppRoutes.instituteMarkAttendance,
+          arguments: controller.batch,
+        ),
+      ),
+      _ManagementTileData(
+        icon: Icons.menu_book_rounded,
+        title: 'Resources',
+        onTap: () => Get.toNamed(
+          AppRoutes.instituteBatchResources,
+          arguments: controller.batch,
+        ),
+      ),
+    ];
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -219,58 +252,26 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
           ),
         ),
         AppSpacing.v20,
-        GridView.count(
+        GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          crossAxisCount: 3,
-          mainAxisSpacing: 16,
-          crossAxisSpacing: 16,
-          childAspectRatio: 0.85,
-          children: [
-            _buildManagementTile(
-              icon: Icons.people_alt_rounded,
-              title: AppStrings.instNavStudents,
-              onTap: () => Get.toNamed(
-                AppRoutes.instituteBatchStudents,
-                arguments: controller.batch,
-              ),
-            ),
-            _buildManagementTile(
-              icon: Icons.assignment_rounded,
-              title: 'Homework',
-              onTap: () => Get.toNamed(
-                AppRoutes.instituteBatchHomework,
-                arguments: controller.batch,
-              ),
-            ),
-            _buildManagementTile(
-              icon: Icons.menu_book_rounded,
-              title: 'Resources',
-              onTap: () => Get.toNamed(
-                AppRoutes.instituteBatchResources,
-                arguments: controller.batch,
-              ),
-            ),
-          ],
-        ),
-        AppSpacing.v16,
-        GridView.count(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          crossAxisCount: 3,
-          mainAxisSpacing: 16,
-          crossAxisSpacing: 16,
-          childAspectRatio: 0.85,
-          children: [
-            _buildManagementTile(
-              icon: Icons.checklist_rtl_rounded,
-              title: AppStrings.instAttendanceTitle,
-              onTap: () => Get.toNamed(
-                AppRoutes.instituteMarkAttendance,
-                arguments: controller.batch,
-              ),
-            ),
-          ],
+          itemCount: tiles.length,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            mainAxisSpacing: 16,
+            crossAxisSpacing: 16,
+            childAspectRatio: 1,
+          ),
+          itemBuilder: (context, index) {
+            final tile = tiles[index];
+            final accent = _accentPalette[index % _accentPalette.length];
+            return _buildManagementTile(
+              icon: tile.icon,
+              title: tile.title,
+              onTap: tile.onTap,
+              accent: accent,
+            );
+          },
         ),
       ],
     );
@@ -280,11 +281,12 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
     required IconData icon,
     required String title,
     required VoidCallback onTap,
+    required Color accent,
   }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: AppSpacing.all12,
+        padding: AppSpacing.cardPadding,
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
@@ -299,15 +301,21 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, color: AppColors.primaryBrand, size: 28),
+            Icon(icon, color: accent, size: 48),
             AppSpacing.v12,
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: AppTextStyles.outfit(
-                fontSize: 14,
-                fontWeight: FontWeight.w800,
-                color: AppColors.textPrimary,
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                title,
+                maxLines: 1,
+                softWrap: false,
+                overflow: TextOverflow.fade,
+                textAlign: TextAlign.center,
+                style: AppTextStyles.outfit(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textPrimary,
+                ),
               ),
             ),
           ],
@@ -315,4 +323,16 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
       ),
     );
   }
+}
+
+class _ManagementTileData {
+  final IconData icon;
+  final String title;
+  final VoidCallback onTap;
+
+  const _ManagementTileData({
+    required this.icon,
+    required this.title,
+    required this.onTap,
+  });
 }

@@ -42,7 +42,8 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool effectivelyDisabled = isDisabled || isLoading || onPressed == null;
+    final bool effectivelyDisabled =
+        isDisabled || isLoading || onPressed == null;
     final Color bgColor = backgroundColor ?? AppColors.primaryBrand;
     final Color contentColor = foregroundColor ?? AppColors.white;
 
@@ -50,11 +51,9 @@ class AppButton extends StatelessWidget {
       onTap: effectivelyDisabled ? null : onPressed,
       child: Container(
         width: width ?? (fullWidth ? double.infinity : null),
-        // Institute design system requires 48dp button height. Use
-        // constraints (not a fixed height) so callers that pass a custom
-        // `padding` can still grow the button beyond 48dp when needed.
         constraints: const BoxConstraints(minHeight: 48),
-        padding: padding ?? const EdgeInsets.symmetric(vertical: AppSpacing.s18),
+        padding:
+            padding ?? const EdgeInsets.symmetric(vertical: AppSpacing.s18),
         decoration: BoxDecoration(
           color: effectivelyDisabled ? AppColors.textMuted : bgColor,
           borderRadius: BorderRadius.circular(borderRadius),
@@ -86,4 +85,3 @@ class AppButton extends StatelessWidget {
     );
   }
 }
-

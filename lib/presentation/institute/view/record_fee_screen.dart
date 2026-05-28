@@ -8,6 +8,7 @@ import 'package:tuoora/presentation/institute/controllers/record_fee_controller.
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/core/widgets/app_search_field.dart';
+import 'package:tuoora/presentation/institute/widgets/institute_label.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -24,7 +25,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
             Obx(
               () => Column(
                 children: [
-                  const InstituteAppBar(title: 'Record Fee'),
+                  const InstituteAppBar(title: 'Add Transaction'),
                   Expanded(
                     child: SingleChildScrollView(
                       padding: AppSpacing.x16.add(AppSpacing.y16),
@@ -59,242 +60,26 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
   }
 
   Widget _buildStudentSearchSection() {
-    return Container(
-      padding: AppSpacing.all24,
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            offset: const Offset(0, AppSpacing.s4),
-            blurRadius: 16,
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const Icon(
-                Icons.person,
-                color: AppColors.primaryBrand,
-                size: AppSpacing.s20,
-              ),
-              AppSpacing.h8,
-              Text(
-                AppStrings.instStudentInfoLabel,
-                style: AppTextStyles.outfit(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.brandAppBarColor,
-                  letterSpacing: 1.2,
-                ),
-              ),
-            ],
-          ),
-          AppSpacing.v16,
-          if (!controller.isStudentSelected.value) ...[
-            Obx(
-              () => AppSearchField(
-                hintText: AppStrings.instSearchStudentHint,
-                onChanged: (value) => controller.searchQuery.value = value,
-                borderColor: controller.studentError.value != null
-                    ? Colors.redAccent
-                    : Colors.transparent,
-              ),
-            ),
-            Obx(() {
-              if (controller.studentError.value != null) {
-                return Padding(
-                  padding: const EdgeInsets.only(top: 8, left: 4),
-                  child: Text(
-                    controller.studentError.value!,
-                    style: AppTextStyles.outfit(
-                      fontSize: 12,
-                      color: Colors.redAccent,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                );
-              }
-              return const SizedBox.shrink();
-            }),
-            if (controller.searchQuery.value.isNotEmpty)
-              Container(
-                margin: const EdgeInsets.only(top: AppSpacing.s8),
-                constraints: const BoxConstraints(maxHeight: 200),
-                decoration: BoxDecoration(
-                  color: AppColors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.background),
-                ),
-                child: ListView.separated(
-                  shrinkWrap: true,
-                  itemCount: controller.filteredStudents.length,
-                  separatorBuilder: (context, index) =>
-                      const Divider(height: 1),
-                  itemBuilder: (context, index) {
-                    final student = controller.filteredStudents[index];
-                    return ListTile(
-                      onTap: () => controller.selectStudent(student),
-                      leading: _buildStudentAvatar(
-                        student.imageUrl,
-                        student.name,
-                        size: 40,
-                      ),
-                      title: Text(
-                        student.name,
-                        style: AppTextStyles.outfit(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      subtitle: Text(
-                        student.id.toString(),
-                        style: AppTextStyles.outfit(
-                          fontSize: 12,
-                          color: AppColors.textTertiary,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-          ] else
-            Container(
-              padding: AppSpacing.all12,
-              decoration: BoxDecoration(
-                color: AppColors.primaryBrandLight,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                children: [
-                  _buildStudentAvatar(
-                    controller.selectedStudent.value!.imageUrl,
-                    controller.selectedStudent.value!.name,
-                    size: 48,
-                  ),
-                  AppSpacing.h16,
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          controller.selectedStudent.value!.name,
-                          style: AppTextStyles.outfit(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.textPrimary,
-                          ),
-                        ),
-                        Text(
-                          'Batch: ${controller.selectedStudent.value!.currentBatchName}',
-                          style: AppTextStyles.outfit(
-                            fontSize: 12,
-                            color: AppColors.textSecondary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () => controller.changeStudent(),
-                    child: Text(
-                      'Change',
-                      style: AppTextStyles.outfit(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.primaryBrand,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildFeeDetailsSection(BuildContext context) {
-    return Container(
-      padding: AppSpacing.all24,
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            offset: const Offset(0, AppSpacing.s4),
-            blurRadius: 16,
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            AppStrings.instAmountLabel,
-            style: AppTextStyles.outfit(
-              fontSize: 14,
-              fontWeight: FontWeight.w800,
-              color: AppColors.brandAppBarColor,
-            ),
-          ),
-          AppSpacing.v8,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const InstituteLabel('Student Information'),
+        if (!controller.isStudentSelected.value) ...[
           Obx(
-            () => Container(
-              padding: AppSpacing.all16,
-              decoration: BoxDecoration(
-                color: AppColors.paleSilver,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: controller.amountError.value != null
-                      ? Colors.redAccent
-                      : Colors.transparent,
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: TextField(
-                      onChanged: (value) => controller.amount.value = value,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        hintText: 'Enter Amount',
-                        border: InputBorder.none,
-                        isDense: true,
-                        contentPadding: EdgeInsets.zero,
-                        hintStyle: AppTextStyles.outfit(
-                          fontSize: 15,
-                          color: AppColors.blueSapphire,
-                        ),
-                      ),
-                      style: AppTextStyles.outfit(
-                        fontSize: 15,
-                        color: AppColors.textPrimary,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                  const Icon(
-                    Icons.payments,
-                    color: AppColors.textTertiary,
-                    size: AppSpacing.s24,
-                  ),
-                ],
-              ),
+            () => AppSearchField(
+              hintText: AppStrings.instSearchStudentHint,
+              onChanged: (value) => controller.searchQuery.value = value,
+              borderColor: controller.studentError.value != null
+                  ? Colors.redAccent
+                  : Colors.transparent,
             ),
           ),
           Obx(() {
-            if (controller.amountError.value != null) {
+            if (controller.studentError.value != null) {
               return Padding(
                 padding: const EdgeInsets.only(top: 8, left: 4),
                 child: Text(
-                  controller.amountError.value!,
+                  controller.studentError.value!,
                   style: AppTextStyles.outfit(
                     fontSize: 12,
                     color: Colors.redAccent,
@@ -305,82 +90,225 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
             }
             return const SizedBox.shrink();
           }),
-          AppSpacing.v20,
-          Text(
-            'Record Date',
-            style: AppTextStyles.outfit(
-              fontSize: 14,
-              fontWeight: FontWeight.w800,
-              color: AppColors.brandAppBarColor,
-            ),
-          ),
-          AppSpacing.v8,
-          GestureDetector(
-            onTap: () => controller.selectRecordDate(context),
-            child: Container(
-              padding: AppSpacing.all16,
+          if (controller.searchQuery.value.isNotEmpty)
+            Container(
+              margin: const EdgeInsets.only(top: AppSpacing.s8),
+              constraints: const BoxConstraints(maxHeight: 200),
               decoration: BoxDecoration(
-                color: AppColors.paleSilver,
-                borderRadius: BorderRadius.circular(8),
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppColors.background),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Obx(
-                    () => Text(
-                      DateFormat(
-                        'dd MMM, yyyy',
-                      ).format(controller.selectedRecordDate.value),
+              child: ListView.separated(
+                shrinkWrap: true,
+                itemCount: controller.filteredStudents.length,
+                separatorBuilder: (context, index) => const Divider(height: 1),
+                itemBuilder: (context, index) {
+                  final student = controller.filteredStudents[index];
+                  return ListTile(
+                    onTap: () => controller.selectStudent(student),
+                    leading: _buildStudentAvatar(
+                      student.imageUrl,
+                      student.name,
+                      size: 40,
+                    ),
+                    title: Text(
+                      student.name,
                       style: AppTextStyles.outfit(
-                        fontSize: 15,
-                        color: AppColors.textPrimary,
+                        fontSize: 14,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                  ),
-                  const Icon(
-                    Icons.calendar_today_rounded,
-                    color: AppColors.textTertiary,
-                    size: AppSpacing.s22,
-                  ),
-                ],
+                    subtitle: Text(
+                      student.id.toString(),
+                      style: AppTextStyles.outfit(
+                        fontSize: 12,
+                        color: AppColors.textTertiary,
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
-          ),
-          AppSpacing.v20,
-          Text(
-            AppStrings.instPaymentMethodLabel,
-            style: AppTextStyles.outfit(
-              fontSize: 14,
-              fontWeight: FontWeight.w800,
-              color: AppColors.brandAppBarColor,
+        ] else
+          Container(
+            padding: AppSpacing.all12,
+            decoration: BoxDecoration(
+              color: AppColors.primaryBrandLight,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              children: [
+                _buildStudentAvatar(
+                  controller.selectedStudent.value!.imageUrl,
+                  controller.selectedStudent.value!.name,
+                  size: 48,
+                ),
+                AppSpacing.h16,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        controller.selectedStudent.value?.name ?? "",
+                        style: AppTextStyles.outfit(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                      Text(
+                        'Batch: ${controller.selectedStudent.value?.currentBatchName ?? ""}',
+                        style: AppTextStyles.outfit(
+                          fontSize: 12,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () => controller.changeStudent(),
+                  child: Text(
+                    'Change',
+                    style: AppTextStyles.outfit(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.primaryBrand,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-          AppSpacing.v8,
-          Row(
-            children: [
-              Expanded(
-                child: _buildPaymentMethodBtn(
-                  AppStrings.instPaymentCash,
-                  Icons.wallet,
-                  controller.paymentMethod.value == AppStrings.instPaymentCash,
-                ),
+      ],
+    );
+  }
+
+  Widget _buildFeeDetailsSection(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        InstituteLabel(AppStrings.instAmountLabel),
+        Obx(
+          () => Container(
+            padding: AppSpacing.all16,
+            decoration: BoxDecoration(
+              color: AppColors.paleSilver,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                color: controller.amountError.value != null
+                    ? Colors.redAccent
+                    : Colors.transparent,
               ),
-              AppSpacing.h12,
-              Expanded(
-                child: _buildPaymentMethodBtn(
-                  AppStrings.instPaymentOnline,
-                  Icons.account_balance,
-                  controller.paymentMethod.value ==
-                      AppStrings.instPaymentOnline,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: TextField(
+                    onChanged: (value) => controller.amount.value = value,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      hintText: 'Enter Amount',
+                      border: InputBorder.none,
+                      isDense: true,
+                      contentPadding: EdgeInsets.zero,
+                      hintStyle: AppTextStyles.outfit(
+                        fontSize: 15,
+                        color: AppColors.blueSapphire,
+                      ),
+                    ),
+                    style: AppTextStyles.outfit(
+                      fontSize: 15,
+                      color: AppColors.textPrimary,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                 ),
-              ),
-            ],
+                const Icon(
+                  Icons.payments,
+                  color: AppColors.textTertiary,
+                  size: AppSpacing.s24,
+                ),
+              ],
+            ),
           ),
-          AppSpacing.v24,
-          _buildReceiptPreview(),
-        ],
-      ),
+        ),
+        Obx(() {
+          if (controller.amountError.value != null) {
+            return Padding(
+              padding: const EdgeInsets.only(top: 8, left: 4),
+              child: Text(
+                controller.amountError.value!,
+                style: AppTextStyles.outfit(
+                  fontSize: 12,
+                  color: Colors.redAccent,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            );
+          }
+          return const SizedBox.shrink();
+        }),
+        AppSpacing.v20,
+        const InstituteLabel('Fee Date'),
+        GestureDetector(
+          onTap: () => controller.selectRecordDate(context),
+          child: Container(
+            padding: AppSpacing.all16,
+            decoration: BoxDecoration(
+              color: AppColors.paleSilver,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Obx(
+                  () => Text(
+                    DateFormat(
+                      'dd MMM, yyyy',
+                    ).format(controller.selectedRecordDate.value),
+                    style: AppTextStyles.outfit(
+                      fontSize: 15,
+                      color: AppColors.textPrimary,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+                const Icon(
+                  Icons.calendar_today_rounded,
+                  color: AppColors.textTertiary,
+                  size: AppSpacing.s22,
+                ),
+              ],
+            ),
+          ),
+        ),
+        AppSpacing.v20,
+        InstituteLabel(AppStrings.instPaymentMethodLabel),
+        Row(
+          children: [
+            Expanded(
+              child: _buildPaymentMethodBtn(
+                AppStrings.instPaymentCash,
+                Icons.wallet,
+                controller.paymentMethod.value == AppStrings.instPaymentCash,
+              ),
+            ),
+            AppSpacing.h12,
+            Expanded(
+              child: _buildPaymentMethodBtn(
+                AppStrings.instPaymentOnline,
+                Icons.account_balance,
+                controller.paymentMethod.value == AppStrings.instPaymentOnline,
+              ),
+            ),
+          ],
+        ),
+        AppSpacing.v24,
+        _buildReceiptPreview(),
+      ],
     );
   }
 
@@ -388,12 +316,13 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
     return GestureDetector(
       onTap: () => controller.setPaymentMethod(label),
       child: Container(
-        padding: AppSpacing.y16,
+        height: 48,
+        padding: AppSpacing.cardPadding,
         decoration: BoxDecoration(
           color: isActive
               ? AppColors.primaryBrandLight.withValues(alpha: 0.5)
               : AppColors.white,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           border: Border.all(
             color: isActive ? AppColors.primaryBrand : AppColors.paleSilver,
             width: 1.5,
@@ -407,13 +336,13 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
               color: isActive
                   ? AppColors.primaryBrand
                   : AppColors.brandAppBarColor,
-              size: 20,
+              size: 24,
             ),
             AppSpacing.h12,
             Text(
               label,
               style: AppTextStyles.outfit(
-                fontSize: 14,
+                fontSize: 16,
                 fontWeight: FontWeight.w800,
                 color: isActive
                     ? AppColors.primaryBrand
@@ -428,10 +357,10 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
 
   Widget _buildReceiptPreview() {
     return Container(
-      padding: AppSpacing.all20,
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.scaffoldBg,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         border: Border.all(
           color: AppColors.background,
           width: 1.5,
@@ -441,7 +370,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
       child: Column(
         children: [
           Container(
-            padding: AppSpacing.all12,
+            padding: AppSpacing.cardPadding,
             decoration: BoxDecoration(
               color: AppColors.white,
               borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
@@ -477,29 +406,37 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
               height: 1.4,
             ),
           ),
-          AppSpacing.v16,
-          GestureDetector(
-            onTap: () => _showReceiptPreview(),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  AppStrings.instPreviewReceipt,
-                  style: AppTextStyles.outfit(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.primaryBrand,
-                  ),
+          // Only surface the Preview Receipt action once a student is
+          // picked and a valid amount is entered. Otherwise the tap would
+          // just flash an error snackbar, so hide it entirely.
+          Obx(() {
+            if (!controller.canPreview) return const SizedBox.shrink();
+            return Padding(
+              padding: const EdgeInsets.only(top: AppSpacing.s16),
+              child: GestureDetector(
+                onTap: () => _showReceiptPreview(),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      AppStrings.instPreviewReceipt,
+                      style: AppTextStyles.outfit(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.primaryBrand,
+                      ),
+                    ),
+                    AppSpacing.h8,
+                    const Icon(
+                      Icons.open_in_new,
+                      color: AppColors.primaryBrand,
+                      size: AppSpacing.s16,
+                    ),
+                  ],
                 ),
-                AppSpacing.h8,
-                const Icon(
-                  Icons.open_in_new,
-                  color: AppColors.primaryBrand,
-                  size: AppSpacing.s16,
-                ),
-              ],
-            ),
-          ),
+              ),
+            );
+          }),
         ],
       ),
     );
@@ -708,11 +645,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
 
   Widget _buildFixedFooterButton() {
     return Container(
-      padding: AppSpacing.all24,
-      decoration: const BoxDecoration(
-        color: AppColors.white,
-        border: Border(top: BorderSide(color: AppColors.background, width: 1)),
-      ),
+      padding: AppSpacing.cardPadding,
       child: AppButton(
         label: AppStrings.instSaveFeeBtn,
         onPressed: () => controller.saveRecord(),

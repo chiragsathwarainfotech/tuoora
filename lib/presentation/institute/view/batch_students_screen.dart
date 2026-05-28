@@ -115,31 +115,27 @@ class BatchStudentsScreen extends StatelessWidget {
             controller.assignedStudents.length > 3
                 ? 3
                 : controller.assignedStudents.length,
-            (index) => Positioned(
-              left: index * 25.0,
-              child: Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: AppColors.white, width: 2),
-                ),
-                child: CircleAvatar(
-                  radius: 18,
-                  backgroundColor: [
-                    AppColors.warningBg,
-                    AppColors.successBg,
-                    AppColors.greenBg,
-                  ][index % 3],
-                  child: Text(
-                    controller.assignedStudents[index].student.name[0],
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.textDarkGrey,
-                    ),
+            (index) {
+              final student = controller.assignedStudents[index].student;
+              return Positioned(
+                left: index * 25.0,
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: AppColors.white, width: 2),
+                  ),
+                  child: _buildStackAvatar(
+                    imageUrl: student.profileImageUrl,
+                    name: student.name,
+                    fallbackBgColor: [
+                      AppColors.warningBg,
+                      AppColors.successBg,
+                      AppColors.greenBg,
+                    ][index % 3],
                   ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
           if (controller.assignedStudents.length > 3)
             Positioned(
@@ -164,6 +160,42 @@ class BatchStudentsScreen extends StatelessWidget {
               ),
             ),
         ],
+      ),
+    );
+  }
+
+  // Small 36 dp circular avatar used inside the stacked-overlap row in the
+  // "TOTAL ENROLLED" header. Renders the student's profile photo when one is
+  // available, otherwise falls back to the first letter of their name on a
+  // soft tinted background.
+  Widget _buildStackAvatar({
+    required String? imageUrl,
+    required String name,
+    required Color fallbackBgColor,
+  }) {
+    final bool hasPhoto =
+        imageUrl != null &&
+        imageUrl.isNotEmpty &&
+        imageUrl.startsWith('http') &&
+        !imageUrl.contains('ui-avatars.com');
+    if (hasPhoto) {
+      return CircleAvatar(
+        radius: 18,
+        backgroundColor: fallbackBgColor,
+        backgroundImage: NetworkImage(imageUrl),
+      );
+    }
+    final initial = name.trim().isEmpty ? '?' : name.trim()[0].toUpperCase();
+    return CircleAvatar(
+      radius: 18,
+      backgroundColor: fallbackBgColor,
+      child: Text(
+        initial,
+        style: const TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.bold,
+          color: AppColors.textDarkGrey,
+        ),
       ),
     );
   }
@@ -201,8 +233,8 @@ class BatchStudentsScreen extends StatelessWidget {
         itemBuilder: (context, index) {
           final bs = students[index];
           return Container(
-            margin: const EdgeInsets.only(bottom: 12),
-            padding: AppSpacing.all12,
+            margin: AppSpacing.bottom10,
+            padding: AppSpacing.cardPadding,
             decoration: BoxDecoration(
               color: AppColors.white,
               borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
@@ -234,7 +266,7 @@ class BatchStudentsScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'ID: ${bs.student.id}',
+                        'Enrollment ID: ${bs.student.id}',
                         style: AppTextStyles.outfit(
                           fontSize: 12,
                           color: AppColors.textMuted,
@@ -246,7 +278,10 @@ class BatchStudentsScreen extends StatelessWidget {
                 IconButton(
                   onPressed: () =>
                       _showRemoveConfirmation(context, controller, bs),
-                  icon: const AppActionIcon(asset: AppImages.icDelete, size: 24),
+                  icon: const AppActionIcon(
+                    asset: AppImages.icDelete,
+                    size: 24,
+                  ),
                 ),
               ],
             ),

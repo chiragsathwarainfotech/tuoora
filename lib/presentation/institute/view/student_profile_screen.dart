@@ -54,13 +54,12 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
                   Expanded(
                     child: SingleChildScrollView(
                       padding: AppSpacing.all16,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          _buildProfileHeader(name, id, imageUrl, grade),
-                          AppSpacing.v24,
-                          _buildInformationSection(student),
-                        ],
+                      child: _buildIdCard(
+                        name: name,
+                        id: id,
+                        imageUrl: imageUrl,
+                        grade: grade,
+                        student: student,
                       ),
                     ),
                   ),
@@ -81,83 +80,304 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
     );
   }
 
-  // ───────── Flat profile header: avatar + name + meta lines.
-  Widget _buildProfileHeader(
-    String name,
-    String id,
-    String imageUrl,
-    String grade,
-  ) {
-    return Row(
+  // ───────── Full Student ID-Card layout matching the reference design:
+  //   - WHITE top half with the institute name + tagline
+  //   - DIAGONAL brand-orange ribbons at the seam
+  //   - HEXAGONAL photo straddling the seam
+  //   - DARK BROWN (brandAppBarColor) bottom half carrying the name +
+  //     "Standard X" designation + a label : value info table.
+  // Purple in the reference is swapped for our brand orange so the card
+  // sits in the app's existing colour rhythm.
+  Widget _buildIdCard({
+    required String name,
+    required String id,
+    required String imageUrl,
+    required String grade,
+    required Student? student,
+  }) {
+    const double topHeight = 160;
+    const double hexagonSize = 116;
+
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.12),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: Stack(
+          clipBehavior: Clip.hardEdge,
+          children: [
+            // (1) Base column — white top, dark bottom. The dark bottom is
+            // auto-height; padding-top is reserved so the hexagon photo
+            // (which floats over the seam) doesn't collide with the name.
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildIdCardTopHalf(topHeight),
+                _buildIdCardBottomHalf(
+                  name: name,
+                  id: id,
+                  grade: grade,
+                  student: student,
+                  topPadding: hexagonSize * 0.55,
+                ),
+              ],
+            ),
+            // (2) Diagonal brand-orange ribbons at the seam.
+            Positioned(
+              top: topHeight - 24,
+              left: 0,
+              right: 0,
+              height: 80,
+              child: IgnorePointer(child: _buildDiagonalRibbons()),
+            ),
+            // (3) Hexagonal photo centred over the seam.
+            Positioned(
+              top: topHeight - hexagonSize / 2,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: _buildHexagonAvatar(
+                  imageUrl: imageUrl,
+                  name: name,
+                  size: hexagonSize,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // White top half: institute name (dark) + tagline (brand orange).
+  Widget _buildIdCardTopHalf(double height) {
+    return Container(
+      height: height,
+      width: double.infinity,
+      color: AppColors.white,
+      padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            'TUOORA INSTITUTE',
+            textAlign: TextAlign.center,
+            style: AppTextStyles.outfit(
+              fontSize: 18,
+              fontWeight: FontWeight.w900,
+              color: AppColors.textPrimary,
+              letterSpacing: 1.4,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            'STUDENT IDENTITY CARD',
+            textAlign: TextAlign.center,
+            style: AppTextStyles.outfit(
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              color: AppColors.primaryBrand,
+              letterSpacing: 1.8,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Two slanted brand-orange ribbons that mimic the angled stripes in the
+  // reference image. One full-width primary stripe and a thinner darker
+  // stripe just below for depth.
+  Widget _buildDiagonalRibbons() {
+    return Stack(
+      clipBehavior: Clip.hardEdge,
       children: [
-        _buildStudentAvatar(imageUrl, name),
-        AppSpacing.h16,
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                name.isEmpty ? '—' : name,
-                style: AppTextStyles.outfit(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-              AppSpacing.v4,
-              Text(
-                'ID: $id',
-                style: AppTextStyles.outfit(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w400,
-                  color: AppColors.textTertiary,
-                ),
-              ),
-              Text(
-                'Standard: $grade',
-                style: AppTextStyles.outfit(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w400,
-                  color: AppColors.textTertiary,
-                ),
-              ),
-            ],
+        Transform.translate(
+          offset: const Offset(0, 14),
+          child: Transform.rotate(
+            angle: -0.10,
+            child: Container(
+              height: 28,
+              color: AppColors.brandAppBarColor,
+            ),
+          ),
+        ),
+        Transform.translate(
+          offset: const Offset(0, 6),
+          child: Transform.rotate(
+            angle: -0.10,
+            child: Container(
+              height: 22,
+              color: AppColors.primaryBrand,
+            ),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildStudentAvatar(String imageUrl, String name) {
-    final hasPhoto = imageUrl.isNotEmpty &&
+  // Dark bottom half — name, designation chip, then label : value info rows.
+  Widget _buildIdCardBottomHalf({
+    required String name,
+    required String id,
+    required String grade,
+    required Student? student,
+    required double topPadding,
+  }) {
+    return Container(
+      width: double.infinity,
+      color: AppColors.brandAppBarColor,
+      padding: EdgeInsets.fromLTRB(28, topPadding, 28, 28),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: Text(
+              name.isEmpty ? '—' : name,
+              textAlign: TextAlign.center,
+              style: AppTextStyles.outfit(
+                fontSize: 22,
+                fontWeight: FontWeight.w800,
+                color: AppColors.white,
+                letterSpacing: 0.4,
+              ),
+            ),
+          ),
+          const SizedBox(height: 6),
+          Center(
+            child: Text(
+              'Standard $grade',
+              textAlign: TextAlign.center,
+              style: AppTextStyles.outfit(
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                color: AppColors.primaryBrand,
+                letterSpacing: 0.6,
+              ),
+            ),
+          ),
+          const SizedBox(height: 22),
+          _buildIdInfoRow('ID No', id.isEmpty ? '—' : id),
+          _buildIdInfoRow(
+            'DOB',
+            student?.dob ?? 'Not Specified',
+          ),
+          _buildIdInfoRow(
+            'Phone',
+            student?.phone ?? 'Not Available',
+          ),
+          _buildIdInfoRow(
+            'Email',
+            student?.email ?? 'Not Available',
+          ),
+          const SizedBox(height: 10),
+          _buildIdInfoRow(
+            'Parent',
+            student?.guardianName ?? 'Not Specified',
+          ),
+        ],
+      ),
+    );
+  }
+
+  // "Label  : value" row in white text — uses a fixed-width label column so
+  // every colon lines up vertically the way it does on the reference.
+  Widget _buildIdInfoRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 64,
+            child: Text(
+              label,
+              style: AppTextStyles.outfit(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                color: AppColors.white,
+              ),
+            ),
+          ),
+          Text(
+            ': ',
+            style: AppTextStyles.outfit(
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+              color: AppColors.white.withValues(alpha: 0.85),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              value,
+              style: AppTextStyles.outfit(
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+                color: AppColors.white.withValues(alpha: 0.9),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Hexagonal photo container clipped via [_HexagonClipper]. Renders the
+  // student's profile picture when one is available, otherwise their
+  // initials on a light brand background. Wrapped in a slightly bigger
+  // hexagon in brand orange so the photo reads with a coloured border.
+  Widget _buildHexagonAvatar({
+    required String imageUrl,
+    required String name,
+    required double size,
+  }) {
+    final bool hasPhoto =
+        imageUrl.isNotEmpty &&
         imageUrl.startsWith('http') &&
         !imageUrl.contains('ui-avatars.com');
 
-    return Container(
-      width: 80,
-      height: 80,
-      decoration: BoxDecoration(
-        color: AppColors.primaryBrandLight,
-        shape: BoxShape.circle,
-        image: hasPhoto
-            ? DecorationImage(
-                image: NetworkImage(imageUrl),
-                fit: BoxFit.cover,
-              )
-            : null,
-      ),
-      child: hasPhoto
-          ? null
-          : Center(
-              child: Text(
-                _initialsFor(name),
-                style: AppTextStyles.outfit(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.primaryBrand,
-                ),
-              ),
+    return ClipPath(
+      clipper: _HexagonClipper(),
+      child: Container(
+        width: size,
+        height: size,
+        color: AppColors.primaryBrand,
+        padding: const EdgeInsets.all(4),
+        child: ClipPath(
+          clipper: _HexagonClipper(),
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppColors.primaryBrandLight,
+              image: hasPhoto
+                  ? DecorationImage(
+                      image: NetworkImage(imageUrl),
+                      fit: BoxFit.cover,
+                    )
+                  : null,
             ),
+            child: hasPhoto
+                ? null
+                : Center(
+                    child: Text(
+                      _initialsFor(name),
+                      style: AppTextStyles.outfit(
+                        fontSize: 28,
+                        fontWeight: FontWeight.w900,
+                        color: AppColors.primaryBrand,
+                      ),
+                    ),
+                  ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -168,93 +388,6 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
     return (parts.first[0] + parts.last[0]).toUpperCase();
   }
 
-  // ───────── Flat info section: section header + key/value rows with
-  // thin dividers. No card chrome.
-  Widget _buildInformationSection(Student? student) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            const Icon(
-              Icons.assignment_ind_rounded,
-              color: AppColors.primaryBrand,
-              size: 20,
-            ),
-            AppSpacing.h12,
-            Text(
-              AppStrings.instAcademicContactInfo,
-              style: AppTextStyles.outfit(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: AppColors.primaryBrand,
-                letterSpacing: 0.3,
-              ),
-            ),
-          ],
-        ),
-        AppSpacing.v16,
-        _buildInfoField(
-          AppStrings.instStudentDobLabel,
-          student?.dob ?? 'Not Specified',
-        ),
-        _buildInfoField(
-          AppStrings.instParentNameLabel,
-          student?.guardianName ?? 'Not Specified',
-        ),
-        _buildInfoField(
-          AppStrings.instPhoneLabel,
-          student?.phone ?? 'Not Available',
-        ),
-        _buildInfoField(
-          'Email',
-          student?.email ?? 'Not Available',
-          isLast: true,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildInfoField(String label, String value, {bool isLast = false}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: AppSpacing.s12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                label,
-                style: AppTextStyles.outfit(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.textMuted,
-                  letterSpacing: 0.2,
-                ),
-              ),
-              AppSpacing.v4,
-              Text(
-                value,
-                style: AppTextStyles.outfit(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-            ],
-          ),
-        ),
-        if (!isLast)
-          Divider(
-            height: 1,
-            thickness: 1,
-            color: AppColors.borderGrey.withValues(alpha: 0.6),
-          ),
-      ],
-    );
-  }
-
   void _showDeleteConfirmation(BuildContext context, String studentName) {
     CommonDialog.showDeleteConfirmation(
       title: 'Delete Student',
@@ -262,4 +395,25 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
       onConfirm: () => controller.deleteStudent(),
     );
   }
+}
+
+// Vertically-oriented regular hexagon used for the ID-card photo. Points
+// face top and bottom; the flat sides face left and right.
+class _HexagonClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    final w = size.width;
+    final h = size.height;
+    return Path()
+      ..moveTo(w * 0.5, 0)
+      ..lineTo(w, h * 0.25)
+      ..lineTo(w, h * 0.75)
+      ..lineTo(w * 0.5, h)
+      ..lineTo(0, h * 0.75)
+      ..lineTo(0, h * 0.25)
+      ..close();
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
 }

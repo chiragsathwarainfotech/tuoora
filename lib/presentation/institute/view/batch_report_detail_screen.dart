@@ -43,7 +43,7 @@ class BatchReportDetailScreen extends StatelessWidget {
                 }
 
                 return SingleChildScrollView(
-                  padding: AppSpacing.all24,
+                  padding: AppSpacing.all16,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -101,7 +101,7 @@ class BatchReportDetailScreen extends StatelessWidget {
       for (var f in fees) {
         items.add(
           Padding(
-            padding: const EdgeInsets.only(bottom: AppSpacing.s12),
+            padding: AppSpacing.bottom10,
             child: ReportStudentItemCard(
               name: f.student?.name ?? '',
               metric: 'Paid',
@@ -120,7 +120,7 @@ class BatchReportDetailScreen extends StatelessWidget {
         final percentage = (a.presentDays / total) * 100;
         items.add(
           Padding(
-            padding: const EdgeInsets.only(bottom: AppSpacing.s12),
+            padding: AppSpacing.bottom10,
             child: ReportStudentItemCard(
               name: a.studentName,
               metric: '${percentage.toStringAsFixed(1)}%',
@@ -138,7 +138,7 @@ class BatchReportDetailScreen extends StatelessWidget {
         final score = double.tryParse(s.avgScore.replaceAll('%', '')) ?? 0.0;
         items.add(
           Padding(
-            padding: const EdgeInsets.only(bottom: AppSpacing.s12),
+            padding: AppSpacing.bottom10,
             child: ReportStudentItemCard(
               name: s.studentName,
               metric: s.avgScore,
@@ -159,4 +159,3 @@ class BatchReportDetailScreen extends StatelessWidget {
     return AppColors.errorRed;
   }
 }
-

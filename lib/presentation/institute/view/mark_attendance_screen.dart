@@ -28,9 +28,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
                   ),
                   Expanded(
                     child: SingleChildScrollView(
-                      padding: AppSpacing.x16.add(
-                        const EdgeInsets.only(top: 8, bottom: 16),
-                      ),
+                      padding: AppSpacing.x16,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
@@ -105,10 +103,10 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
         GestureDetector(
           onTap: () => controller.selectDate(context),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: AppSpacing.cardPadding,
             decoration: BoxDecoration(
               color: AppColors.paleSilver,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -148,7 +146,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
           child: _buildBulkButton(
             label: 'All Present',
             icon: Icons.done_all_rounded,
-            color: AppColors.primaryBrand,
+            color: AppColors.successGreen,
             onTap: () => controller.markAllPresent(),
           ),
         ),
@@ -157,7 +155,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
           child: _buildBulkButton(
             label: 'All Absent',
             icon: Icons.person_off_rounded,
-            color: AppColors.brandAppBarColor,
+            color: AppColors.bohoRed,
             onTap: () => controller.markAllAbsent(),
           ),
         ),
@@ -174,9 +172,11 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
     return OutlinedButton(
       onPressed: onTap,
       style: OutlinedButton.styleFrom(
-        side: BorderSide(color: color.withValues(alpha: 0.3)),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        padding: const EdgeInsets.symmetric(vertical: 16),
+        side: BorderSide(color: color.withValues(alpha: 0.3), width: 2),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+        ),
+        padding: AppSpacing.cardPadding,
         backgroundColor: AppColors.white,
       ),
       child: Row(
@@ -209,7 +209,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
     AttendanceStudent student,
   ) {
     return Container(
-      padding: AppSpacing.all16,
+      padding: AppSpacing.all8,
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
@@ -272,7 +272,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
           _buildToggleOption(
             label: 'PRESENT',
             isSelected: isPresent,
-            color: AppColors.primaryBrand,
+            color: AppColors.successGreen,
             onTap: isEditable
                 ? () => controller.toggleStatus(student, true)
                 : null,
@@ -280,7 +280,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
           _buildToggleOption(
             label: 'ABSENT',
             isSelected: !isPresent,
-            color: AppColors.activeTracker,
+            color: AppColors.bohoRed,
             onTap: isEditable
                 ? () => controller.toggleStatus(student, false)
                 : null,

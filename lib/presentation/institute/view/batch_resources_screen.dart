@@ -62,10 +62,10 @@ class BatchResourcesScreen extends StatelessWidget {
                   );
                 }
                 return ListView.builder(
-                  padding: AppSpacing.all24,
+                  padding: AppSpacing.all16,
                   itemCount: controller.resources.length,
                   itemBuilder: (context, index) =>
-                      _buildResourceItem(controller.resources[index]),
+                      _buildResourceItem(controller.resources[index], index),
                 );
               }),
             ),
@@ -80,13 +80,21 @@ class BatchResourcesScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildResourceItem(ResourceModel resource) {
+  static const List<Color> _stripePalette = <Color>[
+    AppColors.instBrandOrange,
+    AppColors.successGreen,
+    AppColors.orangeTag,
+    AppColors.subjectPhysics,
+    AppColors.greenLight,
+  ];
+
+  Widget _buildResourceItem(ResourceModel resource, int index) {
+    final Color stripe = _stripePalette[index % _stripePalette.length];
     return GestureDetector(
       onTap: () =>
           Get.toNamed(AppRoutes.instituteResourceDetail, arguments: resource),
       child: Container(
-        margin: const EdgeInsets.only(bottom: 16),
-        padding: AppSpacing.all16,
+        margin: AppSpacing.bottom10,
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
@@ -98,66 +106,91 @@ class BatchResourcesScreen extends StatelessWidget {
             ),
           ],
         ),
-        child: Row(
-          children: [
-            Container(
-              padding: AppSpacing.all12,
-              decoration: BoxDecoration(
-                color: _getResourceColor(resource.type).withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(
-                _getResourceIcon(resource.type),
-                color: _getResourceColor(resource.type),
-                size: 24,
-              ),
-            ),
-            AppSpacing.h16,
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    resource.subject,
-                    style: AppTextStyles.outfit(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.textPrimary,
-                    ),
-                  ),
-                  AppSpacing.v4,
-                  Text(
-                    resource.description,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTextStyles.outfit(
-                      fontSize: 12,
-                      color: AppColors.textTertiary,
-                    ),
-                  ),
-                  AppSpacing.v8,
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.access_time_rounded,
-                        size: 12,
-                        color: AppColors.textMuted,
-                      ),
-                      AppSpacing.h4,
-                      Text(
-                        DateFormat('MMM dd, yyyy').format(resource.uploadedAt),
-                        style: AppTextStyles.outfit(
-                          fontSize: 10,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+          child: IntrinsicHeight(
+            child: Row(
+              children: [
+                Container(width: 4, color: stripe),
+                Expanded(
+                  child: Padding(
+                    padding: AppSpacing.cardPadding,
+                    child: Row(
+                      children: [
+                        Container(
+                          height: 48,
+                          width: 48,
+                          decoration: BoxDecoration(
+                            color: _getResourceColor(
+                              resource.type,
+                            ).withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(
+                              AppSpacing.cardRadius,
+                            ),
+                          ),
+                          child: Icon(
+                            _getResourceIcon(resource.type),
+                            color: _getResourceColor(resource.type),
+                            size: 24,
+                          ),
+                        ),
+                        AppSpacing.h16,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                resource.subject,
+                                style: AppTextStyles.outfit(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.textPrimary,
+                                ),
+                              ),
+                              AppSpacing.v4,
+                              Text(
+                                resource.description,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppTextStyles.outfit(
+                                  fontSize: 12,
+                                  color: AppColors.textTertiary,
+                                ),
+                              ),
+                              AppSpacing.v8,
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.access_time_rounded,
+                                    size: 12,
+                                    color: AppColors.textMuted,
+                                  ),
+                                  AppSpacing.h4,
+                                  Text(
+                                    DateFormat(
+                                      'MMM dd, yyyy',
+                                    ).format(resource.uploadedAt),
+                                    style: AppTextStyles.outfit(
+                                      fontSize: 10,
+                                      color: AppColors.textMuted,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Icon(
+                          Icons.chevron_right_rounded,
                           color: AppColors.textMuted,
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            const Icon(Icons.chevron_right_rounded, color: AppColors.textMuted),
-          ],
+          ),
         ),
       ),
     );
@@ -173,9 +206,9 @@ class BatchResourcesScreen extends StatelessWidget {
         children: [
           Obx(
             () => AppInputField(
-              label: AppStrings.instResourceSubjectLabel,
+              label: AppStrings.instNoteTitleLabel,
               controller: controller.subjectController,
-              hint: 'e.g., Physics Notes',
+              hint: 'Enter title',
               errorText: controller.triedToSave.value
                   ? controller.subjectError.value
                   : null,
@@ -185,7 +218,7 @@ class BatchResourcesScreen extends StatelessWidget {
           AppInputField(
             label: AppStrings.instResourceDescriptionLabel,
             controller: controller.descriptionController,
-            hint: 'e.g., Chapter 1 derivation',
+            hint: 'Enter description',
             maxLines: 3,
           ),
           AppSpacing.v24,

@@ -23,7 +23,7 @@ class InstituteBottomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: AppSpacing.all24,
+      padding: AppSpacing.all16,
       child: ElevatedButton(
         onPressed: isLoading ? null : onTap,
         style: ElevatedButton.styleFrom(
@@ -31,7 +31,6 @@ class InstituteBottomButton extends StatelessWidget {
           disabledBackgroundColor:
               backgroundColor?.withValues(alpha: 0.6) ??
               AppColors.primaryBrand.withValues(alpha: 0.6),
-          // Design-system button height (was 56 → 48 per spec).
           minimumSize: const Size(double.infinity, 48),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),

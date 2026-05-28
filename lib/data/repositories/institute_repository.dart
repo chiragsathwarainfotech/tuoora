@@ -331,10 +331,14 @@ class InstituteRepository implements InstituteRepositoryImpl {
   }
 
   @override
-  Future<BatchListResponse> listBatches({int page = 1}) async {
+  Future<BatchListResponse> listBatches({int page = 1, String? search}) async {
+    final query = <String, String>{'page': page.toString()};
+    if (search != null && search.trim().isNotEmpty) {
+      query['search'] = search.trim();
+    }
     final response = await _apiClient.get(
       ApiConstants.instituteBatches,
-      query: {'page': page.toString()},
+      query: query,
     );
     if (response.status.hasError) {
       throw Exception('Failed to fetch batches: ${response.statusText}');

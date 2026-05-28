@@ -80,14 +80,13 @@ class NotesListScreen extends GetView<NotesController> {
                             child: RefreshIndicator(
                               onRefresh: () => controller.fetchNotes(page: 1),
                               child: ListView.separated(
-                                padding: const EdgeInsets.only(bottom: 100),
                                 itemCount:
                                     notes.length +
                                     (controller.currentPage.value <
                                             controller.lastPage.value
                                         ? 1
                                         : 0),
-                                separatorBuilder: (_, _) => AppSpacing.v16,
+                                separatorBuilder: (_, _) => AppSpacing.v10,
                                 itemBuilder: (context, index) {
                                   if (index == notes.length) {
                                     return const Center(
@@ -134,7 +133,6 @@ class NotesListScreen extends GetView<NotesController> {
   Widget _buildNoteCard(Note note) {
     final dateFormat = DateFormat('MMM dd, yyyy');
 
-    // Get color from relation if available
     Color catColor = AppColors.primaryBrand;
     if (note.categoryRelation != null) {
       try {
@@ -152,7 +150,7 @@ class NotesListScreen extends GetView<NotesController> {
         Get.toNamed(AppRoutes.instituteAddEditNote);
       },
       child: Container(
-        padding: AppSpacing.all20,
+        padding: AppSpacing.cardPadding,
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
@@ -190,7 +188,9 @@ class NotesListScreen extends GetView<NotesController> {
                         ),
                         decoration: BoxDecoration(
                           color: catColor.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(
+                            AppSpacing.cardRadius,
+                          ),
                           border: Border.all(
                             color: catColor.withValues(alpha: 0.2),
                           ),
@@ -220,7 +220,7 @@ class NotesListScreen extends GetView<NotesController> {
                           ? Icons.bookmark_rounded
                           : Icons.bookmark_border_rounded,
                       color: AppColors.primaryBrand,
-                      size: 20,
+                      size: 24,
                     );
                   }),
                 ),
@@ -232,12 +232,11 @@ class NotesListScreen extends GetView<NotesController> {
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
               style: AppTextStyles.outfit(
-                fontSize: 13,
+                fontSize: 14,
                 color: AppColors.textSecondary,
-                height: 1.5,
               ),
             ),
-            AppSpacing.v16,
+            AppSpacing.v10,
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -250,7 +249,10 @@ class NotesListScreen extends GetView<NotesController> {
                 ),
                 GestureDetector(
                   onTap: () => _showDeleteConfirmation(note),
-                  child: const AppActionIcon(asset: AppImages.icDelete, size: 18),
+                  child: const AppActionIcon(
+                    asset: AppImages.icDelete,
+                    size: 24,
+                  ),
                 ),
               ],
             ),

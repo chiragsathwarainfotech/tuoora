@@ -104,6 +104,7 @@ class AppSpacing {
   static const y32 = EdgeInsets.symmetric(vertical: s32);
 
   // Bottom Spacing
+  static const EdgeInsets bottom10 = EdgeInsets.only(bottom: s10);
   static const EdgeInsets bottom12 = EdgeInsets.only(bottom: s12);
   static const EdgeInsets bottom16 = EdgeInsets.only(bottom: s16);
   static const EdgeInsets bottom20 = EdgeInsets.only(bottom: s20);

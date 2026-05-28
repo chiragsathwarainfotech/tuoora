@@ -26,35 +26,39 @@ class ReportsScreen extends StatelessWidget {
             const InstituteAppBar(title: 'Reports', isRoot: false),
             Expanded(
               child: ListView(
-                padding: AppSpacing.all24,
+                padding: AppSpacing.all16,
                 children: [
-                  _buildReportCard(
-                    title: 'Fee Reports',
-                    subtitle:
-                        'Collection summaries, pending dues, and batch-wise financial insights.',
-                    icon: Icons.account_balance_wallet_rounded,
-                    color: AppColors.primaryBrand,
-                    onTap: () => Get.toNamed(AppRoutes.instituteFeeReport),
-                  ),
-                  AppSpacing.v16,
                   _buildReportCard(
                     title: 'Attendance Reports',
                     subtitle:
-                        'Daily attendance rates, absentee tracking, and batch consistency trends.',
+                        'Comprehensive analysis of daily, weekly, and monthly student presence across all active batches.',
                     icon: Icons.calendar_today_rounded,
                     color: AppColors.primaryBrand,
-                    onTap: () =>
-                        Get.toNamed(AppRoutes.instituteAttendanceReport),
+                    onTap: () {
+                      Get.toNamed(AppRoutes.instituteAttendanceReport);
+                    },
                   ),
-                  AppSpacing.v16,
+                  AppSpacing.v10,
                   _buildReportCard(
-                    title: 'Performance Reports',
+                    title: 'Fee Collection Report',
+                    subtitle:
+                        'Deep dive into examination results, assignment completion rates, and individual student growth curves.',
+                    icon: Icons.account_balance_wallet_rounded,
+                    color: AppColors.primaryBrand,
+                    onTap: () {
+                      Get.toNamed(AppRoutes.instituteFeeReport);
+                    },
+                  ),
+                  AppSpacing.v10,
+                  _buildReportCard(
+                    title: 'Student Performance Reports',
                     subtitle:
                         'Academic progress, average grades, and performance analysis across batches.',
                     icon: Icons.insights_rounded,
                     color: AppColors.primaryBrand,
-                    onTap: () =>
-                        Get.toNamed(AppRoutes.institutePerformanceReport),
+                    onTap: () {
+                      Get.toNamed(AppRoutes.institutePerformanceReport);
+                    },
                   ),
                 ],
               ),
@@ -75,7 +79,7 @@ class ReportsScreen extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: AppSpacing.all24,
+        padding: AppSpacing.cardPadding,
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(AppSpacing.cardRadius),

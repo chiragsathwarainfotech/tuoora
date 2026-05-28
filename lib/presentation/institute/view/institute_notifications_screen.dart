@@ -81,7 +81,7 @@ class InstituteNotificationsScreen extends GetView<NotificationController> {
                   child: ListView.separated(
                     padding: AppSpacing.x16.add(AppSpacing.y16),
                     itemCount: controller.notifications.length,
-                    separatorBuilder: (context, index) => AppSpacing.v16,
+                    separatorBuilder: (context, index) => AppSpacing.v10,
                     itemBuilder: (context, index) {
                       final notification = controller.notifications[index];
                       return _buildNotificationCard(notification);
@@ -97,45 +97,9 @@ class InstituteNotificationsScreen extends GetView<NotificationController> {
   }
 
   Widget _buildNotificationCard(NotificationModel notification) {
-    IconData icon;
-    Color iconBg;
-    Color iconColor;
-    String badge;
-    Color badgeColor;
-
-    switch (notification.type.toLowerCase()) {
-      case 'announcement':
-        icon = Icons.campaign_rounded;
-        iconBg = AppColors.amberLight;
-        iconColor = AppColors.orangeDue;
-        badge = 'ANNOUNCEMENT';
-        badgeColor = AppColors.orangeDue;
-        break;
-      case 'urgent':
-        icon = Icons.warning_amber_rounded;
-        iconBg = AppColors.errorBg;
-        iconColor = AppColors.errorRed;
-        badge = 'URGENT';
-        badgeColor = AppColors.errorRed;
-        break;
-      case 'update':
-        icon = Icons.update_rounded;
-        iconBg = AppColors.studentUpdateIconBg;
-        iconColor = AppColors.studentUpdateIconColor;
-        badge = 'UPDATE';
-        badgeColor = AppColors.studentUpdateIconColor;
-        break;
-      default:
-        icon = Icons.notifications_rounded;
-        iconBg = AppColors.background;
-        iconColor = AppColors.textSecondary;
-        badge = 'INFO';
-        badgeColor = AppColors.textTertiary;
-    }
-
     return Container(
       width: double.infinity,
-      padding: AppSpacing.all24,
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
@@ -146,22 +110,10 @@ class InstituteNotificationsScreen extends GetView<NotificationController> {
             offset: const Offset(0, 4),
           ),
         ],
-        border: notification.isRead
-            ? null
-            : Border.all(color: badgeColor.withValues(alpha: 0.2), width: 1),
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            padding: AppSpacing.all12,
-            decoration: BoxDecoration(
-              color: iconBg,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(icon, color: iconColor, size: 24),
-          ),
-          AppSpacing.h20,
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -169,22 +121,13 @@ class InstituteNotificationsScreen extends GetView<NotificationController> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: badgeColor,
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Text(
-                        badge,
-                        style: AppTextStyles.outfit(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w900,
-                          color: AppColors.white,
-                        ),
+                    Text(
+                      notification.title,
+                      style: AppTextStyles.outfit(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.darkSlate,
+                        height: 1.2,
                       ),
                     ),
                     Text(
@@ -197,17 +140,7 @@ class InstituteNotificationsScreen extends GetView<NotificationController> {
                     ),
                   ],
                 ),
-                AppSpacing.v12,
-                Text(
-                  notification.title,
-                  style: AppTextStyles.outfit(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.darkSlate,
-                    height: 1.2,
-                  ),
-                ),
-                AppSpacing.v8,
+                AppSpacing.v4,
                 Text(
                   notification.message,
                   style: AppTextStyles.outfit(
@@ -219,9 +152,9 @@ class InstituteNotificationsScreen extends GetView<NotificationController> {
                 if (notification.image != null) ...[
                   AppSpacing.v16,
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
                     child: Image.network(
-                      notification.image!,
+                      notification.image ?? "",
                       height: 140,
                       width: double.infinity,
                       fit: BoxFit.cover,

@@ -34,6 +34,9 @@ class SignupController extends GetxController {
       if (instituteNameController.text.isEmpty) {
         instituteNameController.text = user.instituteName ?? '';
       }
+      if (instituteOwnerNameController.text.isEmpty) {
+        instituteOwnerNameController.text = user.name;
+      }
     }
   }
 
@@ -155,8 +158,12 @@ class SignupController extends GetxController {
     final email = emailController.text.trim();
     final password = passwordController.text;
     final instituteName = instituteNameController.text.trim();
+    final ownerName = instituteOwnerNameController.text.trim();
 
-    if (instituteName.isEmpty || email.isEmpty || password.isEmpty) {
+    if (instituteName.isEmpty ||
+        ownerName.isEmpty ||
+        email.isEmpty ||
+        password.isEmpty) {
       Get.snackbar(
         'Error',
         'Please fill in all fields',
@@ -191,6 +198,7 @@ class SignupController extends GetxController {
     try {
       final message = await _repository.registerInstitute({
         'email': email,
+        'name': ownerName,
         'password': password,
         'institute_name': instituteName,
       });
@@ -236,7 +244,7 @@ class SignupController extends GetxController {
 
       final user = User(
         id: 0,
-        name: instituteNameController.text,
+        name: instituteOwnerNameController.text,
         email: email,
         token: token,
         role: 'INSTITUTE',
@@ -268,6 +276,7 @@ class SignupController extends GetxController {
 
   Future<void> completeProfile() async {
     if (instituteOwnerNameController.text.isEmpty ||
+        instituteNameController.text.isEmpty ||
         phoneController.text.isEmpty ||
         addressLine1Controller.text.isEmpty ||
         cityController.text.isEmpty ||

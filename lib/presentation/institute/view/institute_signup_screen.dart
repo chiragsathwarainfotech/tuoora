@@ -1,5 +1,6 @@
-﻿import 'package:tuoora/core/widgets/app_button.dart';
+import 'package:tuoora/core/widgets/app_button.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_images.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/controllers/signup_controller.dart';
 import 'package:flutter/material.dart';
@@ -14,111 +15,126 @@ class InstituteSignupScreen extends GetView<SignupController> {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              AppSpacing.v32,
-              _buildHeader(),
-              AppSpacing.v32,
-              Container(
-                margin: AppSpacing.x16,
-                padding: const EdgeInsets.all(AppSpacing.s28),
-                decoration: BoxDecoration(
-                  color: AppColors.white,
-                  borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.04),
-                      blurRadius: AppSpacing.s24,
-                      offset: const Offset(0, AppSpacing.s12),
-                    ),
-                  ],
-                ),
+        child: LayoutBuilder(
+          builder: (context, constraints) => SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: IntrinsicHeight(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    _buildLabel('INSTITUTE NAME'),
-                    AppSpacing.v8,
-                    _buildTextField(
-                      controller: controller.instituteNameController,
-                      hint: 'e.g. Oxford Academy',
-                      prefixIcon: Icons.business_outlined,
-                    ),
-                    AppSpacing.v24,
-                    _buildLabel('EMAIL ADDRESS'),
-                    AppSpacing.v8,
-                    _buildTextField(
-                      controller: controller.emailController,
-                      hint: 'contact@institute.edu',
-                      prefixIcon: Icons.alternate_email,
-                      keyboardType: TextInputType.emailAddress,
-                    ),
-                    AppSpacing.v24,
-                    _buildLabel('PASSWORD'),
-                    AppSpacing.v8,
-                    Obx(
-                      () => _buildTextField(
-                        controller: controller.passwordController,
-                        hint: 'â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢',
-                        prefixIcon: Icons.lock_outline,
-                        obscureText: controller.obscurePassword.value,
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            controller.obscurePassword.value
-                                ? Icons.visibility_outlined
-                                : Icons.visibility_off_outlined,
-                            color: AppColors.textMuted,
-                            size: AppSpacing.s20,
-                          ),
-                          onPressed: controller.togglePasswordVisibility,
+                    AppSpacing.v32,
+                    _buildHeader(),
+                    AppSpacing.v32,
+                    Container(
+                      margin: AppSpacing.x16,
+                      padding: AppSpacing.cardPadding,
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(
+                          AppSpacing.cardRadius,
                         ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.04),
+                            blurRadius: AppSpacing.s24,
+                            offset: const Offset(0, AppSpacing.s12),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          _buildLabel('Institute Name'),
+                          AppSpacing.v8,
+                          _buildTextField(
+                            controller: controller.instituteNameController,
+                            hint: 'Enter institute name',
+                            prefixIcon: Icons.business_outlined,
+                          ),
+                          AppSpacing.v24,
+                          _buildLabel('Owner Name'),
+                          AppSpacing.v8,
+                          _buildTextField(
+                            controller: controller.instituteOwnerNameController,
+                            hint: 'Enter owner name',
+                            prefixIcon: Icons.person,
+                          ),
+                          AppSpacing.v24,
+                          _buildLabel('Email Address'),
+                          AppSpacing.v8,
+                          _buildTextField(
+                            controller: controller.emailController,
+                            hint: 'Enter email',
+                            prefixIcon: Icons.mail,
+                            keyboardType: TextInputType.emailAddress,
+                          ),
+                          AppSpacing.v24,
+                          _buildLabel('Password'),
+                          AppSpacing.v8,
+                          Obx(
+                            () => _buildTextField(
+                              controller: controller.passwordController,
+                              hint: '••••••••',
+                              prefixIcon: Icons.lock_outline,
+                              obscureText: controller.obscurePassword.value,
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  controller.obscurePassword.value
+                                      ? Icons.visibility_outlined
+                                      : Icons.visibility_off_outlined,
+                                  color: AppColors.textMuted,
+                                  size: AppSpacing.s20,
+                                ),
+                                onPressed: controller.togglePasswordVisibility,
+                              ),
+                            ),
+                          ),
+                          AppSpacing.v32,
+                          Obx(
+                            () => AppButton(
+                              label: 'Create Account',
+                              onPressed: controller.register,
+                              isLoading: controller.isLoading.value,
+                              backgroundColor: AppColors.primaryBrand,
+                              foregroundColor: AppColors.white,
+                              borderRadius: AppSpacing.cardRadius,
+                              fontSize: 16,
+                              fullWidth: true,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     AppSpacing.v32,
-                    Obx(
-                      () => AppButton(
-                        label: 'Create Account',
-                        onPressed: controller.register,
-                        isLoading: controller.isLoading.value,
-                        backgroundColor: AppColors.primaryBrand,
-                        foregroundColor: AppColors.white,
-                        borderRadius: AppSpacing.s24,
-                        padding: const EdgeInsets.symmetric(
-                          vertical: AppSpacing.s18,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Already have an account? ',
+                          style: AppTextStyles.outfit(
+                            fontSize: 14,
+                            color: AppColors.blueSapphire,
+                          ),
                         ),
-                        fontSize: 16,
-                        fullWidth: true,
-                      ),
+                        GestureDetector(
+                          onTap: () => Get.back(),
+                          child: Text(
+                            'Sign In',
+                            style: AppTextStyles.outfit(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.primaryBrand,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
+                    AppSpacing.v32,
                   ],
                 ),
               ),
-              AppSpacing.v32,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Already have an account? ',
-                    style: AppTextStyles.outfit(
-                      fontSize: 14,
-                      color: AppColors.blueSapphire,
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () => Get.back(),
-                    child: Text(
-                      'Sign In',
-                      style: AppTextStyles.outfit(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.primaryBrand,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              AppSpacing.v32,
-            ],
+            ),
           ),
         ),
       ),
@@ -128,46 +144,8 @@ class InstituteSignupScreen extends GetView<SignupController> {
   Widget _buildHeader() {
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: AppSpacing.s40,
-              height: AppSpacing.s40,
-              decoration: BoxDecoration(
-                color: AppColors.primaryBrandLight,
-                shape: BoxShape.circle,
-              ),
-              child: const Center(
-                child: Icon(
-                  Icons.school,
-                  color: AppColors.primaryBrand,
-                  size: AppSpacing.s24,
-                ),
-              ),
-            ),
-            AppSpacing.h12,
-            Text(
-              'Tuoora',
-              style: AppTextStyles.outfit(
-                fontSize: 22,
-                fontWeight: FontWeight.w800,
-                color: AppColors.primaryBrand,
-              ),
-            ),
-          ],
-        ),
-        AppSpacing.v32,
-        Text(
-          'REGISTRATION',
-          style: AppTextStyles.outfit(
-            fontSize: 12,
-            fontWeight: FontWeight.w800,
-            color: AppColors.primaryBrand,
-            letterSpacing: 1.5,
-          ),
-        ),
-        AppSpacing.v8,
+        Image.asset(AppImages.logoWithName, height: AppSpacing.s48),
+        AppSpacing.v12,
         Text(
           'Complete these steps to register your institute.',
           textAlign: TextAlign.center,
@@ -186,7 +164,7 @@ class InstituteSignupScreen extends GetView<SignupController> {
     return Text(
       text,
       style: AppTextStyles.outfit(
-        fontSize: 10,
+        fontSize: 12,
         fontWeight: FontWeight.w800,
         color: AppColors.brandAppBarColor,
         letterSpacing: 1.0,
@@ -205,7 +183,7 @@ class InstituteSignupScreen extends GetView<SignupController> {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.paleSilver,
-        borderRadius: BorderRadius.circular(AppSpacing.s16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       ),
       child: TextField(
         controller: controller,

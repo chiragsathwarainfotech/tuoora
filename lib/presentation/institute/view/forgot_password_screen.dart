@@ -1,4 +1,5 @@
-﻿import 'package:tuoora/core/widgets/app_button.dart';
+import 'package:tuoora/core/constants/app_images.dart';
+import 'package:tuoora/core/widgets/app_button.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
@@ -22,73 +23,89 @@ class ForgotPasswordScreen extends GetView<ForgotPasswordController> {
               onBackTap: () => Get.back(),
             ),
             Expanded(
-              child: SingleChildScrollView(
-                padding: AppSpacing.all24,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      'Enter your institutional email address and we\'ll send you a security code to reset your access key.',
-                      style: AppTextStyles.outfit(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.blueSapphire,
-                        height: 1.5,
-                      ),
+              child: LayoutBuilder(
+                builder: (context, constraints) => SingleChildScrollView(
+                  padding: AppSpacing.screenPaddingTop,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: constraints.maxHeight - AppSpacing.s16,
                     ),
-                    AppSpacing.v40,
-                    Container(
-                      padding: const EdgeInsets.all(AppSpacing.s28),
-                      decoration: BoxDecoration(
-                        color: AppColors.white,
-                        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.04),
-                            blurRadius: AppSpacing.s24,
-                            offset: const Offset(0, AppSpacing.s12),
-                          ),
-                        ],
-                      ),
+                    child: IntrinsicHeight(
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          Text(
-                            'INSTITUTIONAL EMAIL',
-                            style: AppTextStyles.outfit(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w800,
-                              color: AppColors.brandAppBarColor,
-                              letterSpacing: 1.0,
+                          Center(
+                            child: Image.asset(
+                              AppImages.logoWithName,
+                              height: AppSpacing.s48,
                             ),
                           ),
-                          AppSpacing.v8,
-                          _buildTextField(
-                            controller: controller.emailController,
-                            hint: 'your@email.com',
-                            prefixIcon: Icons.alternate_email,
-                            keyboardType: TextInputType.emailAddress,
+                          AppSpacing.v12,
+                          Text(
+                            'Enter your registered email address and we\'ll send you an OTP to reset your password.',
+                            style: AppTextStyles.outfit(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.blueSapphire,
+                              height: 1.5,
+                            ),
                           ),
-                          AppSpacing.v32,
-                          Obx(
-                            () => AppButton(
-                              label: 'Send Recovery Code',
-                              onPressed: controller.sendOtp,
-                              isLoading: controller.isLoading.value,
-                              backgroundColor: AppColors.primaryBrand,
-                              foregroundColor: AppColors.white,
-                              borderRadius: AppSpacing.s24,
-                              padding: const EdgeInsets.symmetric(
-                                vertical: AppSpacing.s18,
+                          AppSpacing.v24,
+                          Container(
+                            padding: AppSpacing.cardPadding,
+                            decoration: BoxDecoration(
+                              color: AppColors.white,
+                              borderRadius: BorderRadius.circular(
+                                AppSpacing.cardRadius,
                               ),
-                              fontSize: 16,
-                              fullWidth: true,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.04),
+                                  blurRadius: AppSpacing.s24,
+                                  offset: const Offset(0, AppSpacing.s12),
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Text(
+                                  'Email Address',
+                                  style: AppTextStyles.outfit(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w800,
+                                    color: AppColors.brandAppBarColor,
+                                    letterSpacing: 1.0,
+                                  ),
+                                ),
+                                AppSpacing.v8,
+                                _buildTextField(
+                                  controller: controller.emailController,
+                                  hint: 'Enter email',
+                                  prefixIcon: Icons.mail,
+                                  keyboardType: TextInputType.emailAddress,
+                                ),
+                                AppSpacing.v32,
+                                Obx(
+                                  () => AppButton(
+                                    label: 'Send Reset Code',
+                                    onPressed: controller.sendOtp,
+                                    isLoading: controller.isLoading.value,
+                                    backgroundColor: AppColors.primaryBrand,
+                                    foregroundColor: AppColors.white,
+                                    borderRadius: AppSpacing.cardRadius,
+                                    fontSize: 16,
+                                    fullWidth: true,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -107,7 +124,7 @@ class ForgotPasswordScreen extends GetView<ForgotPasswordController> {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.paleSilver,
-        borderRadius: BorderRadius.circular(AppSpacing.s16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       ),
       child: TextField(
         controller: controller,

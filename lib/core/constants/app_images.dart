@@ -2,10 +2,14 @@ class AppImages {
   // Base paths
   static const String _iconsPath = 'assets/icons';
 
+  // --- Brand ---
+  /// Full Tuoora logo with wordmark, used in the header of auth screens.
+  static const String logoWithName = '$_iconsPath/logo_w_name.png';
+
   // --- Header & Navigation Icons ---
   static const String icBank = '$_iconsPath/ic_bank.svg';
   static const String icBell = '$_iconsPath/ic_bell.svg';
-  
+
   // --- Fee Breakdown & Academic Icons ---
   static const String icTuition = '$_iconsPath/ic_tuition.svg';
   static const String icTransport = '$_iconsPath/ic_transport.svg';
@@ -32,4 +36,3 @@ class AppImages {
   /// Render via [AppActionIcon] to get the standard primary-brand tint.
   static const String icDelete = '$_iconsPath/ic_delete.svg';
 }
-

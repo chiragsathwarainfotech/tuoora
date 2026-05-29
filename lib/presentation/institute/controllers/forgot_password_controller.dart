@@ -14,15 +14,24 @@ class ForgotPasswordController extends GetxController {
   final emailController = TextEditingController();
   final otpController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
 
   final isLoading = false.obs;
+  // Separate flag for the resend-OTP action so tapping "Resend Code" doesn't
+  // trigger the Reset Password button's loading spinner (which watches
+  // [isLoading]).
+  final isResending = false.obs;
   final obscurePassword = true.obs;
+  final obscureConfirmPassword = true.obs;
   final timerSeconds = 60.obs;
   final canResend = false.obs;
   Timer? _timer;
 
   void togglePasswordVisibility() =>
       obscurePassword.value = !obscurePassword.value;
+
+  void toggleConfirmPasswordVisibility() =>
+      obscureConfirmPassword.value = !obscureConfirmPassword.value;
 
   Future<void> sendOtp() async {
     final email = emailController.text.trim();
@@ -63,8 +72,9 @@ class ForgotPasswordController extends GetxController {
     final email = emailController.text.trim();
     final otp = otpController.text.trim();
     final password = passwordController.text.trim();
+    final confirmPassword = confirmPasswordController.text.trim();
 
-    if (otp.isEmpty || password.isEmpty) {
+    if (otp.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
       Get.snackbar(
         'Error',
         'Please fill in all fields',
@@ -85,12 +95,23 @@ class ForgotPasswordController extends GetxController {
       return;
     }
 
+    if (password != confirmPassword) {
+      Get.snackbar(
+        'Passwords do not match',
+        'New password and confirm password must be the same.',
+        backgroundColor: AppColors.errorRed.withValues(alpha: 0.1),
+        colorText: AppColors.errorRed,
+      );
+      return;
+    }
+
     isLoading.value = true;
     try {
       final message = await _authRepository.resetPassword({
         'email': email,
         'otp': otp,
         'password': password,
+        'password_confirmation': confirmPassword,
       });
       Get.snackbar(
         'Success',
@@ -129,7 +150,7 @@ class ForgotPasswordController extends GetxController {
     final email = emailController.text.trim();
     if (email.isEmpty) return;
 
-    isLoading.value = true;
+    isResending.value = true;
     try {
       await _authRepository.forgotPassword(email);
       Get.snackbar(
@@ -147,7 +168,7 @@ class ForgotPasswordController extends GetxController {
         colorText: AppColors.errorRed,
       );
     } finally {
-      isLoading.value = false;
+      isResending.value = false;
     }
   }
 
@@ -165,6 +186,7 @@ class ForgotPasswordController extends GetxController {
     emailController.dispose();
     otpController.dispose();
     passwordController.dispose();
+    confirmPasswordController.dispose();
     super.onClose();
   }
 }

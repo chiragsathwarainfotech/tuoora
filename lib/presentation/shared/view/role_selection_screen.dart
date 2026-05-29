@@ -14,7 +14,7 @@ class RoleSelectionScreen extends StatelessWidget {
       backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: AppSpacing.x24,
+          padding: AppSpacing.x16,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -101,10 +101,10 @@ class RoleSelectionScreen extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: AppSpacing.all16,
+        padding: AppSpacing.cardPadding,
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           border: Border.all(color: AppColors.borderGrey, width: 1),
           boxShadow: [
             BoxShadow(
@@ -121,7 +121,7 @@ class RoleSelectionScreen extends StatelessWidget {
               height: AppSpacing.s72,
               decoration: BoxDecoration(
                 color: iconColor.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
               ),
               child: Center(child: Icon(icon, color: iconColor, size: 32)),
             ),

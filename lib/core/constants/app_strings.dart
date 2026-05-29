@@ -3,12 +3,10 @@ class AppStrings {
   static const String appName = 'Tuoora';
 
   // Login Screen
-  static const String loginHeader = 'SECURE ACCESS';
-  static const String loginWelcome = 'Welcome Back';
-  static const String loginSubtitle =
+  static const String tagLine =
       'Step back into your clarified sanctuary of\nlearning.';
-  static const String stayAuthenticated = 'Stay authenticated on this device';
-  static const String signInButton = 'Sign in to Tuoora';
+  static const String rememberMe = 'Remember Me';
+  static const String signInButton = 'Sign In';
   static const String enrolmentText = 'New to Tuoora? ';
   static const String enrolmentLink = 'Enrolment Office';
 

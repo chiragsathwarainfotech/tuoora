@@ -21,7 +21,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
         child: Column(
           children: [
             const InstituteAppBar(
-              title: 'Setup Profile',
+              title: 'Complete Setup',
               isRoot: true,
               hideLeading: true,
               showDefaultActions: false,
@@ -79,7 +79,10 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                                     color: AppColors.primaryBrand,
                                     shape: BoxShape.circle,
                                   ),
-                                  child: const AppActionIcon(asset: AppImages.icEdit, size: 14),
+                                  child: const AppActionIcon(
+                                    asset: AppImages.icEdit,
+                                    size: 14,
+                                  ),
                                 ),
                               ),
                             ],
@@ -88,7 +91,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                       ),
                     ),
                     AppSpacing.v32,
-                    _buildSectionHeader('BASIC INFORMATION'),
+                    _buildSectionHeader('Finalize Profile'),
                     AppSpacing.v16,
                     _buildTextField(
                       label: 'Institute Name',
@@ -105,13 +108,14 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                     _buildTextField(
                       label: 'Email Address',
                       controller: controller.emailController,
-                      prefixIcon: Icons.alternate_email,
+                      prefixIcon: Icons.mail,
                       enabled: false,
                     ),
                     AppSpacing.v20,
                     _buildTextField(
                       label: 'Phone Number',
                       controller: controller.phoneController,
+                      hint: 'Enter number',
                       prefixIcon: Icons.phone_outlined,
                       keyboardType: TextInputType.phone,
                     ),
@@ -121,12 +125,14 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                     _buildTextField(
                       label: 'Address Line 1',
                       controller: controller.addressLine1Controller,
+                      hint: 'Enter address line 1',
                       prefixIcon: Icons.location_on_outlined,
                     ),
                     AppSpacing.v20,
                     _buildTextField(
                       label: 'Address Line 2',
                       controller: controller.addressLine2Controller,
+                      hint: 'Enter address line 2',
                       prefixIcon: Icons.add_location_outlined,
                     ),
                     AppSpacing.v20,
@@ -136,6 +142,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                           child: _buildTextField(
                             label: 'City',
                             controller: controller.cityController,
+                            hint: 'Enter city',
                             prefixIcon: Icons.location_city_outlined,
                           ),
                         ),
@@ -144,6 +151,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                           child: _buildTextField(
                             label: 'State',
                             controller: controller.stateController,
+                            hint: 'Enter state',
                             prefixIcon: Icons.map_outlined,
                           ),
                         ),
@@ -156,6 +164,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                           child: _buildTextField(
                             label: 'Country',
                             controller: controller.countryController,
+                            hint: 'Enter country',
                             prefixIcon: Icons.public_outlined,
                           ),
                         ),
@@ -164,6 +173,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                           child: _buildTextField(
                             label: 'Pincode',
                             controller: controller.pincodeController,
+                            hint: 'Enter pincode',
                             prefixIcon: Icons.pin_drop_outlined,
                             keyboardType: TextInputType.number,
                           ),
@@ -173,20 +183,16 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                     AppSpacing.v40,
                     Obx(
                       () => AppButton(
-                        label: 'Complete Setup',
+                        label: 'Finish',
                         onPressed: controller.completeProfile,
                         isLoading: controller.isLoading.value,
                         backgroundColor: AppColors.primaryBrand,
                         foregroundColor: AppColors.white,
-                        borderRadius: AppSpacing.s16,
-                        padding: const EdgeInsets.symmetric(
-                          vertical: AppSpacing.s18,
-                        ),
+                        borderRadius: AppSpacing.cardRadius,
                         fontSize: 16,
                         fullWidth: true,
                       ),
                     ),
-                    AppSpacing.v32,
                   ],
                 ),
               ),
@@ -212,6 +218,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
   Widget _buildTextField({
     required String label,
     required TextEditingController controller,
+    String? hint,
     required IconData prefixIcon,
     bool enabled = true,
     TextInputType? keyboardType,
@@ -233,7 +240,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
             color: enabled
                 ? AppColors.paleSilver
                 : AppColors.paleSilver.withValues(alpha: 0.5),
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           ),
           child: TextField(
             controller: controller,
@@ -244,6 +251,11 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
               color: enabled ? AppColors.textPrimary : AppColors.textMuted,
             ),
             decoration: InputDecoration(
+              hintText: hint,
+              hintStyle: AppTextStyles.outfit(
+                fontSize: 14,
+                color: AppColors.blueSapphire,
+              ),
               prefixIcon: Icon(
                 prefixIcon,
                 color: AppColors.textMuted,

@@ -33,29 +33,10 @@ class LeadDetailsScreen extends GetView<LeadsController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildHeader(lead),
-                      AppSpacing.v32,
-                      _buildContactSection(lead),
-                      AppSpacing.v32,
-                      _buildInfoCard(
-                        Icons.school_rounded,
-                        AppStrings.instCourseSelectionLabel,
-                        lead.courseSelection ?? "",
-                      ),
-                      AppSpacing.v16,
-                      _buildInfoCard(
-                        Icons.location_on_rounded,
-                        AppStrings.instAddressLabel,
-                        lead.address ?? "",
-                      ),
-                      AppSpacing.v16,
-                      _buildInfoCard(
-                        Icons.campaign_rounded,
-                        AppStrings.instReferenceLabel,
-                        lead.reference ?? "",
-                      ),
+                      AppSpacing.v24,
+                      _buildDetailsSection(lead),
                       AppSpacing.v32,
                       _buildInteractionHistory(lead, context),
-                      AppSpacing.v32,
                     ],
                   ),
                 ),
@@ -70,100 +51,59 @@ class LeadDetailsScreen extends GetView<LeadsController> {
 
   Widget _buildHeader(Lead lead) {
     final dateFormat = DateFormat('MMM dd, yyyy');
-    return Container(
-      padding: AppSpacing.all24,
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.primaryBrandLight,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  lead.status,
-                  style: AppTextStyles.outfit(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.primaryBrand,
-                    letterSpacing: 0.5,
-                  ),
-                ),
-              ),
-              Text(
-                '${AppStrings.instAppliedSuffix} ${dateFormat.format(lead.createdAt)}',
-                style: AppTextStyles.outfit(
-                  fontSize: 12,
-                  color: AppColors.textTertiary,
-                ),
-              ),
-            ],
-          ),
-          AppSpacing.v16,
-          Text(
-            lead.fullName,
-            style: AppTextStyles.outfit(
-              fontSize: 28,
-              fontWeight: FontWeight.w800,
-              color: AppColors.primaryBrand,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildContactSection(Lead lead) {
-    return Container(
-      padding: AppSpacing.all20,
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          _buildContactRow(Icons.email_rounded, 'EMAIL', lead.email),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 16),
-            child: Divider(height: 1, color: AppColors.background),
-          ),
-          _buildContactRow(Icons.phone_rounded, 'PHONE', lead.phone),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildContactRow(IconData icon, String label, String value) {
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, color: AppColors.primaryBrand, size: 20),
-        AppSpacing.h16,
-        Expanded(
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              lead.fullName,
+              style: AppTextStyles.outfit(
+                fontSize: 28,
+                fontWeight: FontWeight.w800,
+                color: AppColors.primaryBrand,
+              ),
+            ),
+            Text(
+              '${AppStrings.instAppliedSuffix} ${dateFormat.format(lead.createdAt)}',
+              style: AppTextStyles.outfit(
+                fontSize: 12,
+                color: AppColors.textTertiary,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDetailsSection(Lead lead) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildFlatField('EMAIL', lead.email),
+        _buildFlatField('PHONE', lead.phone),
+        _buildFlatField(AppStrings.instAddressLabel, lead.address ?? ''),
+        _buildFlatField(
+          AppStrings.instReferenceLabel,
+          lead.reference ?? '',
+          isLast: true,
+        ),
+        _buildFlatField(
+          AppStrings.instCourseSelectionLabel,
+          lead.courseSelection ?? '',
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFlatField(String label, String value, {bool isLast = false}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: AppSpacing.s12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -178,7 +118,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
               ),
               AppSpacing.v4,
               Text(
-                value,
+                value.isEmpty ? '—' : value,
                 style: AppTextStyles.outfit(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
@@ -188,69 +128,13 @@ class LeadDetailsScreen extends GetView<LeadsController> {
             ],
           ),
         ),
+        if (!isLast)
+          Divider(
+            height: 1,
+            thickness: 1,
+            color: AppColors.borderGrey.withValues(alpha: 0.6),
+          ),
       ],
-    );
-  }
-
-  Widget _buildInfoCard(
-    IconData icon,
-    String label,
-    String value, {
-    String? subtitle,
-  }) {
-    return Container(
-      width: double.infinity,
-      padding: AppSpacing.all20,
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(icon, color: AppColors.primaryBrand, size: 18),
-              AppSpacing.h12,
-              Text(
-                label,
-                style: AppTextStyles.outfit(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.textTertiary,
-                  letterSpacing: 1.0,
-                ),
-              ),
-            ],
-          ),
-          AppSpacing.v12,
-          Text(
-            value,
-            style: AppTextStyles.outfit(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-              color: AppColors.textPrimary,
-            ),
-          ),
-          if (subtitle != null) ...[
-            AppSpacing.v4,
-            Text(
-              subtitle,
-              style: AppTextStyles.outfit(
-                fontSize: 13,
-                color: AppColors.textSecondary,
-              ),
-            ),
-          ],
-        ],
-      ),
     );
   }
 
@@ -284,7 +168,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
                 ),
                 decoration: BoxDecoration(
                   color: AppColors.primaryBrand.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
                 ),
                 child: Row(
                   children: [
@@ -332,7 +216,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 6.0),
             child: Column(
               children: [
                 Container(
@@ -355,7 +239,8 @@ class LeadDetailsScreen extends GetView<LeadsController> {
           AppSpacing.h16,
           Expanded(
             child: Container(
-              padding: AppSpacing.all16,
+              padding: AppSpacing.cardPadding,
+              margin: AppSpacing.bottom10,
               decoration: BoxDecoration(
                 color: AppColors.white,
                 borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
@@ -437,9 +322,13 @@ class LeadDetailsScreen extends GetView<LeadsController> {
 
     Get.dialog(
       Dialog(
+        insetPadding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.s16,
+          vertical: AppSpacing.s24,
+        ),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         child: Container(
-          padding: AppSpacing.all28,
+          padding: AppSpacing.all16,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -468,8 +357,8 @@ class LeadDetailsScreen extends GetView<LeadsController> {
               AppSpacing.v24,
               Obx(
                 () => _buildDialogField(
-                  label: 'TITLE',
-                  hint: 'e.g., Follow-up Call',
+                  label: 'Title',
+                  hint: 'Enter lead title',
                   controller: controller.noteTitleController,
                   errorText: controller.noteTitleError.value,
                 ),
@@ -477,8 +366,8 @@ class LeadDetailsScreen extends GetView<LeadsController> {
               AppSpacing.v20,
               Obx(
                 () => _buildDialogField(
-                  label: 'NOTE',
-                  hint: 'Details about the interaction...',
+                  label: 'Description',
+                  hint: 'Enter description',
                   controller: controller.notesController,
                   maxLines: 4,
                   errorText: controller.noteError.value,
@@ -487,7 +376,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
               AppSpacing.v32,
               Obx(
                 () => AppButton(
-                  label: 'Submit Note',
+                  label: 'Submit',
                   isLoading: controller.isLoading.value,
                   onPressed: () => controller.addLeadNote(),
                 ),

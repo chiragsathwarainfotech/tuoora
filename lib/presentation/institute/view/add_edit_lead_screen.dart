@@ -34,14 +34,6 @@ class AddEditLeadScreen extends GetView<LeadsController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildLeadInformationSection(),
-                    AppSpacing.v32,
-                    _buildSectionHeader(
-                      Icons.school_rounded,
-                      AppStrings.instCourseSelectionHeading,
-                    ),
-                    AppSpacing.v20,
-                    _buildCourseSelectionSection(),
-                    
                     Obx(() {
                       if (controller.editingLeadId.value == null) {
                         return Column(
@@ -59,7 +51,6 @@ class AddEditLeadScreen extends GetView<LeadsController> {
                       }
                       return const SizedBox.shrink();
                     }),
-                    
                     AppSpacing.v40,
                     Obx(
                       () => AppButton(
@@ -102,8 +93,8 @@ class AddEditLeadScreen extends GetView<LeadsController> {
       children: [
         Obx(
           () => AppInputField(
-            label: AppStrings.instFullNameLabel,
-            hint: AppStrings.instFullNameHint,
+            label: AppStrings.instStudentNameLabel,
+            hint: AppStrings.instStudentNameHint,
             controller: controller.nameController,
             errorText: controller.triedToSave.value
                 ? controller.nameError.value
@@ -114,7 +105,7 @@ class AddEditLeadScreen extends GetView<LeadsController> {
         Obx(
           () => AppInputField(
             label: AppStrings.instEmailAddressLabel,
-            hint: AppStrings.instEmailAddressHint,
+            hint: AppStrings.instStudentEmailHint,
             controller: controller.emailController,
             keyboardType: TextInputType.emailAddress,
             errorText: controller.triedToSave.value
@@ -126,7 +117,7 @@ class AddEditLeadScreen extends GetView<LeadsController> {
         Obx(
           () => AppInputField(
             label: AppStrings.instPhoneNumberLabelAlt,
-            hint: AppStrings.instPhoneNumberHint,
+            hint: AppStrings.instPhoneHint,
             controller: controller.phoneController,
             keyboardType: TextInputType.phone,
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -158,20 +149,18 @@ class AddEditLeadScreen extends GetView<LeadsController> {
                 : null,
           ),
         ),
+        AppSpacing.v24,
+        Obx(
+          () => AppInputField(
+            label: AppStrings.instCourseSelectionLabel,
+            hint: AppStrings.instCourseSelectionHint,
+            controller: controller.courseController,
+            errorText: controller.triedToSave.value
+                ? controller.courseError.value
+                : null,
+          ),
+        ),
       ],
-    );
-  }
-
-  Widget _buildCourseSelectionSection() {
-    return Obx(
-      () => AppInputField(
-        label: AppStrings.instCourseSelectionLabel,
-        hint: AppStrings.instCourseSelectionHint,
-        controller: controller.courseController,
-        errorText: controller.triedToSave.value
-            ? controller.courseError.value
-            : null,
-      ),
     );
   }
 
@@ -180,8 +169,8 @@ class AddEditLeadScreen extends GetView<LeadsController> {
       children: [
         Obx(
           () => AppInputField(
-            label: 'NOTE TITLE',
-            hint: 'e.g., Initial Inquiry',
+            label: 'Title',
+            hint: 'Enter note title',
             controller: controller.noteTitleController,
             errorText: controller.triedToSave.value
                 ? controller.noteTitleError.value
@@ -191,8 +180,8 @@ class AddEditLeadScreen extends GetView<LeadsController> {
         AppSpacing.v20,
         Obx(
           () => AppInputField(
-            label: 'NOTE DESCRIPTION',
-            hint: 'Add more details about the interaction...',
+            label: 'Description',
+            hint: 'Enter note description',
             controller: controller.notesController,
             maxLines: 5,
             errorText: controller.triedToSave.value
@@ -204,4 +193,3 @@ class AddEditLeadScreen extends GetView<LeadsController> {
     );
   }
 }
-

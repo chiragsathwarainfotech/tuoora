@@ -29,7 +29,6 @@ class MonthSelectorWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        // Left: Month Picker with Dropdown Icon
         GestureDetector(
           onTap: () async {
             final picked = await Get.dialog<DateTime>(
@@ -44,7 +43,7 @@ class MonthSelectorWidget extends StatelessWidget {
             }
           },
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: AppSpacing.cardPadding,
             decoration: BoxDecoration(
               color: AppColors.white,
               borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
@@ -83,8 +82,6 @@ class MonthSelectorWidget extends StatelessWidget {
             ),
           ),
         ),
-
-        // Right: Navigation Arrows
         Row(
           children: [
             _buildArrowButton(
@@ -123,7 +120,7 @@ class MonthSelectorWidget extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         opacity: isEnabled ? 1.0 : 0.3,
         child: Container(
-          padding: const EdgeInsets.all(12),
+          padding: AppSpacing.cardPadding,
           decoration: BoxDecoration(
             color: AppColors.white,
             borderRadius: BorderRadius.circular(AppSpacing.cardRadius),

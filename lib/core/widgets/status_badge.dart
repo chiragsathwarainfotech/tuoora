@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/theme/app_spacing.dart';
 
 class StatusBadge extends StatelessWidget {
   final String label;
@@ -16,8 +17,15 @@ class StatusBadge extends StatelessWidget {
       StatusBadge._(label: label, backgroundColor: AppColors.bohoRed);
   factory StatusBadge.fromLabel(String label) {
     final first = label.trim().toUpperCase().split(RegExp(r'\s+')).first;
-    const successTokens = {'ACTIVE', 'SUBMITTED', 'OPEN', 'PAID'};
-    const dangerTokens = {'PENDING', 'CLOSED', 'OVERDUE', 'DUE', 'INACTIVE'};
+    const successTokens = {'ACTIVE', 'SUBMITTED', 'OPEN', 'PAID', 'PRESENT'};
+    const dangerTokens = {
+      'PENDING',
+      'CLOSED',
+      'OVERDUE',
+      'DUE',
+      'INACTIVE',
+      'ABSENT',
+    };
     if (successTokens.contains(first)) return StatusBadge.success(label);
     if (dangerTokens.contains(first)) return StatusBadge.danger(label);
     return StatusBadge.danger(label);
@@ -26,10 +34,10 @@ class StatusBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: backgroundColor,
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       ),
       child: Text(
         label.toUpperCase(),
@@ -37,7 +45,7 @@ class StatusBadge extends StatelessWidget {
           fontSize: 10,
           fontWeight: FontWeight.w800,
           color: AppColors.white,
-          letterSpacing: 0.6,
+          letterSpacing: 0.4,
         ),
       ),
     );

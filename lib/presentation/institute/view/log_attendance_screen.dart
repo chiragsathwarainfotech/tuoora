@@ -9,6 +9,7 @@ import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/core/widgets/app_search_field.dart';
 import 'package:tuoora/core/constants/app_images.dart';
 import 'package:tuoora/core/widgets/app_action_icon.dart';
+import 'package:tuoora/presentation/institute/widgets/institute_label.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -23,29 +24,27 @@ class LogAttendanceScreen extends GetView<StaffController> {
       body: SafeArea(
         child: Column(
           children: [
-            const InstituteAppBar(title: 'Log Attendance'),
+            const InstituteAppBar(title: 'Add Attendance'),
             Expanded(
               child: SingleChildScrollView(
-                padding: AppSpacing.all24,
+                padding: AppSpacing.all16,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildSectionCard(
-                      label: 'SELECT STAFF MEMBER',
-                      child: Obx(() {
-                        if (controller.selectedLogStaff.value != null) {
-                          return _buildSelectedStaffCard(
-                            controller.selectedLogStaff.value!,
-                          );
-                        } else {
-                          return _buildStaffSearchField();
-                        }
-                      }),
-                    ),
+                    const InstituteLabel('Select Member'),
+                    Obx(() {
+                      if (controller.selectedLogStaff.value != null) {
+                        return _buildSelectedStaffCard(
+                          controller.selectedLogStaff.value!,
+                        );
+                      } else {
+                        return _buildStaffSearchField();
+                      }
+                    }),
                     AppSpacing.v20,
                     Obx(
                       () => AppInputField(
-                        label: 'SELECT DATE',
+                        label: 'Date',
                         hint: 'MM/dd/yyyy',
                         icon: Icons.calendar_today_rounded,
                         controller: TextEditingController(
@@ -68,22 +67,13 @@ class LogAttendanceScreen extends GetView<StaffController> {
                       ),
                     ),
                     AppSpacing.v24,
-                    Text(
-                      'ATTENDANCE STATUS',
-                      style: AppTextStyles.outfit(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.textTertiary,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                    AppSpacing.v12,
+                    const InstituteLabel('Attendance Status'),
                     _buildStatusToggle(),
                     AppSpacing.v24,
                     AppInputField(
-                      label: 'ADDITIONAL NOTES',
+                      label: 'Absent Reason',
                       controller: controller.logNotesController,
-                      hint: 'Any overtime details or shift adjustments...',
+                      hint: 'Enter reason',
                       maxLines: 4,
                     ),
                     AppSpacing.v32,
@@ -98,38 +88,11 @@ class LogAttendanceScreen extends GetView<StaffController> {
     );
   }
 
-  Widget _buildSectionCard({required String label, required Widget child}) {
-    return Container(
-      padding: AppSpacing.all20,
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.background),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: AppTextStyles.outfit(
-              fontSize: 12,
-              fontWeight: FontWeight.w800,
-              color: AppColors.textTertiary,
-              letterSpacing: 0.5,
-            ),
-          ),
-          AppSpacing.v12,
-          child,
-        ],
-      ),
-    );
-  }
-
   Widget _buildStaffSearchField() {
     return Column(
       children: [
         AppSearchField(
-          hintText: 'Search by name or role...',
+          hintText: 'Search member by name',
           onChanged: (val) => controller.searchLogStaff(val),
         ),
         Obx(() {
@@ -194,7 +157,7 @@ class LogAttendanceScreen extends GetView<StaffController> {
       padding: AppSpacing.all12,
       decoration: BoxDecoration(
         color: AppColors.paleSilver.withValues(alpha: 0.2),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         border: Border.all(
           color: AppColors.primaryBrand.withValues(alpha: 0.2),
         ),
@@ -255,7 +218,7 @@ class LogAttendanceScreen extends GetView<StaffController> {
               child: _buildStatusButton(
                 'Absent',
                 Icons.cancel_rounded,
-                AppColors.textMuted,
+                AppColors.bohoRed,
                 !controller.isPresent.value,
               ),
             ),
@@ -272,10 +235,10 @@ class LogAttendanceScreen extends GetView<StaffController> {
     bool isSelected,
   ) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 24),
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: isSelected ? color.withValues(alpha: 0.05) : AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         border: Border.all(
           color: isSelected ? color : AppColors.background,
           width: 1.5,
@@ -286,7 +249,7 @@ class LogAttendanceScreen extends GetView<StaffController> {
           Icon(
             icon,
             color: isSelected ? color : AppColors.textTertiary,
-            size: 28,
+            size: 32,
           ),
           AppSpacing.v12,
           Text(

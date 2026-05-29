@@ -1,6 +1,7 @@
 ﻿import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/status_badge.dart';
 import 'package:tuoora/presentation/institute/controllers/staff_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/config/app_routes.dart';
@@ -22,7 +23,7 @@ class AttendanceHistoryScreen extends GetView<StaffController> {
       body: SafeArea(
         child: Column(
           children: [
-            const InstituteAppBar(title: 'Attendance History'),
+            const InstituteAppBar(title: 'Attendance Management'),
             Expanded(
               child: Obx(() {
                 return CommonStateWidget(
@@ -34,7 +35,7 @@ class AttendanceHistoryScreen extends GetView<StaffController> {
                   child: RefreshIndicator(
                     onRefresh: () => controller.fetchGlobalAttendance(page: 1),
                     child: ListView.builder(
-                      padding: AppSpacing.all24,
+                      padding: AppSpacing.screenPaddingTop,
                       itemCount: controller.globalAttendanceList.length,
                       itemBuilder: (context, index) {
                         final attendance =
@@ -45,9 +46,6 @@ class AttendanceHistoryScreen extends GetView<StaffController> {
                             attendance.staff?.fullName ?? 'Unknown Staff',
                             attendance.note ?? '',
                             attendance.status,
-                            attendance.status.toLowerCase() == 'present'
-                                ? AppColors.successGreen
-                                : AppColors.errorRed,
                             attendance.staff?.profileUrl ?? '',
                             attendance.date,
                           ),
@@ -70,20 +68,19 @@ class AttendanceHistoryScreen extends GetView<StaffController> {
     String name,
     String remark,
     String status,
-    Color statusColor,
     String imageUrl,
     String date,
   ) {
     return Container(
-      padding: AppSpacing.all16,
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         border: Border.all(color: AppColors.background),
       ),
       child: Row(
         children: [
-          _buildStaffAvatar(imageUrl, name, size: 48),
+          _buildStaffAvatar(imageUrl, name, size: 38),
           AppSpacing.h16,
           Expanded(
             child: Column(
@@ -115,7 +112,7 @@ class AttendanceHistoryScreen extends GetView<StaffController> {
                         ],
                       ),
                     ),
-                    _buildStatusBadge(status, statusColor),
+                    StatusBadge.fromLabel(status),
                   ],
                 ),
                 if (remark.isNotEmpty) ...[
@@ -123,43 +120,13 @@ class AttendanceHistoryScreen extends GetView<StaffController> {
                   Text(
                     '"$remark"',
                     style: AppTextStyles.outfit(
-                      fontSize: 13,
+                      fontSize: 14,
                       fontWeight: FontWeight.w400,
                       color: AppColors.textSecondary,
-                      fontStyle: FontStyle.italic,
                     ),
                   ),
                 ],
               ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStatusBadge(String status, Color color) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 6,
-            height: 6,
-            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-          ),
-          AppSpacing.h6,
-          Text(
-            status,
-            style: AppTextStyles.outfit(
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
-              color: color,
             ),
           ),
         ],

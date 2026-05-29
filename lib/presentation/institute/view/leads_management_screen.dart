@@ -66,7 +66,7 @@ class LeadsManagementScreen extends GetView<LeadsController> {
                                             controller.lastPage.value
                                         ? 1
                                         : 0),
-                                separatorBuilder: (_, _) => AppSpacing.v16,
+                                separatorBuilder: (_, _) => AppSpacing.v10,
                                 itemBuilder: (context, index) {
                                   if (index == controller.leadsList.length) {
                                     return const Center(
@@ -119,7 +119,7 @@ class LeadsManagementScreen extends GetView<LeadsController> {
         Get.toNamed(AppRoutes.instituteLeadDetails);
       },
       child: Container(
-        padding: AppSpacing.all20,
+        padding: AppSpacing.cardPadding,
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(AppSpacing.cardRadius),

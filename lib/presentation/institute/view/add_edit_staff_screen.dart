@@ -23,7 +23,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
         child: Column(
           children: [
             InstituteAppBar(
-              title: isEdit ? 'Edit Staff Member' : 'Staff Management',
+              title: isEdit ? 'Edit Staff Member' : 'Add Staff Member',
             ),
             Expanded(
               child: SingleChildScrollView(
@@ -32,11 +32,9 @@ class AddEditStaffScreen extends GetView<StaffController> {
                   key: controller.addStaffFormKey,
                   child: Column(
                     children: [
-                      _buildMainFormCard(context),
-                      AppSpacing.v24,
+                      _buildForm(context),
+                      AppSpacing.v32,
                       _buildSaveButton(isEdit),
-                      AppSpacing.v16,
-                      _buildDiscardButton(),
                       AppSpacing.v32,
                     ],
                   ),
@@ -49,160 +47,112 @@ class AddEditStaffScreen extends GetView<StaffController> {
     );
   }
 
-  Widget _buildMainFormCard(BuildContext context) {
-    return Container(
-      padding: AppSpacing.all24,
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            offset: const Offset(0, 4),
-            blurRadius: 16,
+  Widget _buildForm(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildProfileImageSection(context),
+        AppSpacing.v32,
+        Obx(
+          () => AppInputField(
+            label: 'Name',
+            controller: controller.staffNameController,
+            hint: 'Enter name',
+            icon: Icons.person,
+            errorText: controller.staffNameError.value,
+            validator: (value) =>
+                ValidationUtils.validateRequired(value, 'Full name'),
           ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildProfileImageSection(context),
-          AppSpacing.v32,
-          Obx(
-            () => AppInputField(
-              label: 'Full Name',
-              controller: controller.staffNameController,
-              hint: 'Eleanor Shellstrop',
-              icon: Icons.person,
-              errorText: controller.staffNameError.value,
-              validator: (value) =>
-                  ValidationUtils.validateRequired(value, 'Full name'),
-            ),
+        ),
+        AppSpacing.v20,
+        Text(
+          'Department',
+          style: AppTextStyles.outfit(
+            fontSize: 14,
+            fontWeight: FontWeight.w800,
+            color: AppColors.brandAppBarColor,
           ),
-          AppSpacing.v20,
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Role',
-                      style: AppTextStyles.outfit(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.brandAppBarColor,
-                      ),
-                    ),
-                    AppSpacing.v8,
-                    Obx(() => _buildRoleDropdown(controller.roleError.value)),
-                  ],
+        ),
+        AppSpacing.v8,
+        Obx(() => _buildDepartmentDropdown(controller.deptError.value)),
+        AppSpacing.v20,
+        Obx(
+          () => AppInputField(
+            label: 'Email',
+            controller: controller.staffEmailController,
+            hint: 'Enter email',
+            icon: Icons.email_rounded,
+            keyboardType: TextInputType.emailAddress,
+            errorText: controller.staffEmailError.value,
+            validator: ValidationUtils.validateEmail,
+          ),
+        ),
+        AppSpacing.v20,
+        Obx(
+          () => AppInputField(
+            label: 'Phone Number',
+            controller: controller.staffPhoneController,
+            hint: 'Enter number',
+            icon: Icons.phone,
+            keyboardType: TextInputType.phone,
+            maxLength: 10,
+            errorText: controller.staffPhoneError.value,
+            validator: ValidationUtils.validatePhone,
+          ),
+        ),
+        AppSpacing.v32,
+        Text(
+          'Employment Type',
+          style: AppTextStyles.outfit(
+            fontSize: 14,
+            fontWeight: FontWeight.w800,
+            color: AppColors.brandAppBarColor,
+          ),
+        ),
+        AppSpacing.v12,
+        Row(
+          children: [
+            Expanded(
+              child: Obx(
+                () => _buildToggleButton(
+                  'Salary',
+                  controller.employmentType.value == 'Salary',
+                  () => controller.employmentType.value = 'Salary',
                 ),
               ),
-              AppSpacing.h16,
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Department',
-                      style: AppTextStyles.outfit(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.brandAppBarColor,
-                      ),
-                    ),
-                    AppSpacing.v8,
-                    Obx(
-                      () =>
-                          _buildDepartmentDropdown(controller.deptError.value),
-                    ),
-                  ],
+            ),
+            AppSpacing.h12,
+            Expanded(
+              child: Obx(
+                () => _buildToggleButton(
+                  'Hourly',
+                  controller.employmentType.value == 'Hourly',
+                  () => controller.employmentType.value = 'Hourly',
                 ),
               ),
-            ],
-          ),
-          AppSpacing.v20,
-          Obx(
-            () => AppInputField(
-              label: 'Email Address',
-              controller: controller.staffEmailController,
-              hint: 'eleanor.s@company.com',
-              icon: Icons.email_rounded,
-              keyboardType: TextInputType.emailAddress,
-              errorText: controller.staffEmailError.value,
-              validator: ValidationUtils.validateEmail,
             ),
-          ),
-          AppSpacing.v20,
-          Obx(
-            () => AppInputField(
-              label: 'Phone Number',
-              controller: controller.staffPhoneController,
-              hint: '0123456789',
-              icon: Icons.phone,
-              keyboardType: TextInputType.phone,
-              maxLength: 10,
-              errorText: controller.staffPhoneError.value,
-              validator: ValidationUtils.validatePhone,
-            ),
-          ),
-          AppSpacing.v32,
-          Text(
-            'Employment Type',
-            style: AppTextStyles.outfit(
-              fontSize: 14,
-              fontWeight: FontWeight.w800,
-              color: AppColors.brandAppBarColor,
-            ),
-          ),
-          AppSpacing.v12,
-          Row(
-            children: [
-              Expanded(
-                child: Obx(
-                  () => _buildToggleButton(
-                    'Salary',
-                    controller.employmentType.value == 'Salary',
-                    () => controller.employmentType.value = 'Salary',
-                  ),
-                ),
-              ),
-              AppSpacing.h12,
-              Expanded(
-                child: Obx(
-                  () => _buildToggleButton(
-                    'Hourly',
-                    controller.employmentType.value == 'Hourly',
-                    () => controller.employmentType.value = 'Hourly',
-                  ),
-                ),
-              ),
-            ],
-          ),
-          AppSpacing.v24,
-          Obx(
-            () => AppInputField(
-              label: controller.employmentType.value == 'Salary'
+          ],
+        ),
+        AppSpacing.v24,
+        Obx(
+          () => AppInputField(
+            label: controller.employmentType.value == 'Salary'
+                ? 'Base Salary'
+                : 'Hourly Rate',
+            controller: controller.staffSalaryController,
+            hint: '0.00',
+            icon: Icons.payments_rounded,
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            errorText: controller.staffSalaryError.value,
+            validator: (value) => ValidationUtils.validateAmount(
+              value,
+              controller.employmentType.value == 'Salary'
                   ? 'Base Salary'
                   : 'Hourly Rate',
-              controller: controller.staffSalaryController,
-              hint: '0.00',
-              icon: Icons.payments_rounded,
-              keyboardType: const TextInputType.numberWithOptions(
-                decimal: true,
-              ),
-              errorText: controller.staffSalaryError.value,
-              validator: (value) => ValidationUtils.validateAmount(
-                value,
-                controller.employmentType.value == 'Salary'
-                    ? 'Base Salary'
-                    : 'Hourly Rate',
-              ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -271,7 +221,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Staff Photo',
+                'Profile Photo',
                 style: AppTextStyles.outfit(
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
@@ -295,69 +245,6 @@ class AddEditStaffScreen extends GetView<StaffController> {
     );
   }
 
-  Widget _buildRoleDropdown(String? errorText) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-          decoration: BoxDecoration(
-            color: AppColors.paleSilver,
-            borderRadius: BorderRadius.circular(12),
-            border: errorText != null
-                ? Border.all(color: Colors.redAccent, width: 1.5)
-                : null,
-          ),
-          child: DropdownButtonHideUnderline(
-            child: DropdownButton<int>(
-              value: controller.selectedRoleId.value,
-              isExpanded: true,
-              hint: Text(
-                'Select Role',
-                style: AppTextStyles.outfit(
-                  fontSize: 14,
-                  color: AppColors.textTertiary,
-                ),
-              ),
-              icon: const Icon(
-                Icons.keyboard_arrow_down_rounded,
-                color: AppColors.blueSapphire,
-              ),
-              items: controller.roles.map((role) {
-                return DropdownMenuItem<int>(
-                  value: role.id,
-                  child: Text(
-                    role.name,
-                    style: AppTextStyles.outfit(
-                      fontSize: 14,
-                      color: AppColors.textPrimary,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                );
-              }).toList(),
-              onChanged: (val) => controller.selectedRoleId.value = val,
-            ),
-          ),
-        ),
-        if (errorText != null) ...[
-          const SizedBox(height: 4),
-          Padding(
-            padding: const EdgeInsets.only(left: 4),
-            child: Text(
-              errorText,
-              style: AppTextStyles.outfit(
-                fontSize: 12,
-                color: Colors.redAccent,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-        ],
-      ],
-    );
-  }
-
   Widget _buildDepartmentDropdown(String? errorText) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -376,7 +263,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
               value: controller.selectedDepartmentId.value,
               isExpanded: true,
               hint: Text(
-                'Select Dept',
+                'Select Department',
                 style: AppTextStyles.outfit(
                   fontSize: 14,
                   color: AppColors.textTertiary,
@@ -452,34 +339,6 @@ class AddEditStaffScreen extends GetView<StaffController> {
             : () => controller.saveStaff(),
         isLoading: controller.isSaving.value,
         label: isEdit ? 'Update Staff Member' : 'Save Staff Member',
-      ),
-    );
-  }
-
-  Widget _buildDiscardButton() {
-    return GestureDetector(
-      onTap: () {
-        controller.clearStaffForm();
-        Get.back();
-      },
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 18),
-        decoration: BoxDecoration(
-          color: Colors.transparent,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.borderGrey, width: 1.5),
-        ),
-        child: Center(
-          child: Text(
-            'Discard Changes',
-            style: AppTextStyles.outfit(
-              fontSize: 14,
-              fontWeight: FontWeight.w800,
-              color: AppColors.primaryBrand,
-            ),
-          ),
-        ),
       ),
     );
   }

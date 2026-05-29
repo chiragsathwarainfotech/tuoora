@@ -124,9 +124,6 @@ class CommonDialog extends StatelessWidget {
                     color: iconBgColor,
                     shape: BoxShape.circle,
                   ),
-                  // SVG asset takes precedence over IconData when both
-                  // are provided. The colour filter on AppActionIcon
-                  // tints the SVG paths to match [iconColor].
                   child: svgAsset != null
                       ? AppActionIcon(
                           asset: svgAsset!,

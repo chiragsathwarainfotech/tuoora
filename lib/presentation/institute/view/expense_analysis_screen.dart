@@ -27,7 +27,7 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
                 return RefreshIndicator(
                   onRefresh: () => controller.loadExpenseAnalysis(),
                   child: ListView(
-                    padding: AppSpacing.all24,
+                    padding: AppSpacing.screenPaddingTop,
                     children: [
                       _buildTotalSpendingCard(analysis),
                       AppSpacing.v24,
@@ -71,7 +71,7 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
 
     return Container(
       width: double.infinity,
-      padding: AppSpacing.all24,
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.primaryBrand,
         borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
@@ -101,11 +101,11 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 10,
-                    vertical: 4,
+                    vertical: 6,
                   ),
                   decoration: BoxDecoration(
                     color: AppColors.white.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
                   ),
                   child: Text(
                     analysis.monthName,
@@ -124,7 +124,7 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
                 ? currencyFormat.format(analysis.totalSpending)
                 : '₹0.00',
             style: AppTextStyles.outfit(
-              fontSize: 36,
+              fontSize: 32,
               fontWeight: FontWeight.w800,
               color: AppColors.white,
             ),
@@ -154,7 +154,7 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
     return Column(
       children: analysis.categories.map((cat) {
         return Padding(
-          padding: const EdgeInsets.only(bottom: 16),
+          padding: const EdgeInsets.only(bottom: 10),
           child: _buildCategoryProgressItem(
             cat.categoryName,
             '₹${cat.amount.toStringAsFixed(2)}',
@@ -209,7 +209,7 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
     Color color,
   ) {
     return Container(
-      padding: AppSpacing.all16,
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.cardRadius),

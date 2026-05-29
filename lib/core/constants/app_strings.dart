@@ -437,19 +437,14 @@ class AppStrings {
   static const String instLeadInfoHeading = 'Lead Information';
   static const String instLeadInfoSubtitle =
       'Update contact and course preferences';
-  static const String instFullNameLabel = 'FULL NAME';
-  static const String instFullNameHint = 'e.g. Alex Rivera';
-  static const String instEmailAddressLabel = 'EMAIL ADDRESS';
-  static const String instEmailAddressHint = 'alex@company.com';
-  static const String instPhoneNumberLabelAlt = 'PHONE NUMBER';
-  static const String instPhoneNumberHint = '+1 (555) 000-0000';
-  static const String instAddressLabel = 'ADDRESS';
-  static const String instAddressHint = 'e.g. 123 Business Way, Suite 100';
-  static const String instReferenceLabel = 'REFERENCE';
+  static const String instEmailAddressLabel = 'Email Address';
+  static const String instPhoneNumberLabelAlt = 'Phone Number';
+  static const String instAddressLabel = 'Address';
+  static const String instAddressHint = 'Enter address';
+  static const String instReferenceLabel = 'Reference';
   static const String instReferenceHint =
-      'e.g. LinkedIn, Referral, Google Search';
-  static const String instCourseSelectionHeading = 'COURSE SELECTION';
-  static const String instCourseSelectionLabel = 'COURSE SELECTION';
+      'e.g. LinkedIn, Social Media, Referral';
+  static const String instCourseSelectionLabel = 'Course Selection';
   static const String instCourseSelectionHint = 'Enter course name';
   static const String instInteractionNotesHeading = 'INTERACTION NOTES';
   static const String instInteractionNotesLabel = 'INTERACTION NOTES';

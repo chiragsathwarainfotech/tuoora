@@ -3,6 +3,7 @@ import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
 import 'package:tuoora/core/widgets/app_input_field.dart';
+import 'package:tuoora/core/widgets/input_styles.dart';
 import 'package:tuoora/presentation/institute/controllers/expense_controller.dart';
 import 'package:tuoora/presentation/institute/models/expense_model.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
@@ -20,13 +21,13 @@ class AddExpenseScreen extends GetView<ExpenseController> {
       body: SafeArea(
         child: Column(
           children: [
-            const InstituteAppBar(title: 'Add New Expense'),
+            const InstituteAppBar(title: 'Add Expense'),
             Expanded(
               child: SingleChildScrollView(
-                padding: AppSpacing.all24,
+                padding: AppSpacing.all16,
                 child: Column(
                   children: [
-                    _buildFormCard(context),
+                    _buildForm(context),
                     AppSpacing.v32,
                     Obx(
                       () => AppButton(
@@ -46,55 +47,39 @@ class AddExpenseScreen extends GetView<ExpenseController> {
     );
   }
 
-  Widget _buildFormCard(BuildContext context) {
-    return Container(
-      padding: AppSpacing.all24,
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+  Widget _buildForm(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildCategoryDropdown(),
+        AppSpacing.v20,
+        Obx(
+          () => AppInputField(
+            label: 'Amount',
+            hint: 'Enter amount',
+            icon: Icons.currency_rupee_rounded,
+            controller: controller.amountController,
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            errorText: controller.amountError.value,
           ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildCategoryDropdown(),
-          AppSpacing.v20,
-          Obx(
-            () => AppInputField(
-              label: 'AMOUNT',
-              hint: '0.00',
-              icon: Icons.currency_rupee_rounded,
-              controller: controller.amountController,
-              keyboardType: const TextInputType.numberWithOptions(
-                decimal: true,
-              ),
-              errorText: controller.amountError.value,
-            ),
+        ),
+        AppSpacing.v20,
+        Obx(
+          () => AppInputField(
+            label: 'Description',
+            hint: 'Enter description',
+            icon: Icons.description_rounded,
+            controller: controller.descriptionController,
+            errorText: controller.descriptionError.value,
           ),
-          AppSpacing.v20,
-          Obx(
-            () => AppInputField(
-              label: 'DESCRIPTION',
-              hint: 'What was this for?',
-              icon: Icons.description_rounded,
-              controller: controller.descriptionController,
-              errorText: controller.descriptionError.value,
-            ),
-          ),
-          AppSpacing.v20,
-          _buildDatePicker(context),
-          AppSpacing.v20,
-          _buildPaymentTypeToggle(),
-          AppSpacing.v24,
-          _buildAddReceiptButton(),
-        ],
-      ),
+        ),
+        AppSpacing.v20,
+        _buildDatePicker(context),
+        AppSpacing.v20,
+        _buildPaymentTypeToggle(),
+        AppSpacing.v24,
+        _buildAddReceiptButton(),
+      ],
     );
   }
 
@@ -103,7 +88,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'CATEGORY',
+          'Category',
           style: AppTextStyles.outfit(
             fontSize: 14,
             fontWeight: FontWeight.w800,
@@ -116,16 +101,13 @@ class AddExpenseScreen extends GetView<ExpenseController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 12),
                 decoration: BoxDecoration(
-                  color: AppColors.primaryBrandLight.withValues(alpha: 0.3),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: controller.categoryError.value != null
-                        ? Colors.redAccent
-                        : AppColors.primaryBrand.withValues(alpha: 0.2),
-                    width: 1.5,
-                  ),
+                  color: AppColors.paleSilver,
+                  borderRadius: BorderRadius.circular(InputStyles.borderRadius),
+                  border: controller.categoryError.value != null
+                      ? Border.all(color: Colors.redAccent, width: 1.5)
+                      : null,
                 ),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<ExpenseCategory>(
@@ -136,7 +118,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
                       style: AppTextStyles.outfit(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.textSecondary,
+                        color: AppColors.blueSapphire,
                       ),
                     ),
                     items: controller.categories.map((
@@ -186,7 +168,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'DATE',
+          'Date',
           style: AppTextStyles.outfit(
             fontSize: 14,
             fontWeight: FontWeight.w800,
@@ -197,14 +179,10 @@ class AddExpenseScreen extends GetView<ExpenseController> {
         GestureDetector(
           onTap: () => controller.selectDate(context),
           child: Container(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: AppColors.primaryBrandLight.withValues(alpha: 0.3),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: AppColors.primaryBrand.withValues(alpha: 0.2),
-                width: 1.5,
-              ),
+              color: AppColors.paleSilver,
+              borderRadius: BorderRadius.circular(InputStyles.borderRadius),
             ),
             child: Row(
               children: [
@@ -239,7 +217,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'PAYMENT TYPE',
+          'Payment Method',
           style: AppTextStyles.outfit(
             fontSize: 14,
             fontWeight: FontWeight.w800,
@@ -250,8 +228,8 @@ class AddExpenseScreen extends GetView<ExpenseController> {
         Container(
           padding: const EdgeInsets.all(4),
           decoration: BoxDecoration(
-            color: AppColors.primaryBrandLight.withValues(alpha: 0.3),
-            borderRadius: BorderRadius.circular(12),
+            color: AppColors.paleSilver,
+            borderRadius: BorderRadius.circular(InputStyles.borderRadius),
           ),
           child: Obx(
             () => Row(
@@ -309,11 +287,10 @@ class AddExpenseScreen extends GetView<ExpenseController> {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(vertical: 20),
           decoration: BoxDecoration(
-            color: AppColors.primaryBrandLight.withValues(alpha: 0.3),
-            borderRadius: BorderRadius.circular(16),
+            color: AppColors.paleSilver,
+            borderRadius: BorderRadius.circular(InputStyles.borderRadius),
             border: Border.all(
-              color: AppColors.primaryBrand.withValues(alpha: 0.2),
-              style: BorderStyle.solid,
+              color: AppColors.primaryBrand.withValues(alpha: 0.3),
               width: 1.5,
             ),
           ),

@@ -20,7 +20,7 @@ class StaffListScreen extends GetView<StaffController> {
       body: SafeArea(
         child: Column(
           children: [
-            const InstituteAppBar(title: 'Staff Directory'),
+            const InstituteAppBar(title: 'Staff Management'),
             Expanded(
               child: Padding(
                 padding: AppSpacing.x16,
@@ -54,16 +54,13 @@ class StaffListScreen extends GetView<StaffController> {
                             child: RefreshIndicator(
                               onRefresh: () => controller.fetchStaffs(page: 1),
                               child: GridView.builder(
-                                padding: const EdgeInsets.only(
-                                  bottom: 100,
-                                  top: 4,
-                                ),
+                                padding: EdgeInsets.zero,
                                 gridDelegate:
                                     const SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: 3,
                                       crossAxisSpacing: 12,
-                                      mainAxisSpacing: 16,
-                                      childAspectRatio: 0.72,
+                                      mainAxisSpacing: 10,
+                                      childAspectRatio: 0.8,
                                     ),
                                 itemCount:
                                     staffs.length +
@@ -118,6 +115,7 @@ class StaffListScreen extends GetView<StaffController> {
         Get.toNamed(AppRoutes.instituteStaffDetails);
       },
       child: Container(
+        padding: AppSpacing.cardPadding,
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(AppSpacing.cardRadius),

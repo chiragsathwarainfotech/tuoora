@@ -30,7 +30,7 @@ class SalaryManagementScreen extends GetView<StaffController> {
                 onRefresh: () => controller.fetchGlobalSalaries(page: 1),
                 color: AppColors.primaryBrand,
                 child: ListView(
-                  padding: AppSpacing.all24,
+                  padding: AppSpacing.screenPaddingTop,
                   children: [
                     _buildTotalPaidCard(),
                     AppSpacing.v24,
@@ -39,6 +39,15 @@ class SalaryManagementScreen extends GetView<StaffController> {
                       child: _buildMonthPicker(context),
                     ),
                     AppSpacing.v24,
+                    Text(
+                      'Payout History',
+                      style: AppTextStyles.outfit(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                    AppSpacing.v12,
                     _buildPayoutHistory(),
                   ],
                 ),
@@ -74,10 +83,10 @@ class SalaryManagementScreen extends GetView<StaffController> {
     return Obx(
       () => Container(
         width: double.infinity,
-        padding: AppSpacing.all32,
+        padding: AppSpacing.all8,
         decoration: BoxDecoration(
           color: AppColors.primaryBrand,
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         ),
         child: Stack(
           children: [
@@ -96,7 +105,7 @@ class SalaryManagementScreen extends GetView<StaffController> {
                 Text(
                   '₹${controller.totalGlobalSalaryAmount.value}',
                   style: AppTextStyles.outfit(
-                    fontSize: 42,
+                    fontSize: 36,
                     fontWeight: FontWeight.w800,
                     color: AppColors.white,
                   ),
@@ -104,11 +113,11 @@ class SalaryManagementScreen extends GetView<StaffController> {
               ],
             ),
             Positioned(
-              right: -10,
+              right: -8,
               bottom: -10,
               child: Icon(
                 Icons.verified_rounded,
-                size: 80,
+                size: 60,
                 color: AppColors.white.withValues(alpha: 0.1),
               ),
             ),
@@ -126,50 +135,31 @@ class SalaryManagementScreen extends GetView<StaffController> {
         emptyTitle: 'No Records Found',
         emptySubtitle: 'No salary payout records found for this month.',
         emptyIcon: Icons.receipt_long_rounded,
-        child: Container(
-          padding: AppSpacing.all24,
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: AppColors.background),
-          ),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Payout History',
-                    style: AppTextStyles.outfit(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.textPrimary,
-                    ),
-                  ),
-                ],
+        child: ListView.separated(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: controller.globalSalaryList.length,
+          separatorBuilder: (_, _) => const SizedBox(height: 10),
+          itemBuilder: (context, index) {
+            final salary = controller.globalSalaryList[index];
+            final date = DateFormat(
+              'MMM dd, yyyy',
+            ).format(DateTime.parse(salary.paymentDate));
+            return Container(
+              padding: AppSpacing.cardPadding,
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+                border: Border.all(color: AppColors.background),
               ),
-              AppSpacing.v24,
-              ListView.separated(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: controller.globalSalaryList.length,
-                separatorBuilder: (_, _) =>
-                    const Divider(height: 1, color: AppColors.background),
-                itemBuilder: (context, index) {
-                  final salary = controller.globalSalaryList[index];
-                  final date = DateFormat(
-                    'MMM dd, yyyy',
-                  ).format(DateTime.parse(salary.paymentDate));
-                  return _buildPayoutItem(
-                    salary.staff?.fullName ?? 'Unknown Staff',
-                    '$date â€¢ ${salary.paymentMethod}',
-                    '₹${salary.netSalary}',
-                    salary.staff?.profileUrl ?? '',
-                  );
-                },
+              child: _buildPayoutItem(
+                salary.staff?.fullName ?? 'Unknown Staff',
+                '$date â€¢ ${salary.paymentMethod}',
+                '₹${salary.netSalary}',
+                salary.staff?.profileUrl ?? '',
               ),
-            ],
-          ),
+            );
+          },
         ),
       );
     });
@@ -181,39 +171,16 @@ class SalaryManagementScreen extends GetView<StaffController> {
     String amount,
     String imageUrl,
   ) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20),
-      child: Row(
-        children: [
-          _buildStaffAvatar(name, imageUrl),
-          AppSpacing.h16,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  name,
-                  style: AppTextStyles.outfit(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-                Text(
-                  sub,
-                  style: AppTextStyles.outfit(
-                    fontSize: 12,
-                    color: AppColors.textTertiary,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
+    return Row(
+      children: [
+        _buildStaffAvatar(name, imageUrl),
+        AppSpacing.h16,
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                amount,
+                name,
                 style: AppTextStyles.outfit(
                   fontSize: 15,
                   fontWeight: FontWeight.w800,
@@ -221,18 +188,38 @@ class SalaryManagementScreen extends GetView<StaffController> {
                 ),
               ),
               Text(
-                'PAID',
+                sub,
                 style: AppTextStyles.outfit(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.successGreen,
-                  letterSpacing: 0.5,
+                  fontSize: 12,
+                  color: AppColors.textTertiary,
                 ),
               ),
             ],
           ),
-        ],
-      ),
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text(
+              amount,
+              style: AppTextStyles.outfit(
+                fontSize: 15,
+                fontWeight: FontWeight.w800,
+                color: AppColors.textPrimary,
+              ),
+            ),
+            Text(
+              'PAID',
+              style: AppTextStyles.outfit(
+                fontSize: 10,
+                fontWeight: FontWeight.w800,
+                color: AppColors.successGreen,
+                letterSpacing: 0.5,
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 

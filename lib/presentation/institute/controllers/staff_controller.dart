@@ -25,7 +25,6 @@ class StaffController extends GetxController {
   final selectedImagePath = Rxn<String>();
 
   // Metadata
-  final roles = <StaffRole>[].obs;
   final departments = <StaffDepartment>[].obs;
   final isLoadingMetadata = false.obs;
 
@@ -89,7 +88,6 @@ class StaffController extends GetxController {
   }
 
   // Add/Edit Staff Reactive State
-  final selectedRoleId = Rxn<int>();
   final selectedDepartmentId = Rxn<int>();
   final employmentType = 'Salary'.obs;
 
@@ -104,7 +102,6 @@ class StaffController extends GetxController {
   final staffEmailError = RxnString();
   final staffPhoneError = RxnString();
   final staffSalaryError = RxnString();
-  final roleError = RxnString();
   final deptError = RxnString();
   final triedToSave = false.obs;
 
@@ -142,7 +139,6 @@ class StaffController extends GetxController {
     staffEmailController.addListener(() => _clearError(staffEmailError));
     staffPhoneController.addListener(() => _clearError(staffPhoneError));
     staffSalaryController.addListener(() => _clearError(staffSalaryError));
-    selectedRoleId.listen((_) => _clearError(roleError));
     selectedDepartmentId.listen((_) => _clearError(deptError));
 
     // Initialize salary date controller
@@ -172,14 +168,10 @@ class StaffController extends GetxController {
   Future<void> fetchMetadata() async {
     try {
       isLoadingMetadata.value = true;
-      final results = await Future.wait([
-        _repository.getStaffRoles(),
-        _repository.getStaffDepartments(),
-      ]);
-      roles.assignAll(results[0] as List<StaffRole>);
-      departments.assignAll(results[1] as List<StaffDepartment>);
+      final depts = await _repository.getStaffDepartments();
+      departments.assignAll(depts);
     } catch (e) {
-      AppSnackBar.error('Failed to load roles and departments: $e');
+      AppSnackBar.error('Failed to load departments: $e');
     } finally {
       isLoadingMetadata.value = false;
     }
@@ -507,9 +499,6 @@ class StaffController extends GetxController {
       staffSalaryController.text,
       employmentType.value == 'Salary' ? 'Base Salary' : 'Hourly Rate',
     );
-    roleError.value = ValidationUtils.validateRoleSelection(
-      selectedRoleId.value,
-    );
     deptError.value = ValidationUtils.validateDepartmentSelection(
       selectedDepartmentId.value,
     );
@@ -519,7 +508,6 @@ class StaffController extends GetxController {
         staffEmailError.value != null ||
         staffPhoneError.value != null ||
         staffSalaryError.value != null ||
-        roleError.value != null ||
         deptError.value != null) {
       return;
     }
@@ -530,7 +518,6 @@ class StaffController extends GetxController {
         'full_name': staffNameController.text.trim(),
         'email': staffEmailController.text.trim(),
         'phone': staffPhoneController.text.trim(),
-        'staff_role_id': selectedRoleId.value.toString(),
         'staff_department_id': selectedDepartmentId.value.toString(),
         'employment_type': employmentType.value,
         'base_salary': staffSalaryController.text.trim(),
@@ -583,9 +570,6 @@ class StaffController extends GetxController {
     if (errors.containsKey('base_salary')) {
       staffSalaryError.value = (errors['base_salary'] as List).first.toString();
     }
-    if (errors.containsKey('staff_role_id')) {
-      roleError.value = (errors['staff_role_id'] as List).first.toString();
-    }
     if (errors.containsKey('staff_department_id')) {
       deptError.value = (errors['staff_department_id'] as List).first
           .toString();
@@ -597,7 +581,6 @@ class StaffController extends GetxController {
     staffEmailError.value = null;
     staffPhoneError.value = null;
     staffSalaryError.value = null;
-    roleError.value = null;
     deptError.value = null;
   }
 
@@ -623,7 +606,6 @@ class StaffController extends GetxController {
     staffEmailController.clear();
     staffPhoneController.clear();
     staffSalaryController.clear();
-    selectedRoleId.value = null;
     selectedDepartmentId.value = null;
     employmentType.value = 'Salary';
     selectedImagePath.value = null;
@@ -638,7 +620,6 @@ class StaffController extends GetxController {
     staffEmailController.text = staff.email;
     staffPhoneController.text = staff.phone;
     staffSalaryController.text = staff.baseSalary;
-    selectedRoleId.value = staff.staffRoleId;
     selectedDepartmentId.value = staff.staffDepartmentId;
     employmentType.value = staff.employmentType;
     selectedImagePath.value = null;

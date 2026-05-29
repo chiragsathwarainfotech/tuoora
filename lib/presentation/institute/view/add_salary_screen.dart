@@ -9,6 +9,7 @@ import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/core/widgets/app_search_field.dart';
 import 'package:tuoora/core/constants/app_images.dart';
 import 'package:tuoora/core/widgets/app_action_icon.dart';
+import 'package:tuoora/presentation/institute/widgets/institute_label.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -25,25 +26,23 @@ class AddSalaryScreen extends GetView<StaffController> {
             const InstituteAppBar(title: 'Add Salary'),
             Expanded(
               child: SingleChildScrollView(
-                padding: AppSpacing.all24,
+                padding: AppSpacing.all16,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildSectionCard(
-                      label: 'SELECT STAFF MEMBER',
-                      child: Obx(() {
-                        if (controller.selectedAddSalaryStaff.value != null) {
-                          return _buildSelectedStaffCard(
-                            controller.selectedAddSalaryStaff.value!,
-                          );
-                        } else {
-                          return _buildStaffSearchField();
-                        }
-                      }),
-                    ),
+                    const InstituteLabel('Select Member'),
+                    Obx(() {
+                      if (controller.selectedAddSalaryStaff.value != null) {
+                        return _buildSelectedStaffCard(
+                          controller.selectedAddSalaryStaff.value!,
+                        );
+                      } else {
+                        return _buildStaffSearchField();
+                      }
+                    }),
                     AppSpacing.v20,
                     AppInputField(
-                      label: 'PAYMENT DATE',
+                      label: 'Payment Date',
                       hint: 'MM/dd/yyyy',
                       icon: Icons.calendar_today_rounded,
                       controller: controller.salaryDateController,
@@ -62,7 +61,7 @@ class AddSalaryScreen extends GetView<StaffController> {
                     ),
                     AppSpacing.v20,
                     AppInputField(
-                      label: 'SALARY AMOUNT',
+                      label: 'Salary Amount',
                       controller: controller.salaryAmountController,
                       hint: '0.00',
                       icon: Icons.currency_rupee_sharp,
@@ -72,21 +71,13 @@ class AddSalaryScreen extends GetView<StaffController> {
                       onChanged: (_) => controller.update(),
                     ),
                     AppSpacing.v24,
-                    Text(
-                      'PAYMENT METHOD',
-                      style: AppTextStyles.outfit(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.brandAppBarColor,
-                      ),
-                    ),
-                    AppSpacing.v12,
+                    const InstituteLabel('Payment Method'),
                     _buildPaymentMethodToggle(),
                     AppSpacing.v24,
                     AppInputField(
-                      label: 'NOTES (OPTIONAL)',
+                      label: 'Notes (OPTIONAL)',
                       controller: controller.salaryNotesController,
-                      hint: 'Add any specific details regarding bonuses...',
+                      hint: 'Enter optional note',
                       maxLines: 3,
                     ),
                     AppSpacing.v32,
@@ -104,38 +95,11 @@ class AddSalaryScreen extends GetView<StaffController> {
     );
   }
 
-  Widget _buildSectionCard({required String label, required Widget child}) {
-    return Container(
-      padding: AppSpacing.all20,
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.background),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: AppTextStyles.outfit(
-              fontSize: 12,
-              fontWeight: FontWeight.w800,
-              color: AppColors.textTertiary,
-              letterSpacing: 0.5,
-            ),
-          ),
-          AppSpacing.v12,
-          child,
-        ],
-      ),
-    );
-  }
-
   Widget _buildStaffSearchField() {
     return Column(
       children: [
         AppSearchField(
-          hintText: 'Search by name or role...',
+          hintText: 'Search member by name',
           onChanged: (val) => controller.searchSalaryStaff(val),
         ),
         Obx(() {

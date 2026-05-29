@@ -20,7 +20,7 @@ class ExpensesScreen extends GetView<ExpenseController> {
         child: Column(
           children: [
             InstituteAppBar(
-              title: 'Expenses',
+              title: 'Expenses Overview',
               actions: [
                 GestureDetector(
                   onTap: () => Get.toNamed(AppRoutes.instituteExpenseAnalysis),
@@ -57,9 +57,9 @@ class ExpensesScreen extends GetView<ExpenseController> {
                   );
                 }
                 return ListView.separated(
-                  padding: AppSpacing.all24,
+                  padding: AppSpacing.screenPaddingTop,
                   itemCount: controller.expenses.length,
-                  separatorBuilder: (context, index) => AppSpacing.v16,
+                  separatorBuilder: (context, index) => AppSpacing.v10,
                   itemBuilder: (context, index) {
                     final expense = controller.expenses[index];
                     return _buildExpenseCard(expense);
@@ -86,7 +86,7 @@ class ExpensesScreen extends GetView<ExpenseController> {
     final dateFormat = DateFormat('MMM dd, yyyy');
 
     return Container(
-      padding: AppSpacing.all16,
+      padding: AppSpacing.all8,
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
@@ -101,10 +101,10 @@ class ExpensesScreen extends GetView<ExpenseController> {
       child: Row(
         children: [
           Container(
-            padding: AppSpacing.all12,
+            padding: AppSpacing.all8,
             decoration: BoxDecoration(
               color: expense.iconBgColor,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
             ),
             child: Icon(
               expense.icon,

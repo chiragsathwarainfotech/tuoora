@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/app_empty_view.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/presentation/student/controllers/student_receipts_list_controller.dart';
 import 'package:tuoora/presentation/student/models/fee_model.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
@@ -21,26 +23,13 @@ class StudentReceiptsListScreen extends GetView<StudentReceiptsListController> {
             Expanded(
               child: Obx(() {
                 if (controller.isLoading.value) {
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.studentBrand,
-                    ),
-                  );
+                  return const CommonLoading(color: AppColors.studentBrand);
                 }
                 final items = controller.receipts;
                 if (items.isEmpty) {
-                  return Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(AppSpacing.s24),
-                      child: Text(
-                        'No receipts available yet.',
-                        style: AppTextStyles.outfit(
-                          fontSize: 13,
-                          color: AppColors.textSecondary,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
+                  return const AppEmptyView(
+                    icon: Icons.receipt_long_outlined,
+                    title: 'No receipts available yet',
                   );
                 }
                 return RefreshIndicator(

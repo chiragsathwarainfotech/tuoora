@@ -10,6 +10,7 @@ import 'package:tuoora/core/utils/date_format_utils.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/core/widgets/common_dialog.dart';
 import 'package:tuoora/presentation/institute/controllers/chat_controller.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/presentation/institute/widgets/chat_attachment_view.dart';
 import 'package:tuoora/presentation/institute/widgets/chat_date_separator.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
@@ -83,7 +84,7 @@ class ChatMessagesScreen extends GetView<ChatController> {
                     Obx(() {
                       if (controller.isLoading.value &&
                           controller.messages.isEmpty) {
-                        return const Center(child: CircularProgressIndicator());
+                        return const CommonLoading();
                       }
 
                       if (controller.messages.isEmpty) {

@@ -5,6 +5,8 @@ import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/controllers/expense_controller.dart';
 import 'package:tuoora/presentation/institute/models/expense_model.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
+import 'package:tuoora/core/widgets/app_empty_view.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -43,17 +45,12 @@ class ExpensesScreen extends GetView<ExpenseController> {
             Expanded(
               child: Obx(() {
                 if (controller.isLoading.value && controller.expenses.isEmpty) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const CommonLoading();
                 }
                 if (controller.expenses.isEmpty) {
-                  return Center(
-                    child: Text(
-                      'No expenses found',
-                      style: AppTextStyles.outfit(
-                        fontSize: 16,
-                        color: AppColors.textTertiary,
-                      ),
-                    ),
+                  return const AppEmptyView(
+                    icon: Icons.receipt_long_outlined,
+                    title: 'No expenses found',
                   );
                 }
                 return ListView.separated(

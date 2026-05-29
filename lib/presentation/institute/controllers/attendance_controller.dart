@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/widgets/app_pickers.dart';
 
 class AttendanceStudent {
   final int id;
@@ -136,8 +137,8 @@ class AttendanceController extends GetxController {
   }
 
   Future<void> selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
+    final DateTime? picked = await AppPickers.date(
+      context,
       initialDate: selectedDate.value,
       firstDate: DateTime(2020),
       lastDate: DateTime.now(),

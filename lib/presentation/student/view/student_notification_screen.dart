@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/presentation/student/controllers/student_notifications_controller.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
 
@@ -24,11 +25,7 @@ class StudentNotificationScreen
             Expanded(
               child: Obx(() {
                 if (controller.isLoading.value && controller.items.isEmpty) {
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.studentBrand,
-                    ),
-                  );
+                  return const CommonLoading(color: AppColors.studentBrand);
                 }
                 final displays = controller.displays;
                 if (displays.isEmpty) {

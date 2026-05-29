@@ -1,6 +1,4 @@
-import 'package:tuoora/core/constants/app_colors.dart';
-import 'package:tuoora/core/constants/app_text_styles.dart';
-import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/app_empty_view.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
 
@@ -29,41 +27,10 @@ class CommonStateWidget extends StatelessWidget {
     }
 
     if (isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              padding: AppSpacing.all24,
-              decoration: const BoxDecoration(
-                color: AppColors.primaryBrandLight,
-                shape: BoxShape.circle,
-              ),
-              child: Icon(emptyIcon, size: 64, color: AppColors.primaryBrand),
-            ),
-            AppSpacing.v24,
-            Text(
-              emptyTitle,
-              style: AppTextStyles.outfit(
-                fontSize: 18,
-                fontWeight: FontWeight.w800,
-                color: AppColors.brandAppBarColor,
-              ),
-            ),
-            AppSpacing.v8,
-            Padding(
-              padding: AppSpacing.x32,
-              child: Text(
-                emptySubtitle,
-                textAlign: TextAlign.center,
-                style: AppTextStyles.outfit(
-                  fontSize: 14,
-                  color: AppColors.textTertiary,
-                ),
-              ),
-            ),
-          ],
-        ),
+      return AppEmptyView(
+        icon: emptyIcon,
+        title: emptyTitle,
+        message: emptySubtitle,
       );
     }
 

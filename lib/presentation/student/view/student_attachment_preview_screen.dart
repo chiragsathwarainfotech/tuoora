@@ -7,6 +7,7 @@ import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/enums/app_enums.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/presentation/student/controllers/attachment_preview_controller.dart';
 import 'package:tuoora/presentation/student/models/assignment_model.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
@@ -37,11 +38,7 @@ class StudentAttachmentPreviewScreen
                   showDefaultActions: false,
                 ),
                 const Expanded(
-                  child: Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.primaryBrand,
-                    ),
-                  ),
+                  child: CommonLoading(color: AppColors.studentBrand),
                 ),
               ],
             );
@@ -369,13 +366,7 @@ class _LoadingPlaceholder extends StatelessWidget {
   Widget build(BuildContext context) {
     return const SizedBox(
       height: 240,
-      child: Center(
-        child: SizedBox(
-          width: 24,
-          height: 24,
-          child: CircularProgressIndicator(strokeWidth: 2),
-        ),
-      ),
+      child: CommonLoading(color: AppColors.studentBrand),
     );
   }
 }

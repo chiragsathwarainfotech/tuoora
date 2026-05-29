@@ -7,6 +7,7 @@ import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/data/models/staff_model.dart';
 import 'package:tuoora/core/widgets/app_search_field.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -52,6 +53,7 @@ class StaffListScreen extends GetView<StaffController> {
                               return false;
                             },
                             child: RefreshIndicator(
+                              color: AppColors.primaryBrand,
                               onRefresh: () => controller.fetchStaffs(page: 1),
                               child: GridView.builder(
                                 padding: EdgeInsets.zero,
@@ -70,8 +72,9 @@ class StaffListScreen extends GetView<StaffController> {
                                         : 0),
                                 itemBuilder: (context, index) {
                                   if (index == staffs.length) {
-                                    return const Center(
-                                      child: CircularProgressIndicator(),
+                                    return const Padding(
+                                      padding: EdgeInsets.all(16.0),
+                                      child: CommonLoading(),
                                     );
                                   }
                                   final staff = staffs[index];

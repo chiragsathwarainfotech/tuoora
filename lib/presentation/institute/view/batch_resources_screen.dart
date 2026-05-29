@@ -11,6 +11,7 @@ import 'package:tuoora/presentation/institute/models/resource_model.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/core/widgets/common_dialog.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
+import 'package:tuoora/core/widgets/app_empty_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -39,26 +40,9 @@ class BatchResourcesScreen extends StatelessWidget {
                   return const CommonLoading();
                 }
                 if (controller.resources.isEmpty) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.folder_open_outlined,
-                          size: 64,
-                          color: AppColors.textMuted.withValues(alpha: 0.5),
-                        ),
-                        AppSpacing.v16,
-                        Text(
-                          'No resources found',
-                          style: AppTextStyles.outfit(
-                            fontSize: 16,
-                            color: AppColors.textMuted,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
+                  return const AppEmptyView(
+                    icon: Icons.folder_open_outlined,
+                    title: 'No resources found',
                   );
                 }
                 return ListView.builder(

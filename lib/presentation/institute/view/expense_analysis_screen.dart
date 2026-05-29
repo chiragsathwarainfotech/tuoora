@@ -25,6 +25,7 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
               child: Obx(() {
                 final analysis = controller.expenseAnalysis.value;
                 return RefreshIndicator(
+                  color: AppColors.primaryBrand,
                   onRefresh: () => controller.loadExpenseAnalysis(),
                   child: ListView(
                     padding: AppSpacing.screenPaddingTop,

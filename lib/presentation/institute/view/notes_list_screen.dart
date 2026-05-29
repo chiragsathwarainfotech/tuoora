@@ -3,6 +3,7 @@ import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/widgets/common_dialog.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/presentation/institute/controllers/notes_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/presentation/institute/widgets/common_state_widget.dart';
@@ -78,6 +79,7 @@ class NotesListScreen extends GetView<NotesController> {
                               return false;
                             },
                             child: RefreshIndicator(
+                              color: AppColors.primaryBrand,
                               onRefresh: () => controller.fetchNotes(page: 1),
                               child: ListView.separated(
                                 itemCount:
@@ -89,11 +91,9 @@ class NotesListScreen extends GetView<NotesController> {
                                 separatorBuilder: (_, _) => AppSpacing.v10,
                                 itemBuilder: (context, index) {
                                   if (index == notes.length) {
-                                    return const Center(
-                                      child: Padding(
-                                        padding: EdgeInsets.all(16.0),
-                                        child: CircularProgressIndicator(),
-                                      ),
+                                    return const Padding(
+                                      padding: EdgeInsets.all(16.0),
+                                      child: CommonLoading(),
                                     );
                                   }
                                   final note = notes[index];

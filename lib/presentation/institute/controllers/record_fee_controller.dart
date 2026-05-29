@@ -1,4 +1,4 @@
-import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/widgets/app_pickers.dart';
 import 'package:tuoora/data/models/student_model.dart';
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
 import 'package:flutter/material.dart';
@@ -118,23 +118,11 @@ class RecordFeeController extends GetxController {
   }
 
   Future<void> selectRecordDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
+    final DateTime? picked = await AppPickers.date(
+      context,
       initialDate: selectedRecordDate.value,
       firstDate: DateTime(2020),
       lastDate: DateTime.now(),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.light(
-              primary: AppColors.primaryBrand,
-              onPrimary: AppColors.white,
-              onSurface: AppColors.textPrimary,
-            ),
-          ),
-          child: child!,
-        );
-      },
     );
     if (picked != null) {
       selectedRecordDate.value = picked;

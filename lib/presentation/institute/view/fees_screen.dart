@@ -7,6 +7,7 @@ import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
+import 'package:tuoora/core/widgets/app_empty_view.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -132,26 +133,9 @@ class InstituteFeesScreen extends GetView<InstituteController> {
       }
 
       if (controller.feeRecords.isEmpty) {
-        return Center(
-          child: Column(
-            children: [
-              AppSpacing.v48,
-              Icon(
-                Icons.receipt_long_outlined,
-                size: 64,
-                color: AppColors.primaryBrand,
-              ),
-              AppSpacing.v16,
-              Text(
-                'No fee records found',
-                style: AppTextStyles.outfit(
-                  fontSize: 18,
-                  color: AppColors.brandAppBarColor,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ],
-          ),
+        return const AppEmptyView(
+          icon: Icons.receipt_long_outlined,
+          title: 'No fee records found',
         );
       }
 

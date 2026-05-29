@@ -4,6 +4,7 @@ import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/core/widgets/student_bottom_nav.dart';
 import 'package:tuoora/presentation/student/controllers/student_controller.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
@@ -26,9 +27,7 @@ class StudentDashboard extends GetView<StudentDashboardController> {
         bottom: false,
         child: Obx(() {
           if (controller.isLoading.value) {
-            return const Center(
-              child: CircularProgressIndicator(color: AppColors.studentBrand),
-            );
+            return const CommonLoading(color: AppColors.studentBrand);
           }
           final data = controller.dashboardData.value;
           if (data == null) {

@@ -7,6 +7,7 @@ import 'package:tuoora/data/models/staff_model.dart';
 import 'package:tuoora/presentation/institute/controllers/staff_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/core/widgets/app_search_field.dart';
+import 'package:tuoora/core/widgets/app_pickers.dart';
 import 'package:tuoora/core/constants/app_images.dart';
 import 'package:tuoora/core/widgets/app_action_icon.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_label.dart';
@@ -48,8 +49,8 @@ class AddSalaryScreen extends GetView<StaffController> {
                       controller: controller.salaryDateController,
                       readOnly: true,
                       onTap: () async {
-                        final picked = await showDatePicker(
-                          context: context,
+                        final picked = await AppPickers.date(
+                          context,
                           initialDate: controller.selectedSalaryDate.value,
                           firstDate: DateTime(2020),
                           lastDate: DateTime.now(),

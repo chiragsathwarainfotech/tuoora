@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/services/media_cache_service.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/presentation/institute/view/in_app_resource_viewer.dart';
 
 /// Renders a single chat attachment (image / video / audio / document) and
@@ -77,11 +78,7 @@ class ChatAttachmentView extends StatelessWidget {
                   width: 200,
                   alignment: Alignment.center,
                   color: AppColors.background.withValues(alpha: 0.3),
-                  child: const SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  ),
+                  child: const CommonLoading(),
                 ),
                 errorWidget: (_, _, _) => _imageError(),
               ),

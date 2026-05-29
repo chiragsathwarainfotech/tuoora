@@ -7,6 +7,7 @@ import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/core/widgets/student_bottom_nav.dart';
 import 'package:tuoora/presentation/student/controllers/fees_controller.dart';
 import 'package:tuoora/presentation/student/models/fee_model.dart';
@@ -35,11 +36,7 @@ class StudentFeesScreen extends GetView<FeesController> {
               child: Obx(() {
                 if (controller.isLoading.value &&
                     controller.statements.isEmpty) {
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.studentBrand,
-                    ),
-                  );
+                  return const CommonLoading(color: AppColors.studentBrand);
                 }
                 return RefreshIndicator(
                   color: AppColors.studentBrand,

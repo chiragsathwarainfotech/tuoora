@@ -6,6 +6,7 @@ import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/widgets/app_action_icon.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
 import 'package:tuoora/core/widgets/common_dialog.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/presentation/institute/controllers/leads_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/presentation/institute/widgets/common_state_widget.dart';
@@ -57,6 +58,7 @@ class LeadsManagementScreen extends GetView<LeadsController> {
                               return false;
                             },
                             child: RefreshIndicator(
+                              color: AppColors.primaryBrand,
                               onRefresh: () => controller.fetchLeads(page: 1),
                               child: ListView.separated(
                                 padding: EdgeInsets.only(bottom: 100),
@@ -69,11 +71,9 @@ class LeadsManagementScreen extends GetView<LeadsController> {
                                 separatorBuilder: (_, _) => AppSpacing.v10,
                                 itemBuilder: (context, index) {
                                   if (index == controller.leadsList.length) {
-                                    return const Center(
-                                      child: Padding(
-                                        padding: EdgeInsets.all(16.0),
-                                        child: CircularProgressIndicator(),
-                                      ),
+                                    return const Padding(
+                                      padding: EdgeInsets.all(16.0),
+                                      child: CommonLoading(),
                                     );
                                   }
                                   final lead = controller.leadsList[index];

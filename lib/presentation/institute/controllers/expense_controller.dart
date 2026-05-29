@@ -1,4 +1,5 @@
 import 'package:tuoora/core/utils/validation_utils.dart';
+import 'package:tuoora/core/widgets/app_pickers.dart';
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
 import 'package:tuoora/presentation/institute/models/expense_model.dart';
 import 'package:flutter/material.dart';
@@ -216,8 +217,8 @@ class ExpenseController extends GetxController {
   }
 
   Future<void> selectDate(BuildContext context) async {
-    final picked = await showDatePicker(
-      context: context,
+    final picked = await AppPickers.date(
+      context,
       initialDate: selectedDate.value,
       firstDate: DateTime(2020),
       lastDate: DateTime.now(),

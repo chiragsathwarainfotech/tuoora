@@ -4,6 +4,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/widgets/app_empty_view.dart';
 import 'package:tuoora/presentation/student/controllers/student_study_material_controller.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
 import 'package:tuoora/data/models/student_resource_model.dart';
@@ -40,7 +41,10 @@ class StudentStudyMaterialScreen
                 }
 
                 if (controller.resources.isEmpty) {
-                  return const Center(child: Text('No study material found'));
+                  return const AppEmptyView(
+                    icon: Icons.menu_book_outlined,
+                    title: 'No study material found',
+                  );
                 }
 
                 return ListView.separated(

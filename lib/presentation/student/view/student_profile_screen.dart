@@ -4,6 +4,7 @@ import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/services/auth_service.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/core/widgets/student_bottom_nav.dart';
 import 'package:tuoora/presentation/student/widgets/profile_grid_action.dart';
 import 'package:tuoora/presentation/student/widgets/profile_menu_tile.dart';
@@ -24,9 +25,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
       body: SafeArea(
         child: Obx(() {
           if (controller.isLoading.value) {
-            return const Center(
-              child: CircularProgressIndicator(color: AppColors.primaryBrand),
-            );
+            return const CommonLoading(color: AppColors.studentBrand);
           }
           final profile = controller.profileData.value;
           if (profile == null) {

@@ -6,6 +6,7 @@ import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/enums/app_enums.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/core/widgets/student_bottom_nav.dart';
 import 'package:tuoora/presentation/student/controllers/assignments_controller.dart';
 import 'package:tuoora/presentation/student/models/assignment_model.dart';
@@ -60,13 +61,9 @@ class StudentAssignmentsScreen extends GetView<AssignmentsController> {
                     const SizedBox(height: AppSpacing.s16),
                     Obx(() {
                       if (controller.isLoading.value) {
-                        return const Center(
-                          child: Padding(
-                            padding: EdgeInsets.all(32.0),
-                            child: CircularProgressIndicator(
-                              color: AppColors.primaryBrand,
-                            ),
-                          ),
+                        return const Padding(
+                          padding: EdgeInsets.all(32.0),
+                          child: CommonLoading(color: AppColors.studentBrand),
                         );
                       }
 

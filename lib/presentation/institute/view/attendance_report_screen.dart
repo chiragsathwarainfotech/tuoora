@@ -4,6 +4,7 @@ import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/widgets/export_report.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
+import 'package:tuoora/core/widgets/app_empty_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/config/app_routes.dart';
@@ -32,8 +33,9 @@ class AttendanceReportScreen extends StatelessWidget {
 
                 final report = controller.attendanceReport.value;
                 if (report == null) {
-                  return const Center(
-                    child: Text('No attendance data available'),
+                  return const AppEmptyView(
+                    icon: Icons.fact_check_outlined,
+                    title: 'No attendance data available',
                   );
                 }
 

@@ -33,6 +33,7 @@ class AttendanceHistoryScreen extends GetView<StaffController> {
                   emptySubtitle: 'No attendance logs found for this month.',
                   emptyIcon: Icons.calendar_today_outlined,
                   child: RefreshIndicator(
+                    color: AppColors.primaryBrand,
                     onRefresh: () => controller.fetchGlobalAttendance(page: 1),
                     child: ListView.builder(
                       padding: AppSpacing.screenPaddingTop,

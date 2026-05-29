@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
 import 'package:tuoora/presentation/student/controllers/student_institute_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -23,11 +24,7 @@ class StudentInstituteScreen extends GetView<StudentInstituteController> {
             Expanded(
               child: Obx(() {
                 if (controller.isLoading.value) {
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.primaryBrand,
-                    ),
-                  );
+                  return const CommonLoading(color: AppColors.studentBrand);
                 }
 
                 final institute = controller.instituteData.value;
@@ -93,7 +90,7 @@ class StudentInstituteScreen extends GetView<StudentInstituteController> {
                       height: 72,
                       fit: BoxFit.cover,
                       placeholder: (context, url) =>
-                          const CircularProgressIndicator(),
+                          const CommonLoading(color: AppColors.studentBrand),
                       errorWidget: (context, url, error) => Text(
                         institute.initials,
                         style: AppTextStyles.outfit(

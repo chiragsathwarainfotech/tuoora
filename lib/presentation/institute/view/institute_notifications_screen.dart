@@ -5,6 +5,7 @@ import 'package:tuoora/data/models/notification_model.dart';
 import 'package:tuoora/presentation/institute/controllers/notification_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
+import 'package:tuoora/core/widgets/app_empty_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -52,26 +53,9 @@ class InstituteNotificationsScreen extends GetView<NotificationController> {
                 }
 
                 if (controller.notifications.isEmpty) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.notifications_none_rounded,
-                          size: 64,
-                          color: AppColors.textMuted,
-                        ),
-                        AppSpacing.v16,
-                        Text(
-                          'No notifications yet',
-                          style: AppTextStyles.outfit(
-                            fontSize: 16,
-                            color: AppColors.textSecondary,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
+                  return const AppEmptyView(
+                    icon: Icons.notifications_none_rounded,
+                    title: 'No notifications yet',
                   );
                 }
 

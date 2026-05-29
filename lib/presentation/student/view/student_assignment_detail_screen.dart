@@ -6,6 +6,7 @@ import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/enums/app_enums.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/presentation/student/controllers/assignments_controller.dart';
 import 'package:tuoora/presentation/student/models/assignment_model.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
@@ -22,9 +23,7 @@ class StudentAssignmentDetailScreen extends GetView<AssignmentsController> {
         bottom: false,
         child: Obx(() {
           if (controller.isDetailLoading.value) {
-            return const Center(
-              child: CircularProgressIndicator(color: AppColors.primaryBrand),
-            );
+            return const CommonLoading(color: AppColors.studentBrand);
           }
           final assignment = controller.selectedAssignment.value;
           if (assignment == null) {

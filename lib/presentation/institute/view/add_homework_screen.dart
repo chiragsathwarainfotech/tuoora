@@ -3,6 +3,7 @@ import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
+import 'package:tuoora/core/widgets/app_pickers.dart';
 import 'package:tuoora/presentation/institute/controllers/homework_controller.dart';
 import 'package:tuoora/presentation/institute/models/batch_model.dart';
 import 'package:tuoora/core/widgets/app_input_field.dart';
@@ -73,8 +74,8 @@ class AddHomeworkScreen extends StatelessWidget {
   Widget _buildDatePicker(BuildContext context, HomeworkController controller) {
     return GestureDetector(
       onTap: () async {
-        final date = await showDatePicker(
-          context: context,
+        final date = await AppPickers.date(
+          context,
           initialDate: DateTime.now().add(const Duration(days: 1)),
           firstDate: DateTime.now(),
           lastDate: DateTime.now().add(const Duration(days: 365)),

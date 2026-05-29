@@ -3,6 +3,7 @@ import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/widgets/app_input_field.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/presentation/institute/controllers/notes_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
@@ -93,7 +94,7 @@ class AddEditNoteScreen extends GetView<NotesController> {
         Obx(() {
           if (controller.isCategoriesLoading.value &&
               controller.noteCategories.isEmpty) {
-            return const Center(child: CircularProgressIndicator());
+            return const CommonLoading();
           }
 
           return Column(

@@ -49,6 +49,7 @@ class _BatchHomeworkScreenState extends State<BatchHomeworkScreen> {
             ),
             Expanded(
               child: RefreshIndicator(
+                color: AppColors.primaryBrand,
                 onRefresh: () => controller.fetchHomeworks(),
                 child: Obx(() {
                   return CommonStateWidget(

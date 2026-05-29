@@ -48,6 +48,7 @@ class LoginController extends GetxController {
         await _authService.saveSession(
           user,
           stayAuthenticated: stayAuthenticated.value,
+          loggedIn: true,
           email: email,
           password: stayAuthenticated.value ? password : null,
         );
@@ -65,7 +66,14 @@ class LoginController extends GetxController {
 
   void _navigateToDashboard(String role) {
     if (role == 'INSTITUTE') {
-      Get.offAllNamed(AppRoutes.instituteDashboard);
+      // The login response carries is_profile_setup. If the institute hasn't
+      // finished onboarding, resume profile setup instead of the dashboard.
+      final isProfileSetup = _authService.currentUser?.isProfileSetup ?? true;
+      if (isProfileSetup) {
+        Get.offAllNamed(AppRoutes.instituteDashboard);
+      } else {
+        Get.offAllNamed(AppRoutes.instituteProfileSetup);
+      }
     } else if (role == 'STUDENT') {
       Get.offAllNamed(AppRoutes.studentDashboard);
     }
@@ -81,7 +89,7 @@ class LoginController extends GetxController {
     final rememberedEmail = _authService.rememberedEmail;
     final rememberedPassword = _authService.rememberedPassword;
     print('LoginController: Prefilling credentials. Email: $rememberedEmail');
-    
+
     if (rememberedEmail != null) {
       emailController.text = rememberedEmail;
       if (rememberedPassword != null) {
@@ -105,4 +113,3 @@ class LoginController extends GetxController {
     super.onClose();
   }
 }
-

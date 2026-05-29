@@ -96,8 +96,48 @@ class InstituteOtpScreen extends GetView<SignupController> {
   }
 
   Widget _buildHeader() {
-    return Center(
-      child: Image.asset(AppImages.logoWithName, height: AppSpacing.s48),
+    return Column(
+      children: [
+        Image.asset(AppImages.logoWithName, height: AppSpacing.s48),
+        AppSpacing.v32,
+        Text(
+          'CHECK YOUR EMAIL',
+          style: AppTextStyles.outfit(
+            fontSize: 18,
+            fontWeight: FontWeight.w800,
+            color: AppColors.brandAppBarColor,
+            letterSpacing: 1.5,
+          ),
+        ),
+        AppSpacing.v8,
+        Padding(
+          padding: AppSpacing.x16,
+          child: RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              style: AppTextStyles.outfit(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: AppColors.blueSapphire,
+                height: 1.5,
+              ),
+              children: [
+                const TextSpan(
+                  text: 'We have sent a 6-digit verification code to: ',
+                ),
+                TextSpan(
+                  text: controller.emailController.text,
+                  style: AppTextStyles.outfit(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.brandAppBarColor,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 

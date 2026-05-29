@@ -252,7 +252,11 @@ class SignupController extends GetxController {
         isProfileSetup: false,
       );
 
-      await _authService.saveSession(user, stayAuthenticated: true);
+      await _authService.saveSession(
+        user,
+        stayAuthenticated: true,
+        loggedIn: false,
+      );
 
       Get.snackbar(
         'Success',

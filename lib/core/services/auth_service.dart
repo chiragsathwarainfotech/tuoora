@@ -17,7 +17,9 @@ class AuthService extends GetxService {
     return this;
   }
 
-  bool get shouldStayAuthenticated => _storage.read('stay_authenticated') ?? false;
+  bool get shouldStayAuthenticated =>
+      _storage.read('stay_authenticated') ?? false;
+  bool get isLoggedIn => _storage.read('logged_in') ?? false;
 
   void _loadSession() {
     try {
@@ -39,12 +41,19 @@ class AuthService extends GetxService {
     }
   }
 
-  Future<void> saveSession(User user, {bool stayAuthenticated = false, String? email, String? password}) async {
+  Future<void> saveSession(
+    User user, {
+    bool stayAuthenticated = false,
+    bool loggedIn = false,
+    String? email,
+    String? password,
+  }) async {
     _currentUser.value = user;
     _token.value = user.token;
     await _storage.write('user', user.toJson());
     await _storage.write('token', user.token);
     await _storage.write('stay_authenticated', stayAuthenticated);
+    await _storage.write('logged_in', loggedIn);
     if (stayAuthenticated) {
       await _storage.write('remembered_email', email ?? user.email);
       if (password != null) {
@@ -62,12 +71,13 @@ class AuthService extends GetxService {
   Future<void> clearSession() async {
     _currentUser.value = null;
     _token.value = '';
-    
-    // Selectively remove session data, but preserve preferences like remembered_email
+
     await _storage.remove('user');
     await _storage.remove('token');
-    
-    print('AuthService: Session cleared (user and token removed). Preferences preserved.');
+    await _storage.remove('logged_in');
+
+    print(
+      'AuthService: Session cleared (user and token removed). Preferences preserved.',
+    );
   }
 }
-

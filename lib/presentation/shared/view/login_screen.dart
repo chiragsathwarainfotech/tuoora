@@ -129,7 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 child: Text(
                                   'Forgot Password?',
                                   style: AppTextStyles.outfit(
-                                    fontSize: 10,
+                                    fontSize: 12,
                                     fontWeight: FontWeight.w800,
                                     color: AppColors.primaryBrand,
                                     letterSpacing: 1.0,

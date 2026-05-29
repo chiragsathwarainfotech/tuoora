@@ -6,8 +6,6 @@ import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/presentation/institute/controllers/signup_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
-import 'package:tuoora/core/constants/app_images.dart';
-import 'package:tuoora/core/widgets/app_action_icon.dart';
 import 'package:get/get.dart';
 
 class InstituteProfileSetupScreen extends GetView<SignupController> {
@@ -28,7 +26,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
             ),
             Expanded(
               child: SingleChildScrollView(
-                padding: AppSpacing.all24,
+                padding: AppSpacing.screenPaddingTop,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -69,21 +67,6 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                                         size: 32,
                                       )
                                     : null,
-                              ),
-                              Positioned(
-                                bottom: 0,
-                                right: 0,
-                                child: Container(
-                                  padding: const EdgeInsets.all(4),
-                                  decoration: const BoxDecoration(
-                                    color: AppColors.primaryBrand,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: const AppActionIcon(
-                                    asset: AppImages.icEdit,
-                                    size: 14,
-                                  ),
-                                ),
                               ),
                             ],
                           ),

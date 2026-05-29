@@ -1,6 +1,6 @@
 import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
-import 'package:tuoora/core/constants/app_strings.dart';
+import 'package:tuoora/core/constants/app_images.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
@@ -19,8 +19,10 @@ class SplashScreen extends GetView<SplashController> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: 100,
-              height: 100,
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.s24,
+                vertical: AppSpacing.s20,
+              ),
               decoration: BoxDecoration(
                 color: AppColors.white,
                 borderRadius: BorderRadius.circular(24),
@@ -32,24 +34,12 @@ class SplashScreen extends GetView<SplashController> {
                   ),
                 ],
               ),
-              child: const Center(
-                child: Icon(
-                  Icons.school_rounded,
-                  color: AppColors.primaryBrand,
-                  size: 60,
-                ),
+              child: Image.asset(
+                AppImages.logoWithName,
+                height: AppSpacing.s56,
               ),
             ),
             AppSpacing.v24,
-            Text(
-              AppStrings.appName,
-              style: AppTextStyles.outfit(
-                fontSize: 32,
-                fontWeight: FontWeight.w800,
-                color: AppColors.white,
-              ),
-            ),
-            AppSpacing.v8,
             Text(
               'Finance Simplified',
               style: AppTextStyles.outfit(

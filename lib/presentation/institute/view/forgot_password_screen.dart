@@ -50,6 +50,7 @@ class ForgotPasswordScreen extends GetView<ForgotPasswordController> {
                               color: AppColors.blueSapphire,
                               height: 1.5,
                             ),
+                            textAlign: TextAlign.center,
                           ),
                           AppSpacing.v24,
                           Container(

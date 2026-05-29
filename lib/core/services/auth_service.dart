@@ -1,4 +1,5 @@
 import 'package:tuoora/data/models/user_model.dart';
+import 'package:tuoora/data/models/subscription_model.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -6,10 +7,15 @@ class AuthService extends GetxService {
   final _storage = GetStorage();
   final _currentUser = Rxn<User>();
   final _token = ''.obs;
+  final _subscription = Rxn<Subscription>();
 
   User? get currentUser => _currentUser.value;
   String get token => _token.value;
   bool get isAuthenticated => _token.isNotEmpty;
+
+  /// Latest known subscription summary (institute only). Reactive — read inside
+  /// an Obx to rebuild when it changes (e.g. the dashboard renewal banner).
+  Subscription? get subscription => _subscription.value;
 
   Future<AuthService> init() async {
     await GetStorage.init();
@@ -32,6 +38,12 @@ class AuthService extends GetxService {
         _token.value = savedToken;
         final role = userData['role'] ?? 'INSTITUTE';
         _currentUser.value = User.fromJson(userData, savedToken, role);
+        final subData = _storage.read('subscription');
+        if (subData != null) {
+          _subscription.value = Subscription.fromJson(
+            Map<String, dynamic>.from(subData),
+          );
+        }
         print('AuthService: Session loaded for role: $role');
       } else {
         print('AuthService: No session found.');
@@ -65,16 +77,27 @@ class AuthService extends GetxService {
     }
   }
 
+  Future<void> setSubscription(Subscription? subscription) async {
+    _subscription.value = subscription;
+    if (subscription == null) {
+      await _storage.remove('subscription');
+    } else {
+      await _storage.write('subscription', subscription.toJson());
+    }
+  }
+
   String? get rememberedEmail => _storage.read('remembered_email');
   String? get rememberedPassword => _storage.read('remembered_password');
 
   Future<void> clearSession() async {
     _currentUser.value = null;
     _token.value = '';
+    _subscription.value = null;
 
     await _storage.remove('user');
     await _storage.remove('token');
     await _storage.remove('logged_in');
+    await _storage.remove('subscription');
 
     print(
       'AuthService: Session cleared (user and token removed). Preferences preserved.',

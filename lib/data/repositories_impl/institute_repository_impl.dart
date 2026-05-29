@@ -16,6 +16,13 @@ abstract class InstituteRepositoryImpl {
   Future<InstituteSubscriptionData> getSubscriptionData();
   Future<void> updateProfile(Map<String, dynamic> data);
 
+  // Subscription renewal (offline payment proof submission)
+  Future<void> renewSubscription({
+    required String transactionId,
+    required String screenshotPath,
+    String? message,
+  });
+
   // Authentication
   Future<String> registerInstitute(Map<String, dynamic> data);
   Future<String> verifyOtp(Map<String, dynamic> data);

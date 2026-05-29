@@ -1,5 +1,6 @@
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/utils/subscription_guard.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/enums/app_enums.dart';
@@ -57,8 +58,12 @@ class BatchResourcesScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _showUploadDialog(context, controller),
-        backgroundColor: AppColors.primaryBrand,
+        onPressed: () => SubscriptionGuard.runAddAction(
+          () => _showUploadDialog(context, controller),
+        ),
+        backgroundColor: SubscriptionGuard.blocksAdd
+            ? AppColors.textMuted
+            : AppColors.primaryBrand,
         child: const Icon(Icons.add, color: AppColors.white),
       ),
     );

@@ -4,6 +4,7 @@ import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/data/models/menu_item.dart';
 import 'package:tuoora/presentation/institute/controllers/institute_profile_controller.dart';
+import 'package:tuoora/presentation/institute/widgets/subscription_banner.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
@@ -19,6 +20,7 @@ class InstituteDashboard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _buildTopHeader(),
+            const SubscriptionBanner(),
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 16.0,

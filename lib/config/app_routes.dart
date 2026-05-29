@@ -44,6 +44,10 @@ class AppRoutes {
   static const String instituteChangePassword =
       '/institute/profile/changePassword';
   static const String instituteSubscription = '/institute/profile/subscription';
+  static const String instituteSubscriptionRenew =
+      '/institute/subscription/renewal';
+  static const String instituteSubmitPaymentProof =
+      '/institute/subscription/renewal/proof';
   static const String instituteWhatsApp = '/institute/profile/whatsapp';
   static const String instituteFeeReport = '/institute/reports/fee-main';
   static const String instituteAttendanceReport =

@@ -1,5 +1,8 @@
+import 'package:get/get.dart';
 import 'package:tuoora/core/api/api_client.dart';
 import 'package:tuoora/core/constants/api_constants.dart';
+import 'package:tuoora/core/services/auth_service.dart';
+import 'package:tuoora/data/models/subscription_model.dart';
 import 'package:tuoora/data/models/user_model.dart';
 import 'package:tuoora/data/repositories_impl/auth_repository_impl.dart';
 
@@ -14,7 +17,9 @@ class AuthRepository implements AuthRepositoryImpl {
       ApiConstants.instituteLogin,
       {'email': email, 'password': password},
     );
-    return _handleResponse(response, 'INSTITUTE');
+    final user = _handleResponse(response, 'INSTITUTE');
+    await _updateSubscription(response);
+    return user;
   }
 
   @override
@@ -23,7 +28,25 @@ class AuthRepository implements AuthRepositoryImpl {
       ApiConstants.studentLogin,
       {'email': email, 'password': password},
     );
-    return _handleResponse(response, 'STUDENT');
+    final user = _handleResponse(response, 'STUDENT');
+    // Students have no subscription — clear any stale one from a prior session.
+    await Get.find<AuthService>().setSubscription(null);
+    return user;
+  }
+
+  /// Reads the top-level `subscription` node (sibling of `data`) and stores it
+  /// on [AuthService] so the dashboard banner can react to its status.
+  Future<void> _updateSubscription(dynamic response) async {
+    try {
+      final sub = response.body?['subscription'];
+      await Get.find<AuthService>().setSubscription(
+        sub != null
+            ? Subscription.fromJson(Map<String, dynamic>.from(sub))
+            : null,
+      );
+    } catch (_) {
+      // Non-fatal: a missing/malformed subscription node shouldn't block login.
+    }
   }
 
   User _handleResponse(dynamic response, String role) {

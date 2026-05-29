@@ -16,6 +16,7 @@ import 'package:tuoora/presentation/institute/models/resource_model.dart';
 import 'package:tuoora/presentation/institute/models/attendance_record_model.dart';
 import 'package:tuoora/data/models/notification_model.dart';
 import 'package:tuoora/data/models/staff_model.dart';
+import 'package:tuoora/data/models/subscription_model.dart';
 import 'package:get/get.dart';
 
 class InstituteRepository implements InstituteRepositoryImpl {
@@ -66,7 +67,47 @@ class InstituteRepository implements InstituteRepositoryImpl {
       throw Exception('Invalid profile response');
     }
 
+    // Refresh the cached subscription so the dashboard banner stays current
+    // (e.g. flips from pending to active once an admin approves a renewal).
+    final sub = body['subscription'];
+    if (sub != null) {
+      await Get.find<AuthService>().setSubscription(
+        Subscription.fromJson(Map<String, dynamic>.from(sub)),
+      );
+    }
+
     return InstituteProfile.fromJson(body['data']);
+  }
+
+  @override
+  Future<void> renewSubscription({
+    required String transactionId,
+    required String screenshotPath,
+    String? message,
+  }) async {
+    final fields = <String, dynamic>{
+      'transaction_id': transactionId,
+      if (message != null && message.trim().isNotEmpty) 'message': message.trim(),
+    };
+
+    final formData = FormData(fields);
+    formData.files.add(
+      MapEntry(
+        'screenshot',
+        MultipartFile(
+          File(screenshotPath),
+          filename: screenshotPath.split('/').last,
+        ),
+      ),
+    );
+
+    final response = await _apiClient.post(
+      ApiConstants.instituteSubscriptionRenew,
+      formData,
+    );
+    if (response.status.hasError) {
+      _handleError(response, 'Failed to submit renewal request');
+    }
   }
 
   @override

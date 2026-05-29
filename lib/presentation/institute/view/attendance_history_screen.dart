@@ -1,4 +1,5 @@
 ﻿import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/utils/subscription_guard.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/widgets/status_badge.dart';
@@ -137,10 +138,12 @@ class AttendanceHistoryScreen extends GetView<StaffController> {
 
   Widget _buildLogAttendanceButton() {
     return FloatingActionButton(
-      onPressed: () {
+      onPressed: () => SubscriptionGuard.runAddAction(() {
         Get.toNamed(AppRoutes.instituteLogStaffAttendance);
-      },
-      backgroundColor: AppColors.primaryBrand,
+      }),
+      backgroundColor: SubscriptionGuard.blocksAdd
+          ? AppColors.textMuted
+          : AppColors.primaryBrand,
       child: const Icon(Icons.add, color: AppColors.white, size: 32),
     );
   }

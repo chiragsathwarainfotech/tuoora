@@ -1,5 +1,6 @@
 ﻿import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/utils/subscription_guard.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
@@ -86,9 +87,12 @@ class _BatchHomeworkScreenState extends State<BatchHomeworkScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () =>
-            Get.toNamed(AppRoutes.instituteAddHomework, arguments: batch),
-        backgroundColor: AppColors.primaryBrand,
+        onPressed: () => SubscriptionGuard.runAddAction(
+          () => Get.toNamed(AppRoutes.instituteAddHomework, arguments: batch),
+        ),
+        backgroundColor: SubscriptionGuard.blocksAdd
+            ? AppColors.textMuted
+            : AppColors.primaryBrand,
         child: const Icon(Icons.add, color: AppColors.white),
       ),
     );

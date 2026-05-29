@@ -15,6 +15,9 @@ import 'package:tuoora/presentation/institute/view/record_fee_screen.dart';
 import 'package:tuoora/presentation/institute/view/edit_profile_screen.dart';
 import 'package:tuoora/presentation/institute/view/institute_change_password_screen.dart';
 import 'package:tuoora/presentation/institute/view/institute_subscription_screen.dart';
+import 'package:tuoora/presentation/institute/view/subscription_renewal_screen.dart';
+import 'package:tuoora/presentation/institute/view/submit_payment_proof_screen.dart';
+import 'package:tuoora/presentation/institute/bindings/subscription_renewal_binding.dart';
 import 'package:tuoora/presentation/institute/view/institute_whatsapp_screen.dart';
 import 'package:tuoora/presentation/institute/view/fee_report_screen.dart';
 import 'package:tuoora/presentation/institute/view/attendance_report_screen.dart';
@@ -312,6 +315,16 @@ class AppPages {
       name: AppRoutes.instituteSubscription,
       page: () => const InstituteSubscriptionScreen(),
       binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteSubscriptionRenew,
+      page: () => const SubscriptionRenewalScreen(),
+      binding: SubscriptionRenewalBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteSubmitPaymentProof,
+      page: () => const SubmitPaymentProofScreen(),
+      binding: SubscriptionRenewalBinding(),
     ),
     GetPage(
       name: AppRoutes.instituteWhatsApp,

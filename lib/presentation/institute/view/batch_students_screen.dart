@@ -1,5 +1,6 @@
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/utils/subscription_guard.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/controllers/batch_details_controller.dart';
@@ -49,9 +50,11 @@ class BatchStudentsScreen extends StatelessWidget {
       bottomNavigationBar: InstituteBottomButton(
         label: 'Assign Student',
         icon: Icons.person_add_alt_1_rounded,
-        onTap: () => Get.toNamed(
-          AppRoutes.instituteAssignToBatch,
-          arguments: controller.batch,
+        onTap: () => SubscriptionGuard.runAddAction(
+          () => Get.toNamed(
+            AppRoutes.instituteAssignToBatch,
+            arguments: controller.batch,
+          ),
         ),
       ),
     );

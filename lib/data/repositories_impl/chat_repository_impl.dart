@@ -12,10 +12,15 @@ abstract class ChatRepository {
   /// Loads existing message history with the participant encoded by
   /// [chatId] (format: `"<otherType>_<otherId>"`). [myUserId]/[myUserType]
   /// are needed to compute the `isMe` flag for each message.
+  ///
+  /// Paginated: [page] 1 is the most recent block; higher pages are older
+  /// history. [perPage] controls the page size.
   Future<List<Message>> getChatMessages(
     String chatId, {
     required String myUserId,
     required String myUserType,
+    int page = 1,
+    int perPage = 20,
   });
 
   Future<List<ChatParticipant>> getAvailableParticipants();
@@ -209,6 +214,8 @@ class ChatRepositoryImpl implements ChatRepository {
     String chatId, {
     required String myUserId,
     required String myUserType,
+    int page = 1,
+    int perPage = 20,
   }) async {
     // chatId is synthesized as "<otherType>_<otherId>" by the chat list/
     // contacts parsers. Split on the first underscore so multi-word types
@@ -222,7 +229,11 @@ class ChatRepositoryImpl implements ChatRepository {
 
     final response = await _apiClient.get(
       ApiConstants.chatMessages(otherId),
-      query: {'type': otherType},
+      query: {
+        'type': otherType,
+        'page': '$page',
+        'per_page': '$perPage',
+      },
     );
     if (response.status.hasError) {
       throw Exception(

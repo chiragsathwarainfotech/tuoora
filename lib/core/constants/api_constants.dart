@@ -60,6 +60,8 @@ class ApiConstants {
   static const String instituteSalaries = '/institute/salaries';
   static const String instituteSubscriptionAllData =
       '/institute/subscriptions/all-data';
+  static const String instituteSubscriptionRenew =
+      '/institute/subscription/renew';
 
   static String removeStudentFromBatch(int batchId) =>
       '/institute/batches/$batchId/remove-student';

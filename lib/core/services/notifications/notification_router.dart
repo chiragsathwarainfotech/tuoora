@@ -3,10 +3,12 @@ import 'package:get/get.dart';
 
 import 'package:tuoora/core/services/notifications/handlers/attendance_notification_handler.dart';
 import 'package:tuoora/core/services/notifications/handlers/batch_notification_handler.dart';
+import 'package:tuoora/core/services/notifications/handlers/birthday_notification_handler.dart';
 import 'package:tuoora/core/services/notifications/handlers/broadcast_notification_handler.dart';
 import 'package:tuoora/core/services/notifications/handlers/chat_notification_handler.dart';
 import 'package:tuoora/core/services/notifications/handlers/homework_notification_handler.dart';
 import 'package:tuoora/core/services/notifications/handlers/resource_notification_handler.dart';
+import 'package:tuoora/core/services/notifications/handlers/subscription_notification_handler.dart';
 import 'package:tuoora/core/services/notifications/notification_handler.dart';
 import 'package:tuoora/core/services/notifications/notification_payload.dart';
 
@@ -50,6 +52,10 @@ class NotificationRouter extends GetxService {
       'holiday': broadcastHandler,
       'daily_update': broadcastHandler,
       'resource': ResourceNotificationHandler(),
+      // Institute: admin approved a subscription renewal.
+      'subscription_alert': SubscriptionNotificationHandler(),
+      // Student: birthday celebration.
+      'birthday_celebration': BirthdayNotificationHandler(),
     };
     return this;
   }

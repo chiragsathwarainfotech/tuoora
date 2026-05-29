@@ -30,6 +30,16 @@ class ChatController extends GetxController {
   final messageController = TextEditingController();
   final scrollController = ScrollController();
 
+  // ----------------------------------------- message history pagination
+  static const int _messagesPerPage = 20;
+  int _messagesPage = 1;
+
+  /// True while an older page is being fetched (drives the top spinner).
+  final isLoadingMore = false.obs;
+
+  /// False once the server returns a short page — no more history to load.
+  final hasMoreMessages = true.obs;
+
   /// True when the user has scrolled up far enough that the latest message
   /// is off-screen — drives the floating "scroll to bottom" button.
   final showScrollToBottom = false.obs;
@@ -107,6 +117,13 @@ class ChatController extends GetxController {
     final shouldShow = distanceFromBottom > 300;
     if (shouldShow != showScrollToBottom.value) {
       showScrollToBottom.value = shouldShow;
+    }
+
+    // Near the top → pull the next (older) page of history.
+    if (pos.pixels <= 200 &&
+        !isLoadingMore.value &&
+        hasMoreMessages.value) {
+      loadOlderMessages();
     }
   }
 
@@ -190,12 +207,19 @@ class ChatController extends GetxController {
   Future<void> fetchMessages(String chatId) async {
     try {
       isLoading.value = true;
+      // Reset pagination for the freshly-opened conversation.
+      _messagesPage = 1;
+      isLoadingMore.value = false;
+      hasMoreMessages.value = true;
       final chatMessages = await _chatRepository.getChatMessages(
         chatId,
         myUserId: _myUserId ?? '',
         myUserType: _myUserType ?? '',
+        page: _messagesPage,
+        perPage: _messagesPerPage,
       );
       messages.assignAll(chatMessages);
+      hasMoreMessages.value = chatMessages.length >= _messagesPerPage;
       if (kDebugMode) {
         final mine = chatMessages.where((m) => m.isMe).toList();
         final invariantBreaks = mine
@@ -217,6 +241,68 @@ class ChatController extends GetxController {
       );
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  /// Loads the next older page of message history and prepends it, keeping the
+  /// user's current scroll position stable. Triggered from [_onScroll] when the
+  /// list nears the top. No-op while a fetch is in flight or once the server
+  /// returns a short page (signalling there's no more history).
+  Future<void> loadOlderMessages() async {
+    if (isLoadingMore.value || !hasMoreMessages.value) return;
+    final chat = selectedChat.value;
+    if (chat == null) return;
+
+    isLoadingMore.value = true;
+    try {
+      final nextPage = _messagesPage + 1;
+      final older = await _chatRepository.getChatMessages(
+        chat.id,
+        myUserId: _myUserId ?? '',
+        myUserType: _myUserType ?? '',
+        page: nextPage,
+        perPage: _messagesPerPage,
+      );
+
+      _messagesPage = nextPage;
+      hasMoreMessages.value = older.length >= _messagesPerPage;
+      if (older.isEmpty) return;
+
+      // Drop any overlap with messages already in the list (e.g. one that
+      // arrived live via the socket while we were paging).
+      final existingIds =
+          messages.where((m) => m.id.isNotEmpty).map((m) => m.id).toSet();
+      final fresh = older
+          .where((m) => m.id.isEmpty || !existingIds.contains(m.id))
+          .toList();
+      if (fresh.isEmpty) return;
+
+      // Capture pre-insert metrics so we can restore the viewport after the
+      // prepended (older) messages grow the list above the current top.
+      final hasClients = scrollController.hasClients;
+      final beforeMax =
+          hasClients ? scrollController.position.maxScrollExtent : 0.0;
+      final beforePixels =
+          hasClients ? scrollController.position.pixels : 0.0;
+
+      messages.assignAll([...fresh, ...messages]);
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!scrollController.hasClients) return;
+        final afterMax = scrollController.position.maxScrollExtent;
+        final delta = afterMax - beforeMax;
+        if (delta > 0) {
+          scrollController.jumpTo(
+            (beforePixels + delta).clamp(0.0, afterMax).toDouble(),
+          );
+        }
+      });
+    } catch (e) {
+      AppSnackBar.error(
+        'Failed to load older messages: ${e.toString().replaceAll('Exception: ', '')}',
+      );
+    } finally {
+      isLoadingMore.value = false;
     }
   }
 

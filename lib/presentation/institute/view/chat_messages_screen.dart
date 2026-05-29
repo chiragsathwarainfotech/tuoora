@@ -101,6 +101,7 @@ class ChatMessagesScreen extends GetView<ChatController> {
                         },
                       );
                     }),
+                    _buildLoadingMoreIndicator(),
                     _buildScrollToBottomButton(),
                   ],
                 ),
@@ -109,6 +110,20 @@ class ChatMessagesScreen extends GetView<ChatController> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  // Top spinner shown while older message history is being paged in.
+  Widget _buildLoadingMoreIndicator() {
+    return Positioned(
+      top: 12,
+      left: 0,
+      right: 0,
+      child: Obx(
+        () => controller.isLoadingMore.value
+            ? const Center(child: CommonLoading(size: 22))
+            : const SizedBox.shrink(),
       ),
     );
   }

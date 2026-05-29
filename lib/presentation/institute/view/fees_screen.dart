@@ -1,5 +1,6 @@
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/utils/subscription_guard.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/presentation/institute/controllers/institute_controller.dart';
@@ -55,8 +56,12 @@ class InstituteFeesScreen extends GetView<InstituteController> {
       ),
       floatingActionButton: FloatingActionButton(
         heroTag: 'fees_fab_unique_tag',
-        onPressed: () => Get.toNamed(AppRoutes.instituteRecordFee),
-        backgroundColor: AppColors.primaryBrand,
+        onPressed: () => SubscriptionGuard.runAddAction(
+          () => Get.toNamed(AppRoutes.instituteRecordFee),
+        ),
+        backgroundColor: SubscriptionGuard.blocksAdd
+            ? AppColors.textMuted
+            : AppColors.primaryBrand,
         child: const Icon(Icons.add, color: AppColors.white, size: 28),
       ),
     );

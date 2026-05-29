@@ -41,24 +41,6 @@ class HomeworkRatingScreen extends StatelessWidget {
                     _buildProgressSection(homework),
                     AppSpacing.v24,
                     _buildFilterSection(controller),
-                    // Single "Remind All Pending" CTA — replaces the per-card
-                    // reminder buttons. canEdit is derived from the immutable
-                    // homework arg, so it stays outside the Obx (avoids an
-                    // Obx with no reactive reads). Hidden on the Submitted
-                    // filter tab too — sending reminders only makes sense on
-                    // the All and Pending views.
-                    if (controller.canEdit)
-                      Obx(() {
-                        final pending = controller.pendingCount;
-                        final tab = controller.filterIndex.value;
-                        if (pending == 0 || tab == 1) {
-                          return const SizedBox.shrink();
-                        }
-                        return Padding(
-                          padding: const EdgeInsets.only(top: 16),
-                          child: _buildRemindAllButton(controller, pending),
-                        );
-                      }),
                     AppSpacing.v24,
                     Obx(
                       () => Column(
@@ -384,47 +366,6 @@ class HomeworkRatingScreen extends StatelessWidget {
             ),
           ],
         ],
-      ),
-    );
-  }
-
-  // Compact pill CTA on the right side. Replaces the old per-student
-  // "Send Reminder" buttons — one tap pings every pending student.
-  Widget _buildRemindAllButton(
-    HomeworkRatingController controller,
-    int pending,
-  ) {
-    return Align(
-      alignment: Alignment.centerRight,
-      child: Material(
-        color: AppColors.primaryBrand,
-        borderRadius: BorderRadius.circular(20),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(20),
-          onTap: controller.sendReminderToAllPending,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(
-                  Icons.notifications_active_rounded,
-                  size: 16,
-                  color: AppColors.white,
-                ),
-                AppSpacing.h8,
-                Text(
-                  'Remind $pending Pending',
-                  style: AppTextStyles.outfit(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.white,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
       ),
     );
   }

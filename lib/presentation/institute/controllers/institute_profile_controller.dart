@@ -307,7 +307,7 @@ class InstituteProfileController extends GetxController {
   void logout() async {
     final authService = Get.find<AuthService>();
     await authService.clearSession();
-    Get.offAllNamed(AppRoutes.login, arguments: 'INSTITUTE');
+    Get.offAllNamed(AppRoutes.roleSelection);
   }
 
   @override

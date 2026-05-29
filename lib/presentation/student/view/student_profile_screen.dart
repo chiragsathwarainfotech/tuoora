@@ -532,7 +532,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
       onPressed: () async {
         final authService = Get.find<AuthService>();
         await authService.clearSession();
-        Get.offAllNamed(AppRoutes.login, arguments: 'STUDENT');
+        Get.offAllNamed(AppRoutes.roleSelection);
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.errorBg,

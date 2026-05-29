@@ -10,8 +10,7 @@ class AppRoutes {
   static const String studentHomework = '/student/homework';
   static const String studentHomeworkDetail = '/student/homework-detail';
   static const String studentAssignmentDetail = '/student/assignment-detail';
-  static const String studentAttachmentPreview =
-      '/student/attachment-preview';
+  static const String studentAttachmentPreview = '/student/attachment-preview';
   static const String studentFeeReceipt = '/student/fee-receipt';
   static const String studentPayFees = '/student/pay-fees';
   static const String studentInstitute = '/student/institute';
@@ -24,9 +23,11 @@ class AppRoutes {
   static const String studentHolidayDetail = '/student/holiday-detail';
   static const String studentReports = '/student/reports';
   static const String studentReceiptsList = '/student/receipts-list';
-  static const String studentNotificationPreferences = '/student/notification-preferences';
+  static const String studentNotificationPreferences =
+      '/student/notification-preferences';
   static const String studentStudyMaterial = '/student/study-material';
-  static const String studentStudyMaterialDetail = '/student/study-material/detail';
+  static const String studentStudyMaterialDetail =
+      '/student/study-material/detail';
   static const String studentFeedback = '/student/feedback';
 
   static const String instituteDashboard = '/institute/dashboard';
@@ -40,7 +41,8 @@ class AppRoutes {
   static const String instituteBatchDetails = '/institute/batches/details';
   static const String instituteEditProfile = '/institute/edit-profile';
   static const String instituteProfile = '/institute/profile';
-  static const String instituteSecurity = '/institute/profile/security';
+  static const String instituteChangePassword =
+      '/institute/profile/changePassword';
   static const String instituteSubscription = '/institute/profile/subscription';
   static const String instituteWhatsApp = '/institute/profile/whatsapp';
   static const String instituteFeeReport = '/institute/reports/fee-main';
@@ -95,4 +97,3 @@ class AppRoutes {
   static const String instituteAddExpense = '/institute/expenses/add';
   static const String instituteExpenseAnalysis = '/institute/expenses/analysis';
 }
-

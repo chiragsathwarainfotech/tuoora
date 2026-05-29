@@ -13,7 +13,7 @@ import 'package:tuoora/presentation/institute/view/student_profile_screen.dart'
     as institute_student_profile;
 import 'package:tuoora/presentation/institute/view/record_fee_screen.dart';
 import 'package:tuoora/presentation/institute/view/edit_profile_screen.dart';
-import 'package:tuoora/presentation/institute/view/institute_security_screen.dart';
+import 'package:tuoora/presentation/institute/view/institute_change_password_screen.dart';
 import 'package:tuoora/presentation/institute/view/institute_subscription_screen.dart';
 import 'package:tuoora/presentation/institute/view/institute_whatsapp_screen.dart';
 import 'package:tuoora/presentation/institute/view/fee_report_screen.dart';
@@ -304,8 +304,8 @@ class AppPages {
       binding: InstituteBinding(),
     ),
     GetPage(
-      name: AppRoutes.instituteSecurity,
-      page: () => const InstituteSecurityScreen(),
+      name: AppRoutes.instituteChangePassword,
+      page: () => const InstituteChangePasswordScreen(),
       binding: InstituteBinding(),
     ),
     GetPage(

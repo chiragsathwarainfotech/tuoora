@@ -30,7 +30,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
                 ),
                 Expanded(
                   child: SingleChildScrollView(
-                    padding: AppSpacing.all24,
+                    padding: AppSpacing.screenPaddingTop,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:tuoora/presentation/institute/controllers/security_controller.dart';
 import 'package:get/get.dart';
 
-class InstituteSecurityScreen extends GetView<SecurityController> {
-  const InstituteSecurityScreen({super.key});
+class InstituteChangePasswordScreen extends GetView<SecurityController> {
+  const InstituteChangePasswordScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +21,10 @@ class InstituteSecurityScreen extends GetView<SecurityController> {
           children: [
             Column(
               children: [
-                const InstituteAppBar(title: 'Security', isRoot: false),
+                const InstituteAppBar(title: 'Change Password', isRoot: false),
                 Expanded(
                   child: SingleChildScrollView(
-                    padding: AppSpacing.all24,
+                    padding: AppSpacing.screenPaddingTop,
                     child: _buildUpdatePasswordCard(),
                   ),
                 ),
@@ -46,7 +46,7 @@ class InstituteSecurityScreen extends GetView<SecurityController> {
 
   Widget _buildUpdatePasswordCard() {
     return Container(
-      padding: AppSpacing.all28,
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
@@ -84,7 +84,7 @@ class InstituteSecurityScreen extends GetView<SecurityController> {
           Obx(
             () => _buildPasswordField(
               label: AppStrings.instNewPasswordLabel,
-              hint: 'Min. 6 characters',
+              hint: 'Enter new password',
               controller: controller.newPasswordController,
               isVisible: controller.isNewPasswordVisible,
               onToggle: controller.toggleNewPasswordVisibility,
@@ -95,7 +95,7 @@ class InstituteSecurityScreen extends GetView<SecurityController> {
           Obx(
             () => _buildPasswordField(
               label: AppStrings.instConfirmPasswordLabel,
-              hint: 'Repeat password',
+              hint: 'Confirm new password',
               controller: controller.confirmPasswordController,
               isVisible: controller.isConfirmPasswordVisible,
               onToggle: controller.toggleConfirmPasswordVisibility,

@@ -45,7 +45,7 @@ class InstituteSubscriptionScreen
                 }
 
                 return SingleChildScrollView(
-                  padding: AppSpacing.all24,
+                  padding: AppSpacing.screenPaddingTop,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -77,7 +77,7 @@ class InstituteSubscriptionScreen
       amount = '0';
     }
     return Container(
-      padding: AppSpacing.all16,
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: isActive
@@ -104,12 +104,12 @@ class InstituteSubscriptionScreen
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                padding: AppSpacing.x14.add(AppSpacing.y8),
+                padding: AppSpacing.cardPadding,
                 decoration: BoxDecoration(
                   color: isActive
                       ? AppColors.successBg.withValues(alpha: 0.30)
                       : AppColors.errorBg,
-                  borderRadius: BorderRadius.circular(AppSpacing.s20),
+                  borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
                   border: Border.all(
                     color: isActive ? AppColors.darkGreen : AppColors.error,
                   ),
@@ -225,7 +225,7 @@ class InstituteSubscriptionScreen
       padding: AppSpacing.all28,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.s24),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         border: Border.all(color: AppColors.background),
       ),
       child: Column(
@@ -336,19 +336,19 @@ class InstituteSubscriptionScreen
         : 'UNKNOWN DATE';
 
     return Container(
-      padding: AppSpacing.all16,
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.s16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         border: Border.all(color: AppColors.background),
       ),
       child: Row(
         children: [
           Container(
-            padding: AppSpacing.all10,
+            padding: AppSpacing.cardPadding,
             decoration: BoxDecoration(
               color: AppColors.primaryBrandLight,
-              borderRadius: BorderRadius.circular(AppSpacing.s10),
+              borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
             ),
             child: const Icon(
               Icons.assignment_rounded,

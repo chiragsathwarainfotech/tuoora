@@ -46,7 +46,7 @@ class InputStyles {
   static TextStyle hintStyle() => AppTextStyles.outfit(
         fontSize: 14,
         fontWeight: FontWeight.w400,
-        color: AppColors.blueSapphire,
+        color: AppColors.fieldLabel,
       );
 
   /// Drop-in [InputDecoration] for any raw [TextField] / [TextFormField].

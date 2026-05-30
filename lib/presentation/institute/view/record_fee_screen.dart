@@ -216,7 +216,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                       contentPadding: EdgeInsets.zero,
                       hintStyle: AppTextStyles.outfit(
                         fontSize: 15,
-                        color: AppColors.blueSapphire,
+                        color: AppColors.fieldLabel,
                       ),
                     ),
                     style: AppTextStyles.outfit(
@@ -335,7 +335,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
               icon,
               color: isActive
                   ? AppColors.primaryBrand
-                  : AppColors.brandAppBarColor,
+                  : AppColors.fieldLabel,
               size: 24,
             ),
             AppSpacing.h12,
@@ -346,7 +346,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                 fontWeight: FontWeight.w800,
                 color: isActive
                     ? AppColors.primaryBrand
-                    : AppColors.brandAppBarColor,
+                    : AppColors.textPrimary,
               ),
             ),
           ],
@@ -359,7 +359,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
     return Container(
       padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
-        color: AppColors.scaffoldBg,
+        color: AppColors.surfaceBg,
         borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         border: Border.all(
           color: AppColors.background,
@@ -515,7 +515,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                   style: AppTextStyles.outfit(
                     fontSize: 24,
                     fontWeight: FontWeight.w800,
-                    color: AppColors.primaryBrand,
+                    color: AppColors.textPrimary,
                   ),
                 ),
               ],

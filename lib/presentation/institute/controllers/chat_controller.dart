@@ -30,7 +30,6 @@ class ChatController extends GetxController {
   final messageController = TextEditingController();
   final scrollController = ScrollController();
 
-  // ----------------------------------------- message history pagination
   static const int _messagesPerPage = 20;
   int _messagesPage = 1;
 
@@ -99,7 +98,6 @@ class ChatController extends GetxController {
     super.onClose();
   }
 
-  // Formats the live recording timer as m:ss.
   String get recordTimeLabel {
     final s = recordSeconds.value;
     final m = s ~/ 60;
@@ -107,9 +105,6 @@ class ChatController extends GetxController {
     return '$m:$sec';
   }
 
-  // Shows the jump-to-bottom button once the user has scrolled more than
-  // ~300px away from the newest message (the list isn't reversed, so the
-  // bottom is maxScrollExtent).
   void _onScroll() {
     if (!scrollController.hasClients) return;
     final pos = scrollController.position;
@@ -119,21 +114,12 @@ class ChatController extends GetxController {
       showScrollToBottom.value = shouldShow;
     }
 
-    // Near the top → pull the next (older) page of history.
-    if (pos.pixels <= 200 &&
-        !isLoadingMore.value &&
-        hasMoreMessages.value) {
+    if (pos.pixels <= 200 && !isLoadingMore.value && hasMoreMessages.value) {
       loadOlderMessages();
     }
   }
 
-  /// Public entry point for the floating jump-to-bottom button. The list is
-  /// already laid out when the user taps, so scroll immediately rather than
-  /// waiting on a post-frame callback (which may not fire if no frame is
-  /// otherwise scheduled — that was why the button appeared to do nothing).
   void scrollToBottom() => _scrollToExtent(animate: true);
-
-  // ---------------------------------------------------------------- chats
 
   Future<void> fetchChats() async {
     try {
@@ -142,8 +128,6 @@ class ChatController extends GetxController {
       chatsList.assignAll(chats);
       _filterChats();
 
-      // Derive my identity from any chat (the backend embeds my_id/my_type
-      // on every entry). Fall back to AuthService if there are no chats yet.
       if (chats.isNotEmpty &&
           chats.first.myId != null &&
           chats.first.myRole != null) {
@@ -153,7 +137,6 @@ class ChatController extends GetxController {
         _deriveMyIdentityFromAuth();
       }
 
-      // Best-effort socket connect — failures don't block the chat list.
       _ensureSocketConnected();
     } catch (e) {
       AppSnackBar.error('Failed to load chats: $e');
@@ -170,18 +153,16 @@ class ChatController extends GetxController {
     _myUserType = _mapAuthRoleToChatType(user.role);
   }
 
-  /// AuthService stores roles in shouty form (`'INSTITUTE'`, `'STUDENT'`,
-  /// `'PARENT'`) while the chat backend uses model names. Map here once.
   String _mapAuthRoleToChatType(String role) {
     switch (role.toUpperCase()) {
       case 'INSTITUTE':
         return 'Institute';
-      case 'STAFF':
-        return 'Staff';
+      // case 'STAFF':
+      //   return 'Staff';
       case 'STUDENT':
         return 'Student';
-      case 'PARENT':
-        return 'StudentParent';
+      // case 'PARENT':
+      //   return 'StudentParent';
       default:
         return role;
     }
@@ -202,12 +183,9 @@ class ChatController extends GetxController {
     }
   }
 
-  // ----------------------------------------------------------- messages
-
   Future<void> fetchMessages(String chatId) async {
     try {
       isLoading.value = true;
-      // Reset pagination for the freshly-opened conversation.
       _messagesPage = 1;
       isLoadingMore.value = false;
       hasMoreMessages.value = true;
@@ -232,8 +210,6 @@ class ChatController extends GetxController {
           '(impossible state from backend): $invariantBreaks',
         );
       }
-      // Initial load jumps straight to the bottom (no animation) so the chat
-      // opens already pinned to the latest message.
       _scrollToBottom(animate: false);
     } catch (e) {
       AppSnackBar.error(
@@ -244,10 +220,6 @@ class ChatController extends GetxController {
     }
   }
 
-  /// Loads the next older page of message history and prepends it, keeping the
-  /// user's current scroll position stable. Triggered from [_onScroll] when the
-  /// list nears the top. No-op while a fetch is in flight or once the server
-  /// returns a short page (signalling there's no more history).
   Future<void> loadOlderMessages() async {
     if (isLoadingMore.value || !hasMoreMessages.value) return;
     final chat = selectedChat.value;
@@ -268,22 +240,20 @@ class ChatController extends GetxController {
       hasMoreMessages.value = older.length >= _messagesPerPage;
       if (older.isEmpty) return;
 
-      // Drop any overlap with messages already in the list (e.g. one that
-      // arrived live via the socket while we were paging).
-      final existingIds =
-          messages.where((m) => m.id.isNotEmpty).map((m) => m.id).toSet();
+      final existingIds = messages
+          .where((m) => m.id.isNotEmpty)
+          .map((m) => m.id)
+          .toSet();
       final fresh = older
           .where((m) => m.id.isEmpty || !existingIds.contains(m.id))
           .toList();
       if (fresh.isEmpty) return;
 
-      // Capture pre-insert metrics so we can restore the viewport after the
-      // prepended (older) messages grow the list above the current top.
       final hasClients = scrollController.hasClients;
-      final beforeMax =
-          hasClients ? scrollController.position.maxScrollExtent : 0.0;
-      final beforePixels =
-          hasClients ? scrollController.position.pixels : 0.0;
+      final beforeMax = hasClients
+          ? scrollController.position.maxScrollExtent
+          : 0.0;
+      final beforePixels = hasClients ? scrollController.position.pixels : 0.0;
 
       messages.assignAll([...fresh, ...messages]);
 
@@ -317,7 +287,6 @@ class ChatController extends GetxController {
       return;
     }
 
-    // Optimistic insert so the bubble shows up instantly (single grey tick).
     final now = DateTime.now();
     final optimistic = Message(
       id: '',
@@ -365,15 +334,6 @@ class ChatController extends GetxController {
     }
   }
 
-  /// Re-attempts a message whose previous send was marked as `failed`.
-  /// Removes the failed bubble from the list and re-fires either the text
-  /// or attachment send path depending on the message type.
-  ///
-  /// Note: if the backend persisted the original send but failed to return
-  /// a 2xx response (e.g. a 500 caused by serialization), retrying creates
-  /// a duplicate. The chat-history endpoint is the only source of truth in
-  /// that case — the user can swipe back and reopen to reconcile, or just
-  /// delete the duplicate.
   Future<void> retrySend(Message failed) async {
     if (!failed.failed) return;
     final chat = selectedChat.value;
@@ -602,7 +562,9 @@ class ChatController extends GetxController {
     if (idx == -1) {
       // The socket echoed the message back before our HTTP response. If we
       // haven't already accepted it, append; otherwise leave it alone.
-      if (!messages.any((m) => m.id == canonical.id && canonical.id.isNotEmpty)) {
+      if (!messages.any(
+        (m) => m.id == canonical.id && canonical.id.isNotEmpty,
+      )) {
         messages.add(canonical);
       }
       return;
@@ -630,8 +592,9 @@ class ChatController extends GetxController {
     }
     final socket = Get.find<ChatSocketService>();
     _onMessageSentSub = socket.onMessageSent.listen(_onIncomingMessage);
-    _onMessageReceivedSub =
-        socket.onMessageReceived.listen(_onMessageReceivedAck);
+    _onMessageReceivedSub = socket.onMessageReceived.listen(
+      _onMessageReceivedAck,
+    );
     _onMessageReadSub = socket.onMessageRead.listen(_onMessageReadAck);
     _onChatDeletedSub = socket.onChatDeleted.listen(_onChatDeletedRemote);
     if (kDebugMode) {
@@ -758,8 +721,9 @@ class ChatController extends GetxController {
       lastMessage: msg.content,
       lastMessageType: msg.messageType,
       lastMessageAt: msg.createdAt,
-      lastMessageTime:
-          msg.createdAt == null ? old.lastMessageTime : msg.timestamp,
+      lastMessageTime: msg.createdAt == null
+          ? old.lastMessageTime
+          : msg.timestamp,
       unreadCount: old.unreadCount + 1,
     );
     _moveToTop(idx, updated);
@@ -850,7 +814,9 @@ class ChatController extends GetxController {
     }
 
     final isStudent = Get.currentRoute.startsWith('/student');
-    Get.toNamed(isStudent ? AppRoutes.studentChat : AppRoutes.instituteChatMessages);
+    Get.toNamed(
+      isStudent ? AppRoutes.studentChat : AppRoutes.instituteChatMessages,
+    );
   }
 
   /// Called when the user leaves the chat messages screen (via system back,
@@ -882,17 +848,18 @@ class ChatController extends GetxController {
       );
       _removeChatLocally(target.id);
       // If we're sitting on the chat-messages route, pop back to the list.
-      if (Get.currentRoute == AppRoutes.instituteChatMessages || Get.currentRoute == AppRoutes.studentChat) {
+      if (Get.currentRoute == AppRoutes.instituteChatMessages ||
+          Get.currentRoute == AppRoutes.studentChat) {
         Get.until(
-          (route) => route.settings.name != AppRoutes.instituteChatMessages && route.settings.name != AppRoutes.studentChat,
+          (route) =>
+              route.settings.name != AppRoutes.instituteChatMessages &&
+              route.settings.name != AppRoutes.studentChat,
         );
       }
       closeChat();
       AppSnackBar.success('Conversation deleted');
     } catch (e) {
-      AppSnackBar.error(
-        e.toString().replaceAll('Exception: ', ''),
-      );
+      AppSnackBar.error(e.toString().replaceAll('Exception: ', ''));
     } finally {
       isLoading.value = false;
     }
@@ -913,9 +880,12 @@ class ChatController extends GetxController {
     }
     _removeChatLocally(id);
     if (selectedChat.value?.id == id) {
-      if (Get.currentRoute == AppRoutes.instituteChatMessages || Get.currentRoute == AppRoutes.studentChat) {
+      if (Get.currentRoute == AppRoutes.instituteChatMessages ||
+          Get.currentRoute == AppRoutes.studentChat) {
         Get.until(
-          (route) => route.settings.name != AppRoutes.instituteChatMessages && route.settings.name != AppRoutes.studentChat,
+          (route) =>
+              route.settings.name != AppRoutes.instituteChatMessages &&
+              route.settings.name != AppRoutes.studentChat,
         );
       }
       closeChat();

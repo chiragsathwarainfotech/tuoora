@@ -39,28 +39,33 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
               ),
             ),
             Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(
-                  AppSpacing.s16,
-                  AppSpacing.s16,
-                  AppSpacing.s16,
-                  AppSpacing.s24,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    StudentSectionHeader(title: 'TODAY'),
-                    const SizedBox(height: AppSpacing.s12),
-                    _buildTodayCard(),
-                    const SizedBox(height: AppSpacing.s24),
-                    StudentSectionHeader(title: 'MONTH'),
-                    const SizedBox(height: AppSpacing.s12),
-                    _buildMonthCard(),
-                    const SizedBox(height: AppSpacing.s24),
-                    StudentSectionHeader(title: 'MONTHLY SUMMARY'),
-                    const SizedBox(height: AppSpacing.s12),
-                    _buildSummaryCard(),
-                  ],
+              child: RefreshIndicator(
+                onRefresh: controller.fetchAttendance,
+                color: AppColors.studentBrand,
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: const EdgeInsets.fromLTRB(
+                    AppSpacing.s16,
+                    AppSpacing.s16,
+                    AppSpacing.s16,
+                    AppSpacing.s24,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      StudentSectionHeader(title: 'TODAY'),
+                      const SizedBox(height: AppSpacing.s12),
+                      _buildTodayCard(),
+                      const SizedBox(height: AppSpacing.s24),
+                      StudentSectionHeader(title: 'MONTH'),
+                      const SizedBox(height: AppSpacing.s12),
+                      _buildMonthCard(),
+                      const SizedBox(height: AppSpacing.s24),
+                      StudentSectionHeader(title: 'MONTHLY SUMMARY'),
+                      const SizedBox(height: AppSpacing.s12),
+                      _buildSummaryCard(),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -204,7 +209,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
         width: AppSpacing.s36,
         height: AppSpacing.s36,
         decoration: BoxDecoration(
-          color: AppColors.scaffoldBg,
+          color: AppColors.surfaceBg,
           borderRadius: BorderRadius.circular(AppSpacing.s8),
           border: Border.all(color: AppColors.borderGrey),
         ),

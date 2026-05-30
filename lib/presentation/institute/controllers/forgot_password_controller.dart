@@ -1,10 +1,10 @@
 import 'package:tuoora/core/utils/validation_utils.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/data/repositories/auth_repository.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'dart:async';
-import 'package:tuoora/core/constants/app_colors.dart';
 
 class ForgotPasswordController extends GetxController {
   final _authRepository = Get.find<AuthRepository>();
@@ -36,33 +36,18 @@ class ForgotPasswordController extends GetxController {
   Future<void> sendOtp() async {
     final email = emailController.text.trim();
     if (email.isEmpty || !GetUtils.isEmail(email)) {
-      Get.snackbar(
-        'Error',
-        'Please enter a valid email address',
-        backgroundColor: AppColors.errorRed.withValues(alpha: 0.1),
-        colorText: AppColors.errorRed,
-      );
+      AppSnackBar.error('Please enter a valid email address');
       return;
     }
 
     isLoading.value = true;
     try {
       final message = await _authRepository.forgotPassword(email);
-      Get.snackbar(
-        'Success',
-        message,
-        backgroundColor: Colors.green.withValues(alpha: 0.1),
-        colorText: Colors.green,
-      );
+      AppSnackBar.success(message);
       Get.toNamed(AppRoutes.instituteResetPassword, arguments: email);
       startTimer();
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        e.toString().replaceAll('Exception: ', ''),
-        backgroundColor: AppColors.errorRed.withValues(alpha: 0.1),
-        colorText: AppColors.errorRed,
-      );
+      AppSnackBar.error(e.toString().replaceAll('Exception: ', ''));
     } finally {
       isLoading.value = false;
     }
@@ -75,32 +60,20 @@ class ForgotPasswordController extends GetxController {
     final confirmPassword = confirmPasswordController.text.trim();
 
     if (otp.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
-      Get.snackbar(
-        'Error',
-        'Please fill in all fields',
-        backgroundColor: AppColors.errorRed.withValues(alpha: 0.1),
-        colorText: AppColors.errorRed,
-      );
+      AppSnackBar.error('Please fill in all fields');
       return;
     }
 
     final passwordError = ValidationUtils.validatePassword(password);
     if (passwordError != null) {
-      Get.snackbar(
-        'Invalid Password',
-        passwordError,
-        backgroundColor: AppColors.errorRed.withValues(alpha: 0.1),
-        colorText: AppColors.errorRed,
-      );
+      AppSnackBar.error(passwordError, title: 'Invalid Password');
       return;
     }
 
     if (password != confirmPassword) {
-      Get.snackbar(
-        'Passwords do not match',
+      AppSnackBar.error(
         'New password and confirm password must be the same.',
-        backgroundColor: AppColors.errorRed.withValues(alpha: 0.1),
-        colorText: AppColors.errorRed,
+        title: 'Passwords do not match',
       );
       return;
     }
@@ -113,20 +86,10 @@ class ForgotPasswordController extends GetxController {
         'password': password,
         'password_confirmation': confirmPassword,
       });
-      Get.snackbar(
-        'Success',
-        message,
-        backgroundColor: Colors.green.withValues(alpha: 0.1),
-        colorText: Colors.green,
-      );
+      AppSnackBar.success(message);
       Get.offAllNamed(AppRoutes.login, arguments: 'INSTITUTE');
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        e.toString().replaceAll('Exception: ', ''),
-        backgroundColor: AppColors.errorRed.withValues(alpha: 0.1),
-        colorText: AppColors.errorRed,
-      );
+      AppSnackBar.error(e.toString().replaceAll('Exception: ', ''));
     } finally {
       isLoading.value = false;
     }
@@ -153,20 +116,10 @@ class ForgotPasswordController extends GetxController {
     isResending.value = true;
     try {
       await _authRepository.forgotPassword(email);
-      Get.snackbar(
-        'Success',
-        'OTP resend successfully',
-        backgroundColor: Colors.green.withValues(alpha: 0.1),
-        colorText: Colors.green,
-      );
+      AppSnackBar.success('OTP resend successfully');
       startTimer();
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        e.toString().replaceAll('Exception: ', ''),
-        backgroundColor: AppColors.errorRed.withValues(alpha: 0.1),
-        colorText: AppColors.errorRed,
-      );
+      AppSnackBar.error(e.toString().replaceAll('Exception: ', ''));
     } finally {
       isResending.value = false;
     }

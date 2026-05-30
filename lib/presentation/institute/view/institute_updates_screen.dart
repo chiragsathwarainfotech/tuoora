@@ -37,7 +37,9 @@ class InstituteUpdatesScreen extends StatelessWidget {
                         'Broadcast your first update to students and parents to keep them informed.',
                     emptyIcon: Icons.campaign_outlined,
                     child: ListView.builder(
-                      padding: AppSpacing.screenPaddingTop,
+                      padding: AppSpacing.screenPaddingTop.add(
+                        const EdgeInsets.only(bottom: 96),
+                      ),
                       itemCount: controller.updatesList.length,
                       itemBuilder: (context, index) {
                         final update = controller.updatesList[index];

@@ -37,7 +37,9 @@ class AttendanceHistoryScreen extends GetView<StaffController> {
                     color: AppColors.primaryBrand,
                     onRefresh: () => controller.fetchGlobalAttendance(page: 1),
                     child: ListView.builder(
-                      padding: AppSpacing.screenPaddingTop,
+                      padding: AppSpacing.screenPaddingTop.add(
+                        const EdgeInsets.only(bottom: 96),
+                      ),
                       itemCount: controller.globalAttendanceList.length,
                       itemBuilder: (context, index) {
                         final attendance =

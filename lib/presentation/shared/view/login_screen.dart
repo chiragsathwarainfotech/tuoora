@@ -1,4 +1,5 @@
 import 'package:tuoora/core/widgets/app_button.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_images.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
@@ -83,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             style: AppTextStyles.outfit(
                               fontSize: 12,
                               fontWeight: FontWeight.w800,
-                              color: AppColors.brandAppBarColor,
+                              color: AppColors.fieldLabel,
                               letterSpacing: 1.0,
                             ),
                           ),
@@ -103,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 style: AppTextStyles.outfit(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w800,
-                                  color: AppColors.brandAppBarColor,
+                                  color: AppColors.fieldLabel,
                                   letterSpacing: 1.0,
                                 ),
                               ),
@@ -114,9 +115,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                       AppRoutes.instituteForgotPassword,
                                     );
                                   } else {
-                                    Get.snackbar(
-                                      'Coming Soon',
+                                    AppSnackBar.warning(
                                       'Recovery for this role will be available soon.',
+                                      title: 'Coming Soon',
                                     );
                                   }
                                 },
@@ -269,8 +270,9 @@ class _LoginScreenState extends State<LoginScreen> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.paleSilver,
+        color: AppColors.fieldBg,
         borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+        border: Border.all(color: AppColors.fieldBorder),
       ),
       child: TextField(
         controller: controller,
@@ -281,7 +283,7 @@ class _LoginScreenState extends State<LoginScreen> {
           hintText: hint,
           hintStyle: AppTextStyles.outfit(
             fontSize: 14,
-            color: AppColors.blueSapphire,
+            color: AppColors.fieldLabel,
           ),
           prefixIcon: Icon(
             prefixIcon,

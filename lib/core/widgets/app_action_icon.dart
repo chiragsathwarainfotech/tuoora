@@ -12,7 +12,7 @@ class AppActionIcon extends StatelessWidget {
   const AppActionIcon({
     super.key,
     required this.asset,
-    this.color = AppColors.primaryBrand,
+    this.color = AppColors.fieldLabel,
     this.size = 22,
     this.semanticsLabel,
   });

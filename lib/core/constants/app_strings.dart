@@ -178,14 +178,13 @@ class AppStrings {
   static const String instEditBatchTitle = 'Edit Batch';
   static const String instAddBatchTitle = 'Add Batch';
   static const String instBatchNameLabelAlt = 'Batch Name';
-  static const String instBatchNameHint = 'e.g., Advanced Algebra - Section A';
+  static const String instBatchNameHint = 'Enter batch name';
   static const String instBatchSubjectLabel = 'Subject';
-  static const String instBatchSubjectHint = 'e.g., Advanced Mathematics';
+  static const String instBatchSubjectHint = 'Enter subject';
   static const String instBatchDescLabel = 'Batch Description';
-  static const String instBatchDescHint =
-      'Enter batch details or topics covered...';
+  static const String instBatchDescHint = 'Enter batch description';
   static const String instBatchFeeLabelAlt = 'Batch Fee (₹)';
-  static const String instBatchFeeHint = 'e.g., 2500';
+  static const String instBatchFeeHint = 'Enter fee';
   static const String instScheduleSettings = 'Schedule Settings';
   static const String instTimeSlot = 'Time Slot';
   static const String instChangeBtn = 'Change';
@@ -211,13 +210,12 @@ class AppStrings {
 
   // Institute Add Homework
   static const String instAddHomeworkTitle = 'Add Homework';
-  static const String instHomeworkSubjectLabel = 'Subject Title';
-  static const String instHomeworkSubjectHint = 'e.g., Advanced Physics';
+  static const String instHomeworkSubjectLabel = 'Subject Name';
+  static const String instHomeworkSubjectHint = 'Enter subject';
   static const String instDueDateLabel = 'Due Date';
-  static const String instDueDateHint = 'mm/dd/yyyy';
+  static const String instDueDateHint = 'Select date';
   static const String instInstructionDetailsLabel = 'Instruction Details';
-  static const String instInstructionDetailsHint =
-      'Please complete the problems...';
+  static const String instInstructionDetailsHint = 'Enter instruction detail';
   static const String instResourceMaterialsLabel = 'Resource Materials';
   static const String instAddAttachmentBtn = 'Add Attachment';
   static const String instAddAttachmentDesc = 'Image or PDF documents';

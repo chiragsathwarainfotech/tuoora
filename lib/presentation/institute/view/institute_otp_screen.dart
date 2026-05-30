@@ -148,7 +148,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
       style: AppTextStyles.outfit(
         fontSize: 12,
         fontWeight: FontWeight.w800,
-        color: AppColors.brandAppBarColor,
+        color: AppColors.fieldLabel,
         letterSpacing: 1.0,
       ),
     );
@@ -157,8 +157,9 @@ class InstituteOtpScreen extends GetView<SignupController> {
   Widget _buildOtpField() {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.paleSilver,
+        color: AppColors.fieldBg,
         borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+        border: Border.all(color: AppColors.fieldBorder),
       ),
       child: TextField(
         controller: controller.otpController,
@@ -175,7 +176,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
           counterText: '',
           hintText: 'XXXXXX',
           hintStyle: TextStyle(
-            color: AppColors.blueSapphire,
+            color: AppColors.fieldLabel,
             letterSpacing: 8.0,
           ),
           border: InputBorder.none,

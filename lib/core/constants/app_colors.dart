@@ -2,12 +2,18 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   // --- Layout & Backgrounds ---
-  static const Color scaffoldBg = Color(0xFFF8F9FB);
+  /// Scaffold background — transparent on purpose so the global dotted
+  /// background painted by [DottedBackground] (wired into GetMaterialApp's
+  /// builder) shows through every screen. Use [surfaceBg] when you need the
+  /// pale fill colour for cards, tiles, or borders.
+  static const Color scaffoldBg = Colors.transparent;
+  static const Color surfaceBg = Color(0xFFF8F9FB);
   static const Color white = Colors.white;
   static const Color background = Color(0xFFF5F5F5);
-
-  // --- Brand & Primary Colors ---
-  static const Color primaryBrand = Color(0xFFB45309);
+  static const Color primaryBrand = Color(0xFFF97316);
+  static const Color fieldLabel = Color(0xFFA1A8B3);
+  static const Color fieldBg = Color(0xFFF1F5F9);
+  static const Color fieldBorder = Color(0xFFE2E8F0);
   static const Color primaryBrandLight = Color(0xFFFEF4E8);
   static const Color darkSlate = Color(0xFF1E293B);
   static const Color instBrandOrangeLight = Color(0xFFFF8800);
@@ -48,7 +54,7 @@ class AppColors {
   static const Color amberLight = Color(0xFFFEF3C7);
   static const Color error = Color(0xFFB00020);
   static const Color blueSapphire = Color(0xFF917B6B);
-  static const Color paleSilver = Color(0xFFEBEBEB);
+  static const Color paleSilver = Color(0xFFF1F5F9);
 
   // --- Student App Theme ---
   static const Color studentBrand = Color(0xFF7B2D1A);

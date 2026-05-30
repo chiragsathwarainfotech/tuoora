@@ -197,7 +197,7 @@ class InstituteSubscriptionScreen
           style: AppTextStyles.outfit(
             fontSize: AppSpacing.s20,
             fontWeight: FontWeight.w800,
-            color: AppColors.primaryBrand,
+            color: AppColors.textPrimary,
           ),
         ),
         AppSpacing.v24,
@@ -313,7 +313,7 @@ class InstituteSubscriptionScreen
           style: AppTextStyles.outfit(
             fontSize: AppSpacing.s18,
             fontWeight: FontWeight.w800,
-            color: AppColors.primaryBrand,
+            color: AppColors.textPrimary,
           ),
         ),
         AppSpacing.v24,

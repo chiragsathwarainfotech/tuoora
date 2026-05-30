@@ -13,8 +13,6 @@ class AuthService extends GetxService {
   String get token => _token.value;
   bool get isAuthenticated => _token.isNotEmpty;
 
-  /// Latest known subscription summary (institute only). Reactive — read inside
-  /// an Obx to rebuild when it changes (e.g. the dashboard renewal banner).
   Subscription? get subscription => _subscription.value;
 
   Future<AuthService> init() async {

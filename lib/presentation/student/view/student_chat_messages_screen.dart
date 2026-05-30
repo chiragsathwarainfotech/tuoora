@@ -137,7 +137,7 @@ class _StudentChatMessagesScreenState extends State<StudentChatMessagesScreen> {
                 PopupMenuButton<ChatMenuAction>(
                   icon: const Icon(
                     Icons.more_vert_rounded,
-                    color: AppColors.primaryBrand,
+                    color: AppColors.fieldLabel,
                   ),
                   onSelected: (action) {
                     switch (action) {

@@ -83,11 +83,11 @@ class AddEditNoteScreen extends GetView<NotesController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'CATEGORY',
+          'Category',
           style: AppTextStyles.outfit(
             fontSize: 14,
             fontWeight: FontWeight.w800,
-            color: AppColors.brandAppBarColor,
+            color: AppColors.fieldLabel,
           ),
         ),
         AppSpacing.v12,
@@ -176,15 +176,19 @@ class AddEditNoteScreen extends GetView<NotesController> {
   }
 
   Widget _buildBottomAction() {
-    return Container(
-      padding: AppSpacing.all24,
-      child: Obx(
-        () => AppButton(
-          label: AppStrings.instSaveNoteBtn,
-          onPressed: () => controller.saveNote(),
-          isLoading: controller.isLoading.value,
-          borderRadius: 16,
-          fontSize: 16,
+    return SafeArea(
+      top: false,
+      minimum: const EdgeInsets.only(bottom: 16),
+      child: Container(
+        padding: AppSpacing.all24,
+        child: Obx(
+          () => AppButton(
+            label: AppStrings.instSaveNoteBtn,
+            onPressed: () => controller.saveNote(),
+            isLoading: controller.isLoading.value,
+            borderRadius: 16,
+            fontSize: 16,
+          ),
         ),
       ),
     );

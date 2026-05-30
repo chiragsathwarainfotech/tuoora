@@ -33,7 +33,7 @@ class StaffAttendanceScreen extends GetView<StaffController> {
                   emptySubtitle: 'No attendance records found for this month.',
                   emptyIcon: Icons.calendar_today_outlined,
                   child: SingleChildScrollView(
-                    padding: AppSpacing.all24,
+                    padding: AppSpacing.screenPaddingTop,
                     child: Column(
                       children: [
                         _buildSummaryCard(),
@@ -55,10 +55,10 @@ class StaffAttendanceScreen extends GetView<StaffController> {
 
   Widget _buildSummaryCard() {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 32),
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       ),
       child: Row(
         children: [
@@ -122,10 +122,10 @@ class StaffAttendanceScreen extends GetView<StaffController> {
 
   Widget _buildCalendarCard() {
     return Container(
-      padding: AppSpacing.all24,
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       ),
       child: Column(
         children: [
@@ -352,17 +352,16 @@ class StaffAttendanceScreen extends GetView<StaffController> {
   }
 
   Widget _buildRemarksCard() {
-    // Show remark for the latest entry if available
     final latestRemark = controller.attendanceList.firstWhereOrNull(
       (a) => a.note != null && a.note!.isNotEmpty,
     );
 
     return Container(
       width: double.infinity,
-      padding: AppSpacing.all24,
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -372,7 +371,7 @@ class StaffAttendanceScreen extends GetView<StaffController> {
               Container(
                 padding: AppSpacing.all8,
                 decoration: BoxDecoration(
-                  color: AppColors.scaffoldBg,
+                  color: AppColors.surfaceBg,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Icon(

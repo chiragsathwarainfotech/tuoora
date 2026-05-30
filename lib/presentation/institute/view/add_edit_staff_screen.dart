@@ -70,7 +70,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
           style: AppTextStyles.outfit(
             fontSize: 14,
             fontWeight: FontWeight.w800,
-            color: AppColors.brandAppBarColor,
+            color: AppColors.fieldLabel,
           ),
         ),
         AppSpacing.v8,
@@ -106,7 +106,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
           style: AppTextStyles.outfit(
             fontSize: 14,
             fontWeight: FontWeight.w800,
-            color: AppColors.brandAppBarColor,
+            color: AppColors.fieldLabel,
           ),
         ),
         AppSpacing.v12,
@@ -332,13 +332,17 @@ class AddEditStaffScreen extends GetView<StaffController> {
   }
 
   Widget _buildSaveButton(bool isEdit) {
-    return Obx(
-      () => AppButton(
-        onPressed: controller.isSaving.value
-            ? null
-            : () => controller.saveStaff(),
-        isLoading: controller.isSaving.value,
-        label: isEdit ? 'Update Staff Member' : 'Save Staff Member',
+    return SafeArea(
+      top: false,
+      minimum: const EdgeInsets.only(bottom: 16),
+      child: Obx(
+        () => AppButton(
+          onPressed: controller.isSaving.value
+              ? null
+              : () => controller.saveStaff(),
+          isLoading: controller.isSaving.value,
+          label: isEdit ? 'Update Staff Member' : 'Save Staff Member',
+        ),
       ),
     );
   }

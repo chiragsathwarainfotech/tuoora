@@ -165,7 +165,7 @@ class FeeTransactionHistoryScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: AppColors.scaffoldBg,
+                  color: AppColors.surfaceBg,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(

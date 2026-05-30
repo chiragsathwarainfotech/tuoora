@@ -32,28 +32,33 @@ class StudentInstituteScreen extends GetView<StudentInstituteController> {
                   return const Center(child: Text('No institute data found'));
                 }
 
-                return SingleChildScrollView(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      _buildHeroCard(institute),
-                      const SizedBox(height: 16),
-                      _buildContactCard(institute),
-                      const SizedBox(height: 16),
-                      _buildChatButton(),
-                      const SizedBox(height: 32),
-                      Text(
-                        'LOCATION',
-                        style: AppTextStyles.outfit(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w800,
-                          color: AppColors.textSecondary,
+                return RefreshIndicator(
+                  onRefresh: controller.fetchInstitute,
+                  color: AppColors.studentBrand,
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        _buildHeroCard(institute),
+                        const SizedBox(height: 16),
+                        _buildContactCard(institute),
+                        const SizedBox(height: 16),
+                        _buildChatButton(),
+                        const SizedBox(height: 32),
+                        Text(
+                          'LOCATION',
+                          style: AppTextStyles.outfit(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.textSecondary,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      _buildMapCard(institute),
-                    ],
+                        const SizedBox(height: 8),
+                        _buildMapCard(institute),
+                      ],
+                    ),
                   ),
                 );
               }),

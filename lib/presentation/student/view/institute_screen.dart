@@ -64,7 +64,7 @@ class InstituteScreen extends StatelessWidget {
             onPressed: () => Get.toNamed(_getUpdatesRoute()),
             icon: const Icon(
               Icons.notifications_none_rounded,
-              color: AppColors.textPrimary,
+              color: AppColors.fieldLabel,
               size: AppSpacing.s26,
             ),
           ),
@@ -171,7 +171,7 @@ class InstituteScreen extends StatelessWidget {
     return Container(
       padding: AppSpacing.all16,
       decoration: BoxDecoration(
-        color: AppColors.scaffoldBg,
+        color: AppColors.surfaceBg,
         borderRadius: BorderRadius.circular(AppSpacing.s20),
       ),
       child: Row(

@@ -27,7 +27,10 @@ class AppTheme {
       onPrimary: onPrimary,
       onSurface: onSurface,
     ),
-    scaffoldBackgroundColor: background,
+    // Transparent so the global DottedBackground (wired in
+    // GetMaterialApp.builder) shows through every Scaffold, including ones
+    // that don't set their own backgroundColor.
+    scaffoldBackgroundColor: Colors.transparent,
     textTheme: TextTheme(
       headlineLarge: GoogleFonts.outfit(
         fontSize: 28,

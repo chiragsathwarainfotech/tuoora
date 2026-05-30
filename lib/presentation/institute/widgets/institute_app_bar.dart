@@ -53,7 +53,7 @@ class InstituteAppBar extends StatelessWidget implements PreferredSizeWidget {
                         style: AppTextStyles.outfit(
                           fontSize: 18,
                           fontWeight: FontWeight.w700,
-                          color: AppColors.brandAppBarColor,
+                          color: AppColors.textPrimary,
                         ),
                       ),
                       if (subtitle != null)
@@ -88,14 +88,14 @@ class InstituteAppBar extends StatelessWidget implements PreferredSizeWidget {
         width: AppSpacing.s40,
         height: AppSpacing.s40,
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: AppColors.fieldBg,
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: AppColors.borderGrey),
+          border: Border.all(color: AppColors.fieldBorder),
         ),
         child: Center(
           child: Icon(
             isRoot ? Icons.menu_rounded : Icons.arrow_back_ios_new_rounded,
-            color: AppColors.brandAppBarColor,
+            color: AppColors.textPrimary,
             size: isRoot ? AppSpacing.s22 : AppSpacing.s18,
           ),
         ),
@@ -110,7 +110,7 @@ class InstituteAppBar extends StatelessWidget implements PreferredSizeWidget {
           onTap: () => Get.toNamed(AppRoutes.instituteChats),
           child: const Icon(
             Icons.chat_bubble_outline_rounded,
-            color: AppColors.brandAppBarColor,
+            color: AppColors.fieldLabel,
             size: AppSpacing.s24,
           ),
         ),
@@ -119,7 +119,7 @@ class InstituteAppBar extends StatelessWidget implements PreferredSizeWidget {
           onTap: () => Get.toNamed(AppRoutes.instituteNotifications),
           child: const Icon(
             Icons.notifications_none_rounded,
-            color: AppColors.brandAppBarColor,
+            color: AppColors.fieldLabel,
             size: AppSpacing.s26,
           ),
         ),

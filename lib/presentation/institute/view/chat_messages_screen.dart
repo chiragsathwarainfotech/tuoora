@@ -44,7 +44,7 @@ class ChatMessagesScreen extends GetView<ChatController> {
                     PopupMenuButton<ChatMenuAction>(
                       icon: const Icon(
                         Icons.more_vert_rounded,
-                        color: AppColors.primaryBrand,
+                        color: AppColors.fieldLabel,
                       ),
                       onSelected: (action) {
                         switch (action) {
@@ -114,7 +114,6 @@ class ChatMessagesScreen extends GetView<ChatController> {
     );
   }
 
-  // Top spinner shown while older message history is being paged in.
   Widget _buildLoadingMoreIndicator() {
     return Positioned(
       top: 12,
@@ -205,8 +204,6 @@ class ChatMessagesScreen extends GetView<ChatController> {
     );
   }
 
-  // Wraps a bubble with a day separator ("Today" / "Yesterday" / date) when
-  // this message starts a new calendar day relative to the previous one.
   Widget _buildMessageRow(int index, Message message) {
     final bubble = _buildMessageBubble(message);
     final createdAt = message.createdAt;
@@ -518,7 +515,10 @@ class ChatMessagesScreen extends GetView<ChatController> {
       children: [
         IconButton(
           onPressed: controller.cancelRecording,
-          icon: const Icon(Icons.delete_outline_rounded, color: AppColors.bohoRed),
+          icon: const Icon(
+            Icons.delete_outline_rounded,
+            color: AppColors.bohoRed,
+          ),
         ),
         Expanded(
           child: Row(

@@ -47,7 +47,9 @@ class BatchResourcesScreen extends StatelessWidget {
                   );
                 }
                 return ListView.builder(
-                  padding: AppSpacing.all16,
+                  padding: AppSpacing.all16.add(
+                    const EdgeInsets.only(bottom: 80),
+                  ),
                   itemCount: controller.resources.length,
                   itemBuilder: (context, index) =>
                       _buildResourceItem(controller.resources[index], index),

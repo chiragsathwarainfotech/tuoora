@@ -41,7 +41,7 @@ class SplashScreen extends GetView<SplashController> {
             ),
             AppSpacing.v24,
             Text(
-              'Finance Simplified',
+              'Tag Line',
               style: AppTextStyles.outfit(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,

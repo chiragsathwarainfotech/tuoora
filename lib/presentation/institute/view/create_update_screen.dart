@@ -35,7 +35,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                           style: AppTextStyles.outfit(
                             fontSize: 14,
                             fontWeight: FontWeight.w800,
-                            color: AppColors.brandAppBarColor,
+                            color: AppColors.fieldLabel,
                           ),
                         ),
                         AppSpacing.v16,
@@ -150,7 +150,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
           style: AppTextStyles.outfit(
             fontSize: 14,
             fontWeight: FontWeight.w800,
-            color: AppColors.brandAppBarColor,
+            color: AppColors.fieldLabel,
           ),
         ),
         AppSpacing.v16,
@@ -200,7 +200,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                   style: AppTextStyles.outfit(
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
-                    color: AppColors.brandAppBarColor,
+                    color: AppColors.fieldLabel,
                   ),
                 ),
                 AppSpacing.v12,
@@ -253,7 +253,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                     style: AppTextStyles.outfit(
                       fontSize: 14,
                       fontWeight: FontWeight.w800,
-                      color: AppColors.brandAppBarColor,
+                      color: AppColors.fieldLabel,
                     ),
                   ),
                   AppSpacing.v12,
@@ -414,10 +414,14 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
   }
 
   Widget _buildBroadcastButton(UpdatesController controller) {
-    return AppButton(
-      label: 'Create Update',
-      icon: Icons.send_rounded,
-      onPressed: () => controller.broadcastUpdate(),
+    return SafeArea(
+      top: false,
+      minimum: const EdgeInsets.only(bottom: 16),
+      child: AppButton(
+        label: 'Create Update',
+        icon: Icons.send_rounded,
+        onPressed: () => controller.broadcastUpdate(),
+      ),
     );
   }
 }

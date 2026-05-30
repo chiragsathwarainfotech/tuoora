@@ -114,7 +114,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: AppColors.primaryBrand,
                     shape: BoxShape.circle,
-                    border: Border.all(color: AppColors.scaffoldBg, width: 2),
+                    border: Border.all(color: AppColors.surfaceBg, width: 2),
                   ),
                   child: const AppActionIcon(
                     asset: AppImages.icEdit,
@@ -133,7 +133,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
           style: AppTextStyles.outfit(
             fontSize: 22,
             fontWeight: FontWeight.w800,
-            color: AppColors.primaryBrand,
+            color: AppColors.textPrimary,
           ),
         ),
         AppSpacing.v4,
@@ -244,14 +244,14 @@ class InstituteProfileViewScreen extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(0, 24, 0, 12),
       child: Row(
         children: [
-          Icon(icon, size: 18, color: AppColors.primaryBrand),
+          Icon(icon, size: 18, color: AppColors.fieldLabel),
           AppSpacing.h12,
           Text(
             title,
             style: AppTextStyles.outfit(
               fontSize: 11,
               fontWeight: FontWeight.w900,
-              color: AppColors.primaryBrand,
+              color: AppColors.textPrimary,
               letterSpacing: 1.1,
             ),
           ),

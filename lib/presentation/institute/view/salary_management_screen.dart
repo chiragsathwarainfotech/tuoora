@@ -31,7 +31,9 @@ class SalaryManagementScreen extends GetView<StaffController> {
                 onRefresh: () => controller.fetchGlobalSalaries(page: 1),
                 color: AppColors.primaryBrand,
                 child: ListView(
-                  padding: AppSpacing.screenPaddingTop,
+                  padding: AppSpacing.screenPaddingTop.add(
+                    const EdgeInsets.only(bottom: 96),
+                  ),
                   children: [
                     _buildTotalPaidCard(),
                     AppSpacing.v24,
@@ -99,7 +101,7 @@ class SalaryManagementScreen extends GetView<StaffController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Total Paid this Month â€¢ ${DateFormat('MMMM yyyy').format(controller.selectedSalaryMonth.value)}',
+                  'Total Paid this Month ${DateFormat('MMMM yyyy').format(controller.selectedSalaryMonth.value)}',
                   style: AppTextStyles.outfit(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,

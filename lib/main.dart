@@ -9,6 +9,7 @@ import 'config/app_pages.dart';
 import 'config/app_routes.dart';
 import 'config/app_theme.dart';
 import 'package:tuoora/core/api/api_client.dart';
+import 'package:tuoora/core/widgets/dotted_background.dart';
 import 'package:tuoora/core/services/auth_service.dart';
 import 'package:tuoora/core/services/media_cache_service.dart';
 import 'package:tuoora/core/services/notifications/notification_router.dart';
@@ -22,10 +23,6 @@ import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
-
-  // Wire up the WebView platform implementation. Without this, the in-app
-  // resource viewer asserts with "A platform implementation for
-  // webview_flutter has not been set." on first use.
   if (!kIsWeb) {
     if (Platform.isAndroid) {
       WebViewPlatform.instance = AndroidWebViewPlatform();
@@ -57,6 +54,9 @@ class FeeEasyApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       initialRoute: AppRoutes.splash,
       getPages: AppPages.pages,
+      builder: (context, child) {
+        return DottedBackground(child: child ?? const SizedBox.shrink());
+      },
     );
   }
 }

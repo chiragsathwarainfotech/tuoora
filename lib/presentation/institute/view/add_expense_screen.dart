@@ -29,12 +29,16 @@ class AddExpenseScreen extends GetView<ExpenseController> {
                   children: [
                     _buildForm(context),
                     AppSpacing.v32,
-                    Obx(
-                      () => AppButton(
-                        onPressed: () => controller.addExpense(),
-                        label: 'Add Expense',
-                        icon: Icons.check_circle_outline_rounded,
-                        isLoading: controller.isLoading.value,
+                    SafeArea(
+                      top: false,
+                      minimum: const EdgeInsets.only(bottom: 16),
+                      child: Obx(
+                        () => AppButton(
+                          onPressed: () => controller.addExpense(),
+                          label: 'Add Expense',
+                          icon: Icons.check_circle_outline_rounded,
+                          isLoading: controller.isLoading.value,
+                        ),
                       ),
                     ),
                   ],
@@ -92,7 +96,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
           style: AppTextStyles.outfit(
             fontSize: 14,
             fontWeight: FontWeight.w800,
-            color: AppColors.brandAppBarColor,
+            color: AppColors.fieldLabel,
           ),
         ),
         AppSpacing.v8,
@@ -172,7 +176,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
           style: AppTextStyles.outfit(
             fontSize: 14,
             fontWeight: FontWeight.w800,
-            color: AppColors.brandAppBarColor,
+            color: AppColors.fieldLabel,
           ),
         ),
         AppSpacing.v8,
@@ -221,7 +225,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
           style: AppTextStyles.outfit(
             fontSize: 14,
             fontWeight: FontWeight.w800,
-            color: AppColors.brandAppBarColor,
+            color: AppColors.fieldLabel,
           ),
         ),
         AppSpacing.v8,

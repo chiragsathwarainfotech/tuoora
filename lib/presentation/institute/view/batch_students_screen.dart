@@ -96,7 +96,7 @@ class BatchStudentsScreen extends StatelessWidget {
                   style: AppTextStyles.outfit(
                     fontSize: 32,
                     fontWeight: FontWeight.w800,
-                    color: AppColors.primaryBrand,
+                    color: AppColors.textPrimary,
                   ),
                 ),
               ],

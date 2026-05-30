@@ -177,7 +177,7 @@ class StudentFeeReminderScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppSpacing.s16),
       decoration: BoxDecoration(
-        color: AppColors.scaffoldBg,
+        color: AppColors.surfaceBg,
         borderRadius: BorderRadius.circular(AppSpacing.s8),
       ),
       child: Row(

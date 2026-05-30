@@ -9,12 +9,6 @@ import 'package:tuoora/data/models/chat_model.dart';
 abstract class ChatRepository {
   Future<List<Chat>> getChats();
 
-  /// Loads existing message history with the participant encoded by
-  /// [chatId] (format: `"<otherType>_<otherId>"`). [myUserId]/[myUserType]
-  /// are needed to compute the `isMe` flag for each message.
-  ///
-  /// Paginated: [page] 1 is the most recent block; higher pages are older
-  /// history. [perPage] controls the page size.
   Future<List<Message>> getChatMessages(
     String chatId, {
     required String myUserId,
@@ -25,13 +19,6 @@ abstract class ChatRepository {
 
   Future<List<ChatParticipant>> getAvailableParticipants();
 
-  /// Sends a text/attachment message. Returns the server-canonical Message.
-  /// [receiverType] is the bare model name (`Institute`, `Student`, `Staff`,
-  /// `StudentParent`) — this method prefixes it with `App\Models\` as the
-  /// backend expects.
-  ///
-  /// Pass [attachment] only for `type` in {image, video, audio, document};
-  /// the request switches to `multipart/form-data` automatically when set.
   Future<Message> sendMessage({
     required int receiverId,
     required String receiverType,
@@ -42,16 +29,10 @@ abstract class ChatRepository {
     required String myUserType,
   });
 
-  /// Marks the given message as delivered to the recipient device.
-  /// Returns the updated `received_at` timestamp (UTC) when reported by
-  /// the server, or `null` if the server didn't echo it.
   Future<DateTime?> markReceived(int messageId);
 
-  /// Marks the given message as read by the recipient.
   Future<DateTime?> markRead(int messageId);
 
-  /// Deletes the entire conversation with the given user. [userType] is the
-  /// bare model name (`Institute`, `Student`, `Staff`, `StudentParent`).
   Future<void> deleteConversation({
     required int userId,
     required String userType,
@@ -67,9 +48,7 @@ class ChatRepositoryImpl implements ChatRepository {
   Future<List<Chat>> getChats() async {
     final response = await _apiClient.get(ApiConstants.chatList);
     if (response.status.hasError) {
-      throw Exception(
-        response.body?['message'] ?? 'Failed to fetch chats',
-      );
+      throw Exception(response.body?['message'] ?? 'Failed to fetch chats');
     }
     final body = response.body;
     final data = body is Map<String, dynamic> ? body['data'] : null;
@@ -84,9 +63,7 @@ class ChatRepositoryImpl implements ChatRepository {
   Future<List<ChatParticipant>> getAvailableParticipants() async {
     final response = await _apiClient.get(ApiConstants.chatContacts);
     if (response.status.hasError) {
-      throw Exception(
-        response.body?['message'] ?? 'Failed to fetch contacts',
-      );
+      throw Exception(response.body?['message'] ?? 'Failed to fetch contacts');
     }
     final body = response.body;
     final list = body is List
@@ -119,7 +96,7 @@ class ChatRepositoryImpl implements ChatRepository {
     final response = attachment == null
         ? await _apiClient.post(ApiConstants.chatSend, {
             ...commonFields,
-            'receiver_id': receiverId, // keep int when JSON
+            'receiver_id': receiverId,
           })
         : await _apiClient.post(
             ApiConstants.chatSend,
@@ -135,9 +112,7 @@ class ChatRepositoryImpl implements ChatRepository {
           );
 
     if (response.status.hasError) {
-      throw Exception(
-        response.body?['message'] ?? 'Failed to send message',
-      );
+      throw Exception(response.body?['message'] ?? 'Failed to send message');
     }
     final data = response.body is Map<String, dynamic>
         ? response.body['data']
@@ -154,14 +129,11 @@ class ChatRepositoryImpl implements ChatRepository {
 
   @override
   Future<DateTime?> markReceived(int messageId) async {
-    final response = await _apiClient.post(
-      ApiConstants.chatMarkReceived,
-      {'message_id': messageId},
-    );
+    final response = await _apiClient.post(ApiConstants.chatMarkReceived, {
+      'message_id': messageId,
+    });
     if (response.status.hasError) {
-      throw Exception(
-        response.body?['message'] ?? 'Failed to mark received',
-      );
+      throw Exception(response.body?['message'] ?? 'Failed to mark received');
     }
     final data = response.body is Map<String, dynamic>
         ? response.body['data']
@@ -175,14 +147,9 @@ class ChatRepositoryImpl implements ChatRepository {
     required int userId,
     required String userType,
   }) async {
-    // GetConnect's `delete` doesn't carry a body — pass as query params.
-    // Laravel reads `$request->user_id` identically from query or body.
     final response = await _apiClient.delete(
       ApiConstants.chatConversation,
-      query: {
-        'user_id': userId.toString(),
-        'user_type': userType,
-      },
+      query: {'user_id': userId.toString(), 'user_type': userType},
     );
     if (response.status.hasError) {
       throw Exception(
@@ -193,14 +160,11 @@ class ChatRepositoryImpl implements ChatRepository {
 
   @override
   Future<DateTime?> markRead(int messageId) async {
-    final response = await _apiClient.post(
-      ApiConstants.chatMarkRead,
-      {'message_id': messageId},
-    );
+    final response = await _apiClient.post(ApiConstants.chatMarkRead, {
+      'message_id': messageId,
+    });
     if (response.status.hasError) {
-      throw Exception(
-        response.body?['message'] ?? 'Failed to mark read',
-      );
+      throw Exception(response.body?['message'] ?? 'Failed to mark read');
     }
     final data = response.body is Map<String, dynamic>
         ? response.body['data']
@@ -217,9 +181,6 @@ class ChatRepositoryImpl implements ChatRepository {
     int page = 1,
     int perPage = 20,
   }) async {
-    // chatId is synthesized as "<otherType>_<otherId>" by the chat list/
-    // contacts parsers. Split on the first underscore so multi-word types
-    // like "StudentParent" survive the round-trip.
     final cut = chatId.indexOf('_');
     if (cut <= 0 || cut == chatId.length - 1) {
       throw Exception('Invalid chat id: $chatId');
@@ -229,27 +190,35 @@ class ChatRepositoryImpl implements ChatRepository {
 
     final response = await _apiClient.get(
       ApiConstants.chatMessages(otherId),
-      query: {
-        'type': otherType,
-        'page': '$page',
-        'per_page': '$perPage',
-      },
+      query: {'type': otherType, 'page': '$page', 'per_page': '$perPage'},
     );
     if (response.status.hasError) {
-      throw Exception(
-        response.body?['message'] ?? 'Failed to fetch messages',
-      );
+      throw Exception(response.body?['message'] ?? 'Failed to fetch messages');
     }
     final body = response.body;
-    final data = body is Map<String, dynamic> ? body['data'] : null;
-    if (data is! List) return const [];
-    return data
+    final root = body is Map<String, dynamic> ? body['data'] : null;
+    // The paginated endpoint returns one of:
+    //   { "data": [ ...messages ] }                                 (flat list)
+    //   { "data": { "data": [ ...messages ], "current_page", ... } } (Laravel)
+    //   { "data": { "messages": [...], "current_page", ... } }       (custom)
+    // Walk these shapes and extract the actual message list.
+    List<dynamic>? rawMessages;
+    if (root is List) {
+      rawMessages = root;
+    } else if (root is Map<String, dynamic>) {
+      final inner = root['data'] ?? root['messages'] ?? root['items'];
+      if (inner is List) rawMessages = inner;
+    }
+    if (rawMessages == null) return const [];
+    return rawMessages
         .whereType<Map>()
-        .map((e) => Message.fromJson(
-              Map<String, dynamic>.from(e),
-              myUserId: myUserId,
-              myUserType: myUserType,
-            ))
+        .map(
+          (e) => Message.fromJson(
+            Map<String, dynamic>.from(e),
+            myUserId: myUserId,
+            myUserType: myUserType,
+          ),
+        )
         .toList();
   }
 }

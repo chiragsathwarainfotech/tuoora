@@ -111,7 +111,7 @@ class ReportsScreen extends StatelessWidget {
                     style: AppTextStyles.outfit(
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
-                      color: AppColors.brandAppBarColor,
+                      color: AppColors.textPrimary,
                     ),
                   ),
                   AppSpacing.v4,

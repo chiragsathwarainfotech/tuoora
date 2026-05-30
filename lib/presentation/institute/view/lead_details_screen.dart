@@ -62,7 +62,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
               style: AppTextStyles.outfit(
                 fontSize: 28,
                 fontWeight: FontWeight.w800,
-                color: AppColors.primaryBrand,
+                color: AppColors.textPrimary,
               ),
             ),
             Text(
@@ -146,7 +146,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
           children: [
             const Icon(
               Icons.history_rounded,
-              color: AppColors.primaryBrand,
+              color: AppColors.fieldLabel,
               size: 20,
             ),
             AppSpacing.h12,
@@ -155,7 +155,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
               style: AppTextStyles.outfit(
                 fontSize: 16,
                 fontWeight: FontWeight.w800,
-                color: AppColors.primaryBrand,
+                color: AppColors.textPrimary,
               ),
             ),
             const Spacer(),
@@ -428,7 +428,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
               hintText: hint,
               hintStyle: AppTextStyles.outfit(
                 fontSize: 14,
-                color: AppColors.blueSapphire,
+                color: AppColors.fieldLabel,
               ),
               border: InputBorder.none,
               contentPadding: const EdgeInsets.symmetric(vertical: 14),

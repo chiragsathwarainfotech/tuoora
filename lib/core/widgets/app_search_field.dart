@@ -25,8 +25,8 @@ class AppSearchField extends StatelessWidget {
     this.controller,
     this.onClear,
     this.borderRadius = InputStyles.borderRadius,
-    this.backgroundColor = AppColors.paleSilver,
-    this.iconColor = AppColors.blueSapphire,
+    this.backgroundColor = AppColors.fieldBg,
+    this.iconColor = AppColors.fieldLabel,
     this.iconSize = AppSpacing.s24,
     this.contentPadding = InputStyles.contentPadding,
     this.hintStyle,
@@ -40,7 +40,7 @@ class AppSearchField extends StatelessWidget {
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: BorderRadius.circular(borderRadius),
-        border: borderColor != null ? Border.all(color: borderColor!) : null,
+        border: Border.all(color: borderColor ?? AppColors.fieldBorder),
       ),
       child: TextField(
         controller: controller,

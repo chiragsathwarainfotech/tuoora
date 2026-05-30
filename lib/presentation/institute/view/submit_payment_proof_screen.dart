@@ -64,19 +64,22 @@ class SubmitPaymentProofScreen
                       labelLetterSpacing: 1.0,
                     ),
                     AppSpacing.v32,
-                    Obx(
-                      () => AppButton(
-                        label: 'Submit Proof',
-                        onPressed: controller.submitProof,
-                        isLoading: controller.isSubmitting.value,
-                        backgroundColor: AppColors.primaryBrand,
-                        foregroundColor: AppColors.white,
-                        borderRadius: AppSpacing.cardRadius,
-                        fontSize: 16,
-                        fullWidth: true,
+                    SafeArea(
+                      top: false,
+                      minimum: const EdgeInsets.only(bottom: 16),
+                      child: Obx(
+                        () => AppButton(
+                          label: 'Submit Proof',
+                          onPressed: controller.submitProof,
+                          isLoading: controller.isSubmitting.value,
+                          backgroundColor: AppColors.primaryBrand,
+                          foregroundColor: AppColors.white,
+                          borderRadius: AppSpacing.cardRadius,
+                          fontSize: 16,
+                          fullWidth: true,
+                        ),
                       ),
                     ),
-                    AppSpacing.v24,
                   ],
                 ),
               ),

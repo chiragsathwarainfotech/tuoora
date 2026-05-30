@@ -381,16 +381,20 @@ class AddSalaryScreen extends GetView<StaffController> {
   }
 
   Widget _buildSaveButton() {
-    return Obx(
-      () => AppButton(
-        onPressed: controller.isSaving.value
-            ? null
-            : () => controller.saveSalaryRecord(),
-        label: controller.isSaving.value ? 'Saving...' : 'Save Salary Record',
-        icon: controller.isSaving.value
-            ? null
-            : Icons.check_circle_outline_rounded,
-        isLoading: controller.isSaving.value,
+    return SafeArea(
+      top: false,
+      minimum: const EdgeInsets.only(bottom: 16),
+      child: Obx(
+        () => AppButton(
+          onPressed: controller.isSaving.value
+              ? null
+              : () => controller.saveSalaryRecord(),
+          label: controller.isSaving.value ? 'Saving...' : 'Save Salary Record',
+          icon: controller.isSaving.value
+              ? null
+              : Icons.check_circle_outline_rounded,
+          isLoading: controller.isSaving.value,
+        ),
       ),
     );
   }

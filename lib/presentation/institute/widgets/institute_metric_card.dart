@@ -22,7 +22,8 @@ class InstituteMetricCard extends StatelessWidget {
     return Container(
       padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
-        color: AppColors.scaffoldBg,
+        color: AppColors.surfaceBg,
+        border: Border.all(width: 1.5, color: AppColors.fieldBorder),
         borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
@@ -52,7 +53,7 @@ class InstituteMetricCard extends StatelessWidget {
             style: AppTextStyles.outfit(
               fontSize: 20,
               fontWeight: FontWeight.w800,
-              color: valueColor ?? AppColors.primaryBrand,
+              color: valueColor ?? AppColors.textPrimary,
             ),
           ),
         ],

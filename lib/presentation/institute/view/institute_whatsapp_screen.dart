@@ -39,7 +39,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
                           style: AppTextStyles.outfit(
                             fontSize: AppSpacing.s28,
                             fontWeight: FontWeight.w800,
-                            color: AppColors.brandAppBarColor,
+                            color: AppColors.textPrimary,
                           ),
                         ),
                         AppSpacing.v12,
@@ -118,7 +118,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
                       style: AppTextStyles.outfit(
                         fontSize: AppSpacing.s18,
                         fontWeight: FontWeight.w800,
-                        color: AppColors.brandAppBarColor,
+                        color: AppColors.textPrimary,
                       ),
                     ),
                     Text(
@@ -185,7 +185,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
       style: AppTextStyles.outfit(
         fontSize: AppSpacing.s12,
         fontWeight: FontWeight.w800,
-        color: AppColors.brandAppBarColor,
+        color: AppColors.fieldLabel,
         letterSpacing: 0.5,
       ),
     );
@@ -213,7 +213,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
           hintText: hint,
           hintStyle: AppTextStyles.outfit(
             fontSize: AppSpacing.s14,
-            color: AppColors.blueSapphire,
+            color: AppColors.fieldLabel,
           ),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(vertical: 16),
@@ -249,7 +249,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
               style: AppTextStyles.outfit(
                 fontSize: AppSpacing.s20,
                 fontWeight: FontWeight.w800,
-                color: AppColors.primaryBrand,
+                color: AppColors.textPrimary,
               ),
             ),
           ],
@@ -345,7 +345,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
                       style: AppTextStyles.outfit(
                         fontSize: AppSpacing.s16,
                         fontWeight: FontWeight.w800,
-                        color: AppColors.brandAppBarColor,
+                        color: AppColors.textPrimary,
                       ),
                     ),
                     Text(

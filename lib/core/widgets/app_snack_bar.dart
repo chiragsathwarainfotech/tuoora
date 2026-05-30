@@ -7,7 +7,7 @@ class AppSnackBar {
     Get.snackbar(
       title,
       message,
-      backgroundColor: AppColors.darkGreen,
+      backgroundColor: AppColors.successGreen,
       colorText: AppColors.white,
       snackPosition: SnackPosition.TOP,
       margin: const EdgeInsets.all(16),
@@ -24,7 +24,7 @@ class AppSnackBar {
     Get.snackbar(
       title,
       message,
-      backgroundColor: Colors.redAccent,
+      backgroundColor: AppColors.bohoRed,
       colorText: AppColors.white,
       snackPosition: SnackPosition.TOP,
       margin: const EdgeInsets.all(16),

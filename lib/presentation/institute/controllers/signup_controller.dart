@@ -10,6 +10,7 @@ import 'package:tuoora/data/models/user_model.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tuoora/data/repositories/auth_repository.dart';
 import 'package:tuoora/core/utils/validation_utils.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'dart:async';
 
 class SignupController extends GetxController {
@@ -150,7 +151,7 @@ class SignupController extends GetxController {
         selectedLogoPath.value = image.path;
       }
     } catch (e) {
-      Get.snackbar('Error', 'Failed to pick image');
+      AppSnackBar.error('Failed to pick image');
     }
   }
 
@@ -164,33 +165,18 @@ class SignupController extends GetxController {
         ownerName.isEmpty ||
         email.isEmpty ||
         password.isEmpty) {
-      Get.snackbar(
-        'Error',
-        'Please fill in all fields',
-        backgroundColor: Colors.red.withValues(alpha: 0.1),
-        colorText: Colors.red,
-      );
+      AppSnackBar.error('Please fill in all fields');
       return;
     }
 
     if (!GetUtils.isEmail(email)) {
-      Get.snackbar(
-        'Error',
-        'Please enter a valid email',
-        backgroundColor: Colors.red.withValues(alpha: 0.1),
-        colorText: Colors.red,
-      );
+      AppSnackBar.error('Please enter a valid email');
       return;
     }
 
     final passwordError = ValidationUtils.validatePassword(password);
     if (passwordError != null) {
-      Get.snackbar(
-        'Invalid Password',
-        passwordError,
-        backgroundColor: Colors.red.withValues(alpha: 0.1),
-        colorText: Colors.red,
-      );
+      AppSnackBar.error(passwordError, title: 'Invalid Password');
       return;
     }
 
@@ -203,21 +189,14 @@ class SignupController extends GetxController {
         'institute_name': instituteName,
       });
 
-      Get.snackbar(
-        'Success',
-        message,
-        backgroundColor: Colors.green.withValues(alpha: 0.1),
-        colorText: Colors.green,
-      );
+      AppSnackBar.success(message);
 
       Get.toNamed(AppRoutes.instituteOtp);
       startTimer();
     } catch (e) {
-      Get.snackbar(
-        'Registration Failed',
+      AppSnackBar.error(
         e.toString().replaceAll('Exception: ', ''),
-        backgroundColor: Colors.red.withValues(alpha: 0.1),
-        colorText: Colors.red,
+        title: 'Registration Failed',
       );
     } finally {
       isLoading.value = false;
@@ -229,12 +208,7 @@ class SignupController extends GetxController {
     final email = emailController.text.trim();
 
     if (otp.isEmpty) {
-      Get.snackbar(
-        'Error',
-        'Please enter OTP',
-        backgroundColor: Colors.red.withValues(alpha: 0.1),
-        colorText: Colors.red,
-      );
+      AppSnackBar.error('Please enter OTP');
       return;
     }
 
@@ -258,20 +232,13 @@ class SignupController extends GetxController {
         loggedIn: false,
       );
 
-      Get.snackbar(
-        'Success',
-        'OTP verified successfully.',
-        backgroundColor: Colors.green.withValues(alpha: 0.1),
-        colorText: Colors.green,
-      );
+      AppSnackBar.success('OTP verified successfully.');
 
       Get.toNamed(AppRoutes.instituteProfileSetup);
     } catch (e) {
-      Get.snackbar(
-        'Verification Failed',
+      AppSnackBar.error(
         e.toString().replaceAll('Exception: ', ''),
-        backgroundColor: Colors.red.withValues(alpha: 0.1),
-        colorText: Colors.red,
+        title: 'Verification Failed',
       );
     } finally {
       isLoading.value = false;
@@ -287,12 +254,7 @@ class SignupController extends GetxController {
         stateController.text.isEmpty ||
         countryController.text.isEmpty ||
         pincodeController.text.isEmpty) {
-      Get.snackbar(
-        'Error',
-        'Please fill in all required fields',
-        backgroundColor: Colors.red.withValues(alpha: 0.1),
-        colorText: Colors.red,
-      );
+      AppSnackBar.error('Please fill in all required fields');
       return;
     }
 
@@ -338,18 +300,11 @@ class SignupController extends GetxController {
       }
 
       Get.offAllNamed(AppRoutes.instituteDashboard);
-      Get.snackbar(
-        'Success',
-        'Profile created successfully',
-        backgroundColor: Colors.green.withValues(alpha: 0.1),
-        colorText: Colors.green,
-      );
+      AppSnackBar.success('Profile created successfully');
     } catch (e) {
-      Get.snackbar(
-        'Setup Failed',
+      AppSnackBar.error(
         e.toString().replaceAll('Exception: ', ''),
-        backgroundColor: Colors.red.withValues(alpha: 0.1),
-        colorText: Colors.red,
+        title: 'Setup Failed',
       );
     } finally {
       isLoading.value = false;
@@ -377,15 +332,10 @@ class SignupController extends GetxController {
     isLoading.value = true;
     try {
       await _authRepository.forgotPassword(email);
-      Get.snackbar(
-        'Success',
-        'OTP resend successfully',
-        backgroundColor: Colors.green.withValues(alpha: 0.1),
-        colorText: Colors.green,
-      );
+      AppSnackBar.success('OTP resend successfully');
       startTimer();
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      AppSnackBar.error(e.toString());
     } finally {
       isLoading.value = false;
     }

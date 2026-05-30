@@ -52,14 +52,17 @@ class AddEditLeadScreen extends GetView<LeadsController> {
                       return const SizedBox.shrink();
                     }),
                     AppSpacing.v40,
-                    Obx(
-                      () => AppButton(
-                        label: AppStrings.instSaveLeadBtn,
-                        isLoading: controller.isLoading.value,
-                        onPressed: () => controller.saveLead(),
+                    SafeArea(
+                      top: false,
+                      minimum: const EdgeInsets.only(bottom: 16),
+                      child: Obx(
+                        () => AppButton(
+                          label: AppStrings.instSaveLeadBtn,
+                          isLoading: controller.isLoading.value,
+                          onPressed: () => controller.saveLead(),
+                        ),
                       ),
                     ),
-                    AppSpacing.v24,
                   ],
                 ),
               ),
@@ -73,14 +76,14 @@ class AddEditLeadScreen extends GetView<LeadsController> {
   Widget _buildSectionHeader(IconData icon, String title) {
     return Row(
       children: [
-        Icon(icon, color: AppColors.primaryBrand, size: 20),
+        Icon(icon, color: AppColors.fieldLabel, size: 20),
         AppSpacing.h12,
         Text(
           title,
           style: AppTextStyles.outfit(
             fontSize: 16,
             fontWeight: FontWeight.w800,
-            color: AppColors.primaryBrand,
+            color: AppColors.textPrimary,
           ),
         ),
       ],

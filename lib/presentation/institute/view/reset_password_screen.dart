@@ -75,7 +75,7 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
                                   style: AppTextStyles.outfit(
                                     fontSize: 12,
                                     fontWeight: FontWeight.w800,
-                                    color: AppColors.brandAppBarColor,
+                                    color: AppColors.fieldLabel,
                                     letterSpacing: 1.0,
                                   ),
                                 ),
@@ -92,7 +92,7 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
                                   style: AppTextStyles.outfit(
                                     fontSize: 12,
                                     fontWeight: FontWeight.w800,
-                                    color: AppColors.brandAppBarColor,
+                                    color: AppColors.fieldLabel,
                                     letterSpacing: 1.0,
                                   ),
                                 ),
@@ -123,7 +123,7 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
                                   style: AppTextStyles.outfit(
                                     fontSize: 12,
                                     fontWeight: FontWeight.w800,
-                                    color: AppColors.brandAppBarColor,
+                                    color: AppColors.fieldLabel,
                                     letterSpacing: 1.0,
                                   ),
                                 ),
@@ -230,8 +230,9 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.paleSilver,
+        color: AppColors.fieldBg,
         borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+        border: Border.all(color: AppColors.fieldBorder),
       ),
       child: TextField(
         controller: controller,
@@ -242,7 +243,7 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
           hintText: hint,
           hintStyle: AppTextStyles.outfit(
             fontSize: 14,
-            color: AppColors.blueSapphire,
+            color: AppColors.fieldLabel,
           ),
           prefixIcon: Icon(
             prefixIcon,

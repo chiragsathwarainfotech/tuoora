@@ -99,7 +99,7 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
             itemCount:
                 controller.students.length +
                 (controller.isLoadMore.value ? 1 : 0),
-            padding: EdgeInsets.zero,
+            padding: const EdgeInsets.only(bottom: 96),
             physics: const AlwaysScrollableScrollPhysics(),
             itemBuilder: (context, index) {
               if (index == controller.students.length) {
@@ -182,7 +182,7 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
                           const Icon(
                             Icons.school_rounded,
                             size: AppSpacing.s18,
-                            color: AppColors.primaryBrand,
+                            color: AppColors.fieldLabel,
                           ),
                           AppSpacing.h4,
                           Text(

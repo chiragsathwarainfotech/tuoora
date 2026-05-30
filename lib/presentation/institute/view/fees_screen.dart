@@ -215,7 +215,7 @@ class InstituteFeesScreen extends GetView<InstituteController> {
                       style: AppTextStyles.outfit(
                         fontSize: 16,
                         fontWeight: FontWeight.w800,
-                        color: AppColors.primaryBrand,
+                        color: AppColors.textPrimary,
                       ),
                     ),
                   ],

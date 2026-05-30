@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:tuoora/data/repositories/auth_repository.dart';
 import 'package:tuoora/core/services/auth_service.dart';
 import 'package:tuoora/core/services/push_notification_service.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/config/app_routes.dart';
 
 class LoginController extends GetxController {
@@ -30,7 +31,7 @@ class LoginController extends GetxController {
     final password = passwordController.text.trim();
 
     if (email.isEmpty || password.isEmpty) {
-      Get.snackbar('Error', 'Please fill in all fields');
+      AppSnackBar.error('Please fill in all fields');
       return;
     }
 
@@ -58,7 +59,7 @@ class LoginController extends GetxController {
         _navigateToDashboard(role);
       }
     } catch (e) {
-      Get.snackbar('Login Failed', e.toString());
+      AppSnackBar.error(e.toString(), title: 'Login Failed');
     } finally {
       isLoading.value = false;
     }

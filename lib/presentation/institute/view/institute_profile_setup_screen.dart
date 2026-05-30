@@ -164,16 +164,20 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                       ],
                     ),
                     AppSpacing.v40,
-                    Obx(
-                      () => AppButton(
-                        label: 'Finish',
-                        onPressed: controller.completeProfile,
-                        isLoading: controller.isLoading.value,
-                        backgroundColor: AppColors.primaryBrand,
-                        foregroundColor: AppColors.white,
-                        borderRadius: AppSpacing.cardRadius,
-                        fontSize: 16,
-                        fullWidth: true,
+                    SafeArea(
+                      top: false,
+                      minimum: const EdgeInsets.only(bottom: 16),
+                      child: Obx(
+                        () => AppButton(
+                          label: 'Finish',
+                          onPressed: controller.completeProfile,
+                          isLoading: controller.isLoading.value,
+                          backgroundColor: AppColors.primaryBrand,
+                          foregroundColor: AppColors.white,
+                          borderRadius: AppSpacing.cardRadius,
+                          fontSize: 16,
+                          fullWidth: true,
+                        ),
                       ),
                     ),
                   ],
@@ -237,7 +241,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
               hintText: hint,
               hintStyle: AppTextStyles.outfit(
                 fontSize: 14,
-                color: AppColors.blueSapphire,
+                color: AppColors.fieldLabel,
               ),
               prefixIcon: Icon(
                 prefixIcon,

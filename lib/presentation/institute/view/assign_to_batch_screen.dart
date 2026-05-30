@@ -408,7 +408,7 @@ class AssignToBatchScreen extends StatelessWidget {
                         vertical: 12,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.scaffoldBg,
+                        color: AppColors.surfaceBg,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(

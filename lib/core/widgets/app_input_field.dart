@@ -82,7 +82,7 @@ class AppInputField extends StatelessWidget {
           style: AppTextStyles.outfit(
             fontSize: labelFontSize ?? (isProfile ? 12 : 14),
             fontWeight: labelFontWeight ?? FontWeight.w800,
-            color: labelColor ?? AppColors.brandAppBarColor,
+            color: labelColor ?? AppColors.fieldLabel,
             letterSpacing: labelLetterSpacing ?? (isProfile ? 0.5 : null),
           ),
         ),
@@ -114,23 +114,18 @@ class AppInputField extends StatelessWidget {
   /// tweaks. The TextFormField gets an isCollapsed: true / borderless
   /// InputDecoration so it occupies just its content height.
   Widget _buildField({required bool isProfile}) {
-    final Color bgColor = fillColor ??
-        (isProfile
-            ? (enabled
-                ? AppColors.background
-                : AppColors.background.withValues(alpha: 0.5))
-            : (enabled
-                ? AppColors.paleSilver
-                : AppColors.paleSilver.withValues(alpha: 0.5)));
-    final BoxBorder? effectiveBorder = containerBorder ??
+    final Color bgColor =
+        fillColor ??
+        (enabled
+            ? AppColors.fieldBg
+            : AppColors.fieldBg.withValues(alpha: 0.5));
+    final BoxBorder effectiveBorder =
+        containerBorder ??
         (errorText != null
             ? Border.all(color: Colors.redAccent, width: 1.5)
-            : isProfile
-                ? Border.all(
-                    color: AppColors.borderGrey.withValues(alpha: 0.5),
-                  )
-                : null);
-    final TextStyle effectiveTextStyle = textStyle ??
+            : Border.all(color: AppColors.fieldBorder));
+    final TextStyle effectiveTextStyle =
+        textStyle ??
         (isProfile
             ? AppTextStyles.outfit(
                 fontSize: 14,
@@ -142,7 +137,8 @@ class AppInputField extends StatelessWidget {
                 color: AppColors.textPrimary,
                 fontWeight: FontWeight.w500,
               ));
-    final EdgeInsetsGeometry effectiveContentPadding = contentPadding ??
+    final EdgeInsetsGeometry effectiveContentPadding =
+        contentPadding ??
         (isProfile
             ? const EdgeInsets.symmetric(vertical: AppSpacing.s18)
             : InputStyles.contentPadding);
@@ -158,30 +154,25 @@ class AppInputField extends StatelessWidget {
       inputFormatters: inputFormatters,
       validator: validator,
       onChanged: onChanged,
-      textAlignVertical:
-          maxLines == 1 ? TextAlignVertical.center : null,
+      textAlignVertical: maxLines == 1 ? TextAlignVertical.center : null,
       style: effectiveTextStyle,
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: hintStyle ??
-            AppTextStyles.outfit(
-              fontSize: 14,
-              color: AppColors.blueSapphire,
-            ),
+        hintStyle:
+            hintStyle ??
+            AppTextStyles.outfit(fontSize: 14, color: AppColors.fieldLabel),
         border: InputBorder.none,
         enabledBorder: InputBorder.none,
         disabledBorder: InputBorder.none,
         errorBorder: InputBorder.none,
         focusedErrorBorder: InputBorder.none,
         errorStyle: const TextStyle(height: 0, color: Colors.transparent),
-        // When the icon is laid out as a Row sibling we own the
-        // horizontal/vertical padding ourselves — the field should
-        // collapse to just its content area inside the Container.
         isCollapsed: icon != null,
         contentPadding: icon != null
             ? EdgeInsets.symmetric(
-                vertical:
-                    (effectiveContentPadding.vertical / 2).clamp(0, 32).toDouble(),
+                vertical: (effectiveContentPadding.vertical / 2)
+                    .clamp(0, 32)
+                    .toDouble(),
               )
             : effectiveContentPadding,
         isDense: isProfile || isDense,
@@ -201,18 +192,13 @@ class AppInputField extends StatelessWidget {
       ),
       child: icon != null
           ? Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: paddingInsets.left,
-              ),
+              padding: EdgeInsets.symmetric(horizontal: paddingInsets.left),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Icon(
                     icon,
-                    color: iconColor ??
-                        (isProfile
-                            ? AppColors.primaryBrand
-                            : AppColors.blueSapphire),
+                    color: iconColor ?? AppColors.fieldLabel,
                     size: iconSize ?? AppSpacing.s20,
                   ),
                   SizedBox(width: paddingInsets.left),

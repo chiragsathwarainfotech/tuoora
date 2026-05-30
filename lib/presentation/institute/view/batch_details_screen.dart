@@ -116,7 +116,7 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
             style: AppTextStyles.outfit(
               fontSize: 24,
               fontWeight: FontWeight.w800,
-              color: AppColors.primaryBrand,
+              color: AppColors.textPrimary,
             ),
           ),
           AppSpacing.v8,

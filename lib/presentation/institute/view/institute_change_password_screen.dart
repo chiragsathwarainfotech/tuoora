@@ -66,7 +66,7 @@ class InstituteChangePasswordScreen extends GetView<SecurityController> {
             style: AppTextStyles.outfit(
               fontSize: 18,
               fontWeight: FontWeight.w800,
-              color: AppColors.brandAppBarColor,
+              color: AppColors.textPrimary,
             ),
           ),
           AppSpacing.v24,
@@ -157,7 +157,7 @@ class InstituteChangePasswordScreen extends GetView<SecurityController> {
                       hintText: hint,
                       hintStyle: AppTextStyles.outfit(
                         fontSize: 14,
-                        color: AppColors.blueSapphire,
+                        color: AppColors.fieldLabel,
                       ),
                       border: InputBorder.none,
                       contentPadding: const EdgeInsets.symmetric(vertical: 14),
@@ -170,7 +170,7 @@ class InstituteChangePasswordScreen extends GetView<SecurityController> {
                     isVisible.value
                         ? Icons.visibility_off_outlined
                         : Icons.visibility_outlined,
-                    color: AppColors.blueSapphire,
+                    color: AppColors.fieldLabel,
                     size: AppSpacing.s20,
                   ),
                   constraints: const BoxConstraints(),

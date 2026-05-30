@@ -118,7 +118,7 @@ class StaffProfileScreen extends GetView<StaffController> {
                 _buildContactItem(
                   Icons.email,
                   staff.email,
-                  AppColors.primaryBrand,
+                  AppColors.textPrimary,
                 ),
                 AppSpacing.v8,
                 _buildContactItem(
@@ -188,7 +188,7 @@ class StaffProfileScreen extends GetView<StaffController> {
       children: [
         Row(
           children: [
-            Icon(icon, size: 20, color: AppColors.primaryBrand),
+            Icon(icon, size: 20, color: AppColors.fieldLabel),
             AppSpacing.h6,
             Text(
               label,

@@ -267,12 +267,16 @@ class LogAttendanceScreen extends GetView<StaffController> {
   }
 
   Widget _buildLogButton() {
-    return Obx(
-      () => AppButton(
-        onPressed: () => controller.saveAttendanceRecord(),
-        label: 'Log Attendance',
-        icon: Icons.check_circle_outline_rounded,
-        isLoading: controller.isSaving.value,
+    return SafeArea(
+      top: false,
+      minimum: const EdgeInsets.only(bottom: 16),
+      child: Obx(
+        () => AppButton(
+          onPressed: () => controller.saveAttendanceRecord(),
+          label: 'Log Attendance',
+          icon: Icons.check_circle_outline_rounded,
+          isLoading: controller.isSaving.value,
+        ),
       ),
     );
   }

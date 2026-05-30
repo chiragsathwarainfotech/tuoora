@@ -63,7 +63,7 @@ class StudentNotificationPreferencesScreen
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: AppColors.scaffoldBg,
+              color: AppColors.surfaceBg,
               borderRadius: BorderRadius.circular(8),
             ),
             child: const Icon(
@@ -196,7 +196,7 @@ class StudentNotificationPreferencesScreen
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: AppColors.scaffoldBg,
+              color: AppColors.surfaceBg,
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(icon, size: 18, color: AppColors.textSecondary),

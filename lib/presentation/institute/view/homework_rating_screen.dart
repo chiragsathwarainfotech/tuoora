@@ -83,7 +83,7 @@ class HomeworkRatingScreen extends StatelessWidget {
               style: AppTextStyles.outfit(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
-                color: AppColors.primaryBrand,
+                color: AppColors.textTertiary,
                 letterSpacing: 1,
               ),
             ),
@@ -168,7 +168,7 @@ class HomeworkRatingScreen extends StatelessWidget {
                       style: AppTextStyles.outfit(
                         fontSize: 24,
                         fontWeight: FontWeight.w800,
-                        color: AppColors.primaryBrand,
+                        color: AppColors.textPrimary,
                       ),
                     ),
                     TextSpan(
@@ -336,7 +336,7 @@ class HomeworkRatingScreen extends StatelessWidget {
                         style: AppTextStyles.outfit(
                           fontSize: 16,
                           fontWeight: FontWeight.w800,
-                          color: AppColors.primaryBrand,
+                          color: AppColors.textPrimary,
                         ),
                       ),
                       AppSpacing.h12,

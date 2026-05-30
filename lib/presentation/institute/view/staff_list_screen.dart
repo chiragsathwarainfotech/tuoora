@@ -57,7 +57,7 @@ class StaffListScreen extends GetView<StaffController> {
                               color: AppColors.primaryBrand,
                               onRefresh: () => controller.fetchStaffs(page: 1),
                               child: GridView.builder(
-                                padding: EdgeInsets.zero,
+                                padding: const EdgeInsets.only(bottom: 96),
                                 gridDelegate:
                                     const SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: 3,

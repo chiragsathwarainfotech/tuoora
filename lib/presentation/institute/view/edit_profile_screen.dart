@@ -132,7 +132,7 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
           style: AppTextStyles.outfit(
             fontSize: 14,
             fontWeight: FontWeight.w800,
-            color: AppColors.primaryBrand,
+            color: AppColors.textPrimary,
           ),
         ),
       ],
@@ -160,7 +160,7 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
             children: [
               const Icon(
                 Icons.business_rounded,
-                color: AppColors.primaryBrand,
+                color: AppColors.fieldLabel,
                 size: 20,
               ),
               AppSpacing.h12,
@@ -169,7 +169,7 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
                 style: AppTextStyles.outfit(
                   fontSize: 12,
                   fontWeight: FontWeight.w900,
-                  color: AppColors.primaryBrand,
+                  color: AppColors.textPrimary,
                   letterSpacing: 1.2,
                 ),
               ),
@@ -278,37 +278,41 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
   }
 
   Widget _buildActionButtons() {
-    return Column(
-      children: [
-        AppButton(
-          label: 'Save Profile Changes',
-          icon: Icons.check_circle_outline_rounded,
-          onPressed: () => controller.saveProfile(),
-        ),
-        AppSpacing.v16,
-        GestureDetector(
-          onTap: () => controller.discardChanges(),
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: AppSpacing.s18),
-            decoration: BoxDecoration(
-              color: Colors.transparent,
-              borderRadius: BorderRadius.circular(AppSpacing.s12),
-              border: Border.all(color: AppColors.borderGrey, width: 1.5),
-            ),
-            child: Center(
-              child: Text(
-                'Discard Changes',
-                style: AppTextStyles.outfit(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.textSecondary,
+    return SafeArea(
+      top: false,
+      minimum: const EdgeInsets.only(bottom: 16),
+      child: Column(
+        children: [
+          AppButton(
+            label: 'Save Profile Changes',
+            icon: Icons.check_circle_outline_rounded,
+            onPressed: () => controller.saveProfile(),
+          ),
+          AppSpacing.v16,
+          GestureDetector(
+            onTap: () => controller.discardChanges(),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: AppSpacing.s18),
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(AppSpacing.s12),
+                border: Border.all(color: AppColors.borderGrey, width: 1.5),
+              ),
+              child: Center(
+                child: Text(
+                  'Discard Changes',
+                  style: AppTextStyles.outfit(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.textSecondary,
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

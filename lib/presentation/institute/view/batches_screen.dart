@@ -91,7 +91,9 @@ class _BatchesScreenState extends State<BatchesScreen> {
                             : Icons.school_outlined,
                         child: ListView.separated(
                           controller: _scrollController,
-                          padding: AppSpacing.x16,
+                          padding: AppSpacing.x16.add(
+                            const EdgeInsets.only(bottom: 96),
+                          ),
                           itemCount:
                               controller.batchesList.length +
                               (controller.isMoreLoading.value ? 1 : 0),
@@ -182,7 +184,7 @@ class _BatchesScreenState extends State<BatchesScreen> {
                                 style: AppTextStyles.outfit(
                                   fontSize: 18,
                                   fontWeight: FontWeight.w800,
-                                  color: AppColors.primaryBrand,
+                                  color: AppColors.textPrimary,
                                 ),
                               ),
                             ),
@@ -195,7 +197,7 @@ class _BatchesScreenState extends State<BatchesScreen> {
                           style: AppTextStyles.outfit(
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
-                            color: AppColors.primaryBrand,
+                            color: AppColors.textTertiary,
                           ),
                         ),
                         AppSpacing.v12,
@@ -223,7 +225,7 @@ class _BatchesScreenState extends State<BatchesScreen> {
                             const Icon(
                               Icons.people_outline_rounded,
                               size: AppSpacing.s18,
-                              color: AppColors.primaryBrand,
+                              color: AppColors.fieldLabel,
                             ),
                             AppSpacing.h8,
                             Text(
@@ -246,7 +248,7 @@ class _BatchesScreenState extends State<BatchesScreen> {
                               style: AppTextStyles.outfit(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w800,
-                                color: AppColors.primaryBrand,
+                                color: AppColors.textPrimary,
                               ),
                             ),
                           ],

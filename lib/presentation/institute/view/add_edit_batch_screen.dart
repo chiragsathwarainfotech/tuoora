@@ -126,14 +126,15 @@ class AddEditBatchScreen extends GetView<BatchController> {
         constraints: const BoxConstraints(minHeight: 48),
         padding: InputStyles.contentPadding,
         decoration: BoxDecoration(
-          color: AppColors.paleSilver,
+          color: AppColors.fieldBg,
           borderRadius: BorderRadius.circular(InputStyles.borderRadius),
+          border: Border.all(color: AppColors.fieldBorder),
         ),
         child: Row(
           children: [
             const Icon(
               Icons.access_time_filled,
-              color: AppColors.blueSapphire,
+              color: AppColors.fieldLabel,
               size: AppSpacing.s20,
             ),
             AppSpacing.h12,
@@ -154,7 +155,7 @@ class AddEditBatchScreen extends GetView<BatchController> {
               style: AppTextStyles.outfit(
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
-                color: AppColors.primaryBrand,
+                color: AppColors.fieldLabel,
               ),
             ),
           ],
@@ -203,15 +204,19 @@ class AddEditBatchScreen extends GetView<BatchController> {
   }
 
   Widget _buildSaveButton(BuildContext context) {
-    return Obx(
-      () => AppButton(
-        label: AppStrings.instSaveBatchBtn,
-        icon: Icons.save_rounded,
-        isLoading: controller.isLoading.value,
-        onPressed: () {
-          FocusScope.of(context).unfocus();
-          controller.saveBatch(context);
-        },
+    return SafeArea(
+      top: false,
+      minimum: const EdgeInsets.only(bottom: 16),
+      child: Obx(
+        () => AppButton(
+          label: AppStrings.instSaveBatchBtn,
+          icon: Icons.save_rounded,
+          isLoading: controller.isLoading.value,
+          onPressed: () {
+            FocusScope.of(context).unfocus();
+            controller.saveBatch(context);
+          },
+        ),
       ),
     );
   }

@@ -16,7 +16,7 @@ class InstituteLabel extends StatelessWidget {
         style: AppTextStyles.outfit(
           fontSize: 14,
           fontWeight: FontWeight.w800,
-          color: AppColors.brandAppBarColor,
+          color: AppColors.fieldLabel,
         ),
       ),
     );

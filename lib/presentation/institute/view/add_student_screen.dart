@@ -276,13 +276,17 @@ class AddEditStudentScreen extends GetView<InstituteStudentController> {
   }
 
   Widget _buildActionButtons() {
-    return Obx(
-      () => AppButton(
-        label: controller.editingStudentId.value != null
-            ? 'Update Student'
-            : AppStrings.instConfirmBtn,
-        onPressed: () => controller.saveStudent(
-          isEdit: controller.editingStudentId.value != null,
+    return SafeArea(
+      top: false,
+      minimum: const EdgeInsets.only(bottom: 16),
+      child: Obx(
+        () => AppButton(
+          label: controller.editingStudentId.value != null
+              ? 'Update Student'
+              : AppStrings.instConfirmBtn,
+          onPressed: () => controller.saveStudent(
+            isEdit: controller.editingStudentId.value != null,
+          ),
         ),
       ),
     );

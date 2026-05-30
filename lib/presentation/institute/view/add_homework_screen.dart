@@ -231,13 +231,17 @@ class AddHomeworkScreen extends StatelessWidget {
   }
 
   Widget _buildSaveButton(BuildContext context, HomeworkController controller) {
-    return Obx(
-      () => AppButton(
-        label: AppStrings.instCreateHomeworkBtn,
-        isLoading: controller.isLoading.value,
-        onPressed: () {
-          controller.createHomework();
-        },
+    return SafeArea(
+      top: false,
+      minimum: const EdgeInsets.only(bottom: 16),
+      child: Obx(
+        () => AppButton(
+          label: AppStrings.instCreateHomeworkBtn,
+          isLoading: controller.isLoading.value,
+          onPressed: () {
+            controller.createHomework();
+          },
+        ),
       ),
     );
   }

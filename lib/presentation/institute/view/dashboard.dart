@@ -15,20 +15,26 @@ class InstituteDashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _buildTopHeader(),
-            const SubscriptionBanner(),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 16.0,
+      body: RefreshIndicator(
+        onRefresh: () =>
+            Get.find<InstituteProfileController>().fetchProfile(),
+        color: AppColors.primaryBrand,
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _buildTopHeader(),
+              const SubscriptionBanner(),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 16.0,
+                ),
+                child: _buildModulesGrid(),
               ),
-              child: _buildModulesGrid(),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -56,8 +62,8 @@ class InstituteDashboard extends StatelessWidget {
           GestureDetector(
             onTap: () => Get.toNamed(AppRoutes.instituteNotifications),
             child: const Icon(
-              Icons.notifications_rounded,
-              color: AppColors.primaryBrand,
+              Icons.notifications_outlined,
+              color: AppColors.fieldLabel,
               size: 28,
             ),
           ),

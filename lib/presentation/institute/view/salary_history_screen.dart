@@ -32,9 +32,9 @@ class SalaryHistoryScreen extends GetView<StaffController> {
                       'No salary payments found for this staff member.',
                   emptyIcon: Icons.payments_outlined,
                   child: ListView.separated(
-                    padding: AppSpacing.all24,
+                    padding: AppSpacing.screenPaddingTop,
                     itemCount: salaries.length,
-                    separatorBuilder: (_, _) => AppSpacing.v16,
+                    separatorBuilder: (_, _) => AppSpacing.v10,
                     itemBuilder: (context, index) {
                       final salary = salaries[index];
                       return _buildSalaryCard(salary);
@@ -61,7 +61,7 @@ class SalaryHistoryScreen extends GetView<StaffController> {
     final dateStr = 'Paid on ${DateFormat('MMM dd, yyyy').format(paymentDate)}';
 
     return Container(
-      padding: AppSpacing.all20,
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.cardRadius),

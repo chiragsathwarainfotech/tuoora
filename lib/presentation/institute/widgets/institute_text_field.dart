@@ -62,7 +62,7 @@ class InstituteTextField extends StatelessWidget {
               hintStyle: AppTextStyles.outfit(
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
-                color: AppColors.blueSapphire,
+                color: AppColors.fieldLabel,
               ),
               border: InputBorder.none,
               // Single source of truth — see [InputStyles.contentPadding]

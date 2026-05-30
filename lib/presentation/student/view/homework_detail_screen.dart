@@ -42,7 +42,7 @@ class _StudentHomeworkDetailScreenState
           style: AppTextStyles.outfit(
             fontSize: 18,
             fontWeight: FontWeight.w800,
-            color: AppColors.primaryBrand,
+            color: AppColors.textPrimary,
           ),
         ),
       ),
@@ -243,7 +243,7 @@ class _StudentHomeworkDetailScreenState
           Container(
             padding: AppSpacing.all20,
             decoration: BoxDecoration(
-              color: AppColors.scaffoldBg,
+              color: AppColors.surfaceBg,
               borderRadius: BorderRadius.circular(AppSpacing.s16),
               border: const Border(
                 left: BorderSide(
@@ -349,7 +349,7 @@ class _StudentHomeworkDetailScreenState
           children: [
             const Icon(
               Icons.link_rounded,
-              color: AppColors.primaryBrand,
+              color: AppColors.fieldLabel,
               size: AppSpacing.s24,
             ),
             AppSpacing.h12,
@@ -413,7 +413,7 @@ class _StudentHomeworkDetailScreenState
       child: Container(
         padding: AppSpacing.all16,
         decoration: BoxDecoration(
-          color: AppColors.scaffoldBg,
+          color: AppColors.surfaceBg,
           borderRadius: BorderRadius.circular(AppSpacing.s16),
           border: Border.all(color: AppColors.borderGrey),
         ),

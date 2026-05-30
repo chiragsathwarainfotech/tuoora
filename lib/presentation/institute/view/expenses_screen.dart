@@ -36,7 +36,7 @@ class ExpensesScreen extends GetView<ExpenseController> {
                     ),
                     child: const Icon(
                       Icons.insights_rounded,
-                      color: AppColors.brandAppBarColor,
+                      color: AppColors.primaryBrand,
                       size: 20,
                     ),
                   ),
@@ -54,14 +54,21 @@ class ExpensesScreen extends GetView<ExpenseController> {
                     title: 'No expenses found',
                   );
                 }
-                return ListView.separated(
-                  padding: AppSpacing.screenPaddingTop,
-                  itemCount: controller.expenses.length,
-                  separatorBuilder: (context, index) => AppSpacing.v10,
-                  itemBuilder: (context, index) {
-                    final expense = controller.expenses[index];
-                    return _buildExpenseCard(expense);
-                  },
+                return RefreshIndicator(
+                  onRefresh: () => controller.loadExpenses(),
+                  color: AppColors.primaryBrand,
+                  child: ListView.separated(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: AppSpacing.screenPaddingTop.add(
+                      const EdgeInsets.only(bottom: 96),
+                    ),
+                    itemCount: controller.expenses.length,
+                    separatorBuilder: (context, index) => AppSpacing.v10,
+                    itemBuilder: (context, index) {
+                      final expense = controller.expenses[index];
+                      return _buildExpenseCard(expense);
+                    },
+                  ),
                 );
               }),
             ),

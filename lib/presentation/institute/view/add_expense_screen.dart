@@ -122,7 +122,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
                       style: AppTextStyles.outfit(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.blueSapphire,
+                        color: AppColors.textPrimary,
                       ),
                     ),
                     items: controller.categories.map((
@@ -192,7 +192,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
               children: [
                 const Icon(
                   Icons.calendar_today_rounded,
-                  color: AppColors.primaryBrand,
+                  color: AppColors.fieldLabel,
                   size: 20,
                 ),
                 AppSpacing.h12,
@@ -304,7 +304,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
                 controller.selectedReceiptPath.value != null
                     ? Icons.check_circle_rounded
                     : Icons.file_upload_rounded,
-                color: AppColors.primaryBrand,
+                color: AppColors.fieldLabel,
                 size: 28,
               ),
               AppSpacing.v8,

@@ -1,5 +1,6 @@
 import 'package:tuoora/presentation/institute/models/batch_model.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/data/models/staff_model.dart';
 
 class Batch {
   final int id;
@@ -19,6 +20,8 @@ class Batch {
   final dynamic totalPaid;
   final dynamic totalExpected;
   final List<BatchStudent>? students;
+  final int? staffId;
+  final Staff? staff;
 
   Batch({
     required this.id,
@@ -38,6 +41,8 @@ class Batch {
     this.totalPaid,
     this.totalExpected,
     this.students,
+    this.staffId,
+    this.staff,
   });
 
   BatchModel toUIModel() {
@@ -59,6 +64,8 @@ class Batch {
       days: days,
       students: students,
       classroom: classroom,
+      staffId: staffId,
+      staffName: staff?.fullName,
     );
   }
 
@@ -85,6 +92,10 @@ class Batch {
                 .map((i) => BatchStudent.fromJson(i))
                 .toList()
           : null,
+      staffId: json['staff_id'] == null
+          ? null
+          : int.tryParse(json['staff_id'].toString()),
+      staff: json['staff'] != null ? Staff.fromJson(json['staff']) : null,
     );
   }
 
@@ -107,6 +118,7 @@ class Batch {
       'total_paid': totalPaid,
       'total_expected': totalExpected,
       'students': students?.map((s) => s.toJson()).toList(),
+      'staff_id': staffId,
     };
   }
 

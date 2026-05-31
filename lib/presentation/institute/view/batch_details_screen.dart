@@ -13,6 +13,7 @@ import 'package:tuoora/core/constants/app_images.dart';
 import 'package:tuoora/core/widgets/app_action_icon.dart';
 import 'package:tuoora/core/widgets/status_badge.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class BatchDetailsScreen extends StatefulWidget {
@@ -68,6 +69,7 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
                     _buildBatchHeader(),
                     AppSpacing.v24,
                     _buildCourseManagementSection(),
+                    AppSpacing.v24,
                   ],
                 ),
               ),
@@ -186,28 +188,30 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
               text: batch.classroom!,
             ),
           ],
-          AppSpacing.v12,
-          const InstituteInfoRow(
-            icon: Icons.person_rounded,
-            text: 'Prof. Julian Archer',
-          ),
+          if (batch.staffName != null &&
+              batch.staffName!.trim().isNotEmpty) ...[
+            AppSpacing.v12,
+            InstituteInfoRow(
+              icon: Icons.person_rounded,
+              text: batch.staffName!,
+            ),
+          ],
         ],
       ),
     );
   }
 
   static const List<Color> _accentPalette = <Color>[
-    AppColors.instBrandOrange,
+    AppColors.primaryBrand,
     AppColors.successGreen,
-    AppColors.orangeTag,
+    AppColors.bohoRed,
     AppColors.subjectPhysics,
-    AppColors.greenLight,
   ];
 
   Widget _buildCourseManagementSection() {
     final tiles = <_ManagementTileData>[
       _ManagementTileData(
-        icon: Icons.people_alt_rounded,
+        svgAsset: AppImages.icBatchStudents,
         title: AppStrings.instNavStudents,
         onTap: () => Get.toNamed(
           AppRoutes.instituteBatchStudents,
@@ -215,7 +219,7 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
         ),
       ),
       _ManagementTileData(
-        icon: Icons.assignment_rounded,
+        svgAsset: AppImages.icBatchHomework,
         title: 'Homework',
         onTap: () => Get.toNamed(
           AppRoutes.instituteBatchHomework,
@@ -223,7 +227,7 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
         ),
       ),
       _ManagementTileData(
-        icon: Icons.checklist_rtl_rounded,
+        svgAsset: AppImages.icBatchAttendance,
         title: AppStrings.instAttendanceTitle,
         onTap: () => Get.toNamed(
           AppRoutes.instituteMarkAttendance,
@@ -231,7 +235,7 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
         ),
       ),
       _ManagementTileData(
-        icon: Icons.menu_book_rounded,
+        svgAsset: AppImages.icBatchResource,
         title: 'Resources',
         onTap: () => Get.toNamed(
           AppRoutes.instituteBatchResources,
@@ -266,7 +270,7 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
             final tile = tiles[index];
             final accent = _accentPalette[index % _accentPalette.length];
             return _buildManagementTile(
-              icon: tile.icon,
+              svgAsset: tile.svgAsset,
               title: tile.title,
               onTap: tile.onTap,
               accent: accent,
@@ -278,7 +282,7 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
   }
 
   Widget _buildManagementTile({
-    required IconData icon,
+    required String svgAsset,
     required String title,
     required VoidCallback onTap,
     required Color accent,
@@ -301,7 +305,14 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, color: accent, size: 48),
+            SvgPicture.asset(
+              svgAsset,
+              width: 48,
+              height: 48,
+              theme: SvgTheme(currentColor: accent),
+              colorFilter: ColorFilter.mode(accent, BlendMode.srcIn),
+            ),
+
             AppSpacing.v12,
             FittedBox(
               fit: BoxFit.scaleDown,
@@ -326,12 +337,12 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
 }
 
 class _ManagementTileData {
-  final IconData icon;
+  final String svgAsset;
   final String title;
   final VoidCallback onTap;
 
   const _ManagementTileData({
-    required this.icon,
+    required this.svgAsset,
     required this.title,
     required this.onTap,
   });

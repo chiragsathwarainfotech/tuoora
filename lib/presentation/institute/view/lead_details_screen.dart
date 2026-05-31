@@ -341,7 +341,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
                     style: AppTextStyles.outfit(
                       fontSize: 18,
                       fontWeight: FontWeight.w800,
-                      color: AppColors.primaryBrand,
+                      color: AppColors.textPrimary,
                     ),
                   ),
                   GestureDetector(
@@ -401,7 +401,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
         Text(
           label,
           style: AppTextStyles.outfit(
-            fontSize: 10,
+            fontSize: 12,
             fontWeight: FontWeight.w700,
             color: AppColors.textTertiary,
             letterSpacing: 1.0,

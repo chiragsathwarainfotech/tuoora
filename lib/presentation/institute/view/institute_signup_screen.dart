@@ -199,7 +199,7 @@ class InstituteSignupScreen extends GetView<SignupController> {
           ),
           prefixIcon: Icon(
             prefixIcon,
-            color: AppColors.blueSapphire,
+            color: AppColors.fieldLabel,
             size: AppSpacing.s20,
           ),
           suffixIcon: suffixIcon,

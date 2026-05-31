@@ -1,10 +1,12 @@
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_images.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/data/models/menu_item.dart';
 import 'package:tuoora/presentation/institute/controllers/institute_profile_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/subscription_banner.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
@@ -16,8 +18,7 @@ class InstituteDashboard extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       body: RefreshIndicator(
-        onRefresh: () =>
-            Get.find<InstituteProfileController>().fetchProfile(),
+        onRefresh: () => Get.find<InstituteProfileController>().fetchProfile(),
         color: AppColors.primaryBrand,
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
@@ -120,53 +121,53 @@ class InstituteDashboard extends StatelessWidget {
     final modules = [
       ModuleItem(
         'Students',
-        Icons.people_rounded,
         () => Get.toNamed(AppRoutes.instituteStudents),
+        AppImages.icModuleStudents,
       ),
       ModuleItem(
         'Batches',
-        Icons.layers_rounded,
         () => Get.toNamed(AppRoutes.instituteBatches),
+        AppImages.icModuleBatch,
       ),
       ModuleItem(
         'Fees',
-        Icons.account_balance_wallet_rounded,
         () => Get.toNamed(AppRoutes.instituteFees),
+        AppImages.icModuleFees,
       ),
       ModuleItem(
         'Staffs',
-        Icons.person_search_rounded,
         () => Get.toNamed(AppRoutes.instituteStaffs),
+        AppImages.icModuleStaff,
       ),
       ModuleItem(
         'Chats',
-        Icons.chat,
         () => Get.toNamed(AppRoutes.instituteChats),
+        AppImages.icModuleChat,
       ),
       ModuleItem(
         'Reports',
-        Icons.insert_chart_rounded,
         () => Get.toNamed(AppRoutes.instituteReports),
+        AppImages.icModuleReports,
       ),
       ModuleItem(
         'Leads',
-        Icons.leaderboard_rounded,
         () => Get.toNamed(AppRoutes.instituteLeads),
+        AppImages.icModuleLead,
       ),
       ModuleItem(
         'Notes',
-        Icons.note_alt_rounded,
         () => Get.toNamed(AppRoutes.instituteNotes),
+        AppImages.icModuleNotes,
       ),
       ModuleItem(
         'Expenses',
-        Icons.payments_rounded,
         () => Get.toNamed(AppRoutes.instituteExpenses),
+        AppImages.icModuleExpense,
       ),
       ModuleItem(
         'Updates',
-        Icons.campaign_rounded,
         () => Get.toNamed(AppRoutes.instituteUpdates),
+        AppImages.icModuleUpdates,
       ),
     ];
 
@@ -189,10 +190,11 @@ class InstituteDashboard extends StatelessWidget {
   }
 
   static const List<Color> _accentPalette = <Color>[
-    AppColors.instBrandOrange,
+    AppColors.primaryBrand,
     AppColors.successGreen,
-    AppColors.orangeTag,
+    AppColors.bohoRed,
     AppColors.subjectPhysics,
+    AppColors.orangeTag,
     AppColors.greenLight,
   ];
 
@@ -214,7 +216,13 @@ class InstituteDashboard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(item.icon, color: accent, size: 48),
+            SvgPicture.asset(
+              item.svgAsset,
+              width: 48,
+              height: 48,
+              theme: SvgTheme(currentColor: accent),
+              colorFilter: ColorFilter.mode(accent, BlendMode.srcIn),
+            ),
             AppSpacing.v12,
             Text(
               item.title,

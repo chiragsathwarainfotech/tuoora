@@ -203,29 +203,22 @@ class AssignToBatchScreen extends StatelessWidget {
                     bottom: 0,
                     left: 0,
                     right: 0,
-                    child: Container(
-                      padding: AppSpacing.all16,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            AppColors.scaffoldBg.withValues(alpha: 0.0),
-                            AppColors.scaffoldBg.withValues(alpha: 0.9),
-                            AppColors.scaffoldBg,
-                          ],
-                          stops: const [0.0, 0.3, 1.0],
-                        ),
-                      ),
-                      child: Obx(
-                        () => AppButton(
-                          label: 'Confirm & Save Assignment',
-                          icon: Icons.check_circle_rounded,
-                          isLoading: controller.isLoading.value,
-                          isDisabled: controller.selectedStudents.isEmpty,
-                          onPressed: controller.selectedStudents.isEmpty
-                              ? null
-                              : controller.confirmAssignment,
+                    child: SafeArea(
+                      top: false,
+                      minimum: const EdgeInsets.only(bottom: 16),
+                      child: Container(
+                        color: AppColors.scaffoldBg,
+                        padding: AppSpacing.all16,
+                        child: Obx(
+                          () => AppButton(
+                            label: 'Confirm & Save Assignment',
+                            icon: Icons.check_circle_rounded,
+                            isLoading: controller.isLoading.value,
+                            isDisabled: controller.selectedStudents.isEmpty,
+                            onPressed: controller.selectedStudents.isEmpty
+                                ? null
+                                : controller.confirmAssignment,
+                          ),
                         ),
                       ),
                     ),

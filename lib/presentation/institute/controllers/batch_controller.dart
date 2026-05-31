@@ -1,4 +1,5 @@
 import 'package:tuoora/core/widgets/app_pickers.dart';
+import 'package:tuoora/data/models/staff_model.dart';
 import 'package:tuoora/presentation/institute/models/batch_model.dart';
 import 'package:tuoora/core/widgets/common_dialog.dart';
 import 'package:flutter/material.dart';
@@ -60,11 +61,19 @@ class BatchController extends GetxController {
   final currentEditingBatchId = ''.obs;
   final allDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
+  // Assigned staff dropdown state — list is fetched on demand each time the
+  // add/edit form is opened so it picks up newly-added staff without needing
+  // a controller restart.
+  final staffList = <Staff>[].obs;
+  final isLoadingStaff = false.obs;
+  final selectedStaffId = Rxn<int>();
+
   final triedToSave = false.obs;
   final batchNameError = RxnString();
   final subjectError = RxnString();
   final feeError = RxnString();
   final daysError = RxnString();
+  final staffError = RxnString();
 
   bool validateForm() {
     bool isValid = true;
@@ -95,6 +104,13 @@ class BatchController extends GetxController {
     );
     daysError.value = daysVal;
     if (daysVal != null) isValid = false;
+
+    if (selectedStaffId.value == null) {
+      staffError.value = 'Please select a staff member';
+      isValid = false;
+    } else {
+      staffError.value = null;
+    }
 
     return isValid;
   }
@@ -157,6 +173,9 @@ class BatchController extends GetxController {
     subjectError.value = null;
     feeError.value = null;
     daysError.value = null;
+    staffError.value = null;
+    selectedStaffId.value = null;
+    fetchStaffForAssignment();
   }
 
   void initEditMode(BatchModel batch) {
@@ -181,6 +200,28 @@ class BatchController extends GetxController {
     subjectError.value = null;
     feeError.value = null;
     daysError.value = null;
+    staffError.value = null;
+    selectedStaffId.value = batch.staffId;
+    fetchStaffForAssignment();
+  }
+
+  Future<void> fetchStaffForAssignment() async {
+    try {
+      isLoadingStaff.value = true;
+      final response = await _repository.listStaff();
+      staffList.assignAll(response.items);
+    } catch (e) {
+      AppSnackBar.error('Failed to load staff list');
+    } finally {
+      isLoadingStaff.value = false;
+    }
+  }
+
+  void selectStaff(int? id) {
+    selectedStaffId.value = id;
+    if (triedToSave.value && id != null) {
+      staffError.value = null;
+    }
   }
 
   TimeOfDay _parseTime(String timeStr) {
@@ -281,6 +322,7 @@ class BatchController extends GetxController {
           '${endTime.value.hour.toString().padLeft(2, '0')}:${endTime.value.minute.toString().padLeft(2, '0')}',
       'days': selectedDays.toList(),
       'classroom': classroomController.text.trim(),
+      'staff_id': selectedStaffId.value,
     };
 
     try {
@@ -339,6 +381,9 @@ class BatchController extends GetxController {
     }
     if (errors.containsKey('days')) {
       daysError.value = (errors['days'] as List).first.toString();
+    }
+    if (errors.containsKey('staff_id')) {
+      staffError.value = (errors['staff_id'] as List).first.toString();
     }
   }
 

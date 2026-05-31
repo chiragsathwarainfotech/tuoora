@@ -54,13 +54,6 @@ class AddEditBatchScreen extends GetView<BatchController> {
                       ),
                     ),
                     AppSpacing.v24,
-                    AppInputField(
-                      label: AppStrings.instBatchDescLabel,
-                      controller: controller.descriptionController,
-                      hint: AppStrings.instBatchDescHint,
-                      maxLines: 3,
-                    ),
-                    AppSpacing.v24,
                     Obx(
                       () => AppInputField(
                         label: AppStrings.instBatchFeeLabelAlt,
@@ -72,6 +65,13 @@ class AddEditBatchScreen extends GetView<BatchController> {
                         ],
                         errorText: controller.feeError.value,
                       ),
+                    ),
+                    AppSpacing.v24,
+                    AppInputField(
+                      label: AppStrings.instBatchDescLabel,
+                      controller: controller.descriptionController,
+                      hint: AppStrings.instBatchDescHint,
+                      maxLines: 3,
                     ),
                     AppSpacing.v24,
                     const InstituteLabel(AppStrings.instTimeSlot),
@@ -102,6 +102,8 @@ class AddEditBatchScreen extends GetView<BatchController> {
                       controller: controller.classroomController,
                       hint: AppStrings.instBatchClassroomHint,
                     ),
+                    AppSpacing.v24,
+                    _buildAssignedStaffField(),
                     AppSpacing.v32,
                     _buildSaveButton(context),
                     AppSpacing.v24,
@@ -200,6 +202,100 @@ class AddEditBatchScreen extends GetView<BatchController> {
           );
         });
       }).toList(),
+    );
+  }
+
+  Widget _buildAssignedStaffField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          AppStrings.instBatchAssignedStaffLabel,
+          style: AppTextStyles.outfit(
+            fontSize: 14,
+            fontWeight: FontWeight.w800,
+            color: AppColors.fieldLabel,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Obx(() {
+          final hasError = controller.staffError.value != null;
+          final selectedId = controller.selectedStaffId.value;
+          final isValueInList = controller.staffList.any(
+            (s) => s.id == selectedId,
+          );
+          return Container(
+            constraints: const BoxConstraints(minHeight: 48),
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            decoration: BoxDecoration(
+              color: AppColors.fieldBg,
+              borderRadius: BorderRadius.circular(InputStyles.borderRadius),
+              border: Border.all(
+                color: hasError ? Colors.redAccent : AppColors.fieldBorder,
+                width: hasError ? 1.5 : 1,
+              ),
+            ),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<int>(
+                value: isValueInList ? selectedId : null,
+                isExpanded: true,
+                hint: Text(
+                  controller.isLoadingStaff.value
+                      ? 'Loading staff...'
+                      : AppStrings.instBatchAssignedStaffHint,
+                  style: AppTextStyles.outfit(
+                    fontSize: 14,
+                    color: AppColors.fieldLabel,
+                  ),
+                ),
+                icon: const Icon(
+                  Icons.keyboard_arrow_down_rounded,
+                  color: AppColors.fieldLabel,
+                ),
+                style: AppTextStyles.outfit(
+                  fontSize: 14,
+                  color: AppColors.textPrimary,
+                  fontWeight: FontWeight.w500,
+                ),
+                dropdownColor: AppColors.white,
+                items: controller.staffList
+                    .map(
+                      (staff) => DropdownMenuItem<int>(
+                        value: staff.id,
+                        child: Text(
+                          staff.fullName,
+                          style: AppTextStyles.outfit(
+                            fontSize: 14,
+                            color: AppColors.textPrimary,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    )
+                    .toList(),
+                onChanged: controller.isLoadingStaff.value
+                    ? null
+                    : controller.selectStaff,
+              ),
+            ),
+          );
+        }),
+        Obx(() {
+          final err = controller.staffError.value;
+          if (err == null) return const SizedBox.shrink();
+          return Padding(
+            padding: const EdgeInsets.only(top: 4, left: 4),
+            child: Text(
+              err,
+              style: AppTextStyles.outfit(
+                fontSize: 12,
+                color: Colors.redAccent,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          );
+        }),
+      ],
     );
   }
 

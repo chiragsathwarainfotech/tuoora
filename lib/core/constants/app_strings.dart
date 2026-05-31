@@ -181,16 +181,18 @@ class AppStrings {
   static const String instBatchNameHint = 'Enter batch name';
   static const String instBatchSubjectLabel = 'Subject';
   static const String instBatchSubjectHint = 'Enter subject';
-  static const String instBatchDescLabel = 'Batch Description';
+  static const String instBatchDescLabel = 'Description';
   static const String instBatchDescHint = 'Enter batch description';
-  static const String instBatchFeeLabelAlt = 'Batch Fee (₹)';
+  static const String instBatchFeeLabelAlt = 'Fees (₹)';
   static const String instBatchFeeHint = 'Enter fee';
   static const String instScheduleSettings = 'Schedule Settings';
   static const String instTimeSlot = 'Time Slot';
   static const String instChangeBtn = 'Change';
-  static const String instActiveDaysLabel = 'Active Days';
+  static const String instActiveDaysLabel = 'Days';
   static const String instBatchClassroomLabel = 'Classroom / Venue';
   static const String instBatchClassroomHint = 'Enter class room';
+  static const String instBatchAssignedStaffLabel = 'Assigned Staff';
+  static const String instBatchAssignedStaffHint = 'Select Staff';
   static const String instSaveBatchBtn = 'Save Batch Details';
 
   // Institute Batch Resources
@@ -210,7 +212,7 @@ class AppStrings {
 
   // Institute Add Homework
   static const String instAddHomeworkTitle = 'Add Homework';
-  static const String instHomeworkSubjectLabel = 'Subject Name';
+  static const String instHomeworkSubjectLabel = 'Subject Title';
   static const String instHomeworkSubjectHint = 'Enter subject';
   static const String instDueDateLabel = 'Due Date';
   static const String instDueDateHint = 'Select date';

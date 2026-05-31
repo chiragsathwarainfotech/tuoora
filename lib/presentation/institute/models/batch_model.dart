@@ -23,6 +23,8 @@ class BatchModel {
   // the unvarnished string so the edit form can re-hydrate the field
   // correctly when it's actually empty on the server.
   final String? classroom;
+  final int? staffId;
+  final String? staffName;
 
   BatchModel({
     required this.id,
@@ -42,6 +44,8 @@ class BatchModel {
     this.days = const ['Mon', 'Wed', 'Fri'],
     this.students,
     this.classroom,
+    this.staffId,
+    this.staffName,
   });
 }
 

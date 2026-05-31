@@ -140,7 +140,7 @@ class ForgotPasswordScreen extends GetView<ForgotPasswordController> {
           ),
           prefixIcon: Icon(
             prefixIcon,
-            color: AppColors.blueSapphire,
+            color: AppColors.fieldLabel,
             size: AppSpacing.s20,
           ),
           border: InputBorder.none,

@@ -247,7 +247,7 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
           ),
           prefixIcon: Icon(
             prefixIcon,
-            color: AppColors.blueSapphire,
+            color: AppColors.fieldLabel,
             size: AppSpacing.s20,
           ),
           suffixIcon: suffixIcon,

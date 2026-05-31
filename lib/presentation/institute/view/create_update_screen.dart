@@ -46,7 +46,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                         Obx(
                           () => AppInputField(
                             label: 'Topic',
-                            hint: 'e.g., Q3 Fee Installment Reminder',
+                            hint: 'Enter topic',
                             controller: controller.subjectController,
                             labelSpacing: 12.0,
                             errorText: controller.triedToSave.value

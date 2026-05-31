@@ -244,7 +244,7 @@ class BatchResourcesScreen extends StatelessWidget {
                 children: [
                   const Icon(
                     Icons.attach_file_rounded,
-                    color: AppColors.primaryBrand,
+                    color: AppColors.fieldLabel,
                   ),
                   AppSpacing.h12,
                   Expanded(

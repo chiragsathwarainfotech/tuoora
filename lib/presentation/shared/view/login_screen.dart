@@ -55,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: AppTextStyles.outfit(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
-                        color: AppColors.blueSapphire,
+                        color: AppColors.primaryBrand,
                         height: 1.5,
                       ),
                     ),
@@ -187,7 +187,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   style: AppTextStyles.outfit(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
-                                    color: AppColors.blueSapphire,
+                                    color: AppColors.fieldLabel,
                                   ),
                                 ),
                               ],
@@ -223,7 +223,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 style: AppTextStyles.outfit(
                                   fontSize: 10,
                                   fontWeight: FontWeight.w800,
-                                  color: AppColors.brandAppBarColor,
+                                  color: AppColors.primaryBrand,
                                   letterSpacing: 1.0,
                                 ),
                               ),
@@ -287,7 +287,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           prefixIcon: Icon(
             prefixIcon,
-            color: AppColors.blueSapphire,
+            color: AppColors.fieldLabel,
             size: AppSpacing.s20,
           ),
           suffixIcon: suffixIcon,

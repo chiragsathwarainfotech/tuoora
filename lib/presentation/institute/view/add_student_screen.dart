@@ -216,6 +216,19 @@ class AddEditStudentScreen extends GetView<InstituteStudentController> {
           AppSpacing.v20,
           Obx(
             () => AppInputField(
+              label: AppStrings.instPhoneLabel,
+              hint: AppStrings.instPhoneHint,
+              icon: Icons.phone,
+              controller: controller.phoneController,
+              keyboardType: TextInputType.phone,
+              maxLength: 10,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              errorText: controller.phoneError.value,
+            ),
+          ),
+          AppSpacing.v20,
+          Obx(
+            () => AppInputField(
               label: AppStrings.instStudentEmailLabel,
               hint: AppStrings.instStudentEmailHint,
               icon: Icons.email_rounded,
@@ -240,34 +253,22 @@ class AddEditStudentScreen extends GetView<InstituteStudentController> {
           AppSpacing.v20,
           Obx(
             () => AppInputField(
-              label: AppStrings.instParentNameLabel,
-              hint: AppStrings.instParentNameHint,
-              icon: Icons.group,
-              controller: controller.parentNameController,
-              errorText: controller.parentNameError.value,
-            ),
-          ),
-          AppSpacing.v20,
-          Obx(
-            () => AppInputField(
-              label: AppStrings.instPhoneLabel,
-              hint: AppStrings.instPhoneHint,
-              icon: Icons.phone,
-              controller: controller.phoneController,
-              keyboardType: TextInputType.phone,
-              maxLength: 10,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              errorText: controller.phoneError.value,
-            ),
-          ),
-          AppSpacing.v20,
-          Obx(
-            () => AppInputField(
               label: AppStrings.instGradeLabel,
               hint: AppStrings.instGradeHint,
               icon: Icons.school,
               controller: controller.standardController,
               errorText: controller.standardError.value,
+            ),
+          ),
+
+          AppSpacing.v20,
+          Obx(
+            () => AppInputField(
+              label: AppStrings.instParentNameLabel,
+              hint: AppStrings.instParentNameHint,
+              icon: Icons.group,
+              controller: controller.parentNameController,
+              errorText: controller.parentNameError.value,
             ),
           ),
         ],

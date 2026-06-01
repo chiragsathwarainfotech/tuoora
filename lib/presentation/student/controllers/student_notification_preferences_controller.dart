@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/data/repositories/student_notifications_repository.dart';
 import 'dart:async';
 
@@ -38,7 +39,7 @@ class StudentNotificationPreferencesController extends GetxController {
       final data = await _repository.getNotificationSettings();
       _updateObservables(data);
     } catch (e) {
-      Get.snackbar('Error', 'Failed to fetch notification settings');
+      AppSnackBar.error('Failed to fetch notification settings');
     } finally {
       isLoading.value = false;
     }
@@ -67,7 +68,7 @@ class StudentNotificationPreferencesController extends GetxController {
         };
         await _repository.updateNotificationSettings(data);
       } catch (e) {
-        Get.snackbar('Error', 'Failed to update settings');
+        AppSnackBar.error('Failed to update settings');
         fetchSettings(); // Revert to remote on failure
       }
     });

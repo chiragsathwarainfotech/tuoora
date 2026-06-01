@@ -197,8 +197,6 @@ class AppPages {
       name: AppRoutes.studentReceiptsList,
       page: () => const StudentReceiptsListScreen(),
       binding: BindingsBuilder(() {
-        // FeesController owns the receipt screen state — make sure it
-        // exists so taps from the list can hand off cleanly.
         if (!Get.isRegistered<FeesController>()) {
           Get.lazyPut<FeesController>(() => FeesController(), fenix: true);
         }

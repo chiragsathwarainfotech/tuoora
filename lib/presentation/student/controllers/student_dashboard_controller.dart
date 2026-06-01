@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:tuoora/core/api/api_client.dart';
 import 'package:tuoora/core/enums/app_enums.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/data/models/student_dashboard_model.dart';
 import 'package:tuoora/data/repositories/student_dashboard_repository.dart';
 import 'package:tuoora/presentation/student/models/assignment_model.dart';
@@ -84,7 +85,7 @@ class StudentDashboardController extends GetxController {
       final data = await _repository.getDashboardData();
       dashboardData.value = data;
     } catch (e) {
-      Get.snackbar('Error', 'Failed to load dashboard data');
+      AppSnackBar.error('Failed to load dashboard data');
     } finally {
       isLoading.value = false;
     }

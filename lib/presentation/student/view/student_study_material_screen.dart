@@ -4,6 +4,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/widgets/app_empty_view.dart';
 import 'package:tuoora/presentation/student/controllers/student_study_material_controller.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
@@ -24,43 +25,48 @@ class StudentStudyMaterialScreen
               title: 'Study material',
               showDefaultActions: false,
             ),
-            const SizedBox(height: 16),
             Expanded(
-              child: Obx(() {
-                if (controller.isLoading.value) {
+              child: RefreshIndicator(
+                color: AppColors.primaryBrand,
+                onRefresh: controller.fetchResources,
+                child: Obx(() {
+                  if (controller.isLoading.value) {
+                    return ListView.separated(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      padding: AppSpacing.x16,
+                      itemCount: 4,
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: 10),
+                      itemBuilder: (context, index) => _buildShimmerCard(),
+                    );
+                  }
+
+                  if (controller.resources.isEmpty) {
+                    return ListView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      children: const [
+                        SizedBox(height: 80),
+                        AppEmptyView(
+                          icon: Icons.menu_book_outlined,
+                          title: 'No study material found',
+                        ),
+                      ],
+                    );
+                  }
+
                   return ListView.separated(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    itemCount: 4,
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: AppSpacing.x16,
+                    itemCount: controller.resources.length,
                     separatorBuilder: (context, index) =>
-                        const SizedBox(height: 12),
-                    itemBuilder: (context, index) => _buildShimmerCard(),
+                        const SizedBox(height: 10),
+                    itemBuilder: (context, index) {
+                      final item = controller.resources[index];
+                      return _buildMaterialCard(item);
+                    },
                   );
-                }
-
-                if (controller.resources.isEmpty) {
-                  return const AppEmptyView(
-                    icon: Icons.menu_book_outlined,
-                    title: 'No study material found',
-                  );
-                }
-
-                return ListView.separated(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  itemCount: controller.resources.length,
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(height: 12),
-                  itemBuilder: (context, index) {
-                    final item = controller.resources[index];
-                    return _buildMaterialCard(item);
-                  },
-                );
-              }),
+                }),
+              ),
             ),
           ],
         ),
@@ -71,9 +77,7 @@ class StudentStudyMaterialScreen
   Widget _buildMaterialCard(StudentResourceModel item) {
     final hash = item.subject.hashCode;
     final isDark = hash % 2 == 0;
-    final bgColor = isDark
-        ? AppColors.studentBrandSoft
-        : AppColors.studentPresentBg;
+    final bgColor = isDark ? AppColors.primaryBrandLight : AppColors.successBg;
     final textColor = isDark ? AppColors.error : AppColors.errorRed;
 
     final isVideo = item.fileType.toLowerCase() == 'video';
@@ -82,10 +86,10 @@ class StudentStudyMaterialScreen
       onTap: () =>
           Get.toNamed(AppRoutes.studentStudyMaterialDetail, arguments: item),
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: AppSpacing.cardPadding,
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           border: Border.all(
             color: AppColors.borderGrey.withValues(alpha: 0.5),
           ),
@@ -103,12 +107,12 @@ class StudentStudyMaterialScreen
                   ),
                   decoration: BoxDecoration(
                     color: bgColor,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
                   ),
                   child: Text(
                     item.subject,
                     style: AppTextStyles.outfit(
-                      fontSize: 10,
+                      fontSize: 12,
                       fontWeight: FontWeight.w800,
                       color: textColor,
                     ),
@@ -195,9 +199,10 @@ class StudentStudyMaterialScreen
       highlightColor: Colors.grey[100]!,
       child: Container(
         height: 140,
+        padding: AppSpacing.cardPadding,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         ),
       ),
     );

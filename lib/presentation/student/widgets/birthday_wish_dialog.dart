@@ -43,7 +43,7 @@ class BirthdayWishDialog extends StatelessWidget {
               gradient: const LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [AppColors.studentBrand, AppColors.orangeTag],
+                colors: [AppColors.primaryBrand, AppColors.orangeTag],
               ),
               borderRadius: BorderRadius.circular(28),
               boxShadow: [
@@ -66,7 +66,7 @@ class BirthdayWishDialog extends StatelessWidget {
                   ),
                   child: const Icon(
                     Icons.cake_rounded,
-                    color: AppColors.studentBrand,
+                    color: AppColors.primaryBrand,
                     size: 46,
                   ),
                 ),
@@ -118,7 +118,7 @@ class BirthdayWishDialog extends StatelessWidget {
                       style: AppTextStyles.outfit(
                         fontSize: 16,
                         fontWeight: FontWeight.w800,
-                        color: AppColors.studentBrand,
+                        color: AppColors.primaryBrand,
                       ),
                     ),
                   ),

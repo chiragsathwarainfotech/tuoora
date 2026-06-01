@@ -7,6 +7,7 @@ import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/presentation/student/controllers/fees_controller.dart';
 import 'package:tuoora/presentation/student/models/fee_model.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
@@ -56,10 +57,9 @@ class StudentPayFeesScreen extends GetView<FeesController> {
                       ),
                       const SizedBox(height: AppSpacing.s12),
                       _OpenInGooglePayButton(
-                        onTap: () => Get.snackbar(
-                          AppStrings.studentPayFeesOpenInGooglePay,
+                        onTap: () => AppSnackBar.success(
                           profile.instituteUpiHandle,
-                          snackPosition: SnackPosition.BOTTOM,
+                          title: AppStrings.studentPayFeesOpenInGooglePay,
                         ),
                       ),
                       const SizedBox(height: AppSpacing.s12),
@@ -104,7 +104,7 @@ class _OutstandingCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.studentBrand,
+        color: AppColors.primaryBrand,
         borderRadius: BorderRadius.circular(AppSpacing.s14),
       ),
       child: Stack(
@@ -294,7 +294,7 @@ class _QrPlaceholder extends StatelessWidget {
                   style: AppTextStyles.outfit(
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
-                    color: AppColors.studentBrand,
+                    color: AppColors.primaryBrand,
                   ),
                 ),
               ),
@@ -383,7 +383,7 @@ class _OpenInGooglePayButton extends StatelessWidget {
                 style: AppTextStyles.outfit(
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
-                  color: AppColors.studentProgressBlue,
+                  color: AppColors.subjectPhysics,
                 ),
               ),
               Text(
@@ -450,11 +450,7 @@ class _PaymentAppRow extends StatelessWidget {
   }
 
   void _snack(String app) {
-    Get.snackbar(
-      app,
-      profile.instituteUpiHandle,
-      snackPosition: SnackPosition.BOTTOM,
-    );
+    AppSnackBar.success(profile.instituteUpiHandle, title: app);
   }
 }
 
@@ -574,7 +570,7 @@ class _Step extends StatelessWidget {
           width: 22,
           height: 22,
           decoration: BoxDecoration(
-            color: AppColors.studentBrandSoft,
+            color: AppColors.primaryBrandLight,
             shape: BoxShape.circle,
           ),
           alignment: Alignment.center,
@@ -583,7 +579,7 @@ class _Step extends StatelessWidget {
             style: AppTextStyles.outfit(
               fontSize: 11,
               fontWeight: FontWeight.w800,
-              color: AppColors.studentBrand,
+              color: AppColors.primaryBrand,
             ),
           ),
         ),

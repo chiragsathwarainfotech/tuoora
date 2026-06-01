@@ -4,6 +4,7 @@ import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/app_empty_view.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/core/widgets/student_bottom_nav.dart';
 import 'package:tuoora/presentation/student/controllers/student_controller.dart';
@@ -27,11 +28,40 @@ class StudentDashboard extends GetView<StudentDashboardController> {
         bottom: false,
         child: Obx(() {
           if (controller.isLoading.value) {
-            return const CommonLoading(color: AppColors.studentBrand);
+            return const CommonLoading(color: AppColors.primaryBrand);
           }
           final data = controller.dashboardData.value;
           if (data == null) {
-            return const Center(child: Text('No dashboard data found'));
+            // Wrap empty state in a scrollable so pull-to-refresh still works.
+            return Column(
+              children: [
+                StudentAppBar(
+                  isRoot: true,
+                  titleWidget: _GreetingTitle(
+                    firstName: controller.studentFirstName,
+                    initials: controller.studentInitials,
+                  ),
+                ),
+                Expanded(
+                  child: RefreshIndicator(
+                    color: AppColors.primaryBrand,
+                    onRefresh: controller.fetchDashboard,
+                    child: ListView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      children: const [
+                        SizedBox(height: 80),
+                        AppEmptyView(
+                          icon: Icons.dashboard_outlined,
+                          title: 'Nothing to show yet',
+                          message:
+                              'We couldn\'t load your dashboard right now. Pull to refresh.',
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            );
           }
 
           final todayClass = controller.todayClassDisplay;
@@ -47,14 +77,13 @@ class StudentDashboard extends GetView<StudentDashboardController> {
                 ),
               ),
               Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.fromLTRB(
-                    AppSpacing.s16,
-                    AppSpacing.s16,
-                    AppSpacing.s16,
-                    AppSpacing.s24,
-                  ),
-                  child: Column(
+                child: RefreshIndicator(
+                  color: AppColors.primaryBrand,
+                  onRefresh: controller.fetchDashboard,
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: AppSpacing.screenPaddingTop,
+                    child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       if (todayClass != null) ...[
@@ -145,6 +174,7 @@ class StudentDashboard extends GetView<StudentDashboardController> {
                       ],
                     ],
                   ),
+                  ),
                 ),
               ),
             ],
@@ -208,13 +238,13 @@ class _GreetingTitle extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: AppSpacing.s18,
-            backgroundColor: AppColors.studentBrandSoft,
+            backgroundColor: AppColors.primaryBrandLight,
             child: Text(
               initials,
               style: AppTextStyles.outfit(
                 fontSize: 12,
                 fontWeight: FontWeight.w800,
-                color: AppColors.studentBrand,
+                color: AppColors.primaryBrand,
               ),
             ),
           ),
@@ -258,110 +288,85 @@ class _TodayClassCard extends StatelessWidget {
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(AppSpacing.s20),
-        child: Stack(
-          children: [
-            Positioned(
-              right: -8,
-              top: 8,
-              bottom: 8,
-              child: Opacity(
-                opacity: 0.08,
-                child: Text(
-                  'S',
-                  style: AppTextStyles.outfit(
-                    fontSize: 160,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.studentBrand,
-                    height: 1,
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+        child: IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                width: 72,
+                decoration: const BoxDecoration(color: AppColors.primaryBrand),
+                padding: AppSpacing.cardPadding,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      display.dayNumber,
+                      style: AppTextStyles.outfit(
+                        fontSize: 26,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.white,
+                        height: 1,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      display.monthLabel,
+                      style: AppTextStyles.outfit(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.white,
+                        letterSpacing: 1.2,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(AppSpacing.s16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${display.weekdayLabel}  •  ${display.headerLabel}',
+                        style: AppTextStyles.outfit(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.textTertiary,
+                          letterSpacing: 1.2,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        display.subject,
+                        style: AppTextStyles.outfit(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.textPrimary,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        display.subtitle,
+                        style: AppTextStyles.outfit(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w400,
+                          color: AppColors.textTertiary,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: AppSpacing.s16),
+                      _WeekStrip(weekDays: weekDays),
+                    ],
                   ),
                 ),
               ),
-            ),
-            IntrinsicHeight(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Container(
-                    width: 72,
-                    decoration: const BoxDecoration(
-                      color: AppColors.studentBrand,
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      vertical: AppSpacing.s16,
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          display.dayNumber,
-                          style: AppTextStyles.outfit(
-                            fontSize: 26,
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.white,
-                            height: 1,
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          display.monthLabel,
-                          style: AppTextStyles.outfit(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.white,
-                            letterSpacing: 1.2,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(AppSpacing.s16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${display.weekdayLabel}  •  ${display.headerLabel}',
-                            style: AppTextStyles.outfit(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w800,
-                              color: AppColors.textTertiary,
-                              letterSpacing: 1.2,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            display.subject,
-                            style: AppTextStyles.outfit(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w800,
-                              color: AppColors.textPrimary,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            display.subtitle,
-                            style: AppTextStyles.outfit(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w400,
-                              color: AppColors.textTertiary,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: AppSpacing.s16),
-                          _WeekStrip(weekDays: weekDays),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -424,14 +429,12 @@ class _AssignmentTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pillBg = item.isSubmitted
-        ? AppColors.studentBrandSoft
-        : AppColors.amberLight;
-    final pillText = item.isSubmitted
-        ? AppColors.studentBrand
-        : AppColors.studentTomorrowPillText;
+        ? AppColors.successGreen
+        : AppColors.bohoRed;
+    const pillText = AppColors.white;
 
     return Container(
-      padding: const EdgeInsets.all(AppSpacing.s14),
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
@@ -449,12 +452,12 @@ class _AssignmentTile extends StatelessWidget {
             width: AppSpacing.s40,
             height: AppSpacing.s40,
             decoration: BoxDecoration(
-              color: AppColors.studentBrandSoft,
-              borderRadius: BorderRadius.circular(AppSpacing.s12),
+              color: AppColors.primaryBrandLight,
+              borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
             ),
             child: Icon(
               Icons.menu_book_rounded,
-              color: AppColors.studentBrand,
+              color: AppColors.primaryBrand,
               size: 20,
             ),
           ),
@@ -497,7 +500,7 @@ class _AssignmentTile extends StatelessWidget {
             ),
             decoration: BoxDecoration(
               color: pillBg,
-              borderRadius: BorderRadius.circular(AppSpacing.s12),
+              borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
             ),
             child: Text(
               item.status,
@@ -522,19 +525,15 @@ class _AttendanceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isNotMarked = status.toLowerCase() == 'not marked';
-    final bgColor = isNotMarked
-        ? AppColors.primaryBrand
-        : AppColors.studentPresentBg;
-    final iconColor = isNotMarked
-        ? AppColors.white
-        : AppColors.studentPresentText;
+    final bgColor = isNotMarked ? AppColors.primaryBrand : AppColors.successBg;
+    final iconColor = isNotMarked ? AppColors.white : AppColors.successGreen;
     final textColor = isNotMarked
         ? AppColors.textPrimary
-        : AppColors.studentPresentText;
+        : AppColors.successGreen;
     final icon = isNotMarked ? Icons.close_rounded : Icons.check_rounded;
 
     return Container(
-      padding: const EdgeInsets.all(AppSpacing.s14),
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
@@ -553,7 +552,7 @@ class _AttendanceCard extends StatelessWidget {
             height: AppSpacing.s40,
             decoration: BoxDecoration(
               color: bgColor,
-              borderRadius: BorderRadius.circular(AppSpacing.s12),
+              borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
             ),
             child: Icon(icon, color: iconColor, size: 20),
           ),
@@ -597,7 +596,7 @@ class _StudyMaterialTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(AppSpacing.s14),
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
@@ -615,12 +614,12 @@ class _StudyMaterialTile extends StatelessWidget {
             width: AppSpacing.s40,
             height: AppSpacing.s40,
             decoration: BoxDecoration(
-              color: AppColors.studentBrandSoft,
-              borderRadius: BorderRadius.circular(AppSpacing.s12),
+              color: AppColors.primaryBrandLight,
+              borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
             ),
             child: Icon(
               Icons.menu_book_outlined,
-              color: AppColors.studentBrand,
+              color: AppColors.primaryBrand,
               size: 20,
             ),
           ),
@@ -670,7 +669,7 @@ class _PendingFeeTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(AppSpacing.s14),
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
@@ -688,12 +687,12 @@ class _PendingFeeTile extends StatelessWidget {
             width: AppSpacing.s40,
             height: AppSpacing.s40,
             decoration: BoxDecoration(
-              color: AppColors.studentBrandSoft,
-              borderRadius: BorderRadius.circular(AppSpacing.s12),
+              color: AppColors.primaryBrandLight,
+              borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
             ),
             child: Icon(
               Icons.currency_rupee_rounded,
-              color: AppColors.studentBrand,
+              color: AppColors.primaryBrand,
               size: 20,
             ),
           ),
@@ -729,15 +728,15 @@ class _PendingFeeTile extends StatelessWidget {
               vertical: AppSpacing.s4,
             ),
             decoration: BoxDecoration(
-              color: AppColors.amberLight,
-              borderRadius: BorderRadius.circular(AppSpacing.s12),
+              color: AppColors.bohoRed,
+              borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
             ),
             child: Text(
               'Pending',
               style: AppTextStyles.outfit(
                 fontSize: 11,
                 fontWeight: FontWeight.w700,
-                color: AppColors.studentTomorrowPillText,
+                color: AppColors.white,
               ),
             ),
           ),

@@ -505,9 +505,7 @@ class AppStrings {
 
   // Student — Attachment preview screen.
   static const String studentAttachmentDownload = 'Download';
-  static const String studentAttachmentShare = 'Share';
   static const String studentAttachmentDownloadStarted = 'Downloading…';
-  static const String studentAttachmentShareStarted = 'Sharing…';
   static const String studentAttachmentNoneSelected = 'No attachment selected';
 
   // Student — Fees tab.

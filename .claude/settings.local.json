@@ -11,7 +11,9 @@
       "WebFetch(domain:help.figma.com)",
       "Bash(claude plugin *)",
       "WebFetch(domain:claude.ai)",
-      "PowerShell(Remove-Item *)"
+      "PowerShell(Remove-Item *)",
+      "Bash(grep -rnB1 -A6 \"Get\\\\.snackbar\" lib/presentation/student/controllers/)",
+      "Bash(grep -v \"//\")"
     ]
   },
   "enabledPlugins": {

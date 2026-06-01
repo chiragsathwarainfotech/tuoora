@@ -394,7 +394,7 @@ class StudentChatScreen extends StatelessWidget {
         ),
         margin: const EdgeInsets.symmetric(horizontal: AppSpacing.s32),
         decoration: BoxDecoration(
-          color: AppColors.amberLight,
+          color: AppColors.errorBg,
           borderRadius: BorderRadius.circular(AppSpacing.s8),
         ),
         child: Row(

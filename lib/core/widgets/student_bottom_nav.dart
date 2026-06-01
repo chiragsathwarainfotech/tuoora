@@ -67,7 +67,7 @@ class StudentBottomNav extends StatelessWidget {
 
   Widget _buildNavItem(int index, _NavItem item) {
     final isSelected = currentIndex == index;
-    final color = isSelected ? AppColors.studentBrand : AppColors.textMuted;
+    final color = isSelected ? AppColors.primaryBrand : AppColors.textMuted;
 
     return Expanded(
       child: GestureDetector(

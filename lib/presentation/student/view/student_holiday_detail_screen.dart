@@ -131,12 +131,12 @@ class StudentHolidayDetailScreen extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: AppColors.studentPresentBg,
+              color: AppColors.successBg,
               borderRadius: BorderRadius.circular(8),
             ),
             child: const Icon(
               Icons.arrow_forward,
-              color: AppColors.studentPresentText,
+              color: AppColors.successGreen,
               size: 20,
             ),
           ),

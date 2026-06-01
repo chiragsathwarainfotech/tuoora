@@ -239,16 +239,16 @@ class StudentEventDetailScreen extends StatelessWidget {
         children: [
           _buildAttachmentRow(
             Icons.description,
-            AppColors.studentPresentText,
-            AppColors.studentPresentBg,
+            AppColors.successGreen,
+            AppColors.successBg,
             'Schedule_ScienceDay.pdf',
             'Document - 120 KB',
           ),
           const Divider(height: 1, color: AppColors.borderGrey),
           _buildAttachmentRow(
             Icons.image,
-            AppColors.studentTomorrowPillText,
-            AppColors.amberLight,
+            AppColors.bohoRed,
+            AppColors.errorBg,
             'Floor_plan_HallA.png',
             'Image - 480 KB',
           ),

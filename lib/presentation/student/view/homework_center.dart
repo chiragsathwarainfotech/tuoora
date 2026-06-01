@@ -236,11 +236,11 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
       margin: AppSpacing.x28,
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
-        color: AppColors.studentUpdateIconColor,
+        color: AppColors.subjectPhysics,
         borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
-            color: AppColors.studentProgressBlue,
+            color: AppColors.subjectPhysics,
             blurRadius: AppSpacing.s20,
             offset: const Offset(0, AppSpacing.s10),
           ),
@@ -277,7 +277,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                   vertical: AppSpacing.s6,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.amberLight,
+                  color: AppColors.errorBg,
                   borderRadius: BorderRadius.circular(AppSpacing.s10),
                 ),
                 child: Row(
@@ -348,7 +348,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: AppColors.studentUpdateIconColor,
+                            color: AppColors.subjectPhysics,
                             width: AppSpacing.s2,
                           ),
                         ),
@@ -499,7 +499,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                     color: isActive
                         ? AppColors.skyBlueLight
                         : (isDeadlineStyle
-                              ? AppColors.amberLight
+                              ? AppColors.errorBg
                               : AppColors.white),
                     borderRadius: BorderRadius.circular(AppSpacing.s10),
                   ),
@@ -555,7 +555,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
               padding: const EdgeInsets.symmetric(vertical: AppSpacing.s14),
               decoration: BoxDecoration(
                 color: isActive
-                    ? AppColors.studentUpdateIconColor
+                    ? AppColors.subjectPhysics
                     : AppColors.background,
                 borderRadius: BorderRadius.circular(AppSpacing.s16),
               ),

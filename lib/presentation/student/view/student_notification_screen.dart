@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/app_empty_view.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/presentation/student/controllers/student_notifications_controller.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
@@ -25,24 +26,21 @@ class StudentNotificationScreen
             Expanded(
               child: Obx(() {
                 if (controller.isLoading.value && controller.items.isEmpty) {
-                  return const CommonLoading(color: AppColors.studentBrand);
+                  return const CommonLoading(color: AppColors.primaryBrand);
                 }
                 final displays = controller.displays;
                 if (displays.isEmpty) {
                   return _EmptyState(onRefresh: controller.load);
                 }
                 return RefreshIndicator(
-                  color: AppColors.studentBrand,
+                  color: AppColors.primaryBrand,
                   onRefresh: controller.load,
                   child: ListView.separated(
                     physics: const AlwaysScrollableScrollPhysics(),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.s16,
-                      vertical: AppSpacing.s12,
-                    ),
+                    padding: AppSpacing.screenPadding,
                     itemCount: displays.length,
                     separatorBuilder: (_, _) =>
-                        const SizedBox(height: AppSpacing.s12),
+                        const SizedBox(height: AppSpacing.s10),
                     itemBuilder: (context, index) {
                       final d = displays[index];
                       return _NotificationCard(
@@ -71,7 +69,7 @@ class _NotificationCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: AppColors.white,
-      borderRadius: BorderRadius.circular(AppSpacing.s12),
+      borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
@@ -87,70 +85,55 @@ class _NotificationCard extends StatelessWidget {
               ),
             ],
           ),
-          padding: const EdgeInsets.all(AppSpacing.s16),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: display.iconBg,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Icon(display.icon, color: display.iconColor, size: 20),
-              ),
-              AppSpacing.h16,
-              Expanded(
-                child: Column(
+          padding: AppSpacing.cardPadding,
+          child: Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            display.title,
-                            style: AppTextStyles.outfit(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w800,
-                              color: AppColors.textPrimary,
-                            ),
-                          ),
-                        ),
-                        if (display.showChevron) ...[
-                          AppSpacing.h4,
-                          const Icon(
-                            Icons.chevron_right,
-                            size: 18,
-                            color: AppColors.textPrimary,
-                          ),
-                        ],
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      display.message,
-                      style: AppTextStyles.outfit(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    if (display.timeAgo.isNotEmpty)
-                      Text(
-                        display.timeAgo,
+                    Expanded(
+                      child: Text(
+                        display.title,
                         style: AppTextStyles.outfit(
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.primaryBrand,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.textPrimary,
                         ),
                       ),
+                    ),
+                    if (display.showChevron) ...[
+                      AppSpacing.h4,
+                      const Icon(
+                        Icons.chevron_right,
+                        size: 18,
+                        color: AppColors.textPrimary,
+                      ),
+                    ],
                   ],
                 ),
-              ),
-            ],
+                const SizedBox(height: 4),
+                Text(
+                  display.message,
+                  style: AppTextStyles.outfit(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                if (display.timeAgo.isNotEmpty)
+                  Text(
+                    display.timeAgo,
+                    style: AppTextStyles.outfit(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primaryBrand,
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
       ),
@@ -164,38 +147,19 @@ class _EmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Wrap AppEmptyView in a scrollable so RefreshIndicator still works when
+    // the list is empty (otherwise pull-to-refresh has no scrollable child).
     return RefreshIndicator(
-      color: AppColors.studentBrand,
+      color: AppColors.primaryBrand,
       onRefresh: onRefresh,
       child: ListView(
         physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.all(AppSpacing.s24),
-        children: [
-          const SizedBox(height: 80),
-          Center(
-            child: Container(
-              width: 72,
-              height: 72,
-              decoration: const BoxDecoration(
-                color: AppColors.studentBrandSoft,
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.notifications_none_rounded,
-                color: AppColors.studentBrand,
-                size: 32,
-              ),
-            ),
-          ),
-          const SizedBox(height: AppSpacing.s16),
-          Center(
-            child: Text(
-              "You're all caught up.",
-              style: AppTextStyles.outfit(
-                fontSize: 13,
-                color: AppColors.textSecondary,
-              ),
-            ),
+        children: const [
+          SizedBox(height: 120),
+          AppEmptyView(
+            icon: Icons.notifications_none_rounded,
+            title: "You're all caught up",
+            message: 'New notifications will show up here.',
           ),
         ],
       ),

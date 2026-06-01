@@ -1,10 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/api/api_client.dart';
-import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/services/download_service.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
@@ -113,13 +111,9 @@ class FeesController extends GetxController {
       isDownloading.value = true;
       downloadProgress.value = 0.0;
 
-      Get.snackbar(
-        'Downloading',
+      AppSnackBar.success(
         'Please wait, your receipt is being downloaded...',
-        snackPosition: SnackPosition.BOTTOM,
-        showProgressIndicator: true,
-        backgroundColor: AppColors.primaryBrand,
-        colorText: AppColors.white,
+        title: 'Downloading',
       );
 
       final bytes = await _repository.downloadFeeReceipt(
@@ -136,12 +130,8 @@ class FeesController extends GetxController {
         fileName: fileName,
       );
     } catch (e) {
-      Get.snackbar(
-        'Error',
+      AppSnackBar.error(
         'Failed to download receipt: ${e.toString().replaceAll('Exception: ', '')}',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.redAccent,
-        colorText: AppColors.white,
       );
     } finally {
       isDownloading.value = false;

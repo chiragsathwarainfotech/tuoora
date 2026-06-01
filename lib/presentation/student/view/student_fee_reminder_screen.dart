@@ -56,7 +56,7 @@ class StudentFeeReminderScreen extends StatelessWidget {
       height: 140,
       padding: const EdgeInsets.all(AppSpacing.s24),
       decoration: BoxDecoration(
-        color: paid ? AppColors.studentPresentText : AppColors.studentTomorrowPillText,
+        color: paid ? AppColors.successGreen : AppColors.bohoRed,
         borderRadius: BorderRadius.circular(AppSpacing.s12),
       ),
       child: Stack(
@@ -128,8 +128,8 @@ class StudentFeeReminderScreen extends StatelessWidget {
             'Status',
             paid ? 'Paid' : 'Pending',
             valueColor: paid
-                ? AppColors.studentPresentText
-                : AppColors.studentTomorrowPillText,
+                ? AppColors.successGreen
+                : AppColors.bohoRed,
             isValueBold: true,
           ),
           const Divider(height: 1, color: AppColors.borderGrey),
@@ -214,8 +214,8 @@ class StudentFeeReminderScreen extends StatelessWidget {
       label: 'Open invoice',
       icon: Icons.currency_rupee,
       backgroundColor: paid
-          ? AppColors.studentPresentText
-          : AppColors.studentTomorrowPillText,
+          ? AppColors.successGreen
+          : AppColors.bohoRed,
       borderRadius: 8,
       padding: const EdgeInsets.symmetric(vertical: 16),
       onPressed: () {

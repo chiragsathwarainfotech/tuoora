@@ -21,18 +21,23 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
           children: [
             const StudentAppBar(title: 'Reports', showDefaultActions: false),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: _buildSegmentControl(),
             ),
             Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    _buildAttendanceCard(),
-                    const SizedBox(height: 16),
-                    _buildAssignmentsCard(),
-                  ],
+              child: RefreshIndicator(
+                color: AppColors.primaryBrand,
+                onRefresh: controller.fetchReport,
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: AppSpacing.screenPaddingTop,
+                  child: Column(
+                    children: [
+                      _buildAttendanceCard(),
+                      const SizedBox(height: 16),
+                      _buildAssignmentsCard(),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -45,10 +50,10 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
   Widget _buildSegmentControl() {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.borderGrey.withValues(alpha: 0.3),
-        borderRadius: BorderRadius.circular(8),
+        color: AppColors.fieldBg,
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       ),
-      padding: const EdgeInsets.all(4),
+      padding: const EdgeInsets.all(AppSpacing.s4),
       child: Obx(
         () => Row(
           children: [
@@ -67,28 +72,21 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
       child: GestureDetector(
         onTap: () => controller.changePeriod(period),
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          decoration: isSelected
-              ? BoxDecoration(
-                  color: AppColors.white,
-                  borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
-                      blurRadius: 4,
-                    ),
-                  ],
-                )
-              : null,
+          padding: const EdgeInsets.symmetric(
+            vertical: AppSpacing.s10,
+            horizontal: AppSpacing.s12,
+          ),
+          decoration: BoxDecoration(
+            color: isSelected ? AppColors.primaryBrand : AppColors.fieldBg,
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+          ),
           alignment: Alignment.center,
           child: Text(
             text,
             style: AppTextStyles.outfit(
-              fontSize: 12,
-              fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
-              color: isSelected
-                  ? AppColors.textPrimary
-                  : AppColors.textSecondary,
+              fontSize: 13,
+              fontWeight: FontWeight.w800,
+              color: isSelected ? AppColors.white : AppColors.textTertiary,
             ),
           ),
         ),
@@ -100,10 +98,10 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
     return GestureDetector(
       onTap: () => Get.offAllNamed(AppRoutes.studentAttendance),
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: AppSpacing.cardPadding,
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           border: Border.all(
             color: AppColors.borderGrey.withValues(alpha: 0.5),
           ),
@@ -126,7 +124,7 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: AppColors.studentPresentBg,
+                      color: AppColors.successBg,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: const Icon(
@@ -228,10 +226,10 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
     return GestureDetector(
       onTap: () => Get.offAllNamed(AppRoutes.studentHomework),
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: AppSpacing.cardPadding,
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           border: Border.all(
             color: AppColors.borderGrey.withValues(alpha: 0.5),
           ),
@@ -254,7 +252,7 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: AppColors.amberLight,
+                      color: AppColors.errorBg,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: const Icon(
@@ -457,7 +455,7 @@ class LineChartPainter extends CustomPainter {
       ..style = PaintingStyle.stroke;
 
     final fillPaint = Paint()
-      ..color = AppColors.studentPresentBg.withValues(alpha: 0.8)
+      ..color = AppColors.successBg.withValues(alpha: 0.8)
       ..style = PaintingStyle.fill;
 
     final pointPaint = Paint()

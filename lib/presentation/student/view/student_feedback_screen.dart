@@ -1,3 +1,4 @@
+import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
 import 'package:tuoora/core/widgets/input_styles.dart';
 import 'package:flutter/material.dart';
@@ -20,29 +21,17 @@ class StudentFeedbackScreen extends GetView<StudentFeedbackController> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const StudentAppBar(title: "Tell us what's missing", isRoot: false),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _buildRatingCard(),
-                    const SizedBox(height: 16),
-                    _buildMessageCard(),
-                    const SizedBox(height: 24),
-                    _buildSubmitButton(),
-                    const SizedBox(height: 16),
-                    Center(
-                      child: Text(
-                        'We read everything. Replies come via chat.',
-                        style: AppTextStyles.outfit(
-                          fontSize: 11,
-                          color: AppColors.textTertiary,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+            Padding(
+              padding: AppSpacing.screenPaddingTop,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _buildRatingCard(),
+                  const SizedBox(height: 16),
+                  _buildMessageCard(),
+                  const SizedBox(height: 16),
+                  _buildSubmitButton(),
+                ],
               ),
             ),
           ],
@@ -53,10 +42,10 @@ class StudentFeedbackScreen extends GetView<StudentFeedbackController> {
 
   Widget _buildRatingCard() {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         border: Border.all(color: AppColors.borderGrey.withValues(alpha: 0.5)),
       ),
       child: Column(
@@ -93,12 +82,14 @@ class StudentFeedbackScreen extends GetView<StudentFeedbackController> {
       return GestureDetector(
         onTap: () => controller.setRating(rating),
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 12),
+          padding: const EdgeInsets.symmetric(vertical: 10),
           decoration: BoxDecoration(
-            color: isSelected ? AppColors.errorBg : AppColors.background,
-            borderRadius: BorderRadius.circular(8),
+            color: isSelected
+                ? AppColors.primaryBrandLight
+                : AppColors.background,
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
             border: Border.all(
-              color: isSelected ? AppColors.error : AppColors.borderGrey,
+              color: isSelected ? AppColors.primaryBrand : AppColors.borderGrey,
             ),
           ),
           child: Column(
@@ -108,9 +99,11 @@ class StudentFeedbackScreen extends GetView<StudentFeedbackController> {
               Text(
                 rating.label,
                 style: AppTextStyles.outfit(
-                  fontSize: 11,
+                  fontSize: 12,
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                  color: isSelected ? AppColors.error : AppColors.textSecondary,
+                  color: isSelected
+                      ? AppColors.primaryBrand
+                      : AppColors.textSecondary,
                 ),
               ),
             ],
@@ -122,10 +115,10 @@ class StudentFeedbackScreen extends GetView<StudentFeedbackController> {
 
   Widget _buildMessageCard() {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         border: Border.all(color: AppColors.borderGrey.withValues(alpha: 0.5)),
       ),
       child: Column(
@@ -163,9 +156,9 @@ class StudentFeedbackScreen extends GetView<StudentFeedbackController> {
       return AppButton(
         label: 'Send to Tuoora',
         icon: Icons.arrow_forward_rounded,
-        backgroundColor: AppColors.studentTomorrowPillText,
-        borderRadius: 8,
-        padding: const EdgeInsets.symmetric(vertical: 16),
+        backgroundColor: AppColors.bohoRed,
+        borderRadius: AppSpacing.cardRadius,
+        padding: AppSpacing.cardPadding,
         isLoading: isLoading,
         isDisabled: isLoading,
         onPressed: isLoading ? null : controller.submitFeedback,

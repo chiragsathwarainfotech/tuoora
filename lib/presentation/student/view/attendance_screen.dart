@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/app_empty_view.dart';
 import 'package:tuoora/core/widgets/student_bottom_nav.dart';
 import 'package:tuoora/presentation/student/controllers/attendance_history_controller.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
@@ -41,31 +42,41 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
             Expanded(
               child: RefreshIndicator(
                 onRefresh: controller.fetchAttendance,
-                color: AppColors.studentBrand,
+                color: AppColors.primaryBrand,
                 child: SingleChildScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),
-                  padding: const EdgeInsets.fromLTRB(
-                    AppSpacing.s16,
-                    AppSpacing.s16,
-                    AppSpacing.s16,
-                    AppSpacing.s24,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      StudentSectionHeader(title: 'TODAY'),
-                      const SizedBox(height: AppSpacing.s12),
-                      _buildTodayCard(),
-                      const SizedBox(height: AppSpacing.s24),
-                      StudentSectionHeader(title: 'MONTH'),
-                      const SizedBox(height: AppSpacing.s12),
-                      _buildMonthCard(),
-                      const SizedBox(height: AppSpacing.s24),
-                      StudentSectionHeader(title: 'MONTHLY SUMMARY'),
-                      const SizedBox(height: AppSpacing.s12),
-                      _buildSummaryCard(),
-                    ],
-                  ),
+                  padding: AppSpacing.screenPaddingTop,
+                  child: Obx(() {
+                    if (!controller.isLoading.value &&
+                        controller.attendanceData.value == null) {
+                      return const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 80),
+                        child: AppEmptyView(
+                          icon: Icons.event_busy_outlined,
+                          title: 'No attendance records',
+                          message:
+                              'Your attendance will appear here once your institute starts marking it.',
+                        ),
+                      );
+                    }
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        StudentSectionHeader(title: 'TODAY'),
+                        const SizedBox(height: AppSpacing.s12),
+                        _buildTodayCard(),
+                        const SizedBox(height: AppSpacing.s24),
+                        StudentSectionHeader(title: 'MONTH'),
+                        const SizedBox(height: AppSpacing.s12),
+                        _buildMonthCard(),
+                        const SizedBox(height: AppSpacing.s24),
+                        StudentSectionHeader(title: 'MONTHLY SUMMARY'),
+                        const SizedBox(height: AppSpacing.s12),
+                        _buildSummaryCard(),
+                        const SizedBox(height: AppSpacing.s8),
+                      ],
+                    );
+                  }),
                 ),
               ),
             ),
@@ -80,7 +91,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
 
   Widget _buildTodayCard() {
     return Container(
-      padding: const EdgeInsets.all(AppSpacing.s16),
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
@@ -110,14 +121,12 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
               decoration: BoxDecoration(
                 color: isNotMarked
                     ? AppColors.primaryBrand
-                    : AppColors.studentPresentBg,
+                    : AppColors.successBg,
                 borderRadius: BorderRadius.circular(AppSpacing.s8),
               ),
               child: Icon(
                 isNotMarked ? Icons.close_rounded : Icons.check_rounded,
-                color: isNotMarked
-                    ? AppColors.white
-                    : AppColors.studentPresentText,
+                color: isNotMarked ? AppColors.white : AppColors.successGreen,
                 size: 24,
               ),
             ),
@@ -132,8 +141,8 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
                       fontSize: 16,
                       fontWeight: FontWeight.w800,
                       color: isNotMarked
-                          ? AppColors.primaryBrand
-                          : AppColors.studentPresentText,
+                          ? AppColors.textPrimary
+                          : AppColors.successGreen,
                     ),
                   ),
                   const SizedBox(height: 2),
@@ -156,7 +165,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
 
   Widget _buildMonthCard() {
     return Container(
-      padding: const EdgeInsets.all(AppSpacing.s16),
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
@@ -209,11 +218,10 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
         width: AppSpacing.s36,
         height: AppSpacing.s36,
         decoration: BoxDecoration(
-          color: AppColors.surfaceBg,
-          borderRadius: BorderRadius.circular(AppSpacing.s8),
-          border: Border.all(color: AppColors.borderGrey),
+          color: AppColors.primaryBrand,
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         ),
-        child: Icon(icon, color: AppColors.textSecondary, size: 18),
+        child: Icon(icon, color: AppColors.white, size: 24),
       ),
     );
   }
@@ -293,12 +301,10 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
       int daysInMonth = DateTime(viewDate.year, viewDate.month + 1, 0).day;
       int firstWeekday = DateTime(viewDate.year, viewDate.month, 1).weekday;
 
-      // Convert to 0-6 where 0 is Sunday
       int startOffset = firstWeekday == 7 ? 0 : firstWeekday;
 
       List<Widget> rows = [];
 
-      // Header
       rows.add(
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -324,7 +330,6 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
 
       List<Widget> currentRow = [];
 
-      // Previous month days (dashed)
       int prevDaysInMonth = DateTime(viewDate.year, viewDate.month, 0).day;
       for (int i = 0; i < startOffset; i++) {
         int d = prevDaysInMonth - startOffset + i + 1;
@@ -372,22 +377,22 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
     bool isDashed = false;
 
     switch (type) {
-      case 'present': // Present
+      case 'present':
       case 'p':
-        bg = AppColors.studentPresentBg; // studentPresentBg
-        fg = AppColors.studentPresentText; // studentPresentText
+        bg = AppColors.successBg;
+        fg = AppColors.successGreen;
         break;
-      case 'absent': // Absent
+      case 'absent':
       case 'a':
         bg = AppColors.errorBg;
         fg = AppColors.bohoRed;
         break;
-      case 'holiday': // Holiday
+      case 'holiday':
       case 'h':
-        bg = AppColors.amberLight;
-        fg = AppColors.studentTomorrowPillText;
+        bg = AppColors.errorBg;
+        fg = AppColors.bohoRed;
         break;
-      case 'p_dashed': // Previous month (dashed)
+      case 'p_dashed':
         bg = Colors.transparent;
         fg = AppColors.textTertiary;
         isDashed = true;
@@ -427,7 +432,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
           height: AppSpacing.s36,
           decoration: BoxDecoration(
             color: bg,
-            borderRadius: BorderRadius.circular(AppSpacing.s8),
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           ),
           child: content,
         ),
@@ -439,11 +444,11 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _legendItem(AppColors.studentPresentText, 'Present'),
+        _legendItem(AppColors.successGreen, 'Present'),
         AppSpacing.h12,
         _legendItem(AppColors.bohoRed, 'Absent'),
         AppSpacing.h12,
-        _legendItem(AppColors.studentTomorrowPillText, 'Holiday'),
+        _legendItem(AppColors.bohoRed, 'Holiday'),
         AppSpacing.h12,
         _legendItem(AppColors.borderLightGray, 'No class'),
       ],
@@ -477,7 +482,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
 
   Widget _buildSummaryCard() {
     return Container(
-      padding: const EdgeInsets.all(AppSpacing.s16),
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
@@ -513,7 +518,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
                     style: AppTextStyles.outfit(
                       fontSize: 13,
                       fontWeight: FontWeight.w800,
-                      color: AppColors.studentPresentText,
+                      color: AppColors.successGreen,
                     ),
                   ),
                 ),
@@ -668,7 +673,7 @@ class _SummaryRingPainter extends CustomPainter {
       radius: (size.shortestSide - stroke) / 2,
     );
     final track = Paint()
-      ..color = AppColors.studentPresentBg
+      ..color = AppColors.successBg
       ..style = PaintingStyle.stroke
       ..strokeWidth = stroke
       ..strokeCap = StrokeCap.round;
@@ -676,7 +681,7 @@ class _SummaryRingPainter extends CustomPainter {
 
     if (percent <= 0) return;
     final progress = Paint()
-      ..color = AppColors.studentPresentText
+      ..color = AppColors.successGreen
       ..style = PaintingStyle.stroke
       ..strokeWidth = stroke
       ..strokeCap = StrokeCap.round;

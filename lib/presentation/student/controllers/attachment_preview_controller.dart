@@ -1,13 +1,12 @@
 import 'dart:io' as io;
 import 'dart:typed_data';
 
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/api_constants.dart';
 import 'package:tuoora/core/enums/app_enums.dart';
 import 'package:tuoora/core/services/download_service.dart';
 import 'package:tuoora/core/services/auth_service.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/presentation/student/models/assignment_model.dart';
 
 class AttachmentPreviewArgs {
@@ -67,13 +66,9 @@ class AttachmentPreviewController extends GetxController {
       isDownloading.value = true;
       downloadProgress.value = 0.0;
 
-      Get.snackbar(
-        'Downloading',
+      AppSnackBar.success(
         'Please wait, your file is being downloaded...',
-        snackPosition: SnackPosition.BOTTOM,
-        showProgressIndicator: true,
-        backgroundColor: AppColors.primaryBrand,
-        colorText: AppColors.white,
+        title: 'Downloading',
       );
 
       final downloadService = Get.find<DownloadService>();
@@ -126,12 +121,8 @@ class AttachmentPreviewController extends GetxController {
         );
       }
     } catch (e) {
-      Get.snackbar(
-        'Error',
+      AppSnackBar.error(
         'Failed to download file: ${e.toString().replaceAll('Exception: ', '')}',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.redAccent,
-        colorText: AppColors.white,
       );
     } finally {
       isDownloading.value = false;

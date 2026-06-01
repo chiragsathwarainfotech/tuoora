@@ -31,7 +31,7 @@ class StudentReceiptScreen extends GetView<FeesController> {
               child: Obx(() {
                 if (controller.isReceiptLoading.value &&
                     controller.currentReceipt.value == null) {
-                  return const CommonLoading(color: AppColors.studentBrand);
+                  return const CommonLoading(color: AppColors.primaryBrand);
                 }
                 final receipt = controller.currentReceipt.value;
                 if (receipt == null) {
@@ -67,13 +67,8 @@ class _Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(
-        AppSpacing.s16,
-        AppSpacing.s16,
-        AppSpacing.s16,
-        AppSpacing.s24,
-      ),
+    return Padding(
+      padding: AppSpacing.cardPadding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -85,7 +80,7 @@ class _Body extends StatelessWidget {
             child: Text(
               'This is a system generated receipt and doesn\'t require a signature.',
               style: AppTextStyles.outfit(
-                fontSize: 11,
+                fontSize: 12,
                 color: AppColors.textTertiary,
               ),
               textAlign: TextAlign.center,
@@ -122,7 +117,7 @@ class _ReceiptCard extends StatelessWidget {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.s16),
+        padding: AppSpacing.cardPadding,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -272,8 +267,7 @@ class _StatusPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = isPaid ? AppColors.studentPresentBg : AppColors.studentBrandSoft;
-    final fg = isPaid ? AppColors.studentPresentText : AppColors.orangeTag;
+    final bg = isPaid ? AppColors.successGreen : AppColors.bohoRed;
     final label = isPaid
         ? AppStrings.studentFeesPillPaid
         : AppStrings.studentFeesPillPending;
@@ -281,14 +275,14 @@ class _StatusPill extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
         color: bg,
-        borderRadius: BorderRadius.circular(99),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       ),
       child: Text(
         label,
         style: AppTextStyles.outfit(
           fontSize: 11,
           fontWeight: FontWeight.w800,
-          color: fg,
+          color: AppColors.white,
         ),
       ),
     );
@@ -355,14 +349,14 @@ class _ActionButton extends StatelessWidget {
     );
     return Material(
       color: bg,
-      borderRadius: BorderRadius.circular(AppSpacing.s12),
+      borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(AppSpacing.s12),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         child: Ink(
           decoration: BoxDecoration(
             color: bg,
-            borderRadius: BorderRadius.circular(AppSpacing.s12),
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
             border: border,
           ),
           padding: const EdgeInsets.symmetric(

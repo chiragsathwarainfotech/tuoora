@@ -36,7 +36,7 @@ class StudentProfileController extends GetxController {
       final data = await _repository.getProfile();
       profileData.value = data;
     } catch (e) {
-      Get.snackbar('Error', 'Failed to load profile');
+      AppSnackBar.error('Failed to load profile');
     } finally {
       isLoading.value = false;
     }

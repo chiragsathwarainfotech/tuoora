@@ -4,6 +4,8 @@ import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/services/auth_service.dart';
+import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/app_empty_view.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/core/widgets/student_bottom_nav.dart';
 import 'package:tuoora/presentation/student/widgets/profile_grid_action.dart';
@@ -25,44 +27,55 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
       body: SafeArea(
         child: Obx(() {
           if (controller.isLoading.value) {
-            return const CommonLoading(color: AppColors.studentBrand);
+            return const CommonLoading(color: AppColors.primaryBrand);
           }
           final profile = controller.profileData.value;
           if (profile == null) {
-            return const Center(child: Text('Failed to load profile data'));
+            return const AppEmptyView(
+              icon: Icons.person_off_outlined,
+              title: 'Profile unavailable',
+              message:
+                  'We couldn\'t load your profile right now. Please try again later.',
+            );
           }
 
           return Column(
             children: [
               const StudentAppBar(title: 'Profile', isRoot: true),
               Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      _buildHeroCard(profile.header),
-                      const SizedBox(height: 12),
-                      _buildStatsRow(profile.stats),
-                      const SizedBox(height: 12),
-                      _buildQRCard(profile.studentQr),
-                      const SizedBox(height: 16),
-                      _buildGridActions(),
-                      const SizedBox(height: 32),
-                      _buildSectionTitle('YOUR INFO'),
-                      const SizedBox(height: 8),
-                      _buildYourInfoCard(profile.info),
-                      const SizedBox(height: 24),
-                      _buildSectionTitle('SETTINGS'),
-                      const SizedBox(height: 8),
-                      _buildSettingsCard(),
-                      const SizedBox(height: 24),
-                      _buildSectionTitle('HELP & INFO'),
-                      const SizedBox(height: 8),
-                      _buildHelpCard(),
-                      const SizedBox(height: 24),
-                      _buildLogOutButton(),
-                    ],
+                child: RefreshIndicator(
+                  color: AppColors.primaryBrand,
+                  onRefresh: controller.fetchProfile,
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: AppSpacing.screenPaddingTop,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        _buildHeroCard(profile.header),
+                        const SizedBox(height: 12),
+                        _buildStatsRow(profile.stats),
+                        const SizedBox(height: 12),
+                        _buildQRCard(profile.studentQr),
+                        const SizedBox(height: 16),
+                        _buildGridActions(),
+                        const SizedBox(height: 16),
+                        _buildSectionTitle('YOUR INFO'),
+                        const SizedBox(height: 8),
+                        _buildYourInfoCard(profile.info),
+                        const SizedBox(height: 16),
+                        _buildSectionTitle('SETTINGS'),
+                        const SizedBox(height: 8),
+                        _buildSettingsCard(),
+                        const SizedBox(height: 16),
+                        _buildSectionTitle('HELP & INFO'),
+                        const SizedBox(height: 8),
+                        _buildHelpCard(),
+                        const SizedBox(height: 16),
+                        _buildLogOutButton(),
+                        const SizedBox(height: 8),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -91,7 +104,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         border: Border.all(color: AppColors.borderGrey.withValues(alpha: 0.5)),
       ),
       child: Stack(
@@ -111,7 +124,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
                 ),
               ),
               Padding(
@@ -131,7 +144,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
                     Text(
                       'Class ${header.standard} • ${header.subject} • Roll ${header.rollNo}',
                       style: AppTextStyles.outfit(
-                        fontSize: 11,
+                        fontSize: 12,
                         color: AppColors.textSecondary,
                       ),
                     ),
@@ -242,7 +255,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
           child: _buildStatCard(
             label: 'ATTENDANCE',
             value: '${stats.attendancePct}%',
-            valueColor: AppColors.greenText,
+            valueColor: AppColors.primaryBrand,
           ),
         ),
         const SizedBox(width: 8),
@@ -250,7 +263,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
           child: _buildStatCard(
             label: 'ASSIGNMENT COMPLETED',
             value: '${stats.assignmentsPct}%',
-            valueColor: AppColors.brandAppBarColor,
+            valueColor: AppColors.primaryBrand,
           ),
         ),
       ],
@@ -263,10 +276,10 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
     Color? valueColor,
   }) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         border: Border.all(color: AppColors.borderGrey.withValues(alpha: 0.5)),
       ),
       child: Column(
@@ -297,10 +310,10 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
 
   Widget _buildQRCard(StudentProfileQr qr) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         border: Border.all(color: AppColors.borderGrey.withValues(alpha: 0.5)),
       ),
       child: Row(
@@ -359,47 +372,47 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
                 icon: Icons.show_chart_rounded,
                 label: 'Reports',
                 iconBgColor: AppColors.errorBg,
-                iconColor: AppColors.studentBrand,
+                iconColor: AppColors.primaryBrand,
                 onTap: () => Get.toNamed(AppRoutes.studentReports),
               ),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: 8),
             Expanded(
               child: ProfileGridAction(
                 icon: Icons.book_outlined,
                 label: 'Study\nmaterial',
-                iconBgColor: AppColors.amberLight,
+                iconBgColor: AppColors.errorBg,
                 iconColor: AppColors.brandAppBarColor,
                 onTap: () => Get.toNamed(AppRoutes.studentStudyMaterial),
               ),
             ),
           ],
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 10),
         Row(
           children: [
             Expanded(
               child: ProfileGridAction(
                 icon: Icons.domain_rounded,
                 label: 'Institute',
-                iconBgColor: AppColors.studentPresentBg,
+                iconBgColor: AppColors.successBg,
                 iconColor: AppColors.greenText,
                 onTap: () => Get.toNamed(AppRoutes.studentInstitute),
               ),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: 8),
             Expanded(
               child: ProfileGridAction(
                 icon: Icons.chat_bubble_outline_rounded,
                 label: 'Chat',
                 iconBgColor: AppColors.errorBg,
-                iconColor: AppColors.studentBrand,
+                iconColor: AppColors.primaryBrand,
                 onTap: () => Get.toNamed(AppRoutes.studentChat),
               ),
             ),
           ],
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 10),
         Row(
           children: [
             Expanded(
@@ -411,7 +424,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
                 onTap: () => Get.toNamed(AppRoutes.studentReceiptsList),
               ),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: 8),
             Expanded(child: SizedBox()),
           ],
         ),
@@ -433,7 +446,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
   Widget _buildYourInfoCard(StudentProfileInfo info) {
     return _buildCardWrap(
       children: [
-        _buildInfoRow('Phone', '+91 ${info.phone}'),
+        _buildInfoRow('Phone', info.phone),
         Divider(height: 1, color: AppColors.borderGrey.withValues(alpha: 0.5)),
         _buildInfoRow('Email', info.email),
         if (info.parentName != null) ...[
@@ -443,7 +456,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
           ),
           _buildInfoRow(
             info.parentRelation,
-            '${info.parentName} • +91 ${info.parentPhone ?? ''}',
+            '${info.parentName} • ${info.parentPhone ?? ''}',
           ),
         ],
       ],
@@ -452,7 +465,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
 
   Widget _buildInfoRow(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: AppSpacing.cardPadding,
       child: Row(
         children: [
           SizedBox(
@@ -460,7 +473,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
             child: Text(
               label,
               style: AppTextStyles.outfit(
-                fontSize: 13,
+                fontSize: 14,
                 color: AppColors.textTertiary,
               ),
             ),
@@ -470,7 +483,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
               value,
               textAlign: TextAlign.right,
               style: AppTextStyles.outfit(
-                fontSize: 13,
+                fontSize: 14,
                 fontWeight: FontWeight.w500,
                 color: AppColors.textPrimary,
               ),
@@ -538,7 +551,9 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
         backgroundColor: AppColors.errorBg,
         elevation: 0,
         padding: const EdgeInsets.symmetric(vertical: 16),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+        ),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -572,7 +587,7 @@ class _AvatarPersonFallback extends StatelessWidget {
       child: Icon(
         Icons.person_rounded,
         size: 44,
-        color: AppColors.studentBrand,
+        color: AppColors.primaryBrand,
       ),
     );
   }

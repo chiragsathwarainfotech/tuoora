@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:tuoora/core/api/api_client.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/data/models/student_institute_model.dart';
 import 'package:tuoora/data/repositories/student_institute_repository.dart';
 
@@ -22,7 +23,7 @@ class StudentInstituteController extends GetxController {
       final data = await _repository.getInstitute();
       instituteData.value = data;
     } catch (e) {
-      Get.snackbar('Error', 'Failed to load institute details');
+      AppSnackBar.error('Failed to load institute details');
     } finally {
       isLoading.value = false;
     }

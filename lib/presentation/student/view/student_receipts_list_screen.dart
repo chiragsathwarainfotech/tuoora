@@ -23,7 +23,7 @@ class StudentReceiptsListScreen extends GetView<StudentReceiptsListController> {
             Expanded(
               child: Obx(() {
                 if (controller.isLoading.value) {
-                  return const CommonLoading(color: AppColors.studentBrand);
+                  return const CommonLoading(color: AppColors.primaryBrand);
                 }
                 final items = controller.receipts;
                 if (items.isEmpty) {
@@ -33,27 +33,15 @@ class StudentReceiptsListScreen extends GetView<StudentReceiptsListController> {
                   );
                 }
                 return RefreshIndicator(
-                  color: AppColors.studentBrand,
+                  color: AppColors.primaryBrand,
                   onRefresh: controller.loadReceipts,
                   child: ListView.separated(
-                    padding: const EdgeInsets.all(AppSpacing.s16),
-                    itemCount: items.length + 1,
+                    padding: AppSpacing.screenPaddingTop,
+                    itemCount: items.length,
                     separatorBuilder: (_, _) =>
                         const SizedBox(height: AppSpacing.s10),
                     itemBuilder: (context, index) {
-                      if (index == 0) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: AppSpacing.s8),
-                          child: Text(
-                            '${items.length} ${items.length == 1 ? "receipt" : "receipts"} available',
-                            style: AppTextStyles.outfit(
-                              fontSize: 12,
-                              color: AppColors.textSecondary,
-                            ),
-                          ),
-                        );
-                      }
-                      final receipt = items[index - 1];
+                      final receipt = items[index];
                       return _ReceiptCard(
                         receipt: receipt,
                         onTap: () => controller.openReceipt(receipt),
@@ -80,30 +68,30 @@ class _ReceiptCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: AppColors.white,
-      borderRadius: BorderRadius.circular(AppSpacing.s12),
+      borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(AppSpacing.s12),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         child: Ink(
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(AppSpacing.s12),
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
             border: Border.all(
               color: AppColors.borderGrey.withValues(alpha: 0.5),
             ),
           ),
-          padding: const EdgeInsets.all(AppSpacing.s12),
+          padding: AppSpacing.cardPadding,
           child: Row(
             children: [
               Container(
                 padding: const EdgeInsets.all(AppSpacing.s12),
                 decoration: BoxDecoration(
-                  color: AppColors.studentPresentBg,
-                  borderRadius: BorderRadius.circular(AppSpacing.s8),
+                  color: AppColors.successGreen,
+                  borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
                 ),
                 child: const Icon(
                   Icons.receipt_long_rounded,
-                  color: AppColors.studentPresentBg,
+                  color: AppColors.white,
                   size: 20,
                 ),
               ),

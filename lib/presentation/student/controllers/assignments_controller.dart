@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/enums/app_enums.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/presentation/student/models/assignment_model.dart';
 import 'package:tuoora/core/api/api_client.dart';
 import 'package:tuoora/data/repositories/student_homework_repository.dart';
@@ -49,7 +50,7 @@ class AssignmentsController extends GetxController {
       weeklyCompleted.value = data.summary.completed;
       weeklyOverdue.value = data.summary.overdue;
     } catch (e) {
-      Get.snackbar('Error', 'Failed to load assignments');
+      AppSnackBar.error('Failed to load assignments');
     } finally {
       isLoading.value = false;
     }
@@ -70,7 +71,7 @@ class AssignmentsController extends GetxController {
       final detail = await _repository.getHomeworkDetail(id);
       selectedAssignment.value = detail;
     } catch (e) {
-      Get.snackbar('Error', 'Failed to load assignment details');
+      AppSnackBar.error('Failed to load assignment details');
     } finally {
       isDetailLoading.value = false;
     }
@@ -85,7 +86,7 @@ class AssignmentsController extends GetxController {
       final detail = await _repository.getHomeworkDetail(id);
       selectedAssignment.value = detail;
     } catch (e) {
-      Get.snackbar('Error', 'Failed to load assignment details');
+      AppSnackBar.error('Failed to load assignment details');
     } finally {
       isDetailLoading.value = false;
     }

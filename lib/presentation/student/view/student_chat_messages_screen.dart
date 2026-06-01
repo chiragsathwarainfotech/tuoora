@@ -511,7 +511,7 @@ class _StudentChatMessagesScreenState extends State<StudentChatMessagesScreen> {
   }
 
   Widget _buildStatusTick(MessageStatus status) {
-    const sentColor = AppColors.studentTabInactiveBg;
+    const sentColor = AppColors.fieldBg;
     const readColor = AppColors.subjectPhysics;
 
     switch (status) {

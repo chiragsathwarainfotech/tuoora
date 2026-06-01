@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:tuoora/core/api/api_client.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/data/models/student_resource_model.dart';
 import 'package:tuoora/data/repositories/student_resource_repository.dart';
 
@@ -25,7 +26,7 @@ class StudentStudyMaterialController extends GetxController {
       subjects.assignAll(data.subjects);
       resources.assignAll(data.resources);
     } catch (e) {
-      Get.snackbar('Error', 'Failed to load study materials');
+      AppSnackBar.error('Failed to load study materials');
     } finally {
       isLoading.value = false;
     }

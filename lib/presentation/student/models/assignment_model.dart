@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/enums/app_enums.dart';
@@ -49,10 +48,6 @@ class Assignment {
   final String? pendingNote;
   final String? completedNote;
   final String? gradeNote;
-
-  /// True when the assignment was due before today and the student hasn't
-  /// submitted yet. The list UI uses this to dull the row and disable taps
-  /// (the student can't act on it anymore).
   final bool isOverdue;
 
   const Assignment({
@@ -82,19 +77,20 @@ class Assignment {
     bool isCompleted = false,
   }) {
     final subject = json['subject']?.toString() ?? 'General';
-
-    final palettes = <Map<String, Color>>[
-      {'stripe': AppColors.studentProgressOrange, 'bg': AppColors.studentBrandSoft},
-      {'stripe': AppColors.subjectPhysics, 'bg': AppColors.subjectPhysicsSoft},
-      {'stripe': AppColors.studentPresentText, 'bg': AppColors.studentPresentBg},
-      {'stripe': AppColors.studentProgressBlue, 'bg': AppColors.studentUpdateIconBg},
-      {'stripe': AppColors.bohoRed, 'bg': AppColors.errorBg},
+    const palettes = <List<Color>>[
+      [AppColors.primaryBrand, AppColors.primaryBrandLight],
+      [AppColors.successGreen, AppColors.successBg],
+      [AppColors.bohoRed, AppColors.errorBg],
+      [AppColors.subjectPhysics, AppColors.subjectPhysicsSoft],
+      [AppColors.orangeTag, AppColors.primaryBrandLight],
+      [AppColors.greenLight, AppColors.successBg],
     ];
 
-    final palette = palettes[Random().nextInt(palettes.length)];
+    final id = json['id']?.toString() ?? '';
+    final palette = palettes[id.hashCode.abs() % palettes.length];
 
-    final stripe = palette['stripe'] as Color;
-    final iconBg = palette['bg'] as Color;
+    final stripe = palette[0];
+    final iconBg = palette[1];
     final iconColor = stripe;
     final icon = Icons.menu_book_rounded;
 
@@ -158,9 +154,8 @@ class Assignment {
       }
     }
 
-    // Overdue: API flag wins, otherwise compute from the date diff.
-    // Completed work is never "overdue" regardless of date.
-    final bool overdue = !isCompleted &&
+    final bool overdue =
+        !isCompleted &&
         (json['is_overdue'] == true ||
             (dueDiffDays != null && dueDiffDays < 0));
 

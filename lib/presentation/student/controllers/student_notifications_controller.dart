@@ -125,20 +125,20 @@ class StudentNotificationsController extends GetxController {
       case NotificationKind.homeworkReminder:
         return const _NotificationVisuals(
           icon: Icons.chrome_reader_mode_outlined,
-          bg: AppColors.amberLight,
-          fg: AppColors.studentTomorrowPillText,
+          bg: AppColors.errorBg,
+          fg: AppColors.bohoRed,
         );
       case NotificationKind.homeworkGraded:
         return const _NotificationVisuals(
           icon: Icons.auto_awesome,
-          bg: AppColors.studentBrandSoft,
-          fg: AppColors.studentBrand,
+          bg: AppColors.primaryBrandLight,
+          fg: AppColors.primaryBrand,
         );
       case NotificationKind.attendance:
         return const _NotificationVisuals(
           icon: Icons.calendar_today_outlined,
-          bg: AppColors.studentPresentBg,
-          fg: AppColors.studentPresentText,
+          bg: AppColors.successBg,
+          fg: AppColors.successGreen,
         );
       case NotificationKind.resource:
         return const _NotificationVisuals(
@@ -156,20 +156,20 @@ class StudentNotificationsController extends GetxController {
       case NotificationKind.batchRemoval:
         return const _NotificationVisuals(
           icon: Icons.groups_outlined,
-          bg: AppColors.studentUpdateIconBg,
-          fg: AppColors.studentUpdateIconColor,
+          bg: AppColors.subjectPhysicsSoft,
+          fg: AppColors.subjectPhysics,
         );
       case NotificationKind.holidays:
         return const _NotificationVisuals(
           icon: Icons.celebration_outlined,
-          bg: AppColors.studentPresentBg,
-          fg: AppColors.studentPresentText,
+          bg: AppColors.successBg,
+          fg: AppColors.successGreen,
         );
       case NotificationKind.paymentReceiver:
         return const _NotificationVisuals(
           icon: Icons.currency_rupee,
-          bg: AppColors.amberLight,
-          fg: AppColors.studentTomorrowPillText,
+          bg: AppColors.errorBg,
+          fg: AppColors.bohoRed,
         );
       default:
         return const _NotificationVisuals(

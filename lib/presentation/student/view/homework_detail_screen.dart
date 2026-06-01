@@ -1,4 +1,5 @@
 import 'package:tuoora/core/widgets/app_button.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
@@ -75,7 +76,7 @@ class _StudentHomeworkDetailScreenState
       width: double.infinity,
       padding: AppSpacing.all32,
       decoration: BoxDecoration(
-        color: AppColors.studentUpdateIconColor,
+        color: AppColors.subjectPhysics,
         borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
@@ -131,7 +132,7 @@ class _StudentHomeworkDetailScreenState
                 _isSubmitted ? 'Status: Submitted' : 'Status: Pending',
                 _isSubmitted
                     ? AppColors.darkGreen.withValues(alpha: 0.8)
-                    : AppColors.studentTomorrowPillText.withValues(alpha: 0.8),
+                    : AppColors.bohoRed.withValues(alpha: 0.8),
               ),
             ],
           ),
@@ -539,14 +540,7 @@ class _StudentHomeworkDetailScreenState
         onPressed: isEnabled
             ? () {
                 setState(() => _isSubmitted = true);
-                Get.snackbar(
-                  'Success',
-                  'Homework submitted successfully!',
-                  backgroundColor: AppColors.darkGreen,
-                  colorText: AppColors.white,
-                  snackPosition: SnackPosition.BOTTOM,
-                  margin: const EdgeInsets.all(16),
-                );
+                AppSnackBar.success('Homework submitted successfully!');
               }
             : null,
       ),

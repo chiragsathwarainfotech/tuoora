@@ -32,7 +32,6 @@ class StudentDashboard extends GetView<StudentDashboardController> {
           }
           final data = controller.dashboardData.value;
           if (data == null) {
-            // Wrap empty state in a scrollable so pull-to-refresh still works.
             return Column(
               children: [
                 StudentAppBar(
@@ -84,96 +83,96 @@ class StudentDashboard extends GetView<StudentDashboardController> {
                     physics: const AlwaysScrollableScrollPhysics(),
                     padding: AppSpacing.screenPaddingTop,
                     child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      if (todayClass != null) ...[
-                        _TodayClassCard(
-                          display: todayClass,
-                          weekDays: data.weekAttendanceDays,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        if (todayClass != null) ...[
+                          _TodayClassCard(
+                            display: todayClass,
+                            weekDays: data.weekAttendanceDays,
+                          ),
+                          const SizedBox(height: AppSpacing.s24),
+                        ],
+                        if (assignmentItems.isNotEmpty) ...[
+                          StudentSectionHeader(
+                            title: "ASSIGNMENTS",
+                            showSeeAll: true,
+                            onActionTap: _openAssignmentsTab,
+                          ),
+                          const SizedBox(height: AppSpacing.s12),
+                          ...assignmentItems.map((item) {
+                            return Padding(
+                              padding: const EdgeInsets.only(
+                                bottom: AppSpacing.s8,
+                              ),
+                              child: GestureDetector(
+                                onTap: () =>
+                                    _openAssignmentDetail(item.assignment),
+                                child: _AssignmentTile(item: item),
+                              ),
+                            );
+                          }),
+                          const SizedBox(height: AppSpacing.s16),
+                        ],
+                        const StudentSectionHeader(title: "TODAY'S ATTENDANCE"),
+                        const SizedBox(height: AppSpacing.s12),
+                        GestureDetector(
+                          onTap: _openAttendanceTab,
+                          child: _AttendanceCard(
+                            status: data.todayAttendance.status,
+                            detail: data.todayAttendance.text,
+                          ),
                         ),
                         const SizedBox(height: AppSpacing.s24),
-                      ],
-                      if (assignmentItems.isNotEmpty) ...[
-                        StudentSectionHeader(
-                          title: "ASSIGNMENTS",
-                          showSeeAll: true,
-                          onActionTap: _openAssignmentsTab,
-                        ),
-                        const SizedBox(height: AppSpacing.s12),
-                        ...assignmentItems.map((item) {
-                          return Padding(
-                            padding: const EdgeInsets.only(
-                              bottom: AppSpacing.s8,
-                            ),
-                            child: GestureDetector(
-                              onTap: () =>
-                                  _openAssignmentDetail(item.assignment),
-                              child: _AssignmentTile(item: item),
-                            ),
-                          );
-                        }),
-                        const SizedBox(height: AppSpacing.s16),
-                      ],
-                      const StudentSectionHeader(title: "TODAY'S ATTENDANCE"),
-                      const SizedBox(height: AppSpacing.s12),
-                      GestureDetector(
-                        onTap: _openAttendanceTab,
-                        child: _AttendanceCard(
-                          status: data.todayAttendance.status,
-                          detail: data.todayAttendance.text,
-                        ),
-                      ),
-                      const SizedBox(height: AppSpacing.s24),
-                      if (data.studyMaterials.isNotEmpty) ...[
-                        StudentSectionHeader(
-                          title: 'STUDY MATERIAL THIS WEEK',
-                          showSeeAll: true,
-                          onActionTap: () =>
-                              Get.toNamed(AppRoutes.studentStudyMaterial),
-                        ),
-                        const SizedBox(height: AppSpacing.s12),
-                        ...data.studyMaterials.take(2).map((material) {
-                          return Padding(
-                            padding: const EdgeInsets.only(
-                              bottom: AppSpacing.s8,
-                            ),
-                            child: GestureDetector(
-                              onTap: () => _openStudyMaterialDetail(material),
-                              child: _StudyMaterialTile(
-                                title: material.title,
-                                meta:
-                                    "${material.subject} • ${material.timeLabel}",
+                        if (data.studyMaterials.isNotEmpty) ...[
+                          StudentSectionHeader(
+                            title: 'STUDY MATERIAL THIS WEEK',
+                            showSeeAll: true,
+                            onActionTap: () =>
+                                Get.toNamed(AppRoutes.studentStudyMaterial),
+                          ),
+                          const SizedBox(height: AppSpacing.s12),
+                          ...data.studyMaterials.take(2).map((material) {
+                            return Padding(
+                              padding: const EdgeInsets.only(
+                                bottom: AppSpacing.s8,
                               ),
-                            ),
-                          );
-                        }),
-                        const SizedBox(height: AppSpacing.s16),
-                      ],
-                      if (data.pendingFees.isNotEmpty) ...[
-                        StudentSectionHeader(
-                          title: 'PENDING FEES',
-                          actionLabel: 'History',
-                          onActionTap: _openFeesTab,
-                        ),
-                        const SizedBox(height: AppSpacing.s12),
-                        ...data.pendingFees.take(2).map((fee) {
-                          return Padding(
-                            padding: const EdgeInsets.only(
-                              bottom: AppSpacing.s8,
-                            ),
-                            child: GestureDetector(
-                              onTap: _openFeesTab,
-                              child: _PendingFeeTile(
-                                date: fee.monthYear,
-                                dueAmount: fee.dueAmount.toString(),
-                                status: fee.status,
+                              child: GestureDetector(
+                                onTap: () => _openStudyMaterialDetail(material),
+                                child: _StudyMaterialTile(
+                                  title: material.title,
+                                  meta:
+                                      "${material.subject} • ${material.timeLabel}",
+                                ),
                               ),
-                            ),
-                          );
-                        }),
+                            );
+                          }),
+                          const SizedBox(height: AppSpacing.s16),
+                        ],
+                        if (data.pendingFees.isNotEmpty) ...[
+                          StudentSectionHeader(
+                            title: 'PENDING FEES',
+                            actionLabel: 'History',
+                            onActionTap: _openFeesTab,
+                          ),
+                          const SizedBox(height: AppSpacing.s12),
+                          ...data.pendingFees.take(2).map((fee) {
+                            return Padding(
+                              padding: const EdgeInsets.only(
+                                bottom: AppSpacing.s8,
+                              ),
+                              child: GestureDetector(
+                                onTap: _openFeesTab,
+                                child: _PendingFeeTile(
+                                  date: fee.monthYear,
+                                  dueAmount: fee.dueAmount.toString(),
+                                  status: fee.status,
+                                ),
+                              ),
+                            );
+                          }),
+                        ],
                       ],
-                    ],
-                  ),
+                    ),
                   ),
                 ),
               ),

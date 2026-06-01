@@ -3,15 +3,15 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
-import 'package:tuoora/core/constants/subscription_payment_info.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
+import 'package:tuoora/data/models/institute_subscription_model.dart';
+import 'package:tuoora/presentation/institute/controllers/institute_subscription_controller.dart';
 import 'package:tuoora/presentation/institute/controllers/subscription_renewal_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 
-class SubscriptionRenewalScreen
-    extends GetView<SubscriptionRenewalController> {
+class SubscriptionRenewalScreen extends GetView<SubscriptionRenewalController> {
   const SubscriptionRenewalScreen({super.key});
 
   @override
@@ -148,40 +148,45 @@ class SubscriptionRenewalScreen
 
   Widget _buildQrTab() {
     return _buildCard(
-      child: Column(
-        children: [
-          AspectRatio(
-            aspectRatio: 1,
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColors.paleSilver,
-                borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+      child: Obx(() {
+        final qrUrl = _paymentSettings()?.qrUrl;
+        return Column(
+          children: [
+            AspectRatio(
+              aspectRatio: 1,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: AppColors.paleSilver,
+                  borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+                ),
+                child: qrUrl != null && qrUrl.isNotEmpty
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(
+                          AppSpacing.cardRadius,
+                        ),
+                        child: Image.network(
+                          qrUrl,
+                          fit: BoxFit.contain,
+                          errorBuilder: (context, error, stackTrace) =>
+                              _qrPlaceholder(),
+                        ),
+                      )
+                    : _qrPlaceholder(),
               ),
-              child: SubscriptionPaymentInfo.qrImageUrl != null
-                  ? ClipRRect(
-                      borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-                      child: Image.network(
-                        SubscriptionPaymentInfo.qrImageUrl!,
-                        fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) =>
-                            _qrPlaceholder(),
-                      ),
-                    )
-                  : _qrPlaceholder(),
             ),
-          ),
-          AppSpacing.v16,
-          Text(
-            'SCAN WITH ANY UPI APP',
-            style: AppTextStyles.outfit(
-              fontSize: 12,
-              fontWeight: FontWeight.w800,
-              color: AppColors.brandAppBarColor,
-              letterSpacing: 1.0,
+            AppSpacing.v16,
+            Text(
+              'SCAN WITH ANY UPI APP',
+              style: AppTextStyles.outfit(
+                fontSize: 12,
+                fontWeight: FontWeight.w800,
+                color: AppColors.brandAppBarColor,
+                letterSpacing: 1.0,
+              ),
             ),
-          ),
-        ],
-      ),
+          ],
+        );
+      }),
     );
   }
 
@@ -210,26 +215,37 @@ class SubscriptionRenewalScreen
 
   Widget _buildBankTab() {
     return _buildCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'BANK TRANSFER DETAILS',
-            style: AppTextStyles.outfit(
-              fontSize: 12,
-              fontWeight: FontWeight.w800,
-              color: AppColors.brandAppBarColor,
-              letterSpacing: 1.0,
+      child: Obx(() {
+        final p = _paymentSettings();
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'BANK TRANSFER DETAILS',
+              style: AppTextStyles.outfit(
+                fontSize: 12,
+                fontWeight: FontWeight.w800,
+                color: AppColors.brandAppBarColor,
+                letterSpacing: 1.0,
+              ),
             ),
-          ),
-          AppSpacing.v16,
-          _buildBankRow('Holder', SubscriptionPaymentInfo.holderName),
-          _buildBankRow('Bank', SubscriptionPaymentInfo.bankName),
-          _buildBankRow('A/C No', SubscriptionPaymentInfo.accountNumber),
-          _buildBankRow('IFSC', SubscriptionPaymentInfo.ifscCode, isLast: true),
-        ],
-      ),
+            AppSpacing.v16,
+            _buildBankRow('Holder', p?.bankHolderName ?? '—'),
+            _buildBankRow('Bank', p?.bankName ?? '—'),
+            _buildBankRow('A/C No', p?.bankAccount ?? '—'),
+            _buildBankRow('IFSC', p?.bankIfsc ?? '—', isLast: true),
+          ],
+        );
+      }),
     );
+  }
+
+  SubscriptionPaymentSettings? _paymentSettings() {
+    if (!Get.isRegistered<InstituteSubscriptionController>()) return null;
+    return Get.find<InstituteSubscriptionController>()
+        .subscriptionData
+        .value
+        ?.paymentSettings;
   }
 
   Widget _buildBankRow(String label, String value, {bool isLast = false}) {

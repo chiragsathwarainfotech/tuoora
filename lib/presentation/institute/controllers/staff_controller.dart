@@ -121,7 +121,15 @@ class StaffController extends GetxController {
   final salaryAmountController = TextEditingController();
   final salaryNotesController = TextEditingController();
   final salaryDateController = TextEditingController();
+  final salaryDeductionController = TextEditingController();
+  // Read-only display of the leaves count returned by the salary preview
+  // endpoint. Kept as a TextEditingController so the leaves tile can reuse
+  // the same AppInputField widget as every other input, guaranteeing the
+  // row aligns horizontally with the deduction field next to it.
+  final salaryLeavesDisplayController = TextEditingController(text: '0');
   final filteredSalaryStaffs = <Staff>[].obs;
+  final salaryPreview = Rxn<SalaryPreview>();
+  final isLoadingSalaryPreview = false.obs;
 
   @override
   void onInit() {
@@ -148,6 +156,30 @@ class StaffController extends GetxController {
     selectedSalaryDate.listen((date) {
       salaryDateController.text = DateFormat('MM/dd/yyyy').format(date);
     });
+
+    // Keep the Total Disbursement summary in sync — any edit to salary
+    // amount OR deduction recomputes the net via GetBuilder.update(). Wired
+    // here (not via onChanged in the view) so the behaviour can't be lost
+    // to an accidental edit in the screen widget.
+    salaryAmountController.addListener(update);
+    salaryDeductionController.addListener(update);
+  }
+
+  /// Wipes the Add Salary form so re-opening the screen starts clean —
+  /// otherwise the controller is alive for the whole session and previous
+  /// staff / amount / deduction values bleed into a fresh visit.
+  void initAddSalaryMode() {
+    selectedAddSalaryStaff.value = null;
+    salaryPreview.value = null;
+    isLoadingSalaryPreview.value = false;
+    salaryAmountController.clear();
+    salaryDeductionController.clear();
+    salaryNotesController.clear();
+    salaryLeavesDisplayController.text = '0';
+    selectedSalaryDate.value = DateTime.now();
+    isOnlinePayment.value = true;
+    salarySearchQuery.value = '';
+    filteredSalaryStaffs.clear();
   }
 
   void _clearError(RxnString error) {
@@ -301,14 +333,16 @@ class StaffController extends GetxController {
 
     try {
       isSaving.value = true;
+      final deductionRaw = salaryDeductionController.text.trim();
       final data = {
-        'staff_id': selectedAddSalaryStaff.value!.id,
+        'staff_id': selectedAddSalaryStaff.value?.id,
         'base_salary': salaryAmountController.text.trim(),
         'payment_date': DateFormat(
           'yyyy-MM-dd',
         ).format(selectedSalaryDate.value),
         'status': 'Paid',
         'payment_method': isOnlinePayment.value ? 'Online' : 'Cash',
+        if (deductionRaw.isNotEmpty) 'deductions': deductionRaw,
         if (salaryNotesController.text.isNotEmpty)
           'notes': salaryNotesController.text.trim(),
       };
@@ -316,10 +350,8 @@ class StaffController extends GetxController {
       await _repository.logSalary(data);
       AppSnackBar.success('Salary record saved successfully');
 
-      // Refresh global list
       fetchGlobalSalaries(page: 1);
 
-      // If we are on a staff profile, refresh their history too
       if (selectedStaff.value != null &&
           selectedStaff.value!.id == selectedAddSalaryStaff.value!.id) {
         fetchSalaryHistory(page: 1);
@@ -468,9 +500,42 @@ class StaffController extends GetxController {
     salarySearchQuery.value = '';
     filteredSalaryStaffs.clear();
     salaryAmountController.text = staff.baseSalary;
+    salaryDeductionController.clear();
+    fetchSalaryPreview(staff.id);
   }
 
-  void removeSalaryStaff() => selectedAddSalaryStaff.value = null;
+  /// Dropdown helper — looks up the [Staff] in [staffList] by id and
+  /// delegates to [setSalaryStaff] so the same selection side-effects
+  /// (preview fetch, amount prefill) fire regardless of entry path.
+  void selectSalaryStaffById(int? id) {
+    if (id == null) {
+      removeSalaryStaff();
+      return;
+    }
+    final staff = staffList.firstWhereOrNull((s) => s.id == id);
+    if (staff != null) setSalaryStaff(staff);
+  }
+
+  void removeSalaryStaff() {
+    selectedAddSalaryStaff.value = null;
+    salaryPreview.value = null;
+    salaryDeductionController.clear();
+  }
+
+  Future<void> fetchSalaryPreview(int staffId) async {
+    try {
+      isLoadingSalaryPreview.value = true;
+      salaryPreview.value = null;
+      salaryLeavesDisplayController.text = '0';
+      final preview = await _repository.getSalaryPreview(staffId);
+      salaryPreview.value = preview;
+      salaryLeavesDisplayController.text = preview.leaves.toString();
+    } catch (e) {
+      AppSnackBar.error('Failed to load salary preview');
+    } finally {
+      isLoadingSalaryPreview.value = false;
+    }
+  }
   void selectSalaryDate(DateTime date) => selectedSalaryDate.value = date;
   void togglePaymentMethod(bool isOnline) => isOnlinePayment.value = isOnline;
 
@@ -710,6 +775,9 @@ class StaffController extends GetxController {
     staffSalaryController.dispose();
     salaryAmountController.dispose();
     salaryNotesController.dispose();
+    salaryDateController.dispose();
+    salaryDeductionController.dispose();
+    salaryLeavesDisplayController.dispose();
     logNotesController.dispose();
     super.onClose();
   }

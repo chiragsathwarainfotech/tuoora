@@ -105,7 +105,6 @@ class StudentAppBar extends StatelessWidget implements PreferredSizeWidget {
       AppSpacing.h8,
       StudentHeaderIconButton(
         icon: Icons.notifications_none_rounded,
-        hasBadge: true,
         onTap: () => Get.toNamed(AppRoutes.studentNotifications),
       ),
     ];
@@ -117,14 +116,12 @@ class StudentAppBar extends StatelessWidget implements PreferredSizeWidget {
 
 class StudentHeaderIconButton extends StatelessWidget {
   final IconData icon;
-  final bool hasBadge;
   final VoidCallback onTap;
 
   const StudentHeaderIconButton({
     super.key,
     required this.icon,
     required this.onTap,
-    this.hasBadge = false,
   });
 
   @override
@@ -136,28 +133,10 @@ class StudentHeaderIconButton extends StatelessWidget {
         height: AppSpacing.s40,
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(AppSpacing.s12),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           border: Border.all(color: AppColors.borderGrey),
         ),
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Center(child: Icon(icon, size: 18, color: AppColors.textPrimary)),
-            if (hasBadge)
-              Positioned(
-                top: 8,
-                right: 8,
-                child: Container(
-                  width: 8,
-                  height: 8,
-                  decoration: const BoxDecoration(
-                    color: AppColors.bohoRed,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ),
-          ],
-        ),
+        child: Icon(icon, size: 18, color: AppColors.textPrimary),
       ),
     );
   }

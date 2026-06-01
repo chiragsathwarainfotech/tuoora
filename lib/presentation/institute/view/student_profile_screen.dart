@@ -4,6 +4,7 @@ import 'package:tuoora/core/constants/app_images.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/data/models/student_model.dart';
+import 'package:tuoora/presentation/institute/controllers/institute_profile_controller.dart';
 import 'package:tuoora/presentation/institute/controllers/student_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
@@ -54,12 +55,22 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
                   Expanded(
                     child: SingleChildScrollView(
                       padding: AppSpacing.all16,
-                      child: _buildIdCard(
-                        name: name,
-                        id: id,
-                        imageUrl: imageUrl,
-                        grade: grade,
-                        student: student,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          _buildIdCard(
+                            name: name,
+                            id: id,
+                            imageUrl: imageUrl,
+                            grade: grade,
+                            student: student,
+                          ),
+                          if (student != null && student.fees.isNotEmpty) ...[
+                            const SizedBox(height: AppSpacing.s24),
+                            _buildFeesSection(student.fees),
+                          ],
+                          const SizedBox(height: AppSpacing.s24),
+                        ],
                       ),
                     ),
                   ),
@@ -80,14 +91,12 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
     );
   }
 
-  // ───────── Full Student ID-Card layout matching the reference design:
-  //   - WHITE top half with the institute name + tagline
-  //   - DIAGONAL brand-orange ribbons at the seam
-  //   - HEXAGONAL photo straddling the seam
-  //   - DARK BROWN (brandAppBarColor) bottom half carrying the name +
-  //     "Standard X" designation + a label : value info table.
-  // Purple in the reference is swapped for our brand orange so the card
-  // sits in the app's existing colour rhythm.
+  // Simple, professional Student ID card:
+  //   - Brand-orange header strip with institute name + "STUDENT IDENTITY CARD"
+  //   - Circular avatar centred just under the strip
+  //   - Student name + "Standard X" tag below the avatar
+  //   - Clean info rows (label / value) separated by light dividers
+  // Whole card sits on white with a subtle shadow and 16 dp radius.
   Widget _buildIdCard({
     required String name,
     required String id,
@@ -95,97 +104,205 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
     required String grade,
     required Student? student,
   }) {
-    const double topHeight = 160;
-    const double hexagonSize = 116;
-
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(AppSpacing.s16),
+        border: Border.all(color: AppColors.fieldBorder),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.12),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 16,
+            offset: const Offset(0, 6),
           ),
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(16),
-        child: Stack(
-          clipBehavior: Clip.hardEdge,
+        borderRadius: BorderRadius.circular(AppSpacing.s16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            // (1) Base column — white top, dark bottom. The dark bottom is
-            // auto-height; padding-top is reserved so the hexagon photo
-            // (which floats over the seam) doesn't collide with the name.
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _buildIdCardTopHalf(topHeight),
-                _buildIdCardBottomHalf(
-                  name: name,
-                  id: id,
-                  grade: grade,
-                  student: student,
-                  topPadding: hexagonSize * 0.55,
+            _buildIdHeader(),
+            const SizedBox(height: AppSpacing.s16),
+            _buildCircleAvatar(imageUrl: imageUrl, name: name, size: 96),
+            const SizedBox(height: AppSpacing.s12),
+            _buildNameBlock(name: name, grade: grade),
+            const SizedBox(height: AppSpacing.s16),
+            _buildInfoTable(id: id, student: student),
+            // Fee reminder button — only when this student actually owes
+            // money. Tapping it POSTs to the fee-reminder endpoint and
+            // the student app receives a push notification.
+            if ((student?.totalDue ?? 0) > 0) ...[
+              const SizedBox(height: AppSpacing.s4),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.s20,
+                  0,
+                  AppSpacing.s20,
+                  AppSpacing.s16,
                 ),
-              ],
-            ),
-            // (2) Diagonal brand-orange ribbons at the seam.
-            Positioned(
-              top: topHeight - 24,
-              left: 0,
-              right: 0,
-              height: 80,
-              child: IgnorePointer(child: _buildDiagonalRibbons()),
-            ),
-            // (3) Hexagonal photo centred over the seam.
-            Positioned(
-              top: topHeight - hexagonSize / 2,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: _buildHexagonAvatar(
-                  imageUrl: imageUrl,
-                  name: name,
-                  size: hexagonSize,
-                ),
+                child: _buildFeeReminderButton(student!.totalDue),
               ),
-            ),
+            ] else
+              const SizedBox(height: AppSpacing.s16),
           ],
         ),
       ),
     );
   }
 
-  // White top half: institute name (dark) + tagline (brand orange).
-  Widget _buildIdCardTopHalf(double height) {
-    return Container(
-      height: height,
-      width: double.infinity,
-      color: AppColors.white,
-      padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            'TUOORA INSTITUTE',
-            textAlign: TextAlign.center,
-            style: AppTextStyles.outfit(
-              fontSize: 18,
-              fontWeight: FontWeight.w900,
-              color: AppColors.textPrimary,
-              letterSpacing: 1.4,
+  // Solid brand-orange CTA inside the ID card. Disables itself while the
+  // API call is in flight to prevent double-sends.
+  Widget _buildFeeReminderButton(num totalDue) {
+    return Obx(() {
+      final sending = controller.isSendingFeeReminder.value;
+      return Material(
+        color: sending
+            ? AppColors.primaryBrand.withValues(alpha: 0.6)
+            : AppColors.primaryBrand,
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+        child: InkWell(
+          onTap: sending ? null : controller.sendFeeReminder,
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.s16,
+              vertical: AppSpacing.s14,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (sending)
+                  const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation(AppColors.white),
+                    ),
+                  )
+                else
+                  const Icon(
+                    Icons.notifications_active_rounded,
+                    size: 18,
+                    color: AppColors.white,
+                  ),
+                AppSpacing.h12,
+                Text(
+                  sending
+                      ? 'Sending Reminder...'
+                      : 'Send Fee Reminder  •  ₹${totalDue.toStringAsFixed(0)}',
+                  style: AppTextStyles.outfit(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.white,
+                    letterSpacing: 0.3,
+                  ),
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 6),
-          Text(
-            'STUDENT IDENTITY CARD',
-            textAlign: TextAlign.center,
-            style: AppTextStyles.outfit(
-              fontSize: 11,
-              fontWeight: FontWeight.w700,
-              color: AppColors.primaryBrand,
-              letterSpacing: 1.8,
+        ),
+      );
+    });
+  }
+
+  // Compact fees list shown below the ID card. Each tile shows the date,
+  // amount, and a status badge in the institute-side StatusBadge style.
+  Widget _buildFeesSection(List<StudentFee> fees) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(AppSpacing.s16),
+        border: Border.all(color: AppColors.fieldBorder),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.s20,
+              AppSpacing.s16,
+              AppSpacing.s20,
+              AppSpacing.s8,
+            ),
+            child: Text(
+              'FEES HISTORY',
+              style: AppTextStyles.outfit(
+                fontSize: 11,
+                fontWeight: FontWeight.w800,
+                color: AppColors.fieldLabel,
+                letterSpacing: 1.2,
+              ),
+            ),
+          ),
+          for (var i = 0; i < fees.length; i++) ...[
+            if (i > 0) Divider(height: 1, color: AppColors.fieldBorder),
+            _buildFeeRow(fees[i]),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFeeRow(StudentFee fee) {
+    final isPaid = fee.status.toLowerCase() == 'paid';
+    final badgeColor = isPaid ? AppColors.successGreen : AppColors.bohoRed;
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.s20,
+        vertical: AppSpacing.s14,
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '₹${fee.totalAmount}',
+                  style: AppTextStyles.outfit(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  fee.date,
+                  style: AppTextStyles.outfit(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.textTertiary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.s10,
+              vertical: AppSpacing.s4,
+            ),
+            decoration: BoxDecoration(
+              color: badgeColor,
+              borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+            ),
+            child: Text(
+              fee.status.toUpperCase(),
+              style: AppTextStyles.outfit(
+                fontSize: 10,
+                fontWeight: FontWeight.w800,
+                color: AppColors.white,
+                letterSpacing: 0.4,
+              ),
             ),
           ),
         ],
@@ -193,30 +310,84 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
     );
   }
 
-  // Two slanted brand-orange ribbons that mimic the angled stripes in the
-  // reference image. One full-width primary stripe and a thinner darker
-  // stripe just below for depth.
-  Widget _buildDiagonalRibbons() {
-    return Stack(
-      clipBehavior: Clip.hardEdge,
-      children: [
-        Transform.translate(
-          offset: const Offset(0, 14),
-          child: Transform.rotate(
-            angle: -0.10,
-            child: Container(
-              height: 28,
-              color: AppColors.brandAppBarColor,
+  // Orange header strip with the institute name (pulled from the logged-in
+  // profile when available) and the "STUDENT IDENTITY CARD" tagline.
+  Widget _buildIdHeader() {
+    String resolvedName = 'Tuoora Institute';
+    if (Get.isRegistered<InstituteProfileController>()) {
+      final v = Get.find<InstituteProfileController>().instituteName.value
+          .trim();
+      if (v.isNotEmpty) resolvedName = v;
+    }
+    return Container(
+      width: double.infinity,
+      color: AppColors.primaryBrand,
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.s20,
+        vertical: AppSpacing.s16,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            resolvedName.toUpperCase(),
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppTextStyles.outfit(
+              fontSize: 16,
+              fontWeight: FontWeight.w900,
+              color: AppColors.white,
+              letterSpacing: 1.4,
             ),
           ),
+          const SizedBox(height: 4),
+          Text(
+            'STUDENT IDENTITY CARD',
+            textAlign: TextAlign.center,
+            style: AppTextStyles.outfit(
+              fontSize: 10,
+              fontWeight: FontWeight.w700,
+              color: AppColors.white.withValues(alpha: 0.9),
+              letterSpacing: 1.6,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Student name (bold dark) + a "Standard X" tag below in brand orange.
+  Widget _buildNameBlock({required String name, required String grade}) {
+    return Column(
+      children: [
+        Text(
+          name.isEmpty ? '—' : name,
+          textAlign: TextAlign.center,
+          style: AppTextStyles.outfit(
+            fontSize: 20,
+            fontWeight: FontWeight.w800,
+            color: AppColors.textPrimary,
+            letterSpacing: 0.3,
+          ),
         ),
-        Transform.translate(
-          offset: const Offset(0, 6),
-          child: Transform.rotate(
-            angle: -0.10,
-            child: Container(
-              height: 22,
+        const SizedBox(height: 4),
+        Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.s12,
+            vertical: AppSpacing.s4,
+          ),
+          decoration: BoxDecoration(
+            color: AppColors.primaryBrandLight,
+            borderRadius: BorderRadius.circular(AppSpacing.s12),
+          ),
+          child: Text(
+            'Standard ${grade.isEmpty ? '—' : grade}',
+            style: AppTextStyles.outfit(
+              fontSize: 11,
+              fontWeight: FontWeight.w800,
               color: AppColors.primaryBrand,
+              letterSpacing: 0.6,
             ),
           ),
         ),
@@ -224,104 +395,59 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
     );
   }
 
-  // Dark bottom half — name, designation chip, then label : value info rows.
-  Widget _buildIdCardBottomHalf({
-    required String name,
-    required String id,
-    required String grade,
-    required Student? student,
-    required double topPadding,
-  }) {
-    return Container(
-      width: double.infinity,
-      color: AppColors.brandAppBarColor,
-      padding: EdgeInsets.fromLTRB(28, topPadding, 28, 28),
+  // The label / value information table.
+  Widget _buildInfoTable({required String id, required Student? student}) {
+    final rows = <(String, String)>[
+      ('ID No', id.isEmpty ? '—' : id),
+      ('DOB', student?.dob ?? 'Not Specified'),
+      ('Phone', student?.phone ?? 'Not Available'),
+      ('Email', student?.email ?? 'Not Available'),
+      ('Parent', student?.guardianName ?? 'Not Specified'),
+    ];
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s20),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Center(
-            child: Text(
-              name.isEmpty ? '—' : name,
-              textAlign: TextAlign.center,
-              style: AppTextStyles.outfit(
-                fontSize: 22,
-                fontWeight: FontWeight.w800,
-                color: AppColors.white,
-                letterSpacing: 0.4,
+          for (var i = 0; i < rows.length; i++) ...[
+            if (i > 0)
+              Divider(
+                height: 1,
+                color: AppColors.fieldBorder,
               ),
-            ),
-          ),
-          const SizedBox(height: 6),
-          Center(
-            child: Text(
-              'Standard $grade',
-              textAlign: TextAlign.center,
-              style: AppTextStyles.outfit(
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-                color: AppColors.primaryBrand,
-                letterSpacing: 0.6,
-              ),
-            ),
-          ),
-          const SizedBox(height: 22),
-          _buildIdInfoRow('ID No', id.isEmpty ? '—' : id),
-          _buildIdInfoRow(
-            'DOB',
-            student?.dob ?? 'Not Specified',
-          ),
-          _buildIdInfoRow(
-            'Phone',
-            student?.phone ?? 'Not Available',
-          ),
-          _buildIdInfoRow(
-            'Email',
-            student?.email ?? 'Not Available',
-          ),
-          const SizedBox(height: 10),
-          _buildIdInfoRow(
-            'Parent',
-            student?.guardianName ?? 'Not Specified',
-          ),
+            _buildIdInfoRow(rows[i].$1, rows[i].$2),
+          ],
         ],
       ),
     );
   }
 
-  // "Label  : value" row in white text — uses a fixed-width label column so
-  // every colon lines up vertically the way it does on the reference.
+  // Single info row — label on the left in muted slate, value on the right
+  // in textPrimary. Vertically padded so dividers between rows breathe.
   Widget _buildIdInfoRow(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.s12),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            width: 64,
+            width: 72,
             child: Text(
               label,
               style: AppTextStyles.outfit(
                 fontSize: 13,
-                fontWeight: FontWeight.w700,
-                color: AppColors.white,
+                fontWeight: FontWeight.w600,
+                color: AppColors.fieldLabel,
               ),
-            ),
-          ),
-          Text(
-            ': ',
-            style: AppTextStyles.outfit(
-              fontSize: 13,
-              fontWeight: FontWeight.w500,
-              color: AppColors.white.withValues(alpha: 0.85),
             ),
           ),
           Expanded(
             child: Text(
               value,
+              textAlign: TextAlign.right,
               style: AppTextStyles.outfit(
                 fontSize: 13,
-                fontWeight: FontWeight.w500,
-                color: AppColors.white.withValues(alpha: 0.9),
+                fontWeight: FontWeight.w700,
+                color: AppColors.textPrimary,
               ),
             ),
           ),
@@ -330,11 +456,9 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
     );
   }
 
-  // Hexagonal photo container clipped via [_HexagonClipper]. Renders the
-  // student's profile picture when one is available, otherwise their
-  // initials on a light brand background. Wrapped in a slightly bigger
-  // hexagon in brand orange so the photo reads with a coloured border.
-  Widget _buildHexagonAvatar({
+  // Circular avatar with a primary-brand ring. Shows the student's photo
+  // when available, otherwise initials on a soft brand background.
+  Widget _buildCircleAvatar({
     required String imageUrl,
     required String name,
     required double size,
@@ -344,40 +468,32 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
         imageUrl.startsWith('http') &&
         !imageUrl.contains('ui-avatars.com');
 
-    return ClipPath(
-      clipper: _HexagonClipper(),
-      child: Container(
-        width: size,
-        height: size,
-        color: AppColors.primaryBrand,
-        padding: const EdgeInsets.all(4),
-        child: ClipPath(
-          clipper: _HexagonClipper(),
-          child: Container(
-            decoration: BoxDecoration(
-              color: AppColors.primaryBrandLight,
-              image: hasPhoto
-                  ? DecorationImage(
-                      image: NetworkImage(imageUrl),
-                      fit: BoxFit.cover,
-                    )
-                  : null,
-            ),
-            child: hasPhoto
-                ? null
-                : Center(
-                    child: Text(
-                      _initialsFor(name),
-                      style: AppTextStyles.outfit(
-                        fontSize: 28,
-                        fontWeight: FontWeight.w900,
-                        color: AppColors.primaryBrand,
-                      ),
-                    ),
-                  ),
-          ),
-        ),
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: AppColors.primaryBrandLight,
+        border: Border.all(color: AppColors.primaryBrand, width: 3),
+        image: hasPhoto
+            ? DecorationImage(
+                image: NetworkImage(imageUrl),
+                fit: BoxFit.cover,
+              )
+            : null,
       ),
+      child: hasPhoto
+          ? null
+          : Center(
+              child: Text(
+                _initialsFor(name),
+                style: AppTextStyles.outfit(
+                  fontSize: 28,
+                  fontWeight: FontWeight.w900,
+                  color: AppColors.primaryBrand,
+                ),
+              ),
+            ),
     );
   }
 
@@ -395,25 +511,4 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
       onConfirm: () => controller.deleteStudent(),
     );
   }
-}
-
-// Vertically-oriented regular hexagon used for the ID-card photo. Points
-// face top and bottom; the flat sides face left and right.
-class _HexagonClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    final w = size.width;
-    final h = size.height;
-    return Path()
-      ..moveTo(w * 0.5, 0)
-      ..lineTo(w, h * 0.25)
-      ..lineTo(w, h * 0.75)
-      ..lineTo(w * 0.5, h)
-      ..lineTo(0, h * 0.75)
-      ..lineTo(0, h * 0.25)
-      ..close();
-  }
-
-  @override
-  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
 }

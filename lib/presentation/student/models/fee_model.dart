@@ -127,8 +127,6 @@ class StudentBillingProfile {
   });
 }
 
-/// Receipt detail for `/student/receipts/{id}` and a single item in
-/// `/student/receipts` (both endpoints return the same shape).
 class StudentReceipt {
   final int id;
   final String receiptNumber;

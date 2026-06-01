@@ -539,13 +539,10 @@ class AppStrings {
   static const String studentPayFeesTitle = 'Pay fees';
   static const String studentPayFeesOutstanding = 'TOTAL OUTSTANDING';
   static const String studentPayFeesScanWith = 'SCAN WITH ANY UPI APP';
-  static const String studentPayFeesOpenInGooglePay = 'Open in Google Pay';
-  static const String studentPayFeesAppPhonePe = 'PhonePe';
-  static const String studentPayFeesAppPaytm = 'Paytm';
-  static const String studentPayFeesAppAnyUpi = 'Any UPI';
+  static const String studentPayFeesOpenInAnyUpi = 'Open in Any UPI App';
   static const String studentPayFeesHowItWorks = 'HOW IT WORKS';
   static const String studentPayFeesStep1 =
-      'Tap "Open in Google Pay" or scan the QR with any UPI app.';
+      'Tap "Open in Any UPI App" or scan the QR with any UPI app.';
   static const String studentPayFeesStep2Prefix = 'Confirm the amount';
   static const String studentPayFeesStep2Suffix = 'and pay to';
   static const String studentPayFeesStep3 =

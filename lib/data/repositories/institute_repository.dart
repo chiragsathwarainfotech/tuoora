@@ -816,6 +816,19 @@ class InstituteRepository implements InstituteRepositoryImpl {
   }
 
   @override
+  Future<SalaryPreview> getSalaryPreview(int staffId) async {
+    final response = await _apiClient.get(
+      '${ApiConstants.instituteSalaries}/preview/$staffId',
+    );
+    if (response.status.hasError) {
+      throw Exception('Failed to load salary preview');
+    }
+    return SalaryPreview.fromJson(
+      (response.body['data'] as Map?)?.cast<String, dynamic>() ?? {},
+    );
+  }
+
+  @override
   Future<AttendanceListResponse> getStaffAttendance(
     int staffId, {
     int page = 1,

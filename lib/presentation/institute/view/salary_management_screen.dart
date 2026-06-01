@@ -60,9 +60,13 @@ class SalaryManagementScreen extends GetView<StaffController> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => SubscriptionGuard.runAddAction(
-          () => Get.toNamed(AppRoutes.instituteAddSalary),
-        ),
+        onPressed: () => SubscriptionGuard.runAddAction(() {
+          // Reset the form BEFORE navigation so AddSalaryScreen builds with
+          // a clean controller state instead of inheriting the previous
+          // visit's selection / amount / deduction.
+          Get.find<StaffController>().initAddSalaryMode();
+          Get.toNamed(AppRoutes.instituteAddSalary);
+        }),
         backgroundColor: SubscriptionGuard.blocksAdd
             ? AppColors.textMuted
             : AppColors.primaryBrand,

@@ -142,6 +142,40 @@ class StaffSalary {
   }
 }
 
+/// Pre-fill data returned by GET /institute/salaries/preview/{staffId}.
+/// The institute fetches this when staff is picked on the Add Salary form
+/// so the screen can show the leaves count and suggest a base salary.
+class SalaryPreview {
+  final String staffName;
+  final String? employeeId;
+  final String baseSalary;
+  final num suggestedDeductions;
+  final num suggestedBonus;
+  final int leaves;
+
+  SalaryPreview({
+    required this.staffName,
+    this.employeeId,
+    required this.baseSalary,
+    required this.suggestedDeductions,
+    required this.suggestedBonus,
+    required this.leaves,
+  });
+
+  factory SalaryPreview.fromJson(Map<String, dynamic> json) {
+    return SalaryPreview(
+      staffName: json['staff_name']?.toString() ?? '',
+      employeeId: json['employee_id']?.toString(),
+      baseSalary: json['base_salary']?.toString() ?? '0.00',
+      suggestedDeductions:
+          num.tryParse(json['suggested_deductions']?.toString() ?? '0') ?? 0,
+      suggestedBonus:
+          num.tryParse(json['suggested_bonus']?.toString() ?? '0') ?? 0,
+      leaves: int.tryParse(json['leaves']?.toString() ?? '0') ?? 0,
+    );
+  }
+}
+
 class SalaryListResponse {
   final List<StaffSalary> items;
   final String totalAmount;

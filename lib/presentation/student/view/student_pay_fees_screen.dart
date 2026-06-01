@@ -12,13 +12,6 @@ import 'package:tuoora/presentation/student/controllers/fees_controller.dart';
 import 'package:tuoora/presentation/student/models/fee_model.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
 
-/// Student → Fees → Pay fees.
-///
-/// Shows the outstanding amount, the institute's UPI QR + handle, and
-/// quick-launch buttons for Google Pay / PhonePe / Paytm. The "Open in
-/// Google Pay" CTA + the three app buttons currently snackbar — wire
-/// `url_launcher` with the right UPI intent URL once you have a payee
-/// merchant code.
 class StudentPayFeesScreen extends GetView<FeesController> {
   const StudentPayFeesScreen({super.key});
 
@@ -40,12 +33,7 @@ class StudentPayFeesScreen extends GetView<FeesController> {
               ),
               Expanded(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.fromLTRB(
-                    AppSpacing.s16,
-                    AppSpacing.s16,
-                    AppSpacing.s16,
-                    AppSpacing.s24,
-                  ),
+                  padding: AppSpacing.screenPadding,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -59,28 +47,12 @@ class StudentPayFeesScreen extends GetView<FeesController> {
                       _OpenInGooglePayButton(
                         onTap: () => AppSnackBar.success(
                           profile.instituteUpiHandle,
-                          title: AppStrings.studentPayFeesOpenInGooglePay,
+                          title: AppStrings.studentPayFeesOpenInAnyUpi,
                         ),
                       ),
-                      const SizedBox(height: AppSpacing.s12),
-                      _PaymentAppRow(profile: profile),
                       const SizedBox(height: AppSpacing.s16),
                       _HowItWorksCard(profile: profile, summary: summary),
-                      const SizedBox(height: AppSpacing.s12),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: AppSpacing.s8,
-                        ),
-                        child: Text(
-                          AppStrings.studentPayFeesDisclaimer,
-                          textAlign: TextAlign.center,
-                          style: AppTextStyles.outfit(
-                            fontSize: 11,
-                            color: AppColors.textTertiary,
-                            height: 1.4,
-                          ),
-                        ),
-                      ),
+                      const SizedBox(height: AppSpacing.s8),
                     ],
                   ),
                 ),
@@ -93,8 +65,6 @@ class StudentPayFeesScreen extends GetView<FeesController> {
   }
 }
 
-// ────────────────────────────────────────────────────────── Outstanding
-
 class _OutstandingCard extends StatelessWidget {
   final FeeSummary summary;
 
@@ -103,65 +73,40 @@ class _OutstandingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.primaryBrand,
-        borderRadius: BorderRadius.circular(AppSpacing.s14),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       ),
-      child: Stack(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ₹ watermark on the right side.
-          Positioned(
-            right: -8,
-            top: 8,
-            bottom: 8,
-            child: Opacity(
-              opacity: 0.15,
-              child: Text(
-                '₹',
-                style: AppTextStyles.outfit(
-                  fontSize: 120,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.white,
-                  height: 1,
-                ),
-              ),
+          Text(
+            AppStrings.studentPayFeesOutstanding,
+            style: AppTextStyles.outfit(
+              fontSize: 10,
+              fontWeight: FontWeight.w800,
+              color: AppColors.white.withValues(alpha: 0.7),
+              letterSpacing: 1.2,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(AppSpacing.s16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  AppStrings.studentPayFeesOutstanding,
-                  style: AppTextStyles.outfit(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.white.withValues(alpha: 0.7),
-                    letterSpacing: 1.2,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  '₹${_formatThousands(summary.pendingInRupees)}',
-                  style: AppTextStyles.outfit(
-                    fontSize: 28,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.white,
-                    height: 1,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  summary.pendingMonthsLabel,
-                  style: AppTextStyles.outfit(
-                    fontSize: 12,
-                    color: AppColors.white.withValues(alpha: 0.85),
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
+          const SizedBox(height: 4),
+          Text(
+            '₹${_formatThousands(summary.pendingInRupees)}',
+            style: AppTextStyles.outfit(
+              fontSize: 28,
+              fontWeight: FontWeight.w800,
+              color: AppColors.white,
+              height: 1,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            summary.pendingMonthsLabel,
+            style: AppTextStyles.outfit(
+              fontSize: 12,
+              color: AppColors.white,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ],
@@ -169,8 +114,6 @@ class _OutstandingCard extends StatelessWidget {
     );
   }
 }
-
-// ───────────────────────────────────────────────────────── UPI / QR card
 
 class _UpiCard extends StatelessWidget {
   final StudentBillingProfile profile;
@@ -181,7 +124,7 @@ class _UpiCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(AppSpacing.s16),
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
@@ -198,7 +141,7 @@ class _UpiCard extends StatelessWidget {
           Text(
             AppStrings.studentPayFeesScanWith,
             style: AppTextStyles.outfit(
-              fontSize: 10,
+              fontSize: 12,
               fontWeight: FontWeight.w800,
               color: AppColors.textTertiary,
               letterSpacing: 1.4,
@@ -263,11 +206,11 @@ class _QrPlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(AppSpacing.s12),
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
         border: Border.all(color: AppColors.borderGrey, width: 1.5),
-        borderRadius: BorderRadius.circular(AppSpacing.s12),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       ),
       child: SizedBox(
         width: 180,
@@ -355,8 +298,6 @@ class _QrLikePainter extends CustomPainter {
       oldDelegate.seed != seed;
 }
 
-// ───────────────────────────────────────────────────────── GPay button
-
 class _OpenInGooglePayButton extends StatelessWidget {
   final VoidCallback onTap;
 
@@ -365,11 +306,11 @@ class _OpenInGooglePayButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.attachmentShareButton,
-      borderRadius: BorderRadius.circular(AppSpacing.s12),
+      color: AppColors.primaryBrand,
+      borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(AppSpacing.s12),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         child: Padding(
           padding: const EdgeInsets.symmetric(
             vertical: AppSpacing.s14,
@@ -378,28 +319,17 @@ class _OpenInGooglePayButton extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                'G',
-                style: AppTextStyles.outfit(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.subjectPhysics,
-                ),
-              ),
-              Text(
-                'Pay',
-                style: AppTextStyles.outfit(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.white,
-                ),
+              const Icon(
+                Icons.account_balance_wallet_rounded,
+                size: 18,
+                color: AppColors.white,
               ),
               AppSpacing.h12,
               Text(
-                AppStrings.studentPayFeesOpenInGooglePay,
+                AppStrings.studentPayFeesOpenInAnyUpi,
                 style: AppTextStyles.outfit(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w800,
                   color: AppColors.white,
                 ),
               ),
@@ -411,98 +341,6 @@ class _OpenInGooglePayButton extends StatelessWidget {
   }
 }
 
-// ───────────────────────────────────────────────────────── App buttons
-
-class _PaymentAppRow extends StatelessWidget {
-  final StudentBillingProfile profile;
-
-  const _PaymentAppRow({required this.profile});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: _AppButton(
-            label: AppStrings.studentPayFeesAppPhonePe,
-            labelColor: AppColors.primaryBrand,
-            onTap: () => _snack(AppStrings.studentPayFeesAppPhonePe),
-          ),
-        ),
-        AppSpacing.h8,
-        Expanded(
-          child: _AppButton(
-            label: AppStrings.studentPayFeesAppPaytm,
-            labelColor: AppColors.textPrimary,
-            onTap: () => _snack(AppStrings.studentPayFeesAppPaytm),
-          ),
-        ),
-        AppSpacing.h8,
-        Expanded(
-          child: _AppButton(
-            label: AppStrings.studentPayFeesAppAnyUpi,
-            labelColor: AppColors.textPrimary,
-            onTap: () => _snack(AppStrings.studentPayFeesAppAnyUpi),
-          ),
-        ),
-      ],
-    );
-  }
-
-  void _snack(String app) {
-    AppSnackBar.success(profile.instituteUpiHandle, title: app);
-  }
-}
-
-class _AppButton extends StatelessWidget {
-  final String label;
-  final Color labelColor;
-  final VoidCallback onTap;
-
-  const _AppButton({
-    required this.label,
-    required this.labelColor,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: AppColors.white,
-      borderRadius: BorderRadius.circular(AppSpacing.s10),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(AppSpacing.s10),
-        child: Ink(
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.circular(AppSpacing.s10),
-            border: Border.all(color: AppColors.borderGrey),
-          ),
-          padding: const EdgeInsets.symmetric(
-            vertical: AppSpacing.s12,
-            horizontal: AppSpacing.s8,
-          ),
-          child: Center(
-            child: Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: AppTextStyles.outfit(
-                fontSize: 13,
-                fontWeight: FontWeight.w800,
-                color: labelColor,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// ───────────────────────────────────────────────────────── How it works
-
 class _HowItWorksCard extends StatelessWidget {
   final StudentBillingProfile profile;
   final FeeSummary summary;
@@ -512,7 +350,7 @@ class _HowItWorksCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(AppSpacing.s14),
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.cardRadius),

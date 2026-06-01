@@ -115,6 +115,17 @@ class StudentRepository implements StudentRepositoryImpl {
     return response.statusCode == 200 || response.statusCode == 204;
   }
 
+  @override
+  Future<void> sendFeeReminder(dynamic id) async {
+    final response = await _apiClient.post(
+      '${ApiConstants.instituteStudents}/$id/fee-reminder',
+      {},
+    );
+    if (response.status.hasError) {
+      _handleError(response, 'Failed to send fee reminder');
+    }
+  }
+
   void _handleError(Response response, String defaultMessage) {
     if (response.statusCode == 422 && response.body?['errors'] != null) {
       throw ValidationException(response.body['errors']);

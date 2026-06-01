@@ -13,7 +13,10 @@
       "WebFetch(domain:claude.ai)",
       "PowerShell(Remove-Item *)",
       "Bash(grep -rnB1 -A6 \"Get\\\\.snackbar\" lib/presentation/student/controllers/)",
-      "Bash(grep -v \"//\")"
+      "Bash(grep -v \"//\")",
+      "Bash(findstr /n \"instituteStudents\\\\|ApiConstants\" lib/core/constants/api_constants.dart)",
+      "Bash(findstr /r \"fees\\\\|total_due\\\\|FeeRecord\" lib/data/models/student_model.dart lib/presentation/institute/models/*.dart)",
+      "Bash(grep -n \"Students\\\\b\\\\|^\\\\s*//.*Student\\\\|listStudents\\\\|deleteStudent\\\\|createStudent\\\\|updateStudent\" lib/data/repositories_impl/institute_repository_impl.dart)"
     ]
   },
   "enabledPlugins": {

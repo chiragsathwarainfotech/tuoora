@@ -363,6 +363,9 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
   }
 
   Widget _buildGridActions() {
+    // Logo-aligned 5-colour palette — same pool the institute dashboard and
+    // assignment stripes use. Each tile takes a distinct (icon, soft bg) pair
+    // so the row reads as a varied brand-coloured cluster.
     return Column(
       children: [
         Row(
@@ -371,7 +374,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
               child: ProfileGridAction(
                 icon: Icons.show_chart_rounded,
                 label: 'Reports',
-                iconBgColor: AppColors.errorBg,
+                iconBgColor: AppColors.primaryBrandLight,
                 iconColor: AppColors.primaryBrand,
                 onTap: () => Get.toNamed(AppRoutes.studentReports),
               ),
@@ -380,9 +383,9 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
             Expanded(
               child: ProfileGridAction(
                 icon: Icons.book_outlined,
-                label: 'Study\nmaterial',
-                iconBgColor: AppColors.errorBg,
-                iconColor: AppColors.brandAppBarColor,
+                label: 'Study material',
+                iconBgColor: AppColors.successBg,
+                iconColor: AppColors.successGreen,
                 onTap: () => Get.toNamed(AppRoutes.studentStudyMaterial),
               ),
             ),
@@ -395,8 +398,8 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
               child: ProfileGridAction(
                 icon: Icons.domain_rounded,
                 label: 'Institute',
-                iconBgColor: AppColors.successBg,
-                iconColor: AppColors.greenText,
+                iconBgColor: AppColors.subjectPhysicsSoft,
+                iconColor: AppColors.subjectPhysics,
                 onTap: () => Get.toNamed(AppRoutes.studentInstitute),
               ),
             ),
@@ -406,7 +409,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
                 icon: Icons.chat_bubble_outline_rounded,
                 label: 'Chat',
                 iconBgColor: AppColors.errorBg,
-                iconColor: AppColors.primaryBrand,
+                iconColor: AppColors.bohoRed,
                 onTap: () => Get.toNamed(AppRoutes.studentChat),
               ),
             ),
@@ -419,8 +422,8 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
               child: ProfileGridAction(
                 icon: Icons.download_rounded,
                 label: 'Receipts',
-                iconBgColor: AppColors.subjectPhysicsSoft,
-                iconColor: AppColors.greenText,
+                iconBgColor: AppColors.primaryBrandLight,
+                iconColor: AppColors.orangeTag,
                 onTap: () => Get.toNamed(AppRoutes.studentReceiptsList),
               ),
             ),

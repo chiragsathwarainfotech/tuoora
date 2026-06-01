@@ -18,6 +18,15 @@ class Student {
   final String profileImageUrl;
   final dynamic batch;
 
+  /// Outstanding fee amount for this student (server-computed). Positive
+  /// when the student owes money, zero when settled, can be negative when
+  /// the student has overpaid / has a credit.
+  final num totalDue;
+
+  /// Past fee transactions for this student. Used to populate the fees
+  /// list below the ID card on the institute Student Profile screen.
+  final List<StudentFee> fees;
+
   const Student({
     required this.id,
     required this.name,
@@ -37,6 +46,8 @@ class Student {
     required this.updatedAt,
     required this.profileImageUrl,
     this.batch,
+    this.totalDue = 0,
+    this.fees = const [],
   });
 
   factory Student.fromJson(Map<String, dynamic> json) {
@@ -71,6 +82,12 @@ class Student {
       updatedAt: json['updated_at']?.toString() ?? '',
       profileImageUrl: json['profile_image_url']?.toString() ?? '',
       batch: json['batch'],
+      totalDue: num.tryParse(json['total_due']?.toString() ?? '0') ?? 0,
+      fees: (json['fees'] as List?)
+              ?.whereType<Map>()
+              .map((e) => StudentFee.fromJson(e.cast<String, dynamic>()))
+              .toList() ??
+          const [],
     );
   }
 
@@ -94,6 +111,8 @@ class Student {
       'updated_at': updatedAt,
       'profile_image_url': profileImageUrl,
       'batch': batch,
+      'total_due': totalDue,
+      'fees': fees.map((f) => f.toJson()).toList(),
     };
   }
 
@@ -116,6 +135,8 @@ class Student {
     String? updatedAt,
     String? profileImageUrl,
     dynamic batch,
+    num? totalDue,
+    List<StudentFee>? fees,
   }) {
     return Student(
       id: id ?? this.id,
@@ -136,6 +157,8 @@ class Student {
       updatedAt: updatedAt ?? this.updatedAt,
       profileImageUrl: profileImageUrl ?? this.profileImageUrl,
       batch: batch ?? this.batch,
+      totalDue: totalDue ?? this.totalDue,
+      fees: fees ?? this.fees,
     );
   }
 
@@ -148,5 +171,45 @@ class Student {
     }
     return 'Not Assigned';
   }
+}
+
+/// One fee transaction belonging to a [Student]. Mirrors the entries the
+/// student-list API returns under `student.fees[]`.
+class StudentFee {
+  final int id;
+  final int studentId;
+  final String totalAmount;
+  final String paidAmount;
+  final String status;
+  final String date;
+
+  const StudentFee({
+    required this.id,
+    required this.studentId,
+    required this.totalAmount,
+    required this.paidAmount,
+    required this.status,
+    required this.date,
+  });
+
+  factory StudentFee.fromJson(Map<String, dynamic> json) {
+    return StudentFee(
+      id: int.tryParse(json['id']?.toString() ?? '0') ?? 0,
+      studentId: int.tryParse(json['student_id']?.toString() ?? '0') ?? 0,
+      totalAmount: json['total_amount']?.toString() ?? '0.00',
+      paidAmount: json['paid_amount']?.toString() ?? '0.00',
+      status: json['status']?.toString() ?? '',
+      date: json['date']?.toString() ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'student_id': studentId,
+        'total_amount': totalAmount,
+        'paid_amount': paidAmount,
+        'status': status,
+        'date': date,
+      };
 }
 

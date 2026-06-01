@@ -122,7 +122,7 @@ class InstituteDashboard extends StatelessWidget {
       ModuleItem(
         'Students',
         () => Get.toNamed(AppRoutes.instituteStudents),
-        AppImages.icModuleStudents,
+        AppImages.icModuleStaff,
       ),
       ModuleItem(
         'Batches',

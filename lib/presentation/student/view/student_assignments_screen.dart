@@ -69,7 +69,9 @@ class StudentAssignmentsScreen extends GetView<AssignmentsController> {
 
                         final items = controller.activeItems;
                         if (items.isEmpty) {
-                          return _EmptyState(active: controller.activeTab.value);
+                          return _EmptyState(
+                            active: controller.activeTab.value,
+                          );
                         }
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -490,11 +492,6 @@ class _AssignmentCard extends StatelessWidget {
                               ],
                             ),
                           ),
-                          // Right-side pill: shown ONLY for completed items
-                          // ("Done"). Pending items now communicate their
-                          // due-ness inline via "Due: <date>" on the line
-                          // above, so a separate Today/Tomorrow pill is
-                          // redundant.
                           if (item.isCompleted) ...[
                             AppSpacing.h8,
                             _DuePill(badge: item.badge),
@@ -510,20 +507,12 @@ class _AssignmentCard extends StatelessWidget {
         ),
       ),
     );
-
-    // "Expired offer" look: knock the whole row's opacity down so it
-    // visually reads as inactive. AbsorbPointer guarantees no tap or
-    // hover effect lands even if a child has its own GestureDetector.
     if (disabled) {
       return AbsorbPointer(child: Opacity(opacity: 0.55, child: card));
     }
     return card;
   }
 
-  /// Inline suffix after the subject label. Three buckets:
-  ///   - Completed → "Submitted" (no date — completion is the message)
-  ///   - Overdue   → `Was due on …` (past-tense, signals missed)
-  ///   - Active    → `Due: …` (action-oriented, keeps urgency)
   static String _statusSuffix(Assignment item) {
     if (item.isCompleted) return '  ·  Submitted';
     if (item.isOverdue) return '  ·  Was due on ${item.dueLabel}';
@@ -544,9 +533,6 @@ class _DuePill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // All pills now follow the institute StatusBadge pattern: solid colour
-    // background + white text. Done = success green, Today = brand orange
-    // (most-urgent attention), Tomorrow = deep-orange tag.
     late final Color bg;
     late final String label;
     switch (badge) {
@@ -571,12 +557,12 @@ class _DuePill extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: bg,
-        borderRadius: BorderRadius.circular(AppSpacing.s12),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       ),
       child: Text(
         label,
         style: AppTextStyles.outfit(
-          fontSize: 11,
+          fontSize: 12,
           fontWeight: FontWeight.w700,
           color: fg,
         ),

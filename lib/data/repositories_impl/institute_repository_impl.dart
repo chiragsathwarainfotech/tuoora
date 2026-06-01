@@ -105,6 +105,7 @@ abstract class InstituteRepositoryImpl {
   Future<Staff> createStaff(Map<String, dynamic> data, String? imagePath);
   Future<Staff> updateStaff(int id, Map<String, dynamic> data, String? imagePath);
   Future<SalaryListResponse> getStaffSalaries(int staffId, {int page = 1});
+  Future<SalaryPreview> getSalaryPreview(int staffId);
   Future<AttendanceListResponse> getStaffAttendance(int staffId, {int page = 1, String? month, String? year});
   Future<AttendanceListResponse> getAttendanceLogs({int? page, String? month, String? year});
   Future<void> logStaffAttendance(Map<String, dynamic> data);

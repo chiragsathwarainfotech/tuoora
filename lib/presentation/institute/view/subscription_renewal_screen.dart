@@ -5,6 +5,7 @@ import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
+import 'package:tuoora/core/widgets/app_network_image.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/data/models/institute_subscription_model.dart';
 import 'package:tuoora/presentation/institute/controllers/institute_subscription_controller.dart';
@@ -160,16 +161,13 @@ class SubscriptionRenewalScreen extends GetView<SubscriptionRenewalController> {
                   borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
                 ),
                 child: qrUrl != null && qrUrl.isNotEmpty
-                    ? ClipRRect(
+                    ? AppNetworkImage(
+                        url: qrUrl,
+                        fit: BoxFit.contain,
                         borderRadius: BorderRadius.circular(
                           AppSpacing.cardRadius,
                         ),
-                        child: Image.network(
-                          qrUrl,
-                          fit: BoxFit.contain,
-                          errorBuilder: (context, error, stackTrace) =>
-                              _qrPlaceholder(),
-                        ),
+                        errorWidget: _qrPlaceholder(),
                       )
                     : _qrPlaceholder(),
               ),

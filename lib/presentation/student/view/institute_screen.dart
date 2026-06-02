@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/widgets/student_bottom_nav.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
@@ -41,9 +42,9 @@ class InstituteScreen extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () => Get.toNamed(_getProfileRoute()),
-              child: const CircleAvatar(
+              child: CircleAvatar(
                 radius: AppSpacing.s18,
-                backgroundImage: NetworkImage(
+                backgroundImage: CachedNetworkImageProvider(
                   'https://i.pravatar.cc/150?img=11',
                 ),
               ),

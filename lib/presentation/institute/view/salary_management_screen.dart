@@ -2,6 +2,7 @@
 import 'package:tuoora/core/utils/subscription_guard.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/app_network_image.dart';
 import 'package:tuoora/presentation/institute/controllers/staff_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/config/app_routes.dart';
@@ -243,13 +244,11 @@ class SalaryManagementScreen extends GetView<StaffController> {
         shape: BoxShape.circle,
       ),
       child: profileUrl != null && profileUrl.isNotEmpty
-          ? ClipRRect(
+          ? AppNetworkImage(
+              url: profileUrl,
+              fit: BoxFit.cover,
               borderRadius: BorderRadius.circular(22),
-              child: Image.network(
-                profileUrl,
-                fit: BoxFit.cover,
-                errorBuilder: (_, _, _) => _buildInitials(name),
-              ),
+              errorWidget: _buildInitials(name),
             )
           : _buildInitials(name),
     );

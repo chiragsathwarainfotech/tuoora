@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
@@ -113,7 +114,7 @@ class AddEditStudentScreen extends GetView<InstituteStudentController> {
                                         .profileImageUrl
                                         .contains('ui-avatars.com'))
                               ? DecorationImage(
-                                  image: NetworkImage(
+                                  image: CachedNetworkImageProvider(
                                     controller
                                         .currentStudent
                                         .value!

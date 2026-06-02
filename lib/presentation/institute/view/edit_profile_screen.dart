@@ -6,6 +6,7 @@ import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
 import 'package:tuoora/core/widgets/app_input_field.dart';
+import 'package:tuoora/core/widgets/app_network_image.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -78,11 +79,10 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
                         ),
                       )
                     : (path.startsWith('http') || !path.contains('/')
-                          ? Image.network(
-                              path,
+                          ? AppNetworkImage(
+                              url: path,
                               fit: BoxFit.cover,
-                              errorBuilder: (_, _, _) =>
-                                  const Icon(Icons.error),
+                              errorWidget: const Icon(Icons.error),
                             )
                           : Image.file(File(path), fit: BoxFit.cover)),
               );

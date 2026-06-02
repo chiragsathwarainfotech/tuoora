@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
 import 'package:intl/intl.dart';
@@ -607,7 +608,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
           color: AppColors.primaryBrandLight,
           borderRadius: BorderRadius.circular(size / 3),
           image: DecorationImage(
-            image: NetworkImage(imageUrl),
+            image: CachedNetworkImageProvider(imageUrl),
             fit: BoxFit.cover,
           ),
         ),

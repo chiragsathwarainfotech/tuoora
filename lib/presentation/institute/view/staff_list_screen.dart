@@ -1,4 +1,5 @@
-﻿import 'package:tuoora/core/constants/app_colors.dart';
+﻿import 'package:cached_network_image/cached_network_image.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/utils/subscription_guard.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
@@ -185,7 +186,7 @@ class StaffListScreen extends GetView<StaffController> {
           color: AppColors.primaryBrand.withValues(alpha: 0.1),
           shape: BoxShape.circle,
           image: DecorationImage(
-            image: NetworkImage(imageUrl),
+            image: CachedNetworkImageProvider(imageUrl),
             fit: BoxFit.cover,
           ),
         ),

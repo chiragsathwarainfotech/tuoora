@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
@@ -461,7 +462,10 @@ class AssignToBatchScreen extends StatelessWidget {
         color: AppColors.primaryBrandLight,
         shape: BoxShape.circle,
         image: hasPhoto
-            ? DecorationImage(image: NetworkImage(imageUrl), fit: BoxFit.cover)
+            ? DecorationImage(
+                image: CachedNetworkImageProvider(imageUrl),
+                fit: BoxFit.cover,
+              )
             : null,
       ),
       child: hasPhoto
@@ -499,7 +503,7 @@ class AssignToBatchScreen extends StatelessWidget {
           color: AppColors.primaryBrandLight,
           image: hasPhoto
               ? DecorationImage(
-                  image: NetworkImage(imageUrl),
+                  image: CachedNetworkImageProvider(imageUrl),
                   fit: BoxFit.cover,
                 )
               : null,

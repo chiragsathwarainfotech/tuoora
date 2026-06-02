@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_images.dart';
@@ -442,7 +443,10 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
         color: AppColors.primaryBrandLight,
         border: Border.all(color: AppColors.primaryBrand, width: 3),
         image: hasPhoto
-            ? DecorationImage(image: NetworkImage(imageUrl), fit: BoxFit.cover)
+            ? DecorationImage(
+                image: CachedNetworkImageProvider(imageUrl),
+                fit: BoxFit.cover,
+              )
             : null,
       ),
       child: hasPhoto

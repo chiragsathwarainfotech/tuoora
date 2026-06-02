@@ -8,6 +8,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/widgets/app_network_image.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
 
 /// Full-screen in-app resource viewer. Picks the right native player per
@@ -264,14 +265,11 @@ class _InAppResourceViewerState extends State<InAppResourceViewer> {
               size: 48,
             ),
           )
-        : Image.network(
-            widget.url,
+        : AppNetworkImage(
+            url: widget.url,
             fit: BoxFit.contain,
-            loadingBuilder: (context, child, progress) {
-              if (progress == null) return child;
-              return const CommonLoading(color: AppColors.white);
-            },
-            errorBuilder: (context, error, stackTrace) => const Icon(
+            placeholder: const CommonLoading(color: AppColors.white),
+            errorWidget: const Icon(
               Icons.broken_image_rounded,
               color: AppColors.white,
               size: 48,

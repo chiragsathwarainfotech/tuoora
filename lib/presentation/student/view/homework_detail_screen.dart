@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
@@ -309,9 +310,11 @@ class _StudentHomeworkDetailScreenState
       ),
       child: Row(
         children: [
-          const CircleAvatar(
+          CircleAvatar(
             radius: AppSpacing.s22,
-            backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=12'),
+            backgroundImage: CachedNetworkImageProvider(
+              'https://i.pravatar.cc/150?img=12',
+            ),
           ),
           AppSpacing.h16,
           Column(

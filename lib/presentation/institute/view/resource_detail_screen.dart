@@ -3,6 +3,7 @@ import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/enums/app_enums.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/app_network_image.dart';
 import 'package:tuoora/presentation/institute/models/resource_model.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_bottom_button.dart';
@@ -179,17 +180,14 @@ class ResourceDetailScreen extends StatelessWidget {
     if (resource.type == ResourceType.image &&
         resource.fileUrl != null &&
         resource.fileUrl!.isNotEmpty) {
-      return Image.network(
-        resource.fileUrl!,
+      return AppNetworkImage(
+        url: resource.fileUrl!,
         fit: BoxFit.cover,
-        loadingBuilder: (context, child, progress) {
-          if (progress == null) return child;
-          return Container(
-            color: accent.withValues(alpha: 0.08),
-            child: const CommonLoading(),
-          );
-        },
-        errorBuilder: (context, error, stackTrace) => Container(
+        placeholder: Container(
+          color: accent.withValues(alpha: 0.08),
+          child: const CommonLoading(),
+        ),
+        errorWidget: Container(
           color: accent.withValues(alpha: 0.08),
           child: Icon(Icons.broken_image_rounded, color: accent, size: 56),
         ),

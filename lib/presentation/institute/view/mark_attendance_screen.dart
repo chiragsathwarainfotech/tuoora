@@ -1,4 +1,5 @@
-﻿import 'package:tuoora/core/constants/app_colors.dart';
+﻿import 'package:cached_network_image/cached_network_image.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/controllers/attendance_controller.dart';
@@ -330,7 +331,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
           color: AppColors.primaryBrandLight,
           shape: BoxShape.circle,
           image: DecorationImage(
-            image: NetworkImage(imageUrl),
+            image: CachedNetworkImageProvider(imageUrl),
             fit: BoxFit.cover,
           ),
         ),

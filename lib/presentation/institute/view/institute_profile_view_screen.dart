@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
@@ -104,7 +105,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
             border: Border.all(color: AppColors.fieldLabel),
             image: p.logoUrl != null
                 ? DecorationImage(
-                    image: NetworkImage(p.logoUrl!),
+                    image: CachedNetworkImageProvider(p.logoUrl!),
                     fit: BoxFit.cover,
                   )
                 : null,

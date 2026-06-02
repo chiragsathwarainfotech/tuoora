@@ -1,6 +1,7 @@
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/app_network_image.dart';
 import 'package:tuoora/data/models/notification_model.dart';
 import 'package:tuoora/presentation/institute/controllers/notification_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
@@ -135,16 +136,13 @@ class InstituteNotificationsScreen extends GetView<NotificationController> {
                 ),
                 if (notification.image != null) ...[
                   AppSpacing.v16,
-                  ClipRRect(
+                  AppNetworkImage(
+                    url: notification.image ?? "",
+                    height: 140,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
                     borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-                    child: Image.network(
-                      notification.image ?? "",
-                      height: 140,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) =>
-                          const SizedBox.shrink(),
-                    ),
+                    errorWidget: const SizedBox.shrink(),
                   ),
                 ],
               ],

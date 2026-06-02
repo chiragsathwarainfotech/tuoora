@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/config/app_routes.dart';
+import 'package:tuoora/core/widgets/app_network_image.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/services/auth_service.dart';
@@ -204,11 +205,10 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
                           )
                         : (header.avatarUrl.isNotEmpty &&
                                   header.avatarUrl.startsWith('http')
-                              ? Image.network(
-                                  header.avatarUrl,
+                              ? AppNetworkImage(
+                                  url: header.avatarUrl,
                                   fit: BoxFit.cover,
-                                  errorBuilder: (_, _, _) =>
-                                      const _AvatarPersonFallback(),
+                                  errorWidget: const _AvatarPersonFallback(),
                                 )
                               : Center(
                                   child: Text(

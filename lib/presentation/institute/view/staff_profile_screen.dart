@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
@@ -85,8 +86,8 @@ class StaffProfileScreen extends GetView<StaffController> {
               ),
               image: DecorationImage(
                 image: staff.profileUrl != null
-                    ? NetworkImage(staff.profileUrl!)
-                    : const NetworkImage(
+                    ? CachedNetworkImageProvider(staff.profileUrl!)
+                    : CachedNetworkImageProvider(
                         'https://ui-avatars.com/api/?name=Staff&background=00A3A3&color=fff',
                       ),
                 fit: BoxFit.cover,

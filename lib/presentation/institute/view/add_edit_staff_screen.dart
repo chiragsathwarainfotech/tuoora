@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
@@ -184,10 +185,10 @@ class AddEditStaffScreen extends GetView<StaffController> {
                             image:
                                 controller.selectedStaff.value?.profileUrl !=
                                     null
-                                ? NetworkImage(
+                                ? CachedNetworkImageProvider(
                                     controller.selectedStaff.value!.profileUrl!,
                                   )
-                                : const NetworkImage(
+                                : CachedNetworkImageProvider(
                                     'https://ui-avatars.com/api/?name=Staff&background=00A3A3&color=fff',
                                   ),
                             fit: BoxFit.cover,

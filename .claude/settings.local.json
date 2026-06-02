@@ -29,7 +29,14 @@
       "PowerShell(flutter analyze lib/presentation/shared/controllers/login_controller.dart lib/presentation/shared/view/login_screen.dart lib/presentation/institute/controllers/forgot_password_controller.dart lib/presentation/institute/view/forgot_password_screen.dart lib/presentation/institute/view/reset_password_screen.dart lib/presentation/institute/controllers/signup_controller.dart lib/presentation/institute/view/institute_signup_screen.dart lib/presentation/institute/view/institute_otp_screen.dart lib/presentation/institute/view/institute_profile_setup_screen.dart)",
       "PowerShell(flutter analyze lib/presentation/institute/view/batches_screen.dart)",
       "Bash(/c/Users/PANCHAM/AppData/Local/Programs/Python/Python310/python tool/fontweight_sweep.py)",
-      "PowerShell(flutter analyze lib)"
+      "PowerShell(flutter analyze lib)",
+      "Bash(/c/Users/PANCHAM/AppData/Local/Programs/Python/Python310/python tool/appstrings_audit.py)",
+      "Bash(/c/Users/PANCHAM/AppData/Local/Programs/Python/Python310/python tool/appstrings_cleanup.py)",
+      "Bash(/c/Users/PANCHAM/AppData/Local/Programs/Python/Python310/python tool/repeated_literals.py)",
+      "Bash(cd \"/c/Users/PANCHAM/StudioProjects/tuoora\" && /c/Users/PANCHAM/AppData/Local/Programs/Python/Python310/python tool/repeated_literals.py && head -120 tool/repeated_literals_report.txt)",
+      "Read(//c/c/Users/PANCHAM/StudioProjects/tuoora/tool/**)",
+      "Bash(/c/Users/PANCHAM/AppData/Local/Programs/Python/Python310/python tool/appstrings_extract.py)",
+      "PowerShell(flutter analyze lib 2>&1 | Where-Object { $_ -match '\\\\s+error\\\\s+-' } | ForEach-Object { $_.ToString\\(\\) })"
     ]
   },
   "enabledPlugins": {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:get/get.dart';
 
 import 'package:tuoora/config/app_routes.dart';
@@ -57,7 +58,7 @@ class SubscriptionGuard {
       iconColor: AppColors.errorRed,
       iconBgColor: AppColors.errorBg,
       confirmText: 'Renew Now',
-      cancelText: 'Not Now',
+      cancelText: AppStrings.labelNotNow,
       confirmButtonColor: AppColors.primaryBrand,
       onConfirm: () => Get.toNamed(AppRoutes.instituteSubscriptionRenew),
     );

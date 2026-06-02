@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -562,7 +563,7 @@ class ChatController extends GetxController {
           'Microphone access is off for this app. Enable it from Settings to send voice messages.',
       icon: Icons.mic_off_rounded,
       confirmText: 'Open Settings',
-      cancelText: 'Not Now',
+      cancelText: AppStrings.labelNotNow,
       onConfirm: () async {
         try {
           await openAppSettings();

@@ -1,5 +1,6 @@
 ﻿import 'dart:io';
 import 'package:tuoora/core/widgets/app_button.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
@@ -131,7 +132,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                     AppSpacing.v16,
                     Obx(
                       () => _buildTextField(
-                        label: 'Address Line 1',
+                        label: AppStrings.labelAddressLine1,
                         controller: controller.addressLine1Controller,
                         hint: 'Enter address line 1',
                         prefixIcon: Icons.location_on_outlined,
@@ -145,7 +146,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                     ),
                     AppSpacing.v20,
                     _buildTextField(
-                      label: 'Address Line 2',
+                      label: AppStrings.labelAddressLine2,
                       controller: controller.addressLine2Controller,
                       hint: 'Enter address line 2',
                       prefixIcon: Icons.add_location_outlined,
@@ -156,7 +157,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                         Expanded(
                           child: Obx(
                             () => _buildTextField(
-                              label: 'City',
+                              label: AppStrings.labelCity,
                               controller: controller.cityController,
                               hint: 'Enter city',
                               prefixIcon: Icons.location_city_outlined,
@@ -173,7 +174,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                         Expanded(
                           child: Obx(
                             () => _buildTextField(
-                              label: 'State',
+                              label: AppStrings.labelState,
                               controller: controller.stateController,
                               hint: 'Enter state',
                               prefixIcon: Icons.map_outlined,
@@ -194,7 +195,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                         Expanded(
                           child: Obx(
                             () => _buildTextField(
-                              label: 'Country',
+                              label: AppStrings.labelCountry,
                               controller: controller.countryController,
                               hint: 'Enter country',
                               prefixIcon: Icons.public_outlined,
@@ -211,7 +212,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                         Expanded(
                           child: Obx(
                             () => _buildTextField(
-                              label: 'Pincode',
+                              label: AppStrings.labelPincode,
                               controller: controller.pincodeController,
                               hint: 'Enter pincode',
                               prefixIcon: Icons.pin_drop_outlined,

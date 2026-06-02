@@ -119,7 +119,7 @@ class AddEditLeadScreen extends GetView<LeadsController> {
         AppSpacing.v24,
         Obx(
           () => AppInputField(
-            label: AppStrings.instPhoneNumberLabelAlt,
+            label: AppStrings.instPhoneLabel,
             hint: AppStrings.instPhoneHint,
             controller: controller.phoneController,
             keyboardType: TextInputType.phone,

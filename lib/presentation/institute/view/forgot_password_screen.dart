@@ -1,4 +1,5 @@
 import 'package:tuoora/core/constants/app_images.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
@@ -84,7 +85,7 @@ class ForgotPasswordScreen extends GetView<ForgotPasswordController> {
                                 Obx(
                                   () => _buildTextField(
                                     controller: controller.emailController,
-                                    hint: 'Enter email',
+                                    hint: AppStrings.hintEnterEmail,
                                     prefixIcon: Icons.mail,
                                     keyboardType: TextInputType.emailAddress,
                                     errorText: controller.emailError.value,

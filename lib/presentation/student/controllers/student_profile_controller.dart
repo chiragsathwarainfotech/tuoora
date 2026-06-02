@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -36,7 +37,7 @@ class StudentProfileController extends GetxController {
       final data = await _repository.getProfile();
       profileData.value = data;
     } catch (e) {
-      AppSnackBar.error('Failed to load profile');
+      AppSnackBar.error(AppStrings.errFailedLoadProfile);
     } finally {
       isLoading.value = false;
     }
@@ -114,7 +115,7 @@ class StudentProfileController extends GetxController {
                   ),
                 ),
                 title: Text(
-                  'Camera',
+                  AppStrings.labelCamera,
                   style: AppTextStyles.outfit(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
@@ -140,7 +141,7 @@ class StudentProfileController extends GetxController {
                   ),
                 ),
                 title: Text(
-                  'Gallery',
+                  AppStrings.labelGallery,
                   style: AppTextStyles.outfit(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,

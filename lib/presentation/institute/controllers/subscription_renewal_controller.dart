@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tuoora/config/app_routes.dart';
@@ -40,7 +41,7 @@ class SubscriptionRenewalController extends GetxController {
         screenshotError.value = null;
       }
     } catch (_) {
-      AppSnackBar.error('Failed to pick image');
+      AppSnackBar.error(AppStrings.errFailedPickImage);
     }
   }
 
@@ -48,7 +49,7 @@ class SubscriptionRenewalController extends GetxController {
   /// the user on the renewal screen, where the same action can be re-triggered.
   void promptForProof() {
     CommonDialog.show(
-      title: 'Submit Payment Proof',
+      title: AppStrings.labelSubmitPaymentProof,
       description:
           'Once you have completed the payment, submit your transaction '
           'details so our billing team can verify and activate your '

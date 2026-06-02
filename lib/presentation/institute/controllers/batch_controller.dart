@@ -1,4 +1,5 @@
 import 'package:tuoora/core/widgets/app_pickers.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/data/models/staff_model.dart';
 import 'package:tuoora/presentation/institute/models/batch_model.dart';
 import 'package:tuoora/core/widgets/common_dialog.dart';
@@ -360,7 +361,7 @@ class BatchController extends GetxController {
     } catch (e) {
       if (e is ValidationException) {
         _handleValidationErrors(e.errors);
-        AppSnackBar.error('Please correct the highlighted errors');
+        AppSnackBar.error(AppStrings.validationErrorsBelow);
       } else {
         AppSnackBar.error(e.toString());
       }

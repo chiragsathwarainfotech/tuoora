@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:tuoora/config/app_routes.dart';
@@ -22,7 +23,7 @@ class StudentStudyMaterialScreen
         child: Column(
           children: [
             const StudentAppBar(
-              title: 'Study material',
+              title: AppStrings.labelStudyMaterial,
               showDefaultActions: false,
             ),
             Expanded(

@@ -315,7 +315,7 @@ class InstituteSubscriptionScreen
       ),
       _Feature(
         icon: Icons.chat_bubble_outline_rounded,
-        title: AppStrings.instWhatsAppOption,
+        title: AppStrings.instWhatsAppIntegration,
         desc: AppStrings.instWhatsAppOptionDesc,
       ),
     ];

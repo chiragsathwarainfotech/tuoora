@@ -187,7 +187,7 @@ class _SummaryCard extends StatelessWidget {
               _LegendDot(color: AppColors.successGreen),
               const SizedBox(width: 6),
               Text(
-                '${AppStrings.studentFeesLegendPaid} '
+                '${AppStrings.studentFeesPaidPercent} '
                 '₹${_formatThousands(summary.paidInRupees)}',
                 style: AppTextStyles.outfit(
                   fontSize: 11,
@@ -512,8 +512,8 @@ class _StatusPill extends StatelessWidget {
   Widget build(BuildContext context) {
     final bg = isPaid ? AppColors.successGreen : AppColors.bohoRed;
     final label = isPaid
-        ? AppStrings.studentFeesPillPaid
-        : AppStrings.studentFeesPillPending;
+        ? AppStrings.instStatusPaid
+        : AppStrings.studentAssignmentsTabPending;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(

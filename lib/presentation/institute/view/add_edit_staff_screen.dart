@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
@@ -81,7 +82,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
           () => AppInputField(
             label: 'Email',
             controller: controller.staffEmailController,
-            hint: 'Enter email',
+            hint: AppStrings.hintEnterEmail,
             icon: Icons.email_rounded,
             keyboardType: TextInputType.emailAddress,
             errorText: controller.staffEmailError.value,

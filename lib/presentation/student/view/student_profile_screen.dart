@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/widgets/app_network_image.dart';
@@ -326,7 +327,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
             Expanded(
               child: ProfileGridAction(
                 icon: Icons.show_chart_rounded,
-                label: 'Reports',
+                label: AppStrings.labelReports,
                 iconBgColor: AppColors.primaryBrandLight,
                 iconColor: AppColors.primaryBrand,
                 onTap: () => Get.toNamed(AppRoutes.studentReports),
@@ -336,7 +337,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
             Expanded(
               child: ProfileGridAction(
                 icon: Icons.book_outlined,
-                label: 'Study material',
+                label: AppStrings.labelStudyMaterial,
                 iconBgColor: AppColors.successBg,
                 iconColor: AppColors.successGreen,
                 onTap: () => Get.toNamed(AppRoutes.studentStudyMaterial),
@@ -374,7 +375,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
             Expanded(
               child: ProfileGridAction(
                 icon: Icons.download_rounded,
-                label: 'Receipts',
+                label: AppStrings.labelReceipts,
                 iconBgColor: AppColors.primaryBrandLight,
                 iconColor: AppColors.orangeTag,
                 onTap: () => Get.toNamed(AppRoutes.studentReceiptsList),

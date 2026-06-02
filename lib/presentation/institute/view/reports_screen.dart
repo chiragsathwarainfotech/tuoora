@@ -1,4 +1,5 @@
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/controllers/reports_controller.dart';
@@ -23,7 +24,7 @@ class ReportsScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const InstituteAppBar(title: 'Reports', isRoot: false),
+            const InstituteAppBar(title: AppStrings.labelReports, isRoot: false),
             Expanded(
               child: ListView(
                 padding: AppSpacing.all16,
@@ -40,7 +41,7 @@ class ReportsScreen extends StatelessWidget {
                   ),
                   AppSpacing.v10,
                   _buildReportCard(
-                    title: 'Fee Collection Report',
+                    title: AppStrings.labelFeeCollectionReport,
                     subtitle:
                         'Deep dive into examination results, assignment completion rates, and individual student growth curves.',
                     icon: Icons.account_balance_wallet_rounded,

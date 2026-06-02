@@ -1,4 +1,5 @@
 import 'package:tuoora/core/widgets/app_pickers.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/data/models/student_model.dart';
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
 import 'package:flutter/material.dart';
@@ -153,7 +154,7 @@ class RecordFeeController extends GetxController {
     } catch (e) {
       if (e is ValidationException) {
         _handleValidationErrors(e.errors);
-        AppSnackBar.error('Please correct the highlighted errors');
+        AppSnackBar.error(AppStrings.validationErrorsBelow);
       } else {
         AppSnackBar.error(e.toString().replaceAll('Exception: ', ''));
       }

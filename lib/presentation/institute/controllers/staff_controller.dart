@@ -1,4 +1,5 @@
 import 'package:tuoora/config/app_routes.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/utils/validation_utils.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/data/models/staff_model.dart';
@@ -613,7 +614,7 @@ class StaffController extends GetxController {
     } catch (e) {
       if (e is ValidationException) {
         _handleValidationErrors(e.errors);
-        AppSnackBar.error('Please correct the highlighted errors');
+        AppSnackBar.error(AppStrings.validationErrorsBelow);
       } else {
         AppSnackBar.error('Failed to save staff: $e');
       }
@@ -731,7 +732,7 @@ class StaffController extends GetxController {
                 color: AppColors.primaryBrand,
               ),
               title: Text(
-                'Camera',
+                AppStrings.labelCamera,
                 style: AppTextStyles.outfit(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -749,7 +750,7 @@ class StaffController extends GetxController {
                 color: AppColors.primaryBrand,
               ),
               title: Text(
-                'Gallery',
+                AppStrings.labelGallery,
                 style: AppTextStyles.outfit(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,

@@ -62,7 +62,7 @@ class FeesController extends GetxController {
       statements.assignAll(data.fees);
       summary.value = data.summary;
     } catch (_) {
-      AppSnackBar.error('Failed to load fees');
+      AppSnackBar.error(AppStrings.errFailedLoadFees);
     } finally {
       isLoading.value = false;
     }
@@ -113,7 +113,7 @@ class FeesController extends GetxController {
 
       AppSnackBar.success(
         'Please wait, your receipt is being downloaded...',
-        title: 'Downloading',
+        title: AppStrings.labelDownloading,
       );
 
       final bytes = await _repository.downloadFeeReceipt(

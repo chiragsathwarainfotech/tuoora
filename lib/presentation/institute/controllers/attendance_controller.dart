@@ -1,4 +1,5 @@
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/presentation/institute/models/batch_model.dart';
 import 'package:tuoora/presentation/institute/models/attendance_record_model.dart';
@@ -104,7 +105,7 @@ class AttendanceController extends GetxController {
 
       filterStudents();
     } catch (e) {
-      AppSnackBar.error('Failed to load attendance');
+      AppSnackBar.error(AppStrings.errFailedLoadAttendance);
     } finally {
       isLoading.value = false;
     }

@@ -1,4 +1,5 @@
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/services/download_service.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
@@ -79,7 +80,7 @@ class ResourceDetailController extends GetxController {
 
       await _downloadService.saveFile(bytes: bytes, fileName: fullFileName);
     } catch (e) {
-      AppSnackBar.error('Download failed');
+      AppSnackBar.error(AppStrings.downloadFailed);
     } finally {
       isDownloading.value = false;
       downloadProgress.value = 0.0;

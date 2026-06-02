@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
@@ -19,7 +20,7 @@ class StudentReceiptsListScreen extends GetView<StudentReceiptsListController> {
       body: SafeArea(
         child: Column(
           children: [
-            const StudentAppBar(title: 'Receipts', showDefaultActions: false),
+            const StudentAppBar(title: AppStrings.labelReceipts, showDefaultActions: false),
             Expanded(
               child: Obx(() {
                 if (controller.isLoading.value) {

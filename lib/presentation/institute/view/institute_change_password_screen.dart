@@ -21,7 +21,7 @@ class InstituteChangePasswordScreen extends GetView<SecurityController> {
           children: [
             Column(
               children: [
-                const InstituteAppBar(title: 'Change Password', isRoot: false),
+                const InstituteAppBar(title: AppStrings.labelChangePassword, isRoot: false),
                 Expanded(
                   child: SingleChildScrollView(
                     padding: AppSpacing.screenPaddingTop,
@@ -64,7 +64,7 @@ class InstituteChangePasswordScreen extends GetView<SecurityController> {
           Obx(
             () => _buildPasswordField(
               label: AppStrings.instCurrentPasswordLabel,
-              hint: '••••••••',
+              hint: AppStrings.hintPasswordDots,
               controller: controller.currentPasswordController,
               isVisible: controller.isCurrentPasswordVisible,
               onToggle: controller.toggleCurrentPasswordVisibility,
@@ -75,7 +75,7 @@ class InstituteChangePasswordScreen extends GetView<SecurityController> {
           Obx(
             () => _buildPasswordField(
               label: AppStrings.instNewPasswordLabel,
-              hint: 'Enter new password',
+              hint: AppStrings.hintEnterNewPassword,
               controller: controller.newPasswordController,
               isVisible: controller.isNewPasswordVisible,
               onToggle: controller.toggleNewPasswordVisibility,

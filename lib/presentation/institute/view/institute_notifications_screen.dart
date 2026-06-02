@@ -1,4 +1,5 @@
 import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/widgets/app_network_image.dart';
@@ -46,7 +47,7 @@ class InstituteNotificationsScreen extends GetView<NotificationController> {
                         AppSpacing.v16,
                         ElevatedButton(
                           onPressed: () => controller.fetchNotifications(),
-                          child: const Text('Retry'),
+                          child: const Text(AppStrings.labelRetry),
                         ),
                       ],
                     ),

@@ -92,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           Obx(
                             () => _buildTextField(
                               controller: controller.emailController,
-                              hint: 'Enter email',
+                              hint: AppStrings.hintEnterEmail,
                               prefixIcon: Icons.email,
                               keyboardType: TextInputType.emailAddress,
                               errorText: controller.emailError.value,
@@ -151,7 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           Obx(
                             () => _buildTextField(
                               controller: controller.passwordController,
-                              hint: '••••••••',
+                              hint: AppStrings.hintPasswordDots,
                               prefixIcon: Icons.lock_outline,
                               obscureText: controller.obscurePassword.value,
                               errorText: controller.passwordError.value,

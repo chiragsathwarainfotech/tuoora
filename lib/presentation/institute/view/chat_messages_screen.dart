@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
@@ -63,7 +64,7 @@ class ChatMessagesScreen extends GetView<ChatController> {
                               ),
                               const SizedBox(width: 12),
                               Text(
-                                'Delete chat',
+                                AppStrings.labelDeleteChat,
                                 style: AppTextStyles.outfit(
                                   fontSize: 14,
                                   color: AppColors.bohoRed,
@@ -334,7 +335,7 @@ class ChatMessagesScreen extends GetView<ChatController> {
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      'Tap to retry',
+                      AppStrings.labelTapToRetry,
                       style: AppTextStyles.outfit(
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
@@ -452,7 +453,7 @@ class ChatMessagesScreen extends GetView<ChatController> {
                     controller: controller.messageController,
                     style: AppTextStyles.outfit(fontSize: 14),
                     decoration: const InputDecoration(
-                      hintText: 'Type a message...',
+                      hintText: AppStrings.hintTypeMessage,
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.symmetric(vertical: 12),
                     ),
@@ -539,7 +540,7 @@ class ChatMessagesScreen extends GetView<ChatController> {
               ),
               const SizedBox(width: 10),
               Text(
-                'Recording…',
+                AppStrings.labelRecording,
                 style: AppTextStyles.outfit(
                   fontSize: 13,
                   color: AppColors.textTertiary,
@@ -663,7 +664,7 @@ class ChatMessagesScreen extends GetView<ChatController> {
   void _confirmDeleteConversation(Chat? chat) {
     if (chat == null) return;
     CommonDialog.showDeleteConfirmation(
-      title: 'Delete chat',
+      title: AppStrings.labelDeleteChat,
       description:
           'Are you sure you want to delete your chat with '
           '${chat.participantName}? This will permanently remove all '

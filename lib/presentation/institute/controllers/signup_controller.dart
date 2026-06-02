@@ -1,4 +1,5 @@
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
@@ -117,7 +118,7 @@ class SignupController extends GetxController {
                 ),
               ),
               title: Text(
-                'Camera',
+                AppStrings.labelCamera,
                 style: AppTextStyles.outfit(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -140,7 +141,7 @@ class SignupController extends GetxController {
                 ),
               ),
               title: Text(
-                'Gallery',
+                AppStrings.labelGallery,
                 style: AppTextStyles.outfit(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -167,7 +168,7 @@ class SignupController extends GetxController {
         selectedLogoPath.value = image.path;
       }
     } catch (e) {
-      AppSnackBar.error('Failed to pick image');
+      AppSnackBar.error(AppStrings.errFailedPickImage);
     }
   }
 
@@ -379,7 +380,7 @@ class SignupController extends GetxController {
     isLoading.value = true;
     try {
       await _authRepository.forgotPassword(email);
-      AppSnackBar.success('OTP resend successfully');
+      AppSnackBar.success(AppStrings.msgOtpResent);
       startTimer();
     } catch (e) {
       AppSnackBar.error(e.toString());

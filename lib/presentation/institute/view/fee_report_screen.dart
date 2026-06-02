@@ -1,4 +1,5 @@
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/controllers/reports_controller.dart';
@@ -25,7 +26,7 @@ class FeeReportScreen extends StatelessWidget {
         child: Column(
           children: [
             const InstituteAppBar(
-              title: 'Fee Collection Report',
+              title: AppStrings.labelFeeCollectionReport,
               isRoot: false,
             ),
             Expanded(

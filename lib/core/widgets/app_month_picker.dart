@@ -1,4 +1,5 @@
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
@@ -151,7 +152,7 @@ class _AppMonthPickerState extends State<AppMonthPicker> {
                 TextButton(
                   onPressed: () => Get.back(),
                   child: Text(
-                    'Cancel',
+                    AppStrings.labelCancel,
                     style: AppTextStyles.outfit(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,

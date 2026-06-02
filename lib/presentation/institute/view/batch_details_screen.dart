@@ -157,7 +157,7 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
                   width: double.infinity,
                   child: Expanded(
                     child: InstituteMetricCard(
-                      label: AppStrings.instStudentsCountLabel,
+                      label: AppStrings.instNavStudents,
                       value: '${controller.studentCount.value}',
                     ),
                   ),

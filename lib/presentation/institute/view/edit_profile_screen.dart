@@ -197,7 +197,7 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
           AppSpacing.v20,
           Obx(
             () => AppInputField(
-              label: AppStrings.instPhoneNumberLabel,
+              label: AppStrings.instPhoneLabel,
               controller: controller.phoneController,
               icon: Icons.phone_iphone_rounded,
               keyboardType: TextInputType.number,
@@ -206,38 +206,38 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
           ),
           AppSpacing.v20,
           AppInputField(
-            label: 'Address Line 1',
+            label: AppStrings.labelAddressLine1,
             controller: controller.addressLine1Controller,
             icon: Icons.location_on_outlined,
           ),
           AppSpacing.v20,
           AppInputField(
-            label: 'Address Line 2',
+            label: AppStrings.labelAddressLine2,
             controller: controller.addressLine2Controller,
             icon: Icons.location_on_outlined,
           ),
           AppSpacing.v20,
           AppInputField(
-            label: 'City',
+            label: AppStrings.labelCity,
             controller: controller.cityController,
             icon: Icons.location_city_rounded,
           ),
           AppSpacing.v20,
           AppInputField(
-            label: 'State',
+            label: AppStrings.labelState,
             controller: controller.stateController,
             icon: Icons.map_rounded,
           ),
           AppSpacing.v20,
           AppInputField(
-            label: 'Country',
+            label: AppStrings.labelCountry,
             controller: controller.countryController,
             icon: Icons.public_rounded,
           ),
           AppSpacing.v20,
           Obx(
             () => AppInputField(
-              label: 'Pincode',
+              label: AppStrings.labelPincode,
               controller: controller.pincodeController,
               icon: Icons.pin_drop_rounded,
               keyboardType: TextInputType.number,

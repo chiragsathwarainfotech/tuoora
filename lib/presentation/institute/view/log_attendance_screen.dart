@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
@@ -46,7 +47,7 @@ class LogAttendanceScreen extends GetView<StaffController> {
                     AppSpacing.v20,
                     Obx(
                       () => AppInputField(
-                        label: 'Date',
+                        label: AppStrings.labelDate,
                         hint: 'MM/dd/yyyy',
                         icon: Icons.calendar_today_rounded,
                         controller: TextEditingController(

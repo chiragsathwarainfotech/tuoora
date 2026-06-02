@@ -78,7 +78,7 @@ class InstituteController extends GetxController {
         feesCurrentPage.value++;
       }
     } catch (e) {
-      AppSnackBar.error('Failed to load fees');
+      AppSnackBar.error(AppStrings.errFailedLoadFees);
     } finally {
       isLoadingFees.value = false;
     }
@@ -100,7 +100,7 @@ class InstituteController extends GetxController {
         successMessage: 'Report downloaded',
       );
     } catch (e) {
-      AppSnackBar.error('Download failed');
+      AppSnackBar.error(AppStrings.downloadFailed);
     }
   }
 

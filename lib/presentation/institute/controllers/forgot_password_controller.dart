@@ -1,4 +1,5 @@
 import 'package:tuoora/core/utils/validation_utils.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -132,7 +133,7 @@ class ForgotPasswordController extends GetxController {
     isResending.value = true;
     try {
       await _authRepository.forgotPassword(email);
-      AppSnackBar.success('OTP resend successfully');
+      AppSnackBar.success(AppStrings.msgOtpResent);
       startTimer();
     } catch (e) {
       AppSnackBar.error(e.toString().replaceAll('Exception: ', ''));

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:tuoora/config/app_routes.dart';
@@ -19,7 +20,7 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
       body: SafeArea(
         child: Column(
           children: [
-            const StudentAppBar(title: 'Reports', showDefaultActions: false),
+            const StudentAppBar(title: AppStrings.labelReports, showDefaultActions: false),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: _buildSegmentControl(),

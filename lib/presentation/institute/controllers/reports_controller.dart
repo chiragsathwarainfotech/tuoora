@@ -1,4 +1,5 @@
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/presentation/institute/controllers/batch_controller.dart';
 import 'package:tuoora/presentation/institute/controllers/institute_controller.dart';
 import 'package:tuoora/presentation/institute/models/batch_performance_model.dart';
@@ -127,7 +128,7 @@ class ReportsController extends GetxController {
         successMessage: 'Report downloaded',
       );
     } catch (e) {
-      AppSnackBar.error('Download failed');
+      AppSnackBar.error(AppStrings.downloadFailed);
     }
   }
 

@@ -367,7 +367,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
               Obx(
                 () => _buildDialogField(
                   label: 'Description',
-                  hint: 'Enter description',
+                  hint: AppStrings.hintEnterDescription,
                   controller: controller.notesController,
                   maxLines: 4,
                   errorText: controller.noteError.value,

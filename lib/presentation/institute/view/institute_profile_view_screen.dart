@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
@@ -55,11 +56,11 @@ class InstituteProfileViewScreen extends StatelessWidget {
                           color: Colors.redAccent,
                         ),
                         AppSpacing.v16,
-                        const Text('Failed to load profile'),
+                        const Text(AppStrings.errFailedLoadProfile),
                         AppSpacing.v16,
                         ElevatedButton(
                           onPressed: () => controller.fetchProfile(),
-                          child: const Text('Retry'),
+                          child: const Text(AppStrings.labelRetry),
                         ),
                       ],
                     ),
@@ -176,7 +177,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
         _buildSectionHeader('Account Information', Icons.settings_rounded),
         _buildSettingsItem(
           icon: Icons.lock_outline_rounded,
-          title: 'Change Password',
+          title: AppStrings.labelChangePassword,
           subtitle: 'Update your login credentials',
           onTap: () => Get.toNamed(AppRoutes.instituteChangePassword),
         ),
@@ -370,7 +371,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
           TextButton(
             onPressed: () => Get.back(),
             child: Text(
-              'Cancel',
+              AppStrings.labelCancel,
               style: AppTextStyles.outfit(
                 color: AppColors.textSecondary,
                 fontWeight: FontWeight.w600,

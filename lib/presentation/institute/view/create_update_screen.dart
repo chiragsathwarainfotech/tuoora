@@ -1,4 +1,5 @@
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/enums/app_enums.dart';
@@ -31,7 +32,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Select Category',
+                          AppStrings.hintSelectCategory,
                           style: AppTextStyles.outfit(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,

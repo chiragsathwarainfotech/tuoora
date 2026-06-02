@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
@@ -22,7 +23,7 @@ class SubmitPaymentProofScreen
         child: Column(
           children: [
             InstituteAppBar(
-              title: 'Submit Payment Proof',
+              title: AppStrings.labelSubmitPaymentProof,
               onBackTap: () => Get.back(),
             ),
             Expanded(

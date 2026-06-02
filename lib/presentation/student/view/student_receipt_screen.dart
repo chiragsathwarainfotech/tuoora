@@ -168,7 +168,7 @@ class _ReceiptCard extends StatelessWidget {
               value: receipt.receiptNumber,
             ),
             _DetailRow(label: 'Payment method', value: receipt.paymentMethod),
-            _DetailRow(label: 'Date', value: receipt.date, isLast: true),
+            _DetailRow(label: AppStrings.labelDate, value: receipt.date, isLast: true),
           ],
         ),
       ),
@@ -269,8 +269,8 @@ class _StatusPill extends StatelessWidget {
   Widget build(BuildContext context) {
     final bg = isPaid ? AppColors.successGreen : AppColors.bohoRed;
     final label = isPaid
-        ? AppStrings.studentFeesPillPaid
-        : AppStrings.studentFeesPillPending;
+        ? AppStrings.instStatusPaid
+        : AppStrings.studentAssignmentsTabPending;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
@@ -303,7 +303,7 @@ class _ActionRow extends StatelessWidget {
           child: _ActionButton(
             label: isDownloading
                 ? AppStrings.studentAttachmentDownloadStarted
-                : AppStrings.studentReceiptDownload,
+                : AppStrings.studentAttachmentDownload,
             icon: Icons.download_rounded,
             isPrimary: false,
             isLoading: isDownloading,

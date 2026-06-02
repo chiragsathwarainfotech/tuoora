@@ -538,7 +538,7 @@ class _PendingBanner extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  AppStrings.studentAssignmentDetailPendingTitle,
+                  AppStrings.studentAssignmentsTabPending,
                   style: AppTextStyles.outfit(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,

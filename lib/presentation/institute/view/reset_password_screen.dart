@@ -1,4 +1,5 @@
 import 'package:tuoora/core/constants/app_images.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
@@ -109,7 +110,7 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
                                 Obx(
                                   () => _buildTextField(
                                     controller: controller.passwordController,
-                                    hint: 'Enter new password',
+                                    hint: AppStrings.hintEnterNewPassword,
                                     prefixIcon: Icons.lock_outline,
                                     obscureText:
                                         controller.obscurePassword.value,

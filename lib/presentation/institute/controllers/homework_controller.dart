@@ -1,4 +1,5 @@
 import 'package:tuoora/presentation/institute/models/batch_model.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/presentation/institute/models/homework_model.dart';
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
 import 'package:flutter/material.dart';
@@ -148,7 +149,7 @@ class HomeworkController extends GetxController {
 
       if (e is ValidationException) {
         _handleValidationErrors(e.errors);
-        AppSnackBar.error('Please correct the highlighted errors');
+        AppSnackBar.error(AppStrings.validationErrorsBelow);
       } else {
         AppSnackBar.error('Failed to create homework: ${e.toString()}');
       }

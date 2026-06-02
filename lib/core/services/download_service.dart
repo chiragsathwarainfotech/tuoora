@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
 
@@ -32,7 +33,7 @@ class DownloadService extends GetxService {
 
       AppSnackBar.success(successMessage ?? 'File downloaded');
     } catch (e) {
-      AppSnackBar.error('Download failed');
+      AppSnackBar.error(AppStrings.downloadFailed);
     }
   }
 }

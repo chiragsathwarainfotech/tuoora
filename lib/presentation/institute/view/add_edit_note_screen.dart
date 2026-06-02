@@ -83,7 +83,7 @@ class AddEditNoteScreen extends GetView<NotesController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Category',
+          AppStrings.labelCategory,
           style: AppTextStyles.outfit(
             fontSize: 14,
             fontWeight: FontWeight.w600,

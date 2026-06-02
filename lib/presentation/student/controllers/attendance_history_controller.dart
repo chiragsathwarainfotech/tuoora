@@ -1,4 +1,5 @@
 import 'package:tuoora/config/app_routes.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/core/api/api_client.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
@@ -33,7 +34,7 @@ class AttendanceHistoryController extends GetxController {
       );
       attendanceData.value = data;
     } catch (e) {
-      AppSnackBar.error('Failed to load attendance');
+      AppSnackBar.error(AppStrings.errFailedLoadAttendance);
     } finally {
       isLoading.value = false;
     }

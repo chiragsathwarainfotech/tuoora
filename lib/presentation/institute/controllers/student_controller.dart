@@ -275,7 +275,7 @@ class InstituteStudentController extends GetxController {
                 color: AppColors.primaryBrand,
               ),
               title: Text(
-                'Camera',
+                AppStrings.labelCamera,
                 style: AppTextStyles.outfit(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -294,7 +294,7 @@ class InstituteStudentController extends GetxController {
                 color: AppColors.primaryBrand,
               ),
               title: Text(
-                'Gallery',
+                AppStrings.labelGallery,
                 style: AppTextStyles.outfit(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -364,7 +364,7 @@ class InstituteStudentController extends GetxController {
     } catch (e) {
       if (e is ValidationException) {
         _handleValidationErrors(e.errors);
-        AppSnackBar.error('Please correct the highlighted errors');
+        AppSnackBar.error(AppStrings.validationErrorsBelow);
       } else {
         AppSnackBar.error('Failed to save student: $e');
       }

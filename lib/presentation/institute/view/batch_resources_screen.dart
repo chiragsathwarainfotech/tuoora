@@ -207,9 +207,9 @@ class BatchResourcesScreen extends StatelessWidget {
           ),
           AppSpacing.v16,
           AppInputField(
-            label: AppStrings.instResourceDescriptionLabel,
+            label: AppStrings.instBatchDescLabel,
             controller: controller.descriptionController,
-            hint: 'Enter description',
+            hint: AppStrings.hintEnterDescription,
             maxLines: 3,
           ),
           AppSpacing.v24,

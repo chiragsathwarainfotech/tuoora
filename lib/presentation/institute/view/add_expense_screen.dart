@@ -1,4 +1,5 @@
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
@@ -71,7 +72,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
         Obx(
           () => AppInputField(
             label: 'Description',
-            hint: 'Enter description',
+            hint: AppStrings.hintEnterDescription,
             icon: Icons.description_rounded,
             controller: controller.descriptionController,
             errorText: controller.descriptionError.value,
@@ -92,7 +93,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Category',
+          AppStrings.labelCategory,
           style: AppTextStyles.outfit(
             fontSize: 14,
             fontWeight: FontWeight.w600,
@@ -118,7 +119,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
                     value: controller.selectedCategory.value,
                     isExpanded: true,
                     hint: Text(
-                      'Select Category',
+                      AppStrings.hintSelectCategory,
                       style: AppTextStyles.outfit(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -172,7 +173,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Date',
+          AppStrings.labelDate,
           style: AppTextStyles.outfit(
             fontSize: 14,
             fontWeight: FontWeight.w600,

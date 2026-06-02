@@ -1,4 +1,5 @@
 import 'dart:io' as io;
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'dart:typed_data';
 
 import 'package:get/get.dart';
@@ -68,7 +69,7 @@ class AttachmentPreviewController extends GetxController {
 
       AppSnackBar.success(
         'Please wait, your file is being downloaded...',
-        title: 'Downloading',
+        title: AppStrings.labelDownloading,
       );
 
       final downloadService = Get.find<DownloadService>();

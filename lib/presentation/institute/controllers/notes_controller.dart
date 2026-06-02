@@ -1,4 +1,5 @@
 import 'package:tuoora/core/utils/validation_utils.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/data/models/note_model.dart';
 import 'package:tuoora/data/repositories_impl/notes_repository_impl.dart';
@@ -179,7 +180,7 @@ class NotesController extends GetxController {
     } catch (e) {
       if (e is ValidationException) {
         _handleValidationErrors(e.errors);
-        AppSnackBar.error('Please correct the highlighted errors');
+        AppSnackBar.error(AppStrings.validationErrorsBelow);
       } else {
         AppSnackBar.error('Failed to save note: $e');
       }

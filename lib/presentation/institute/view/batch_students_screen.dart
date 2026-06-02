@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/utils/subscription_guard.dart';
@@ -304,7 +305,7 @@ class BatchStudentsScreen extends StatelessWidget {
       title: 'Remove Student',
       description:
           'Are you sure you want to remove\n${bs.student.name} from this batch?',
-      confirmText: 'Remove',
+      confirmText: AppStrings.labelRemove,
       onConfirm: () => controller.removeStudentFromBatch(bs.student.id),
     );
   }

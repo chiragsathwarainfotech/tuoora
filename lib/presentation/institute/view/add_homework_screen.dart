@@ -42,7 +42,7 @@ class AddHomeworkScreen extends StatelessWidget {
                       () => AppInputField(
                         label: AppStrings.instHomeworkSubjectLabel,
                         controller: controller.titleController,
-                        hint: AppStrings.instHomeworkSubjectHint,
+                        hint: AppStrings.instBatchSubjectHint,
                         errorText: controller.titleError.value,
                       ),
                     ),
@@ -215,7 +215,7 @@ class AddHomeworkScreen extends StatelessWidget {
                       onPressed: controller.removeAttachment,
                       icon: const AppActionIcon(asset: AppImages.icDelete),
                       label: Text(
-                        'Remove',
+                        AppStrings.labelRemove,
                         style: AppTextStyles.outfit(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,

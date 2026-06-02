@@ -135,7 +135,7 @@ class BatchStudentsScreen extends StatelessWidget {
                     fallbackBgColor: [
                       AppColors.warningBg,
                       AppColors.successBg,
-                      AppColors.greenBg,
+                      AppColors.successBg,
                     ][index % 3],
                   ),
                 ),

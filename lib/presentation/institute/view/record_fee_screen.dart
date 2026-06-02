@@ -195,7 +195,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
           () => Container(
             padding: AppSpacing.all16,
             decoration: BoxDecoration(
-              color: AppColors.paleSilver,
+              color: AppColors.fieldBg,
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
                 color: controller.amountError.value != null
@@ -259,7 +259,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
           child: Container(
             padding: AppSpacing.all16,
             decoration: BoxDecoration(
-              color: AppColors.paleSilver,
+              color: AppColors.fieldBg,
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
@@ -325,7 +325,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
               : AppColors.white,
           borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           border: Border.all(
-            color: isActive ? AppColors.primaryBrand : AppColors.paleSilver,
+            color: isActive ? AppColors.primaryBrand : AppColors.fieldBg,
             width: 1.5,
           ),
         ),

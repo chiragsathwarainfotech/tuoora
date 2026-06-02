@@ -78,7 +78,7 @@ class SubscriptionRenewalScreen extends GetView<SubscriptionRenewalController> {
     return Container(
       padding: AppSpacing.all4,
       decoration: BoxDecoration(
-        color: AppColors.paleSilver,
+        color: AppColors.fieldBg,
         borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       ),
       child: Obx(
@@ -157,7 +157,7 @@ class SubscriptionRenewalScreen extends GetView<SubscriptionRenewalController> {
               aspectRatio: 1,
               child: Container(
                 decoration: BoxDecoration(
-                  color: AppColors.paleSilver,
+                  color: AppColors.fieldBg,
                   borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
                 ),
                 child: qrUrl != null && qrUrl.isNotEmpty

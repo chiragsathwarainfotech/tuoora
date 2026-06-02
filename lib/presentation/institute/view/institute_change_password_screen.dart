@@ -128,7 +128,7 @@ class InstituteChangePasswordScreen extends GetView<SecurityController> {
           () => Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             decoration: BoxDecoration(
-              color: AppColors.paleSilver,
+              color: AppColors.fieldBg,
               borderRadius: BorderRadius.circular(12),
               border: errorText != null
                   ? Border.all(color: Colors.redAccent, width: 1.5)

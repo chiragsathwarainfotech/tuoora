@@ -125,7 +125,7 @@ class AddEditNoteScreen extends GetView<NotesController> {
                             decoration: BoxDecoration(
                               color: isSelected
                                   ? catColor
-                                  : AppColors.paleSilver.withValues(alpha: 0.5),
+                                  : AppColors.fieldBg.withValues(alpha: 0.5),
                               borderRadius: BorderRadius.circular(
                                 AppSpacing.cardRadius,
                               ),

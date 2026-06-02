@@ -106,7 +106,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
           child: Container(
             padding: AppSpacing.cardPadding,
             decoration: BoxDecoration(
-              color: AppColors.paleSilver,
+              color: AppColors.fieldBg,
               borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
             ),
             child: Row(
@@ -265,7 +265,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
     return Container(
       height: 36,
       decoration: BoxDecoration(
-        color: AppColors.paleSilver,
+        color: AppColors.fieldBg,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(

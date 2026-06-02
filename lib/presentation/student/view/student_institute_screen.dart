@@ -363,12 +363,12 @@ class MapBackgroundPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final roadPaint = Paint()
-      ..color = Colors.white
+      ..color = AppColors.white
       ..strokeWidth = 6
       ..style = PaintingStyle.stroke;
 
     final blockPaint = Paint()
-      ..color = AppColors.greenBg
+      ..color = AppColors.successBg
       ..style = PaintingStyle.fill;
 
     // Draw horizontal road

@@ -113,7 +113,7 @@ class SubmitPaymentProofScreen
             child: Container(
               height: AppSpacing.s140,
               decoration: BoxDecoration(
-                color: AppColors.paleSilver,
+                color: AppColors.fieldBg,
                 borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
                 border: Border.all(
                   color: hasError ? AppColors.errorRed : AppColors.borderGrey,

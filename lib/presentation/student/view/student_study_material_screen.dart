@@ -202,7 +202,7 @@ class StudentStudyMaterialScreen
         height: 140,
         padding: AppSpacing.cardPadding,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         ),
       ),

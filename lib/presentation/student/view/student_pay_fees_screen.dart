@@ -288,7 +288,7 @@ class _QrLikePainter extends CustomPainter {
   void _drawFinder(Canvas canvas, Paint paint, double x, double y, double c) {
     // 7x7 outer black, 5x5 inner white, 3x3 inner black.
     canvas.drawRect(Rect.fromLTWH(x, y, c * 7, c * 7), paint);
-    final inner = Paint()..color = Colors.white;
+    final inner = Paint()..color = AppColors.white;
     canvas.drawRect(Rect.fromLTWH(x + c, y + c, c * 5, c * 5), inner);
     canvas.drawRect(Rect.fromLTWH(x + 2 * c, y + 2 * c, c * 3, c * 3), paint);
   }

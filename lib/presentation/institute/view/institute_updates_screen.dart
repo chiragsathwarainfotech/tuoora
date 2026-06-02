@@ -75,7 +75,7 @@ class InstituteUpdatesScreen extends StatelessWidget {
                             break;
                           case UpdateCategory.Other:
                             iconBg = AppColors.warningBg;
-                            iconColor = AppColors.studentTomorrowPillText;
+                            iconColor = AppColors.orangeTag;
                             icon = Icons.campaign_rounded;
                             break;
                         }

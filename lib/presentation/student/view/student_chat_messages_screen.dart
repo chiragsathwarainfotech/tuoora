@@ -564,7 +564,7 @@ class _StudentChatMessagesScreenState extends State<StudentChatMessagesScreen> {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             decoration: BoxDecoration(
-              color: AppColors.paleSilver.withValues(alpha: 0.5),
+              color: AppColors.fieldBg.withValues(alpha: 0.5),
               borderRadius: BorderRadius.circular(24),
             ),
             child: Row(
@@ -596,7 +596,7 @@ class _StudentChatMessagesScreenState extends State<StudentChatMessagesScreen> {
           child: Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: AppColors.paleSilver.withValues(alpha: 0.5),
+              color: AppColors.fieldBg.withValues(alpha: 0.5),
               shape: BoxShape.circle,
             ),
             child: const Icon(
@@ -894,7 +894,7 @@ class _UploadProgressOverlay extends StatelessWidget {
               strokeWidth: 3,
               value: percent / 100,
               color: AppColors.white,
-              backgroundColor: Colors.white.withValues(alpha: 0.25),
+              backgroundColor: AppColors.white.withValues(alpha: 0.25),
             ),
           ),
           const SizedBox(height: 6),

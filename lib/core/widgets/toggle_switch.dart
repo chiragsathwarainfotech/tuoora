@@ -13,8 +13,8 @@ class ToggleSwitch extends StatelessWidget {
       value: value,
       onChanged: onChanged,
       activeThumbColor: AppColors.white,
-      activeTrackColor: AppColors.activeTracker,
-      inactiveTrackColor: AppColors.inActiveTracker,
+      activeTrackColor: AppColors.orangeTag,
+      inactiveTrackColor: AppColors.borderLightGray,
       inactiveThumbColor: AppColors.white,
       trackOutlineColor: WidgetStateProperty.all(Colors.transparent),
       thumbIcon: WidgetStateProperty.resolveWith<Icon?>((

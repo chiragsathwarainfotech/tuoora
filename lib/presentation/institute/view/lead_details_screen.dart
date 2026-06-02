@@ -411,7 +411,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           decoration: BoxDecoration(
-            color: AppColors.paleSilver,
+            color: AppColors.fieldBg,
             borderRadius: BorderRadius.circular(12),
             border: errorText != null
                 ? Border.all(color: Colors.redAccent, width: 1.5)

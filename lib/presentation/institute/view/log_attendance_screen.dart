@@ -159,7 +159,7 @@ class LogAttendanceScreen extends GetView<StaffController> {
     return Container(
       padding: AppSpacing.all12,
       decoration: BoxDecoration(
-        color: AppColors.paleSilver.withValues(alpha: 0.2),
+        color: AppColors.fieldBg.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         border: Border.all(
           color: AppColors.primaryBrand.withValues(alpha: 0.2),

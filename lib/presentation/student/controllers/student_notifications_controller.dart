@@ -144,7 +144,7 @@ class StudentNotificationsController extends GetxController {
         return const _NotificationVisuals(
           icon: Icons.menu_book_outlined,
           bg: AppColors.subjectPhysicsSoft,
-          fg: AppColors.darkGreen,
+          fg: AppColors.greenText,
         );
       case NotificationKind.dailyUpdate:
         return const _NotificationVisuals(

@@ -76,7 +76,7 @@ class BatchResourcesScreen extends StatelessWidget {
     AppColors.successGreen,
     AppColors.orangeTag,
     AppColors.subjectPhysics,
-    AppColors.greenLight,
+    AppColors.successGreen,
   ];
 
   Widget _buildResourceItem(ResourceModel resource, int index) {
@@ -233,7 +233,7 @@ class BatchResourcesScreen extends StatelessWidget {
             child: Container(
               padding: AppSpacing.all16,
               decoration: BoxDecoration(
-                color: AppColors.paleSilver,
+                color: AppColors.fieldBg,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
                   color: hasError ? Colors.redAccent : Colors.transparent,

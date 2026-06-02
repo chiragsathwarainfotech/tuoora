@@ -342,10 +342,10 @@ class _ActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = isPrimary ? AppColors.attachmentShareButton : AppColors.white;
+    final bg = isPrimary ? AppColors.textPrimary : AppColors.white;
     final fg = isPrimary ? AppColors.white : AppColors.textPrimary;
     final border = Border.all(
-      color: isPrimary ? AppColors.attachmentShareButton : AppColors.borderGrey,
+      color: isPrimary ? AppColors.textPrimary : AppColors.borderGrey,
     );
     return Material(
       color: bg,

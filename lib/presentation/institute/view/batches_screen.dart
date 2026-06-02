@@ -151,7 +151,7 @@ class _BatchesScreenState extends State<BatchesScreen> {
     AppColors.successGreen,
     AppColors.orangeTag,
     AppColors.subjectPhysics,
-    AppColors.greenLight,
+    AppColors.successGreen,
   ];
 
   Widget _buildBatchCard(BatchModel batch, int index) {

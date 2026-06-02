@@ -123,7 +123,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                 decoration: BoxDecoration(
                   color: isSelected
                       ? AppColors.primaryBrand
-                      : AppColors.paleSilver,
+                      : AppColors.fieldBg,
                   borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
                 ),
                 child: Text(
@@ -158,7 +158,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           decoration: BoxDecoration(
-            color: AppColors.paleSilver,
+            color: AppColors.fieldBg,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Obx(
@@ -211,7 +211,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: AppColors.paleSilver,
+                    color: AppColors.fieldBg,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: DropdownButtonHideUnderline(
@@ -280,7 +280,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.paleSilver,
+                        color: AppColors.fieldBg,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: DropdownButtonHideUnderline(

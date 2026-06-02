@@ -293,8 +293,8 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
         Container(
           decoration: BoxDecoration(
             color: enabled
-                ? AppColors.paleSilver
-                : AppColors.paleSilver.withValues(alpha: 0.5),
+                ? AppColors.fieldBg
+                : AppColors.fieldBg.withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
             border: hasError
                 ? Border.all(color: Colors.redAccent, width: 1.5)

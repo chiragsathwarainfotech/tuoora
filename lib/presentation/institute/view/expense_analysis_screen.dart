@@ -192,7 +192,7 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
       case 'Shopping':
         return AppColors.warningAmber;
       case 'Entertainment':
-        return AppColors.orangeDue;
+        return AppColors.warningAmber;
       case 'Food & Drink':
         return AppColors.successGreen;
       case 'Transport':

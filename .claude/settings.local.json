@@ -36,7 +36,21 @@
       "Bash(cd \"/c/Users/PANCHAM/StudioProjects/tuoora\" && /c/Users/PANCHAM/AppData/Local/Programs/Python/Python310/python tool/repeated_literals.py && head -120 tool/repeated_literals_report.txt)",
       "Read(//c/c/Users/PANCHAM/StudioProjects/tuoora/tool/**)",
       "Bash(/c/Users/PANCHAM/AppData/Local/Programs/Python/Python310/python tool/appstrings_extract.py)",
-      "PowerShell(flutter analyze lib 2>&1 | Where-Object { $_ -match '\\\\s+error\\\\s+-' } | ForEach-Object { $_.ToString\\(\\) })"
+      "PowerShell(flutter analyze lib 2>&1 | Where-Object { $_ -match '\\\\s+error\\\\s+-' } | ForEach-Object { $_.ToString\\(\\) })",
+      "Bash(/c/Users/PANCHAM/AppData/Local/Programs/Python/Python310/python tool/appcolors_audit.py)",
+      "Bash(/c/Users/PANCHAM/AppData/Local/Programs/Python/Python310/python tool/appcolors_cleanup.py)",
+      "Bash(/c/Users/PANCHAM/AppData/Local/Programs/Python/Python310/python tool/appcolors_scattered.py)",
+      "Bash(/c/Users/PANCHAM/AppData/Local/Programs/Python/Python310/python tool/appcolors_phase3.py)",
+      "Bash(cd \"/c/Users/PANCHAM/StudioProjects/tuoora\" && rm -rf tool)",
+      "Bash(/c/Users/PANCHAM/AppData/Local/Programs/Python/Python310/python tool/appimages_audit.py)",
+      "Bash(grep -rn \"institute_header\" lib/)",
+      "Bash(grep -rn \"logo_white\" lib/)",
+      "Bash(/c/Users/PANCHAM/AppData/Local/Programs/Python/Python310/python tool/appimages_cleanup.py)",
+      "Bash(/c/Users/PANCHAM/AppData/Local/Programs/Python/Python310/python tool/appcolors_closeness.py)",
+      "Bash(/c/Users/PANCHAM/AppData/Local/Programs/Python/Python310/python tool/appcolors_collapse_rare.py)"
+    ],
+    "additionalDirectories": [
+      "c:\\c\\Users\\PANCHAM\\StudioProjects\\tuoora"
     ]
   },
   "enabledPlugins": {

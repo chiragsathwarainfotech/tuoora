@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:tuoora/core/constants/app_colors.dart';
 class DottedBackground extends StatelessWidget {
   final Widget child;
 
@@ -19,7 +20,7 @@ class DottedBackground extends StatelessWidget {
 class _DottedBackgroundPainter extends CustomPainter {
   const _DottedBackgroundPainter();
 
-  static const Color _baseColor = Color(0xFFF8F9FB);
+  static const Color _baseColor = AppColors.surfaceBg;
   static const Color _dotColor = Color(0xFFB0B6C4);
   static const double _dotOpacity = 0.55;
   static const double _spacing = 28.0;

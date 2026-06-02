@@ -138,7 +138,7 @@ class _VideoPreview extends StatelessWidget {
       borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       child: Container(
         height: 220,
-        color: AppColors.attachmentShareButton,
+        color: AppColors.textPrimary,
         child: Stack(
           children: [
             Center(
@@ -151,7 +151,7 @@ class _VideoPreview extends StatelessWidget {
                 ),
                 child: const Icon(
                   Icons.play_arrow_rounded,
-                  color: AppColors.attachmentShareButton,
+                  color: AppColors.textPrimary,
                   size: 36,
                 ),
               ),

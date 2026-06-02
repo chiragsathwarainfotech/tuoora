@@ -85,7 +85,7 @@ class Assignment {
       [AppColors.bohoRed, AppColors.errorBg],
       [AppColors.subjectPhysics, AppColors.subjectPhysicsSoft],
       [AppColors.orangeTag, AppColors.primaryBrandLight],
-      [AppColors.greenLight, AppColors.successBg],
+      [AppColors.successGreen, AppColors.successBg],
     ];
 
     final id = json['id']?.toString() ?? '';

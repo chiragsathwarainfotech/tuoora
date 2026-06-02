@@ -74,7 +74,7 @@ class InputStyles {
       labelText: labelText,
       hintStyle: hintStyle(),
       filled: true,
-      fillColor: fillColor ?? AppColors.paleSilver,
+      fillColor: fillColor ?? AppColors.fieldBg,
       prefixIcon: prefixIcon,
       suffixIcon: suffixIcon,
       contentPadding: contentPadding,

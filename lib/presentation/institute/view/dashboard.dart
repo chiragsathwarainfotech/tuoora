@@ -196,7 +196,7 @@ class InstituteDashboard extends GetView<InstituteProfileController> {
     AppColors.bohoRed,
     AppColors.subjectPhysics,
     AppColors.orangeTag,
-    AppColors.greenLight,
+    AppColors.successGreen,
   ];
 
   Widget _buildGridItem(ModuleItem item, Color accent) {

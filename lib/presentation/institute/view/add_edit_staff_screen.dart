@@ -254,7 +254,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           decoration: BoxDecoration(
-            color: AppColors.paleSilver,
+            color: AppColors.fieldBg,
             borderRadius: BorderRadius.circular(12),
             border: errorText != null
                 ? Border.all(color: Colors.redAccent, width: 1.5)
@@ -316,7 +316,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 14),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primaryBrand : AppColors.paleSilver,
+          color: isSelected ? AppColors.primaryBrand : AppColors.fieldBg,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Center(

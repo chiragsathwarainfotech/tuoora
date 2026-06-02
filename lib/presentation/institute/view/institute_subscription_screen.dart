@@ -112,7 +112,7 @@ class InstituteSubscriptionScreen
                   : AppColors.errorBg.withValues(alpha: 0.30),
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
-                color: isActive ? AppColors.darkGreen : AppColors.error,
+                color: isActive ? AppColors.greenText : AppColors.error,
               ),
             ),
             child: Row(
@@ -152,7 +152,7 @@ class InstituteSubscriptionScreen
             ),
           ],
           AppSpacing.v16,
-          Divider(color: Colors.white.withValues(alpha: 0.2), height: 1),
+          Divider(color: AppColors.white.withValues(alpha: 0.2), height: 1),
           AppSpacing.v16,
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -480,7 +480,7 @@ class InstituteSubscriptionScreen
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: statusActive ? AppColors.greenBg : AppColors.fieldBg,
+                  color: statusActive ? AppColors.successBg : AppColors.fieldBg,
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(
@@ -489,7 +489,7 @@ class InstituteSubscriptionScreen
                     fontSize: 10,
                     fontWeight: FontWeight.w900,
                     color: statusActive
-                        ? AppColors.darkGreen
+                        ? AppColors.greenText
                         : AppColors.textTertiary,
                   ),
                 ),

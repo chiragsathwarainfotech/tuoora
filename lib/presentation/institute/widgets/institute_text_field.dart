@@ -39,7 +39,7 @@ class InstituteTextField extends StatelessWidget {
         AppSpacing.v8,
         Container(
           decoration: BoxDecoration(
-            color: AppColors.paleSilver,
+            color: AppColors.fieldBg,
             // Institute design system: 4dp corner radius on text fields.
             borderRadius: BorderRadius.circular(4),
           ),

@@ -415,12 +415,12 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
                 width: 34,
                 height: 34,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.white,
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
               const SizedBox(width: 12),
-              Container(width: 100, height: 16, color: Colors.white),
+              Container(width: 100, height: 16, color: AppColors.white),
             ],
           ),
           const SizedBox(height: 16),
@@ -428,13 +428,13 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.alphabetic,
             children: [
-              Container(width: 60, height: 28, color: Colors.white),
+              Container(width: 60, height: 28, color: AppColors.white),
               const SizedBox(width: 8),
-              Container(width: 120, height: 11, color: Colors.white),
+              Container(width: 120, height: 11, color: AppColors.white),
             ],
           ),
           const SizedBox(height: 24),
-          Container(height: 100, width: double.infinity, color: Colors.white),
+          Container(height: 100, width: double.infinity, color: AppColors.white),
         ],
       ),
     );
@@ -464,7 +464,7 @@ class LineChartPainter extends CustomPainter {
       ..style = PaintingStyle.fill;
 
     final pointInnerPaint = Paint()
-      ..color = Colors.white
+      ..color = AppColors.white
       ..style = PaintingStyle.fill;
 
     final path = Path();

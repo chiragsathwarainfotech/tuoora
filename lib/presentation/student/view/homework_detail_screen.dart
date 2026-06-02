@@ -132,7 +132,7 @@ class _StudentHomeworkDetailScreenState
                 Icons.access_time_rounded,
                 _isSubmitted ? 'Status: Submitted' : 'Status: Pending',
                 _isSubmitted
-                    ? AppColors.darkGreen.withValues(alpha: 0.8)
+                    ? AppColors.greenText.withValues(alpha: 0.8)
                     : AppColors.bohoRed.withValues(alpha: 0.8),
               ),
             ],

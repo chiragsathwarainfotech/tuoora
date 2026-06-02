@@ -113,7 +113,7 @@ class _BatchHomeworkScreenState extends State<BatchHomeworkScreen> {
     AppColors.successGreen,
     AppColors.orangeTag,
     AppColors.subjectPhysics,
-    AppColors.greenLight,
+    AppColors.successGreen,
   ];
 
   Widget _buildHomeworkItem(

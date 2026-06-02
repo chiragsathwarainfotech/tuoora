@@ -107,7 +107,7 @@ class BillingHistoryScreen extends StatelessWidget {
                   style: AppTextStyles.outfit(
                     fontSize: 10,
                     fontWeight: FontWeight.w900,
-                    color: AppColors.studentPresentText,
+                    color: AppColors.greenText,
                     letterSpacing: 0.5,
                   ),
                 ),

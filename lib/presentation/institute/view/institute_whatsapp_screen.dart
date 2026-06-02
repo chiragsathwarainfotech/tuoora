@@ -199,7 +199,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
     return Container(
       padding: AppSpacing.x16.add(AppSpacing.y2),
       decoration: BoxDecoration(
-        color: AppColors.paleSilver,
+        color: AppColors.fieldBg,
         borderRadius: BorderRadius.circular(AppSpacing.s12),
       ),
       child: TextField(

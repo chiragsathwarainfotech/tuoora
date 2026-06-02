@@ -187,7 +187,7 @@ class AddEditBatchScreen extends GetView<BatchController> {
               decoration: BoxDecoration(
                 color: isSelected
                     ? AppColors.primaryBrand
-                    : AppColors.paleSilver,
+                    : AppColors.fieldBg,
                 borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
               ),
               child: Text(

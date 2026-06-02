@@ -123,7 +123,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
                   gradient: LinearGradient(
                     colors: [
                       AppColors.instBrandOrange,
-                      AppColors.instBrandOrangeLight,
+                      AppColors.primaryBrand,
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,

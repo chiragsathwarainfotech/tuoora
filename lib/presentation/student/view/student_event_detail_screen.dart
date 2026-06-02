@@ -57,7 +57,7 @@ class StudentEventDetailScreen extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(AppSpacing.s12),
         gradient: const LinearGradient(
-          colors: [AppColors.turquoiseBlue, AppColors.surfieGreen],
+          colors: [AppColors.turquoiseBlue, AppColors.greenText],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -74,7 +74,7 @@ class StudentEventDetailScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.2),
+                  color: AppColors.white.withValues(alpha: 0.2),
                   width: 2,
                 ),
               ),
@@ -89,7 +89,7 @@ class StudentEventDetailScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.2),
+                  color: AppColors.white.withValues(alpha: 0.2),
                   width: 2,
                 ),
               ),
@@ -105,7 +105,7 @@ class StudentEventDetailScreen extends StatelessWidget {
                   vertical: 4,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.3),
+                  color: AppColors.white.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(AppSpacing.s16),
                 ),
                 child: Text(
@@ -113,7 +113,7 @@ class StudentEventDetailScreen extends StatelessWidget {
                   style: AppTextStyles.outfit(
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
-                    color: Colors.white,
+                    color: AppColors.white,
                   ),
                 ),
               ),
@@ -123,7 +123,7 @@ class StudentEventDetailScreen extends StatelessWidget {
                 style: AppTextStyles.outfit(
                   fontSize: 22,
                   fontWeight: FontWeight.w900,
-                  color: Colors.white,
+                  color: AppColors.white,
                 ),
               ),
               const SizedBox(height: 4),
@@ -132,7 +132,7 @@ class StudentEventDetailScreen extends StatelessWidget {
                 style: AppTextStyles.outfit(
                   fontSize: 12,
                   fontWeight: FontWeight.w400,
-                  color: Colors.white,
+                  color: AppColors.white,
                 ),
               ),
             ],

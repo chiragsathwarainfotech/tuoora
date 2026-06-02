@@ -108,7 +108,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 decoration: BoxDecoration(
-                  color: AppColors.paleSilver,
+                  color: AppColors.fieldBg,
                   borderRadius: BorderRadius.circular(InputStyles.borderRadius),
                   border: controller.categoryError.value != null
                       ? Border.all(color: Colors.redAccent, width: 1.5)
@@ -186,7 +186,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
           child: Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: AppColors.paleSilver,
+              color: AppColors.fieldBg,
               borderRadius: BorderRadius.circular(InputStyles.borderRadius),
             ),
             child: Row(
@@ -233,7 +233,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
         Container(
           padding: const EdgeInsets.all(4),
           decoration: BoxDecoration(
-            color: AppColors.paleSilver,
+            color: AppColors.fieldBg,
             borderRadius: BorderRadius.circular(InputStyles.borderRadius),
           ),
           child: Obx(
@@ -292,7 +292,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(vertical: 20),
           decoration: BoxDecoration(
-            color: AppColors.paleSilver,
+            color: AppColors.fieldBg,
             borderRadius: BorderRadius.circular(InputStyles.borderRadius),
             border: Border.all(
               color: AppColors.primaryBrand.withValues(alpha: 0.3),

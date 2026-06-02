@@ -158,7 +158,7 @@ class ExpensesScreen extends GetView<ExpenseController> {
   }
 
   Color _getIconColor(Color bgColor) {
-    if (bgColor == AppColors.successBg) return AppColors.activeTracker;
+    if (bgColor == AppColors.successBg) return AppColors.orangeTag;
     if (bgColor == AppColors.successBg) return AppColors.studentUpdateIconColor;
     if (bgColor == AppColors.successBg) return AppColors.subjectPhysics;
     if (bgColor == AppColors.successBg) return AppColors.greenText;

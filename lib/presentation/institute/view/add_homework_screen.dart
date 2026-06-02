@@ -90,7 +90,7 @@ class AddHomeworkScreen extends StatelessWidget {
           Container(
             padding: AppSpacing.all16,
             decoration: BoxDecoration(
-              color: AppColors.paleSilver,
+              color: AppColors.fieldBg,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
                 color: controller.dateError.value != null

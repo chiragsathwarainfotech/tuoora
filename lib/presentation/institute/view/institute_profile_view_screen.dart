@@ -76,9 +76,17 @@ class InstituteProfileViewScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        _buildHeader(controller, p),
-                        AppSpacing.v24,
-                        _buildInfoAndSettings(context, controller, p),
+                        _buildHeaderCard(p),
+                        AppSpacing.v16,
+                        _buildContactCard(p),
+                        AppSpacing.v16,
+                        _buildLocationCard(p),
+                        AppSpacing.v16,
+                        _buildAccountCard(),
+                        AppSpacing.v16,
+                        _buildSupportCard(),
+                        AppSpacing.v16,
+                        _buildLogoutCard(context, controller),
                         AppSpacing.v24,
                         const AppVersionLabel(),
                         AppSpacing.v24,
@@ -94,63 +102,103 @@ class InstituteProfileViewScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader(InstituteProfileController controller, var p) {
-    return Column(
-      children: [
-        Container(
-          width: 140,
-          height: 140,
-          decoration: BoxDecoration(
-            color: AppColors.primaryBrandLight,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: AppColors.fieldLabel),
-            image: p.logoUrl != null
-                ? DecorationImage(
-                    image: CachedNetworkImageProvider(p.logoUrl!),
-                    fit: BoxFit.cover,
-                  )
-                : null,
+  /// Shared card wrapper — white surface, 8 dp radius, 8 dp padding, soft
+  /// shadow. Matches the pattern used by `_buildFormSection` on the edit
+  /// profile screen and many other institute screens.
+  Widget _card({required Widget child}) {
+    return Container(
+      padding: AppSpacing.cardPadding,
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.02),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
           ),
-          child: p.logoUrl == null
-              ? const Center(
-                  child: Icon(
-                    Icons.school_rounded,
-                    size: 56,
-                    color: AppColors.primaryBrand,
-                  ),
-                )
-              : null,
-        ),
-        AppSpacing.v16,
-        Text(
-          p.instituteName ?? p.name,
-          textAlign: TextAlign.center,
-          style: AppTextStyles.outfit(
-            fontSize: 22,
-            fontWeight: FontWeight.w600,
-            color: AppColors.textPrimary,
-          ),
-        ),
-        AppSpacing.v4,
-        Text(
-          'Owner: ${p.name}',
-          textAlign: TextAlign.center,
-          style: AppTextStyles.outfit(
-            fontSize: 14,
-            color: AppColors.textSecondary,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ],
+        ],
+      ),
+      child: child,
     );
   }
 
-  Widget _buildInfoAndSettings(
-    BuildContext context,
-    InstituteProfileController controller,
-    var p,
-  ) {
-    String address = [
+  // -------------------------------------------------------------- header
+  Widget _buildHeaderCard(dynamic p) {
+    return _card(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        child: Column(
+          children: [
+            Container(
+              width: 120,
+              height: 120,
+              decoration: BoxDecoration(
+                color: AppColors.primaryBrandLight,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: AppColors.fieldBorder),
+                image: p.logoUrl != null
+                    ? DecorationImage(
+                        image: CachedNetworkImageProvider(p.logoUrl!),
+                        fit: BoxFit.cover,
+                      )
+                    : null,
+              ),
+              child: p.logoUrl == null
+                  ? const Center(
+                      child: Icon(
+                        Icons.school_rounded,
+                        size: 56,
+                        color: AppColors.primaryBrand,
+                      ),
+                    )
+                  : null,
+            ),
+            AppSpacing.v16,
+            Text(
+              p.instituteName ?? p.name,
+              textAlign: TextAlign.center,
+              style: AppTextStyles.outfit(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: AppColors.textPrimary,
+              ),
+            ),
+            AppSpacing.v4,
+            Text(
+              'Owner: ${p.name}',
+              textAlign: TextAlign.center,
+              style: AppTextStyles.outfit(
+                fontSize: 13,
+                color: AppColors.textSecondary,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ----------------------------------------------------- contact section
+  Widget _buildContactCard(dynamic p) {
+    return _card(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _cardSectionHeader('Contact Information', Icons.contact_page_rounded),
+          _buildInfoRow(Icons.email_outlined, 'Email', p.email),
+          _buildInfoRow(Icons.phone_outlined, 'Phone', p.phone),
+          if (p.website != null)
+            _buildInfoRow(Icons.language_rounded, 'Website', p.website!),
+        ],
+      ),
+    );
+  }
+
+  // ---------------------------------------------------- location section
+  Widget _buildLocationCard(dynamic p) {
+    final address = [
       p.address,
       p.addressLine2,
       p.city,
@@ -158,87 +206,115 @@ class InstituteProfileViewScreen extends StatelessWidget {
       p.pincode,
     ].where((e) => e != null && e.toString().isNotEmpty).join(', ');
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildSectionHeader('Contact Information', Icons.contact_page_rounded),
-        _buildInfoRow(Icons.email_outlined, 'Email', p.email),
-        _buildInfoRow(Icons.phone_outlined, 'Phone', p.phone),
-        if (p.website != null)
-          _buildInfoRow(Icons.language_rounded, 'Website', p.website!),
-        _buildDivider(),
-        _buildSectionHeader('Location Information', Icons.location_on_rounded),
-        _buildInfoRow(
-          Icons.map_outlined,
-          'Address',
-          address.isEmpty ? 'Not Provided' : address,
-        ),
-        _buildDivider(),
-        _buildSectionHeader('Account Information', Icons.settings_rounded),
-        _buildSettingsItem(
-          icon: Icons.lock_outline_rounded,
-          title: AppStrings.labelChangePassword,
-          subtitle: 'Update your login credentials',
-          onTap: () => Get.toNamed(AppRoutes.instituteChangePassword),
-        ),
-        _buildSettingsItem(
-          icon: Icons.workspace_premium_outlined,
-          title: 'Subscription',
-          subtitle: 'Manage your active plan',
-          onTap: () => Get.toNamed(AppRoutes.instituteSubscription),
-        ),
-        _buildSettingsItem(
-          icon: Icons.chat_bubble_outline_rounded,
-          title: 'WhatsApp Integration',
-          subtitle: 'Automate alerts via Meta API',
-          onTap: () => Get.toNamed(AppRoutes.instituteWhatsApp),
-        ),
-        _buildDivider(),
-        _buildSectionHeader('Support & Legal', Icons.info_outline_rounded),
-        _buildSettingsItem(
-          icon: Icons.description_outlined,
-          title: 'Terms & Conditions',
-          subtitle: 'Read our terms of service',
-          onTap: () => AppSnackBar.warning('Coming soon'),
-        ),
-        _buildSettingsItem(
-          icon: Icons.privacy_tip_outlined,
-          title: 'Privacy Policy',
-          subtitle: 'Learn how we protect your data',
-          onTap: () => AppSnackBar.warning('Coming soon'),
-        ),
-        _buildSettingsItem(
-          icon: Icons.help_center_outlined,
-          title: 'Help Center',
-          subtitle: 'Get assistance and FAQs',
-          onTap: () => AppSnackBar.warning('Coming soon'),
-        ),
-        _buildDivider(),
-        _buildSettingsItem(
-          icon: Icons.logout_rounded,
-          title: 'Logout',
-          subtitle: 'Sign out of your account',
-          iconColor: AppColors.bohoRed,
-          onTap: () => _showLogoutDialog(context, controller),
-        ),
-      ],
+    return _card(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _cardSectionHeader('Location Information', Icons.location_on_rounded),
+          _buildInfoRow(
+            Icons.map_outlined,
+            'Address',
+            address.isEmpty ? 'Not Provided' : address,
+          ),
+        ],
+      ),
     );
   }
 
-  Widget _buildSectionHeader(String title, IconData icon) {
+  // ----------------------------------------------------- account section
+  Widget _buildAccountCard() {
+    return _card(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _cardSectionHeader('Account Information', Icons.settings_rounded),
+          _buildSettingsItem(
+            icon: Icons.lock_outline_rounded,
+            title: AppStrings.labelChangePassword,
+            subtitle: 'Update your login credentials',
+            onTap: () => Get.toNamed(AppRoutes.instituteChangePassword),
+          ),
+          _buildSettingsItem(
+            icon: Icons.workspace_premium_outlined,
+            title: 'Subscription',
+            subtitle: 'Manage your active plan',
+            onTap: () => Get.toNamed(AppRoutes.instituteSubscription),
+          ),
+          _buildSettingsItem(
+            icon: Icons.chat_bubble_outline_rounded,
+            title: 'WhatsApp Integration',
+            subtitle: 'Automate alerts via Meta API',
+            onTap: () => Get.toNamed(AppRoutes.instituteWhatsApp),
+            isLast: true,
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ----------------------------------------------------- support section
+  Widget _buildSupportCard() {
+    return _card(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _cardSectionHeader('Support & Legal', Icons.info_outline_rounded),
+          _buildSettingsItem(
+            icon: Icons.description_outlined,
+            title: 'Terms & Conditions',
+            subtitle: 'Read our terms of service',
+            onTap: () => AppSnackBar.warning('Coming soon'),
+          ),
+          _buildSettingsItem(
+            icon: Icons.privacy_tip_outlined,
+            title: 'Privacy Policy',
+            subtitle: 'Learn how we protect your data',
+            onTap: () => AppSnackBar.warning('Coming soon'),
+          ),
+          _buildSettingsItem(
+            icon: Icons.help_center_outlined,
+            title: 'Help Center',
+            subtitle: 'Get assistance and FAQs',
+            onTap: () => AppSnackBar.warning('Coming soon'),
+            isLast: true,
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ------------------------------------------------------ logout section
+  Widget _buildLogoutCard(
+    BuildContext context,
+    InstituteProfileController controller,
+  ) {
+    return _card(
+      child: _buildSettingsItem(
+        icon: Icons.logout_rounded,
+        title: 'Logout',
+        subtitle: 'Sign out of your account',
+        iconColor: AppColors.bohoRed,
+        onTap: () => _showLogoutDialog(context, controller),
+        isLast: true,
+      ),
+    );
+  }
+
+  // ------------------------------------------------------------- shared
+  Widget _cardSectionHeader(String title, IconData icon) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 24, 0, 12),
+      padding: const EdgeInsets.fromLTRB(4, 4, 4, 12),
       child: Row(
         children: [
-          Icon(icon, size: 20, color: AppColors.fieldLabel),
-          AppSpacing.h12,
+          Icon(icon, size: 18, color: AppColors.primaryBrand),
+          AppSpacing.h8,
           Text(
             title,
             style: AppTextStyles.outfit(
-              fontSize: 14,
+              fontSize: 13,
               fontWeight: FontWeight.w600,
               color: AppColors.textPrimary,
-              letterSpacing: 1.1,
+              letterSpacing: 0.8,
             ),
           ),
         ],
@@ -246,22 +322,14 @@ class InstituteProfileViewScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDivider() {
-    return Divider(
-      height: 1,
-      thickness: 1,
-      color: AppColors.borderGrey.withValues(alpha: 0.5),
-    );
-  }
-
   Widget _buildInfoRow(IconData icon, String label, String value) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.fromLTRB(4, 6, 4, 6),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(icon, size: 18, color: AppColors.textMuted),
-          AppSpacing.h16,
+          AppSpacing.h12,
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -272,6 +340,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
                     fontSize: 10,
                     color: AppColors.textMuted,
                     fontWeight: FontWeight.w600,
+                    letterSpacing: 0.6,
                   ),
                 ),
                 AppSpacing.v2,
@@ -297,28 +366,30 @@ class InstituteProfileViewScreen extends StatelessWidget {
     required String subtitle,
     required VoidCallback onTap,
     Color? iconColor,
+    bool isLast = false,
   }) {
     return InkWell(
       onTap: onTap,
+      borderRadius: BorderRadius.circular(6),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12),
+        padding: EdgeInsets.fromLTRB(4, 8, 4, isLast ? 8 : 12),
         child: Row(
           children: [
             Container(
-              padding: AppSpacing.all10,
+              padding: AppSpacing.all8,
               decoration: BoxDecoration(
                 color: (iconColor ?? AppColors.primaryBrand).withValues(
                   alpha: 0.1,
                 ),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(10),
               ),
               child: Icon(
                 icon,
-                size: 20,
+                size: 18,
                 color: iconColor ?? AppColors.primaryBrand,
               ),
             ),
-            AppSpacing.h16,
+            AppSpacing.h12,
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

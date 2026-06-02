@@ -46,7 +46,7 @@ class StaffMainScreen extends GetView<StaffController> {
             unselectedItemColor: AppColors.textTertiary,
             selectedLabelStyle: AppTextStyles.outfit(
               fontSize: 12,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
             ),
             unselectedLabelStyle: AppTextStyles.outfit(
               fontSize: 12,

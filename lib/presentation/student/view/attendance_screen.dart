@@ -139,7 +139,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
                     data.status,
                     style: AppTextStyles.outfit(
                       fontSize: 16,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: isNotMarked
                           ? AppColors.textPrimary
                           : AppColors.successGreen,
@@ -201,7 +201,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
             '${controller.currentMonthName} ${controller.currentYear}',
             style: AppTextStyles.outfit(
               fontSize: 14,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.textPrimary,
             ),
           ),
@@ -268,7 +268,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
                       todayStr,
                       style: AppTextStyles.outfit(
                         fontSize: 11,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.orangeTag,
                       ),
                     );
@@ -281,7 +281,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
                     'GO TO TODAY',
                     style: AppTextStyles.outfit(
                       fontSize: 11,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.orangeTag,
                     ),
                   ),
@@ -330,7 +330,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
                       day,
                       style: AppTextStyles.outfit(
                         fontSize: 10,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.textTertiary,
                       ),
                     ),
@@ -422,7 +422,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
         day,
         style: AppTextStyles.outfit(
           fontSize: 12,
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w600,
           color: fg,
         ),
       ),
@@ -531,7 +531,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
                     '$percent%',
                     style: AppTextStyles.outfit(
                       fontSize: 13,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.successGreen,
                     ),
                   ),
@@ -547,7 +547,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
                     summary.label,
                     style: AppTextStyles.outfit(
                       fontSize: 10,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.textTertiary,
                     ),
                   ),

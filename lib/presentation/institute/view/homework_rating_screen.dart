@@ -98,7 +98,7 @@ class HomeworkRatingScreen extends StatelessWidget {
                 'BATCH ${hw.batchId}',
                 style: AppTextStyles.outfit(
                   fontSize: 10,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.primaryBrand,
                 ),
               ),
@@ -155,7 +155,7 @@ class HomeworkRatingScreen extends StatelessWidget {
                     AppStrings.instGradingProgressLabel,
                     style: AppTextStyles.outfit(
                       fontSize: 14,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.textSecondary,
                     ),
                   ),
@@ -237,7 +237,7 @@ class HomeworkRatingScreen extends StatelessWidget {
             label,
             style: AppTextStyles.outfit(
               fontSize: 14,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               color: isSelected ? AppColors.white : AppColors.textSecondary,
             ),
           ),
@@ -279,7 +279,7 @@ class HomeworkRatingScreen extends StatelessWidget {
                       sub.studentName,
                       style: AppTextStyles.outfit(
                         fontSize: 16,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.textPrimary,
                       ),
                     ),
@@ -336,7 +336,7 @@ class HomeworkRatingScreen extends StatelessWidget {
                         sub.score.toStringAsFixed(0),
                         style: AppTextStyles.outfit(
                           fontSize: 16,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w600,
                           color: AppColors.textPrimary,
                         ),
                       ),
@@ -411,7 +411,7 @@ class HomeworkRatingScreen extends StatelessWidget {
           initials,
           style: AppTextStyles.outfit(
             fontSize: 16,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.primaryBrand,
           ),
         ),

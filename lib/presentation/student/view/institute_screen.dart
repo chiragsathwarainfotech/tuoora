@@ -54,7 +54,7 @@ class InstituteScreen extends StatelessWidget {
               AppStrings.appName,
               style: AppTextStyles.outfit(
                 fontSize: 18,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 color: AppColors.primaryBrand,
               ),
             ),
@@ -201,7 +201,7 @@ class InstituteScreen extends StatelessWidget {
                   value,
                   style: AppTextStyles.outfit(
                     fontSize: 14,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.darkSlate,
                     height: 1.4,
                   ),
@@ -229,7 +229,7 @@ class InstituteScreen extends StatelessWidget {
             'Connect with Us',
             style: AppTextStyles.outfit(
               fontSize: 18,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.darkSlate,
             ),
           ),
@@ -299,7 +299,7 @@ class InstituteScreen extends StatelessWidget {
                 'Our Presence',
                 style: AppTextStyles.outfit(
                   fontSize: 18,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.white,
                 ),
               ),
@@ -330,7 +330,7 @@ class InstituteScreen extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: 'Manrope',
                     fontSize: 14,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.white,
                   ),
                 ),

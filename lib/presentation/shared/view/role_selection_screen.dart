@@ -107,7 +107,7 @@ class RoleSelectionScreen extends StatelessWidget {
                     title,
                     style: AppTextStyles.outfit(
                       fontSize: 17,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.textPrimary,
                     ),
                   ),

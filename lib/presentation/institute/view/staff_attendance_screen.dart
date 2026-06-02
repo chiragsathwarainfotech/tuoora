@@ -111,7 +111,7 @@ class StaffAttendanceScreen extends GetView<StaffController> {
           label,
           style: AppTextStyles.outfit(
             fontSize: 12,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w600,
             color: AppColors.textTertiary,
             letterSpacing: 1.0,
           ),
@@ -145,7 +145,7 @@ class StaffAttendanceScreen extends GetView<StaffController> {
                 ).format(controller.selectedAttendanceMonth.value),
                 style: AppTextStyles.outfit(
                   fontSize: 18,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
                 ),
               ),
@@ -246,7 +246,7 @@ class StaffAttendanceScreen extends GetView<StaffController> {
                     d,
                     style: AppTextStyles.outfit(
                       fontSize: 12,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.textMuted,
                     ),
                     textAlign: TextAlign.center,
@@ -287,7 +287,7 @@ class StaffAttendanceScreen extends GetView<StaffController> {
                 date,
                 style: AppTextStyles.outfit(
                   fontSize: 14,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
                 ),
               ),
@@ -342,7 +342,7 @@ class StaffAttendanceScreen extends GetView<StaffController> {
           label,
           style: AppTextStyles.outfit(
             fontSize: 10,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.textTertiary,
             letterSpacing: 0.5,
           ),
@@ -387,7 +387,7 @@ class StaffAttendanceScreen extends GetView<StaffController> {
                     : 'LATEST REMARKS',
                 style: AppTextStyles.outfit(
                   fontSize: 12,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textTertiary,
                   letterSpacing: 0.5,
                 ),

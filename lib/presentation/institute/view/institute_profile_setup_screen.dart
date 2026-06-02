@@ -76,16 +76,32 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                     AppSpacing.v32,
                     _buildSectionHeader('Finalize Profile'),
                     AppSpacing.v16,
-                    _buildTextField(
-                      label: 'Institute Name',
-                      controller: controller.instituteNameController,
-                      prefixIcon: Icons.business_outlined,
+                    Obx(
+                      () => _buildTextField(
+                        label: 'Institute Name',
+                        controller: controller.instituteNameController,
+                        prefixIcon: Icons.business_outlined,
+                        errorText: controller.instituteNameError.value,
+                        onChanged: (_) {
+                          if (controller.instituteNameError.value != null) {
+                            controller.instituteNameError.value = null;
+                          }
+                        },
+                      ),
                     ),
                     AppSpacing.v20,
-                    _buildTextField(
-                      label: 'Owner Name',
-                      controller: controller.instituteOwnerNameController,
-                      prefixIcon: Icons.person,
+                    Obx(
+                      () => _buildTextField(
+                        label: 'Owner Name',
+                        controller: controller.instituteOwnerNameController,
+                        prefixIcon: Icons.person,
+                        errorText: controller.ownerNameError.value,
+                        onChanged: (_) {
+                          if (controller.ownerNameError.value != null) {
+                            controller.ownerNameError.value = null;
+                          }
+                        },
+                      ),
                     ),
                     AppSpacing.v20,
                     _buildTextField(
@@ -95,21 +111,37 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                       enabled: false,
                     ),
                     AppSpacing.v20,
-                    _buildTextField(
-                      label: 'Phone Number',
-                      controller: controller.phoneController,
-                      hint: 'Enter number',
-                      prefixIcon: Icons.phone_outlined,
-                      keyboardType: TextInputType.phone,
+                    Obx(
+                      () => _buildTextField(
+                        label: 'Phone Number',
+                        controller: controller.phoneController,
+                        hint: 'Enter number',
+                        prefixIcon: Icons.phone_outlined,
+                        keyboardType: TextInputType.phone,
+                        errorText: controller.phoneError.value,
+                        onChanged: (_) {
+                          if (controller.phoneError.value != null) {
+                            controller.phoneError.value = null;
+                          }
+                        },
+                      ),
                     ),
                     AppSpacing.v32,
                     _buildSectionHeader('LOCATION DETAILS'),
                     AppSpacing.v16,
-                    _buildTextField(
-                      label: 'Address Line 1',
-                      controller: controller.addressLine1Controller,
-                      hint: 'Enter address line 1',
-                      prefixIcon: Icons.location_on_outlined,
+                    Obx(
+                      () => _buildTextField(
+                        label: 'Address Line 1',
+                        controller: controller.addressLine1Controller,
+                        hint: 'Enter address line 1',
+                        prefixIcon: Icons.location_on_outlined,
+                        errorText: controller.addressLine1Error.value,
+                        onChanged: (_) {
+                          if (controller.addressLine1Error.value != null) {
+                            controller.addressLine1Error.value = null;
+                          }
+                        },
+                      ),
                     ),
                     AppSpacing.v20,
                     _buildTextField(
@@ -122,20 +154,36 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                     Row(
                       children: [
                         Expanded(
-                          child: _buildTextField(
-                            label: 'City',
-                            controller: controller.cityController,
-                            hint: 'Enter city',
-                            prefixIcon: Icons.location_city_outlined,
+                          child: Obx(
+                            () => _buildTextField(
+                              label: 'City',
+                              controller: controller.cityController,
+                              hint: 'Enter city',
+                              prefixIcon: Icons.location_city_outlined,
+                              errorText: controller.cityError.value,
+                              onChanged: (_) {
+                                if (controller.cityError.value != null) {
+                                  controller.cityError.value = null;
+                                }
+                              },
+                            ),
                           ),
                         ),
                         AppSpacing.h16,
                         Expanded(
-                          child: _buildTextField(
-                            label: 'State',
-                            controller: controller.stateController,
-                            hint: 'Enter state',
-                            prefixIcon: Icons.map_outlined,
+                          child: Obx(
+                            () => _buildTextField(
+                              label: 'State',
+                              controller: controller.stateController,
+                              hint: 'Enter state',
+                              prefixIcon: Icons.map_outlined,
+                              errorText: controller.stateError.value,
+                              onChanged: (_) {
+                                if (controller.stateError.value != null) {
+                                  controller.stateError.value = null;
+                                }
+                              },
+                            ),
                           ),
                         ),
                       ],
@@ -144,21 +192,37 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                     Row(
                       children: [
                         Expanded(
-                          child: _buildTextField(
-                            label: 'Country',
-                            controller: controller.countryController,
-                            hint: 'Enter country',
-                            prefixIcon: Icons.public_outlined,
+                          child: Obx(
+                            () => _buildTextField(
+                              label: 'Country',
+                              controller: controller.countryController,
+                              hint: 'Enter country',
+                              prefixIcon: Icons.public_outlined,
+                              errorText: controller.countryError.value,
+                              onChanged: (_) {
+                                if (controller.countryError.value != null) {
+                                  controller.countryError.value = null;
+                                }
+                              },
+                            ),
                           ),
                         ),
                         AppSpacing.h16,
                         Expanded(
-                          child: _buildTextField(
-                            label: 'Pincode',
-                            controller: controller.pincodeController,
-                            hint: 'Enter pincode',
-                            prefixIcon: Icons.pin_drop_outlined,
-                            keyboardType: TextInputType.number,
+                          child: Obx(
+                            () => _buildTextField(
+                              label: 'Pincode',
+                              controller: controller.pincodeController,
+                              hint: 'Enter pincode',
+                              prefixIcon: Icons.pin_drop_outlined,
+                              keyboardType: TextInputType.number,
+                              errorText: controller.pincodeError.value,
+                              onChanged: (_) {
+                                if (controller.pincodeError.value != null) {
+                                  controller.pincodeError.value = null;
+                                }
+                              },
+                            ),
                           ),
                         ),
                       ],
@@ -195,7 +259,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
       title,
       style: AppTextStyles.outfit(
         fontSize: 12,
-        fontWeight: FontWeight.w800,
+        fontWeight: FontWeight.w600,
         color: AppColors.brandAppBarColor,
         letterSpacing: 1.2,
       ),
@@ -209,7 +273,10 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
     required IconData prefixIcon,
     bool enabled = true,
     TextInputType? keyboardType,
+    String? errorText,
+    ValueChanged<String>? onChanged,
   }) {
+    final hasError = errorText != null;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -217,7 +284,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
           label,
           style: AppTextStyles.outfit(
             fontSize: 12,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w600,
             color: AppColors.brandAppBarColor,
           ),
         ),
@@ -228,11 +295,15 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                 ? AppColors.paleSilver
                 : AppColors.paleSilver.withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+            border: hasError
+                ? Border.all(color: Colors.redAccent, width: 1.5)
+                : null,
           ),
           child: TextField(
             controller: controller,
             enabled: enabled,
             keyboardType: keyboardType,
+            onChanged: onChanged,
             style: AppTextStyles.outfit(
               fontSize: 14,
               color: enabled ? AppColors.textPrimary : AppColors.textMuted,
@@ -253,6 +324,20 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
             ),
           ),
         ),
+        if (hasError) ...[
+          const SizedBox(height: 4),
+          Padding(
+            padding: const EdgeInsets.only(left: 4),
+            child: Text(
+              errorText,
+              style: AppTextStyles.outfit(
+                fontSize: 12,
+                color: Colors.redAccent,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ],
       ],
     );
   }

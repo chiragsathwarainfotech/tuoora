@@ -91,7 +91,7 @@ class SubscriptionBanner extends StatelessWidget {
                   title,
                   style: AppTextStyles.outfit(
                     fontSize: 14,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: accent,
                   ),
                 ),
@@ -131,7 +131,7 @@ class SubscriptionBanner extends StatelessWidget {
                             action,
                             style: AppTextStyles.outfit(
                               fontSize: 13,
-                              fontWeight: FontWeight.w800,
+                              fontWeight: FontWeight.w600,
                               color: AppColors.white,
                             ),
                           ),

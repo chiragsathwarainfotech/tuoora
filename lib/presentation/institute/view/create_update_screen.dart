@@ -34,7 +34,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                           'Select Category',
                           style: AppTextStyles.outfit(
                             fontSize: 14,
-                            fontWeight: FontWeight.w800,
+                            fontWeight: FontWeight.w600,
                             color: AppColors.fieldLabel,
                           ),
                         ),
@@ -129,7 +129,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                   cat.name,
                   style: AppTextStyles.outfit(
                     fontSize: 14,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     color: isSelected ? AppColors.white : AppColors.textPrimary,
                   ),
                 ),
@@ -149,7 +149,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
           'Recipient',
           style: AppTextStyles.outfit(
             fontSize: 14,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.fieldLabel,
           ),
         ),
@@ -199,7 +199,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                   'Target Audience',
                   style: AppTextStyles.outfit(
                     fontSize: 14,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.fieldLabel,
                   ),
                 ),
@@ -252,7 +252,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                     'Select Batch',
                     style: AppTextStyles.outfit(
                       fontSize: 14,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.fieldLabel,
                     ),
                   ),
@@ -346,7 +346,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                   'Add Attachment (Image/PDF)',
                   style: AppTextStyles.outfit(
                     fontSize: 14,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.primaryBrand,
                   ),
                 ),

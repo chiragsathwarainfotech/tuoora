@@ -86,7 +86,7 @@ class BirthdayWishDialog extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: AppTextStyles.outfit(
                     fontSize: 18,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.white,
                     letterSpacing: 0.5,
                   ),
@@ -117,7 +117,7 @@ class BirthdayWishDialog extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: AppTextStyles.outfit(
                         fontSize: 16,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.primaryBrand,
                       ),
                     ),

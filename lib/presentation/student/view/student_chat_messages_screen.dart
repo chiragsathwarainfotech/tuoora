@@ -118,7 +118,7 @@ class _StudentChatMessagesScreenState extends State<StudentChatMessagesScreen> {
                     chat?.participantName ?? 'Chat',
                     style: AppTextStyles.outfit(
                       fontSize: 18,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.textPrimary,
                     ),
                   ),
@@ -290,7 +290,7 @@ class _StudentChatMessagesScreenState extends State<StudentChatMessagesScreen> {
             'Say Hello to !',
             style: AppTextStyles.outfit(
               fontSize: 18,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.textPrimary,
             ),
           ),
@@ -653,7 +653,7 @@ class _StudentChatMessagesScreenState extends State<StudentChatMessagesScreen> {
                   controller.recordTimeLabel,
                   style: AppTextStyles.outfit(
                     fontSize: 15,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                 ),
@@ -770,7 +770,7 @@ class _StudentChatMessagesScreenState extends State<StudentChatMessagesScreen> {
             label,
             style: AppTextStyles.outfit(
               fontSize: 10,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               color: AppColors.textSecondary,
             ),
           ),
@@ -901,7 +901,7 @@ class _UploadProgressOverlay extends StatelessWidget {
             '${percent.toInt()}%',
             style: AppTextStyles.outfit(
               fontSize: 11,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.white,
             ),
           ),

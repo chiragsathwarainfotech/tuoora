@@ -96,7 +96,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
       title,
       style: AppTextStyles.outfit(
         fontSize: 12,
-        fontWeight: FontWeight.w800,
+        fontWeight: FontWeight.w600,
         color: AppColors.textSecondary,
       ),
     );
@@ -147,7 +147,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
                       'Class ${header.standard} • ${header.subject} • Roll ${header.rollNo}',
                       style: AppTextStyles.outfit(
                         fontSize: 12,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.textPrimary,
                       ),
                     ),
@@ -299,7 +299,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
             label,
             style: AppTextStyles.outfit(
               fontSize: 10,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.textTertiary,
             ),
           ),
@@ -308,7 +308,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
             value,
             style: AppTextStyles.outfit(
               fontSize: 20,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: valueColor ?? AppColors.textPrimary,
               height: 1,
             ),
@@ -524,7 +524,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
             'Log out',
             style: AppTextStyles.outfit(
               fontSize: 14,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.error,
             ),
           ),

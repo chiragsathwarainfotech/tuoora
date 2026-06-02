@@ -238,7 +238,7 @@ class _DocumentPreview extends StatelessWidget {
                   _docHeadline(attachment.name),
                   style: AppTextStyles.outfit(
                     fontSize: 14,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                 ),
@@ -271,7 +271,7 @@ class _DocumentPreview extends StatelessWidget {
                 'PAGE 1 OF $pages',
                 style: AppTextStyles.outfit(
                   fontSize: 10,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textTertiary,
                   letterSpacing: 1.2,
                 ),
@@ -280,7 +280,7 @@ class _DocumentPreview extends StatelessWidget {
                 '${ext.isEmpty ? 'FILE' : ext} · ${attachment.sizeLabel}',
                 style: AppTextStyles.outfit(
                   fontSize: 10,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textTertiary,
                   letterSpacing: 1.2,
                 ),
@@ -340,7 +340,7 @@ class _AudioPreview extends StatelessWidget {
             duration,
             style: AppTextStyles.outfit(
               fontSize: 13,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.orangeTag,
             ),
           ),
@@ -409,7 +409,7 @@ class _FileInfoCard extends StatelessWidget {
                   attachment.name,
                   style: AppTextStyles.outfit(
                     fontSize: 13,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                   maxLines: 1,
@@ -557,7 +557,7 @@ class _ActionButton extends StatelessWidget {
                 label,
                 style: AppTextStyles.outfit(
                   fontSize: 13,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: fg,
                 ),
               ),

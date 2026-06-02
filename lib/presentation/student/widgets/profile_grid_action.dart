@@ -55,7 +55,7 @@ class ProfileGridAction extends StatelessWidget {
                   overflow: TextOverflow.fade,
                   style: AppTextStyles.outfit(
                     fontSize: 12,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                 ),

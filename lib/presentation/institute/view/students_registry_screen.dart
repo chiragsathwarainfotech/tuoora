@@ -200,7 +200,7 @@ class _StudentsRegistryScreenState extends State<StudentsRegistryScreen> {
                     name,
                     style: AppTextStyles.outfit(
                       fontSize: 16,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.textPrimary,
                     ),
                   ),
@@ -275,7 +275,7 @@ class _StudentsRegistryScreenState extends State<StudentsRegistryScreen> {
           initials,
           style: AppTextStyles.outfit(
             fontSize: 20,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.primaryBrand,
           ),
         ),

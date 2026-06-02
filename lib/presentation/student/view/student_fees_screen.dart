@@ -146,7 +146,7 @@ class _SummaryCard extends StatelessWidget {
                       '${DateTime.now().year} LEDGER',
                       style: AppTextStyles.outfit(
                         fontSize: 10,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.textTertiary,
                         letterSpacing: 1.2,
                       ),
@@ -191,7 +191,7 @@ class _SummaryCard extends StatelessWidget {
                 '₹${_formatThousands(summary.paidInRupees)}',
                 style: AppTextStyles.outfit(
                   fontSize: 11,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textSecondary,
                 ),
               ),
@@ -203,7 +203,7 @@ class _SummaryCard extends StatelessWidget {
                 '₹${_formatThousands(summary.pendingInRupees)}',
                 style: AppTextStyles.outfit(
                   fontSize: 11,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textSecondary,
                 ),
               ),
@@ -235,7 +235,7 @@ class _PaidProgressRing extends StatelessWidget {
                 '$percent%',
                 style: AppTextStyles.outfit(
                   fontSize: 13,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
                   height: 1,
                 ),
@@ -244,7 +244,7 @@ class _PaidProgressRing extends StatelessWidget {
                 AppStrings.studentFeesPaidPercent,
                 style: AppTextStyles.outfit(
                   fontSize: 8,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textTertiary,
                   letterSpacing: 1.0,
                 ),
@@ -380,7 +380,7 @@ class _PayNowButton extends StatelessWidget {
                 '${AppStrings.studentFeesPayNowPrefix}${_formatThousands(pendingAmount)} ${AppStrings.studentFeesPayNowSuffix}',
                 style: AppTextStyles.outfit(
                   fontSize: 14,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.white,
                 ),
               ),
@@ -428,7 +428,7 @@ class _StatementRow extends StatelessWidget {
                             text: statement.periodLabel,
                             style: AppTextStyles.outfit(
                               fontSize: 14,
-                              fontWeight: FontWeight.w800,
+                              fontWeight: FontWeight.w600,
                               color: AppColors.textPrimary,
                             ),
                           ),
@@ -467,7 +467,7 @@ class _StatementRow extends StatelessWidget {
                     '₹${_formatThousands(statement.amountInRupees)}',
                     style: AppTextStyles.outfit(
                       fontSize: 14,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.textPrimary,
                     ),
                   ),
@@ -524,7 +524,7 @@ class _StatusPill extends StatelessWidget {
         label,
         style: AppTextStyles.outfit(
           fontSize: 10,
-          fontWeight: FontWeight.w800,
+          fontWeight: FontWeight.w600,
           color: AppColors.white,
         ),
       ),

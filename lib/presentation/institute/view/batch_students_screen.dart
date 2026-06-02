@@ -156,7 +156,7 @@ class BatchStudentsScreen extends StatelessWidget {
                     '+${controller.assignedStudents.length - 3}',
                     style: AppTextStyles.outfit(
                       fontSize: 10,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.textSecondary,
                     ),
                   ),
@@ -265,7 +265,7 @@ class BatchStudentsScreen extends StatelessWidget {
                         bs.student.name,
                         style: AppTextStyles.outfit(
                           fontSize: 16,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w600,
                           color: AppColors.textPrimary,
                         ),
                       ),
@@ -349,7 +349,7 @@ class BatchStudentsScreen extends StatelessWidget {
           initials,
           style: AppTextStyles.outfit(
             fontSize: 18,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.primaryBrand,
           ),
         ),

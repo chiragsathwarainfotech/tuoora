@@ -110,7 +110,7 @@ class InstituteNotificationsScreen extends GetView<NotificationController> {
                       notification.title,
                       style: AppTextStyles.outfit(
                         fontSize: 18,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.darkSlate,
                         height: 1.2,
                       ),

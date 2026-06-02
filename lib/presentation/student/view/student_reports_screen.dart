@@ -85,7 +85,7 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
             text,
             style: AppTextStyles.outfit(
               fontSize: 13,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: isSelected ? AppColors.white : AppColors.textTertiary,
             ),
           ),
@@ -139,7 +139,7 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
                       'Attendance',
                       style: AppTextStyles.outfit(
                         fontSize: 14,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.textPrimary,
                       ),
                     ),
@@ -267,7 +267,7 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
                       'Assignments',
                       style: AppTextStyles.outfit(
                         fontSize: 14,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.textPrimary,
                       ),
                     ),

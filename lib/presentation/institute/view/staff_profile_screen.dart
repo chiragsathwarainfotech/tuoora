@@ -103,7 +103,7 @@ class StaffProfileScreen extends GetView<StaffController> {
                   staff.fullName,
                   style: AppTextStyles.outfit(
                     fontSize: 22,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                 ),
@@ -195,7 +195,7 @@ class StaffProfileScreen extends GetView<StaffController> {
               label,
               style: AppTextStyles.outfit(
                 fontSize: 11,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
                 color: AppColors.textTertiary,
                 letterSpacing: 0.5,
               ),
@@ -279,7 +279,7 @@ class StaffProfileScreen extends GetView<StaffController> {
               label,
               style: AppTextStyles.outfit(
                 fontSize: 16,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 color: isFilled ? AppColors.white : AppColors.primaryBrand,
               ),
             ),

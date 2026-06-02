@@ -50,7 +50,7 @@ class StudentAttachmentTile extends StatelessWidget {
                       attachment.name,
                       style: AppTextStyles.outfit(
                         fontSize: 13,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.textPrimary,
                       ),
                       maxLines: 1,

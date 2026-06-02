@@ -62,6 +62,22 @@ class SignupController extends GetxController {
   final canResend = false.obs;
   Timer? _timer;
 
+  /// Inline per-field error messages for the signup + OTP flows. Replaces
+  /// the old "Please fill in all fields" blanket snackbar so the user sees
+  /// which specific input is missing or invalid.
+  final instituteNameError = RxnString();
+  final ownerNameError = RxnString();
+  final emailError = RxnString();
+  final passwordError = RxnString();
+  final otpError = RxnString();
+  // Profile-setup screen fields (completeProfile flow).
+  final phoneError = RxnString();
+  final addressLine1Error = RxnString();
+  final cityError = RxnString();
+  final stateError = RxnString();
+  final countryError = RxnString();
+  final pincodeError = RxnString();
+
   final selectedLogoPath = Rxn<String>();
   final _picker = ImagePicker();
 
@@ -83,7 +99,7 @@ class SignupController extends GetxController {
               'Select Logo Source',
               style: AppTextStyles.outfit(
                 fontSize: 18,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 color: AppColors.textPrimary,
               ),
             ),
@@ -104,7 +120,7 @@ class SignupController extends GetxController {
                 'Camera',
                 style: AppTextStyles.outfit(
                   fontSize: 16,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
                 ),
               ),
@@ -127,7 +143,7 @@ class SignupController extends GetxController {
                 'Gallery',
                 style: AppTextStyles.outfit(
                   fontSize: 16,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
                 ),
               ),
@@ -161,22 +177,28 @@ class SignupController extends GetxController {
     final instituteName = instituteNameController.text.trim();
     final ownerName = instituteOwnerNameController.text.trim();
 
-    if (instituteName.isEmpty ||
-        ownerName.isEmpty ||
-        email.isEmpty ||
-        password.isEmpty) {
-      AppSnackBar.error('Please fill in all fields');
+    // Per-field validation — each error renders under its own input.
+    instituteNameError.value = instituteName.isEmpty
+        ? 'Institute name is required'
+        : null;
+    ownerNameError.value = ownerName.isEmpty ? 'Owner name is required' : null;
+    emailError.value = email.isEmpty ? 'Email is required' : null;
+    passwordError.value = password.isEmpty ? 'Password is required' : null;
+    if (instituteNameError.value != null ||
+        ownerNameError.value != null ||
+        emailError.value != null ||
+        passwordError.value != null) {
       return;
     }
 
     if (!GetUtils.isEmail(email)) {
-      AppSnackBar.error('Please enter a valid email');
+      emailError.value = 'Enter a valid email';
       return;
     }
 
-    final passwordError = ValidationUtils.validatePassword(password);
-    if (passwordError != null) {
-      AppSnackBar.error(passwordError, title: 'Invalid Password');
+    final pwdValidation = ValidationUtils.validatePassword(password);
+    if (pwdValidation != null) {
+      passwordError.value = pwdValidation;
       return;
     }
 
@@ -208,9 +230,10 @@ class SignupController extends GetxController {
     final email = emailController.text.trim();
 
     if (otp.isEmpty) {
-      AppSnackBar.error('Please enter OTP');
+      otpError.value = 'OTP is required';
       return;
     }
+    otpError.value = null;
 
     isLoading.value = true;
     try {
@@ -246,15 +269,39 @@ class SignupController extends GetxController {
   }
 
   Future<void> completeProfile() async {
-    if (instituteOwnerNameController.text.isEmpty ||
-        instituteNameController.text.isEmpty ||
-        phoneController.text.isEmpty ||
-        addressLine1Controller.text.isEmpty ||
-        cityController.text.isEmpty ||
-        stateController.text.isEmpty ||
-        countryController.text.isEmpty ||
-        pincodeController.text.isEmpty) {
-      AppSnackBar.error('Please fill in all required fields');
+    // Per-field validation — each error renders under its own input.
+    ownerNameError.value = instituteOwnerNameController.text.trim().isEmpty
+        ? 'Owner name is required'
+        : null;
+    instituteNameError.value = instituteNameController.text.trim().isEmpty
+        ? 'Institute name is required'
+        : null;
+    phoneError.value = phoneController.text.trim().isEmpty
+        ? 'Phone number is required'
+        : null;
+    addressLine1Error.value = addressLine1Controller.text.trim().isEmpty
+        ? 'Address is required'
+        : null;
+    cityError.value = cityController.text.trim().isEmpty
+        ? 'City is required'
+        : null;
+    stateError.value = stateController.text.trim().isEmpty
+        ? 'State is required'
+        : null;
+    countryError.value = countryController.text.trim().isEmpty
+        ? 'Country is required'
+        : null;
+    pincodeError.value = pincodeController.text.trim().isEmpty
+        ? 'Pincode is required'
+        : null;
+    if (ownerNameError.value != null ||
+        instituteNameError.value != null ||
+        phoneError.value != null ||
+        addressLine1Error.value != null ||
+        cityError.value != null ||
+        stateError.value != null ||
+        countryError.value != null ||
+        pincodeError.value != null) {
       return;
     }
 

@@ -254,7 +254,7 @@ class ChatAttachmentView extends StatelessWidget {
                 '${(progress * 100).clamp(0, 100).round()}',
                 style: AppTextStyles.outfit(
                   fontSize: onDark ? 11 : 9,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: color,
                 ),
               ),

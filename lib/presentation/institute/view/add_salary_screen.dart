@@ -185,7 +185,7 @@ class _AddSalaryScreenState extends State<AddSalaryScreen> {
                   labelSpacing: 0,
                   textStyle: AppTextStyles.outfit(
                     fontSize: 14,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                 ),
@@ -273,7 +273,7 @@ class _AddSalaryScreenState extends State<AddSalaryScreen> {
             label,
             style: AppTextStyles.outfit(
               fontSize: 16,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               color: isSelected ? color : AppColors.textTertiary,
             ),
           ),
@@ -306,7 +306,7 @@ class _AddSalaryScreenState extends State<AddSalaryScreen> {
                     'Total Disbursement',
                     style: AppTextStyles.outfit(
                       fontSize: 16,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.textPrimary,
                     ),
                   ),
@@ -314,7 +314,7 @@ class _AddSalaryScreenState extends State<AddSalaryScreen> {
                     '₹$amount',
                     style: AppTextStyles.outfit(
                       fontSize: 22,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.primaryBrand,
                     ),
                   ),

@@ -103,7 +103,7 @@ class InstituteDashboard extends GetView<InstituteProfileController> {
                                   : 'I',
                               style: AppTextStyles.outfit(
                                 fontSize: 20,
-                                fontWeight: FontWeight.w800,
+                                fontWeight: FontWeight.w600,
                                 color: AppColors.primaryBrand,
                               ),
                             ),
@@ -230,7 +230,7 @@ class InstituteDashboard extends GetView<InstituteProfileController> {
               textAlign: TextAlign.center,
               style: AppTextStyles.outfit(
                 fontSize: 16,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
                 color: AppColors.textPrimary,
               ),
             ),

@@ -62,7 +62,7 @@ class HomeworkTile extends StatelessWidget {
                     title,
                     style: AppTextStyles.outfit(
                       fontSize: 15,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.textPrimary,
                     ),
                   ),
@@ -85,7 +85,7 @@ class HomeworkTile extends StatelessWidget {
                   dueDate,
                   style: AppTextStyles.outfit(
                     fontSize: 12,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                 ),
@@ -95,7 +95,7 @@ class HomeworkTile extends StatelessWidget {
                     status!,
                     style: AppTextStyles.outfit(
                       fontSize: 10,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.primaryBrand,
                     ),
                   ),

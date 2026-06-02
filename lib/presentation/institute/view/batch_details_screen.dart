@@ -246,7 +246,7 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
           AppStrings.instCourseManagementHeader,
           style: AppTextStyles.outfit(
             fontSize: 20,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.textPrimary,
           ),
         ),
@@ -319,7 +319,7 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
                 textAlign: TextAlign.center,
                 style: AppTextStyles.outfit(
                   fontSize: 16,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
                 ),
               ),

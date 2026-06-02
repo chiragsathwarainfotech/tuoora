@@ -21,6 +21,12 @@ class LoginController extends GetxController {
   final obscurePassword = true.obs;
   final stayAuthenticated = false.obs;
 
+  /// Inline per-field error messages rendered under each input. Replaces
+  /// the old "Please fill in all fields" snackbar — a single shared toast
+  /// can't point a finger at which field was wrong.
+  final emailError = RxnString();
+  final passwordError = RxnString();
+
   /// Tracks the role the login screen was opened for (read from
   /// [Get.arguments]). Drives per-role Remember Me prefill so an
   /// institute's credentials never leak into a student login attempt.
@@ -35,10 +41,11 @@ class LoginController extends GetxController {
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
 
-    if (email.isEmpty || password.isEmpty) {
-      AppSnackBar.error('Please fill in all fields');
-      return;
-    }
+    // Inline per-field validation — both messages render under their
+    // respective inputs so the user immediately sees which one's missing.
+    emailError.value = email.isEmpty ? 'Email is required' : null;
+    passwordError.value = password.isEmpty ? 'Password is required' : null;
+    if (emailError.value != null || passwordError.value != null) return;
 
     isLoading.value = true;
     try {
@@ -108,6 +115,8 @@ class LoginController extends GetxController {
     // any prefill left in the field from the previous role.
     emailController.clear();
     passwordController.clear();
+    emailError.value = null;
+    passwordError.value = null;
     stayAuthenticated.value = false;
 
     if (rememberedEmail != null) {

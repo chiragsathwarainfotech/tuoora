@@ -144,7 +144,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                 'WEEKLY GOAL',
                 style: AppTextStyles.outfit(
                   fontSize: 10,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.primaryBrand,
                   letterSpacing: 1.0,
                 ),
@@ -153,7 +153,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                 '68%',
                 style: AppTextStyles.outfit(
                   fontSize: 10,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
                 ),
               ),
@@ -265,7 +265,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                   'MATHEMATICS',
                   style: AppTextStyles.outfit(
                     fontSize: 9,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.white,
                     letterSpacing: 1.0,
                   ),
@@ -292,7 +292,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                       'DUE TODAY',
                       style: AppTextStyles.outfit(
                         fontSize: 9,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.error,
                       ),
                     ),
@@ -316,7 +316,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
             'Advanced Calculus:\nVolume Integrals',
             style: AppTextStyles.outfit(
               fontSize: 22,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.white,
               height: 1.2,
             ),
@@ -367,7 +367,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                   '24 students submitted',
                   style: AppTextStyles.outfit(
                     fontSize: 11,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.white,
                   ),
                 ),
@@ -387,7 +387,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                     'Open Task',
                     style: AppTextStyles.outfit(
                       fontSize: 14,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.primaryBrand,
                     ),
                   ),
@@ -436,7 +436,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                 subject,
                 style: AppTextStyles.outfit(
                   fontSize: 10,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.error,
                   letterSpacing: 1.0,
                 ),
@@ -448,7 +448,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                     'DUE DATE',
                     style: AppTextStyles.outfit(
                       fontSize: 8,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.textTertiary,
                       letterSpacing: 0.5,
                     ),
@@ -457,7 +457,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                     dueDate,
                     style: AppTextStyles.outfit(
                       fontSize: 13,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.textPrimary,
                     ),
                   ),
@@ -470,7 +470,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
             title,
             style: AppTextStyles.outfit(
               fontSize: 17,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.darkSlate,
               height: 1.2,
             ),
@@ -526,7 +526,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                         isDeadlineStyle ? 'DEADLINE' : 'STATUS',
                         style: AppTextStyles.outfit(
                           fontSize: 9,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w600,
                           color: AppColors.textMuted,
                           letterSpacing: 0.5,
                         ),
@@ -535,7 +535,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                         status,
                         style: AppTextStyles.outfit(
                           fontSize: 12,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w600,
                           color: isDeadlineStyle
                               ? AppColors.textPrimary
                               : AppColors.primaryBrand,
@@ -564,7 +564,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                   buttonLabel,
                   style: AppTextStyles.outfit(
                     fontSize: 13,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: isActive ? AppColors.white : AppColors.primaryBrand,
                   ),
                 ),
@@ -603,7 +603,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
             'Preparation Guide',
             style: AppTextStyles.outfit(
               fontSize: 20,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.textPrimary,
             ),
           ),
@@ -631,7 +631,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                 'Download PDF',
                 style: AppTextStyles.outfit(
                   fontSize: 13,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.primaryBrand,
                 ),
               ),

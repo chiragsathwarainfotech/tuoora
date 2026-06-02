@@ -156,7 +156,7 @@ class AddEditBatchScreen extends GetView<BatchController> {
               AppStrings.instChangeBtn,
               style: AppTextStyles.outfit(
                 fontSize: 14,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
                 color: AppColors.fieldLabel,
               ),
             ),
@@ -194,7 +194,7 @@ class AddEditBatchScreen extends GetView<BatchController> {
                 day,
                 style: AppTextStyles.outfit(
                   fontSize: 14,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: isSelected ? AppColors.white : AppColors.textSecondary,
                 ),
               ),
@@ -213,7 +213,7 @@ class AddEditBatchScreen extends GetView<BatchController> {
           AppStrings.instBatchAssignedStaffLabel,
           style: AppTextStyles.outfit(
             fontSize: 14,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.fieldLabel,
           ),
         ),

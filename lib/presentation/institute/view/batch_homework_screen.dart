@@ -163,7 +163,7 @@ class _BatchHomeworkScreenState extends State<BatchHomeworkScreen> {
                         hw.title,
                         style: AppTextStyles.outfit(
                           fontSize: 16,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w600,
                           // Mute the title on closed homework. Other cues
                           // (tinted background, no shadow, red CLOSED
                           // badge) finish the disabled treatment — we

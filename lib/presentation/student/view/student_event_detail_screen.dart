@@ -35,7 +35,7 @@ class StudentEventDetailScreen extends StatelessWidget {
                       'ATTACHMENTS',
                       style: AppTextStyles.outfit(
                         fontSize: 12,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.textTertiary,
                       ),
                     ),
@@ -112,7 +112,7 @@ class StudentEventDetailScreen extends StatelessWidget {
                   'EVENT',
                   style: AppTextStyles.outfit(
                     fontSize: 10,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: Colors.white,
                   ),
                 ),
@@ -209,7 +209,7 @@ class StudentEventDetailScreen extends StatelessWidget {
             'DETAILS',
             style: AppTextStyles.outfit(
               fontSize: 10,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.textTertiary,
             ),
           ),

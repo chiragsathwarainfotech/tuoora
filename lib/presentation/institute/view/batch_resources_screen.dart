@@ -134,7 +134,7 @@ class BatchResourcesScreen extends StatelessWidget {
                                 resource.subject,
                                 style: AppTextStyles.outfit(
                                   fontSize: 16,
-                                  fontWeight: FontWeight.w700,
+                                  fontWeight: FontWeight.w600,
                                   color: AppColors.textPrimary,
                                 ),
                               ),

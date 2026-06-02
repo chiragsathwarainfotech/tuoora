@@ -106,7 +106,7 @@ class _ReceiptCard extends StatelessWidget {
                           : 'Receipt #${receipt.id}',
                       style: AppTextStyles.outfit(
                         fontSize: 14,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.textPrimary,
                       ),
                       maxLines: 1,
@@ -134,7 +134,7 @@ class _ReceiptCard extends StatelessWidget {
                 '₹${receipt.amount}',
                 style: AppTextStyles.outfit(
                   fontSize: 14,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
                 ),
               ),

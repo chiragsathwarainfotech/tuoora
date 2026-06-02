@@ -128,7 +128,7 @@ class ExpensesScreen extends GetView<ExpenseController> {
                   expense.category?.name ?? "",
                   style: AppTextStyles.outfit(
                     fontSize: 16,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                 ),
@@ -148,7 +148,7 @@ class ExpensesScreen extends GetView<ExpenseController> {
             currencyFormat.format(expense.amount),
             style: AppTextStyles.outfit(
               fontSize: 16,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               color: AppColors.textPrimary,
             ),
           ),

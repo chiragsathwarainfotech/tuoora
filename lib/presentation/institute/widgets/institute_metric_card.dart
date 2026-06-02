@@ -42,7 +42,7 @@ class InstituteMetricCard extends StatelessWidget {
             label.toUpperCase(),
             style: AppTextStyles.outfit(
               fontSize: 10,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.textTertiary,
               letterSpacing: 0.5,
             ),
@@ -52,7 +52,7 @@ class InstituteMetricCard extends StatelessWidget {
             value,
             style: AppTextStyles.outfit(
               fontSize: 20,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: valueColor ?? AppColors.textPrimary,
             ),
           ),

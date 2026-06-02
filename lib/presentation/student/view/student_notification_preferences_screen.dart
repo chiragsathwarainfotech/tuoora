@@ -34,7 +34,7 @@ class StudentNotificationPreferencesScreen
                       'CATEGORIES',
                       style: AppTextStyles.outfit(
                         fontSize: 12,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.textSecondary,
                       ),
                     ),
@@ -81,7 +81,7 @@ class StudentNotificationPreferencesScreen
                   'Mute everything',
                   style: AppTextStyles.outfit(
                     fontSize: 14,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                 ),

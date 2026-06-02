@@ -141,7 +141,7 @@ class _ChatCard extends StatelessWidget {
                                 : chat.participantName,
                             style: AppTextStyles.outfit(
                               fontSize: 15,
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.w600,
                               color: AppColors.textPrimary,
                             ),
                             maxLines: 1,
@@ -199,7 +199,7 @@ class _Avatar extends StatelessWidget {
         initial,
         style: AppTextStyles.outfit(
           fontSize: 18,
-          fontWeight: FontWeight.w800,
+          fontWeight: FontWeight.w600,
           color: AppColors.primaryBrand,
         ),
       ),
@@ -335,7 +335,7 @@ class _UnreadBadge extends StatelessWidget {
           textAlign: TextAlign.center,
           style: AppTextStyles.outfit(
             fontSize: 11,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.white,
             height: 1.2,
           ),

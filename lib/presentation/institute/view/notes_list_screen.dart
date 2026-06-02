@@ -179,7 +179,7 @@ class NotesListScreen extends GetView<NotesController> {
                         note.title,
                         style: AppTextStyles.outfit(
                           fontSize: 16,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w600,
                           color: AppColors.textPrimary,
                         ),
                       ),
@@ -202,7 +202,7 @@ class NotesListScreen extends GetView<NotesController> {
                           note.category,
                           style: AppTextStyles.outfit(
                             fontSize: 10,
-                            fontWeight: FontWeight.w800,
+                            fontWeight: FontWeight.w600,
                             color: catColor,
                             letterSpacing: 0.5,
                           ),

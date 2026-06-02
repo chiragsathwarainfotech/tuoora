@@ -55,7 +55,7 @@ class StudentFeedbackScreen extends GetView<StudentFeedbackController> {
             "HOW'S IT GOING?",
             style: AppTextStyles.outfit(
               fontSize: 12,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.textSecondary,
             ),
           ),
@@ -128,7 +128,7 @@ class StudentFeedbackScreen extends GetView<StudentFeedbackController> {
             'YOUR MESSAGE',
             style: AppTextStyles.outfit(
               fontSize: 12,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.textSecondary,
             ),
           ),

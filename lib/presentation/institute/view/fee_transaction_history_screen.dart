@@ -30,7 +30,7 @@ class FeeTransactionHistoryScreen extends StatelessWidget {
                       'Past Transactions',
                       style: AppTextStyles.outfit(
                         fontSize: 16,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.textPrimary,
                       ),
                     ),
@@ -101,7 +101,7 @@ class FeeTransactionHistoryScreen extends StatelessWidget {
                 'Active',
                 style: AppTextStyles.outfit(
                   fontSize: 14,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.white,
                 ),
               ),
@@ -184,7 +184,7 @@ class FeeTransactionHistoryScreen extends StatelessWidget {
                       tx['date']!,
                       style: AppTextStyles.outfit(
                         fontSize: 14,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.textPrimary,
                       ),
                     ),
@@ -206,7 +206,7 @@ class FeeTransactionHistoryScreen extends StatelessWidget {
                     tx['amount']!,
                     style: AppTextStyles.outfit(
                       fontSize: 15,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.textPrimary,
                     ),
                   ),

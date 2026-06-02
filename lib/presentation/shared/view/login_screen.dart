@@ -83,17 +83,25 @@ class _LoginScreenState extends State<LoginScreen> {
                             'Email Address',
                             style: AppTextStyles.outfit(
                               fontSize: 12,
-                              fontWeight: FontWeight.w800,
+                              fontWeight: FontWeight.w600,
                               color: AppColors.fieldLabel,
                               letterSpacing: 1.0,
                             ),
                           ),
                           AppSpacing.v8,
-                          _buildTextField(
-                            controller: controller.emailController,
-                            hint: 'Enter email',
-                            prefixIcon: Icons.email,
-                            keyboardType: TextInputType.emailAddress,
+                          Obx(
+                            () => _buildTextField(
+                              controller: controller.emailController,
+                              hint: 'Enter email',
+                              prefixIcon: Icons.email,
+                              keyboardType: TextInputType.emailAddress,
+                              errorText: controller.emailError.value,
+                              onChanged: (_) {
+                                if (controller.emailError.value != null) {
+                                  controller.emailError.value = null;
+                                }
+                              },
+                            ),
                           ),
                           AppSpacing.v24,
                           Row(
@@ -103,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 'Password',
                                 style: AppTextStyles.outfit(
                                   fontSize: 12,
-                                  fontWeight: FontWeight.w800,
+                                  fontWeight: FontWeight.w600,
                                   color: AppColors.fieldLabel,
                                   letterSpacing: 1.0,
                                 ),
@@ -131,7 +139,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   'Forgot Password?',
                                   style: AppTextStyles.outfit(
                                     fontSize: 12,
-                                    fontWeight: FontWeight.w800,
+                                    fontWeight: FontWeight.w600,
                                     color: AppColors.primaryBrand,
                                     letterSpacing: 1.0,
                                   ),
@@ -146,6 +154,12 @@ class _LoginScreenState extends State<LoginScreen> {
                               hint: '••••••••',
                               prefixIcon: Icons.lock_outline,
                               obscureText: controller.obscurePassword.value,
+                              errorText: controller.passwordError.value,
+                              onChanged: (_) {
+                                if (controller.passwordError.value != null) {
+                                  controller.passwordError.value = null;
+                                }
+                              },
                               suffixIcon: IconButton(
                                 icon: Icon(
                                   controller.obscurePassword.value
@@ -222,7 +236,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 'OR EXPAND YOUR REACH',
                                 style: AppTextStyles.outfit(
                                   fontSize: 10,
-                                  fontWeight: FontWeight.w800,
+                                  fontWeight: FontWeight.w600,
                                   color: AppColors.primaryBrand,
                                   letterSpacing: 1.0,
                                 ),
@@ -267,34 +281,63 @@ class _LoginScreenState extends State<LoginScreen> {
     bool obscureText = false,
     Widget? suffixIcon,
     TextInputType? keyboardType,
+    String? errorText,
+    ValueChanged<String>? onChanged,
   }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.fieldBg,
-        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-        border: Border.all(color: AppColors.fieldBorder),
-      ),
-      child: TextField(
-        controller: controller,
-        obscureText: obscureText,
-        keyboardType: keyboardType,
-        style: AppTextStyles.outfit(fontSize: 14, color: AppColors.textPrimary),
-        decoration: InputDecoration(
-          hintText: hint,
-          hintStyle: AppTextStyles.outfit(
-            fontSize: 14,
-            color: AppColors.fieldLabel,
+    final hasError = errorText != null;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            color: AppColors.fieldBg,
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+            border: Border.all(
+              color: hasError ? Colors.redAccent : AppColors.fieldBorder,
+              width: hasError ? 1.5 : 1,
+            ),
           ),
-          prefixIcon: Icon(
-            prefixIcon,
-            color: AppColors.fieldLabel,
-            size: AppSpacing.s20,
+          child: TextField(
+            controller: controller,
+            obscureText: obscureText,
+            keyboardType: keyboardType,
+            onChanged: onChanged,
+            style: AppTextStyles.outfit(
+              fontSize: 14,
+              color: AppColors.textPrimary,
+            ),
+            decoration: InputDecoration(
+              hintText: hint,
+              hintStyle: AppTextStyles.outfit(
+                fontSize: 14,
+                color: AppColors.fieldLabel,
+              ),
+              prefixIcon: Icon(
+                prefixIcon,
+                color: AppColors.fieldLabel,
+                size: AppSpacing.s20,
+              ),
+              suffixIcon: suffixIcon,
+              border: InputBorder.none,
+              contentPadding: AppSpacing.all16,
+            ),
           ),
-          suffixIcon: suffixIcon,
-          border: InputBorder.none,
-          contentPadding: AppSpacing.all16,
         ),
-      ),
+        if (hasError) ...[
+          const SizedBox(height: 4),
+          Padding(
+            padding: const EdgeInsets.only(left: 4),
+            child: Text(
+              errorText,
+              style: AppTextStyles.outfit(
+                fontSize: 12,
+                color: Colors.redAccent,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ],
+      ],
     );
   }
 }

@@ -38,7 +38,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
                           AppStrings.instWhatsAppIntegration,
                           style: AppTextStyles.outfit(
                             fontSize: AppSpacing.s28,
-                            fontWeight: FontWeight.w800,
+                            fontWeight: FontWeight.w600,
                             color: AppColors.textPrimary,
                           ),
                         ),
@@ -117,7 +117,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
                       AppStrings.instMetaApiConfig,
                       style: AppTextStyles.outfit(
                         fontSize: AppSpacing.s18,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.textPrimary,
                       ),
                     ),
@@ -184,7 +184,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
       label,
       style: AppTextStyles.outfit(
         fontSize: AppSpacing.s12,
-        fontWeight: FontWeight.w800,
+        fontWeight: FontWeight.w600,
         color: AppColors.fieldLabel,
         letterSpacing: 0.5,
       ),
@@ -248,7 +248,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
               AppStrings.instAutomatedAlerts,
               style: AppTextStyles.outfit(
                 fontSize: AppSpacing.s20,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 color: AppColors.textPrimary,
               ),
             ),
@@ -344,7 +344,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
                       title,
                       style: AppTextStyles.outfit(
                         fontSize: AppSpacing.s16,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.textPrimary,
                       ),
                     ),

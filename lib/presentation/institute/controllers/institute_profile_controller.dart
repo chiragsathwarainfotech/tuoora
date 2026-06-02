@@ -148,7 +148,7 @@ class InstituteProfileController extends GetxController {
                 'Camera',
                 style: AppTextStyles.outfit(
                   fontSize: 16,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
                 ),
               ),
@@ -179,7 +179,7 @@ class InstituteProfileController extends GetxController {
                 'Gallery',
                 style: AppTextStyles.outfit(
                   fontSize: 16,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
                 ),
               ),

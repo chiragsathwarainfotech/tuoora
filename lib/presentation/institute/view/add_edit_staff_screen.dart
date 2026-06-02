@@ -70,7 +70,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
           'Department',
           style: AppTextStyles.outfit(
             fontSize: 14,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.fieldLabel,
           ),
         ),
@@ -106,7 +106,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
           'Employment Type',
           style: AppTextStyles.outfit(
             fontSize: 14,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.fieldLabel,
           ),
         ),
@@ -225,7 +225,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
                 'Profile Photo',
                 style: AppTextStyles.outfit(
                   fontSize: 16,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
                 ),
               ),
@@ -323,7 +323,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
             label,
             style: AppTextStyles.outfit(
               fontSize: 14,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: isSelected ? AppColors.white : AppColors.textSecondary,
             ),
           ),

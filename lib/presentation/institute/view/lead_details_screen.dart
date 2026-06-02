@@ -111,7 +111,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
                 label,
                 style: AppTextStyles.outfit(
                   fontSize: 10,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textTertiary,
                   letterSpacing: 1.0,
                 ),
@@ -121,7 +121,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
                 value.isEmpty ? '—' : value,
                 style: AppTextStyles.outfit(
                   fontSize: 16,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
                 ),
               ),
@@ -154,7 +154,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
               AppStrings.instInteractionHistoryHeading,
               style: AppTextStyles.outfit(
                 fontSize: 16,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 color: AppColors.textPrimary,
               ),
             ),
@@ -182,7 +182,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
                       'Add Note',
                       style: AppTextStyles.outfit(
                         fontSize: 12,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.primaryBrand,
                       ),
                     ),
@@ -262,7 +262,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
                         item.title,
                         style: AppTextStyles.outfit(
                           fontSize: 14,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w600,
                           color: AppColors.textPrimary,
                         ),
                       ),
@@ -340,7 +340,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
                     'Add Interaction Note',
                     style: AppTextStyles.outfit(
                       fontSize: 18,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.textPrimary,
                     ),
                   ),
@@ -402,7 +402,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
           label,
           style: AppTextStyles.outfit(
             fontSize: 12,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w600,
             color: AppColors.textTertiary,
             letterSpacing: 1.0,
           ),

@@ -27,6 +27,13 @@ class ForgotPasswordController extends GetxController {
   final canResend = false.obs;
   Timer? _timer;
 
+  /// Inline per-field error messages — show below each input instead of
+  /// stacking everything into one snackbar that can't pinpoint the field.
+  final emailError = RxnString();
+  final otpError = RxnString();
+  final passwordError = RxnString();
+  final confirmPasswordError = RxnString();
+
   void togglePasswordVisibility() =>
       obscurePassword.value = !obscurePassword.value;
 
@@ -35,10 +42,15 @@ class ForgotPasswordController extends GetxController {
 
   Future<void> sendOtp() async {
     final email = emailController.text.trim();
-    if (email.isEmpty || !GetUtils.isEmail(email)) {
-      AppSnackBar.error('Please enter a valid email address');
+    if (email.isEmpty) {
+      emailError.value = 'Email is required';
       return;
     }
+    if (!GetUtils.isEmail(email)) {
+      emailError.value = 'Enter a valid email';
+      return;
+    }
+    emailError.value = null;
 
     isLoading.value = true;
     try {
@@ -59,22 +71,26 @@ class ForgotPasswordController extends GetxController {
     final password = passwordController.text.trim();
     final confirmPassword = confirmPasswordController.text.trim();
 
-    if (otp.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
-      AppSnackBar.error('Please fill in all fields');
+    // Per-field validation — each error renders under its own input.
+    otpError.value = otp.isEmpty ? 'OTP is required' : null;
+    passwordError.value = password.isEmpty ? 'Password is required' : null;
+    confirmPasswordError.value = confirmPassword.isEmpty
+        ? 'Confirm your password'
+        : null;
+    if (otpError.value != null ||
+        passwordError.value != null ||
+        confirmPasswordError.value != null) {
       return;
     }
 
-    final passwordError = ValidationUtils.validatePassword(password);
-    if (passwordError != null) {
-      AppSnackBar.error(passwordError, title: 'Invalid Password');
+    final pwdValidation = ValidationUtils.validatePassword(password);
+    if (pwdValidation != null) {
+      passwordError.value = pwdValidation;
       return;
     }
 
     if (password != confirmPassword) {
-      AppSnackBar.error(
-        'New password and confirm password must be the same.',
-        title: 'Passwords do not match',
-      );
+      confirmPasswordError.value = 'Passwords do not match';
       return;
     }
 

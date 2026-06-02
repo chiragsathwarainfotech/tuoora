@@ -184,7 +184,7 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
                       : 'Send Fee Reminder  •  ₹${totalDue.toStringAsFixed(0)}',
                   style: AppTextStyles.outfit(
                     fontSize: 13,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.white,
                     letterSpacing: 0.3,
                   ),
@@ -220,7 +220,7 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
               'Fees History',
               style: AppTextStyles.outfit(
                 fontSize: 14,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 color: AppColors.fieldLabel,
                 letterSpacing: 1.2,
               ),
@@ -250,7 +250,7 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
                   '₹${fee.totalAmount}',
                   style: AppTextStyles.outfit(
                     fontSize: 16,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                 ),
@@ -279,7 +279,7 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
               fee.status.toUpperCase(),
               style: AppTextStyles.outfit(
                 fontSize: 10,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 color: AppColors.white,
                 letterSpacing: 0.4,
               ),
@@ -325,7 +325,7 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
             textAlign: TextAlign.center,
             style: AppTextStyles.outfit(
               fontSize: 10,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               color: AppColors.white.withValues(alpha: 0.9),
               letterSpacing: 1.6,
             ),
@@ -343,7 +343,7 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
           textAlign: TextAlign.center,
           style: AppTextStyles.outfit(
             fontSize: 20,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.textPrimary,
             letterSpacing: 0.3,
           ),
@@ -362,7 +362,7 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
             'Standard ${grade.isEmpty ? '—' : grade}',
             style: AppTextStyles.outfit(
               fontSize: 11,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.primaryBrand,
               letterSpacing: 0.6,
             ),
@@ -413,7 +413,7 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
               textAlign: TextAlign.right,
               style: AppTextStyles.outfit(
                 fontSize: 14,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
                 color: AppColors.textPrimary,
               ),
             ),

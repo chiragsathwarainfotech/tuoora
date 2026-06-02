@@ -96,7 +96,7 @@ class SalaryHistoryScreen extends GetView<StaffController> {
                   monthStr,
                   style: AppTextStyles.outfit(
                     fontSize: 16,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                 ),
@@ -117,7 +117,7 @@ class SalaryHistoryScreen extends GetView<StaffController> {
                 '₹${salary.netSalary}',
                 style: AppTextStyles.outfit(
                   fontSize: 18,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
                 ),
               ),

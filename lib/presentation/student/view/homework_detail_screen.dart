@@ -43,7 +43,7 @@ class _StudentHomeworkDetailScreenState
           'Homework Details',
           style: AppTextStyles.outfit(
             fontSize: 18,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.textPrimary,
           ),
         ),
@@ -103,7 +103,7 @@ class _StudentHomeworkDetailScreenState
               'MATHEMATICS',
               style: AppTextStyles.outfit(
                 fontSize: 10,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 color: AppColors.white,
                 letterSpacing: 1.2,
               ),
@@ -160,7 +160,7 @@ class _StudentHomeworkDetailScreenState
             label,
             style: AppTextStyles.outfit(
               fontSize: 11,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               color: AppColors.white,
             ),
           ),
@@ -205,7 +205,7 @@ class _StudentHomeworkDetailScreenState
                 'Instructions from\nTutor',
                 style: AppTextStyles.outfit(
                   fontSize: 18,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.darkSlate,
                   height: 1.2,
                 ),
@@ -227,7 +227,7 @@ class _StudentHomeworkDetailScreenState
             'Specific Tasks:',
             style: AppTextStyles.outfit(
               fontSize: 14,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.darkSlate,
             ),
           ),
@@ -324,7 +324,7 @@ class _StudentHomeworkDetailScreenState
                 'ASSIGNED TUTOR',
                 style: AppTextStyles.outfit(
                   fontSize: 9,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textMuted,
                   letterSpacing: 0.8,
                 ),
@@ -334,7 +334,7 @@ class _StudentHomeworkDetailScreenState
                 'Dr. Elena Vance',
                 style: AppTextStyles.outfit(
                   fontSize: 15,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.darkSlate,
                 ),
               ),
@@ -361,7 +361,7 @@ class _StudentHomeworkDetailScreenState
               'Attachments',
               style: AppTextStyles.outfit(
                 fontSize: 18,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 color: AppColors.textPrimary,
               ),
             ),
@@ -440,7 +440,7 @@ class _StudentHomeworkDetailScreenState
                     name,
                     style: AppTextStyles.outfit(
                       fontSize: 14,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.darkSlate,
                     ),
                   ),
@@ -448,7 +448,7 @@ class _StudentHomeworkDetailScreenState
                     type,
                     style: AppTextStyles.outfit(
                       fontSize: 9,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.textMuted,
                       letterSpacing: 0.5,
                     ),
@@ -483,7 +483,7 @@ class _StudentHomeworkDetailScreenState
                 'YOUR PROGRESS',
                 style: AppTextStyles.outfit(
                   fontSize: 10,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textTertiary,
                   letterSpacing: 1.0,
                 ),
@@ -492,7 +492,7 @@ class _StudentHomeworkDetailScreenState
                 '${(_progress * 100).toInt()}%',
                 style: AppTextStyles.outfit(
                   fontSize: 12,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
                 ),
               ),

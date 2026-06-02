@@ -44,7 +44,7 @@ class AppTextStyles {
 
   static TextStyle get h3 => outfit(
     fontSize: 18,
-    fontWeight: FontWeight.w700,
+    fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
   );
 

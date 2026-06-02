@@ -23,7 +23,13 @@
       "PowerShell(flutter pub get)",
       "PowerShell(flutter analyze lib/presentation/institute/controllers/chat_controller.dart)",
       "PowerShell(flutter analyze lib/presentation/institute/view/in_app_resource_viewer.dart lib/presentation/institute/controllers/chat_controller.dart lib/data/repositories_impl/chat_repository_impl.dart lib/presentation/institute/view/chat_messages_screen.dart lib/presentation/student/view/student_chat_messages_screen.dart)",
-      "PowerShell(flutter analyze lib/presentation/institute/controllers/chat_controller.dart lib/data/models/chat_model.dart)"
+      "PowerShell(flutter analyze lib/presentation/institute/controllers/chat_controller.dart lib/data/models/chat_model.dart)",
+      "PowerShell(flutter analyze lib/presentation/shared/controllers/login_controller.dart lib/presentation/shared/view/login_screen.dart)",
+      "PowerShell(flutter analyze lib/presentation/institute/controllers/forgot_password_controller.dart lib/presentation/institute/view/forgot_password_screen.dart lib/presentation/institute/view/reset_password_screen.dart)",
+      "PowerShell(flutter analyze lib/presentation/shared/controllers/login_controller.dart lib/presentation/shared/view/login_screen.dart lib/presentation/institute/controllers/forgot_password_controller.dart lib/presentation/institute/view/forgot_password_screen.dart lib/presentation/institute/view/reset_password_screen.dart lib/presentation/institute/controllers/signup_controller.dart lib/presentation/institute/view/institute_signup_screen.dart lib/presentation/institute/view/institute_otp_screen.dart lib/presentation/institute/view/institute_profile_setup_screen.dart)",
+      "PowerShell(flutter analyze lib/presentation/institute/view/batches_screen.dart)",
+      "Bash(/c/Users/PANCHAM/AppData/Local/Programs/Python/Python310/python tool/fontweight_sweep.py)",
+      "PowerShell(flutter analyze lib)"
     ]
   },
   "enabledPlugins": {

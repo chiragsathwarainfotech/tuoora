@@ -734,7 +734,7 @@ class StaffController extends GetxController {
                 'Camera',
                 style: AppTextStyles.outfit(
                   fontSize: 16,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               onTap: () {
@@ -752,7 +752,7 @@ class StaffController extends GetxController {
                 'Gallery',
                 style: AppTextStyles.outfit(
                   fontSize: 16,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               onTap: () {

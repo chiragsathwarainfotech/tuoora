@@ -29,7 +29,7 @@ class StudentSectionHeader extends StatelessWidget {
           title,
           style: AppTextStyles.outfit(
             fontSize: 12,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.fieldLabel,
             letterSpacing: 1.2,
           ),
@@ -42,7 +42,7 @@ class StudentSectionHeader extends StatelessWidget {
               label,
               style: AppTextStyles.outfit(
                 fontSize: 12,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
                 color: actionColor ?? AppColors.orangeTag,
               ),
             ),

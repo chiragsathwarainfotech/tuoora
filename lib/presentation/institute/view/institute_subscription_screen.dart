@@ -162,7 +162,7 @@ class InstituteSubscriptionScreen
                 'LATEST BILLING',
                 style: AppTextStyles.outfit(
                   fontSize: 12,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.white,
                   letterSpacing: 0.6,
                 ),
@@ -171,7 +171,7 @@ class InstituteSubscriptionScreen
                 latestAmount,
                 style: AppTextStyles.outfit(
                   fontSize: 22,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.white,
                 ),
               ),
@@ -191,7 +191,7 @@ class InstituteSubscriptionScreen
           textAlign: TextAlign.center,
           style: AppTextStyles.outfit(
             fontSize: 20,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.textPrimary,
           ),
         ),
@@ -253,7 +253,7 @@ class InstituteSubscriptionScreen
             textAlign: TextAlign.center,
             style: AppTextStyles.outfit(
               fontSize: 12,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               color: AppColors.fieldLabel,
               letterSpacing: 1.4,
             ),
@@ -281,7 +281,7 @@ class InstituteSubscriptionScreen
               '/${plan.durationDays} DAYS',
               style: AppTextStyles.outfit(
                 fontSize: 10,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
                 color: AppColors.fieldLabel,
                 letterSpacing: 1.2,
               ),
@@ -357,7 +357,7 @@ class InstituteSubscriptionScreen
                   f.title,
                   style: AppTextStyles.outfit(
                     fontSize: 14,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                 ),
@@ -397,7 +397,7 @@ class InstituteSubscriptionScreen
               AppStrings.instRecentBilling,
               style: AppTextStyles.outfit(
                 fontSize: 16,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 color: AppColors.textPrimary,
               ),
             ),
@@ -456,7 +456,7 @@ class InstituteSubscriptionScreen
               style: AppTextStyles.outfit(
                 fontSize: 12,
                 color: AppColors.textPrimary,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
               ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
@@ -469,7 +469,7 @@ class InstituteSubscriptionScreen
               style: AppTextStyles.outfit(
                 fontSize: 12,
                 color: AppColors.textPrimary,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
@@ -521,7 +521,7 @@ class _ColHeader extends StatelessWidget {
       textAlign: end ? TextAlign.end : TextAlign.start,
       style: AppTextStyles.outfit(
         fontSize: 10,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w600,
         color: AppColors.fieldLabel,
         letterSpacing: 1.1,
       ),

@@ -47,7 +47,7 @@ class ForgotPasswordScreen extends GetView<ForgotPasswordController> {
                             style: AppTextStyles.outfit(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
-                              color: AppColors.blueSapphire,
+                              color: AppColors.primaryBrand,
                               height: 1.5,
                             ),
                             textAlign: TextAlign.center,
@@ -75,17 +75,25 @@ class ForgotPasswordScreen extends GetView<ForgotPasswordController> {
                                   'Email Address',
                                   style: AppTextStyles.outfit(
                                     fontSize: 12,
-                                    fontWeight: FontWeight.w800,
+                                    fontWeight: FontWeight.w600,
                                     color: AppColors.fieldLabel,
                                     letterSpacing: 1.0,
                                   ),
                                 ),
                                 AppSpacing.v8,
-                                _buildTextField(
-                                  controller: controller.emailController,
-                                  hint: 'Enter email',
-                                  prefixIcon: Icons.mail,
-                                  keyboardType: TextInputType.emailAddress,
+                                Obx(
+                                  () => _buildTextField(
+                                    controller: controller.emailController,
+                                    hint: 'Enter email',
+                                    prefixIcon: Icons.mail,
+                                    keyboardType: TextInputType.emailAddress,
+                                    errorText: controller.emailError.value,
+                                    onChanged: (_) {
+                                      if (controller.emailError.value != null) {
+                                        controller.emailError.value = null;
+                                      }
+                                    },
+                                  ),
                                 ),
                                 AppSpacing.v32,
                                 Obx(
@@ -121,32 +129,61 @@ class ForgotPasswordScreen extends GetView<ForgotPasswordController> {
     required String hint,
     required IconData prefixIcon,
     TextInputType? keyboardType,
+    String? errorText,
+    ValueChanged<String>? onChanged,
   }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.fieldBg,
-        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-        border: Border.all(color: AppColors.fieldBorder),
-      ),
-      child: TextField(
-        controller: controller,
-        keyboardType: keyboardType,
-        style: AppTextStyles.outfit(fontSize: 14, color: AppColors.textPrimary),
-        decoration: InputDecoration(
-          hintText: hint,
-          hintStyle: AppTextStyles.outfit(
-            fontSize: 14,
-            color: AppColors.fieldLabel,
+    final hasError = errorText != null;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            color: AppColors.fieldBg,
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+            border: Border.all(
+              color: hasError ? Colors.redAccent : AppColors.fieldBorder,
+              width: hasError ? 1.5 : 1,
+            ),
           ),
-          prefixIcon: Icon(
-            prefixIcon,
-            color: AppColors.fieldLabel,
-            size: AppSpacing.s20,
+          child: TextField(
+            controller: controller,
+            keyboardType: keyboardType,
+            onChanged: onChanged,
+            style: AppTextStyles.outfit(
+              fontSize: 14,
+              color: AppColors.textPrimary,
+            ),
+            decoration: InputDecoration(
+              hintText: hint,
+              hintStyle: AppTextStyles.outfit(
+                fontSize: 14,
+                color: AppColors.fieldLabel,
+              ),
+              prefixIcon: Icon(
+                prefixIcon,
+                color: AppColors.fieldLabel,
+                size: AppSpacing.s20,
+              ),
+              border: InputBorder.none,
+              contentPadding: AppSpacing.all16,
+            ),
           ),
-          border: InputBorder.none,
-          contentPadding: AppSpacing.all16,
         ),
-      ),
+        if (hasError) ...[
+          const SizedBox(height: 4),
+          Padding(
+            padding: const EdgeInsets.only(left: 4),
+            child: Text(
+              errorText,
+              style: AppTextStyles.outfit(
+                fontSize: 12,
+                color: Colors.redAccent,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ],
+      ],
     );
   }
 }

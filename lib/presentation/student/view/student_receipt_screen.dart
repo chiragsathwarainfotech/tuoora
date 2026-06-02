@@ -126,7 +126,7 @@ class _ReceiptCard extends StatelessWidget {
               monthHeader,
               style: AppTextStyles.outfit(
                 fontSize: 10,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 color: AppColors.textTertiary,
                 letterSpacing: 1.2,
               ),
@@ -281,7 +281,7 @@ class _StatusPill extends StatelessWidget {
         label,
         style: AppTextStyles.outfit(
           fontSize: 11,
-          fontWeight: FontWeight.w800,
+          fontWeight: FontWeight.w600,
           color: AppColors.white,
         ),
       ),
@@ -382,7 +382,7 @@ class _ActionButton extends StatelessWidget {
                 label,
                 style: AppTextStyles.outfit(
                   fontSize: 13,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: fg,
                 ),
               ),

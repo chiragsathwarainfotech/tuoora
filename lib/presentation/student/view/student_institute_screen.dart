@@ -58,7 +58,7 @@ class StudentInstituteScreen extends GetView<StudentInstituteController> {
                           'LOCATION',
                           style: AppTextStyles.outfit(
                             fontSize: 12,
-                            fontWeight: FontWeight.w800,
+                            fontWeight: FontWeight.w600,
                             color: AppColors.textSecondary,
                           ),
                         ),
@@ -127,7 +127,7 @@ class StudentInstituteScreen extends GetView<StudentInstituteController> {
             institute.name,
             style: AppTextStyles.outfit(
               fontSize: 18,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.textPrimary,
             ),
             textAlign: TextAlign.center,
@@ -282,7 +282,7 @@ class StudentInstituteScreen extends GetView<StudentInstituteController> {
                         displayAddr1,
                         style: AppTextStyles.outfit(
                           fontSize: 14,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w600,
                           color: AppColors.textPrimary,
                         ),
                         maxLines: 2,
@@ -343,7 +343,7 @@ class StudentInstituteScreen extends GetView<StudentInstituteController> {
                         'Directions',
                         style: AppTextStyles.outfit(
                           fontSize: 12,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w600,
                           color: AppColors.textPrimary,
                         ),
                       ),

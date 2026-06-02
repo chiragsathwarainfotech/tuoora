@@ -40,7 +40,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
                   children: [
                     _buildLabel('Enter Code'),
                     AppSpacing.v16,
-                    _buildOtpField(),
+                    Obx(() => _buildOtpField()),
                     AppSpacing.v32,
                     Obx(
                       () => AppButton(
@@ -75,7 +75,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
                                   'Resend OTP',
                                   style: AppTextStyles.outfit(
                                     fontSize: 14,
-                                    fontWeight: FontWeight.w700,
+                                    fontWeight: FontWeight.w600,
                                     color: AppColors.primaryBrand,
                                   ),
                                 ),
@@ -104,7 +104,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
           'CHECK YOUR EMAIL',
           style: AppTextStyles.outfit(
             fontSize: 18,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.brandAppBarColor,
             letterSpacing: 1.5,
           ),
@@ -129,7 +129,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
                   text: controller.emailController.text,
                   style: AppTextStyles.outfit(
                     fontSize: 16,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.brandAppBarColor,
                   ),
                 ),
@@ -147,7 +147,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
       textAlign: TextAlign.center,
       style: AppTextStyles.outfit(
         fontSize: 12,
-        fontWeight: FontWeight.w800,
+        fontWeight: FontWeight.w600,
         color: AppColors.fieldLabel,
         letterSpacing: 1.0,
       ),
@@ -155,34 +155,63 @@ class InstituteOtpScreen extends GetView<SignupController> {
   }
 
   Widget _buildOtpField() {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.fieldBg,
-        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-        border: Border.all(color: AppColors.fieldBorder),
-      ),
-      child: TextField(
-        controller: controller.otpController,
-        keyboardType: TextInputType.number,
-        maxLength: 6,
-        textAlign: TextAlign.center,
-        style: AppTextStyles.outfit(
-          fontSize: 24,
-          fontWeight: FontWeight.w800,
-          color: AppColors.brandAppBarColor,
-          letterSpacing: 8.0,
-        ),
-        decoration: const InputDecoration(
-          counterText: '',
-          hintText: 'XXXXXX',
-          hintStyle: TextStyle(
-            color: AppColors.fieldLabel,
-            letterSpacing: 8.0,
+    final errorText = controller.otpError.value;
+    final hasError = errorText != null;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            color: AppColors.fieldBg,
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+            border: Border.all(
+              color: hasError ? Colors.redAccent : AppColors.fieldBorder,
+              width: hasError ? 1.5 : 1,
+            ),
           ),
-          border: InputBorder.none,
-          contentPadding: AppSpacing.all16,
+          child: TextField(
+            controller: controller.otpController,
+            keyboardType: TextInputType.number,
+            maxLength: 6,
+            textAlign: TextAlign.center,
+            onChanged: (_) {
+              if (controller.otpError.value != null) {
+                controller.otpError.value = null;
+              }
+            },
+            style: AppTextStyles.outfit(
+              fontSize: 24,
+              fontWeight: FontWeight.w800,
+              color: AppColors.brandAppBarColor,
+              letterSpacing: 8.0,
+            ),
+            decoration: const InputDecoration(
+              counterText: '',
+              hintText: 'XXXXXX',
+              hintStyle: TextStyle(
+                color: AppColors.fieldLabel,
+                letterSpacing: 8.0,
+              ),
+              border: InputBorder.none,
+              contentPadding: AppSpacing.all16,
+            ),
+          ),
         ),
-      ),
+        if (hasError) ...[
+          const SizedBox(height: 4),
+          Padding(
+            padding: const EdgeInsets.only(left: 4),
+            child: Text(
+              errorText,
+              style: AppTextStyles.outfit(
+                fontSize: 12,
+                color: Colors.redAccent,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ],
+      ],
     );
   }
 }

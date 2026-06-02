@@ -85,7 +85,7 @@ class _OutstandingCard extends StatelessWidget {
             AppStrings.studentPayFeesOutstanding,
             style: AppTextStyles.outfit(
               fontSize: 10,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.white.withValues(alpha: 0.7),
               letterSpacing: 1.2,
             ),
@@ -142,7 +142,7 @@ class _UpiCard extends StatelessWidget {
             AppStrings.studentPayFeesScanWith,
             style: AppTextStyles.outfit(
               fontSize: 12,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.textTertiary,
               letterSpacing: 1.4,
             ),
@@ -154,7 +154,7 @@ class _UpiCard extends StatelessWidget {
             profile.instituteName,
             style: AppTextStyles.outfit(
               fontSize: 14,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.textPrimary,
             ),
           ),
@@ -236,7 +236,7 @@ class _QrPlaceholder extends StatelessWidget {
                   'T',
                   style: AppTextStyles.outfit(
                     fontSize: 16,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.primaryBrand,
                   ),
                 ),
@@ -329,7 +329,7 @@ class _OpenInGooglePayButton extends StatelessWidget {
                 AppStrings.studentPayFeesOpenInAnyUpi,
                 style: AppTextStyles.outfit(
                   fontSize: 14,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.white,
                 ),
               ),
@@ -369,7 +369,7 @@ class _HowItWorksCard extends StatelessWidget {
             AppStrings.studentPayFeesHowItWorks,
             style: AppTextStyles.outfit(
               fontSize: 11,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.textTertiary,
               letterSpacing: 1.2,
             ),
@@ -416,7 +416,7 @@ class _Step extends StatelessWidget {
             '$index',
             style: AppTextStyles.outfit(
               fontSize: 11,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.primaryBrand,
             ),
           ),

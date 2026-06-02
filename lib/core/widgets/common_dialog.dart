@@ -157,7 +157,7 @@ class CommonDialog extends StatelessWidget {
                         body != null ? TextAlign.left : TextAlign.center,
                     style: AppTextStyles.outfit(
                       fontSize: 20,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.textPrimary,
                     ),
                   ),
@@ -194,7 +194,7 @@ class CommonDialog extends StatelessWidget {
                             cancelText,
                             style: AppTextStyles.outfit(
                               fontSize: 14,
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.w600,
                               color: AppColors.textSecondary,
                             ),
                           ),
@@ -222,7 +222,7 @@ class CommonDialog extends StatelessWidget {
                             confirmText,
                             style: AppTextStyles.outfit(
                               fontSize: 14,
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.w600,
                               color: AppColors.white,
                             ),
                           ),

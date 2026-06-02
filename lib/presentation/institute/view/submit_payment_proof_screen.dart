@@ -98,7 +98,7 @@ class SubmitPaymentProofScreen
           'PAYMENT SCREENSHOT',
           style: AppTextStyles.outfit(
             fontSize: 12,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.brandAppBarColor,
             letterSpacing: 1.0,
           ),

@@ -79,7 +79,7 @@ class StudentAppBar extends StatelessWidget implements PreferredSizeWidget {
           overflow: TextOverflow.ellipsis,
           style: AppTextStyles.outfit(
             fontSize: 22,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.textPrimary,
           ),
         ),

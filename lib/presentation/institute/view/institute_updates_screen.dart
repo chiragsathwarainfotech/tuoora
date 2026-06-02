@@ -151,7 +151,7 @@ class InstituteUpdatesScreen extends StatelessWidget {
                   'VIEW FILE',
                   style: AppTextStyles.outfit(
                     fontSize: 11,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.primaryBrand,
                     letterSpacing: 0.6,
                   ),
@@ -191,7 +191,7 @@ class InstituteUpdatesScreen extends StatelessWidget {
                   update.category.name.toUpperCase(),
                   style: AppTextStyles.outfit(
                     fontSize: 10,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.primaryBrand,
                     letterSpacing: 0.6,
                   ),
@@ -217,7 +217,7 @@ class InstituteUpdatesScreen extends StatelessWidget {
                 'TARGET: ',
                 style: AppTextStyles.outfit(
                   fontSize: 11,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.fieldLabel,
                   letterSpacing: 0.6,
                 ),
@@ -227,7 +227,7 @@ class InstituteUpdatesScreen extends StatelessWidget {
                   update.audience.toUpperCase(),
                   style: AppTextStyles.outfit(
                     fontSize: 11,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.primaryBrand,
                     letterSpacing: 0.6,
                   ),
@@ -282,7 +282,7 @@ class InstituteUpdatesScreen extends StatelessWidget {
                               'View File Attachment',
                               style: AppTextStyles.outfit(
                                 fontSize: 14,
-                                fontWeight: FontWeight.w800,
+                                fontWeight: FontWeight.w600,
                                 color: AppColors.textPrimary,
                               ),
                             ),
@@ -291,7 +291,7 @@ class InstituteUpdatesScreen extends StatelessWidget {
                               'CLICK TO OPEN',
                               style: AppTextStyles.outfit(
                                 fontSize: 10,
-                                fontWeight: FontWeight.w700,
+                                fontWeight: FontWeight.w600,
                                 color: AppColors.fieldLabel,
                                 letterSpacing: 0.6,
                               ),
@@ -411,7 +411,7 @@ class InstituteUpdatesScreen extends StatelessWidget {
                           badgeText,
                           style: AppTextStyles.outfit(
                             fontSize: 10,
-                            fontWeight: FontWeight.w800,
+                            fontWeight: FontWeight.w600,
                             color: badgeTextColor,
                           ),
                         ),
@@ -431,7 +431,7 @@ class InstituteUpdatesScreen extends StatelessWidget {
                     title,
                     style: AppTextStyles.outfit(
                       fontSize: 18,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.textPrimary,
                     ),
                   ),

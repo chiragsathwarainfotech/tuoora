@@ -148,7 +148,7 @@ class _DueCard extends StatelessWidget {
                   AppStrings.studentAssignmentDetailDueLabel,
                   style: AppTextStyles.outfit(
                     fontSize: 10,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.orangeTag,
                     letterSpacing: 1.2,
                   ),
@@ -158,7 +158,7 @@ class _DueCard extends StatelessWidget {
                   assignment.dueDateFullText ?? assignment.dueLabel,
                   style: AppTextStyles.outfit(
                     fontSize: 14,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                 ),
@@ -199,7 +199,7 @@ class _InstructionsCard extends StatelessWidget {
             AppStrings.studentAssignmentDetailInstructions,
             style: AppTextStyles.outfit(
               fontSize: 12,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.orangeTag,
               letterSpacing: 1.2,
             ),
@@ -227,7 +227,7 @@ class _InstructionsCard extends StatelessWidget {
                     text: '${AppStrings.studentAssignmentDetailAssignedBy} ',
                     style: AppTextStyles.outfit(
                       fontSize: 14,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.textPrimary,
                     ),
                   ),
@@ -286,7 +286,7 @@ class _AttachmentTile extends StatelessWidget {
                       attachment.name,
                       style: AppTextStyles.outfit(
                         fontSize: 13,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.textPrimary,
                       ),
                       maxLines: 1,
@@ -448,7 +448,7 @@ class _SubmitAssignmentButton extends StatelessWidget {
                   submitting ? 'Submitting...' : 'Submit Assignment',
                   style: AppTextStyles.outfit(
                     fontSize: 14,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.white,
                     letterSpacing: 0.3,
                   ),
@@ -496,7 +496,7 @@ class _StaticButton extends StatelessWidget {
             label,
             style: AppTextStyles.outfit(
               fontSize: 14,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.white,
               letterSpacing: 0.3,
             ),
@@ -541,7 +541,7 @@ class _PendingBanner extends StatelessWidget {
                   AppStrings.studentAssignmentDetailPendingTitle,
                   style: AppTextStyles.outfit(
                     fontSize: 13,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.bohoRed,
                   ),
                 ),
@@ -597,7 +597,7 @@ class _CompletedBanner extends StatelessWidget {
                   assignment.completedNote ?? '',
                   style: AppTextStyles.outfit(
                     fontSize: 13,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.successGreen,
                   ),
                 ),

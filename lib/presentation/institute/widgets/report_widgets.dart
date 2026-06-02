@@ -38,7 +38,7 @@ class ReportSummaryCard extends StatelessWidget {
             title,
             style: AppTextStyles.outfit(
               fontSize: 14,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               color: AppColors.textPrimary,
             ),
           ),
@@ -101,7 +101,7 @@ class ReportBatchItemCard extends StatelessWidget {
             name,
             style: AppTextStyles.outfit(
               fontSize: 16,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.textPrimary,
             ),
           ),
@@ -129,7 +129,7 @@ class ReportBatchItemCard extends StatelessWidget {
                 metricValue,
                 style: AppTextStyles.outfit(
                   fontSize: 14,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.primaryBrand,
                 ),
               ),
@@ -191,7 +191,7 @@ class ReportStudentItemCard extends StatelessWidget {
                   name,
                   style: AppTextStyles.outfit(
                     fontSize: 14,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                 ),
@@ -219,7 +219,7 @@ class ReportStudentItemCard extends StatelessWidget {
               metric,
               style: AppTextStyles.outfit(
                 fontSize: 12,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 color: metricColor,
               ),
             ),

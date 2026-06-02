@@ -126,7 +126,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
           textAlign: TextAlign.center,
           style: AppTextStyles.outfit(
             fontSize: 22,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.textPrimary,
           ),
         ),
@@ -278,7 +278,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
                   value,
                   style: AppTextStyles.outfit(
                     fontSize: 14,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                 ),
@@ -326,7 +326,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
                     title,
                     style: AppTextStyles.outfit(
                       fontSize: 14,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: iconColor ?? AppColors.textPrimary,
                     ),
                   ),
@@ -360,7 +360,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text(
           'Logout',
-          style: AppTextStyles.outfit(fontWeight: FontWeight.w800),
+          style: AppTextStyles.outfit(fontWeight: FontWeight.w600),
         ),
         content: Text(
           'Are you sure you want to log out from your account?',
@@ -373,7 +373,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
               'Cancel',
               style: AppTextStyles.outfit(
                 color: AppColors.textSecondary,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
@@ -392,7 +392,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
               'Logout',
               style: AppTextStyles.outfit(
                 color: AppColors.white,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),

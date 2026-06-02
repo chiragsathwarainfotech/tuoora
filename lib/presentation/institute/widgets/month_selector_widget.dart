@@ -68,7 +68,7 @@ class MonthSelectorWidget extends StatelessWidget {
                   DateFormat('MMMM yyyy').format(selectedMonth),
                   style: AppTextStyles.outfit(
                     fontSize: 15,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                 ),

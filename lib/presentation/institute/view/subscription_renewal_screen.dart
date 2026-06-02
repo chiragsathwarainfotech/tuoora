@@ -118,7 +118,7 @@ class SubscriptionRenewalScreen extends GetView<SubscriptionRenewalController> {
             textAlign: TextAlign.center,
             style: AppTextStyles.outfit(
               fontSize: 14,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               color: isSelected
                   ? AppColors.primaryBrand
                   : AppColors.textTertiary,
@@ -177,7 +177,7 @@ class SubscriptionRenewalScreen extends GetView<SubscriptionRenewalController> {
               'SCAN WITH ANY UPI APP',
               style: AppTextStyles.outfit(
                 fontSize: 12,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 color: AppColors.brandAppBarColor,
                 letterSpacing: 1.0,
               ),
@@ -222,7 +222,7 @@ class SubscriptionRenewalScreen extends GetView<SubscriptionRenewalController> {
               'BANK TRANSFER DETAILS',
               style: AppTextStyles.outfit(
                 fontSize: 12,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 color: AppColors.brandAppBarColor,
                 letterSpacing: 1.0,
               ),
@@ -274,7 +274,7 @@ class SubscriptionRenewalScreen extends GetView<SubscriptionRenewalController> {
                   value,
                   style: AppTextStyles.outfit(
                     fontSize: 14,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                 ),

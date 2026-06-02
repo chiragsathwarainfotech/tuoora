@@ -64,7 +64,7 @@ class PaymentItemTile extends StatelessWidget {
                   title,
                   style: AppTextStyles.outfit(
                     fontSize: 15,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                 ),
@@ -88,7 +88,7 @@ class PaymentItemTile extends StatelessWidget {
                 amount,
                 style: AppTextStyles.outfit(
                   fontSize: 16,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
                 ),
               ),

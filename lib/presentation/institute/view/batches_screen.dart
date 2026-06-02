@@ -193,7 +193,7 @@ class _BatchesScreenState extends State<BatchesScreen> {
                                 batch.title,
                                 style: AppTextStyles.outfit(
                                   fontSize: 18,
-                                  fontWeight: FontWeight.w800,
+                                  fontWeight: FontWeight.w600,
                                   color: AppColors.textPrimary,
                                 ),
                               ),
@@ -206,10 +206,34 @@ class _BatchesScreenState extends State<BatchesScreen> {
                           batch.subject,
                           style: AppTextStyles.outfit(
                             fontSize: 12,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w600,
                             color: AppColors.textTertiary,
                           ),
                         ),
+                        if (batch.staffName != null &&
+                            batch.staffName!.trim().isNotEmpty) ...[
+                          AppSpacing.v12,
+                          Row(
+                            children: [
+                              Text(
+                                "Faculty: ",
+                                style: AppTextStyles.outfit(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.fieldLabel,
+                                ),
+                              ),
+                              Text(
+                                batch.staffName!,
+                                style: AppTextStyles.outfit(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.textPrimary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                         AppSpacing.v12,
                         Row(
                           children: [
@@ -242,7 +266,7 @@ class _BatchesScreenState extends State<BatchesScreen> {
                               batch.studentCount,
                               style: AppTextStyles.outfit(
                                 fontSize: 14,
-                                fontWeight: FontWeight.w700,
+                                fontWeight: FontWeight.w600,
                                 color: AppColors.textPrimary,
                               ),
                             ),
@@ -257,7 +281,7 @@ class _BatchesScreenState extends State<BatchesScreen> {
                               '₹${batch.baseFee.toStringAsFixed(0)}',
                               style: AppTextStyles.outfit(
                                 fontSize: 14,
-                                fontWeight: FontWeight.w800,
+                                fontWeight: FontWeight.w600,
                                 color: AppColors.textPrimary,
                               ),
                             ),

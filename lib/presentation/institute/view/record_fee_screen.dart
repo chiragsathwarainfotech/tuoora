@@ -117,7 +117,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                       student.name,
                       style: AppTextStyles.outfit(
                         fontSize: 14,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     subtitle: Text(
@@ -154,7 +154,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                         controller.selectedStudent.value?.name ?? "",
                         style: AppTextStyles.outfit(
                           fontSize: 16,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w600,
                           color: AppColors.textPrimary,
                         ),
                       ),
@@ -223,7 +223,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                     style: AppTextStyles.outfit(
                       fontSize: 15,
                       color: AppColors.textPrimary,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
@@ -273,7 +273,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                     style: AppTextStyles.outfit(
                       fontSize: 15,
                       color: AppColors.textPrimary,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
@@ -344,7 +344,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
               label,
               style: AppTextStyles.outfit(
                 fontSize: 16,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 color: isActive
                     ? AppColors.primaryBrand
                     : AppColors.textPrimary,
@@ -393,7 +393,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
             AppStrings.instAutoReceiptTitle,
             style: AppTextStyles.outfit(
               fontSize: 16,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.textPrimary,
             ),
           ),
@@ -423,7 +423,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                       AppStrings.instPreviewReceipt,
                       style: AppTextStyles.outfit(
                         fontSize: 14,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.primaryBrand,
                       ),
                     ),
@@ -477,7 +477,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
               textAlign: TextAlign.center,
               style: AppTextStyles.outfit(
                 fontSize: 20,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 color: AppColors.textPrimary,
               ),
             ),
@@ -507,7 +507,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                   'Total Amount',
                   style: AppTextStyles.outfit(
                     fontSize: 16,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                 ),
@@ -535,7 +535,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                 'Close Preview',
                 style: AppTextStyles.outfit(
                   fontSize: 16,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.white,
                 ),
               ),
@@ -576,7 +576,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                 value,
                 style: AppTextStyles.outfit(
                   fontSize: 12,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: value == AppStrings.instStatusPaid
                       ? AppColors.greenText
                       : AppColors.primaryBrand,
@@ -588,7 +588,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
               value,
               style: AppTextStyles.outfit(
                 fontSize: 14,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
                 color: AppColors.textPrimary,
               ),
             ),
@@ -636,7 +636,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
           initials,
           style: AppTextStyles.outfit(
             fontSize: size * 0.4,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.primaryBrand,
           ),
         ),

@@ -82,7 +82,7 @@ class AddEditLeadScreen extends GetView<LeadsController> {
           title,
           style: AppTextStyles.outfit(
             fontSize: 16,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.textPrimary,
           ),
         ),

@@ -134,7 +134,7 @@ class LogAttendanceScreen extends GetView<StaffController> {
                     staff.fullName,
                     style: AppTextStyles.outfit(
                       fontSize: 14,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                   subtitle: Text(
@@ -176,7 +176,7 @@ class LogAttendanceScreen extends GetView<StaffController> {
                   staff.fullName,
                   style: AppTextStyles.outfit(
                     fontSize: 14,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 Text(
@@ -258,7 +258,7 @@ class LogAttendanceScreen extends GetView<StaffController> {
             label,
             style: AppTextStyles.outfit(
               fontSize: 16,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               color: isSelected ? color : AppColors.textTertiary,
             ),
           ),
@@ -312,7 +312,7 @@ class LogAttendanceScreen extends GetView<StaffController> {
           getInitials(name),
           style: AppTextStyles.outfit(
             fontSize: size * 0.4,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.primaryBrand,
           ),
         ),

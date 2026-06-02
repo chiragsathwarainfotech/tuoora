@@ -33,7 +33,7 @@ class StudentStudyMaterialDetailScreen
                     'FILES',
                     style: AppTextStyles.outfit(
                       fontSize: 12,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.textSecondary,
                     ),
                   ),
@@ -84,7 +84,7 @@ class StudentStudyMaterialDetailScreen
                   item.subject,
                   style: AppTextStyles.outfit(
                     fontSize: 12,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: textColor,
                   ),
                 ),

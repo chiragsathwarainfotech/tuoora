@@ -122,7 +122,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
                   controller.formattedDate,
                   style: AppTextStyles.outfit(
                     fontSize: 14,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                 ),
@@ -189,7 +189,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
             label,
             style: AppTextStyles.outfit(
               fontSize: 14,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               color: color,
             ),
           ),
@@ -234,7 +234,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
                   student.name,
                   style: AppTextStyles.outfit(
                     fontSize: 16,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                 ),
@@ -359,7 +359,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
           initials,
           style: AppTextStyles.outfit(
             fontSize: 16,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.primaryBrand,
           ),
         ),

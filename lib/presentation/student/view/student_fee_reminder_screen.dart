@@ -85,7 +85,7 @@ class StudentFeeReminderScreen extends StatelessWidget {
                 'MAY 2026',
                 style: AppTextStyles.outfit(
                   fontSize: 10,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.white,
                   letterSpacing: 1.0,
                 ),
@@ -102,7 +102,7 @@ class StudentFeeReminderScreen extends StatelessWidget {
                 paid ? 'Paid on 20 May 2026' : '25 May 2026 - 6 days left',
                 style: AppTextStyles.outfit(
                   fontSize: 12,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.white,
                 ),
               ),

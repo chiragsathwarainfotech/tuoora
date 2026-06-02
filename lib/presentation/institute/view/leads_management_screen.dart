@@ -153,7 +153,7 @@ class LeadsManagementScreen extends GetView<LeadsController> {
                         : '?',
                     style: AppTextStyles.outfit(
                       fontSize: 14,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.primaryBrand,
                     ),
                   ),
@@ -167,7 +167,7 @@ class LeadsManagementScreen extends GetView<LeadsController> {
                         lead.fullName,
                         style: AppTextStyles.outfit(
                           fontSize: 16,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w600,
                           color: AppColors.textPrimary,
                         ),
                       ),

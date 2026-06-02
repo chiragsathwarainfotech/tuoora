@@ -113,7 +113,7 @@ class StudentStudyMaterialScreen
                     item.subject,
                     style: AppTextStyles.outfit(
                       fontSize: 12,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: textColor,
                     ),
                   ),
@@ -132,7 +132,7 @@ class StudentStudyMaterialScreen
               item.title,
               style: AppTextStyles.outfit(
                 fontSize: 14,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 color: AppColors.textPrimary,
               ),
             ),

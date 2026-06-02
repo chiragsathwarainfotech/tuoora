@@ -162,7 +162,7 @@ class _WeeklyProgressCard extends StatelessWidget {
                   '/$total',
                   style: AppTextStyles.outfit(
                     fontSize: 14,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textTertiary,
                   ),
                 ),
@@ -177,7 +177,7 @@ class _WeeklyProgressCard extends StatelessWidget {
                       AppStrings.studentAssignmentsStillToDo,
                       style: AppTextStyles.outfit(
                         fontSize: 14,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.textPrimary,
                       ),
                     ),
@@ -372,7 +372,7 @@ class _TabButton extends StatelessWidget {
             label,
             style: AppTextStyles.outfit(
               fontSize: 13,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: isActive ? AppColors.white : AppColors.textTertiary,
             ),
           ),
@@ -450,7 +450,7 @@ class _AssignmentCard extends StatelessWidget {
                                   style:
                                       AppTextStyles.outfit(
                                         fontSize: 14,
-                                        fontWeight: FontWeight.w800,
+                                        fontWeight: FontWeight.w600,
                                         color: item.isCompleted
                                             ? AppColors.textMuted
                                             : AppColors.textPrimary,
@@ -472,7 +472,7 @@ class _AssignmentCard extends StatelessWidget {
                                         text: item.subjectLabel,
                                         style: AppTextStyles.outfit(
                                           fontSize: 11,
-                                          fontWeight: FontWeight.w800,
+                                          fontWeight: FontWeight.w600,
                                           color: item.stripe,
                                           letterSpacing: 0.6,
                                         ),
@@ -481,7 +481,7 @@ class _AssignmentCard extends StatelessWidget {
                                         text: _statusSuffix(item),
                                         style: AppTextStyles.outfit(
                                           fontSize: 10,
-                                          fontWeight: FontWeight.w800,
+                                          fontWeight: FontWeight.w600,
                                           color: _statusColor(item),
                                           letterSpacing: 0.6,
                                         ),
@@ -565,7 +565,7 @@ class _DuePill extends StatelessWidget {
         label,
         style: AppTextStyles.outfit(
           fontSize: 12,
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w600,
           color: fg,
         ),
       ),

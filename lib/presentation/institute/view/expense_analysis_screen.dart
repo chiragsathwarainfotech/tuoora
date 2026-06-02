@@ -38,7 +38,7 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
                         'Categories Breakdown',
                         style: AppTextStyles.outfit(
                           fontSize: 18,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w600,
                           color: AppColors.textPrimary,
                         ),
                       ),
@@ -112,7 +112,7 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
                     analysis.monthName,
                     style: AppTextStyles.outfit(
                       fontSize: 12,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.white,
                     ),
                   ),
@@ -243,7 +243,7 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
                       title,
                       style: AppTextStyles.outfit(
                         fontSize: 15,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.textPrimary,
                       ),
                     ),
@@ -262,7 +262,7 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
                 '${(progress * 100).toStringAsFixed(1)}%',
                 style: AppTextStyles.outfit(
                   fontSize: 14,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
                 ),
               ),

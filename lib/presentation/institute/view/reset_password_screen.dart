@@ -47,9 +47,10 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
                             style: AppTextStyles.outfit(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
-                              color: AppColors.textTertiary,
+                              color: AppColors.primaryBrand,
                               height: 1.5,
                             ),
+                            textAlign: TextAlign.center,
                           ),
                           AppSpacing.v40,
                           Container(
@@ -74,24 +75,32 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
                                   'Verification code',
                                   style: AppTextStyles.outfit(
                                     fontSize: 12,
-                                    fontWeight: FontWeight.w800,
+                                    fontWeight: FontWeight.w600,
                                     color: AppColors.fieldLabel,
                                     letterSpacing: 1.0,
                                   ),
                                 ),
                                 AppSpacing.v8,
-                                _buildTextField(
-                                  controller: controller.otpController,
-                                  hint: 'Enter 6-digit code',
-                                  prefixIcon: Icons.security_outlined,
-                                  keyboardType: TextInputType.number,
+                                Obx(
+                                  () => _buildTextField(
+                                    controller: controller.otpController,
+                                    hint: 'Enter 6-digit code',
+                                    prefixIcon: Icons.security_outlined,
+                                    keyboardType: TextInputType.number,
+                                    errorText: controller.otpError.value,
+                                    onChanged: (_) {
+                                      if (controller.otpError.value != null) {
+                                        controller.otpError.value = null;
+                                      }
+                                    },
+                                  ),
                                 ),
                                 AppSpacing.v24,
                                 Text(
                                   'New Password',
                                   style: AppTextStyles.outfit(
                                     fontSize: 12,
-                                    fontWeight: FontWeight.w800,
+                                    fontWeight: FontWeight.w600,
                                     color: AppColors.fieldLabel,
                                     letterSpacing: 1.0,
                                   ),
@@ -104,6 +113,13 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
                                     prefixIcon: Icons.lock_outline,
                                     obscureText:
                                         controller.obscurePassword.value,
+                                    errorText: controller.passwordError.value,
+                                    onChanged: (_) {
+                                      if (controller.passwordError.value !=
+                                          null) {
+                                        controller.passwordError.value = null;
+                                      }
+                                    },
                                     suffixIcon: IconButton(
                                       icon: Icon(
                                         controller.obscurePassword.value
@@ -122,7 +138,7 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
                                   'Confirm Password',
                                   style: AppTextStyles.outfit(
                                     fontSize: 12,
-                                    fontWeight: FontWeight.w800,
+                                    fontWeight: FontWeight.w600,
                                     color: AppColors.fieldLabel,
                                     letterSpacing: 1.0,
                                   ),
@@ -136,6 +152,17 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
                                     prefixIcon: Icons.lock_outline,
                                     obscureText:
                                         controller.obscureConfirmPassword.value,
+                                    errorText:
+                                        controller.confirmPasswordError.value,
+                                    onChanged: (_) {
+                                      if (controller
+                                              .confirmPasswordError
+                                              .value !=
+                                          null) {
+                                        controller.confirmPasswordError.value =
+                                            null;
+                                      }
+                                    },
                                     suffixIcon: IconButton(
                                       icon: Icon(
                                         controller.obscureConfirmPassword.value
@@ -188,7 +215,7 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
                                                 'Resend Code',
                                                 style: AppTextStyles.outfit(
                                                   fontSize: 14,
-                                                  fontWeight: FontWeight.w800,
+                                                  fontWeight: FontWeight.w600,
                                                   color: AppColors.primaryBrand,
                                                 ),
                                               ),
@@ -197,7 +224,7 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
                                               '00:${controller.timerSeconds.value.toString().padLeft(2, '0')}',
                                               style: AppTextStyles.outfit(
                                                 fontSize: 14,
-                                                fontWeight: FontWeight.w800,
+                                                fontWeight: FontWeight.w600,
                                                 color: AppColors.primaryBrand,
                                               ),
                                             ),
@@ -227,34 +254,63 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
     bool obscureText = false,
     Widget? suffixIcon,
     TextInputType? keyboardType,
+    String? errorText,
+    ValueChanged<String>? onChanged,
   }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.fieldBg,
-        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-        border: Border.all(color: AppColors.fieldBorder),
-      ),
-      child: TextField(
-        controller: controller,
-        obscureText: obscureText,
-        keyboardType: keyboardType,
-        style: AppTextStyles.outfit(fontSize: 14, color: AppColors.textPrimary),
-        decoration: InputDecoration(
-          hintText: hint,
-          hintStyle: AppTextStyles.outfit(
-            fontSize: 14,
-            color: AppColors.fieldLabel,
+    final hasError = errorText != null;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            color: AppColors.fieldBg,
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+            border: Border.all(
+              color: hasError ? Colors.redAccent : AppColors.fieldBorder,
+              width: hasError ? 1.5 : 1,
+            ),
           ),
-          prefixIcon: Icon(
-            prefixIcon,
-            color: AppColors.fieldLabel,
-            size: AppSpacing.s20,
+          child: TextField(
+            controller: controller,
+            obscureText: obscureText,
+            keyboardType: keyboardType,
+            onChanged: onChanged,
+            style: AppTextStyles.outfit(
+              fontSize: 14,
+              color: AppColors.textPrimary,
+            ),
+            decoration: InputDecoration(
+              hintText: hint,
+              hintStyle: AppTextStyles.outfit(
+                fontSize: 14,
+                color: AppColors.fieldLabel,
+              ),
+              prefixIcon: Icon(
+                prefixIcon,
+                color: AppColors.fieldLabel,
+                size: AppSpacing.s20,
+              ),
+              suffixIcon: suffixIcon,
+              border: InputBorder.none,
+              contentPadding: AppSpacing.all16,
+            ),
           ),
-          suffixIcon: suffixIcon,
-          border: InputBorder.none,
-          contentPadding: AppSpacing.all16,
         ),
-      ),
+        if (hasError) ...[
+          const SizedBox(height: 4),
+          Padding(
+            padding: const EdgeInsets.only(left: 4),
+            child: Text(
+              errorText,
+              style: AppTextStyles.outfit(
+                fontSize: 12,
+                color: Colors.redAccent,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ],
+      ],
     );
   }
 }

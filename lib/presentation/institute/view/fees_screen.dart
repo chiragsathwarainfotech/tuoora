@@ -82,7 +82,7 @@ class InstituteFeesScreen extends GetView<InstituteController> {
             AppStrings.instCurrentMonthCollected,
             style: AppTextStyles.outfit(
               fontSize: 12,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.white.withValues(alpha: 0.7),
               letterSpacing: 1.2,
             ),
@@ -109,7 +109,7 @@ class InstituteFeesScreen extends GetView<InstituteController> {
           AppStrings.instFeeRegistry,
           style: AppTextStyles.outfit(
             fontSize: 18,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.textPrimary,
           ),
         ),
@@ -189,7 +189,7 @@ class InstituteFeesScreen extends GetView<InstituteController> {
               name.isNotEmpty ? name[0] : '?',
               style: AppTextStyles.outfit(
                 fontSize: 18,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 color: AppColors.primaryBrand,
               ),
             ),
@@ -206,7 +206,7 @@ class InstituteFeesScreen extends GetView<InstituteController> {
                       name,
                       style: AppTextStyles.outfit(
                         fontSize: 16,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.textPrimary,
                       ),
                     ),
@@ -214,7 +214,7 @@ class InstituteFeesScreen extends GetView<InstituteController> {
                       amount,
                       style: AppTextStyles.outfit(
                         fontSize: 16,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.textPrimary,
                       ),
                     ),

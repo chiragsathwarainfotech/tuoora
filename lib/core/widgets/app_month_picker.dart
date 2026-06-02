@@ -56,7 +56,7 @@ class _AppMonthPickerState extends State<AppMonthPicker> {
                   _viewYear.toString(),
                   style: AppTextStyles.outfit(
                     fontSize: 20,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                 ),
@@ -154,7 +154,7 @@ class _AppMonthPickerState extends State<AppMonthPicker> {
                     'Cancel',
                     style: AppTextStyles.outfit(
                       fontSize: 15,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.textSecondary,
                     ),
                   ),
@@ -178,7 +178,7 @@ class _AppMonthPickerState extends State<AppMonthPicker> {
                     'OK',
                     style: AppTextStyles.outfit(
                       fontSize: 15,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),

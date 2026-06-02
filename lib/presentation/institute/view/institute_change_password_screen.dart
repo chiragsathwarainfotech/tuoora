@@ -119,7 +119,7 @@ class InstituteChangePasswordScreen extends GetView<SecurityController> {
           label,
           style: AppTextStyles.outfit(
             fontSize: 14,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.textDarkGrey,
           ),
         ),

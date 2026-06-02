@@ -47,7 +47,7 @@ class SalaryManagementScreen extends GetView<StaffController> {
                       'Payout History',
                       style: AppTextStyles.outfit(
                         fontSize: 18,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.textPrimary,
                       ),
                     ),
@@ -195,7 +195,7 @@ class SalaryManagementScreen extends GetView<StaffController> {
                 name,
                 style: AppTextStyles.outfit(
                   fontSize: 15,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
                 ),
               ),
@@ -216,7 +216,7 @@ class SalaryManagementScreen extends GetView<StaffController> {
               amount,
               style: AppTextStyles.outfit(
                 fontSize: 15,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 color: AppColors.textPrimary,
               ),
             ),
@@ -224,7 +224,7 @@ class SalaryManagementScreen extends GetView<StaffController> {
               'PAID',
               style: AppTextStyles.outfit(
                 fontSize: 10,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 color: AppColors.successGreen,
                 letterSpacing: 0.5,
               ),
@@ -260,7 +260,7 @@ class SalaryManagementScreen extends GetView<StaffController> {
         getInitials(name),
         style: AppTextStyles.outfit(
           fontSize: 14,
-          fontWeight: FontWeight.w800,
+          fontWeight: FontWeight.w600,
           color: AppColors.primaryBrand,
         ),
       ),

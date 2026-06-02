@@ -242,7 +242,7 @@ class _GreetingTitle extends StatelessWidget {
               initials,
               style: AppTextStyles.outfit(
                 fontSize: 12,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 color: AppColors.primaryBrand,
               ),
             ),
@@ -255,7 +255,7 @@ class _GreetingTitle extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: AppTextStyles.outfit(
                 fontSize: 18,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 color: AppColors.textPrimary,
               ),
             ),
@@ -313,7 +313,7 @@ class _TodayClassCard extends StatelessWidget {
                       display.monthLabel,
                       style: AppTextStyles.outfit(
                         fontSize: 12,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.white,
                         letterSpacing: 1.2,
                       ),
@@ -331,7 +331,7 @@ class _TodayClassCard extends StatelessWidget {
                         '${display.weekdayLabel}  •  ${display.headerLabel}',
                         style: AppTextStyles.outfit(
                           fontSize: 10,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w600,
                           color: AppColors.textTertiary,
                           letterSpacing: 1.2,
                         ),
@@ -341,7 +341,7 @@ class _TodayClassCard extends StatelessWidget {
                         display.subject,
                         style: AppTextStyles.outfit(
                           fontSize: 18,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w600,
                           color: AppColors.textPrimary,
                         ),
                         maxLines: 1,
@@ -401,7 +401,7 @@ class _WeekStrip extends StatelessWidget {
               day.day,
               style: AppTextStyles.outfit(
                 fontSize: 10,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
                 color: AppColors.textTertiary,
               ),
             ),
@@ -469,7 +469,7 @@ class _AssignmentTile extends StatelessWidget {
                   item.title,
                   style: AppTextStyles.outfit(
                     fontSize: 14,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                   maxLines: 1,
@@ -505,7 +505,7 @@ class _AssignmentTile extends StatelessWidget {
               item.status,
               style: AppTextStyles.outfit(
                 fontSize: 11,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
                 color: pillText,
               ),
             ),
@@ -564,7 +564,7 @@ class _AttendanceCard extends StatelessWidget {
                   status,
                   style: AppTextStyles.outfit(
                     fontSize: 16,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: textColor,
                   ),
                 ),
@@ -631,7 +631,7 @@ class _StudyMaterialTile extends StatelessWidget {
                   title,
                   style: AppTextStyles.outfit(
                     fontSize: 14,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                 ),
@@ -704,7 +704,7 @@ class _PendingFeeTile extends StatelessWidget {
                   date,
                   style: AppTextStyles.outfit(
                     fontSize: 14,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                 ),
@@ -734,7 +734,7 @@ class _PendingFeeTile extends StatelessWidget {
               'Pending',
               style: AppTextStyles.outfit(
                 fontSize: 11,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
                 color: AppColors.white,
               ),
             ),

@@ -86,7 +86,7 @@ class StudentHolidayDetailScreen extends StatelessWidget {
                 'INSTITUTE CLOSED',
                 style: AppTextStyles.outfit(
                   fontSize: 10,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textSecondary,
                   letterSpacing: 1.0,
                 ),
@@ -149,7 +149,7 @@ class StudentHolidayDetailScreen extends StatelessWidget {
                   'CLASSES RESUME',
                   style: AppTextStyles.outfit(
                     fontSize: 10,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textTertiary,
                     letterSpacing: 0.5,
                   ),
@@ -158,7 +158,7 @@ class StudentHolidayDetailScreen extends StatelessWidget {
                   'Thursday, 22 May 2026 at 8:00 AM',
                   style: AppTextStyles.outfit(
                     fontSize: 13,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                 ),

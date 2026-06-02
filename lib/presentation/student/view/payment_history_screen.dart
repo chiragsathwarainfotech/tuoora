@@ -33,7 +33,7 @@ class PaymentHistoryScreen extends StatelessWidget {
           title,
           style: AppTextStyles.outfit(
             fontSize: 18,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.darkSlate,
           ),
         ),
@@ -99,7 +99,7 @@ class PaymentHistoryScreen extends StatelessWidget {
         month.toUpperCase(),
         style: AppTextStyles.outfit(
           fontSize: 12,
-          fontWeight: FontWeight.w800,
+          fontWeight: FontWeight.w600,
           color: AppColors.textTertiary,
           letterSpacing: 1.2,
         ),

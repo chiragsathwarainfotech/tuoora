@@ -34,7 +34,7 @@ class StudentChatScreen extends StatelessWidget {
                   'SC',
                   style: AppTextStyles.outfit(
                     fontSize: 14,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.white,
                   ),
                 ),
@@ -48,7 +48,7 @@ class StudentChatScreen extends StatelessWidget {
                   'Saraswati Coaching Centre',
                   style: AppTextStyles.outfit(
                     fontSize: 14,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                 ),
@@ -279,7 +279,7 @@ class StudentChatScreen extends StatelessWidget {
             label,
             style: AppTextStyles.outfit(
               fontSize: 10,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               color: AppColors.textSecondary,
             ),
           ),
@@ -298,7 +298,7 @@ class StudentChatScreen extends StatelessWidget {
             date,
             style: AppTextStyles.outfit(
               fontSize: 10,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.textTertiary,
               letterSpacing: 1.0,
             ),

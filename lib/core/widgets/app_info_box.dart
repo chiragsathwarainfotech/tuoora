@@ -45,7 +45,7 @@ class AppInfoBox extends StatelessWidget {
                   title,
                   style: AppTextStyles.outfit(
                     fontSize: titleFontSize ?? 14,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: themeColor,
                   ),
                 ),

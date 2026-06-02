@@ -102,7 +102,7 @@ class AttendanceHistoryScreen extends GetView<StaffController> {
                             name,
                             style: AppTextStyles.outfit(
                               fontSize: 16,
-                              fontWeight: FontWeight.w800,
+                              fontWeight: FontWeight.w600,
                               color: AppColors.textPrimary,
                             ),
                           ),
@@ -181,7 +181,7 @@ class AttendanceHistoryScreen extends GetView<StaffController> {
           getInitials(name),
           style: AppTextStyles.outfit(
             fontSize: size * 0.4,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.primaryBrand,
           ),
         ),

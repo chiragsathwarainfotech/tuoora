@@ -110,7 +110,7 @@ class ReportsScreen extends StatelessWidget {
                     title,
                     style: AppTextStyles.outfit(
                       fontSize: 20,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.textPrimary,
                     ),
                   ),

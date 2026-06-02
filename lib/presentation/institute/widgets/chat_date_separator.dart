@@ -24,7 +24,7 @@ class ChatDateSeparator extends StatelessWidget {
           label,
           style: AppTextStyles.outfit(
             fontSize: 11,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w600,
             color: AppColors.primaryBrand,
             letterSpacing: 0.3,
           ),

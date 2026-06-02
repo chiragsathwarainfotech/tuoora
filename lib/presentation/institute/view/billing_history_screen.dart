@@ -70,7 +70,7 @@ class BillingHistoryScreen extends StatelessWidget {
                   id,
                   style: AppTextStyles.outfit(
                     fontSize: AppSpacing.s16,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.brandAppBarColor,
                   ),
                 ),
@@ -91,7 +91,7 @@ class BillingHistoryScreen extends StatelessWidget {
                 '₹$amount',
                 style: AppTextStyles.outfit(
                   fontSize: AppSpacing.s16,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.brandAppBarColor,
                 ),
               ),

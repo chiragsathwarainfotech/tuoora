@@ -280,7 +280,7 @@ class AssignToBatchScreen extends StatelessWidget {
                             student.name,
                             style: AppTextStyles.outfit(
                               fontSize: 16,
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.w600,
                               color: AppColors.textPrimary,
                             ),
                           ),
@@ -369,7 +369,7 @@ class AssignToBatchScreen extends StatelessWidget {
                           bs.student.name,
                           style: AppTextStyles.outfit(
                             fontSize: 16,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w600,
                             color: AppColors.textPrimary,
                           ),
                         ),
@@ -425,7 +425,7 @@ class AssignToBatchScreen extends StatelessWidget {
                               ),
                               keyboardType: TextInputType.number,
                               style: AppTextStyles.outfit(
-                                fontWeight: FontWeight.w700,
+                                fontWeight: FontWeight.w600,
                               ),
                               decoration: const InputDecoration(
                                 hintText: 'Enter Fee',
@@ -475,7 +475,7 @@ class AssignToBatchScreen extends StatelessWidget {
                 initial,
                 style: AppTextStyles.outfit(
                   fontSize: 16,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.primaryBrand,
                 ),
               ),
@@ -515,7 +515,7 @@ class AssignToBatchScreen extends StatelessWidget {
                   initial,
                   style: AppTextStyles.outfit(
                     fontSize: 18,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.primaryBrand,
                   ),
                 ),

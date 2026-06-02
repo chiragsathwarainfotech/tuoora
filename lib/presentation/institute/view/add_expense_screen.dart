@@ -95,7 +95,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
           'Category',
           style: AppTextStyles.outfit(
             fontSize: 14,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.fieldLabel,
           ),
         ),
@@ -175,7 +175,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
           'Date',
           style: AppTextStyles.outfit(
             fontSize: 14,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.fieldLabel,
           ),
         ),
@@ -224,7 +224,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
           'Payment Method',
           style: AppTextStyles.outfit(
             fontSize: 14,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.fieldLabel,
           ),
         ),
@@ -314,7 +314,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
                     : 'Add Receipt',
                 style: AppTextStyles.outfit(
                   fontSize: 14,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.primaryBrand,
                 ),
                 maxLines: 1,

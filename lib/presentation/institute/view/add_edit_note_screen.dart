@@ -52,7 +52,7 @@ class AddEditNoteScreen extends GetView<NotesController> {
             errorText: controller.titleError.value,
             textStyle: AppTextStyles.outfit(
               fontSize: 18,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               color: AppColors.textPrimary,
             ),
           ),
@@ -86,7 +86,7 @@ class AddEditNoteScreen extends GetView<NotesController> {
           'Category',
           style: AppTextStyles.outfit(
             fontSize: 14,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.fieldLabel,
           ),
         ),

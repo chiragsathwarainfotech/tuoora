@@ -4,6 +4,8 @@ import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/controllers/institute_profile_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
+import 'package:tuoora/core/widgets/app_version_label.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/core/constants/app_images.dart';
 import 'package:tuoora/core/widgets/app_action_icon.dart';
@@ -22,7 +24,17 @@ class InstituteProfileViewScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const InstituteAppBar(title: 'Institute Profile', isRoot: false),
+            InstituteAppBar(
+              title: 'Institute Profile',
+              isRoot: false,
+              actions: [
+                IconButton(
+                  onPressed: () => Get.toNamed(AppRoutes.instituteEditProfile),
+                  icon: const AppActionIcon(asset: AppImages.icEdit),
+                ),
+                AppSpacing.h8,
+              ],
+            ),
             Expanded(
               child: Obx(() {
                 if (controller.isLoading.value &&
@@ -65,7 +77,9 @@ class InstituteProfileViewScreen extends StatelessWidget {
                         _buildHeader(controller, p),
                         AppSpacing.v24,
                         _buildInfoAndSettings(context, controller, p),
-                        AppSpacing.v40,
+                        AppSpacing.v24,
+                        const AppVersionLabel(),
+                        AppSpacing.v24,
                       ],
                     ),
                   ),
@@ -81,50 +95,29 @@ class InstituteProfileViewScreen extends StatelessWidget {
   Widget _buildHeader(InstituteProfileController controller, var p) {
     return Column(
       children: [
-        Stack(
-          children: [
-            Container(
-              width: 96,
-              height: 96,
-              decoration: BoxDecoration(
-                color: AppColors.primaryBrandLight,
-                borderRadius: BorderRadius.circular(28),
-                image: p.logoUrl != null
-                    ? DecorationImage(
-                        image: NetworkImage(p.logoUrl!),
-                        fit: BoxFit.cover,
-                      )
-                    : null,
-              ),
-              child: p.logoUrl == null
-                  ? const Icon(
-                      Icons.school_rounded,
-                      size: 44,
-                      color: AppColors.primaryBrand,
-                    )
-                  : null,
-            ),
-            Positioned(
-              bottom: 0,
-              right: 0,
-              child: GestureDetector(
-                onTap: () => Get.toNamed(AppRoutes.instituteEditProfile),
-                child: Container(
-                  padding: AppSpacing.all8,
-                  decoration: BoxDecoration(
+        Container(
+          width: 140,
+          height: 140,
+          decoration: BoxDecoration(
+            color: AppColors.primaryBrandLight,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: AppColors.fieldLabel),
+            image: p.logoUrl != null
+                ? DecorationImage(
+                    image: NetworkImage(p.logoUrl!),
+                    fit: BoxFit.cover,
+                  )
+                : null,
+          ),
+          child: p.logoUrl == null
+              ? const Center(
+                  child: Icon(
+                    Icons.school_rounded,
+                    size: 56,
                     color: AppColors.primaryBrand,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: AppColors.surfaceBg, width: 2),
                   ),
-                  child: const AppActionIcon(
-                    asset: AppImages.icEdit,
-                    size: 16,
-                    color: AppColors.white,
-                  ),
-                ),
-              ),
-            ),
-          ],
+                )
+              : null,
         ),
         AppSpacing.v16,
         Text(
@@ -204,28 +197,19 @@ class InstituteProfileViewScreen extends StatelessWidget {
           icon: Icons.description_outlined,
           title: 'Terms & Conditions',
           subtitle: 'Read our terms of service',
-          onTap: () => Get.snackbar(
-            'Coming Soon',
-            'T&C details will be available soon.',
-          ),
+          onTap: () => AppSnackBar.warning('Coming soon'),
         ),
         _buildSettingsItem(
           icon: Icons.privacy_tip_outlined,
           title: 'Privacy Policy',
           subtitle: 'Learn how we protect your data',
-          onTap: () => Get.snackbar(
-            'Coming Soon',
-            'Privacy Policy will be available soon.',
-          ),
+          onTap: () => AppSnackBar.warning('Coming soon'),
         ),
         _buildSettingsItem(
           icon: Icons.help_center_outlined,
           title: 'Help Center',
           subtitle: 'Get assistance and FAQs',
-          onTap: () => Get.snackbar(
-            'Coming Soon',
-            'Help details will be available soon.',
-          ),
+          onTap: () => AppSnackBar.warning('Coming soon'),
         ),
         _buildDivider(),
         _buildSettingsItem(
@@ -244,13 +228,13 @@ class InstituteProfileViewScreen extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(0, 24, 0, 12),
       child: Row(
         children: [
-          Icon(icon, size: 18, color: AppColors.fieldLabel),
+          Icon(icon, size: 20, color: AppColors.fieldLabel),
           AppSpacing.h12,
           Text(
             title,
             style: AppTextStyles.outfit(
-              fontSize: 11,
-              fontWeight: FontWeight.w900,
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
               color: AppColors.textPrimary,
               letterSpacing: 1.1,
             ),

@@ -18,10 +18,6 @@ class BatchModel {
   final dynamic totalPaid;
   final List<String> days;
   final List<dynamic>? students;
-  // Raw classroom value from the API (nullable). [location] is kept for
-  // backwards compatibility and falls back to "Main Hall"; [classroom] is
-  // the unvarnished string so the edit form can re-hydrate the field
-  // correctly when it's actually empty on the server.
   final String? classroom;
   final int? staffId;
   final String? staffName;
@@ -48,4 +44,3 @@ class BatchModel {
     this.staffName,
   });
 }
-

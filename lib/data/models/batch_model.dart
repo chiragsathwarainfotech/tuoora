@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart' show Color;
 import 'package:tuoora/presentation/institute/models/batch_model.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/data/models/staff_model.dart';
@@ -23,6 +24,15 @@ class Batch {
   final int? staffId;
   final Staff? staff;
 
+  /// Server-side lifecycle status — `"active"`, `"closed"`, etc. Drives
+  /// the status badge label / colour on the UI side via [toUIModel].
+  final String status;
+
+  /// Soft-delete timestamp passed straight through from the API. The app
+  /// doesn't render deleted batches today, but keeping it on the model
+  /// means future callers can filter on it without re-parsing.
+  final String? deletedAt;
+
   Batch({
     required this.id,
     required this.instituteId,
@@ -43,9 +53,37 @@ class Batch {
     this.students,
     this.staffId,
     this.staff,
+    this.status = 'active',
+    this.deletedAt,
   });
 
   BatchModel toUIModel() {
+    // Map server status → label + status-badge colours. Anything not
+    // explicitly recognised falls back to a neutral "Active" look so a
+    // future status value doesn't break the badge.
+    final normalized = status.toLowerCase().trim();
+    final String label;
+    final Color bg;
+    final Color textColor;
+    switch (normalized) {
+      case 'closed':
+        label = 'Closed';
+        bg = AppColors.errorBg;
+        textColor = AppColors.bohoRed;
+        break;
+      case 'inactive':
+        label = 'Inactive';
+        bg = AppColors.errorBg;
+        textColor = AppColors.bohoRed;
+        break;
+      case 'active':
+      default:
+        label = 'Active';
+        bg = AppColors.successBg;
+        textColor = AppColors.greenText;
+        break;
+    }
+
     return BatchModel(
       id: id.toString(),
       title: name,
@@ -53,10 +91,10 @@ class Batch {
       subject: subject,
       studentCount: '${studentsCount ?? 0} Students',
       location: classroom ?? 'Main Hall',
-      statusLabel: 'Active',
-      statusBg: AppColors.successBg,
+      statusLabel: label,
+      statusBg: bg,
       leftBorderColor: AppColors.primaryBrand,
-      statusTextColor: AppColors.greenText,
+      statusTextColor: textColor,
       baseFee: double.tryParse(fees.toString()) ?? 0.0,
       description: description,
       totalExpected: totalExpected,
@@ -70,32 +108,45 @@ class Batch {
   }
 
   factory Batch.fromJson(Map<String, dynamic> json) {
+    int safeInt(dynamic v, [int fallback = 0]) {
+      if (v == null) return fallback;
+      if (v is int) return v;
+      return int.tryParse(v.toString()) ?? fallback;
+    }
+
+    int? safeNullableInt(dynamic v) {
+      if (v == null) return null;
+      if (v is int) return v;
+      return int.tryParse(v.toString());
+    }
+
     return Batch(
-      id: json['id'],
-      instituteId: json['institute_id'],
-      name: json['name'] ?? '',
-      subject: json['subject'] ?? '',
-      description: json['description'] ?? '',
+      id: safeInt(json['id']),
+      instituteId: safeInt(json['institute_id']),
+      name: json['name']?.toString() ?? '',
+      subject: json['subject']?.toString() ?? '',
+      description: json['description']?.toString() ?? '',
       fees: json['fees']?.toString() ?? '0.00',
-      startTime: json['start_time'] ?? '',
-      endTime: json['end_time'] ?? '',
-      days: List<String>.from(json['days'] ?? []),
-      classroom: json['classroom'],
-      maxCapacity: json['max_capacity'],
-      createdAt: json['created_at'] ?? '',
-      updatedAt: json['updated_at'] ?? '',
-      studentsCount: json['students_count'],
+      startTime: json['start_time']?.toString() ?? '',
+      endTime: json['end_time']?.toString() ?? '',
+      days: (json['days'] as List?)?.map((d) => d.toString()).toList() ?? const [],
+      classroom: json['classroom']?.toString(),
+      maxCapacity: safeNullableInt(json['max_capacity']),
+      createdAt: json['created_at']?.toString() ?? '',
+      updatedAt: json['updated_at']?.toString() ?? '',
+      studentsCount: safeNullableInt(json['students_count']),
       totalPaid: json['total_paid'],
       totalExpected: json['total_expected'],
-      students: json['students'] != null
-          ? (json['students'] as List)
-                .map((i) => BatchStudent.fromJson(i))
-                .toList()
+      students: (json['students'] as List?)
+          ?.whereType<Map>()
+          .map((i) => BatchStudent.fromJson(i.cast<String, dynamic>()))
+          .toList(),
+      staffId: safeNullableInt(json['staff_id']),
+      staff: json['staff'] is Map
+          ? Staff.fromJson((json['staff'] as Map).cast<String, dynamic>())
           : null,
-      staffId: json['staff_id'] == null
-          ? null
-          : int.tryParse(json['staff_id'].toString()),
-      staff: json['staff'] != null ? Staff.fromJson(json['staff']) : null,
+      status: json['status']?.toString() ?? 'active',
+      deletedAt: json['deleted_at']?.toString(),
     );
   }
 
@@ -119,6 +170,16 @@ class Batch {
       'total_expected': totalExpected,
       'students': students?.map((s) => s.toJson()).toList(),
       'staff_id': staffId,
+      'staff': staff != null
+          ? {
+              'id': staff!.id,
+              'full_name': staff!.fullName,
+              'email': staff!.email,
+              'phone': staff!.phone,
+            }
+          : null,
+      'status': status,
+      'deleted_at': deletedAt,
     };
   }
 
@@ -145,22 +206,31 @@ class Batch {
 class BatchStudent {
   final int id;
   final String name;
-  final int batchId;
+  final int? batchId;
   final String? profileImageUrl;
+  final bool isBirthdayToday;
 
   BatchStudent({
     required this.id,
     required this.name,
-    required this.batchId,
+    this.batchId,
     this.profileImageUrl,
+    this.isBirthdayToday = false,
   });
 
   factory BatchStudent.fromJson(Map<String, dynamic> json) {
+    int? toInt(dynamic v) {
+      if (v == null) return null;
+      if (v is int) return v;
+      return int.tryParse(v.toString());
+    }
+
     return BatchStudent(
-      id: json['id'],
-      name: json['name'] ?? '',
-      batchId: json['batch_id'],
-      profileImageUrl: json['profile_image_url'],
+      id: toInt(json['id']) ?? 0,
+      name: json['name']?.toString() ?? '',
+      batchId: toInt(json['batch_id']),
+      profileImageUrl: json['profile_image_url']?.toString(),
+      isBirthdayToday: json['is_birthday_today'] == true,
     );
   }
 
@@ -170,6 +240,7 @@ class BatchStudent {
       'name': name,
       'batch_id': batchId,
       'profile_image_url': profileImageUrl,
+      'is_birthday_today': isBirthdayToday,
     };
   }
 }

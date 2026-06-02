@@ -390,13 +390,15 @@ class _AssignmentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool disabled = item.isOverdue;
-    final VoidCallback? effectiveOnTap = disabled ? null : onTap;
+    // Overdue rows stay tappable — the detail screen still opens; it just
+    // disables the Submit action. We dim the card slightly so the user
+    // still gets a visual cue that no action is possible.
+    final bool dimmed = item.isOverdue;
 
     final card = Material(
       color: AppColors.white,
       child: InkWell(
-        onTap: effectiveOnTap,
+        onTap: onTap,
         child: Ink(
           decoration: BoxDecoration(
             color: AppColors.white,
@@ -507,8 +509,8 @@ class _AssignmentCard extends StatelessWidget {
         ),
       ),
     );
-    if (disabled) {
-      return AbsorbPointer(child: Opacity(opacity: 0.55, child: card));
+    if (dimmed) {
+      return Opacity(opacity: 0.7, child: card);
     }
     return card;
   }

@@ -150,9 +150,10 @@ class Message {
   MessageStatus get status {
     if (failed) return MessageStatus.failed;
     if (id.isEmpty) return MessageStatus.sending;
-    if (readAt != null && receivedAt != null) return MessageStatus.read;
+    // Read implies received — if backend skipped the MessageReceived event
+    // (or only the read ack made it through), still show the blue tick.
+    if (readAt != null) return MessageStatus.read;
     if (receivedAt != null) return MessageStatus.delivered;
-    if (readAt != null) return MessageStatus.delivered;
     return MessageStatus.sent;
   }
 

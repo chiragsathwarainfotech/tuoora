@@ -27,6 +27,7 @@ abstract class ChatRepository {
     File? attachment,
     required String myUserId,
     required String myUserType,
+    void Function(double percent)? onSendProgress,
   });
 
   Future<DateTime?> markReceived(int messageId);
@@ -85,6 +86,7 @@ class ChatRepositoryImpl implements ChatRepository {
     File? attachment,
     required String myUserId,
     required String myUserType,
+    void Function(double percent)? onSendProgress,
   }) async {
     final commonFields = <String, dynamic>{
       'receiver_id': receiverId.toString(),
@@ -109,6 +111,7 @@ class ChatRepositoryImpl implements ChatRepository {
                     : attachment.uri.pathSegments.last,
               ),
             }),
+            uploadProgress: onSendProgress,
           );
 
     if (response.status.hasError) {

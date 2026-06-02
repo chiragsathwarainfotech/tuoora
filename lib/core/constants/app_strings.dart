@@ -2,9 +2,8 @@ class AppStrings {
   // Global
   static const String appName = 'Tuoora';
 
-  // Login Screen
-  static const String tagLine =
-      'Step back into your clarified sanctuary of\nlearning.';
+  // Login / Splash / Signup brand tagline
+  static const String tagLine = 'A bridge of knowledge for all.';
   static const String rememberMe = 'Remember Me';
   static const String signInButton = 'Sign In';
   static const String enrolmentText = 'New to Tuoora? ';
@@ -165,8 +164,8 @@ class AppStrings {
   static const String instBatchDetailsTitle = 'Batch Details';
   static const String instActiveBatchTag = 'ACTIVE BATCH';
   static const String instStudentsCountLabel = 'Students';
-  static const String instFeesPaidLabel = 'Fees Paid';
-  static const String instTotalCollectionLabel = 'Total Coll.';
+  static const String instFeesPaidLabel = 'Collection';
+  static const String instTotalCollectionLabel = 'Total Fee';
   static const String instStudentEnrollmentLabel = 'Student Enrollment';
   static const String instAddStudentToBatch = 'Add Student to Batch';
   static const String instAttendanceRateLabel = 'Attendance';
@@ -358,14 +357,20 @@ class AppStrings {
   static const String instIncludedBenefits = 'Included Benefits';
   static const String instAutomatedBilling = 'Automated Billing';
   static const String instAutoBillingDesc =
-      'Real-time invoice generation & SMS alerts';
+      'Streamline your finance department with automated invoices.';
   static const String instPrioritySupport = 'Priority Support';
   static const String instPrioritySupportDesc =
-      'Dedicated manager available 24/7';
+      '24/7 access to our specialized support engineers.';
   static const String instWhatsAppOption = 'WhatsApp Integration';
-  static const String instWhatsAppOptionDesc = 'Direct fee reminders via API';
-  static const String instRecentBilling = 'Recent Billing';
+  static const String instWhatsAppOptionDesc =
+      'Keep parents and students informed via automated WhatsApp.';
+  static const String instRecentBilling = 'Recent Billing History';
   static const String instRenewUpgradeBtn = 'Renew or Upgrade Plan';
+  static const String instChoosePerfectPlan =
+      "Choose the perfect plan for your institute's growth";
+  static const String instChooseBestPlan = 'Choose the best plan for your campus';
+  static const String instScalableSolutions =
+      'Scalable solutions for individual schools to large university networks.';
 
   // Institute WhatsApp Integration
   static const String instWhatsAppIntegration = 'WhatsApp Integration';

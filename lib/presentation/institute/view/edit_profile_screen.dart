@@ -1,13 +1,11 @@
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
-import 'package:tuoora/core/enums/app_enums.dart';
 import 'package:tuoora/presentation/institute/controllers/institute_profile_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
 import 'package:tuoora/core/widgets/app_input_field.dart';
-import 'package:tuoora/core/widgets/app_info_box.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -32,18 +30,15 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
                   ),
                   Expanded(
                     child: SingleChildScrollView(
-                      padding: AppSpacing.all24,
+                      padding: AppSpacing.screenPadding,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           _buildLogoSection(),
-                          AppSpacing.v32,
+                          AppSpacing.v24,
                           _buildFormSection(),
                           AppSpacing.v24,
-                          _buildSecurityNotice(),
-                          AppSpacing.v40,
                           _buildActionButtons(),
-                          AppSpacing.v40,
                         ],
                       ),
                     ),
@@ -62,44 +57,39 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
     return Column(
       children: [
         Stack(
+          clipBehavior: Clip.none,
           children: [
-            Obx(
-              () => SizedBox(
+            Obx(() {
+              final path = controller.profileImagePath.value;
+              return Container(
                 width: 140,
                 height: 140,
-                child: controller.profileImagePath.value == null
+                decoration: BoxDecoration(
+                  color: AppColors.primaryBrandLight,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: path == null
                     ? const Center(
                         child: Icon(
                           Icons.school_rounded,
-                          size: 64,
+                          size: 56,
                           color: AppColors.primaryBrand,
                         ),
                       )
-                    : ClipRRect(
-                        borderRadius: BorderRadius.circular(32),
-                        child:
-                            controller.profileImagePath.value!.startsWith(
-                                  'http',
-                                ) ||
-                                !controller.profileImagePath.value!.contains(
-                                  '/',
-                                )
-                            ? Image.network(
-                                controller.profileImagePath.value!,
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) =>
-                                    const Icon(Icons.error),
-                              )
-                            : Image.file(
-                                File(controller.profileImagePath.value!),
-                                fit: BoxFit.cover,
-                              ),
-                      ),
-              ),
-            ),
+                    : (path.startsWith('http') || !path.contains('/')
+                          ? Image.network(
+                              path,
+                              fit: BoxFit.cover,
+                              errorBuilder: (_, _, _) =>
+                                  const Icon(Icons.error),
+                            )
+                          : Image.file(File(path), fit: BoxFit.cover)),
+              );
+            }),
             Positioned(
-              bottom: 8,
-              right: 8,
+              bottom: -6,
+              right: -6,
               child: GestureDetector(
                 onTap: () => controller.pickImage(),
                 child: Container(
@@ -141,7 +131,7 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
 
   Widget _buildFormSection() {
     return Container(
-      padding: AppSpacing.all24,
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
@@ -167,8 +157,8 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
               Text(
                 'INSTITUTE INFORMATION',
                 style: AppTextStyles.outfit(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w900,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
                   letterSpacing: 1.2,
                 ),
@@ -181,7 +171,6 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
               label: AppStrings.instInstituteNameLabel,
               controller: controller.nameController,
               icon: Icons.school_outlined,
-              variant: AppInputFieldVariant.profile,
               errorText: controller.instituteNameError.value,
             ),
           ),
@@ -191,7 +180,6 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
               label: AppStrings.instOwnerNameLabel,
               controller: controller.ownerController,
               icon: Icons.person_outline_rounded,
-              variant: AppInputFieldVariant.profile,
               errorText: controller.ownerNameError.value,
             ),
           ),
@@ -203,7 +191,6 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
               icon: Icons.alternate_email_rounded,
               keyboardType: TextInputType.emailAddress,
               enabled: false,
-              variant: AppInputFieldVariant.profile,
               errorText: controller.emailError.value,
             ),
           ),
@@ -214,7 +201,6 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
               controller: controller.phoneController,
               icon: Icons.phone_iphone_rounded,
               keyboardType: TextInputType.number,
-              variant: AppInputFieldVariant.profile,
               errorText: controller.phoneError.value,
             ),
           ),
@@ -223,35 +209,30 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
             label: 'Address Line 1',
             controller: controller.addressLine1Controller,
             icon: Icons.location_on_outlined,
-            variant: AppInputFieldVariant.profile,
           ),
           AppSpacing.v20,
           AppInputField(
             label: 'Address Line 2',
             controller: controller.addressLine2Controller,
             icon: Icons.location_on_outlined,
-            variant: AppInputFieldVariant.profile,
           ),
           AppSpacing.v20,
           AppInputField(
             label: 'City',
             controller: controller.cityController,
             icon: Icons.location_city_rounded,
-            variant: AppInputFieldVariant.profile,
           ),
           AppSpacing.v20,
           AppInputField(
             label: 'State',
             controller: controller.stateController,
             icon: Icons.map_rounded,
-            variant: AppInputFieldVariant.profile,
           ),
           AppSpacing.v20,
           AppInputField(
             label: 'Country',
             controller: controller.countryController,
             icon: Icons.public_rounded,
-            variant: AppInputFieldVariant.profile,
           ),
           AppSpacing.v20,
           Obx(
@@ -260,7 +241,6 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
               controller: controller.pincodeController,
               icon: Icons.pin_drop_rounded,
               keyboardType: TextInputType.number,
-              variant: AppInputFieldVariant.profile,
               errorText: controller.pincodeError.value,
             ),
           ),
@@ -269,49 +249,14 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
     );
   }
 
-  Widget _buildSecurityNotice() {
-    return const AppInfoBox(
-      icon: Icons.verified_user_rounded,
-      title: AppStrings.instSecurityNote,
-      description: AppStrings.instSecurityNoteDesc,
-    );
-  }
-
   Widget _buildActionButtons() {
     return SafeArea(
       top: false,
       minimum: const EdgeInsets.only(bottom: 16),
-      child: Column(
-        children: [
-          AppButton(
-            label: 'Save Profile Changes',
-            icon: Icons.check_circle_outline_rounded,
-            onPressed: () => controller.saveProfile(),
-          ),
-          AppSpacing.v16,
-          GestureDetector(
-            onTap: () => controller.discardChanges(),
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: AppSpacing.s18),
-              decoration: BoxDecoration(
-                color: Colors.transparent,
-                borderRadius: BorderRadius.circular(AppSpacing.s12),
-                border: Border.all(color: AppColors.borderGrey, width: 1.5),
-              ),
-              child: Center(
-                child: Text(
-                  'Discard Changes',
-                  style: AppTextStyles.outfit(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.textSecondary,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
+      child: AppButton(
+        label: 'Save Profile Changes',
+        icon: Icons.check_circle_outline_rounded,
+        onPressed: () => controller.saveProfile(),
       ),
     );
   }

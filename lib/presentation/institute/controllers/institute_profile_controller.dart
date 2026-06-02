@@ -115,12 +115,7 @@ class InstituteProfileController extends GetxController {
 
       _initializeControllers();
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Failed to load profile: $e',
-        backgroundColor: Colors.redAccent,
-        colorText: AppColors.white,
-      );
+      AppSnackBar.error('Failed to load profile');
     } finally {
       isLoading.value = false;
     }
@@ -252,14 +247,7 @@ class InstituteProfileController extends GetxController {
       await fetchProfile();
 
       Get.back();
-      Get.snackbar(
-        'Profile Updated',
-        'Institute details have been successfully saved.',
-        backgroundColor: AppColors.darkGreen,
-        colorText: AppColors.white,
-        snackPosition: SnackPosition.BOTTOM,
-        margin: const EdgeInsets.all(16),
-      );
+      AppSnackBar.success('Profile updated');
     } catch (e) {
       if (e is ValidationException) {
         _handleValidationErrors(e.errors);

@@ -48,8 +48,6 @@ enum UpdateCategory {
   String toJson() => name;
 }
 
-enum AppInputFieldVariant { standard, profile }
-
 enum ResourceType { image, video, document }
 
 enum ChatMenuAction { delete }

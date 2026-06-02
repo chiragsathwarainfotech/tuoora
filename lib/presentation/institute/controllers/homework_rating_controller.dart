@@ -1,6 +1,6 @@
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/presentation/institute/models/homework_model.dart';
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
-import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:get/get.dart';
 
 class HomeworkRatingController extends GetxController {
@@ -59,7 +59,7 @@ class HomeworkRatingController extends GetxController {
           .toList();
 
       if (scores.isEmpty) {
-        Get.snackbar('Notice', 'No submissions to rate');
+        AppSnackBar.warning('No submissions to rate');
         return;
       }
 
@@ -67,14 +67,9 @@ class HomeworkRatingController extends GetxController {
       await _repository.submitHomeworkScore(int.parse(homework.id), data);
 
       Get.back(result: true);
-      Get.snackbar(
-        'Success',
-        'Ratings submitted successfully',
-        backgroundColor: AppColors.darkGreen,
-        colorText: AppColors.white,
-      );
+      AppSnackBar.success('Ratings submitted');
     } catch (e) {
-      Get.snackbar('Error', 'Failed to submit ratings: ${e.toString()}');
+      AppSnackBar.error('Failed to submit ratings');
     } finally {
       isLoading.value = false;
     }

@@ -80,6 +80,9 @@ class _DetailBody extends StatelessWidget {
                 ],
                 const SizedBox(height: AppSpacing.s16),
                 _StatusBanner(assignment: assignment),
+                const SizedBox(height: AppSpacing.s16),
+                _SubmitAssignmentButton(assignment: assignment),
+                const SizedBox(height: AppSpacing.s16),
               ],
             ),
           ),
@@ -107,7 +110,6 @@ class _DueCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isCompleted = assignment.isCompleted;
     return Container(
       padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
@@ -163,50 +165,7 @@ class _DueCard extends StatelessWidget {
               ],
             ),
           ),
-          AppSpacing.h8,
-          _StatusPill(isCompleted: isCompleted, badge: assignment.badge),
         ],
-      ),
-    );
-  }
-}
-
-class _StatusPill extends StatelessWidget {
-  final bool isCompleted;
-  final AssignmentBadge badge;
-
-  const _StatusPill({required this.isCompleted, required this.badge});
-
-  @override
-  Widget build(BuildContext context) {
-    late final Color fg;
-    late final String label;
-    if (isCompleted) {
-      fg = AppColors.successGreen;
-      label = AppStrings.studentAssignmentDetailCompletedPill;
-    } else if (badge == AssignmentBadge.tomorrow) {
-      fg = AppColors.bohoRed;
-      label = AppStrings.studentTomorrowPill;
-    } else {
-      fg = AppColors.primaryBrand;
-      label = AppStrings.studentTodayPill;
-    }
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.s12,
-        vertical: AppSpacing.s4,
-      ),
-      decoration: BoxDecoration(
-        color: fg,
-        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-      ),
-      child: Text(
-        label,
-        style: AppTextStyles.outfit(
-          fontSize: 11,
-          fontWeight: FontWeight.w700,
-          color: AppColors.white,
-        ),
       ),
     );
   }
@@ -424,6 +383,127 @@ class _StatusBanner extends StatelessWidget {
       return _CompletedBanner(assignment: assignment);
     }
     return _PendingBanner(assignment: assignment);
+  }
+}
+
+class _SubmitAssignmentButton extends StatelessWidget {
+  final Assignment assignment;
+
+  const _SubmitAssignmentButton({required this.assignment});
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = Get.find<AssignmentsController>();
+
+    if (assignment.isCompleted) {
+      return _StaticButton(
+        backgroundColor: AppColors.successGreen,
+        icon: Icons.check_circle_rounded,
+        label: 'Submitted',
+      );
+    }
+    if (assignment.isOverdue) {
+      return _StaticButton(
+        backgroundColor: AppColors.textTertiary,
+        icon: Icons.lock_outline_rounded,
+        label: 'Overdue — cannot submit',
+      );
+    }
+
+    return Obx(() {
+      final submitting = controller.isSubmitting.value;
+      return Material(
+        color: submitting
+            ? AppColors.primaryBrand.withValues(alpha: 0.6)
+            : AppColors.primaryBrand,
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+        child: InkWell(
+          onTap: submitting ? null : controller.submitCurrentAssignment,
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.s16,
+              vertical: AppSpacing.s14,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (submitting)
+                  const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation(AppColors.white),
+                    ),
+                  )
+                else
+                  const Icon(
+                    Icons.check_circle_outline_rounded,
+                    size: 18,
+                    color: AppColors.white,
+                  ),
+                AppSpacing.h12,
+                Text(
+                  submitting ? 'Submitting...' : 'Submit Assignment',
+                  style: AppTextStyles.outfit(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.white,
+                    letterSpacing: 0.3,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    });
+  }
+}
+
+// Non-interactive button skin used for the Completed / Overdue states.
+// Kept inert (no InkWell) so the user can't tap it; styled to read as a
+// status pill in button shape rather than an interactive control.
+class _StaticButton extends StatelessWidget {
+  final Color backgroundColor;
+  final IconData icon;
+  final String label;
+
+  const _StaticButton({
+    required this.backgroundColor,
+    required this.icon,
+    required this.label,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+      ),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.s16,
+        vertical: AppSpacing.s14,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, size: 18, color: AppColors.white),
+          AppSpacing.h12,
+          Text(
+            label,
+            style: AppTextStyles.outfit(
+              fontSize: 14,
+              fontWeight: FontWeight.w800,
+              color: AppColors.white,
+              letterSpacing: 0.3,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 

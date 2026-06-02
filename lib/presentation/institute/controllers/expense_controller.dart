@@ -250,7 +250,7 @@ class ExpenseController extends GetxController {
       await _repository.createExpense(data);
 
       Get.back();
-      Get.snackbar('Success', 'Expense added successfully');
+      AppSnackBar.success('Expense added');
       resetForm();
       loadExpenses(page: 1); // Refresh list
       loadExpenseAnalysis(); // Refresh analysis

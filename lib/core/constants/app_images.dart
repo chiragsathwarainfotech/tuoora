@@ -43,7 +43,6 @@ class AppImages {
   static const String icDelete = '$_iconsPath/ic_delete.svg';
 
   // --- Institute Dashboard Module Icons ---
-  static const String icModuleStudents = '$_iconsPath/students.svg';
   static const String icModuleReports = '$_iconsPath/reports.svg';
   static const String icModuleBatch = '$_iconsPath/batch.svg';
   static const String icModuleStaff = '$_iconsPath/staff.svg';

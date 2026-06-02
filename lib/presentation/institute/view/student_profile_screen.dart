@@ -54,7 +54,7 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
                   ),
                   Expanded(
                     child: SingleChildScrollView(
-                      padding: AppSpacing.all16,
+                      padding: AppSpacing.cardPadding,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
@@ -91,12 +91,6 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
     );
   }
 
-  // Simple, professional Student ID card:
-  //   - Brand-orange header strip with institute name + "STUDENT IDENTITY CARD"
-  //   - Circular avatar centred just under the strip
-  //   - Student name + "Standard X" tag below the avatar
-  //   - Clean info rows (label / value) separated by light dividers
-  // Whole card sits on white with a subtle shadow and 16 dp radius.
   Widget _buildIdCard({
     required String name,
     required String id,
@@ -107,7 +101,7 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.s16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         border: Border.all(color: AppColors.fieldBorder),
         boxShadow: [
           BoxShadow(
@@ -118,7 +112,7 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(AppSpacing.s16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -129,9 +123,6 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
             _buildNameBlock(name: name, grade: grade),
             const SizedBox(height: AppSpacing.s16),
             _buildInfoTable(id: id, student: student),
-            // Fee reminder button — only when this student actually owes
-            // money. Tapping it POSTs to the fee-reminder endpoint and
-            // the student app receives a push notification.
             if ((student?.totalDue ?? 0) > 0) ...[
               const SizedBox(height: AppSpacing.s4),
               Padding(
@@ -151,8 +142,6 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
     );
   }
 
-  // Solid brand-orange CTA inside the ID card. Disables itself while the
-  // API call is in flight to prevent double-sends.
   Widget _buildFeeReminderButton(num totalDue) {
     return Obx(() {
       final sending = controller.isSendingFeeReminder.value;
@@ -207,13 +196,11 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
     });
   }
 
-  // Compact fees list shown below the ID card. Each tile shows the date,
-  // amount, and a status badge in the institute-side StatusBadge style.
   Widget _buildFeesSection(List<StudentFee> fees) {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.s16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         border: Border.all(color: AppColors.fieldBorder),
         boxShadow: [
           BoxShadow(
@@ -227,16 +214,11 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(
-              AppSpacing.s20,
-              AppSpacing.s16,
-              AppSpacing.s20,
-              AppSpacing.s8,
-            ),
+            padding: AppSpacing.cardPadding,
             child: Text(
-              'FEES HISTORY',
+              'Fees History',
               style: AppTextStyles.outfit(
-                fontSize: 11,
+                fontSize: 14,
                 fontWeight: FontWeight.w800,
                 color: AppColors.fieldLabel,
                 letterSpacing: 1.2,
@@ -256,10 +238,7 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
     final isPaid = fee.status.toLowerCase() == 'paid';
     final badgeColor = isPaid ? AppColors.successGreen : AppColors.bohoRed;
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.s20,
-        vertical: AppSpacing.s14,
-      ),
+      padding: AppSpacing.cardPadding,
       child: Row(
         children: [
           Expanded(
@@ -269,7 +248,7 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
                 Text(
                   '₹${fee.totalAmount}',
                   style: AppTextStyles.outfit(
-                    fontSize: 15,
+                    fontSize: 16,
                     fontWeight: FontWeight.w800,
                     color: AppColors.textPrimary,
                   ),
@@ -310,8 +289,6 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
     );
   }
 
-  // Orange header strip with the institute name (pulled from the logged-in
-  // profile when available) and the "STUDENT IDENTITY CARD" tagline.
   Widget _buildIdHeader() {
     String resolvedName = 'Tuoora Institute';
     if (Get.isRegistered<InstituteProfileController>()) {
@@ -357,7 +334,6 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
     );
   }
 
-  // Student name (bold dark) + a "Standard X" tag below in brand orange.
   Widget _buildNameBlock({required String name, required String grade}) {
     return Column(
       children: [
@@ -395,7 +371,6 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
     );
   }
 
-  // The label / value information table.
   Widget _buildInfoTable({required String id, required Student? student}) {
     final rows = <(String, String)>[
       ('ID No', id.isEmpty ? '—' : id),
@@ -404,28 +379,19 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
       ('Email', student?.email ?? 'Not Available'),
       ('Parent', student?.guardianName ?? 'Not Specified'),
     ];
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s20),
-      child: Column(
-        children: [
-          for (var i = 0; i < rows.length; i++) ...[
-            if (i > 0)
-              Divider(
-                height: 1,
-                color: AppColors.fieldBorder,
-              ),
-            _buildIdInfoRow(rows[i].$1, rows[i].$2),
-          ],
+    return Column(
+      children: [
+        for (var i = 0; i < rows.length; i++) ...[
+          if (i > 0) Divider(height: 1, color: AppColors.fieldBorder),
+          _buildIdInfoRow(rows[i].$1, rows[i].$2),
         ],
-      ),
+      ],
     );
   }
 
-  // Single info row — label on the left in muted slate, value on the right
-  // in textPrimary. Vertically padded so dividers between rows breathe.
   Widget _buildIdInfoRow(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: AppSpacing.s12),
+      padding: AppSpacing.cardPadding,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -434,7 +400,7 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
             child: Text(
               label,
               style: AppTextStyles.outfit(
-                fontSize: 13,
+                fontSize: 14,
                 fontWeight: FontWeight.w600,
                 color: AppColors.fieldLabel,
               ),
@@ -445,7 +411,7 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
               value,
               textAlign: TextAlign.right,
               style: AppTextStyles.outfit(
-                fontSize: 13,
+                fontSize: 14,
                 fontWeight: FontWeight.w700,
                 color: AppColors.textPrimary,
               ),
@@ -476,10 +442,7 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
         color: AppColors.primaryBrandLight,
         border: Border.all(color: AppColors.primaryBrand, width: 3),
         image: hasPhoto
-            ? DecorationImage(
-                image: NetworkImage(imageUrl),
-                fit: BoxFit.cover,
-              )
+            ? DecorationImage(image: NetworkImage(imageUrl), fit: BoxFit.cover)
             : null,
       ),
       child: hasPhoto

@@ -61,15 +61,6 @@ class InstituteChangePasswordScreen extends GetView<SecurityController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            AppStrings.instUpdatePasswordLabel,
-            style: AppTextStyles.outfit(
-              fontSize: 18,
-              fontWeight: FontWeight.w800,
-              color: AppColors.textPrimary,
-            ),
-          ),
-          AppSpacing.v24,
           Obx(
             () => _buildPasswordField(
               label: AppStrings.instCurrentPasswordLabel,

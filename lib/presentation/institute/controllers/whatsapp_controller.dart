@@ -1,7 +1,7 @@
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
 import 'package:tuoora/data/models/whatsapp_settings_model.dart';
 import 'package:flutter/material.dart';
-import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:get/get.dart';
 
 class WhatsAppController extends GetxController {
@@ -55,22 +55,12 @@ class WhatsAppController extends GetxController {
     final accountId = businessAccountIdController.text.trim();
 
     if (token.isEmpty || phoneNumber.isEmpty || phoneId.isEmpty || accountId.isEmpty) {
-      Get.snackbar(
-        'Validation Error',
-        'Please provide all Meta API credentials to continue.',
-        backgroundColor: Colors.redAccent,
-        colorText: AppColors.white,
-      );
+      AppSnackBar.warning('Enter all credentials');
       return;
     }
 
     if (phoneNumber.length < 10) {
-      Get.snackbar(
-        'Validation Error',
-        'Please enter a valid phone number.',
-        backgroundColor: Colors.redAccent,
-        colorText: AppColors.white,
-      );
+      AppSnackBar.warning('Invalid phone number');
       return;
     }
 
@@ -93,21 +83,9 @@ class WhatsAppController extends GetxController {
       currentSettings.value = savedSettings;
 
       Get.back();
-      Get.snackbar(
-        'Success',
-        'WhatsApp settings saved successfully.',
-        backgroundColor: AppColors.darkGreen,
-        colorText: AppColors.white,
-        snackPosition: SnackPosition.BOTTOM,
-        margin: const EdgeInsets.all(16),
-      );
+      AppSnackBar.success('Settings saved');
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Failed to save settings: $e',
-        backgroundColor: Colors.redAccent,
-        colorText: AppColors.white,
-      );
+      AppSnackBar.error('Failed to save settings');
     } finally {
       isLoading.value = false;
     }

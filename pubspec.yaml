@@ -60,6 +60,14 @@ dependencies:
   web_socket_channel: ^3.0.0
   shimmer: ^3.0.0
   record: 5.1.2
+  # Explicit runtime permission flow (microphone) — gives us a real
+  # status enum + openAppSettings() so users denied once can still
+  # recover via Settings instead of being stuck.
+  permission_handler: ^11.3.1
+
+  # Reads versionName/versionCode from the bundled platform manifests so
+  # the Profile screens can show "App version 1.0.0+1" without hard-coding.
+  package_info_plus: ^9.0.0
 
 dependency_overrides:
   # record_linux 0.7.2 (the version record pulls) doesn't implement the

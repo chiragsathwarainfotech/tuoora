@@ -1,6 +1,6 @@
+import 'package:flutter/widgets.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
-import 'package:flutter/material.dart';
-import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/core/api/api_exception.dart';
 import 'package:tuoora/core/utils/validation_utils.dart';
@@ -85,26 +85,14 @@ class SecurityController extends GetxController {
       await _instituteRepository.changePassword(data);
 
       Get.back();
-      Get.snackbar(
-        'Success',
-        'Your password has been updated securely.',
-        backgroundColor: AppColors.darkGreen,
-        colorText: AppColors.white,
-        snackPosition: SnackPosition.BOTTOM,
-        margin: const EdgeInsets.all(16),
-      );
+      AppSnackBar.success('Password updated');
 
       _clearFields();
     } catch (e) {
       if (e is ValidationException) {
         _handleValidationErrors(e.errors);
       } else {
-        Get.snackbar(
-          'Error',
-          e.toString().replaceAll('Exception: ', ''),
-          backgroundColor: Colors.redAccent,
-          colorText: AppColors.white,
-        );
+        AppSnackBar.error(e.toString().replaceAll('Exception: ', ''));
       }
     } finally {
       isLoading.value = false;

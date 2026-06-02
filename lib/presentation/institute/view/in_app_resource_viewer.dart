@@ -115,6 +115,9 @@ class _InAppResourceViewerState extends State<InAppResourceViewer> {
         aspectRatio: isAudio ? 16 / 9 : _videoController!.value.aspectRatio,
         allowFullScreen: !isAudio,
         allowPlaybackSpeedChanging: true,
+        // Hide Chewie's built-in 3-dot popup menu in the top-right — it
+        // overlapped the screen's own X-close button and looked broken.
+        showOptions: false,
         placeholder: const CommonLoading(color: AppColors.white),
       );
       _loading.value = false;

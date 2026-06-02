@@ -1,6 +1,5 @@
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
-import 'package:tuoora/core/enums/app_enums.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/widgets/input_styles.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +32,6 @@ class AppInputField extends StatelessWidget {
   final String? errorText;
   final int? maxLength;
   final List<TextInputFormatter>? inputFormatters;
-  final AppInputFieldVariant variant;
   final String? Function(String?)? validator;
   final void Function(String?)? onChanged;
 
@@ -65,29 +63,26 @@ class AppInputField extends StatelessWidget {
     this.errorText,
     this.maxLength,
     this.inputFormatters,
-    this.variant = AppInputFieldVariant.standard,
     this.validator,
     this.onChanged,
   });
 
   @override
   Widget build(BuildContext context) {
-    final isProfile = variant == AppInputFieldVariant.profile;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
           style: AppTextStyles.outfit(
-            fontSize: labelFontSize ?? (isProfile ? 12 : 14),
+            fontSize: labelFontSize ?? 14,
             fontWeight: labelFontWeight ?? FontWeight.w800,
             color: labelColor ?? AppColors.fieldLabel,
-            letterSpacing: labelLetterSpacing ?? (isProfile ? 0.5 : null),
+            letterSpacing: labelLetterSpacing,
           ),
         ),
         SizedBox(height: labelSpacing ?? 8.0),
-        _buildField(isProfile: isProfile),
+        _buildField(),
         if (errorText != null) ...[
           const SizedBox(height: 4),
           Padding(
@@ -106,14 +101,7 @@ class AppInputField extends StatelessWidget {
     );
   }
 
-  /// Lays out the icon + input as a Row instead of using
-  /// `InputDecoration.prefixIcon`. Material's prefix-icon slot enforces
-  /// a 48 dp tap-target which made the hint baseline drift relative to
-  /// the icon. A flat Row with `CrossAxisAlignment.center` puts them on
-  /// the exact same baseline, regardless of contentPadding/textAlignVertical
-  /// tweaks. The TextFormField gets an isCollapsed: true / borderless
-  /// InputDecoration so it occupies just its content height.
-  Widget _buildField({required bool isProfile}) {
+  Widget _buildField() {
     final Color bgColor =
         fillColor ??
         (enabled
@@ -126,22 +114,13 @@ class AppInputField extends StatelessWidget {
             : Border.all(color: AppColors.fieldBorder));
     final TextStyle effectiveTextStyle =
         textStyle ??
-        (isProfile
-            ? AppTextStyles.outfit(
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-                color: AppColors.textPrimary,
-              )
-            : AppTextStyles.outfit(
-                fontSize: 14,
-                color: AppColors.textPrimary,
-                fontWeight: FontWeight.w500,
-              ));
+        AppTextStyles.outfit(
+          fontSize: 14,
+          color: AppColors.textPrimary,
+          fontWeight: FontWeight.w500,
+        );
     final EdgeInsetsGeometry effectiveContentPadding =
-        contentPadding ??
-        (isProfile
-            ? const EdgeInsets.symmetric(vertical: AppSpacing.s18)
-            : InputStyles.contentPadding);
+        contentPadding ?? InputStyles.contentPadding;
 
     final Widget textField = TextFormField(
       controller: controller,
@@ -175,7 +154,7 @@ class AppInputField extends StatelessWidget {
                     .toDouble(),
               )
             : effectiveContentPadding,
-        isDense: isProfile || isDense,
+        isDense: isDense,
         counterText: '',
       ),
     );

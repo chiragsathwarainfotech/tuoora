@@ -37,12 +37,12 @@ class SplashController extends GetxController {
       await _authService.clearSession();
     }
 
-    final remembered = _authService.rememberedEmail;
-    if (remembered != null) {
-      Get.offAllNamed(AppRoutes.login, arguments: 'INSTITUTE');
-    } else {
-      Get.offAllNamed(AppRoutes.roleSelection);
-    }
+    // Not authenticated → always land on role selection. We deliberately
+    // do NOT auto-route to a specific role's login based on a remembered
+    // email — that bug stranded users who'd logged out of one role and
+    // wanted to sign in as the other. The remembered email still
+    // pre-fills the login form once the user picks a role.
+    Get.offAllNamed(AppRoutes.roleSelection);
   }
 
   void _navigateToDashboard(String? role) {

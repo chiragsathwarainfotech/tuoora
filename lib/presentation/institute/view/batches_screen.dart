@@ -29,11 +29,20 @@ class _BatchesScreenState extends State<BatchesScreen> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
+    // Fetch every time the screen is created (not just first time) so
+    // the user sees fresh data when re-entering after creating a batch
+    // elsewhere or following a deep link.
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (controller.batchesList.isEmpty) {
-        controller.loadBatches(isRefresh: true);
-      }
+      controller.loadBatches(isRefresh: true);
     });
+  }
+
+  /// Awaits a pushed route then refreshes — covers the "go to detail /
+  /// add screen, come back" path where the previous State is preserved
+  /// by the Navigator (so initState doesn't fire again).
+  Future<void> _pushAndRefresh(Future<dynamic>? push) async {
+    await push;
+    controller.loadBatches(isRefresh: true);
   }
 
   @override
@@ -127,7 +136,7 @@ class _BatchesScreenState extends State<BatchesScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () => SubscriptionGuard.runAddAction(() {
           controller.initAddMode();
-          Get.toNamed(AppRoutes.instituteAddBatch);
+          _pushAndRefresh(Get.toNamed(AppRoutes.instituteAddBatch));
         }),
         backgroundColor: SubscriptionGuard.blocksAdd
             ? AppColors.textMuted
@@ -149,8 +158,9 @@ class _BatchesScreenState extends State<BatchesScreen> {
     final Color accent = _stripePalette[index % _stripePalette.length];
 
     return GestureDetector(
-      onTap: () =>
-          Get.toNamed(AppRoutes.instituteBatchDetails, arguments: batch),
+      onTap: () => _pushAndRefresh(
+        Get.toNamed(AppRoutes.instituteBatchDetails, arguments: batch),
+      ),
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.white,

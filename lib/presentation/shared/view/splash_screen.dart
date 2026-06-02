@@ -1,6 +1,6 @@
-import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_images.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
@@ -41,16 +41,15 @@ class SplashScreen extends GetView<SplashController> {
             ),
             AppSpacing.v24,
             Text(
-              'Tag Line',
+              AppStrings.tagLine,
+              textAlign: TextAlign.center,
               style: AppTextStyles.outfit(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: AppColors.white.withValues(alpha: 0.8),
-                letterSpacing: 1.2,
+                color: AppColors.white.withValues(alpha: 0.9),
+                letterSpacing: 0.6,
               ),
             ),
-            const SizedBox(height: 100),
-            const CommonLoading(color: AppColors.white, size: 24),
           ],
         ),
       ),

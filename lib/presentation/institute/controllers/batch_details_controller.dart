@@ -1,3 +1,4 @@
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/data/models/student_model.dart';
 import 'package:tuoora/presentation/institute/controllers/institute_controller.dart';
 import 'package:tuoora/presentation/institute/models/batch_model.dart';
@@ -81,11 +82,6 @@ class BatchDetailsController extends GetxController {
     try {
       isLoading.value = true;
 
-      final studentName = assignedStudents
-          .firstWhereOrNull((s) => s.student.id == studentId)
-          ?.student
-          .name;
-
       await _repository.removeStudentFromBatch(int.parse(batch.id), studentId);
 
       // Refresh the batches list in BatchController
@@ -108,12 +104,9 @@ class BatchDetailsController extends GetxController {
       studentCount.value = assignedStudents.length;
       assignedStudents.refresh();
 
-      Get.snackbar(
-        'Success',
-        '${studentName ?? 'Student'} removed from batch successfully.',
-      );
+      AppSnackBar.success('Student removed');
     } catch (e) {
-      Get.snackbar('Error', 'Failed to remove student: ${e.toString()}');
+      AppSnackBar.error('Failed to remove student');
     } finally {
       isLoading.value = false;
     }

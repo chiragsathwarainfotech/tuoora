@@ -57,6 +57,7 @@ class AuthService extends GetxService {
     bool loggedIn = false,
     String? email,
     String? password,
+    String? role,
   }) async {
     _currentUser.value = user;
     _token.value = user.token;
@@ -64,14 +65,22 @@ class AuthService extends GetxService {
     await _storage.write('token', user.token);
     await _storage.write('stay_authenticated', stayAuthenticated);
     await _storage.write('logged_in', loggedIn);
+
+    // Remembered credentials are scoped per-role so the Institute login
+    // screen never auto-fills a Student's email (and vice versa).
+    final effectiveRole = role ?? user.role;
+    final emailKey = _emailKey(effectiveRole);
+    final passwordKey = _passwordKey(effectiveRole);
     if (stayAuthenticated) {
-      await _storage.write('remembered_email', email ?? user.email);
+      await _storage.write(emailKey, email ?? user.email);
       if (password != null) {
-        await _storage.write('remembered_password', password);
+        await _storage.write(passwordKey, password);
+      } else {
+        await _storage.remove(passwordKey);
       }
     } else {
-      await _storage.remove('remembered_email');
-      await _storage.remove('remembered_password');
+      await _storage.remove(emailKey);
+      await _storage.remove(passwordKey);
     }
   }
 
@@ -84,8 +93,16 @@ class AuthService extends GetxService {
     }
   }
 
-  String? get rememberedEmail => _storage.read('remembered_email');
-  String? get rememberedPassword => _storage.read('remembered_password');
+  /// Reads the remembered email saved for [role] (e.g. "INSTITUTE" /
+  /// "STUDENT"). Returns null if the user never ticked Remember Me for
+  /// that specific role.
+  String? rememberedEmailFor(String role) => _storage.read(_emailKey(role));
+  String? rememberedPasswordFor(String role) =>
+      _storage.read(_passwordKey(role));
+
+  String _emailKey(String role) => 'remembered_email_${role.toUpperCase()}';
+  String _passwordKey(String role) =>
+      'remembered_password_${role.toUpperCase()}';
 
   Future<void> clearSession() async {
     _currentUser.value = null;

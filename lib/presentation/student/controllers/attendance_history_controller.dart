@@ -68,4 +68,16 @@ class AttendanceHistoryController extends GetxController {
 
   String get currentMonthName => months[viewDate.value.month - 1];
   String get currentYear => viewDate.value.year.toString();
+
+  /// True only when the currently-viewed month is earlier than this month
+  /// — i.e. there is at least one valid past month the user can advance
+  /// into. The Next arrow on the calendar header uses this to render
+  /// itself as disabled when the user is already on the current month.
+  bool get canGoNext {
+    final now = DateTime.now();
+    final view = viewDate.value;
+    if (view.year < now.year) return true;
+    if (view.year == now.year && view.month < now.month) return true;
+    return false;
+  }
 }

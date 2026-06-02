@@ -66,15 +66,6 @@ class ResourceDetailController extends GetxController {
       isDownloading.value = true;
       downloadProgress.value = 0.0;
 
-      Get.snackbar(
-        'Downloading',
-        'Please wait, your file is being downloaded...',
-        snackPosition: SnackPosition.BOTTOM,
-        showProgressIndicator: true,
-        backgroundColor: AppColors.primaryBrand,
-        colorText: AppColors.white,
-      );
-
       final bytes = await _repository.downloadResource(
         resourceId,
         onProgress: (p) {
@@ -82,22 +73,13 @@ class ResourceDetailController extends GetxController {
         },
       );
 
-      // If extension is not provided, we can try to guess it or just use a default
       final fullFileName = extension != null && !fileName.contains('.')
           ? '$fileName.$extension'
           : fileName;
 
       await _downloadService.saveFile(bytes: bytes, fileName: fullFileName);
-
-      // We don't need a second snackbar here as saveFile already shows one on success.
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Failed to download file: ${e.toString().replaceAll('Exception: ', '')}',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.redAccent,
-        colorText: AppColors.white,
-      );
+      AppSnackBar.error('Download failed');
     } finally {
       isDownloading.value = false;
       downloadProgress.value = 0.0;

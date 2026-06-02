@@ -1,11 +1,11 @@
 import 'package:tuoora/config/app_routes.dart';
-import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/data/models/student_model.dart';
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
 import 'package:tuoora/data/repositories_impl/student_repository_impl.dart';
 import 'package:tuoora/presentation/institute/models/fee_record.dart';
 import 'package:tuoora/core/services/download_service.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -78,12 +78,7 @@ class InstituteController extends GetxController {
         feesCurrentPage.value++;
       }
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Failed to fetch fees: $e',
-        backgroundColor: Colors.red.withValues(alpha: 0.7),
-        colorText: AppColors.white,
-      );
+      AppSnackBar.error('Failed to load fees');
     } finally {
       isLoadingFees.value = false;
     }
@@ -93,15 +88,6 @@ class InstituteController extends GetxController {
 
   Future<void> downloadFeeReport() async {
     try {
-      Get.snackbar(
-        'Downloading',
-        'Preparing your financial report...',
-        backgroundColor: AppColors.primaryBrand,
-        colorText: AppColors.white,
-        snackPosition: SnackPosition.BOTTOM,
-        showProgressIndicator: true,
-      );
-
       final bytes = await _instituteRepository.exportFees();
 
       final downloadService = Get.find<DownloadService>();
@@ -111,16 +97,10 @@ class InstituteController extends GetxController {
       await downloadService.saveFile(
         bytes: bytes,
         fileName: fileName,
-        successMessage: 'Record download successfully',
+        successMessage: 'Report downloaded',
       );
     } catch (e) {
-      Get.snackbar(
-        'Download Error',
-        e.toString().replaceAll('Exception: ', ''),
-        backgroundColor: Colors.redAccent,
-        colorText: AppColors.white,
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackBar.error('Download failed');
     }
   }
 
@@ -156,12 +136,7 @@ class InstituteController extends GetxController {
         currentPage.value++;
       }
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Failed to fetch students: $e',
-        backgroundColor: Colors.red.withValues(alpha: 0.7),
-        colorText: AppColors.white,
-      );
+      AppSnackBar.error('Failed to load students');
     } finally {
       isLoadingStudents.value = false;
       isLoadMore.value = false;

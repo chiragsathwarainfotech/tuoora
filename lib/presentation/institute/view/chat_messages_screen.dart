@@ -360,8 +360,10 @@ class ChatMessagesScreen extends GetView<ChatController> {
       isMe: isMe,
     );
 
-    // While the optimistic message is still uploading, overlay a spinner so
-    // the user sees the attachment is in-flight.
+    // While the optimistic message is still uploading, overlay a progress
+    // ring with the live percentage so the user can watch the upload move.
+    // Once bytes finish uploading but the server is still processing, we
+    // fall back to an indeterminate spinner for the short tail.
     if (isMe && message.status == MessageStatus.sending) {
       return Stack(
         children: [
@@ -372,14 +374,7 @@ class ChatMessagesScreen extends GetView<ChatController> {
               child: Container(
                 color: Colors.black.withValues(alpha: 0.35),
                 alignment: Alignment.center,
-                child: const SizedBox(
-                  width: 28,
-                  height: 28,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2.5,
-                    color: AppColors.white,
-                  ),
-                ),
+                child: _UploadProgressOverlay(localPath: url),
               ),
             ),
           ),
@@ -740,5 +735,61 @@ class ChatMessagesScreen extends GetView<ChatController> {
     } catch (e) {
       AppSnackBar.error('Could not pick document: $e');
     }
+  }
+}
+
+/// Overlay shown on top of a sending attachment bubble. Reads live progress
+/// from [ChatController.uploadingPath] / [ChatController.uploadProgress] and
+/// shows a determinate ring + percentage while bytes are flowing. Falls back
+/// to an indeterminate spinner for the brief window between 100% upload and
+/// the server's response (so the overlay never blinks off prematurely).
+class _UploadProgressOverlay extends StatelessWidget {
+  final String localPath;
+  const _UploadProgressOverlay({required this.localPath});
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = Get.find<ChatController>();
+    return Obx(() {
+      final isThisUpload = controller.uploadingPath.value == localPath;
+      final percent = controller.uploadProgress.value;
+      final showDeterminate = isThisUpload && percent > 0 && percent < 100;
+
+      if (!showDeterminate) {
+        return const SizedBox(
+          width: 28,
+          height: 28,
+          child: CircularProgressIndicator(
+            strokeWidth: 2.5,
+            color: AppColors.white,
+          ),
+        );
+      }
+
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            width: 40,
+            height: 40,
+            child: CircularProgressIndicator(
+              strokeWidth: 3,
+              value: percent / 100,
+              color: AppColors.white,
+              backgroundColor: Colors.white.withValues(alpha: 0.25),
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            '${percent.toInt()}%',
+            style: AppTextStyles.outfit(
+              fontSize: 11,
+              fontWeight: FontWeight.w800,
+              color: AppColors.white,
+            ),
+          ),
+        ],
+      );
+    });
   }
 }

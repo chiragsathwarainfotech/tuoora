@@ -100,10 +100,10 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
         children: [
           Row(
             children: [
-              StatusBadge.fromLabel(AppStrings.instActiveBatchTag),
+              StatusBadge.fromLabel(batch.statusLabel),
               AppSpacing.h12,
               Text(
-                'ID: #${batch.id.length > 4 ? batch.id.substring(0, 4) : batch.id}',
+                'Batch ID: ${batch.id.length > 4 ? batch.id.substring(0, 4) : batch.id}',
                 style: AppTextStyles.outfit(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
@@ -139,22 +139,15 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
                   children: [
                     Expanded(
                       child: InstituteMetricCard(
-                        label: AppStrings.instStudentsCountLabel,
-                        value: '${controller.studentCount.value}',
+                        label: AppStrings.instTotalCollectionLabel,
+                        value: '₹${batch.totalExpected?.toString() ?? '0'}',
                       ),
                     ),
                     AppSpacing.h12,
                     Expanded(
                       child: InstituteMetricCard(
                         label: AppStrings.instFeesPaidLabel,
-                        value:
-                            batch.totalExpected != null &&
-                                double.tryParse(
-                                      batch.totalExpected.toString(),
-                                    ) !=
-                                    0
-                            ? '${((double.tryParse(batch.totalPaid?.toString() ?? '0') ?? 0) / (double.tryParse(batch.totalExpected.toString()) ?? 1) * 100).toStringAsFixed(0)}%'
-                            : '0%',
+                        value: '₹${batch.totalPaid?.toString() ?? '0'}',
                       ),
                     ),
                   ],
@@ -162,9 +155,11 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
                 AppSpacing.v12,
                 SizedBox(
                   width: double.infinity,
-                  child: InstituteMetricCard(
-                    label: AppStrings.instTotalCollectionLabel,
-                    value: '₹${batch.totalExpected?.toString() ?? '0'}',
+                  child: Expanded(
+                    child: InstituteMetricCard(
+                      label: AppStrings.instStudentsCountLabel,
+                      value: '${controller.studentCount.value}',
+                    ),
                   ),
                 ),
               ],

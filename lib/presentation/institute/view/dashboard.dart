@@ -10,7 +10,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-class InstituteDashboard extends StatelessWidget {
+class InstituteDashboard extends GetView<InstituteProfileController> {
   const InstituteDashboard({super.key});
 
   @override
@@ -18,7 +18,7 @@ class InstituteDashboard extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       body: RefreshIndicator(
-        onRefresh: () => Get.find<InstituteProfileController>().fetchProfile(),
+        onRefresh: () => controller.fetchProfile(),
         color: AppColors.primaryBrand,
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),

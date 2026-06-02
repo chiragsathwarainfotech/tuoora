@@ -5,12 +5,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:record/record.dart';
 
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/services/auth_service.dart';
 import 'package:tuoora/core/services/chat_socket_service.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
+import 'package:tuoora/core/widgets/common_dialog.dart';
 import 'package:tuoora/data/models/chat_model.dart';
 import 'package:tuoora/data/repositories_impl/chat_repository_impl.dart';
 
@@ -50,6 +52,15 @@ class ChatController extends GetxController {
   Timer? _recordTimer;
   String? _recordPath;
 
+  // -------------------------------------------------- upload progress
+  /// Local file path of the attachment currently being uploaded. The
+  /// optimistic bubble matches its [Message.attachment] against this and
+  /// shows the progress ring while non-empty. Reset to '' on done/error.
+  final uploadingPath = ''.obs;
+
+  /// 0..100 — bytes uploaded as reported by GetConnect's `uploadProgress`.
+  final uploadProgress = 0.0.obs;
+
   final availableParticipants = <ChatParticipant>[].obs;
   final filteredParticipants = <ChatParticipant>[].obs;
   final participantSearchQuery = ''.obs;
@@ -64,6 +75,14 @@ class ChatController extends GetxController {
   StreamSubscription<MessageAck>? _onMessageReceivedSub;
   StreamSubscription<MessageAck>? _onMessageReadSub;
   StreamSubscription<ChatDeleted>? _onChatDeletedSub;
+
+  /// Holds delivery/read acks that arrived BEFORE we knew the message's
+  /// canonical id. Happens when the recipient's `markReceived` /
+  /// `markRead` round-trip beats our own `/chat/send` HTTP response —
+  /// the optimistic bubble is still `id: ''` so the ack can't match by id.
+  /// We stash the latest received/read timestamps per id here and fold
+  /// them in the moment the canonical message lands.
+  final _pendingAcks = <String, _PendingAck>{};
 
   @override
   void onInit() {
@@ -423,6 +442,8 @@ class ChatController extends GetxController {
 
     try {
       isSending.value = true;
+      uploadingPath.value = file.path;
+      uploadProgress.value = 0.0;
       final sent = await _chatRepository.sendMessage(
         receiverId: receiverId,
         receiverType: chat.participantRole,
@@ -431,6 +452,11 @@ class ChatController extends GetxController {
         attachment: file,
         myUserId: _myUserId ?? '',
         myUserType: _myUserType ?? '',
+        onSendProgress: (percent) {
+          // GetConnect feeds back 0..100 — clamp defensively so a stray
+          // out-of-range value can't break the progress arc.
+          uploadProgress.value = percent.clamp(0.0, 100.0);
+        },
       );
       if (kDebugMode) {
         debugPrint(
@@ -447,21 +473,24 @@ class ChatController extends GetxController {
       );
     } finally {
       isSending.value = false;
+      uploadingPath.value = '';
+      uploadProgress.value = 0.0;
     }
   }
 
   // ----------------------------------------------------- voice recording
 
-  /// Begins recording a voice message. Requests mic permission first; if
-  /// denied, surfaces a snackbar and bails. The file is written to a temp
+  /// Begins recording a voice message. Walks the mic permission flow first
+  /// (system dialog on first ask, settings-redirect dialog when permanently
+  /// denied) so users never hit a dead end. The file is written to a temp
   /// path and sent as an `audio` attachment when [stopAndSendRecording] runs.
   Future<void> startRecording() async {
     if (isRecording.value) return;
+
+    final granted = await _ensureMicPermission();
+    if (!granted) return;
+
     try {
-      if (!await _recorder.hasPermission()) {
-        AppSnackBar.error('Microphone permission is required to record.');
-        return;
-      }
       final dir = Directory('${Directory.systemTemp.path}/tuoora_voice');
       if (!await dir.exists()) await dir.create(recursive: true);
       _recordPath =
@@ -478,8 +507,72 @@ class ChatController extends GetxController {
       });
     } catch (e) {
       isRecording.value = false;
-      AppSnackBar.error('Could not start recording: $e');
+      AppSnackBar.error('Could not start recording');
     }
+  }
+
+  /// Resolves the microphone permission to a final granted/denied state.
+  ///
+  /// First call on Android/iOS triggers the system prompt automatically via
+  /// [Permission.microphone.request]. Subsequent calls short-circuit on the
+  /// current status. Permanently-denied users see a dialog with an
+  /// `Open Settings` action so they're never stranded with no recovery.
+  ///
+  /// Returns `true` only when recording can safely begin. Any unexpected
+  /// platform error is swallowed (status defaults to denied) so the chat
+  /// screen never crashes from a permission edge case.
+  Future<bool> _ensureMicPermission() async {
+    PermissionStatus status;
+    try {
+      status = await Permission.microphone.status;
+    } catch (_) {
+      status = PermissionStatus.denied;
+    }
+
+    if (status.isGranted || status.isLimited) return true;
+
+    if (status.isPermanentlyDenied || status.isRestricted) {
+      _showOpenSettingsDialog();
+      return false;
+    }
+
+    // Undetermined / denied — request once. On Android & iOS this shows the
+    // system prompt the user expects to see on the first tap.
+    PermissionStatus result;
+    try {
+      result = await Permission.microphone.request();
+    } catch (_) {
+      result = PermissionStatus.denied;
+    }
+
+    if (result.isGranted || result.isLimited) return true;
+
+    if (result.isPermanentlyDenied || result.isRestricted) {
+      _showOpenSettingsDialog();
+    } else {
+      AppSnackBar.warning('Microphone permission needed');
+    }
+    return false;
+  }
+
+  void _showOpenSettingsDialog() {
+    CommonDialog.show(
+      title: 'Enable Microphone',
+      description:
+          'Microphone access is off for this app. Enable it from Settings to send voice messages.',
+      icon: Icons.mic_off_rounded,
+      confirmText: 'Open Settings',
+      cancelText: 'Not Now',
+      onConfirm: () async {
+        try {
+          await openAppSettings();
+        } catch (_) {
+          // openAppSettings can throw on rare Android OEMs — fall back to a
+          // snackbar so the dialog still closes cleanly.
+          AppSnackBar.error('Could not open settings');
+        }
+      },
+    );
   }
 
   /// Discards the in-progress recording without sending.
@@ -511,7 +604,7 @@ class ChatController extends GetxController {
     try {
       path = await _recorder.stop();
     } catch (e) {
-      AppSnackBar.error('Could not finish recording: $e');
+      AppSnackBar.error('Could not finish recording');
       return;
     }
     path ??= _recordPath;
@@ -558,18 +651,41 @@ class ChatController extends GetxController {
   }
 
   void _replaceOptimisticWithCanonical(Message optimistic, Message canonical) {
+    // Fold in any acks that landed while the HTTP response was in flight.
+    // Without this the tick stays stuck at "sent" even though the recipient
+    // already ack'd received/read.
+    final folded = _applyPendingAcks(canonical);
+
     final idx = messages.indexOf(optimistic);
     if (idx == -1) {
       // The socket echoed the message back before our HTTP response. If we
       // haven't already accepted it, append; otherwise leave it alone.
       if (!messages.any(
-        (m) => m.id == canonical.id && canonical.id.isNotEmpty,
+        (m) => m.id == folded.id && folded.id.isNotEmpty,
       )) {
-        messages.add(canonical);
+        messages.add(folded);
       }
       return;
     }
-    messages[idx] = canonical;
+    messages[idx] = folded;
+  }
+
+  /// Merges any buffered ack timestamps for [msg]'s id into a fresh copy.
+  /// Removes the buffer entry on hit so it isn't applied twice.
+  Message _applyPendingAcks(Message msg) {
+    if (msg.id.isEmpty) return msg;
+    final pending = _pendingAcks.remove(msg.id);
+    if (pending == null) return msg;
+    if (kDebugMode) {
+      debugPrint(
+        '[ChatController] applying buffered ack to id=${msg.id}: '
+        'received=${pending.receivedAt}, read=${pending.readAt}',
+      );
+    }
+    return msg.copyWith(
+      receivedAt: pending.receivedAt ?? msg.receivedAt,
+      readAt: pending.readAt ?? msg.readAt,
+    );
   }
 
   void _markOptimisticFailed(Message optimistic) {
@@ -630,9 +746,10 @@ class ChatController extends GetxController {
     if (msg.id.isNotEmpty && messages.any((m) => m.id == msg.id)) return;
 
     if (msg.isMe) {
-      // Multi-device echo of our own send. Append only if visible.
+      // Multi-device echo of our own send. Append only if visible, and
+      // fold in any buffered acks first so the tick is correct on land.
       if (selectedChat.value?.id == msg.chatId) {
-        messages.add(msg);
+        messages.add(_applyPendingAcks(msg));
         _scrollToBottom();
       }
       return;
@@ -688,10 +805,21 @@ class ChatController extends GetxController {
   }) {
     final idx = messages.indexWhere((m) => m.id == messageId);
     if (idx == -1) {
+      // Message isn't in the open conversation yet. The common reason is
+      // the race described on [_pendingAcks] — the recipient ack'd before
+      // our `/chat/send` response returned, so the optimistic bubble still
+      // has `id: ''`. Don't drop the ack; stash it and replay on landing.
+      final existing = _pendingAcks[messageId];
+      _pendingAcks[messageId] = _PendingAck(
+        receivedAt: receivedAt ?? existing?.receivedAt,
+        readAt: readAt ?? existing?.readAt,
+      );
       if (kDebugMode) {
         debugPrint(
           '[ChatController] _updateMessageStatus: id=$messageId not in '
-          'open conversation (size=${messages.length})',
+          'open conversation (size=${messages.length}) — buffered ack '
+          '(received=${_pendingAcks[messageId]!.receivedAt}, '
+          'read=${_pendingAcks[messageId]!.readAt})',
         );
       }
       return;
@@ -932,4 +1060,12 @@ class ChatController extends GetxController {
       scrollController.jumpTo(target);
     }
   }
+}
+
+/// Stashed delivery/read timestamps for a message whose canonical id wasn't
+/// known when the broadcast arrived. See [ChatController._pendingAcks].
+class _PendingAck {
+  final DateTime? receivedAt;
+  final DateTime? readAt;
+  const _PendingAck({this.receivedAt, this.readAt});
 }

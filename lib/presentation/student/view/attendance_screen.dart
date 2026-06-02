@@ -206,19 +206,33 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
             ),
           ),
         ),
-        _buildCircleNavButton(Icons.chevron_right, controller.nextMonth),
+        // Next arrow disables itself when the user is already on the
+        // current month — there's no future-month attendance to view.
+        Obx(
+          () => _buildCircleNavButton(
+            Icons.chevron_right,
+            controller.nextMonth,
+            enabled: controller.canGoNext,
+          ),
+        ),
       ],
     );
   }
 
-  Widget _buildCircleNavButton(IconData icon, VoidCallback onTap) {
+  Widget _buildCircleNavButton(
+    IconData icon,
+    VoidCallback onTap, {
+    bool enabled = true,
+  }) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: enabled ? onTap : null,
       child: Container(
         width: AppSpacing.s36,
         height: AppSpacing.s36,
         decoration: BoxDecoration(
-          color: AppColors.primaryBrand,
+          color: enabled
+              ? AppColors.primaryBrand
+              : AppColors.primaryBrand.withValues(alpha: 0.35),
           borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         ),
         child: Icon(icon, color: AppColors.white, size: 24),

@@ -6,6 +6,7 @@ import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/services/auth_service.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/widgets/app_empty_view.dart';
+import 'package:tuoora/core/widgets/app_version_label.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/core/widgets/student_bottom_nav.dart';
 import 'package:tuoora/presentation/student/widgets/profile_grid_action.dart';
@@ -56,8 +57,6 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
                         const SizedBox(height: 12),
                         _buildStatsRow(profile.stats),
                         const SizedBox(height: 12),
-                        _buildQRCard(profile.studentQr),
-                        const SizedBox(height: 16),
                         _buildGridActions(),
                         const SizedBox(height: 16),
                         _buildSectionTitle('YOUR INFO'),
@@ -73,7 +72,9 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
                         _buildHelpCard(),
                         const SizedBox(height: 16),
                         _buildLogOutButton(),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 16),
+                        const AppVersionLabel(),
+                        const SizedBox(height: 16),
                       ],
                     ),
                   ),
@@ -114,41 +115,42 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                height: 70,
+                width: double.infinity,
+                padding: const EdgeInsets.fromLTRB(100, 14, 16, 14),
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      AppColors.brandAppBarColor,
-                      AppColors.primaryBrand,
+                      AppColors.instBrandOrange,
+                      AppColors.instBrandOrangeLight,
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                   borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
                 ),
+                child: Text(
+                  header.name,
+                  style: AppTextStyles.outfit(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.white,
+                  ),
+                ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(100, 16, 16, 16),
+                padding: const EdgeInsets.fromLTRB(100, 12, 16, 16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      header.name,
-                      style: AppTextStyles.outfit(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.textPrimary,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
                       'Class ${header.standard} • ${header.subject} • Roll ${header.rollNo}',
                       style: AppTextStyles.outfit(
                         fontSize: 12,
-                        color: AppColors.textSecondary,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.textPrimary,
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 8),
                     Row(
                       children: [
                         const Icon(
@@ -157,11 +159,15 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
                           color: AppColors.textTertiary,
                         ),
                         const SizedBox(width: 6),
-                        Text(
-                          'Member since: ${header.memberSince}',
-                          style: AppTextStyles.outfit(
-                            fontSize: 12,
-                            color: AppColors.textSecondary,
+                        Expanded(
+                          child: Text(
+                            'Member since: ${header.memberSince}',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTextStyles.outfit(
+                              fontSize: 12,
+                              color: AppColors.textSecondary,
+                            ),
                           ),
                         ),
                       ],
@@ -183,7 +189,11 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
                   return Container(
                     width: 72,
                     height: 72,
-                    decoration: const BoxDecoration(shape: BoxShape.circle),
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryBrandLight,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: AppColors.white, width: 3),
+                    ),
                     clipBehavior: Clip.antiAlias,
                     child: imagePath.isNotEmpty
                         ? Image.file(
@@ -308,64 +318,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
     );
   }
 
-  Widget _buildQRCard(StudentProfileQr qr) {
-    return Container(
-      padding: AppSpacing.cardPadding,
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-        border: Border.all(color: AppColors.borderGrey.withValues(alpha: 0.5)),
-      ),
-      child: Row(
-        children: [
-          const Icon(
-            Icons.qr_code_2_rounded,
-            size: 72,
-            color: AppColors.textPrimary,
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'STUDENT QR',
-                  style: AppTextStyles.outfit(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.textTertiary,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  qr.displayId,
-                  style: AppTextStyles.outfit(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  qr.hint,
-                  style: AppTextStyles.outfit(
-                    fontSize: 11,
-                    color: AppColors.textSecondary,
-                    height: 1.4,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildGridActions() {
-    // Logo-aligned 5-colour palette — same pool the institute dashboard and
-    // assignment stripes use. Each tile takes a distinct (icon, soft bg) pair
-    // so the row reads as a varied brand-coloured cluster.
     return Column(
       children: [
         Row(

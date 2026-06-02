@@ -1,3 +1,4 @@
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/presentation/institute/models/batch_model.dart';
 import 'package:tuoora/presentation/institute/models/attendance_record_model.dart';
@@ -5,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
-import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/widgets/app_pickers.dart';
 
 class AttendanceStudent {
@@ -104,7 +104,7 @@ class AttendanceController extends GetxController {
 
       filterStudents();
     } catch (e) {
-      Get.snackbar('Error', 'Failed to fetch attendance: ${e.toString()}');
+      AppSnackBar.error('Failed to load attendance');
     } finally {
       isLoading.value = false;
     }
@@ -123,14 +123,9 @@ class AttendanceController extends GetxController {
 
       CommonLoading.dismiss();
       Get.back();
-      Get.snackbar(
-        'Success',
-        'Attendance submitted successfully',
-        backgroundColor: AppColors.darkGreen,
-        colorText: AppColors.white,
-      );
+      AppSnackBar.success('Attendance submitted');
     } catch (e) {
-      Get.snackbar('Error', 'Failed to submit attendance: ${e.toString()}');
+      AppSnackBar.error('Failed to submit attendance');
     } finally {
       CommonLoading.dismiss();
     }

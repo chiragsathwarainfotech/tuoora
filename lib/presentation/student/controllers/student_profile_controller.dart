@@ -71,67 +71,89 @@ class StudentProfileController extends GetxController {
 
   void showImagePickerOptions() {
     Get.bottomSheet(
-      Container(
-        padding: AppSpacing.all32,
-        decoration: const BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: Container(
-                padding: AppSpacing.all8,
-                decoration: const BoxDecoration(
-                  color: AppColors.primaryBrandLight,
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.camera_alt_rounded,
-                  color: AppColors.primaryBrand,
-                ),
-              ),
-              title: Text(
-                'Camera',
-                style: AppTextStyles.outfit(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-              onTap: () async {
-                Get.back();
-                await pickImage(ImageSource.camera);
-              },
-            ),
-            AppSpacing.v8,
-            ListTile(
-              leading: Container(
-                padding: AppSpacing.all8,
-                decoration: const BoxDecoration(
-                  color: AppColors.primaryBrandLight,
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.photo_library_rounded,
-                  color: AppColors.primaryBrand,
+      // SafeArea(top:false) pushes the sheet content above the system
+      // gesture / navigation area so the Camera / Gallery tiles stay
+      // fully tappable on phones with a bottom nav bar.
+      SafeArea(
+        top: false,
+        minimum: const EdgeInsets.only(bottom: 12),
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.s24,
+            AppSpacing.s24,
+            AppSpacing.s24,
+            AppSpacing.s16,
+          ),
+          decoration: const BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Drag handle for affordance
+              Container(
+                width: 36,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: AppSpacing.s12),
+                decoration: BoxDecoration(
+                  color: AppColors.borderGrey,
+                  borderRadius: BorderRadius.circular(2),
                 ),
               ),
-              title: Text(
-                'Gallery',
-                style: AppTextStyles.outfit(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.textPrimary,
+              ListTile(
+                leading: Container(
+                  padding: AppSpacing.all8,
+                  decoration: const BoxDecoration(
+                    color: AppColors.primaryBrandLight,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.camera_alt_rounded,
+                    color: AppColors.primaryBrand,
+                  ),
                 ),
+                title: Text(
+                  'Camera',
+                  style: AppTextStyles.outfit(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                onTap: () async {
+                  Get.back();
+                  await pickImage(ImageSource.camera);
+                },
               ),
-              onTap: () async {
-                Get.back();
-                await pickImage(ImageSource.gallery);
-              },
-            ),
-          ],
+              AppSpacing.v8,
+              ListTile(
+                leading: Container(
+                  padding: AppSpacing.all8,
+                  decoration: const BoxDecoration(
+                    color: AppColors.primaryBrandLight,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.photo_library_rounded,
+                    color: AppColors.primaryBrand,
+                  ),
+                ),
+                title: Text(
+                  'Gallery',
+                  style: AppTextStyles.outfit(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                onTap: () async {
+                  Get.back();
+                  await pickImage(ImageSource.gallery);
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

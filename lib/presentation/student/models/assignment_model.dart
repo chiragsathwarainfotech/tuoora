@@ -49,6 +49,7 @@ class Assignment {
   final String? completedNote;
   final String? gradeNote;
   final bool isOverdue;
+  final DateTime? createdAt;
 
   const Assignment({
     required this.id,
@@ -68,6 +69,7 @@ class Assignment {
     this.completedNote,
     this.gradeNote,
     this.isOverdue = false,
+    this.createdAt,
   });
 
   bool get isCompleted => badge == AssignmentBadge.done;
@@ -180,6 +182,14 @@ class Assignment {
       }
     }
 
+    DateTime? createdAtDt;
+    final rawCreated = json['created_at']?.toString();
+    if (rawCreated != null && rawCreated.isNotEmpty) {
+      try {
+        createdAtDt = DateTime.parse(rawCreated);
+      } catch (_) {}
+    }
+
     return Assignment(
       id: json['id']?.toString() ?? '',
       title: json['title'] ?? '',
@@ -198,6 +208,7 @@ class Assignment {
       completedNote: completedNoteStr,
       gradeNote: gradeNoteStr,
       isOverdue: overdue,
+      createdAt: createdAtDt,
     );
   }
 }

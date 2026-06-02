@@ -10,29 +10,18 @@ class StudentBottomNav extends StatelessWidget {
   const StudentBottomNav({super.key, required this.currentIndex, this.onTap});
 
   static const _items = <_NavItem>[
-    _NavItem(
-      icon: Icons.home_rounded,
-      label: 'Home',
-      route: AppRoutes.studentDashboard,
-    ),
-    _NavItem(
-      icon: Icons.assignment_outlined,
-      label: 'Assignments',
-      route: AppRoutes.studentHomework,
-    ),
+    _NavItem(icon: Icons.home_rounded, route: AppRoutes.studentDashboard),
+    _NavItem(icon: Icons.assignment_outlined, route: AppRoutes.studentHomework),
     _NavItem(
       icon: Icons.currency_rupee_rounded,
-      label: 'Fees',
       route: AppRoutes.studentFeeHistory,
     ),
     _NavItem(
       icon: Icons.calendar_month_outlined,
-      label: 'Att',
       route: AppRoutes.studentAttendance,
     ),
     _NavItem(
       icon: Icons.person_outline_rounded,
-      label: 'Profile',
       route: AppRoutes.studentSettings,
     ),
   ];
@@ -79,22 +68,7 @@ class StudentBottomNav extends StatelessWidget {
             Get.offAllNamed(item.route);
           }
         },
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(item.icon, color: color, size: 22),
-            const SizedBox(height: 2),
-            Text(
-              item.label,
-              style: TextStyle(
-                fontFamily: 'Manrope',
-                fontSize: 10,
-                fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
-                color: color,
-              ),
-            ),
-          ],
-        ),
+        child: Icon(item.icon, color: color, size: 24),
       ),
     );
   }
@@ -102,11 +76,6 @@ class StudentBottomNav extends StatelessWidget {
 
 class _NavItem {
   final IconData icon;
-  final String label;
   final String route;
-  const _NavItem({
-    required this.icon,
-    required this.label,
-    required this.route,
-  });
+  const _NavItem({required this.icon, required this.route});
 }

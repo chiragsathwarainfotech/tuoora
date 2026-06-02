@@ -10,6 +10,7 @@ import 'package:tuoora/presentation/institute/controllers/institute_controller.d
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
 import 'package:tuoora/presentation/institute/controllers/batch_controller.dart';
 import 'package:tuoora/core/widgets/app_search_field.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -146,12 +147,9 @@ class AssignToBatchController extends GetxController {
           batchDetailsController.assignedStudents.length;
       batchDetailsController.assignedStudents.refresh();
       Get.back();
-      Get.snackbar(
-        'Success',
-        '${selectedStudents.length} students assigned to batch successfully.',
-      );
+      AppSnackBar.success('Students assigned');
     } catch (e) {
-      Get.snackbar('Error', 'Failed to assign students: ${e.toString()}');
+      AppSnackBar.error('Failed to assign students');
     } finally {
       isLoading.value = false;
     }
@@ -243,7 +241,9 @@ class AssignToBatchScreen extends StatelessWidget {
         ),
         Obx(() {
           if (controller.searchResults.isEmpty) return const SizedBox.shrink();
-          return ListView.builder(
+          return Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: controller.searchResults.length,
@@ -307,6 +307,7 @@ class AssignToBatchScreen extends StatelessWidget {
                 ),
               );
             },
+            ),
           );
         }),
       ],

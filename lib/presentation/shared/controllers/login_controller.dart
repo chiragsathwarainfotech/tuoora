@@ -21,6 +21,11 @@ class LoginController extends GetxController {
   final obscurePassword = true.obs;
   final stayAuthenticated = false.obs;
 
+  /// Tracks the role the login screen was opened for (read from
+  /// [Get.arguments]). Drives per-role Remember Me prefill so an
+  /// institute's credentials never leak into a student login attempt.
+  String _activeRole = 'INSTITUTE';
+
   void togglePasswordVisibility() =>
       obscurePassword.value = !obscurePassword.value;
   void toggleStayAuthenticated() =>
@@ -52,6 +57,7 @@ class LoginController extends GetxController {
           loggedIn: true,
           email: email,
           password: stayAuthenticated.value ? password : null,
+          role: role,
         );
         if (Get.isRegistered<PushNotificationService>()) {
           unawaited(Get.find<PushNotificationService>().syncToken());
@@ -83,13 +89,26 @@ class LoginController extends GetxController {
   @override
   void onReady() {
     super.onReady();
+    _captureRole();
     _prefillCredentials();
   }
 
+  void _captureRole() {
+    final arg = Get.arguments;
+    if (arg is String && arg.isNotEmpty) {
+      _activeRole = arg.toUpperCase();
+    }
+  }
+
   void _prefillCredentials() {
-    final rememberedEmail = _authService.rememberedEmail;
-    final rememberedPassword = _authService.rememberedPassword;
-    print('LoginController: Prefilling credentials. Email: $rememberedEmail');
+    final rememberedEmail = _authService.rememberedEmailFor(_activeRole);
+    final rememberedPassword = _authService.rememberedPasswordFor(_activeRole);
+
+    // Always clear first so switching roles (Institute → Student) drops
+    // any prefill left in the field from the previous role.
+    emailController.clear();
+    passwordController.clear();
+    stayAuthenticated.value = false;
 
     if (rememberedEmail != null) {
       emailController.text = rememberedEmail;
@@ -103,7 +122,7 @@ class LoginController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // Also try onInit just in case
+    _captureRole();
     _prefillCredentials();
   }
 

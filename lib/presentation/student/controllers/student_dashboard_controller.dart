@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/api/api_client.dart';
 import 'package:tuoora/core/enums/app_enums.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
@@ -85,7 +86,7 @@ class StudentDashboardController extends GetxController {
       final data = await _repository.getDashboardData();
       dashboardData.value = data;
     } catch (e) {
-      AppSnackBar.error('Failed to load dashboard data');
+      AppSnackBar.error(AppStrings.failedToLoadDashboardData);
     } finally {
       isLoading.value = false;
     }

@@ -1,4 +1,5 @@
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
@@ -41,7 +42,7 @@ class _AddSalaryScreenState extends State<AddSalaryScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            const InstituteAppBar(title: 'Add Salary'),
+            const InstituteAppBar(title: AppStrings.addSalary),
             Expanded(
               child: SingleChildScrollView(
                 padding: AppSpacing.all16,
@@ -52,7 +53,7 @@ class _AddSalaryScreenState extends State<AddSalaryScreen> {
                     _buildStaffDropdown(),
                     AppSpacing.v20,
                     AppInputField(
-                      label: 'Payment Date',
+                      label: AppStrings.paymentDate,
                       hint: 'MM/dd/yyyy',
                       icon: Icons.calendar_today_rounded,
                       controller: controller.salaryDateController,
@@ -71,9 +72,9 @@ class _AddSalaryScreenState extends State<AddSalaryScreen> {
                     ),
                     AppSpacing.v20,
                     AppInputField(
-                      label: 'Salary Amount',
+                      label: AppStrings.salaryAmount,
                       controller: controller.salaryAmountController,
-                      hint: '0.00',
+                      hint: AppStrings.k000,
                       icon: Icons.currency_rupee_sharp,
                       keyboardType: const TextInputType.numberWithOptions(
                         decimal: true,
@@ -87,9 +88,9 @@ class _AddSalaryScreenState extends State<AddSalaryScreen> {
                     _buildPaymentMethodToggle(),
                     AppSpacing.v24,
                     AppInputField(
-                      label: 'Notes (OPTIONAL)',
+                      label: AppStrings.notesOptional,
                       controller: controller.salaryNotesController,
-                      hint: 'Enter optional note',
+                      hint: AppStrings.enterOptionalNote,
                       maxLines: 3,
                     ),
                     AppSpacing.v32,
@@ -195,7 +196,7 @@ class _AddSalaryScreenState extends State<AddSalaryScreen> {
                 child: AppInputField(
                   label: '',
                   controller: controller.salaryDeductionController,
-                  hint: 'Deduction Amt',
+                  hint: AppStrings.deductionAmt,
                   icon: Icons.currency_rupee_sharp,
                   keyboardType: const TextInputType.numberWithOptions(
                     decimal: true,
@@ -303,7 +304,7 @@ class _AddSalaryScreenState extends State<AddSalaryScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Total Disbursement',
+                    AppStrings.totalDisbursement,
                     style: AppTextStyles.outfit(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -334,7 +335,7 @@ class _AddSalaryScreenState extends State<AddSalaryScreen> {
                   AppSpacing.h12,
                   Expanded(
                     child: Text(
-                      'This payment will be recorded in the general ledger and deducted from the monthly payroll budget.',
+                      AppStrings.thisPaymentWillBeRecordedIn,
                       style: AppTextStyles.outfit(
                         fontSize: 12,
                         color: AppColors.textSecondary,

@@ -57,9 +57,9 @@ class AddEditStaffScreen extends GetView<StaffController> {
         AppSpacing.v32,
         Obx(
           () => AppInputField(
-            label: 'Name',
+            label: AppStrings.instStudentNameLabel,
             controller: controller.staffNameController,
-            hint: 'Enter name',
+            hint: AppStrings.enterName,
             icon: Icons.person,
             errorText: controller.staffNameError.value,
             validator: (value) =>
@@ -68,7 +68,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
         ),
         AppSpacing.v20,
         Text(
-          'Department',
+          AppStrings.department,
           style: AppTextStyles.outfit(
             fontSize: 14,
             fontWeight: FontWeight.w600,
@@ -80,7 +80,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
         AppSpacing.v20,
         Obx(
           () => AppInputField(
-            label: 'Email',
+            label: AppStrings.instStudentEmailLabel,
             controller: controller.staffEmailController,
             hint: AppStrings.hintEnterEmail,
             icon: Icons.email_rounded,
@@ -92,9 +92,9 @@ class AddEditStaffScreen extends GetView<StaffController> {
         AppSpacing.v20,
         Obx(
           () => AppInputField(
-            label: 'Phone Number',
+            label: AppStrings.instPhoneLabel,
             controller: controller.staffPhoneController,
-            hint: 'Enter number',
+            hint: AppStrings.instPhoneHint,
             icon: Icons.phone,
             keyboardType: TextInputType.phone,
             maxLength: 10,
@@ -104,7 +104,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
         ),
         AppSpacing.v32,
         Text(
-          'Employment Type',
+          AppStrings.employmentType,
           style: AppTextStyles.outfit(
             fontSize: 14,
             fontWeight: FontWeight.w600,
@@ -142,7 +142,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
                 ? 'Base Salary'
                 : 'Hourly Rate',
             controller: controller.staffSalaryController,
-            hint: '0.00',
+            hint: AppStrings.k000,
             icon: Icons.payments_rounded,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             errorText: controller.staffSalaryError.value,
@@ -223,7 +223,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Profile Photo',
+                AppStrings.profilePhoto,
                 style: AppTextStyles.outfit(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -232,7 +232,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
               ),
               AppSpacing.v4,
               Text(
-                'Update professional information and profile picture',
+                AppStrings.updateProfessionalInformationAndProfilePicture,
                 style: AppTextStyles.outfit(
                   fontSize: 13,
                   fontWeight: FontWeight.w400,
@@ -265,7 +265,7 @@ class AddEditStaffScreen extends GetView<StaffController> {
               value: controller.selectedDepartmentId.value,
               isExpanded: true,
               hint: Text(
-                'Select Department',
+                AppStrings.selectDepartment,
                 style: AppTextStyles.outfit(
                   fontSize: 14,
                   color: AppColors.textTertiary,

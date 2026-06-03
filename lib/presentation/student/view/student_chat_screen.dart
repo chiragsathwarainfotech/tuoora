@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
@@ -45,7 +46,7 @@ class StudentChatScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Saraswati Coaching Centre',
+                  AppStrings.saraswatiCoachingCentre,
                   style: AppTextStyles.outfit(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -53,7 +54,7 @@ class StudentChatScreen extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Institute',
+                  AppStrings.studentReceiptInstitute,
                   style: AppTextStyles.outfit(
                     fontSize: 11,
                     fontWeight: FontWeight.w400,
@@ -163,7 +164,7 @@ class StudentChatScreen extends StatelessWidget {
                       child: TextField(
                         style: AppTextStyles.outfit(fontSize: 14),
                         decoration: const InputDecoration(
-                          hintText: 'Message the institute...',
+                          hintText: AppStrings.messageTheInstitute,
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.symmetric(vertical: 12),
                         ),

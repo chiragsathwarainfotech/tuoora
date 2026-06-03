@@ -47,7 +47,12 @@
       "Bash(grep -rn \"logo_white\" lib/)",
       "Bash(/c/Users/PANCHAM/AppData/Local/Programs/Python/Python310/python tool/appimages_cleanup.py)",
       "Bash(/c/Users/PANCHAM/AppData/Local/Programs/Python/Python310/python tool/appcolors_closeness.py)",
-      "Bash(/c/Users/PANCHAM/AppData/Local/Programs/Python/Python310/python tool/appcolors_collapse_rare.py)"
+      "Bash(/c/Users/PANCHAM/AppData/Local/Programs/Python/Python310/python tool/appcolors_collapse_rare.py)",
+      "Bash(/c/Users/PANCHAM/AppData/Local/Programs/Python/Python310/python tool/find_all_ui_literals.py)",
+      "Bash(/c/Users/PANCHAM/AppData/Local/Programs/Python/Python310/python tool/extract_all_ui_literals.py)",
+      "Bash(grep -n \"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\'\" \"/c/Users/PANCHAM/StudioProjects/tuoora/lib/core/constants/app_strings.dart\")",
+      "Bash(/c/Users/PANCHAM/AppData/Local/Programs/Python/Python310/python tool/fix_appstrings_bugs.py)",
+      "Bash(/c/Users/PANCHAM/AppData/Local/Programs/Python/Python310/python tool/fix_adjacent_strings.py)"
     ],
     "additionalDirectories": [
       "c:\\c\\Users\\PANCHAM\\StudioProjects\\tuoora"

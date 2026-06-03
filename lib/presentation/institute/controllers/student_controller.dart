@@ -404,7 +404,7 @@ class InstituteStudentController extends GetxController {
       await _studentRepository.sendFeeReminder(student.id);
       AppSnackBar.success(
         'Fee reminder sent to ${student.name}',
-        title: 'Reminder Sent',
+        title: AppStrings.reminderSent,
       );
     } catch (e) {
       AppSnackBar.error('Failed to send fee reminder: $e');

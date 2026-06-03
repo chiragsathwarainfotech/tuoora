@@ -215,7 +215,7 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
       ),
       _ManagementTileData(
         svgAsset: AppImages.icBatchHomework,
-        title: 'Homework',
+        title: AppStrings.homework,
         onTap: () => Get.toNamed(
           AppRoutes.instituteBatchHomework,
           arguments: controller.batch,
@@ -231,7 +231,7 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
       ),
       _ManagementTileData(
         svgAsset: AppImages.icBatchResource,
-        title: 'Resources',
+        title: AppStrings.resources,
         onTap: () => Get.toNamed(
           AppRoutes.instituteBatchResources,
           arguments: controller.batch,

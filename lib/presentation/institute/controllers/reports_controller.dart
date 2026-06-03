@@ -58,7 +58,7 @@ class ReportsController extends GetxController {
       isFeeLoading.value = true;
       feeReport.value = await _repository.getFeeReport();
     } catch (e) {
-      AppSnackBar.error('Failed to load fee report');
+      AppSnackBar.error(AppStrings.failedToLoadFeeReport);
     } finally {
       isFeeLoading.value = false;
     }
@@ -69,7 +69,7 @@ class ReportsController extends GetxController {
       isAttendanceLoading.value = true;
       attendanceReport.value = await _repository.getAttendanceReport();
     } catch (e) {
-      AppSnackBar.error('Failed to load attendance report');
+      AppSnackBar.error(AppStrings.failedToLoadAttendanceReport);
     } finally {
       isAttendanceLoading.value = false;
     }
@@ -80,7 +80,7 @@ class ReportsController extends GetxController {
       isPerformanceLoading.value = true;
       performanceReport.value = await _repository.getPerformanceReport();
     } catch (e) {
-      AppSnackBar.error('Failed to load performance report');
+      AppSnackBar.error(AppStrings.failedToLoadPerformanceReport);
     } finally {
       isPerformanceLoading.value = false;
     }
@@ -102,7 +102,7 @@ class ReportsController extends GetxController {
             .getBatchPerformanceReport(batchId);
       }
     } catch (e) {
-      AppSnackBar.error('Failed to load batch details');
+      AppSnackBar.error(AppStrings.failedToLoadBatchDetails);
     } finally {
       isBatchDetailLoading.value = false;
     }

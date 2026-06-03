@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -87,7 +88,7 @@ class ChatAttachmentView extends StatelessWidget {
 
     return GestureDetector(
       onTap: () => _open(
-        InAppResourceViewer.image(url: url, title: 'Image'),
+        InAppResourceViewer.image(url: url, title: AppStrings.studentAssignmentAttachmentImage),
       ),
       child: thumb,
     );
@@ -273,10 +274,10 @@ class ChatAttachmentView extends StatelessWidget {
   void _openLocal(String path, _MediaKind kind) {
     switch (kind) {
       case _MediaKind.video:
-        _open(InAppResourceViewer.video(url: path, title: 'Video'));
+        _open(InAppResourceViewer.video(url: path, title: AppStrings.studentAssignmentAttachmentVideo));
         break;
       case _MediaKind.audio:
-        _open(InAppResourceViewer.audio(url: path, title: 'Audio'));
+        _open(InAppResourceViewer.audio(url: path, title: AppStrings.studentAssignmentAttachmentAudio));
         break;
       case _MediaKind.document:
         _open(

@@ -1,4 +1,5 @@
 import 'package:tuoora/config/app_routes.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/utils/subscription_guard.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
@@ -23,7 +24,7 @@ class ExpensesScreen extends GetView<ExpenseController> {
         child: Column(
           children: [
             InstituteAppBar(
-              title: 'Expenses Overview',
+              title: AppStrings.expensesOverview,
               actions: [
                 GestureDetector(
                   onTap: () => Get.toNamed(AppRoutes.instituteExpenseAnalysis),
@@ -51,7 +52,7 @@ class ExpensesScreen extends GetView<ExpenseController> {
                 if (controller.expenses.isEmpty) {
                   return const AppEmptyView(
                     icon: Icons.receipt_long_outlined,
-                    title: 'No expenses found',
+                    title: AppStrings.noExpensesFound,
                   );
                 }
                 return RefreshIndicator(

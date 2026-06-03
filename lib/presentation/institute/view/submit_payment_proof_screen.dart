@@ -33,7 +33,7 @@ class SubmitPaymentProofScreen
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      'Enter your transaction details so our billing team can verify and activate your subscription.',
+                      AppStrings.enterYourTransactionDetailsSoOur,
                       style: AppTextStyles.outfit(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
@@ -44,8 +44,8 @@ class SubmitPaymentProofScreen
                     AppSpacing.v24,
                     Obx(
                       () => AppInputField(
-                        label: 'TRANSACTION ID / REF NUMBER',
-                        hint: 'Enter UTR, Ref No. or Txn ID',
+                        label: AppStrings.transactionIdRefNumber,
+                        hint: AppStrings.enterUtrRefNoOrTxn,
                         controller: controller.transactionIdController,
                         icon: Icons.tag_rounded,
                         labelFontSize: 12,
@@ -57,8 +57,8 @@ class SubmitPaymentProofScreen
                     _buildScreenshotPicker(),
                     AppSpacing.v24,
                     AppInputField(
-                      label: 'MESSAGE (OPTIONAL)',
-                      hint: 'Enter any specific note...',
+                      label: AppStrings.messageOptional,
+                      hint: AppStrings.enterAnySpecificNote,
                       controller: controller.messageController,
                       maxLines: 3,
                       labelFontSize: 12,
@@ -70,7 +70,7 @@ class SubmitPaymentProofScreen
                       minimum: const EdgeInsets.only(bottom: 16),
                       child: Obx(
                         () => AppButton(
-                          label: 'Submit Proof',
+                          label: AppStrings.submitProof,
                           onPressed: controller.submitProof,
                           isLoading: controller.isSubmitting.value,
                           backgroundColor: AppColors.primaryBrand,
@@ -96,7 +96,7 @@ class SubmitPaymentProofScreen
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'PAYMENT SCREENSHOT',
+          AppStrings.paymentScreenshot,
           style: AppTextStyles.outfit(
             fontSize: 12,
             fontWeight: FontWeight.w600,
@@ -139,7 +139,7 @@ class SubmitPaymentProofScreen
                         ),
                         AppSpacing.v8,
                         Text(
-                          'Upload screenshot (JPG, PNG)',
+                          AppStrings.uploadScreenshotJpgPng,
                           style: AppTextStyles.outfit(
                             fontSize: 13,
                             fontWeight: FontWeight.w600,

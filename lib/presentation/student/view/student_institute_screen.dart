@@ -1,4 +1,5 @@
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,7 +23,7 @@ class StudentInstituteScreen extends GetView<StudentInstituteController> {
       body: SafeArea(
         child: Column(
           children: [
-            const StudentAppBar(title: 'Institute', showDefaultActions: false),
+            const StudentAppBar(title: AppStrings.studentReceiptInstitute, showDefaultActions: false),
             Expanded(
               child: Obx(() {
                 if (controller.isLoading.value) {
@@ -33,7 +34,7 @@ class StudentInstituteScreen extends GetView<StudentInstituteController> {
                 if (institute == null) {
                   return const AppEmptyView(
                     icon: Icons.school_outlined,
-                    title: 'Institute details unavailable',
+                    title: AppStrings.instituteDetailsUnavailable,
                     message:
                         'We couldn\'t load your institute info. Please try again later.',
                   );
@@ -55,7 +56,7 @@ class StudentInstituteScreen extends GetView<StudentInstituteController> {
                         _buildChatButton(),
                         const SizedBox(height: 32),
                         Text(
-                          'LOCATION',
+                          AppStrings.location,
                           style: AppTextStyles.outfit(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
@@ -199,7 +200,7 @@ class StudentInstituteScreen extends GetView<StudentInstituteController> {
 
   Widget _buildChatButton() {
     return AppButton(
-      label: 'Chat with institute',
+      label: AppStrings.chatWithInstitute,
       icon: Icons.chat_bubble_outline_rounded,
       backgroundColor: AppColors.primaryBrand,
       borderRadius: AppSpacing.cardRadius,
@@ -340,7 +341,7 @@ class StudentInstituteScreen extends GetView<StudentInstituteController> {
                       ),
                       const SizedBox(width: 6),
                       Text(
-                        'Directions',
+                        AppStrings.directions,
                         style: AppTextStyles.outfit(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,

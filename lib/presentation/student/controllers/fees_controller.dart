@@ -91,7 +91,7 @@ class FeesController extends GetxController {
       isReceiptLoading.value = true;
       currentReceipt.value = await _repository.getReceipt(feeId);
     } catch (_) {
-      AppSnackBar.error('Failed to load receipt');
+      AppSnackBar.error(AppStrings.failedToLoadReceipt);
     } finally {
       isReceiptLoading.value = false;
     }
@@ -112,7 +112,7 @@ class FeesController extends GetxController {
       downloadProgress.value = 0.0;
 
       AppSnackBar.success(
-        'Please wait, your receipt is being downloaded...',
+        AppStrings.pleaseWaitYourReceiptIsBeing,
         title: AppStrings.labelDownloading,
       );
 

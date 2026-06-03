@@ -31,7 +31,7 @@ class BatchStudentsScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const InstituteAppBar(title: 'Batch Students'),
+            const InstituteAppBar(title: AppStrings.batchStudents),
             Expanded(
               child: SingleChildScrollView(
                 padding: AppSpacing.x16.add(AppSpacing.y16),
@@ -50,7 +50,7 @@ class BatchStudentsScreen extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: InstituteBottomButton(
-        label: 'Assign Student',
+        label: AppStrings.assignStudent,
         icon: Icons.person_add_alt_1_rounded,
         onTap: () => SubscriptionGuard.runAddAction(
           () => Get.toNamed(
@@ -84,7 +84,7 @@ class BatchStudentsScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'TOTAL ENROLLED',
+                  AppStrings.totalEnrolled,
                   style: AppTextStyles.outfit(
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
@@ -207,7 +207,7 @@ class BatchStudentsScreen extends StatelessWidget {
 
   Widget _buildSearchBar(BatchDetailsController controller) {
     return AppSearchField(
-      hintText: 'Search enrolled students...',
+      hintText: AppStrings.searchEnrolledStudents,
       controller: controller.assignedSearchController,
       onChanged: (val) => controller.assignedSearchQuery.value = val,
     );
@@ -224,7 +224,7 @@ class BatchStudentsScreen extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 40),
             child: Text(
-              'No students found',
+              AppStrings.noStudentsFound,
               style: AppTextStyles.outfit(color: AppColors.textMuted),
             ),
           ),
@@ -302,7 +302,7 @@ class BatchStudentsScreen extends StatelessWidget {
     BatchStudent bs,
   ) {
     CommonDialog.showDeleteConfirmation(
-      title: 'Remove Student',
+      title: AppStrings.removeStudent,
       description:
           'Are you sure you want to remove\n${bs.student.name} from this batch?',
       confirmText: AppStrings.labelRemove,

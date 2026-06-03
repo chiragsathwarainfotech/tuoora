@@ -24,7 +24,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
           body: SafeArea(
             child: Column(
               children: [
-                const InstituteAppBar(title: 'Create Update', isRoot: false),
+                const InstituteAppBar(title: AppStrings.createUpdate, isRoot: false),
                 Expanded(
                   child: SingleChildScrollView(
                     padding: AppSpacing.screenPadding,
@@ -46,8 +46,8 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                         AppSpacing.v32,
                         Obx(
                           () => AppInputField(
-                            label: 'Topic',
-                            hint: 'Enter topic',
+                            label: AppStrings.topic,
+                            hint: AppStrings.enterTopic,
                             controller: controller.subjectController,
                             labelSpacing: 12.0,
                             errorText: controller.triedToSave.value
@@ -63,8 +63,8 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                         AppSpacing.v32,
                         Obx(
                           () => AppInputField(
-                            label: 'Message Content',
-                            hint: 'Write your message here...',
+                            label: AppStrings.messageContent,
+                            hint: AppStrings.writeYourMessageHere,
                             controller: controller.messageController,
                             maxLines: 6,
                             labelSpacing: 12.0,
@@ -147,7 +147,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Recipient',
+          AppStrings.recipient,
           style: AppTextStyles.outfit(
             fontSize: 14,
             fontWeight: FontWeight.w600,
@@ -197,7 +197,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
               children: [
                 AppSpacing.v24,
                 Text(
-                  'Target Audience',
+                  AppStrings.targetAudience,
                   style: AppTextStyles.outfit(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -250,7 +250,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                     UpdateTargetType.batch) ...[
                   AppSpacing.v24,
                   Text(
-                    'Select Batch',
+                    AppStrings.selectBatch,
                     style: AppTextStyles.outfit(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -266,7 +266,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8.0),
                         child: Text(
-                          'No batches found',
+                          AppStrings.noBatchesFound,
                           style: AppTextStyles.outfit(
                             fontSize: 14,
                             color: Colors.redAccent,
@@ -344,7 +344,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                 ),
                 AppSpacing.h12,
                 Text(
-                  'Add Attachment (Image/PDF)',
+                  AppStrings.addAttachmentImagePdf,
                   style: AppTextStyles.outfit(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -419,7 +419,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
       top: false,
       minimum: const EdgeInsets.only(bottom: 16),
       child: AppButton(
-        label: 'Create Update',
+        label: AppStrings.createUpdate,
         icon: Icons.send_rounded,
         onPressed: () => controller.broadcastUpdate(),
       ),

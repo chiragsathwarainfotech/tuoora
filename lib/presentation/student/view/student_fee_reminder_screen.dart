@@ -1,4 +1,5 @@
 import 'package:tuoora/core/widgets/app_button.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/presentation/student/controllers/fees_controller.dart';
@@ -82,7 +83,7 @@ class StudentFeeReminderScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'MAY 2026',
+                AppStrings.may2026,
                 style: AppTextStyles.outfit(
                   fontSize: 10,
                   fontWeight: FontWeight.w600,
@@ -91,7 +92,7 @@ class StudentFeeReminderScreen extends StatelessWidget {
                 ),
               ),
               Text(
-                '₹4,500',
+                AppStrings.k4500,
                 style: AppTextStyles.outfit(
                   fontSize: 36,
                   fontWeight: FontWeight.w800,
@@ -195,7 +196,7 @@ class StudentFeeReminderScreen extends StatelessWidget {
           AppSpacing.h12,
           Expanded(
             child: Text(
-              'A late fee of ₹100 applies after the due date. Pay in cash at the institute or transfer via UPI.',
+              AppStrings.aLateFeeOf100Applies,
               style: AppTextStyles.outfit(
                 fontSize: 13,
                 fontWeight: FontWeight.w400,
@@ -211,7 +212,7 @@ class StudentFeeReminderScreen extends StatelessWidget {
 
   Widget _buildActionButton(bool paid) {
     return AppButton(
-      label: 'Open invoice',
+      label: AppStrings.openInvoice,
       icon: Icons.currency_rupee,
       backgroundColor: paid
           ? AppColors.successGreen

@@ -1,5 +1,6 @@
 ﻿import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/controllers/chat_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
@@ -19,7 +20,7 @@ class CreateChatScreen extends GetView<ChatController> {
       body: SafeArea(
         child: Column(
           children: [
-            const InstituteAppBar(title: 'Select Member'),
+            const InstituteAppBar(title: AppStrings.selectMember),
             Expanded(
               child: Padding(
                 padding: AppSpacing.x16,
@@ -33,9 +34,9 @@ class CreateChatScreen extends GetView<ChatController> {
                         return CommonStateWidget(
                           isLoading: controller.isLoading.value,
                           isEmpty: controller.filteredParticipants.isEmpty,
-                          emptyTitle: 'No Members Found',
+                          emptyTitle: AppStrings.noMembersFound,
                           emptySubtitle:
-                              'We couldn\'t find any members matching your search.',
+                              AppStrings.weCouldnTFindAnyMembers,
                           emptyIcon: Icons.person_search_outlined,
                           child: ListView.separated(
                             padding: EdgeInsets.zero,
@@ -65,7 +66,7 @@ class CreateChatScreen extends GetView<ChatController> {
 
   Widget _buildSearchField() {
     return AppSearchField(
-      hintText: 'Search members...',
+      hintText: AppStrings.searchMembers,
       onChanged: (value) => controller.participantSearchQuery.value = value,
     );
   }

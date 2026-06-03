@@ -303,7 +303,7 @@ class ChatController extends GetxController {
 
     final receiverId = int.tryParse(chat.participantId);
     if (receiverId == null) {
-      AppSnackBar.error('Invalid recipient');
+      AppSnackBar.error(AppStrings.invalidRecipient);
       return;
     }
 
@@ -401,7 +401,7 @@ class ChatController extends GetxController {
 
     final receiverId = int.tryParse(chat.participantId);
     if (receiverId == null) {
-      AppSnackBar.error('Invalid recipient');
+      AppSnackBar.error(AppStrings.invalidRecipient);
       return;
     }
 
@@ -415,7 +415,7 @@ class ChatController extends GetxController {
           '${_attachmentTypeLabel(type)} files must be under '
           '${limitMb.toStringAsFixed(0)} MB. Selected file is '
           '${sizeMb.toStringAsFixed(2)} MB.',
-          title: 'Maximum size limit',
+          title: AppStrings.maximumSizeLimit,
         );
         return;
       }
@@ -508,7 +508,7 @@ class ChatController extends GetxController {
       });
     } catch (e) {
       isRecording.value = false;
-      AppSnackBar.error('Could not start recording');
+      AppSnackBar.error(AppStrings.couldNotStartRecording);
     }
   }
 
@@ -551,18 +551,18 @@ class ChatController extends GetxController {
     if (result.isPermanentlyDenied || result.isRestricted) {
       _showOpenSettingsDialog();
     } else {
-      AppSnackBar.warning('Microphone permission needed');
+      AppSnackBar.warning(AppStrings.microphonePermissionNeeded);
     }
     return false;
   }
 
   void _showOpenSettingsDialog() {
     CommonDialog.show(
-      title: 'Enable Microphone',
+      title: AppStrings.enableMicrophone,
       description:
-          'Microphone access is off for this app. Enable it from Settings to send voice messages.',
+          AppStrings.microphoneAccessIsOffForThis,
       icon: Icons.mic_off_rounded,
-      confirmText: 'Open Settings',
+      confirmText: AppStrings.openSettings,
       cancelText: AppStrings.labelNotNow,
       onConfirm: () async {
         try {
@@ -570,7 +570,7 @@ class ChatController extends GetxController {
         } catch (_) {
           // openAppSettings can throw on rare Android OEMs — fall back to a
           // snackbar so the dialog still closes cleanly.
-          AppSnackBar.error('Could not open settings');
+          AppSnackBar.error(AppStrings.couldNotOpenSettings);
         }
       },
     );
@@ -605,7 +605,7 @@ class ChatController extends GetxController {
     try {
       path = await _recorder.stop();
     } catch (e) {
-      AppSnackBar.error('Could not finish recording');
+      AppSnackBar.error(AppStrings.couldNotFinishRecording);
       return;
     }
     path ??= _recordPath;
@@ -965,7 +965,7 @@ class ChatController extends GetxController {
     if (target == null) return;
     final receiverId = int.tryParse(target.participantId);
     if (receiverId == null) {
-      AppSnackBar.error('Invalid conversation');
+      AppSnackBar.error(AppStrings.invalidConversation);
       return;
     }
 
@@ -986,7 +986,7 @@ class ChatController extends GetxController {
         );
       }
       closeChat();
-      AppSnackBar.success('Conversation deleted');
+      AppSnackBar.success(AppStrings.conversationDeleted);
     } catch (e) {
       AppSnackBar.error(e.toString().replaceAll('Exception: ', ''));
     } finally {
@@ -1018,7 +1018,7 @@ class ChatController extends GetxController {
         );
       }
       closeChat();
-      AppSnackBar.success('This conversation was deleted');
+      AppSnackBar.success(AppStrings.thisConversationWasDeleted);
     }
   }
 

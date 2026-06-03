@@ -1,4 +1,5 @@
 import 'package:tuoora/core/widgets/app_button.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_images.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
@@ -44,7 +45,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
                     AppSpacing.v32,
                     Obx(
                       () => AppButton(
-                        label: 'Verify',
+                        label: AppStrings.verify,
                         onPressed: controller.verifyOtp,
                         isLoading: controller.isLoading.value,
                         backgroundColor: AppColors.primaryBrand,
@@ -72,7 +73,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
                               TextButton(
                                 onPressed: controller.resendOtp,
                                 child: Text(
-                                  'Resend OTP',
+                                  AppStrings.resendOtp,
                                   style: AppTextStyles.outfit(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
@@ -101,7 +102,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
         Image.asset(AppImages.logoWithName, height: AppSpacing.s48),
         AppSpacing.v32,
         Text(
-          'CHECK YOUR EMAIL',
+          AppStrings.checkYourEmail,
           style: AppTextStyles.outfit(
             fontSize: 18,
             fontWeight: FontWeight.w600,
@@ -187,7 +188,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
             ),
             decoration: const InputDecoration(
               counterText: '',
-              hintText: 'XXXXXX',
+              hintText: AppStrings.xxxxxx,
               hintStyle: TextStyle(
                 color: AppColors.fieldLabel,
                 letterSpacing: 8.0,

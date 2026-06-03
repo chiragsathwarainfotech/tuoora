@@ -124,9 +124,9 @@ class AttendanceController extends GetxController {
 
       CommonLoading.dismiss();
       Get.back();
-      AppSnackBar.success('Attendance submitted');
+      AppSnackBar.success(AppStrings.attendanceSubmitted);
     } catch (e) {
-      AppSnackBar.error('Failed to submit attendance');
+      AppSnackBar.error(AppStrings.failedToSubmitAttendance);
     } finally {
       CommonLoading.dismiss();
     }

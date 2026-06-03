@@ -249,7 +249,7 @@ class InstituteProfileController extends GetxController {
       await fetchProfile();
 
       Get.back();
-      AppSnackBar.success('Profile updated');
+      AppSnackBar.success(AppStrings.profileUpdated);
     } catch (e) {
       if (e is ValidationException) {
         _handleValidationErrors(e.errors);

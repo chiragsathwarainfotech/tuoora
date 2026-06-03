@@ -1,5 +1,6 @@
 ﻿import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/controllers/expense_controller.dart';
 import 'package:tuoora/presentation/institute/models/expense_model.dart';
@@ -20,7 +21,7 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
       body: SafeArea(
         child: Column(
           children: [
-            const InstituteAppBar(title: 'Expense Analysis'),
+            const InstituteAppBar(title: AppStrings.expenseAnalysis),
             Expanded(
               child: Obx(() {
                 final analysis = controller.expenseAnalysis.value;
@@ -35,7 +36,7 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
                       _buildDateAndNavHeader(context),
                       AppSpacing.v24,
                       Text(
-                        'Categories Breakdown',
+                        AppStrings.categoriesBreakdown,
                         style: AppTextStyles.outfit(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
@@ -47,8 +48,8 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
                         isLoading: controller.isAnalysisLoading.value,
                         isEmpty:
                             analysis == null || analysis.categories.isEmpty,
-                        emptyTitle: 'No Data for this month',
-                        emptySubtitle: 'Add expenses to see the analysis.',
+                        emptyTitle: AppStrings.noDataForThisMonth,
+                        emptySubtitle: AppStrings.addExpensesToSeeTheAnalysis,
                         emptyIcon: Icons.analytics_outlined,
                         child: _buildCategoryList(analysis),
                       ),
@@ -91,7 +92,7 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Total Spending',
+                AppStrings.totalSpending,
                 style: AppTextStyles.outfit(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,

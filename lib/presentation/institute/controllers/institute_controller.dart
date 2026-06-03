@@ -136,7 +136,7 @@ class InstituteController extends GetxController {
         currentPage.value++;
       }
     } catch (e) {
-      AppSnackBar.error('Failed to load students');
+      AppSnackBar.error(AppStrings.failedToLoadStudents);
     } finally {
       isLoadingStudents.value = false;
       isLoadMore.value = false;

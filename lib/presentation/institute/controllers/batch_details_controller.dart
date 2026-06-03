@@ -1,4 +1,5 @@
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/data/models/student_model.dart';
 import 'package:tuoora/presentation/institute/controllers/institute_controller.dart';
 import 'package:tuoora/presentation/institute/models/batch_model.dart';
@@ -104,9 +105,9 @@ class BatchDetailsController extends GetxController {
       studentCount.value = assignedStudents.length;
       assignedStudents.refresh();
 
-      AppSnackBar.success('Student removed');
+      AppSnackBar.success(AppStrings.studentRemoved);
     } catch (e) {
-      AppSnackBar.error('Failed to remove student');
+      AppSnackBar.error(AppStrings.failedToRemoveStudent);
     } finally {
       isLoading.value = false;
     }

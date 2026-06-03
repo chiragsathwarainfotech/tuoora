@@ -68,7 +68,7 @@ class AttachmentPreviewController extends GetxController {
       downloadProgress.value = 0.0;
 
       AppSnackBar.success(
-        'Please wait, your file is being downloaded...',
+        AppStrings.pleaseWaitYourFileIsBeing,
         title: AppStrings.labelDownloading,
       );
 

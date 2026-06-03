@@ -1,4 +1,5 @@
 import 'package:tuoora/core/enums/app_enums.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/presentation/institute/models/batch_model.dart';
 import 'package:tuoora/presentation/institute/models/resource_model.dart';
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
@@ -134,8 +135,8 @@ class ResourcesController extends GetxController {
       final ResourceType? category = _categoryFor(ext);
       if (category == null) {
         AppSnackBar.error(
-          'Only image, video and document files are allowed.',
-          title: 'Unsupported file type',
+          AppStrings.onlyImageVideoAndDocumentFiles,
+          title: AppStrings.unsupportedFileType,
         );
         return;
       }
@@ -147,7 +148,7 @@ class ResourcesController extends GetxController {
         AppSnackBar.error(
           '${_labelFor(category)} files must be under ${limit.toStringAsFixed(0)} MB. '
           'Selected file is ${sizeMb.toStringAsFixed(2)} MB.',
-          title: 'File too large',
+          title: AppStrings.fileTooLarge,
         );
         return;
       }
@@ -220,7 +221,7 @@ class ResourcesController extends GetxController {
       // Close creation dialog
       Get.back();
 
-      AppSnackBar.success('Resource uploaded successfully');
+      AppSnackBar.success(AppStrings.resourceUploadedSuccessfully);
     } catch (e) {
       // Close loader if open
       CommonLoading.dismiss();

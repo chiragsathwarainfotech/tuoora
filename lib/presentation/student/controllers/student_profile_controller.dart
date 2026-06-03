@@ -58,12 +58,12 @@ class StudentProfileController extends GetxController {
       if (existing != null) {
         profileData.value = existing.copyWithAvatarUrl(newAvatarUrl);
       }
-      AppSnackBar.success('Profile photo updated');
+      AppSnackBar.success(AppStrings.profilePhotoUpdated);
     } catch (e) {
       profileImagePath.value = previousLocalPath;
       AppSnackBar.error(
         e.toString().replaceAll('Exception: ', ''),
-        title: 'Upload failed',
+        title: AppStrings.uploadFailed,
       );
     } finally {
       isUploadingAvatar.value = false;

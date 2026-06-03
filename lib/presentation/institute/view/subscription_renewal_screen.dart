@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
@@ -23,7 +24,7 @@ class SubscriptionRenewalScreen extends GetView<SubscriptionRenewalController> {
         child: Column(
           children: [
             InstituteAppBar(
-              title: 'Offline Subscription Renewal',
+              title: AppStrings.offlineSubscriptionRenewal,
               onBackTap: () => Get.back(),
             ),
             Expanded(
@@ -33,7 +34,7 @@ class SubscriptionRenewalScreen extends GetView<SubscriptionRenewalController> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      'Pay using the details below, then submit your transaction proof to restore access.',
+                      AppStrings.payUsingTheDetailsBelowThen,
                       style: AppTextStyles.outfit(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
@@ -54,7 +55,7 @@ class SubscriptionRenewalScreen extends GetView<SubscriptionRenewalController> {
                       top: false,
                       minimum: const EdgeInsets.only(bottom: 16),
                       child: AppButton(
-                        label: "I've Completed Payment",
+                        label: AppStrings.iVeCompletedPayment,
                         onPressed: controller.promptForProof,
                         icon: Icons.check_circle_outline_rounded,
                         backgroundColor: AppColors.primaryBrand,
@@ -174,7 +175,7 @@ class SubscriptionRenewalScreen extends GetView<SubscriptionRenewalController> {
             ),
             AppSpacing.v16,
             Text(
-              'SCAN WITH ANY UPI APP',
+              AppStrings.studentPayFeesScanWith,
               style: AppTextStyles.outfit(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
@@ -200,7 +201,7 @@ class SubscriptionRenewalScreen extends GetView<SubscriptionRenewalController> {
           ),
           AppSpacing.v8,
           Text(
-            'QR code will appear here',
+            AppStrings.qrCodeWillAppearHere,
             style: AppTextStyles.outfit(
               fontSize: 12,
               color: AppColors.textMuted,
@@ -219,7 +220,7 @@ class SubscriptionRenewalScreen extends GetView<SubscriptionRenewalController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'BANK TRANSFER DETAILS',
+              AppStrings.bankTransferDetails,
               style: AppTextStyles.outfit(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,

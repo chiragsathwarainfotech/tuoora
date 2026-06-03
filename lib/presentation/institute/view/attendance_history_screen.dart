@@ -1,5 +1,6 @@
 ﻿import 'package:cached_network_image/cached_network_image.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/utils/subscription_guard.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
@@ -25,14 +26,14 @@ class AttendanceHistoryScreen extends GetView<StaffController> {
       body: SafeArea(
         child: Column(
           children: [
-            const InstituteAppBar(title: 'Attendance Management'),
+            const InstituteAppBar(title: AppStrings.attendanceManagement),
             Expanded(
               child: Obx(() {
                 return CommonStateWidget(
                   isLoading: controller.isLoadingGlobalAttendance.value,
                   isEmpty: controller.globalAttendanceList.isEmpty,
-                  emptyTitle: 'No Records Found',
-                  emptySubtitle: 'No attendance logs found for this month.',
+                  emptyTitle: AppStrings.noRecordsFound,
+                  emptySubtitle: AppStrings.noAttendanceLogsFoundForThis,
                   emptyIcon: Icons.calendar_today_outlined,
                   child: RefreshIndicator(
                     color: AppColors.primaryBrand,

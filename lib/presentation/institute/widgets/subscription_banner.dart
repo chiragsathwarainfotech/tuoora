@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
@@ -29,7 +30,7 @@ class SubscriptionBanner extends StatelessWidget {
           icon: Icons.hourglass_top_rounded,
           accent: AppColors.warningAmber,
           background: AppColors.warningBg,
-          title: 'Renewal Request Pending Review',
+          title: AppStrings.renewalRequestPendingReview,
           message:
               'We have received your payment proof and transaction reference. Our billing team will verify it shortly.',
         );
@@ -40,7 +41,7 @@ class SubscriptionBanner extends StatelessWidget {
         icon: Icons.error_outline_rounded,
         accent: AppColors.errorRed,
         background: AppColors.errorBg,
-        title: 'Your subscription has been expired.',
+        title: AppStrings.yourSubscriptionHasBeenExpired,
         message:
             'Primary academic and data management operations are restricted. Renew now to restore full access.',
         action: 'Renew',

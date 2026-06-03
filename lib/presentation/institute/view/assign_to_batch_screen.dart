@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
@@ -148,9 +149,9 @@ class AssignToBatchController extends GetxController {
           batchDetailsController.assignedStudents.length;
       batchDetailsController.assignedStudents.refresh();
       Get.back();
-      AppSnackBar.success('Students assigned');
+      AppSnackBar.success(AppStrings.studentsAssigned);
     } catch (e) {
-      AppSnackBar.error('Failed to assign students');
+      AppSnackBar.error(AppStrings.failedToAssignStudents);
     } finally {
       isLoading.value = false;
     }
@@ -181,7 +182,7 @@ class AssignToBatchScreen extends StatelessWidget {
         child: Column(
           children: [
             InstituteAppBar(
-              title: 'Assign to Batch',
+              title: AppStrings.assignToBatch,
               onBackTap: () => Get.back(),
             ),
             Expanded(
@@ -210,7 +211,7 @@ class AssignToBatchScreen extends StatelessWidget {
                         padding: AppSpacing.all16,
                         child: Obx(
                           () => AppButton(
-                            label: 'Confirm & Save Assignment',
+                            label: AppStrings.confirmSaveAssignment,
                             icon: Icons.check_circle_rounded,
                             isLoading: controller.isLoading.value,
                             isDisabled: controller.selectedStudents.isEmpty,
@@ -236,7 +237,7 @@ class AssignToBatchScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         AppSearchField(
-          hintText: 'Search and add students to this batch',
+          hintText: AppStrings.searchAndAddStudentsToThis,
           controller: controller.searchController,
           onChanged: controller.searchStudents,
         ),
@@ -329,7 +330,7 @@ class AssignToBatchScreen extends StatelessWidget {
               ),
               AppSpacing.v16,
               Text(
-                'No students selected yet',
+                AppStrings.noStudentsSelectedYet,
                 style: AppTextStyles.outfit(color: AppColors.textMuted),
               ),
             ],
@@ -428,7 +429,7 @@ class AssignToBatchScreen extends StatelessWidget {
                                 fontWeight: FontWeight.w600,
                               ),
                               decoration: const InputDecoration(
-                                hintText: 'Enter Fee',
+                                hintText: AppStrings.enterFee,
                                 border: InputBorder.none,
                                 isDense: true,
                               ),

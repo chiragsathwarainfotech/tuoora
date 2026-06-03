@@ -35,7 +35,7 @@ class StudentReceiptScreen extends GetView<FeesController> {
                 }
                 final receipt = controller.currentReceipt.value;
                 if (receipt == null) {
-                  return const Center(child: Text('No receipt selected'));
+                  return const Center(child: Text(AppStrings.noReceiptSelected));
                 }
                 return _Body(
                   receipt: receipt,
@@ -78,7 +78,7 @@ class _Body extends StatelessWidget {
           const SizedBox(height: AppSpacing.s16),
           Center(
             child: Text(
-              'This is a system generated receipt and doesn\'t require a signature.',
+              AppStrings.thisIsASystemGeneratedReceipt,
               style: AppTextStyles.outfit(
                 fontSize: 12,
                 color: AppColors.textTertiary,
@@ -167,7 +167,7 @@ class _ReceiptCard extends StatelessWidget {
               label: AppStrings.studentReceiptInvoiceNo,
               value: receipt.receiptNumber,
             ),
-            _DetailRow(label: 'Payment method', value: receipt.paymentMethod),
+            _DetailRow(label: AppStrings.paymentMethod, value: receipt.paymentMethod),
             _DetailRow(label: AppStrings.labelDate, value: receipt.date, isLast: true),
           ],
         ),

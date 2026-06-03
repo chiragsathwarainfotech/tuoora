@@ -27,7 +27,7 @@ class FeeTransactionHistoryScreen extends StatelessWidget {
                     _buildSummaryCard(),
                     AppSpacing.v32,
                     Text(
-                      'Past Transactions',
+                      AppStrings.pastTransactions,
                       style: AppTextStyles.outfit(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -71,14 +71,14 @@ class FeeTransactionHistoryScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Total Fees Collected',
+                AppStrings.totalFeesCollected,
                 style: AppTextStyles.outfit(
                   fontSize: 14,
                   color: AppColors.white.withValues(alpha: 0.7),
                 ),
               ),
               Text(
-                'Status',
+                AppStrings.status,
                 style: AppTextStyles.outfit(
                   fontSize: 14,
                   color: AppColors.white.withValues(alpha: 0.7),
@@ -90,7 +90,7 @@ class FeeTransactionHistoryScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '₹12,450.00',
+                AppStrings.k1245000,
                 style: AppTextStyles.outfit(
                   fontSize: 28,
                   fontWeight: FontWeight.w800,
@@ -98,7 +98,7 @@ class FeeTransactionHistoryScreen extends StatelessWidget {
                 ),
               ),
               Text(
-                'Active',
+                AppStrings.active,
                 style: AppTextStyles.outfit(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,

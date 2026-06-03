@@ -150,7 +150,7 @@ class RecordFeeController extends GetxController {
       await instituteController.refreshFees();
 
       Get.back();
-      AppSnackBar.success('Fee record created and collected successfully');
+      AppSnackBar.success(AppStrings.feeRecordCreatedAndCollectedSuccessfully);
     } catch (e) {
       if (e is ValidationException) {
         _handleValidationErrors(e.errors);

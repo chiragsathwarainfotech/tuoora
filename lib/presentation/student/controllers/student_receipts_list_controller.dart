@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/api/api_client.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/data/repositories/student_fees_repository.dart';
@@ -25,7 +26,7 @@ class StudentReceiptsListController extends GetxController {
       final list = await _repository.getReceipts();
       receipts.assignAll(list);
     } catch (_) {
-      AppSnackBar.error('Failed to load receipts');
+      AppSnackBar.error(AppStrings.failedToLoadReceipts);
     } finally {
       isLoading.value = false;
     }

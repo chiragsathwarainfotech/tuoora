@@ -39,7 +39,7 @@ class FeeReportScreen extends StatelessWidget {
                 if (report == null) {
                   return const AppEmptyView(
                     icon: Icons.account_balance_wallet_outlined,
-                    title: 'No report data available',
+                    title: AppStrings.noReportDataAvailable,
                   );
                 }
 
@@ -49,7 +49,7 @@ class FeeReportScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ReportSummaryCard(
-                        title: 'Total Collection Across Batches',
+                        title: AppStrings.totalCollectionAcrossBatches,
                         value:
                             '₹${report.summary.totalAmount.toStringAsFixed(0)}',
                       ),

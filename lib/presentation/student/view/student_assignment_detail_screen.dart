@@ -30,7 +30,7 @@ class StudentAssignmentDetailScreen extends GetView<AssignmentsController> {
             return const Center(
               child: Padding(
                 padding: EdgeInsets.all(AppSpacing.s24),
-                child: Text('No assignment selected'),
+                child: Text(AppStrings.noAssignmentSelected),
               ),
             );
           }
@@ -399,14 +399,14 @@ class _SubmitAssignmentButton extends StatelessWidget {
       return _StaticButton(
         backgroundColor: AppColors.successGreen,
         icon: Icons.check_circle_rounded,
-        label: 'Submitted',
+        label: AppStrings.instFilterSubmitted,
       );
     }
     if (assignment.isOverdue) {
       return _StaticButton(
         backgroundColor: AppColors.textTertiary,
         icon: Icons.lock_outline_rounded,
-        label: 'Overdue — cannot submit',
+        label: AppStrings.overdueCannotSubmit,
       );
     }
 

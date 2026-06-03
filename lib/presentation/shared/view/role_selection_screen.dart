@@ -1,4 +1,5 @@
 import 'package:tuoora/config/app_routes.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_images.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
@@ -22,8 +23,8 @@ class RoleSelectionScreen extends StatelessWidget {
               _buildLogo(),
               AppSpacing.v24,
               _buildRoleCard(
-                title: 'Login as Institute',
-                subtitle: 'Manage students, batches, and academic operations.',
+                title: AppStrings.loginAsInstitute,
+                subtitle: AppStrings.manageStudentsBatchesAndAcademicOperations,
                 icon: Icons.business_rounded,
                 iconColor: AppColors.primaryBrand,
                 onTap: () {
@@ -32,8 +33,8 @@ class RoleSelectionScreen extends StatelessWidget {
               ),
               AppSpacing.v16,
               _buildRoleCard(
-                title: 'Login as Student',
-                subtitle: 'View your classes, fees, homework and more.',
+                title: AppStrings.loginAsStudent,
+                subtitle: AppStrings.viewYourClassesFeesHomeworkAnd,
                 icon: Icons.school_rounded,
                 iconColor: AppColors.primaryBrand,
                 onTap: () {

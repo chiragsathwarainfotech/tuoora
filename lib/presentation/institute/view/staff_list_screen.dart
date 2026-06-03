@@ -1,5 +1,6 @@
 ﻿import 'package:cached_network_image/cached_network_image.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/utils/subscription_guard.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
@@ -23,7 +24,7 @@ class StaffListScreen extends GetView<StaffController> {
       body: SafeArea(
         child: Column(
           children: [
-            const InstituteAppBar(title: 'Staff Management'),
+            const InstituteAppBar(title: AppStrings.staffManagement),
             Expanded(
               child: Padding(
                 padding: AppSpacing.x16,
@@ -40,7 +41,7 @@ class StaffListScreen extends GetView<StaffController> {
                           isLoading:
                               controller.isLoading.value && staffs.isEmpty,
                           isEmpty: staffs.isEmpty,
-                          emptyTitle: 'No Staff Found',
+                          emptyTitle: AppStrings.noStaffFound,
                           emptySubtitle: controller.searchQuery.value.isEmpty
                               ? 'You haven\'t added any staff members yet.'
                               : 'No staff members match your search.',
@@ -110,7 +111,7 @@ class StaffListScreen extends GetView<StaffController> {
 
   Widget _buildSearchBar() {
     return AppSearchField(
-      hintText: 'Search Staff',
+      hintText: AppStrings.searchStaff,
       onChanged: (value) => controller.searchQuery.value = value,
     );
   }

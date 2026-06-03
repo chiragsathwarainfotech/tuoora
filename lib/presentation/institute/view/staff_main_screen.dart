@@ -1,4 +1,5 @@
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/presentation/institute/controllers/staff_controller.dart';
 import 'package:tuoora/presentation/institute/view/staff_list_screen.dart';
@@ -60,21 +61,21 @@ class StaffMainScreen extends GetView<StaffController> {
                   padding: EdgeInsets.only(bottom: 4),
                   child: Icon(Icons.people_alt_rounded),
                 ),
-                label: 'Staff',
+                label: AppStrings.staff,
               ),
               BottomNavigationBarItem(
                 icon: Padding(
                   padding: EdgeInsets.only(bottom: 4),
                   child: Icon(Icons.calendar_month_rounded),
                 ),
-                label: 'Attendance',
+                label: AppStrings.instAttendanceTitle,
               ),
               BottomNavigationBarItem(
                 icon: Padding(
                   padding: EdgeInsets.only(bottom: 4),
                   child: Icon(Icons.payments_rounded),
                 ),
-                label: 'Salary',
+                label: AppStrings.salary,
               ),
             ],
           ),

@@ -30,7 +30,7 @@ class StudentReceiptsListScreen extends GetView<StudentReceiptsListController> {
                 if (items.isEmpty) {
                   return const AppEmptyView(
                     icon: Icons.receipt_long_outlined,
-                    title: 'No receipts available yet',
+                    title: AppStrings.noReceiptsAvailableYet,
                   );
                 }
                 return RefreshIndicator(

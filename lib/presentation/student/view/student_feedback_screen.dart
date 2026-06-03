@@ -1,4 +1,5 @@
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
 import 'package:tuoora/core/widgets/input_styles.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,7 @@ class StudentFeedbackScreen extends GetView<StudentFeedbackController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const StudentAppBar(title: "Tell us what's missing", isRoot: false),
+            const StudentAppBar(title: AppStrings.tellUsWhatSMissing, isRoot: false),
             Padding(
               padding: AppSpacing.screenPaddingTop,
               child: Column(
@@ -52,7 +53,7 @@ class StudentFeedbackScreen extends GetView<StudentFeedbackController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "HOW'S IT GOING?",
+            AppStrings.howSItGoing,
             style: AppTextStyles.outfit(
               fontSize: 12,
               fontWeight: FontWeight.w600,
@@ -125,7 +126,7 @@ class StudentFeedbackScreen extends GetView<StudentFeedbackController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'YOUR MESSAGE',
+            AppStrings.yourMessage,
             style: AppTextStyles.outfit(
               fontSize: 12,
               fontWeight: FontWeight.w600,
@@ -141,7 +142,7 @@ class StudentFeedbackScreen extends GetView<StudentFeedbackController> {
             // tight padding, Outfit hint. Border kept via the matching
             // border colour through `fillColor: scaffoldBg`.
             decoration: InputStyles.filled(
-              hintText: 'What would make Tuoora more useful to you?',
+              hintText: AppStrings.whatWouldMakeTuooraMoreUseful,
               fillColor: AppColors.scaffoldBg,
             ),
           ),
@@ -154,7 +155,7 @@ class StudentFeedbackScreen extends GetView<StudentFeedbackController> {
     return Obx(() {
       final isLoading = controller.isLoading.value;
       return AppButton(
-        label: 'Send to Tuoora',
+        label: AppStrings.sendToTuoora,
         icon: Icons.arrow_forward_rounded,
         backgroundColor: AppColors.bohoRed,
         borderRadius: AppSpacing.cardRadius,

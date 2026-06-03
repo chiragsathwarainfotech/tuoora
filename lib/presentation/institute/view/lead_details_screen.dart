@@ -21,7 +21,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
         child: Obx(() {
           final lead = controller.selectedLead.value;
           if (lead == null) {
-            return const Center(child: Text('Lead not found'));
+            return const Center(child: Text(AppStrings.leadNotFound));
           }
           return Column(
             children: [
@@ -179,7 +179,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
                     ),
                     AppSpacing.h8,
                     Text(
-                      'Add Note',
+                      AppStrings.instAddNoteTitle,
                       style: AppTextStyles.outfit(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
@@ -203,7 +203,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
               borderRadius: BorderRadius.circular(16),
             ),
             child: const Center(
-              child: Text('No interaction history available'),
+              child: Text(AppStrings.noInteractionHistoryAvailable),
             ),
           ),
       ],
@@ -337,7 +337,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Add Interaction Note',
+                    AppStrings.addInteractionNote,
                     style: AppTextStyles.outfit(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
@@ -357,8 +357,8 @@ class LeadDetailsScreen extends GetView<LeadsController> {
               AppSpacing.v24,
               Obx(
                 () => _buildDialogField(
-                  label: 'Title',
-                  hint: 'Enter lead title',
+                  label: AppStrings.instNoteTitleLabel,
+                  hint: AppStrings.enterLeadTitle,
                   controller: controller.noteTitleController,
                   errorText: controller.noteTitleError.value,
                 ),
@@ -366,7 +366,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
               AppSpacing.v20,
               Obx(
                 () => _buildDialogField(
-                  label: 'Description',
+                  label: AppStrings.instBatchDescLabel,
                   hint: AppStrings.hintEnterDescription,
                   controller: controller.notesController,
                   maxLines: 4,
@@ -376,7 +376,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
               AppSpacing.v32,
               Obx(
                 () => AppButton(
-                  label: 'Submit',
+                  label: AppStrings.submit,
                   isLoading: controller.isLoading.value,
                   onPressed: () => controller.addLeadNote(),
                 ),

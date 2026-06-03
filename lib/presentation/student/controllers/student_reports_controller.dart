@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/api/api_client.dart';
 import 'package:tuoora/core/enums/app_enums.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
@@ -40,7 +41,7 @@ class StudentReportsController extends GetxController {
       );
       reportData.value = data;
     } catch (e) {
-      AppSnackBar.error('Failed to load reports');
+      AppSnackBar.error(AppStrings.failedToLoadReports);
     } finally {
       isLoading.value = false;
     }

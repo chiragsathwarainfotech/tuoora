@@ -27,7 +27,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
         child: Column(
           children: [
             InstituteAppBar(
-              title: 'Institute Profile',
+              title: AppStrings.instituteProfile,
               isRoot: false,
               actions: [
                 IconButton(
@@ -231,19 +231,19 @@ class InstituteProfileViewScreen extends StatelessWidget {
           _buildSettingsItem(
             icon: Icons.lock_outline_rounded,
             title: AppStrings.labelChangePassword,
-            subtitle: 'Update your login credentials',
+            subtitle: AppStrings.updateYourLoginCredentials,
             onTap: () => Get.toNamed(AppRoutes.instituteChangePassword),
           ),
           _buildSettingsItem(
             icon: Icons.workspace_premium_outlined,
-            title: 'Subscription',
-            subtitle: 'Manage your active plan',
+            title: AppStrings.subscription,
+            subtitle: AppStrings.manageYourActivePlan,
             onTap: () => Get.toNamed(AppRoutes.instituteSubscription),
           ),
           _buildSettingsItem(
             icon: Icons.chat_bubble_outline_rounded,
-            title: 'WhatsApp Integration',
-            subtitle: 'Automate alerts via Meta API',
+            title: AppStrings.instWhatsAppIntegration,
+            subtitle: AppStrings.automateAlertsViaMetaApi,
             onTap: () => Get.toNamed(AppRoutes.instituteWhatsApp),
             isLast: true,
           ),
@@ -261,21 +261,21 @@ class InstituteProfileViewScreen extends StatelessWidget {
           _cardSectionHeader('Support & Legal', Icons.info_outline_rounded),
           _buildSettingsItem(
             icon: Icons.description_outlined,
-            title: 'Terms & Conditions',
-            subtitle: 'Read our terms of service',
-            onTap: () => AppSnackBar.warning('Coming soon'),
+            title: AppStrings.termsConditions,
+            subtitle: AppStrings.readOurTermsOfService,
+            onTap: () => AppSnackBar.warning(AppStrings.comingSoon),
           ),
           _buildSettingsItem(
             icon: Icons.privacy_tip_outlined,
-            title: 'Privacy Policy',
-            subtitle: 'Learn how we protect your data',
-            onTap: () => AppSnackBar.warning('Coming soon'),
+            title: AppStrings.privacyPolicy,
+            subtitle: AppStrings.learnHowWeProtectYourData,
+            onTap: () => AppSnackBar.warning(AppStrings.comingSoon),
           ),
           _buildSettingsItem(
             icon: Icons.help_center_outlined,
-            title: 'Help Center',
-            subtitle: 'Get assistance and FAQs',
-            onTap: () => AppSnackBar.warning('Coming soon'),
+            title: AppStrings.helpCenter,
+            subtitle: AppStrings.getAssistanceAndFaqs,
+            onTap: () => AppSnackBar.warning(AppStrings.comingSoon),
             isLast: true,
           ),
         ],
@@ -291,8 +291,8 @@ class InstituteProfileViewScreen extends StatelessWidget {
     return _card(
       child: _buildSettingsItem(
         icon: Icons.logout_rounded,
-        title: 'Logout',
-        subtitle: 'Sign out of your account',
+        title: AppStrings.logout,
+        subtitle: AppStrings.signOutOfYourAccount,
         iconColor: AppColors.bohoRed,
         onTap: () => _showLogoutDialog(context, controller),
         isLast: true,
@@ -431,11 +431,11 @@ class InstituteProfileViewScreen extends StatelessWidget {
       AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text(
-          'Logout',
+          AppStrings.logout,
           style: AppTextStyles.outfit(fontWeight: FontWeight.w600),
         ),
         content: Text(
-          'Are you sure you want to log out from your account?',
+          AppStrings.instituteProfileAreYouSureYouWantTo,
           style: AppTextStyles.outfit(color: AppColors.textSecondary),
         ),
         actions: [
@@ -461,7 +461,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
               ),
             ),
             child: Text(
-              'Logout',
+              AppStrings.logout,
               style: AppTextStyles.outfit(
                 color: AppColors.white,
                 fontWeight: FontWeight.w600,

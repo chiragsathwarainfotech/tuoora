@@ -1,4 +1,5 @@
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/controllers/reports_controller.dart';
@@ -24,7 +25,7 @@ class PerformanceReportScreen extends StatelessWidget {
         child: Column(
           children: [
             const InstituteAppBar(
-              title: 'Student Performance Report',
+              title: AppStrings.studentPerformanceReport,
               isRoot: false,
             ),
             Expanded(
@@ -37,7 +38,7 @@ class PerformanceReportScreen extends StatelessWidget {
                 if (report == null) {
                   return const AppEmptyView(
                     icon: Icons.insights_outlined,
-                    title: 'No performance data available',
+                    title: AppStrings.noPerformanceDataAvailable,
                   );
                 }
 
@@ -47,7 +48,7 @@ class PerformanceReportScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ReportSummaryCard(
-                        title: 'Overall Average Performance',
+                        title: AppStrings.overallAveragePerformance,
                         value: report.summary.averagePerformance,
                       ),
                       AppSpacing.v32,

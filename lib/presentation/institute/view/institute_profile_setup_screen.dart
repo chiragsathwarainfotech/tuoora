@@ -20,7 +20,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
         child: Column(
           children: [
             const InstituteAppBar(
-              title: 'Complete Setup',
+              title: AppStrings.completeSetup,
               isRoot: true,
               hideLeading: true,
               showDefaultActions: false,
@@ -79,7 +79,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                     AppSpacing.v16,
                     Obx(
                       () => _buildTextField(
-                        label: 'Institute Name',
+                        label: AppStrings.instInstituteNameLabel,
                         controller: controller.instituteNameController,
                         prefixIcon: Icons.business_outlined,
                         errorText: controller.instituteNameError.value,
@@ -93,7 +93,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                     AppSpacing.v20,
                     Obx(
                       () => _buildTextField(
-                        label: 'Owner Name',
+                        label: AppStrings.instOwnerNameLabel,
                         controller: controller.instituteOwnerNameController,
                         prefixIcon: Icons.person,
                         errorText: controller.ownerNameError.value,
@@ -106,7 +106,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                     ),
                     AppSpacing.v20,
                     _buildTextField(
-                      label: 'Email Address',
+                      label: AppStrings.instEmailAddressLabel,
                       controller: controller.emailController,
                       prefixIcon: Icons.mail,
                       enabled: false,
@@ -114,9 +114,9 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                     AppSpacing.v20,
                     Obx(
                       () => _buildTextField(
-                        label: 'Phone Number',
+                        label: AppStrings.instPhoneLabel,
                         controller: controller.phoneController,
-                        hint: 'Enter number',
+                        hint: AppStrings.instPhoneHint,
                         prefixIcon: Icons.phone_outlined,
                         keyboardType: TextInputType.phone,
                         errorText: controller.phoneError.value,
@@ -134,7 +134,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                       () => _buildTextField(
                         label: AppStrings.labelAddressLine1,
                         controller: controller.addressLine1Controller,
-                        hint: 'Enter address line 1',
+                        hint: AppStrings.enterAddressLine1,
                         prefixIcon: Icons.location_on_outlined,
                         errorText: controller.addressLine1Error.value,
                         onChanged: (_) {
@@ -148,7 +148,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                     _buildTextField(
                       label: AppStrings.labelAddressLine2,
                       controller: controller.addressLine2Controller,
-                      hint: 'Enter address line 2',
+                      hint: AppStrings.enterAddressLine2,
                       prefixIcon: Icons.add_location_outlined,
                     ),
                     AppSpacing.v20,
@@ -159,7 +159,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                             () => _buildTextField(
                               label: AppStrings.labelCity,
                               controller: controller.cityController,
-                              hint: 'Enter city',
+                              hint: AppStrings.enterCity,
                               prefixIcon: Icons.location_city_outlined,
                               errorText: controller.cityError.value,
                               onChanged: (_) {
@@ -176,7 +176,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                             () => _buildTextField(
                               label: AppStrings.labelState,
                               controller: controller.stateController,
-                              hint: 'Enter state',
+                              hint: AppStrings.enterState,
                               prefixIcon: Icons.map_outlined,
                               errorText: controller.stateError.value,
                               onChanged: (_) {
@@ -197,7 +197,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                             () => _buildTextField(
                               label: AppStrings.labelCountry,
                               controller: controller.countryController,
-                              hint: 'Enter country',
+                              hint: AppStrings.enterCountry,
                               prefixIcon: Icons.public_outlined,
                               errorText: controller.countryError.value,
                               onChanged: (_) {
@@ -214,7 +214,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                             () => _buildTextField(
                               label: AppStrings.labelPincode,
                               controller: controller.pincodeController,
-                              hint: 'Enter pincode',
+                              hint: AppStrings.enterPincode,
                               prefixIcon: Icons.pin_drop_outlined,
                               keyboardType: TextInputType.number,
                               errorText: controller.pincodeError.value,
@@ -234,7 +234,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                       minimum: const EdgeInsets.only(bottom: 16),
                       child: Obx(
                         () => AppButton(
-                          label: 'Finish',
+                          label: AppStrings.finish,
                           onPressed: controller.completeProfile,
                           isLoading: controller.isLoading.value,
                           backgroundColor: AppColors.primaryBrand,

@@ -98,7 +98,7 @@ class ResourceDetailController extends GetxController {
       }
 
       Get.back(); // Close detail screen
-      AppSnackBar.success('Resource deleted successfully');
+      AppSnackBar.success(AppStrings.resourceDeletedSuccessfully);
     } catch (e) {
       AppSnackBar.error('Failed to delete resource: $e');
     } finally {

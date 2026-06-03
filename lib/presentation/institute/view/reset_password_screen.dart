@@ -20,7 +20,7 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
         child: Column(
           children: [
             InstituteAppBar(
-              title: 'Set New Password',
+              title: AppStrings.setNewPassword,
               onBackTap: () => Get.back(),
             ),
             Expanded(
@@ -44,7 +44,7 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
                           ),
                           AppSpacing.v12,
                           Text(
-                            'A verification code has been sent to your email. Enter it below along with your new access key.',
+                            AppStrings.aVerificationCodeHasBeenSent,
                             style: AppTextStyles.outfit(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
@@ -73,7 +73,7 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Text(
-                                  'Verification code',
+                                  AppStrings.verificationCode,
                                   style: AppTextStyles.outfit(
                                     fontSize: 12,
                                     fontWeight: FontWeight.w600,
@@ -85,7 +85,7 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
                                 Obx(
                                   () => _buildTextField(
                                     controller: controller.otpController,
-                                    hint: 'Enter 6-digit code',
+                                    hint: AppStrings.enter6DigitCode,
                                     prefixIcon: Icons.security_outlined,
                                     keyboardType: TextInputType.number,
                                     errorText: controller.otpError.value,
@@ -98,7 +98,7 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
                                 ),
                                 AppSpacing.v24,
                                 Text(
-                                  'New Password',
+                                  AppStrings.instNewPasswordLabel,
                                   style: AppTextStyles.outfit(
                                     fontSize: 12,
                                     fontWeight: FontWeight.w600,
@@ -136,7 +136,7 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
                                 ),
                                 AppSpacing.v24,
                                 Text(
-                                  'Confirm Password',
+                                  AppStrings.confirmPassword,
                                   style: AppTextStyles.outfit(
                                     fontSize: 12,
                                     fontWeight: FontWeight.w600,
@@ -149,7 +149,7 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
                                   () => _buildTextField(
                                     controller:
                                         controller.confirmPasswordController,
-                                    hint: 'Enter confirm password',
+                                    hint: AppStrings.enterConfirmPassword,
                                     prefixIcon: Icons.lock_outline,
                                     obscureText:
                                         controller.obscureConfirmPassword.value,
@@ -180,7 +180,7 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
                                 AppSpacing.v32,
                                 Obx(
                                   () => AppButton(
-                                    label: 'Reset Password',
+                                    label: AppStrings.resetPassword,
                                     onPressed: controller.resetPassword,
                                     isLoading: controller.isLoading.value,
                                     backgroundColor: AppColors.primaryBrand,
@@ -213,7 +213,7 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
                                                   ? null
                                                   : controller.resendOtp,
                                               child: Text(
-                                                'Resend Code',
+                                                AppStrings.resendCode,
                                                 style: AppTextStyles.outfit(
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.w600,

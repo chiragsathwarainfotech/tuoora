@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
@@ -40,7 +41,7 @@ class _StudentHomeworkDetailScreenState
           onPressed: () => Get.back(),
         ),
         title: Text(
-          'Homework Details',
+          AppStrings.homeworkDetails,
           style: AppTextStyles.outfit(
             fontSize: 18,
             fontWeight: FontWeight.w600,
@@ -100,7 +101,7 @@ class _StudentHomeworkDetailScreenState
               borderRadius: BorderRadius.circular(AppSpacing.s12),
             ),
             child: Text(
-              'MATHEMATICS',
+              AppStrings.mathematics,
               style: AppTextStyles.outfit(
                 fontSize: 10,
                 fontWeight: FontWeight.w600,
@@ -111,7 +112,7 @@ class _StudentHomeworkDetailScreenState
           ),
           AppSpacing.v24,
           Text(
-            'Advanced\nCalculus',
+            AppStrings.advancedNcalculus,
             style: AppTextStyles.outfit(
               fontSize: 32,
               fontWeight: FontWeight.w800,
@@ -202,7 +203,7 @@ class _StudentHomeworkDetailScreenState
               ),
               AppSpacing.h16,
               Text(
-                'Instructions from\nTutor',
+                AppStrings.instructionsFromNtutor,
                 style: AppTextStyles.outfit(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -214,7 +215,7 @@ class _StudentHomeworkDetailScreenState
           ),
           AppSpacing.v24,
           Text(
-            'Welcome to the final module of our Calculus series. For this assignment, please focus on the practical applications of Green\'s Theorem and Stoke\'s Theorem.',
+            AppStrings.welcomeToTheFinalModuleOf,
             style: AppTextStyles.outfit(
               fontSize: 13,
               fontWeight: FontWeight.w400,
@@ -224,7 +225,7 @@ class _StudentHomeworkDetailScreenState
           ),
           AppSpacing.v20,
           Text(
-            'Specific Tasks:',
+            AppStrings.specificTasks,
             style: AppTextStyles.outfit(
               fontSize: 14,
               fontWeight: FontWeight.w600,
@@ -255,7 +256,7 @@ class _StudentHomeworkDetailScreenState
               ),
             ),
             child: Text(
-              'Graphs must be plotted clearly. Hand-drawn sketches are acceptable if scanned at high resolution (300 DPI minimum).',
+              AppStrings.graphsMustBePlottedClearlyHand,
               style: AppTextStyles.outfit(
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
@@ -321,7 +322,7 @@ class _StudentHomeworkDetailScreenState
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'ASSIGNED TUTOR',
+                AppStrings.assignedTutor,
                 style: AppTextStyles.outfit(
                   fontSize: 9,
                   fontWeight: FontWeight.w600,
@@ -331,7 +332,7 @@ class _StudentHomeworkDetailScreenState
               ),
               AppSpacing.v2,
               Text(
-                'Dr. Elena Vance',
+                AppStrings.drElenaVance,
                 style: AppTextStyles.outfit(
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
@@ -358,7 +359,7 @@ class _StudentHomeworkDetailScreenState
             ),
             AppSpacing.h12,
             Text(
-              'Attachments',
+              AppStrings.attachments,
               style: AppTextStyles.outfit(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
@@ -396,7 +397,7 @@ class _StudentHomeworkDetailScreenState
               ),
               AppSpacing.v24,
               Text(
-                'Tip: Open both files to reach 100% progress.',
+                AppStrings.tipOpenBothFilesToReach,
                 style: AppTextStyles.outfit(
                   fontSize: 11,
                   color: AppColors.textTertiary,
@@ -480,7 +481,7 @@ class _StudentHomeworkDetailScreenState
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'YOUR PROGRESS',
+                AppStrings.yourProgress,
                 style: AppTextStyles.outfit(
                   fontSize: 10,
                   fontWeight: FontWeight.w600,
@@ -543,7 +544,7 @@ class _StudentHomeworkDetailScreenState
         onPressed: isEnabled
             ? () {
                 setState(() => _isSubmitted = true);
-                AppSnackBar.success('Homework submitted successfully!');
+                AppSnackBar.success(AppStrings.homeworkSubmittedSuccessfully);
               }
             : null,
       ),

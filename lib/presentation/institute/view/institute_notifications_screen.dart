@@ -23,7 +23,7 @@ class InstituteNotificationsScreen extends GetView<NotificationController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const InstituteAppBar(title: 'Notification', isRoot: false),
+            const InstituteAppBar(title: AppStrings.notification, isRoot: false),
             Expanded(
               child: Obx(() {
                 if (controller.isLoading.value &&
@@ -57,7 +57,7 @@ class InstituteNotificationsScreen extends GetView<NotificationController> {
                 if (controller.notifications.isEmpty) {
                   return const AppEmptyView(
                     icon: Icons.notifications_none_rounded,
-                    title: 'No notifications yet',
+                    title: AppStrings.noNotificationsYet,
                   );
                 }
 

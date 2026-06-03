@@ -43,7 +43,7 @@ class BatchResourcesScreen extends StatelessWidget {
                 if (controller.resources.isEmpty) {
                   return const AppEmptyView(
                     icon: Icons.folder_open_outlined,
-                    title: 'No resources found',
+                    title: AppStrings.noResourcesFound,
                   );
                 }
                 return ListView.builder(
@@ -199,7 +199,7 @@ class BatchResourcesScreen extends StatelessWidget {
             () => AppInputField(
               label: AppStrings.instNoteTitleLabel,
               controller: controller.subjectController,
-              hint: 'Enter title',
+              hint: AppStrings.enterTitle,
               errorText: controller.triedToSave.value
                   ? controller.subjectError.value
                   : null,

@@ -288,7 +288,7 @@ class _StudentChatMessagesScreenState extends State<StudentChatMessagesScreen> {
           ),
           AppSpacing.v24,
           Text(
-            'Say Hello to !',
+            AppStrings.sayHelloTo,
             style: AppTextStyles.outfit(
               fontSize: 18,
               fontWeight: FontWeight.w600,
@@ -299,7 +299,7 @@ class _StudentChatMessagesScreenState extends State<StudentChatMessagesScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32),
             child: Text(
-              'Click below to start your conversation.',
+              AppStrings.clickBelowToStartYourConversation,
               textAlign: TextAlign.center,
               style: AppTextStyles.outfit(
                 fontSize: 14,
@@ -309,7 +309,7 @@ class _StudentChatMessagesScreenState extends State<StudentChatMessagesScreen> {
           ),
           AppSpacing.v24,
           AppButton(
-            label: 'Say Hello',
+            label: AppStrings.sayHello,
             backgroundColor: AppColors.primaryBrand,
             borderRadius: 12,
             width: 200,

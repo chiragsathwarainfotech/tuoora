@@ -1,5 +1,6 @@
 ﻿import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/controllers/staff_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
@@ -19,7 +20,7 @@ class SalaryHistoryScreen extends GetView<StaffController> {
       body: SafeArea(
         child: Column(
           children: [
-            const InstituteAppBar(title: 'Salary History'),
+            const InstituteAppBar(title: AppStrings.salaryHistory),
             Expanded(
               child: Obx(() {
                 final salaries = controller.salaryList;
@@ -27,9 +28,9 @@ class SalaryHistoryScreen extends GetView<StaffController> {
                   isLoading:
                       controller.isLoadingSalary.value && salaries.isEmpty,
                   isEmpty: salaries.isEmpty,
-                  emptyTitle: 'No Salary Records',
+                  emptyTitle: AppStrings.noSalaryRecords,
                   emptySubtitle:
-                      'No salary payments found for this staff member.',
+                      AppStrings.noSalaryPaymentsFoundForThis,
                   emptyIcon: Icons.payments_outlined,
                   child: ListView.separated(
                     padding: AppSpacing.screenPaddingTop,

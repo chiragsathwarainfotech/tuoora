@@ -1,5 +1,6 @@
 ﻿import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/controllers/staff_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
@@ -21,7 +22,7 @@ class StaffAttendanceScreen extends GetView<StaffController> {
       body: SafeArea(
         child: Column(
           children: [
-            InstituteAppBar(title: 'Attendance', subtitle: staffName),
+            InstituteAppBar(title: AppStrings.instAttendanceTitle, subtitle: staffName),
             Expanded(
               child: Obx(() {
                 return CommonStateWidget(
@@ -29,8 +30,8 @@ class StaffAttendanceScreen extends GetView<StaffController> {
                       controller.isLoadingAttendance.value &&
                       controller.attendanceList.isEmpty,
                   isEmpty: false,
-                  emptyTitle: 'No Attendance Data',
-                  emptySubtitle: 'No attendance records found for this month.',
+                  emptyTitle: AppStrings.noAttendanceData,
+                  emptySubtitle: AppStrings.noAttendanceRecordsFoundForThis,
                   emptyIcon: Icons.calendar_today_outlined,
                   child: SingleChildScrollView(
                     padding: AppSpacing.screenPaddingTop,

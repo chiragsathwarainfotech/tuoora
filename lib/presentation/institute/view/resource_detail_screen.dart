@@ -261,8 +261,8 @@ class ResourceDetailScreen extends StatelessWidget {
     return IconButton(
       onPressed: () {
         CommonDialog.showDeleteConfirmation(
-          title: 'Delete Resource',
-          description: 'Are you sure you want to delete this resource?',
+          title: AppStrings.deleteResource,
+          description: AppStrings.resourceDetailAreYouSureYouWantTo,
           onConfirm: () =>
               controller.deleteResource(resource.id, resource.batchId),
         );

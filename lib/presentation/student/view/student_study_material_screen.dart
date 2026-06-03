@@ -49,7 +49,7 @@ class StudentStudyMaterialScreen
                         SizedBox(height: 80),
                         AppEmptyView(
                           icon: Icons.menu_book_outlined,
-                          title: 'No study material found',
+                          title: AppStrings.noStudyMaterialFound,
                         ),
                       ],
                     );
@@ -160,7 +160,7 @@ class StudentStudyMaterialScreen
                 ),
                 const SizedBox(width: 4),
                 Text(
-                  '1 file',
+                  AppStrings.k1File,
                   style: AppTextStyles.outfit(
                     fontSize: 11,
                     color: AppColors.textSecondary,

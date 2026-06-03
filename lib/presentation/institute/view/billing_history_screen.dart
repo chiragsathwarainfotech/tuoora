@@ -1,4 +1,5 @@
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
@@ -14,7 +15,7 @@ class BillingHistoryScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const InstituteAppBar(title: 'Billing History', isRoot: false),
+            const InstituteAppBar(title: AppStrings.billingHistory, isRoot: false),
             Expanded(
               child: ListView(
                 padding: AppSpacing.all24,
@@ -103,7 +104,7 @@ class BillingHistoryScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(AppSpacing.s6),
                 ),
                 child: Text(
-                  'PAID',
+                  AppStrings.studentFeesPaidPercent,
                   style: AppTextStyles.outfit(
                     fontSize: 10,
                     fontWeight: FontWeight.w900,

@@ -63,7 +63,7 @@ class HomeworkRatingScreen extends StatelessWidget {
           ? const SizedBox.shrink()
           : Obx(
               () => InstituteBottomButton(
-                label: 'Submit Ratings',
+                label: AppStrings.submitRatings,
                 icon: Icons.check_circle_rounded,
                 isLoading: controller.isLoading.value,
                 onTap: () => controller.submitRatings(),

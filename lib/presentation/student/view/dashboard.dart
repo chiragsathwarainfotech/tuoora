@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
@@ -51,7 +52,7 @@ class StudentDashboard extends GetView<StudentDashboardController> {
                         SizedBox(height: 80),
                         AppEmptyView(
                           icon: Icons.dashboard_outlined,
-                          title: 'Nothing to show yet',
+                          title: AppStrings.nothingToShowYet,
                           message:
                               'We couldn\'t load your dashboard right now. Pull to refresh.',
                         ),
@@ -94,7 +95,7 @@ class StudentDashboard extends GetView<StudentDashboardController> {
                         ],
                         if (assignmentItems.isNotEmpty) ...[
                           StudentSectionHeader(
-                            title: "ASSIGNMENTS",
+                            title: AppStrings.assignments,
                             showSeeAll: true,
                             onActionTap: _openAssignmentsTab,
                           ),
@@ -113,7 +114,7 @@ class StudentDashboard extends GetView<StudentDashboardController> {
                           }),
                           const SizedBox(height: AppSpacing.s16),
                         ],
-                        const StudentSectionHeader(title: "TODAY'S ATTENDANCE"),
+                        const StudentSectionHeader(title: AppStrings.todaySAttendance),
                         const SizedBox(height: AppSpacing.s12),
                         GestureDetector(
                           onTap: _openAttendanceTab,
@@ -125,7 +126,7 @@ class StudentDashboard extends GetView<StudentDashboardController> {
                         const SizedBox(height: AppSpacing.s24),
                         if (data.studyMaterials.isNotEmpty) ...[
                           StudentSectionHeader(
-                            title: 'STUDY MATERIAL THIS WEEK',
+                            title: AppStrings.studyMaterialThisWeek,
                             showSeeAll: true,
                             onActionTap: () =>
                                 Get.toNamed(AppRoutes.studentStudyMaterial),
@@ -150,7 +151,7 @@ class StudentDashboard extends GetView<StudentDashboardController> {
                         ],
                         if (data.pendingFees.isNotEmpty) ...[
                           StudentSectionHeader(
-                            title: 'PENDING FEES',
+                            title: AppStrings.pendingFees,
                             actionLabel: 'History',
                             onActionTap: _openFeesTab,
                           ),
@@ -731,7 +732,7 @@ class _PendingFeeTile extends StatelessWidget {
               borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
             ),
             child: Text(
-              'Pending',
+              AppStrings.studentAssignmentsTabPending,
               style: AppTextStyles.outfit(
                 fontSize: 11,
                 fontWeight: FontWeight.w600,

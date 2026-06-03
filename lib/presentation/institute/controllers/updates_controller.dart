@@ -1,4 +1,5 @@
 import 'package:tuoora/core/enums/app_enums.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/data/models/daily_update_model.dart';
 import 'package:tuoora/data/repositories_impl/daily_update_repository_impl.dart';
 import 'package:file_picker/file_picker.dart';
@@ -122,7 +123,7 @@ class UpdatesController extends GetxController {
         selectedRecipient.value != UpdateRecipient.parents &&
         selectedAudience.value == UpdateTargetType.batch;
     if (targetsBatch && selectedBatch.value == null) {
-      AppSnackBar.error('Please select a batch for this update.');
+      AppSnackBar.error(AppStrings.pleaseSelectABatchForThis);
       return;
     }
 
@@ -160,7 +161,7 @@ class UpdatesController extends GetxController {
       messageError.value = null;
 
       Get.back();
-      AppSnackBar.success('Update broadcasted successfully');
+      AppSnackBar.success(AppStrings.updateBroadcastedSuccessfully);
     } catch (e) {
       AppSnackBar.error('Failed to broadcast update: $e');
     } finally {

@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:tuoora/core/api/api_client.dart';
 import 'package:tuoora/core/constants/api_constants.dart';
 import 'package:tuoora/core/services/auth_service.dart';
+import 'package:tuoora/core/services/institute_account_status_handler.dart';
 import 'package:tuoora/data/models/subscription_model.dart';
 import 'package:tuoora/data/models/user_model.dart';
 import 'package:tuoora/data/repositories_impl/auth_repository_impl.dart';
@@ -17,6 +18,16 @@ class AuthRepository implements AuthRepositoryImpl {
       'email': email,
       'password': password,
     });
+    if (response.statusCode == 403) {
+      final body = response.body;
+      if (body is Map) {
+        final status = body['status']?.toString().toLowerCase() ?? '';
+        final message = body['message']?.toString() ?? 'Login forbidden';
+        if (status.isNotEmpty) {
+          throw AccountStatusException(status, message);
+        }
+      }
+    }
     final user = _handleResponse(response, 'INSTITUTE');
     await _updateSubscription(response);
     return user;

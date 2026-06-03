@@ -1,4 +1,5 @@
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/presentation/institute/models/homework_model.dart';
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
 import 'package:get/get.dart';
@@ -59,7 +60,7 @@ class HomeworkRatingController extends GetxController {
           .toList();
 
       if (scores.isEmpty) {
-        AppSnackBar.warning('No submissions to rate');
+        AppSnackBar.warning(AppStrings.noSubmissionsToRate);
         return;
       }
 
@@ -67,9 +68,9 @@ class HomeworkRatingController extends GetxController {
       await _repository.submitHomeworkScore(int.parse(homework.id), data);
 
       Get.back(result: true);
-      AppSnackBar.success('Ratings submitted');
+      AppSnackBar.success(AppStrings.ratingsSubmitted);
     } catch (e) {
-      AppSnackBar.error('Failed to submit ratings');
+      AppSnackBar.error(AppStrings.failedToSubmitRatings);
     } finally {
       isLoading.value = false;
     }

@@ -57,8 +57,8 @@ class SubscriptionRenewalController extends GetxController {
       icon: Icons.receipt_long_rounded,
       iconColor: AppColors.primaryBrand,
       iconBgColor: AppColors.primaryBrandLight,
-      confirmText: 'Submit Details',
-      cancelText: 'Not Yet',
+      confirmText: AppStrings.submitDetails,
+      cancelText: AppStrings.notYet,
       confirmButtonColor: AppColors.primaryBrand,
       onConfirm: () => Get.toNamed(AppRoutes.instituteSubmitPaymentProof),
     );
@@ -96,7 +96,7 @@ class SubscriptionRenewalController extends GetxController {
       }
 
       AppSnackBar.success(
-        'Your renewal request has been submitted. We will review it shortly.',
+        AppStrings.yourRenewalRequestHasBeenSubmitted,
       );
 
       // Pop the proof + renewal screens back to the dashboard host (mounted

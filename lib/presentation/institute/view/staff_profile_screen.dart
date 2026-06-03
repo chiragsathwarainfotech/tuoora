@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
@@ -25,7 +26,7 @@ class StaffProfileScreen extends GetView<StaffController> {
             Obx(() {
               final staff = controller.selectedStaff.value;
               return InstituteAppBar(
-                title: 'Staff Profile',
+                title: AppStrings.staffProfile,
                 actions: [
                   if (staff != null) ...[
                     IconButton(
@@ -47,7 +48,7 @@ class StaffProfileScreen extends GetView<StaffController> {
               child: Obx(() {
                 final staff = controller.selectedStaff.value;
                 if (staff == null) {
-                  return const Center(child: Text('No staff selected'));
+                  return const Center(child: Text(AppStrings.noStaffSelected));
                 }
                 return SingleChildScrollView(
                   child: Column(
@@ -294,7 +295,7 @@ class StaffProfileScreen extends GetView<StaffController> {
     if (staff == null) return;
 
     CommonDialog.showDeleteConfirmation(
-      title: 'Delete Staff',
+      title: AppStrings.deleteStaff,
       description: 'Are you sure you want to delete ${staff.fullName}?',
       onConfirm: () async {
         Get.back(); // Close the dialog

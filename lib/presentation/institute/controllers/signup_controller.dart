@@ -97,7 +97,7 @@ class SignupController extends GetxController {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Select Logo Source',
+              AppStrings.selectLogoSource,
               style: AppTextStyles.outfit(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
@@ -219,7 +219,7 @@ class SignupController extends GetxController {
     } catch (e) {
       AppSnackBar.error(
         e.toString().replaceAll('Exception: ', ''),
-        title: 'Registration Failed',
+        title: AppStrings.registrationFailed,
       );
     } finally {
       isLoading.value = false;
@@ -256,13 +256,13 @@ class SignupController extends GetxController {
         loggedIn: false,
       );
 
-      AppSnackBar.success('OTP verified successfully.');
+      AppSnackBar.success(AppStrings.otpVerifiedSuccessfully);
 
       Get.toNamed(AppRoutes.instituteProfileSetup);
     } catch (e) {
       AppSnackBar.error(
         e.toString().replaceAll('Exception: ', ''),
-        title: 'Verification Failed',
+        title: AppStrings.verificationFailed,
       );
     } finally {
       isLoading.value = false;
@@ -348,11 +348,11 @@ class SignupController extends GetxController {
       }
 
       Get.offAllNamed(AppRoutes.instituteDashboard);
-      AppSnackBar.success('Profile created successfully');
+      AppSnackBar.success(AppStrings.profileCreatedSuccessfully);
     } catch (e) {
       AppSnackBar.error(
         e.toString().replaceAll('Exception: ', ''),
-        title: 'Setup Failed',
+        title: AppStrings.setupFailed,
       );
     } finally {
       isLoading.value = false;

@@ -1,4 +1,5 @@
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
 import 'package:tuoora/data/models/whatsapp_settings_model.dart';
 import 'package:flutter/material.dart';
@@ -55,12 +56,12 @@ class WhatsAppController extends GetxController {
     final accountId = businessAccountIdController.text.trim();
 
     if (token.isEmpty || phoneNumber.isEmpty || phoneId.isEmpty || accountId.isEmpty) {
-      AppSnackBar.warning('Enter all credentials');
+      AppSnackBar.warning(AppStrings.enterAllCredentials);
       return;
     }
 
     if (phoneNumber.length < 10) {
-      AppSnackBar.warning('Invalid phone number');
+      AppSnackBar.warning(AppStrings.invalidPhoneNumber);
       return;
     }
 
@@ -83,9 +84,9 @@ class WhatsAppController extends GetxController {
       currentSettings.value = savedSettings;
 
       Get.back();
-      AppSnackBar.success('Settings saved');
+      AppSnackBar.success(AppStrings.settingsSaved);
     } catch (e) {
-      AppSnackBar.error('Failed to save settings');
+      AppSnackBar.error(AppStrings.failedToSaveSettings);
     } finally {
       isLoading.value = false;
     }

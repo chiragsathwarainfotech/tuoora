@@ -142,7 +142,7 @@ class HomeworkController extends GetxController {
       // Close creation dialog
       Get.back();
 
-      AppSnackBar.success('Homework created successfully');
+      AppSnackBar.success(AppStrings.homeworkCreatedSuccessfully);
     } catch (e) {
       // Close loader if open
       CommonLoading.dismiss();

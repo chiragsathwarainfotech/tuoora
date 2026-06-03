@@ -169,11 +169,11 @@ class NotesController extends GetxController {
       if (editingNoteId.value != null) {
         await _notesRepository.updateNote(editingNoteId.value!, noteData);
         Get.back();
-        AppSnackBar.success('Note updated successfully');
+        AppSnackBar.success(AppStrings.noteUpdatedSuccessfully);
       } else {
         await _notesRepository.createNote(noteData);
         Get.back();
-        AppSnackBar.success('Note created successfully');
+        AppSnackBar.success(AppStrings.noteCreatedSuccessfully);
       }
 
       fetchNotes(page: 1);
@@ -232,7 +232,7 @@ class NotesController extends GetxController {
       isLoading.value = true;
       await _notesRepository.deleteNote(id);
       notesList.removeWhere((n) => n.id == id);
-      AppSnackBar.success('Note deleted successfully');
+      AppSnackBar.success(AppStrings.noteDeletedSuccessfully);
     } catch (e) {
       AppSnackBar.error('Failed to delete note: $e');
     } finally {

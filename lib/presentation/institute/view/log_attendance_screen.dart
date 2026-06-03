@@ -27,7 +27,7 @@ class LogAttendanceScreen extends GetView<StaffController> {
       body: SafeArea(
         child: Column(
           children: [
-            const InstituteAppBar(title: 'Add Attendance'),
+            const InstituteAppBar(title: AppStrings.addAttendance),
             Expanded(
               child: SingleChildScrollView(
                 padding: AppSpacing.all16,
@@ -74,9 +74,9 @@ class LogAttendanceScreen extends GetView<StaffController> {
                     _buildStatusToggle(),
                     AppSpacing.v24,
                     AppInputField(
-                      label: 'Absent Reason',
+                      label: AppStrings.absentReason,
                       controller: controller.logNotesController,
-                      hint: 'Enter reason',
+                      hint: AppStrings.enterReason,
                       maxLines: 4,
                     ),
                     AppSpacing.v32,
@@ -95,7 +95,7 @@ class LogAttendanceScreen extends GetView<StaffController> {
     return Column(
       children: [
         AppSearchField(
-          hintText: 'Search member by name',
+          hintText: AppStrings.searchMemberByName,
           onChanged: (val) => controller.searchLogStaff(val),
         ),
         Obx(() {
@@ -275,7 +275,7 @@ class LogAttendanceScreen extends GetView<StaffController> {
       child: Obx(
         () => AppButton(
           onPressed: () => controller.saveAttendanceRecord(),
-          label: 'Log Attendance',
+          label: AppStrings.logAttendance,
           icon: Icons.check_circle_outline_rounded,
           isLoading: controller.isSaving.value,
         ),

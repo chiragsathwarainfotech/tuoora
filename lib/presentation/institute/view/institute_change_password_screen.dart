@@ -86,7 +86,7 @@ class InstituteChangePasswordScreen extends GetView<SecurityController> {
           Obx(
             () => _buildPasswordField(
               label: AppStrings.instConfirmPasswordLabel,
-              hint: 'Confirm new password',
+              hint: AppStrings.confirmNewPassword,
               controller: controller.confirmPasswordController,
               isVisible: controller.isConfirmPasswordVisible,
               onToggle: controller.toggleConfirmPasswordVisibility,

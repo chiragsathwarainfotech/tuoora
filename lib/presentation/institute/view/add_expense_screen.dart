@@ -22,7 +22,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
       body: SafeArea(
         child: Column(
           children: [
-            const InstituteAppBar(title: 'Add Expense'),
+            const InstituteAppBar(title: AppStrings.addExpense),
             Expanded(
               child: SingleChildScrollView(
                 padding: AppSpacing.all16,
@@ -36,7 +36,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
                       child: Obx(
                         () => AppButton(
                           onPressed: () => controller.addExpense(),
-                          label: 'Add Expense',
+                          label: AppStrings.addExpense,
                           icon: Icons.check_circle_outline_rounded,
                           isLoading: controller.isLoading.value,
                         ),
@@ -60,8 +60,8 @@ class AddExpenseScreen extends GetView<ExpenseController> {
         AppSpacing.v20,
         Obx(
           () => AppInputField(
-            label: 'Amount',
-            hint: 'Enter amount',
+            label: AppStrings.instAmountLabel,
+            hint: AppStrings.enterAmount,
             icon: Icons.currency_rupee_rounded,
             controller: controller.amountController,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
@@ -71,7 +71,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
         AppSpacing.v20,
         Obx(
           () => AppInputField(
-            label: 'Description',
+            label: AppStrings.instBatchDescLabel,
             hint: AppStrings.hintEnterDescription,
             icon: Icons.description_rounded,
             controller: controller.descriptionController,
@@ -222,7 +222,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Payment Method',
+          AppStrings.instPaymentMethodLabel,
           style: AppTextStyles.outfit(
             fontSize: 14,
             fontWeight: FontWeight.w600,

@@ -30,9 +30,9 @@ class ReportsScreen extends StatelessWidget {
                 padding: AppSpacing.all16,
                 children: [
                   _buildReportCard(
-                    title: 'Attendance Reports',
+                    title: AppStrings.attendanceReports,
                     subtitle:
-                        'Comprehensive analysis of daily, weekly, and monthly student presence across all active batches.',
+                        AppStrings.comprehensiveAnalysisOfDailyWeeklyAnd,
                     icon: Icons.calendar_today_rounded,
                     color: AppColors.primaryBrand,
                     onTap: () {
@@ -43,7 +43,7 @@ class ReportsScreen extends StatelessWidget {
                   _buildReportCard(
                     title: AppStrings.labelFeeCollectionReport,
                     subtitle:
-                        'Deep dive into examination results, assignment completion rates, and individual student growth curves.',
+                        AppStrings.deepDiveIntoExaminationResultsAssignment,
                     icon: Icons.account_balance_wallet_rounded,
                     color: AppColors.primaryBrand,
                     onTap: () {
@@ -52,9 +52,9 @@ class ReportsScreen extends StatelessWidget {
                   ),
                   AppSpacing.v10,
                   _buildReportCard(
-                    title: 'Student Performance Reports',
+                    title: AppStrings.studentPerformanceReports,
                     subtitle:
-                        'Academic progress, average grades, and performance analysis across batches.',
+                        AppStrings.academicProgressAverageGradesAndPerformance,
                     icon: Icons.insights_rounded,
                     color: AppColors.primaryBrand,
                     onTap: () {

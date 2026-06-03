@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
@@ -30,7 +31,7 @@ class StudentStudyMaterialDetailScreen
                   _buildHeaderCard(material),
                   const SizedBox(height: 16),
                   Text(
-                    'FILES',
+                    AppStrings.files,
                     style: AppTextStyles.outfit(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,

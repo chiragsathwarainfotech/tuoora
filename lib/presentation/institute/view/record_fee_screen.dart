@@ -26,7 +26,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
             Obx(
               () => Column(
                 children: [
-                  const InstituteAppBar(title: 'Add Transaction'),
+                  const InstituteAppBar(title: AppStrings.addTransaction),
                   Expanded(
                     child: SingleChildScrollView(
                       padding: AppSpacing.x16.add(AppSpacing.y16),
@@ -171,7 +171,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                 GestureDetector(
                   onTap: () => controller.changeStudent(),
                   child: Text(
-                    'Change',
+                    AppStrings.instChangeBtn,
                     style: AppTextStyles.outfit(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
@@ -211,7 +211,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                     onChanged: (value) => controller.amount.value = value,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
-                      hintText: 'Enter Amount',
+                      hintText: AppStrings.recordFeeEnterAmount,
                       border: InputBorder.none,
                       isDense: true,
                       contentPadding: EdgeInsets.zero,
@@ -473,7 +473,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
             ),
             AppSpacing.v24,
             Text(
-              'Receipt Preview',
+              AppStrings.receiptPreview,
               textAlign: TextAlign.center,
               style: AppTextStyles.outfit(
                 fontSize: 20,
@@ -504,7 +504,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Total Amount',
+                  AppStrings.totalAmount,
                   style: AppTextStyles.outfit(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
@@ -532,7 +532,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                 ),
               ),
               child: Text(
-                'Close Preview',
+                AppStrings.closePreview,
                 style: AppTextStyles.outfit(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,

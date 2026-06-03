@@ -44,20 +44,20 @@ class SubscriptionGuard {
       AppSnackBar.warning(
         'Your renewal request is under review. Adding new records will be '
         'enabled once your subscription is reactivated.',
-        title: 'Renewal Under Review',
+        title: AppStrings.renewalUnderReview,
       );
       return;
     }
 
     CommonDialog.show(
-      title: 'Subscription Expired',
+      title: AppStrings.subscriptionExpired,
       description:
           'Your subscription has expired, so adding new records is disabled. '
           'You can still edit and delete existing records. Renew to add again.',
       icon: Icons.lock_outline_rounded,
       iconColor: AppColors.errorRed,
       iconBgColor: AppColors.errorBg,
-      confirmText: 'Renew Now',
+      confirmText: AppStrings.renewNow,
       cancelText: AppStrings.labelNotNow,
       confirmButtonColor: AppColors.primaryBrand,
       onConfirm: () => Get.toNamed(AppRoutes.instituteSubscriptionRenew),

@@ -1,5 +1,6 @@
 ﻿import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/utils/subscription_guard.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/widgets/app_network_image.dart';
@@ -26,7 +27,7 @@ class SalaryManagementScreen extends GetView<StaffController> {
       body: SafeArea(
         child: Column(
           children: [
-            const InstituteAppBar(title: 'Salary Management'),
+            const InstituteAppBar(title: AppStrings.salaryManagement),
             Expanded(
               child: RefreshIndicator(
                 onRefresh: () => controller.fetchGlobalSalaries(page: 1),
@@ -44,7 +45,7 @@ class SalaryManagementScreen extends GetView<StaffController> {
                     ),
                     AppSpacing.v24,
                     Text(
-                      'Payout History',
+                      AppStrings.payoutHistory,
                       style: AppTextStyles.outfit(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
@@ -144,8 +145,8 @@ class SalaryManagementScreen extends GetView<StaffController> {
       return CommonStateWidget(
         isLoading: controller.isLoadingGlobalSalaries.value,
         isEmpty: controller.globalSalaryList.isEmpty,
-        emptyTitle: 'No Records Found',
-        emptySubtitle: 'No salary payout records found for this month.',
+        emptyTitle: AppStrings.noRecordsFound,
+        emptySubtitle: AppStrings.noSalaryPayoutRecordsFoundFor,
         emptyIcon: Icons.receipt_long_rounded,
         child: ListView.separated(
           shrinkWrap: true,
@@ -221,7 +222,7 @@ class SalaryManagementScreen extends GetView<StaffController> {
               ),
             ),
             Text(
-              'PAID',
+              AppStrings.studentFeesPaidPercent,
               style: AppTextStyles.outfit(
                 fontSize: 10,
                 fontWeight: FontWeight.w600,

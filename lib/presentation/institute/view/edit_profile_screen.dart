@@ -26,7 +26,7 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
               Column(
                 children: [
                   const InstituteAppBar(
-                    title: 'Edit Institute Profile',
+                    title: AppStrings.editInstituteProfile,
                     isRoot: false,
                   ),
                   Expanded(
@@ -155,7 +155,7 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
               ),
               AppSpacing.h12,
               Text(
-                'INSTITUTE INFORMATION',
+                AppStrings.instituteInformation,
                 style: AppTextStyles.outfit(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
@@ -254,7 +254,7 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
       top: false,
       minimum: const EdgeInsets.only(bottom: 16),
       child: AppButton(
-        label: 'Save Profile Changes',
+        label: AppStrings.saveProfileChanges,
         icon: Icons.check_circle_outline_rounded,
         onPressed: () => controller.saveProfile(),
       ),

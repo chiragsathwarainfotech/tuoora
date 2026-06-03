@@ -1,4 +1,5 @@
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/widgets/export_report.dart';
@@ -24,7 +25,7 @@ class AttendanceReportScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const InstituteAppBar(title: 'Attendance Report', isRoot: false),
+            const InstituteAppBar(title: AppStrings.attendanceReport, isRoot: false),
             Expanded(
               child: Obx(() {
                 if (controller.isAttendanceLoading.value) {
@@ -35,7 +36,7 @@ class AttendanceReportScreen extends StatelessWidget {
                 if (report == null) {
                   return const AppEmptyView(
                     icon: Icons.fact_check_outlined,
-                    title: 'No attendance data available',
+                    title: AppStrings.noAttendanceDataAvailable,
                   );
                 }
 
@@ -49,7 +50,7 @@ class AttendanceReportScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ReportSummaryCard(
-                        title: 'Overall Attendance Percentage',
+                        title: AppStrings.overallAttendancePercentage,
                         value: '${attendancePercentage.toStringAsFixed(1)}%',
                       ),
                       AppSpacing.v32,

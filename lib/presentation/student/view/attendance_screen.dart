@@ -1,5 +1,6 @@
 ﻿import 'dart:math' as math;
 import 'dart:ui';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
@@ -53,7 +54,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
                         padding: EdgeInsets.symmetric(vertical: 80),
                         child: AppEmptyView(
                           icon: Icons.event_busy_outlined,
-                          title: 'No attendance records',
+                          title: AppStrings.noAttendanceRecords,
                           message:
                               'Your attendance will appear here once your institute starts marking it.',
                         ),
@@ -62,15 +63,15 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        StudentSectionHeader(title: 'TODAY'),
+                        StudentSectionHeader(title: AppStrings.today),
                         const SizedBox(height: AppSpacing.s12),
                         _buildTodayCard(),
                         const SizedBox(height: AppSpacing.s24),
-                        StudentSectionHeader(title: 'MONTH'),
+                        StudentSectionHeader(title: AppStrings.month),
                         const SizedBox(height: AppSpacing.s12),
                         _buildMonthCard(),
                         const SizedBox(height: AppSpacing.s24),
-                        StudentSectionHeader(title: 'MONTHLY SUMMARY'),
+                        StudentSectionHeader(title: AppStrings.monthlySummary),
                         const SizedBox(height: AppSpacing.s12),
                         _buildSummaryCard(),
                         const SizedBox(height: AppSpacing.s8),
@@ -286,7 +287,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
               Row(
                 children: [
                   Text(
-                    'GO TO TODAY',
+                    AppStrings.goToToday,
                     style: AppTextStyles.outfit(
                       fontSize: 11,
                       fontWeight: FontWeight.w600,

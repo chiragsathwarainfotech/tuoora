@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
@@ -16,7 +17,7 @@ class StudentHolidayDetailScreen extends StatelessWidget {
         child: Column(
           children: [
             const StudentAppBar(
-              title: 'Holiday • Buddha Purnima',
+              title: AppStrings.holidayBuddhaPurnima,
               showDefaultActions: false,
             ),
             Expanded(
@@ -61,7 +62,7 @@ class StudentHolidayDetailScreen extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.s16),
           Text(
-            'Buddha Purnima',
+            AppStrings.buddhaPurnima,
             style: AppTextStyles.outfit(
               fontSize: 22,
               fontWeight: FontWeight.w900,
@@ -70,7 +71,7 @@ class StudentHolidayDetailScreen extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            'Wednesday, 21 May 2026',
+            AppStrings.wednesday21May2026,
             style: AppTextStyles.outfit(
               fontSize: 13,
               fontWeight: FontWeight.w400,
@@ -83,7 +84,7 @@ class StudentHolidayDetailScreen extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
               child: Text(
-                'INSTITUTE CLOSED',
+                AppStrings.instituteClosed,
                 style: AppTextStyles.outfit(
                   fontSize: 10,
                   fontWeight: FontWeight.w600,
@@ -107,7 +108,7 @@ class StudentHolidayDetailScreen extends StatelessWidget {
         border: Border.all(color: AppColors.borderGrey),
       ),
       child: Text(
-        'Marks the birth of Gautama Buddha. The institute will remain closed for the day. There are no assignment deadlines on this day; pending submissions roll over to Thursday.',
+        AppStrings.marksTheBirthOfGautamaBuddha,
         style: AppTextStyles.outfit(
           fontSize: 13,
           fontWeight: FontWeight.w400,
@@ -146,7 +147,7 @@ class StudentHolidayDetailScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'CLASSES RESUME',
+                  AppStrings.classesResume,
                   style: AppTextStyles.outfit(
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
@@ -155,7 +156,7 @@ class StudentHolidayDetailScreen extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Thursday, 22 May 2026 at 8:00 AM',
+                  AppStrings.thursday22May2026At8,
                   style: AppTextStyles.outfit(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,

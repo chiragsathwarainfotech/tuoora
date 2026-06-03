@@ -159,7 +159,7 @@ class _EmptyState extends StatelessWidget {
           SizedBox(height: 120),
           AppEmptyView(
             icon: Icons.notifications_none_rounded,
-            title: "You're all caught up",
+            title: AppStrings.youReAllCaughtUp,
             message: 'New notifications will show up here.',
           ),
         ],

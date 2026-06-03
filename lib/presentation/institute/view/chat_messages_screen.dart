@@ -194,7 +194,7 @@ class ChatMessagesScreen extends GetView<ChatController> {
           ),
           AppSpacing.v8,
           Text(
-            'Type a message to start your conversation.',
+            AppStrings.typeAMessageToStartYour,
             style: AppTextStyles.outfit(
               fontSize: 14,
               color: AppColors.textSecondary,

@@ -174,7 +174,7 @@ class _VideoPreview extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '0:00',
+                        AppStrings.studentAttachmentPreview000,
                         style: AppTextStyles.outfit(
                           fontSize: 10,
                           color: AppColors.white.withValues(alpha: 0.85),

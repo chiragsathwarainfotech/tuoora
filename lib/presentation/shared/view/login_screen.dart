@@ -79,8 +79,54 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
+                          Obx(() {
+                            final err = controller.accountError.value;
+                            if (err == null || err.isEmpty) {
+                              return const SizedBox.shrink();
+                            }
+                            return Container(
+                              margin: const EdgeInsets.only(
+                                bottom: AppSpacing.s16,
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: AppSpacing.s12,
+                                vertical: AppSpacing.s10,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.errorBg,
+                                borderRadius: BorderRadius.circular(
+                                  AppSpacing.cardRadius,
+                                ),
+                                border: Border.all(
+                                  color: AppColors.bohoRed.withValues(
+                                    alpha: 0.25,
+                                  ),
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.error_rounded,
+                                    color: AppColors.bohoRed,
+                                    size: 18,
+                                  ),
+                                  AppSpacing.h8,
+                                  Expanded(
+                                    child: Text(
+                                      err,
+                                      style: AppTextStyles.outfit(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w500,
+                                        color: AppColors.bohoRed,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }),
                           Text(
-                            'Email Address',
+                            AppStrings.instEmailAddressLabel,
                             style: AppTextStyles.outfit(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
@@ -108,7 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'Password',
+                                AppStrings.password,
                                 style: AppTextStyles.outfit(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
@@ -124,8 +170,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                     );
                                   } else {
                                     AppSnackBar.warning(
-                                      'Recovery for this role will be available soon.',
-                                      title: 'Coming Soon',
+                                      AppStrings.recoveryForThisRoleWillBe,
+                                      title: AppStrings.loginComingSoon,
                                     );
                                   }
                                 },
@@ -136,7 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       MaterialTapTargetSize.shrinkWrap,
                                 ),
                                 child: Text(
-                                  'Forgot Password?',
+                                  AppStrings.loginForgotPassword,
                                   style: AppTextStyles.outfit(
                                     fontSize: 12,
                                     fontWeight: FontWeight.w600,
@@ -233,7 +279,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             Padding(
                               padding: AppSpacing.x16,
                               child: Text(
-                                'OR EXPAND YOUR REACH',
+                                AppStrings.orExpandYourReach,
                                 style: AppTextStyles.outfit(
                                   fontSize: 10,
                                   fontWeight: FontWeight.w600,
@@ -250,7 +296,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Padding(
                         padding: AppSpacing.x16,
                         child: AppButton(
-                          label: 'Institute Registration',
+                          label: AppStrings.instituteRegistration,
                           onPressed: () =>
                               Get.toNamed(AppRoutes.instituteSignup),
                           icon: Icons.storefront_outlined,

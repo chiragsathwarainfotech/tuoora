@@ -51,7 +51,7 @@ class InstituteSignupScreen extends GetView<SignupController> {
                           Obx(
                             () => _buildTextField(
                               controller: controller.instituteNameController,
-                              hint: 'Enter institute name',
+                              hint: AppStrings.enterInstituteName,
                               prefixIcon: Icons.business_outlined,
                               errorText: controller.instituteNameError.value,
                               onChanged: (_) {
@@ -69,7 +69,7 @@ class InstituteSignupScreen extends GetView<SignupController> {
                             () => _buildTextField(
                               controller:
                                   controller.instituteOwnerNameController,
-                              hint: 'Enter owner name',
+                              hint: AppStrings.enterOwnerName,
                               prefixIcon: Icons.person,
                               errorText: controller.ownerNameError.value,
                               onChanged: (_) {
@@ -126,7 +126,7 @@ class InstituteSignupScreen extends GetView<SignupController> {
                           AppSpacing.v32,
                           Obx(
                             () => AppButton(
-                              label: 'Create Account',
+                              label: AppStrings.createAccount,
                               onPressed: controller.register,
                               isLoading: controller.isLoading.value,
                               backgroundColor: AppColors.primaryBrand,
@@ -144,7 +144,7 @@ class InstituteSignupScreen extends GetView<SignupController> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Already have an account? ',
+                          AppStrings.alreadyHaveAnAccount,
                           style: AppTextStyles.outfit(
                             fontSize: 14,
                             color: AppColors.blueSapphire,
@@ -153,7 +153,7 @@ class InstituteSignupScreen extends GetView<SignupController> {
                         GestureDetector(
                           onTap: () => Get.back(),
                           child: Text(
-                            'Sign In',
+                            AppStrings.signInButton,
                             style: AppTextStyles.outfit(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,

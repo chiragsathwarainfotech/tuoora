@@ -21,7 +21,7 @@ class InstituteSubscriptionScreen
       body: SafeArea(
         child: Column(
           children: [
-            const InstituteAppBar(title: 'Subscription Plans', isRoot: false),
+            const InstituteAppBar(title: AppStrings.subscriptionPlans, isRoot: false),
             Expanded(
               child: Obx(() {
                 if (controller.isLoading.value) {
@@ -32,7 +32,7 @@ class InstituteSubscriptionScreen
                 if (data == null) {
                   return Center(
                     child: Text(
-                      'Failed to load subscription data.',
+                      AppStrings.failedToLoadSubscriptionData,
                       style: AppTextStyles.outfit(
                         fontSize: 16,
                         color: AppColors.textPrimary,
@@ -159,7 +159,7 @@ class InstituteSubscriptionScreen
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                'LATEST BILLING',
+                AppStrings.latestBilling,
                 style: AppTextStyles.outfit(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,

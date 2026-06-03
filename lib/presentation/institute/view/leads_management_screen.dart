@@ -45,9 +45,9 @@ class LeadsManagementScreen extends GetView<LeadsController> {
                               controller.isLoading.value &&
                               controller.leadsList.isEmpty,
                           isEmpty: controller.leadsList.isEmpty,
-                          emptyTitle: 'No Leads Found',
+                          emptyTitle: AppStrings.noLeadsFound,
                           emptySubtitle:
-                              'Start adding leads to manage your potential students.',
+                              AppStrings.startAddingLeadsToManageYour,
                           emptyIcon: Icons.leaderboard_outlined,
                           child: NotificationListener<ScrollNotification>(
                             onNotification: (ScrollNotification scrollInfo) {
@@ -244,8 +244,8 @@ class LeadsManagementScreen extends GetView<LeadsController> {
                 AppSpacing.h12,
                 _buildActionBtn(AppImages.icDelete, () {
                   CommonDialog.showDeleteConfirmation(
-                    title: 'Delete Lead',
-                    description: 'Are you sure you want to delete this lead?',
+                    title: AppStrings.deleteLead,
+                    description: AppStrings.leadsManagementAreYouSureYouWantTo,
                     onConfirm: () => controller.deleteLead(lead.id),
                   );
                 }),

@@ -37,7 +37,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
           if (profile == null) {
             return const AppEmptyView(
               icon: Icons.person_off_outlined,
-              title: 'Profile unavailable',
+              title: AppStrings.profileUnavailable,
               message:
                   'We couldn\'t load your profile right now. Please try again later.',
             );
@@ -45,7 +45,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
 
           return Column(
             children: [
-              const StudentAppBar(title: 'Profile', isRoot: true),
+              const StudentAppBar(title: AppStrings.profile, isRoot: true),
               Expanded(
                 child: RefreshIndicator(
                   color: AppColors.primaryBrand,
@@ -262,7 +262,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
       children: [
         Expanded(
           child: _buildStatCard(
-            label: 'ATTENDANCE',
+            label: AppStrings.attendance,
             value: '${stats.attendancePct}%',
             valueColor: AppColors.primaryBrand,
           ),
@@ -270,7 +270,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
         const SizedBox(width: 8),
         Expanded(
           child: _buildStatCard(
-            label: 'ASSIGNMENT COMPLETED',
+            label: AppStrings.assignmentCompleted,
             value: '${stats.assignmentsPct}%',
             valueColor: AppColors.primaryBrand,
           ),
@@ -349,7 +349,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
             Expanded(
               child: ProfileGridAction(
                 icon: Icons.domain_rounded,
-                label: 'Institute',
+                label: AppStrings.studentReceiptInstitute,
                 iconBgColor: AppColors.subjectPhysicsSoft,
                 iconColor: AppColors.subjectPhysics,
                 onTap: () => Get.toNamed(AppRoutes.studentInstitute),
@@ -359,7 +359,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
             Expanded(
               child: ProfileGridAction(
                 icon: Icons.chat_bubble_outline_rounded,
-                label: 'Chat',
+                label: AppStrings.chat,
                 iconBgColor: AppColors.errorBg,
                 iconColor: AppColors.bohoRed,
                 onTap: () => Get.toNamed(AppRoutes.studentChat),
@@ -454,19 +454,19 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
       children: [
         ProfileMenuTile(
           icon: Icons.notifications_none_rounded,
-          title: 'Notification preferences',
+          title: AppStrings.notificationPreferences,
           onTap: () => Get.toNamed(AppRoutes.studentNotificationPreferences),
         ),
         // Divider(height: 1, color: AppColors.borderGrey.withValues(alpha: 0.5)),
         // const ProfileMenuTile(
         //   icon: Icons.article_outlined,
-        //   title: 'Language',
+        //   title: AppStrings.language,
         //   trailingText: 'English',
         // ),
         // Divider(height: 1, color: AppColors.borderGrey.withValues(alpha: 0.5)),
         // const ProfileMenuTile(
         //   icon: Icons.brightness_auto_rounded,
-        //   title: 'Theme',
+        //   title: AppStrings.theme,
         //   trailingText: 'Light',
         // ),
       ],
@@ -478,17 +478,17 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
       children: [
         const ProfileMenuTile(
           icon: Icons.chat_bubble_outline_rounded,
-          title: 'Help & support',
+          title: AppStrings.helpSupport,
         ),
         Divider(height: 1, color: AppColors.borderGrey.withValues(alpha: 0.5)),
         const ProfileMenuTile(
           icon: Icons.shield_outlined,
-          title: 'Privacy & terms',
+          title: AppStrings.privacyTerms,
         ),
         Divider(height: 1, color: AppColors.borderGrey.withValues(alpha: 0.5)),
         ProfileMenuTile(
           icon: Icons.add_circle_outline_rounded,
-          title: 'Tell us what\'s missing',
+          title: AppStrings.studentProfileTellUsWhatSMissing,
           onTap: () => Get.toNamed(AppRoutes.studentFeedback),
         ),
       ],
@@ -523,7 +523,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
           ),
           const SizedBox(width: 8),
           Text(
-            'Log out',
+            AppStrings.logOut,
             style: AppTextStyles.outfit(
               fontSize: 14,
               fontWeight: FontWeight.w600,

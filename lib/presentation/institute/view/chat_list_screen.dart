@@ -1,5 +1,6 @@
 ﻿import 'package:cached_network_image/cached_network_image.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/utils/subscription_guard.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
@@ -22,7 +23,7 @@ class ChatListScreen extends GetView<ChatController> {
       body: SafeArea(
         child: Column(
           children: [
-            const InstituteAppBar(title: 'Chats'),
+            const InstituteAppBar(title: AppStrings.chats),
             Expanded(
               child: Padding(
                 padding: AppSpacing.x16,
@@ -36,9 +37,9 @@ class ChatListScreen extends GetView<ChatController> {
                         return CommonStateWidget(
                           isLoading: controller.isLoading.value,
                           isEmpty: controller.filteredChats.isEmpty,
-                          emptyTitle: 'No Chats Found',
+                          emptyTitle: AppStrings.noChatsFound,
                           emptySubtitle:
-                              'Start a new conversation to see your chats here.',
+                              AppStrings.startANewConversationToSee,
                           emptyIcon: Icons.chat_bubble_outline_rounded,
                           child: ListView.separated(
                             padding: const EdgeInsets.only(bottom: 88, top: 4),
@@ -79,7 +80,7 @@ class ChatListScreen extends GetView<ChatController> {
 
   Widget _buildSearchField() {
     return AppSearchField(
-      hintText: 'Search chats...',
+      hintText: AppStrings.searchChats,
       onChanged: (value) => controller.searchQuery.value = value,
     );
   }
@@ -241,7 +242,7 @@ class _PreviewLine extends StatelessWidget {
 
     if (caption.isEmpty) {
       return Text(
-        'Tap to start chatting',
+        AppStrings.tapToStartChatting,
         style: AppTextStyles.outfit(
           fontSize: 13,
           color: AppColors.textTertiary,

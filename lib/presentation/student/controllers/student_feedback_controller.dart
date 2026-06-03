@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/core/api/api_client.dart';
 import 'package:tuoora/core/enums/app_enums.dart';
@@ -60,8 +61,8 @@ class StudentFeedbackController extends GetxController {
     final message = messageController.text.trim();
     if (message.isEmpty) {
       AppSnackBar.warning(
-        'Please enter a message before submitting.',
-        title: 'Validation Error',
+        AppStrings.pleaseEnterAMessageBeforeSubmitting,
+        title: AppStrings.validationError,
       );
       return;
     }
@@ -76,9 +77,9 @@ class StudentFeedbackController extends GetxController {
 
       await _repository.submitFeedback(data);
       Get.back();
-      AppSnackBar.success('Thank you! Your feedback has been sent.');
+      AppSnackBar.success(AppStrings.thankYouYourFeedbackHasBeen);
     } catch (e) {
-      AppSnackBar.error('Failed to submit feedback. Please try again.');
+      AppSnackBar.error(AppStrings.failedToSubmitFeedbackPleaseTry);
     } finally {
       isLoading.value = false;
     }

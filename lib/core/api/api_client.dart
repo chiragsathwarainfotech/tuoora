@@ -1,9 +1,9 @@
 import 'package:tuoora/core/constants/api_constants.dart';
 import 'package:tuoora/core/services/auth_service.dart';
+import 'package:tuoora/core/services/institute_account_status_handler.dart';
 import 'package:get/get.dart';
 
 class ApiClient extends GetConnect {
-
   @override
   void onInit() {
     httpClient.baseUrl = ApiConstants.baseUrl;
@@ -13,19 +13,19 @@ class ApiClient extends GetConnect {
     // Detailed Request Logging
     httpClient.addRequestModifier<dynamic>((request) {
       final authService = Get.find<AuthService>();
-      
+
       // Only set application/json if no Accept header is already present
       if (!request.headers.containsKey('Accept')) {
         request.headers['Accept'] = 'application/json';
       }
-      
+
       if (authService.isAuthenticated) {
         request.headers['Authorization'] = 'Bearer ${authService.token}';
       }
 
       print('🚀 [API REQUEST] ${request.method.toUpperCase()} ${request.url}');
       print('Headers: ${request.headers}');
-      
+
       return request;
     });
 
@@ -33,7 +33,7 @@ class ApiClient extends GetConnect {
     httpClient.addResponseModifier((request, response) {
       print('📥 [API RESPONSE] ${request.method.toUpperCase()} ${request.url}');
       print('Status Code: ${response.statusCode}');
-      
+
       if (response.hasError) {
         print('❌ [API ERROR]');
         print('URL: ${request.url}');
@@ -43,16 +43,31 @@ class ApiClient extends GetConnect {
         } else {
           print('Body: [Binary Data or Unknown Format]');
         }
-        
+
         // Handle unauthorized globally if needed
         if (response.statusCode == 401) {
           // Get.find<AuthService>().logout();
+        }
+
+        if (response.statusCode == 403 &&
+            Get.isRegistered<InstituteAccountStatusHandler>()) {
+          final body = response.body;
+          if (body is Map) {
+            final status = body['status']?.toString().toLowerCase() ?? '';
+            final message = body['message']?.toString() ?? '';
+            if (status.isNotEmpty) {
+              InstituteAccountStatusHandler.to.handleForbidden(
+                status: status,
+                message: message,
+              );
+            }
+          }
         }
       } else {
         // Log body only in debug mode or if specifically needed, keeping it minimal for now
         // print('Body: ${response.body}');
       }
-      
+
       print('--------------------------------------------------');
       return response;
     });
@@ -60,4 +75,3 @@ class ApiClient extends GetConnect {
     super.onInit();
   }
 }
-

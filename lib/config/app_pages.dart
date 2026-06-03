@@ -1,4 +1,5 @@
 import 'package:tuoora/data/repositories/student_notifications_repository.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/presentation/institute/bindings/institute_binding.dart';
 import 'package:tuoora/presentation/institute/view/batches_screen.dart';
@@ -173,7 +174,7 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.studentFeeHistory,
-      page: () => const PaymentHistoryScreen(title: 'Fee History'),
+      page: () => const PaymentHistoryScreen(title: AppStrings.feeHistory),
     ),
 
     GetPage(

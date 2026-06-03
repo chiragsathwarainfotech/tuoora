@@ -69,7 +69,7 @@ class StudentFeesScreen extends GetView<FeesController> {
                             ),
                             child: AppEmptyView(
                               icon: Icons.receipt_long_outlined,
-                              title: 'No fee statements yet',
+                              title: AppStrings.noFeeStatementsYet,
                               message:
                                   'Your statements will appear here once your institute generates them.',
                             ),

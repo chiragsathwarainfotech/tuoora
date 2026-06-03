@@ -217,7 +217,7 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
           Padding(
             padding: AppSpacing.cardPadding,
             child: Text(
-              'Fees History',
+              AppStrings.feesHistory,
               style: AppTextStyles.outfit(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -321,7 +321,7 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
           ),
           const SizedBox(height: 4),
           Text(
-            'STUDENT IDENTITY CARD',
+            AppStrings.studentIdentityCard,
             textAlign: TextAlign.center,
             style: AppTextStyles.outfit(
               fontSize: 10,
@@ -473,7 +473,7 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
 
   void _showDeleteConfirmation(BuildContext context, String studentName) {
     CommonDialog.showDeleteConfirmation(
-      title: 'Delete Student',
+      title: AppStrings.deleteStudent,
       description: 'Are you sure you want to delete\n$studentName?',
       onConfirm: () => controller.deleteStudent(),
     );

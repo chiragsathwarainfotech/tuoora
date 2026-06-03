@@ -172,8 +172,8 @@ class AddEditLeadScreen extends GetView<LeadsController> {
       children: [
         Obx(
           () => AppInputField(
-            label: 'Title',
-            hint: 'Enter note title',
+            label: AppStrings.instNoteTitleLabel,
+            hint: AppStrings.enterNoteTitle,
             controller: controller.noteTitleController,
             errorText: controller.triedToSave.value
                 ? controller.noteTitleError.value
@@ -183,8 +183,8 @@ class AddEditLeadScreen extends GetView<LeadsController> {
         AppSpacing.v20,
         Obx(
           () => AppInputField(
-            label: 'Description',
-            hint: 'Enter note description',
+            label: AppStrings.instBatchDescLabel,
+            hint: AppStrings.enterNoteDescription,
             controller: controller.notesController,
             maxLines: 5,
             errorText: controller.triedToSave.value

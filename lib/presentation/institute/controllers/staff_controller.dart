@@ -349,7 +349,7 @@ class StaffController extends GetxController {
       };
 
       await _repository.logSalary(data);
-      AppSnackBar.success('Salary record saved successfully');
+      AppSnackBar.success(AppStrings.salaryRecordSavedSuccessfully);
 
       fetchGlobalSalaries(page: 1);
 
@@ -413,7 +413,7 @@ class StaffController extends GetxController {
       };
 
       await _repository.logStaffAttendance(data);
-      AppSnackBar.success('Attendance logged successfully');
+      AppSnackBar.success(AppStrings.attendanceLoggedSuccessfully);
 
       // Refresh logs
       fetchGlobalAttendance(page: 1);
@@ -532,7 +532,7 @@ class StaffController extends GetxController {
       salaryPreview.value = preview;
       salaryLeavesDisplayController.text = preview.leaves.toString();
     } catch (e) {
-      AppSnackBar.error('Failed to load salary preview');
+      AppSnackBar.error(AppStrings.failedToLoadSalaryPreview);
     } finally {
       isLoadingSalaryPreview.value = false;
     }
@@ -598,14 +598,14 @@ class StaffController extends GetxController {
         int index = staffList.indexWhere((s) => s.id == updated.id);
         if (index != -1) staffList[index] = updated;
         selectedStaff.value = updated;
-        AppSnackBar.success('Staff updated successfully');
+        AppSnackBar.success(AppStrings.staffUpdatedSuccessfully);
       } else {
         final created = await _repository.createStaff(
           data,
           selectedImagePath.value,
         );
         staffList.insert(0, created);
-        AppSnackBar.success('Staff created successfully');
+        AppSnackBar.success(AppStrings.staffCreatedSuccessfully);
       }
 
       // Robust navigation: go back to StaffMainScreen and set tab to Staff
@@ -655,7 +655,7 @@ class StaffController extends GetxController {
       isLoading.value = true;
       await _repository.deleteStaff(id);
       staffList.removeWhere((s) => s.id == id);
-      AppSnackBar.success('Staff deleted successfully');
+      AppSnackBar.success(AppStrings.staffDeletedSuccessfully);
 
       if (Get.currentRoute == AppRoutes.instituteStaffDetails) {
         Get.back();

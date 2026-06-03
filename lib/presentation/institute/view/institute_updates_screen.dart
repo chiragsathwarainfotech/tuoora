@@ -1,5 +1,6 @@
 ﻿import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/utils/subscription_guard.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/enums/app_enums.dart';
@@ -26,7 +27,7 @@ class InstituteUpdatesScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const InstituteAppBar(title: 'Updates', isRoot: false),
+            const InstituteAppBar(title: AppStrings.updates, isRoot: false),
             Expanded(
               child: RefreshIndicator(
                 onRefresh: () => controller.fetchUpdates(),
@@ -35,9 +36,9 @@ class InstituteUpdatesScreen extends StatelessWidget {
                   return CommonStateWidget(
                     isLoading: controller.isLoading.value,
                     isEmpty: controller.updatesList.isEmpty,
-                    emptyTitle: 'No Updates Found',
+                    emptyTitle: AppStrings.noUpdatesFound,
                     emptySubtitle:
-                        'Broadcast your first update to students and parents to keep them informed.',
+                        AppStrings.broadcastYourFirstUpdateToStudents,
                     emptyIcon: Icons.campaign_outlined,
                     child: ListView.builder(
                       padding: AppSpacing.screenPaddingTop.add(
@@ -148,7 +149,7 @@ class InstituteUpdatesScreen extends StatelessWidget {
                 ),
                 AppSpacing.h8,
                 Text(
-                  'VIEW FILE',
+                  AppStrings.viewFile,
                   style: AppTextStyles.outfit(
                     fontSize: 11,
                     fontWeight: FontWeight.w600,
@@ -214,7 +215,7 @@ class InstituteUpdatesScreen extends StatelessWidget {
           Row(
             children: [
               Text(
-                'TARGET: ',
+                AppStrings.target,
                 style: AppTextStyles.outfit(
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
@@ -279,7 +280,7 @@ class InstituteUpdatesScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'View File Attachment',
+                              AppStrings.viewFileAttachment,
                               style: AppTextStyles.outfit(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
@@ -288,7 +289,7 @@ class InstituteUpdatesScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              'CLICK TO OPEN',
+                              AppStrings.clickToOpen,
                               style: AppTextStyles.outfit(
                                 fontSize: 10,
                                 fontWeight: FontWeight.w600,

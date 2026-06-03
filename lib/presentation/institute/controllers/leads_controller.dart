@@ -170,11 +170,11 @@ class LeadsController extends GetxController {
         await _leadsRepository.createLead(leadData);
         searchQuery.value = '';
         Get.back();
-        AppSnackBar.success('Lead created successfully');
+        AppSnackBar.success(AppStrings.leadCreatedSuccessfully);
       } else {
         await _leadsRepository.updateLead(editingLeadId.value!, leadData);
         Get.back();
-        AppSnackBar.success('Lead updated successfully');
+        AppSnackBar.success(AppStrings.leadUpdatedSuccessfully);
       }
       fetchLeads(page: 1);
     } catch (e) {
@@ -279,7 +279,7 @@ class LeadsController extends GetxController {
       isLoading.value = true;
       await _leadsRepository.deleteLead(id);
       leadsList.removeWhere((l) => l.id == id);
-      AppSnackBar.success('Lead deleted successfully');
+      AppSnackBar.success(AppStrings.leadDeletedSuccessfully);
     } catch (e) {
       AppSnackBar.error('Failed to delete lead: $e');
     } finally {
@@ -355,7 +355,7 @@ class LeadsController extends GetxController {
       triedToSave.value = false;
 
       Get.back(); // Close dialog
-      AppSnackBar.success('Interaction note added successfully');
+      AppSnackBar.success(AppStrings.interactionNoteAddedSuccessfully);
     } catch (e) {
       if (e is ValidationException) {
         _handleValidationErrors(e.errors);

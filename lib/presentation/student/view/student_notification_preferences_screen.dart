@@ -32,7 +32,7 @@ class StudentNotificationPreferencesScreen
                     _buildMuteCard(),
                     const SizedBox(height: 24),
                     Text(
-                      'CATEGORIES',
+                      AppStrings.categories,
                       style: AppTextStyles.outfit(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
@@ -79,7 +79,7 @@ class StudentNotificationPreferencesScreen
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Mute everything',
+                  AppStrings.muteEverything,
                   style: AppTextStyles.outfit(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -88,7 +88,7 @@ class StudentNotificationPreferencesScreen
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Stops all push alerts. In-app notifications still appear.',
+                  AppStrings.stopsAllPushAlertsInApp,
                   style: AppTextStyles.outfit(
                     fontSize: 11,
                     color: AppColors.textSecondary,
@@ -120,8 +120,8 @@ class StudentNotificationPreferencesScreen
           Obx(
             () => _buildToggleRow(
               icon: Icons.currency_rupee_rounded,
-              title: 'Fee reminders',
-              subtitle: 'Due dates and payment confirmations',
+              title: AppStrings.feeReminders,
+              subtitle: AppStrings.dueDatesAndPaymentConfirmations,
               value: controller.feeReminders.value,
               onChanged: controller.toggleFeeReminders,
             ),
@@ -133,8 +133,8 @@ class StudentNotificationPreferencesScreen
           Obx(
             () => _buildToggleRow(
               icon: Icons.tablet_mac_rounded,
-              title: 'Assignment alerts',
-              subtitle: 'New assignments and grading',
+              title: AppStrings.assignmentAlerts,
+              subtitle: AppStrings.newAssignmentsAndGrading,
               value: controller.assignmentAlerts.value,
               onChanged: controller.toggleAssignmentAlerts,
             ),
@@ -146,8 +146,8 @@ class StudentNotificationPreferencesScreen
           Obx(
             () => _buildToggleRow(
               icon: Icons.calendar_today_outlined,
-              title: 'Attendance',
-              subtitle: 'Marked present / absent',
+              title: AppStrings.instAttendanceTitle,
+              subtitle: AppStrings.markedPresentAbsent,
               value: controller.attendance.value,
               onChanged: controller.toggleAttendance,
             ),
@@ -159,8 +159,8 @@ class StudentNotificationPreferencesScreen
           Obx(
             () => _buildToggleRow(
               icon: Icons.auto_awesome_rounded,
-              title: 'Daily updates',
-              subtitle: 'Topics covered in class',
+              title: AppStrings.dailyUpdates,
+              subtitle: AppStrings.topicsCoveredInClass,
               value: controller.dailyUpdates.value,
               onChanged: controller.toggleDailyUpdates,
             ),
@@ -172,8 +172,8 @@ class StudentNotificationPreferencesScreen
           Obx(
             () => _buildToggleRow(
               icon: Icons.event_note_rounded,
-              title: 'Events & holidays',
-              subtitle: 'Institute-wide notices',
+              title: AppStrings.eventsHolidays,
+              subtitle: AppStrings.instituteWideNotices,
               value: controller.eventsHolidays.value,
               onChanged: controller.toggleEventsHolidays,
             ),

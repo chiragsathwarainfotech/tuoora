@@ -26,7 +26,7 @@ class DateFormatUtils {
     return 'Due $dateStr';
   }
 
-  /// WhatsApp-style chat day separator label: "Today", "Yesterday", or a
+  /// WhatsApp-style chat day separator label: AppStrings.studentTodayPill, "Yesterday", or a
   /// formatted date like "12 May 2026" for anything older.
   static String chatDaySeparator(DateTime date) {
     final now = DateTime.now();

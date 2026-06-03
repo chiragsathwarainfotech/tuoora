@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
 import 'package:get/get.dart';
@@ -85,7 +86,7 @@ class SecurityController extends GetxController {
       await _instituteRepository.changePassword(data);
 
       Get.back();
-      AppSnackBar.success('Password updated');
+      AppSnackBar.success(AppStrings.passwordUpdated);
 
       _clearFields();
     } catch (e) {

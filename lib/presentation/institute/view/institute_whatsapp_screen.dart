@@ -25,7 +25,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
             Column(
               children: [
                 const InstituteAppBar(
-                  title: 'WhatsApp Integration',
+                  title: AppStrings.instWhatsAppIntegration,
                   isRoot: false,
                 ),
                 Expanded(
@@ -137,14 +137,14 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
           _buildInputLabel(AppStrings.instAccessToken),
           AppSpacing.v12,
           _buildTextField(
-            hint: '••••••••••••••••••••••••••••••••',
+            hint: AppStrings.label,
             controller: controller.accessTokenController,
           ),
           AppSpacing.v24,
           _buildInputLabel(AppStrings.instPhoneLabel),
           AppSpacing.v12,
           _buildTextField(
-            hint: '1234567890',
+            hint: AppStrings.k1234567890,
             controller: controller.phoneNumberController,
             keyboardType: TextInputType.phone,
           ),
@@ -152,7 +152,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
           _buildInputLabel(AppStrings.instPhoneNumberId),
           AppSpacing.v12,
           _buildTextField(
-            hint: '1059...',
+            hint: AppStrings.k1059,
             controller: controller.phoneNumberIdController,
             keyboardType: TextInputType.number,
           ),
@@ -160,7 +160,7 @@ class InstituteWhatsAppScreen extends GetView<WhatsAppController> {
           _buildInputLabel(AppStrings.instBusinessAccountId),
           AppSpacing.v12,
           _buildTextField(
-            hint: '2941...',
+            hint: AppStrings.k2941,
             controller: controller.businessAccountIdController,
             keyboardType: TextInputType.number,
           ),

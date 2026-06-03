@@ -20,7 +20,7 @@ class ForgotPasswordScreen extends GetView<ForgotPasswordController> {
         child: Column(
           children: [
             InstituteAppBar(
-              title: 'Forgot Password',
+              title: AppStrings.forgotPassword,
               onBackTap: () => Get.back(),
             ),
             Expanded(
@@ -44,7 +44,7 @@ class ForgotPasswordScreen extends GetView<ForgotPasswordController> {
                           ),
                           AppSpacing.v12,
                           Text(
-                            'Enter your registered email address and we\'ll send you an OTP to reset your password.',
+                            AppStrings.enterYourRegisteredEmailAddressAnd,
                             style: AppTextStyles.outfit(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
@@ -73,7 +73,7 @@ class ForgotPasswordScreen extends GetView<ForgotPasswordController> {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Text(
-                                  'Email Address',
+                                  AppStrings.instEmailAddressLabel,
                                   style: AppTextStyles.outfit(
                                     fontSize: 12,
                                     fontWeight: FontWeight.w600,
@@ -99,7 +99,7 @@ class ForgotPasswordScreen extends GetView<ForgotPasswordController> {
                                 AppSpacing.v32,
                                 Obx(
                                   () => AppButton(
-                                    label: 'Send Reset Code',
+                                    label: AppStrings.sendResetCode,
                                     onPressed: controller.sendOtp,
                                     isLoading: controller.isLoading.value,
                                     backgroundColor: AppColors.primaryBrand,

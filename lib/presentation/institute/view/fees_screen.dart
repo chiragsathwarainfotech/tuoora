@@ -140,7 +140,7 @@ class InstituteFeesScreen extends GetView<InstituteController> {
       if (controller.feeRecords.isEmpty) {
         return const AppEmptyView(
           icon: Icons.receipt_long_outlined,
-          title: 'No fee records found',
+          title: AppStrings.noFeeRecordsFound,
         );
       }
 

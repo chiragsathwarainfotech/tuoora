@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
@@ -16,7 +17,7 @@ class StudentEventDetailScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const StudentAppBar(
-              title: 'Science Day exhibition',
+              title: AppStrings.scienceDayExhibition,
               showDefaultActions: false,
             ),
             Expanded(
@@ -32,7 +33,7 @@ class StudentEventDetailScreen extends StatelessWidget {
                     _buildDetailsCard(),
                     const SizedBox(height: AppSpacing.s24),
                     Text(
-                      'ATTACHMENTS',
+                      AppStrings.studentAssignmentDetailAttachments,
                       style: AppTextStyles.outfit(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
@@ -109,7 +110,7 @@ class StudentEventDetailScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(AppSpacing.s16),
                 ),
                 child: Text(
-                  'EVENT',
+                  AppStrings.event,
                   style: AppTextStyles.outfit(
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
@@ -119,7 +120,7 @@ class StudentEventDetailScreen extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                'Science Day exhibition',
+                AppStrings.scienceDayExhibition,
                 style: AppTextStyles.outfit(
                   fontSize: 22,
                   fontWeight: FontWeight.w900,
@@ -128,7 +129,7 @@ class StudentEventDetailScreen extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                'Saturday, 24 May 2026 - 10:00 AM - 1:00 PM',
+                AppStrings.saturday24May20261000,
                 style: AppTextStyles.outfit(
                   fontSize: 12,
                   fontWeight: FontWeight.w400,
@@ -206,7 +207,7 @@ class StudentEventDetailScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'DETAILS',
+            AppStrings.details,
             style: AppTextStyles.outfit(
               fontSize: 10,
               fontWeight: FontWeight.w600,
@@ -215,7 +216,7 @@ class StudentEventDetailScreen extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.s12),
           Text(
-            'Annual Science Day where students demo their term project. Set up by 9:30 AM, judging starts at 10:30. Bring your printed report, props and three pens. Parents are welcome from 10 AM onward — tea and snacks will be served outside the hall.',
+            AppStrings.annualScienceDayWhereStudentsDemo,
             style: AppTextStyles.outfit(
               fontSize: 13,
               fontWeight: FontWeight.w400,

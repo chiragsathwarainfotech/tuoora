@@ -212,7 +212,7 @@ class BatchController extends GetxController {
       final response = await _repository.listStaff();
       staffList.assignAll(response.items);
     } catch (e) {
-      AppSnackBar.error('Failed to load staff list');
+      AppSnackBar.error(AppStrings.failedToLoadStaffList);
     } finally {
       isLoadingStaff.value = false;
     }
@@ -291,14 +291,14 @@ class BatchController extends GetxController {
 
   void deleteBatchWithConfirmation(String id) {
     CommonDialog.showDeleteConfirmation(
-      title: 'Delete Batch',
-      description: 'Are you sure you want to delete this batch?',
+      title: AppStrings.deleteBatch,
+      description: AppStrings.areYouSureYouWantTo,
       onConfirm: () async {
         try {
           isLoading.value = true;
           await _repository.deleteBatch(int.parse(id));
           batchesList.removeWhere((batch) => batch.id == id);
-          AppSnackBar.success('Batch deleted successfully', title: 'Deleted');
+          AppSnackBar.success(AppStrings.batchDeletedSuccessfully, title: AppStrings.deleted);
         } catch (e) {
           AppSnackBar.error(e.toString());
         } finally {
@@ -393,8 +393,8 @@ class BatchController extends GetxController {
     // For now keeping it local or showing a placeholder message
     Get.back();
     AppSnackBar.warning(
-      'Student assignment is currently managed via Student Profile',
-      title: 'Notice',
+      AppStrings.studentAssignmentIsCurrentlyManagedVia,
+      title: AppStrings.notice,
     );
   }
 

@@ -1,5 +1,6 @@
 ﻿import 'package:cached_network_image/cached_network_image.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/controllers/attendance_controller.dart';
@@ -24,7 +25,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
               Column(
                 children: [
                   InstituteAppBar(
-                    title: 'Mark Attendance',
+                    title: AppStrings.markAttendance,
                     onBackTap: () => Get.back(),
                   ),
                   Expanded(
@@ -44,9 +45,9 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
                           CommonStateWidget(
                             isLoading: controller.isLoading.value,
                             isEmpty: controller.filteredStudents.isEmpty,
-                            emptyTitle: 'No students found',
+                            emptyTitle: AppStrings.noStudentsFound,
                             emptySubtitle:
-                                'There are no students assigned to this batch or matching your search.',
+                                AppStrings.thereAreNoStudentsAssignedTo,
                             emptyIcon: Icons.group_off_rounded,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -76,7 +77,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
       bottomNavigationBar: Obx(
         () => (controller.isEditable && controller.allStudents.isNotEmpty)
             ? InstituteBottomButton(
-                label: 'Submit Attendance',
+                label: AppStrings.submitAttendance,
                 icon: Icons.check_circle_rounded,
                 onTap: () => controller.submitAttendance(),
               )
@@ -145,7 +146,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
       children: [
         Expanded(
           child: _buildBulkButton(
-            label: 'All Present',
+            label: AppStrings.allPresent,
             icon: Icons.done_all_rounded,
             color: AppColors.successGreen,
             onTap: () => controller.markAllPresent(),
@@ -154,7 +155,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
         AppSpacing.h16,
         Expanded(
           child: _buildBulkButton(
-            label: 'All Absent',
+            label: AppStrings.allAbsent,
             icon: Icons.person_off_rounded,
             color: AppColors.bohoRed,
             onTap: () => controller.markAllAbsent(),
@@ -200,7 +201,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
 
   Widget _buildSearchBar(AttendanceController controller) {
     return AppSearchField(
-      hintText: 'Search student by name or ID...',
+      hintText: AppStrings.searchStudentByNameOrId,
       onChanged: (value) => controller.searchQuery.value = value,
     );
   }
@@ -271,7 +272,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
       child: Row(
         children: [
           _buildToggleOption(
-            label: 'PRESENT',
+            label: AppStrings.present,
             isSelected: isPresent,
             color: AppColors.successGreen,
             onTap: isEditable
@@ -279,7 +280,7 @@ class MarkAttendanceScreen extends GetView<AttendanceController> {
                 : null,
           ),
           _buildToggleOption(
-            label: 'ABSENT',
+            label: AppStrings.absent,
             isSelected: !isPresent,
             color: AppColors.bohoRed,
             onTap: isEditable

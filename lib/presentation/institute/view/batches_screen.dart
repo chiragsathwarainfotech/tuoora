@@ -216,7 +216,7 @@ class _BatchesScreenState extends State<BatchesScreen> {
                           Row(
                             children: [
                               Text(
-                                "Faculty: ",
+                                AppStrings.faculty,
                                 style: AppTextStyles.outfit(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,

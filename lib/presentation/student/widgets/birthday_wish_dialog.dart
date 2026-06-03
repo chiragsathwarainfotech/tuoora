@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
@@ -72,7 +73,7 @@ class BirthdayWishDialog extends StatelessWidget {
                 ),
                 AppSpacing.v20,
                 Text(
-                  'Happy Birthday!',
+                  AppStrings.happyBirthday,
                   textAlign: TextAlign.center,
                   style: AppTextStyles.outfit(
                     fontSize: 24,
@@ -113,7 +114,7 @@ class BirthdayWishDialog extends StatelessWidget {
                       borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
                     ),
                     child: Text(
-                      'Thank You!',
+                      AppStrings.thankYou,
                       textAlign: TextAlign.center,
                       style: AppTextStyles.outfit(
                         fontSize: 16,

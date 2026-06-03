@@ -1,5 +1,4 @@
-import 'dart:math' as math;
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -24,6 +23,7 @@ class StudentPayFeesScreen extends GetView<FeesController> {
         child: Obx(() {
           final summary = controller.summary.value;
           final profile = controller.billingProfile.value;
+          final hasUpi = profile.hasUpiPayment;
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -39,17 +39,22 @@ class StudentPayFeesScreen extends GetView<FeesController> {
                     children: [
                       _OutstandingCard(summary: summary),
                       const SizedBox(height: AppSpacing.s12),
-                      _UpiCard(
-                        profile: profile,
-                        onCopy: controller.copyUpiHandle,
-                      ),
-                      const SizedBox(height: AppSpacing.s12),
-                      _OpenInGooglePayButton(
-                        onTap: () => AppSnackBar.success(
-                          profile.instituteUpiHandle,
-                          title: AppStrings.studentPayFeesOpenInAnyUpi,
+                      if (hasUpi)
+                        _UpiCard(
+                          profile: profile,
+                          onCopy: controller.copyUpiHandle,
+                        )
+                      else
+                        const _UpiUnavailableCard(),
+                      if (hasUpi && profile.instituteUpiHandle.isNotEmpty) ...[
+                        const SizedBox(height: AppSpacing.s12),
+                        _OpenInGooglePayButton(
+                          onTap: () => AppSnackBar.success(
+                            profile.instituteUpiHandle,
+                            title: AppStrings.studentPayFeesOpenInAnyUpi,
+                          ),
                         ),
-                      ),
+                      ],
                       const SizedBox(height: AppSpacing.s16),
                       _HowItWorksCard(profile: profile, summary: summary),
                       const SizedBox(height: AppSpacing.s8),
@@ -123,6 +128,8 @@ class _UpiCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final qrUrl = profile.instituteUpiQrCodeUrl;
+    final upiId = profile.instituteUpiHandle;
     return Container(
       padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
@@ -148,60 +155,74 @@ class _UpiCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppSpacing.s12),
-          _QrPlaceholder(seed: profile.instituteUpiHandle),
+          _QrBlock(qrUrl: qrUrl, fallbackInitial: profile.instituteName),
           const SizedBox(height: AppSpacing.s12),
-          Text(
-            profile.instituteName,
-            style: AppTextStyles.outfit(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: AppColors.textPrimary,
+          if (profile.instituteName.isNotEmpty)
+            Text(
+              profile.instituteName,
+              style: AppTextStyles.outfit(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: AppColors.textPrimary,
+              ),
             ),
-          ),
           const SizedBox(height: 6),
-          GestureDetector(
-            onTap: onCopy,
-            behavior: HitTestBehavior.opaque,
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.s10,
-                vertical: 4,
-              ),
-              decoration: BoxDecoration(
-                color: AppColors.background,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    profile.instituteUpiHandle,
-                    style: AppTextStyles.outfit(
-                      fontSize: 12,
-                      color: AppColors.textSecondary,
-                      fontWeight: FontWeight.w600,
+          if (upiId.isNotEmpty)
+            GestureDetector(
+              onTap: onCopy,
+              behavior: HitTestBehavior.opaque,
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.s10,
+                  vertical: 4,
+                ),
+                decoration: BoxDecoration(
+                  color: AppColors.background,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      upiId,
+                      style: AppTextStyles.outfit(
+                        fontSize: 12,
+                        color: AppColors.textSecondary,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 6),
-                  const Icon(
-                    Icons.copy_rounded,
-                    size: 12,
-                    color: AppColors.textTertiary,
-                  ),
-                ],
+                    const SizedBox(width: 6),
+                    const Icon(
+                      Icons.copy_rounded,
+                      size: 12,
+                      color: AppColors.textTertiary,
+                    ),
+                  ],
+                ),
+              ),
+            )
+          else
+            Text(
+              AppStrings.studentPayFeesUpiOptional,
+              style: AppTextStyles.outfit(
+                fontSize: 11,
+                color: AppColors.textMuted,
+                fontStyle: FontStyle.italic,
               ),
             ),
-          ),
         ],
       ),
     );
   }
 }
 
-class _QrPlaceholder extends StatelessWidget {
-  final String seed;
+/// Renders the institute's hosted UPI QR PNG/JPG when available, or a
+/// branded "QR coming soon" tile when only the UPI ID is set.
+class _QrBlock extends StatelessWidget {
+  final String? qrUrl;
+  final String fallbackInitial;
 
-  const _QrPlaceholder({required this.seed});
+  const _QrBlock({required this.qrUrl, required this.fallbackInitial});
 
   @override
   Widget build(BuildContext context) {
@@ -213,89 +234,150 @@ class _QrPlaceholder extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       ),
       child: SizedBox(
-        width: 180,
-        height: 180,
-        child: CustomPaint(
-          painter: _QrLikePainter(seed: seed),
-          child: Center(
-            child: Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: Container(
-                width: 26,
-                height: 26,
-                decoration: BoxDecoration(
-                  color: AppColors.white,
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  'T',
-                  style: AppTextStyles.outfit(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.primaryBrand,
+        width: 200,
+        height: 200,
+        child: (qrUrl != null && qrUrl!.isNotEmpty)
+            ? CachedNetworkImage(
+                imageUrl: qrUrl!,
+                fit: BoxFit.contain,
+                placeholder: (_, _) => const Center(
+                  child: SizedBox(
+                    width: 28,
+                    height: 28,
+                    child: CircularProgressIndicator(strokeWidth: 2),
                   ),
+                ),
+                errorWidget: (_, _, _) =>
+                    _QrPlaceholder(initial: fallbackInitial),
+              )
+            : _QrPlaceholder(initial: fallbackInitial),
+      ),
+    );
+  }
+}
+
+/// Friendly fallback shown when the image fails to load or no QR is set
+/// yet but a UPI ID is. We intentionally do NOT draw a fake QR — that
+/// would be unscannable and misleading.
+class _QrPlaceholder extends StatelessWidget {
+  final String initial;
+
+  const _QrPlaceholder({required this.initial});
+
+  @override
+  Widget build(BuildContext context) {
+    final letter = initial.isNotEmpty ? initial.characters.first : 'T';
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.primaryBrandLight,
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+      ),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 56,
+              height: 56,
+              decoration: const BoxDecoration(
+                color: AppColors.white,
+                shape: BoxShape.circle,
+              ),
+              alignment: Alignment.center,
+              child: Text(
+                letter.toUpperCase(),
+                style: AppTextStyles.outfit(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.primaryBrand,
                 ),
               ),
             ),
-          ),
+            const SizedBox(height: AppSpacing.s8),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Text(
+                'QR not uploaded — use the UPI ID below',
+                textAlign: TextAlign.center,
+                style: AppTextStyles.outfit(
+                  fontSize: 10,
+                  color: AppColors.textSecondary,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 }
 
-/// Renders a QR-code-looking grid of black squares + 3 finder rectangles.
-/// This is purely visual — it does NOT encode the UPI handle. Plug in the
-/// `qr_flutter` package and replace this widget with `QrImageView` when
-/// you have a real payee VPA / amount to encode.
-class _QrLikePainter extends CustomPainter {
-  final String seed;
-
-  _QrLikePainter({required this.seed});
+/// Empty-state card shown when the institute hasn't configured any UPI
+/// payment details yet. Replaces both the QR card and the "Open in UPI"
+/// CTA so the student isn't presented with a non-functional button.
+class _UpiUnavailableCard extends StatelessWidget {
+  const _UpiUnavailableCard();
 
   @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = Colors.black;
-    const cells = 21;
-    final cell = size.width / cells;
-    final rng = math.Random(seed.hashCode);
-    for (var y = 0; y < cells; y++) {
-      for (var x = 0; x < cells; x++) {
-        if (_isFinderArea(x, y, cells)) continue;
-        if (rng.nextBool() && rng.nextBool()) {
-          canvas.drawRect(Rect.fromLTWH(x * cell, y * cell, cell, cell), paint);
-        }
-      }
-    }
-    // Three finder squares (top-left, top-right, bottom-left).
-    _drawFinder(canvas, paint, 0, 0, cell);
-    _drawFinder(canvas, paint, (cells - 7) * cell, 0, cell);
-    _drawFinder(canvas, paint, 0, (cells - 7) * cell, cell);
+  Widget build(BuildContext context) {
+    return Container(
+      padding: AppSpacing.cardPadding,
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 24,
+        ),
+        child: Column(
+          children: [
+            Container(
+              width: 64,
+              height: 64,
+              decoration: BoxDecoration(
+                color: AppColors.primaryBrandLight,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.qr_code_scanner_rounded,
+                size: 32,
+                color: AppColors.primaryBrand,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.s12),
+            Text(
+              AppStrings.studentPayFeesUpiUnavailableTitle,
+              textAlign: TextAlign.center,
+              style: AppTextStyles.outfit(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: AppColors.textPrimary,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              AppStrings.studentPayFeesUpiUnavailableBody,
+              textAlign: TextAlign.center,
+              style: AppTextStyles.outfit(
+                fontSize: 12,
+                height: 1.5,
+                color: AppColors.textSecondary,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
-
-  bool _isFinderArea(int x, int y, int cells) {
-    final inTopLeft = x < 7 && y < 7;
-    final inTopRight = x >= cells - 7 && y < 7;
-    final inBottomLeft = x < 7 && y >= cells - 7;
-    return inTopLeft || inTopRight || inBottomLeft;
-  }
-
-  void _drawFinder(Canvas canvas, Paint paint, double x, double y, double c) {
-    // 7x7 outer black, 5x5 inner white, 3x3 inner black.
-    canvas.drawRect(Rect.fromLTWH(x, y, c * 7, c * 7), paint);
-    final inner = Paint()..color = AppColors.white;
-    canvas.drawRect(Rect.fromLTWH(x + c, y + c, c * 5, c * 5), inner);
-    canvas.drawRect(Rect.fromLTWH(x + 2 * c, y + 2 * c, c * 3, c * 3), paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant _QrLikePainter oldDelegate) =>
-      oldDelegate.seed != seed;
 }
 
 class _OpenInGooglePayButton extends StatelessWidget {
@@ -349,6 +431,9 @@ class _HowItWorksCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final instituteLabel = profile.instituteName.isNotEmpty
+        ? profile.instituteName
+        : 'your institute';
     return Container(
       padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
@@ -383,7 +468,7 @@ class _HowItWorksCard extends StatelessWidget {
                 '${AppStrings.studentPayFeesStep2Prefix} '
                 '₹${_formatThousands(summary.pendingInRupees)} '
                 '${AppStrings.studentPayFeesStep2Suffix} '
-                '${profile.instituteName}.',
+                '$instituteLabel.',
           ),
           const SizedBox(height: AppSpacing.s10),
           _Step(index: 3, text: AppStrings.studentPayFeesStep3),

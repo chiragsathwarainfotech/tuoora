@@ -82,6 +82,8 @@ class InstituteProfileViewScreen extends StatelessWidget {
                         AppSpacing.v16,
                         _buildLocationCard(p),
                         AppSpacing.v16,
+                        _buildUpiPaymentCard(controller),
+                        AppSpacing.v16,
                         _buildAccountCard(),
                         AppSpacing.v16,
                         _buildSupportCard(),
@@ -221,6 +223,222 @@ class InstituteProfileViewScreen extends StatelessWidget {
     );
   }
 
+  // ------------------------------------------------- UPI payment section
+  /// "UPI Payment Details" card — surfaces the saved UPI handle + QR
+  /// image when configured, or an "Add Payment Details" empty state
+  /// (with its own CTA button) when the institute hasn't set anything up
+  /// yet. The trailing edit link only appears once configured, so the
+  /// empty state owns its own primary action.
+  Widget _buildUpiPaymentCard(InstituteProfileController controller) {
+    return _card(
+      child: Obx(() {
+        final hasUpi = controller.hasUpiPayment;
+        final qrUrl = controller.upiQrCodeUrl.value;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(4, 4, 4, 12),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.qr_code_2_rounded,
+                    size: 18,
+                    color: AppColors.primaryBrand,
+                  ),
+                  AppSpacing.h8,
+                  Expanded(
+                    child: Text(
+                      AppStrings.upiPaymentDetailsCardTitle,
+                      style: AppTextStyles.outfit(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textPrimary,
+                        letterSpacing: 0.8,
+                      ),
+                    ),
+                  ),
+                  if (hasUpi)
+                    InkWell(
+                      onTap: () =>
+                          Get.toNamed(AppRoutes.instituteUpiPaymentSettings),
+                      borderRadius: BorderRadius.circular(6),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 4,
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.edit_outlined,
+                              size: 14,
+                              color: AppColors.primaryBrand,
+                            ),
+                            AppSpacing.h4,
+                            Text(
+                              AppStrings.editSettings,
+                              style: AppTextStyles.outfit(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.primaryBrand,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            if (!hasUpi)
+              _buildUpiEmptyState()
+            else
+              _buildUpiDetailsBody(controller.upiId.value, qrUrl),
+          ],
+        );
+      }),
+    );
+  }
+
+  Widget _buildUpiDetailsBody(String upiId, String? qrUrl) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(4, 0, 4, 4),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildInfoRow(Icons.alternate_email_rounded, 'UPI ID', upiId),
+          if (qrUrl != null && qrUrl.isNotEmpty) ...[
+            AppSpacing.v12,
+            Center(
+              child: Container(
+                padding: AppSpacing.all8,
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: AppColors.fieldBorder),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(6),
+                  child: CachedNetworkImage(
+                    imageUrl: qrUrl,
+                    width: 160,
+                    height: 160,
+                    fit: BoxFit.contain,
+                    placeholder: (_, _) => const SizedBox(
+                      width: 160,
+                      height: 160,
+                      child: Center(
+                        child: SizedBox(
+                          width: 22,
+                          height: 22,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        ),
+                      ),
+                    ),
+                    errorWidget: (_, _, _) => const SizedBox(
+                      width: 160,
+                      height: 160,
+                      child: Center(
+                        child: Icon(
+                          Icons.broken_image_rounded,
+                          color: AppColors.textMuted,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            AppSpacing.v8,
+            Center(
+              child: Text(
+                AppStrings.upiPaymentScanHint,
+                style: AppTextStyles.outfit(
+                  fontSize: 11,
+                  color: AppColors.textMuted,
+                ),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildUpiEmptyState() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(8, 4, 8, 12),
+      child: Column(
+        children: [
+          Container(
+            width: 56,
+            height: 56,
+            decoration: BoxDecoration(
+              color: AppColors.primaryBrandLight,
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.qr_code_scanner_rounded,
+              color: AppColors.primaryBrand,
+              size: 28,
+            ),
+          ),
+          AppSpacing.v12,
+          Text(
+            AppStrings.upiPaymentEmptyTitle,
+            textAlign: TextAlign.center,
+            style: AppTextStyles.outfit(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: AppColors.textPrimary,
+            ),
+          ),
+          AppSpacing.v4,
+          Text(
+            AppStrings.upiPaymentEmptySubtitle,
+            textAlign: TextAlign.center,
+            style: AppTextStyles.outfit(
+              fontSize: 12,
+              height: 1.5,
+              color: AppColors.textMuted,
+            ),
+          ),
+          AppSpacing.v12,
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: () =>
+                  Get.toNamed(AppRoutes.instituteUpiPaymentSettings),
+              icon: const Icon(
+                Icons.add_rounded,
+                size: 18,
+                color: AppColors.white,
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primaryBrand,
+                foregroundColor: AppColors.white,
+                elevation: 0,
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              label: Text(
+                AppStrings.addPaymentDetails,
+                style: AppTextStyles.outfit(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.white,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   // ----------------------------------------------------- account section
   Widget _buildAccountCard() {
     return _card(
@@ -245,6 +463,12 @@ class InstituteProfileViewScreen extends StatelessWidget {
             title: AppStrings.instWhatsAppIntegration,
             subtitle: AppStrings.automateAlertsViaMetaApi,
             onTap: () => Get.toNamed(AppRoutes.instituteWhatsApp),
+          ),
+          _buildSettingsItem(
+            icon: Icons.qr_code_2_rounded,
+            title: AppStrings.upiPaymentManageTile,
+            subtitle: AppStrings.upiPaymentManageSubtitle,
+            onTap: () => Get.toNamed(AppRoutes.instituteUpiPaymentSettings),
             isLast: true,
           ),
         ],

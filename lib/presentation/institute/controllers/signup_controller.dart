@@ -245,6 +245,8 @@ class SignupController extends GetxController {
         name: instituteOwnerNameController.text,
         email: email,
         token: token,
+        accessToken: token,
+        refreshToken: '',
         role: 'INSTITUTE',
         instituteName: instituteNameController.text,
         isProfileSetup: false,
@@ -270,7 +272,6 @@ class SignupController extends GetxController {
   }
 
   Future<void> completeProfile() async {
-    // Per-field validation — each error renders under its own input.
     ownerNameError.value = instituteOwnerNameController.text.trim().isEmpty
         ? 'Owner name is required'
         : null;
@@ -335,6 +336,8 @@ class SignupController extends GetxController {
           name: data['name'],
           email: currentUser.email,
           token: currentUser.token,
+          accessToken: currentUser.accessToken,
+          refreshToken: currentUser.refreshToken,
           role: currentUser.role,
           instituteName: data['institute_name'],
           phone: data['phone'],

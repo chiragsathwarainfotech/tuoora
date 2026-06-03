@@ -7,10 +7,12 @@ class AuthService extends GetxService {
   final _storage = GetStorage();
   final _currentUser = Rxn<User>();
   final _token = ''.obs;
+  final _refreshToken = ''.obs;
   final _subscription = Rxn<Subscription>();
 
   User? get currentUser => _currentUser.value;
   String get token => _token.value;
+  String get refreshToken => _refreshToken.value;
   bool get isAuthenticated => _token.isNotEmpty;
 
   Subscription? get subscription => _subscription.value;
@@ -29,13 +31,21 @@ class AuthService extends GetxService {
     try {
       final userData = _storage.read('user');
       final savedToken = _storage.read('token');
+      final savedRefresh = _storage.read('refresh_token') ?? '';
 
       print('AuthService: Loading session. Token: $savedToken');
 
       if (userData != null && savedToken != null) {
         _token.value = savedToken;
+        _refreshToken.value = savedRefresh;
         final role = userData['role'] ?? 'INSTITUTE';
-        _currentUser.value = User.fromJson(userData, savedToken, role);
+        _currentUser.value = User.fromJson(
+          userData,
+          savedToken,
+          role,
+          accessToken: savedToken,
+          refreshToken: savedRefresh,
+        );
         final subData = _storage.read('subscription');
         if (subData != null) {
           _subscription.value = Subscription.fromJson(
@@ -60,14 +70,14 @@ class AuthService extends GetxService {
     String? role,
   }) async {
     _currentUser.value = user;
-    _token.value = user.token;
+    _token.value = user.accessToken;
+    _refreshToken.value = user.refreshToken;
     await _storage.write('user', user.toJson());
-    await _storage.write('token', user.token);
+    await _storage.write('token', user.accessToken);
+    await _storage.write('refresh_token', user.refreshToken);
     await _storage.write('stay_authenticated', stayAuthenticated);
     await _storage.write('logged_in', loggedIn);
 
-    // Remembered credentials are scoped per-role so the Institute login
-    // screen never auto-fills a Student's email (and vice versa).
     final effectiveRole = role ?? user.role;
     final emailKey = _emailKey(effectiveRole);
     final passwordKey = _passwordKey(effectiveRole);
@@ -93,9 +103,6 @@ class AuthService extends GetxService {
     }
   }
 
-  /// Reads the remembered email saved for [role] (e.g. "INSTITUTE" /
-  /// "STUDENT"). Returns null if the user never ticked Remember Me for
-  /// that specific role.
   String? rememberedEmailFor(String role) => _storage.read(_emailKey(role));
   String? rememberedPasswordFor(String role) =>
       _storage.read(_passwordKey(role));
@@ -107,15 +114,38 @@ class AuthService extends GetxService {
   Future<void> clearSession() async {
     _currentUser.value = null;
     _token.value = '';
+    _refreshToken.value = '';
     _subscription.value = null;
 
     await _storage.remove('user');
     await _storage.remove('token');
+    await _storage.remove('refresh_token');
     await _storage.remove('logged_in');
     await _storage.remove('subscription');
 
     print(
       'AuthService: Session cleared (user and token removed). Preferences preserved.',
     );
+  }
+
+  Future<void> updateTokens({
+    required String accessToken,
+    String? refreshToken,
+  }) async {
+    _token.value = accessToken;
+    await _storage.write('token', accessToken);
+    if (refreshToken != null && refreshToken.isNotEmpty) {
+      _refreshToken.value = refreshToken;
+      await _storage.write('refresh_token', refreshToken);
+    }
+    final user = _currentUser.value;
+    if (user != null) {
+      final updated = user.copyWith(
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+      );
+      _currentUser.value = updated;
+      await _storage.write('user', updated.toJson());
+    }
   }
 }

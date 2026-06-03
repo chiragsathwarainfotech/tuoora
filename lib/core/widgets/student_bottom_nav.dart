@@ -68,7 +68,7 @@ class StudentBottomNav extends StatelessWidget {
             Get.offAllNamed(item.route);
           }
         },
-        child: Icon(item.icon, color: color, size: 24),
+        child: Icon(item.icon, color: color, size: 28),
       ),
     );
   }

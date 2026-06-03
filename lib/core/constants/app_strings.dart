@@ -269,6 +269,13 @@ class AppStrings {
       'The institute will mark your fee as paid once received — usually '
       'within a few minutes.';
   static const String studentPayFeesCopyHint = 'UPI handle copied';
+  static const String studentPayFeesUpiUnavailableTitle =
+      'Payments not set up yet';
+  static const String studentPayFeesUpiUnavailableBody =
+      "Your institute hasn't configured UPI payments yet. Please ask them to set up a UPI QR code so you can pay fees online.";
+  static const String studentPayFeesUpiIdLabel = 'UPI ID';
+  static const String studentPayFeesUpiOptional =
+      'UPI ID not provided. Use the QR code above to pay.';
 
   // Shared / common labels and messages
   static const String validationErrorsBelow =
@@ -874,4 +881,37 @@ class AppStrings {
   static const String pendingFeesLabel = 'Pending Fees:';
   static const String studentInformationLabel = 'Student Information';
   static const String feeDateLabel = 'Fee Date';
+
+  // Institute UPI Payment Settings (edit + profile-view card)
+  static const String upiPaymentSettingsTitle = 'UPI Payment Settings';
+  static const String upiPaymentSettingsSubtitle =
+      'Configure UPI ID and QR code to enable direct online fee payments for your students';
+  static const String upiConfigurationsHeader = 'UPI Configurations';
+  static const String upiIdLabel = 'UPI ID (VPA) — Optional';
+  static const String upiQrCodeLabelRequired = 'UPI QR Code Image *';
+  static const String upiQrCodeRequiredHelper =
+      'QR code is required so students can scan and pay fees directly.';
+  static const String upiQrRequiredError = 'Please upload a UPI QR code image';
+  static const String upiIdHint = 'name@bank or phone@upi';
+  static const String upiIdHelper =
+      'Enter a valid merchant VPA or personal UPI ID (e.g. name@bank, phone@upi).';
+  static const String upiQrCodeLabel = 'UPI QR Code Image';
+  static const String upiQrCodeSpecHeader = 'QR Code Specifications';
+  static const String upiQrCodeSpec =
+      'Please upload the QR code generated from your business app (GPay, PhonePe, Paytm, BHIM, etc.). Max size 2MB. Format: PNG, JPG, JPEG.';
+  static const String chooseFile = 'Choose File';
+  static const String saveSettings = 'Save Settings';
+  static const String paymentSettingsSaved = 'Payment settings updated';
+
+  // Institute Profile view — UPI Payment Details card
+  static const String upiPaymentDetailsCardTitle = 'UPI Payment Details';
+  static const String upiPaymentScanHint = 'Scan QR code to pay student fees.';
+  static const String upiPaymentEmptyTitle = 'UPI not configured';
+  static const String upiPaymentEmptySubtitle =
+      'Add your UPI ID and QR code so students can pay fees online.';
+  static const String upiPaymentManageTile = 'UPI Payment Settings';
+  static const String upiPaymentManageSubtitle =
+      'Manage UPI ID and QR code for fee collection';
+  static const String addPaymentDetails = 'Add Payment Details';
+  static const String editSettings = 'Edit Settings';
 }

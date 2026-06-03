@@ -8,6 +8,7 @@ class ApiConstants {
   static const String instituteLogout = '/institute/logout';
   static const String studentLogin = '/student/login';
   static const String studentLogout = '/student/logout';
+  static const String authRefresh = '/auth/refresh';
   static const String studentNotificationSettings =
       '/student/notification-settings';
   static const String studentProfile = '/student/profile';
@@ -34,6 +35,10 @@ class ApiConstants {
   static const String instituteStudents = '/institute/students';
   static const String instituteProfile = '/institute/profile';
   static const String instituteProfileUpdate = '/institute/profile/update';
+  /// Save institute's UPI handle + (optional) QR code image. Multipart
+  /// when `upi_qr_code` is a freshly-picked local file.
+  static const String institutePaymentUpdate =
+      '/institute/profile/payment/update';
   static const String instituteBatches = '/institute/batches';
   static const String instituteChangePassword =
       '/institute/profile/change-password';

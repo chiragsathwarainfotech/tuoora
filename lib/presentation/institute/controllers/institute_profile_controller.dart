@@ -44,6 +44,25 @@ class InstituteProfileController extends GetxController {
   final phoneError = RxnString();
   final pincodeError = RxnString();
 
+  // ----- UPI Payment Settings (edit screen + profile-view card) -----
+  /// Saved merchant UPI handle (e.g. `merchant@bank`). Empty when the
+  /// institute hasn't configured it yet.
+  final upiId = ''.obs;
+
+  /// Server-hosted QR image URL once saved. Becomes null after the user
+  /// picks a fresh local file but hasn't hit Save yet — at which point
+  /// [upiQrLocalPath] takes over for the preview.
+  final upiQrCodeUrl = RxnString();
+
+  /// Local file path of a freshly-picked QR image. Cleared after Save.
+  final upiQrLocalPath = RxnString();
+
+  /// Saving spinner for the edit screen's Save button.
+  final isSavingPayment = false.obs;
+
+  final upiIdError = RxnString();
+  final upiQrError = RxnString();
+
   // Controllers for text fields (for editing)
   late TextEditingController nameController;
   late TextEditingController ownerController;
@@ -115,11 +134,92 @@ class InstituteProfileController extends GetxController {
         profileImagePath.value = data.logoUrl;
       }
 
+      // Pull UPI payment fields out of the profile response so the
+      // profile view's "UPI Payment Details" card shows them and the
+      // edit screen has its starting values.
+      upiId.value = data.upiId ?? '';
+      upiQrCodeUrl.value = data.upiQrCodeUrl;
+      upiQrLocalPath.value = null;
+
       _initializeControllers();
     } catch (e) {
       AppSnackBar.error(AppStrings.errFailedLoadProfile);
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  // -------------------------------------------------- UPI payment edit
+  /// True when the institute has configured at least one of (QR image,
+  /// UPI handle). Drives the profile view's choice between showing the
+  /// saved details vs the empty "Add Payment Details" CTA.
+  bool get hasUpiPayment =>
+      upiId.value.trim().isNotEmpty ||
+      (upiQrCodeUrl.value ?? '').isNotEmpty;
+
+  /// QR image source for the edit screen preview — prefers the freshly
+  /// picked local file, falls back to the saved network URL, then null.
+  String? get upiQrPreviewSource =>
+      upiQrLocalPath.value ?? upiQrCodeUrl.value;
+
+  Future<void> pickUpiQrImage(ImageSource source) async {
+    try {
+      final XFile? image = await _picker.pickImage(
+        source: source,
+        imageQuality: 80,
+      );
+      if (image != null) {
+        upiQrLocalPath.value = image.path;
+        // Clear any prior "QR required" error as soon as the user picks one.
+        upiQrError.value = null;
+      }
+    } catch (_) {
+      AppSnackBar.error(AppStrings.errFailedPickImage);
+    }
+  }
+
+  Future<void> savePaymentSettings(String upiIdInput) async {
+    final trimmed = upiIdInput.trim();
+    // UPI ID is OPTIONAL now — only QR code is mandatory. The backend
+    // requires a QR image either uploaded fresh in this submission OR
+    // previously persisted on the profile (in which case we keep it).
+    upiIdError.value = null;
+    final hasFreshQr = (upiQrLocalPath.value ?? '').isNotEmpty;
+    final hasSavedQr = (upiQrCodeUrl.value ?? '').isNotEmpty;
+    upiQrError.value = (hasFreshQr || hasSavedQr)
+        ? null
+        : 'Please upload a UPI QR code image';
+    if (upiQrError.value != null) {
+      AppSnackBar.error(upiQrError.value!);
+      return;
+    }
+
+    try {
+      isSavingPayment.value = true;
+      final result = await _instituteRepository.updatePaymentSettings(
+        upiId: trimmed,
+        qrImagePath: upiQrLocalPath.value,
+      );
+      // Cache new values + sync them onto the profile object so the
+      // profile view's Obx-wrapped card reflects them without a reload.
+      upiId.value = result.upiId;
+      upiQrCodeUrl.value = result.upiQrCodeUrl;
+      upiQrLocalPath.value = null;
+      final p = profile.value;
+      if (p != null) {
+        profile.value = p.copyWithPayment(
+          upiId: result.upiId,
+          upiQrCodeUrl: result.upiQrCodeUrl,
+        );
+      }
+      AppSnackBar.success(AppStrings.paymentSettingsSaved);
+      Get.back();
+    } catch (e) {
+      AppSnackBar.error(
+        e.toString().replaceAll('Exception: ', ''),
+      );
+    } finally {
+      isSavingPayment.value = false;
     }
   }
 

@@ -136,6 +136,41 @@ class InstituteRepository implements InstituteRepositoryImpl {
   }
 
   @override
+  Future<({String upiId, String? upiQrCodeUrl})> updatePaymentSettings({
+    required String upiId,
+    String? qrImagePath,
+  }) async {
+    // Always send as multipart so the backend treats it consistently
+    // whether or not the user just picked a new QR image. When
+    // [qrImagePath] is a local path (i.e. NOT an http URL the API
+    // returned earlier), attach it as a file under `upi_qr_code`.
+    final formData = FormData({'upi_id': upiId});
+    if (qrImagePath != null &&
+        qrImagePath.isNotEmpty &&
+        !qrImagePath.startsWith('http')) {
+      formData.files.add(
+        MapEntry(
+          'upi_qr_code',
+          MultipartFile(qrImagePath, filename: 'upi_qr.png'),
+        ),
+      );
+    }
+
+    final response = await _apiClient.post(
+      ApiConstants.institutePaymentUpdate,
+      formData,
+    );
+    if (response.status.hasError) {
+      _handleError(response, 'Failed to update payment settings');
+    }
+
+    final data = response.body is Map ? response.body['data'] : null;
+    final newUpiId = (data is Map ? data['upi_id'] : null)?.toString() ?? upiId;
+    final newQrUrl = (data is Map ? data['upi_qr_code_url'] : null)?.toString();
+    return (upiId: newUpiId, upiQrCodeUrl: newQrUrl);
+  }
+
+  @override
   Future<WhatsAppSettings?> getWhatsAppSettings() async {
     final response = await _apiClient.get(
       ApiConstants.instituteWhatsAppSettings,

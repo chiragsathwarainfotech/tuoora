@@ -50,6 +50,8 @@ class AppRoutes {
   static const String instituteSubmitPaymentProof =
       '/institute/subscription/renewal/proof';
   static const String instituteWhatsApp = '/institute/profile/whatsapp';
+  static const String instituteUpiPaymentSettings =
+      '/institute/profile/upi-payment';
   static const String instituteFeeReport = '/institute/reports/fee-main';
   static const String instituteAttendanceReport =
       '/institute/reports/attendance';

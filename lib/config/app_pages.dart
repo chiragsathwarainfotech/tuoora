@@ -21,6 +21,7 @@ import 'package:tuoora/presentation/institute/view/subscription_renewal_screen.d
 import 'package:tuoora/presentation/institute/view/submit_payment_proof_screen.dart';
 import 'package:tuoora/presentation/institute/bindings/subscription_renewal_binding.dart';
 import 'package:tuoora/presentation/institute/view/institute_whatsapp_screen.dart';
+import 'package:tuoora/presentation/institute/view/institute_upi_payment_settings_screen.dart';
 import 'package:tuoora/presentation/institute/view/fee_report_screen.dart';
 import 'package:tuoora/presentation/institute/view/attendance_report_screen.dart';
 import 'package:tuoora/presentation/institute/view/performance_report_screen.dart';
@@ -334,6 +335,11 @@ class AppPages {
     GetPage(
       name: AppRoutes.instituteWhatsApp,
       page: () => const InstituteWhatsAppScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteUpiPaymentSettings,
+      page: () => const InstituteUpiPaymentSettingsScreen(),
       binding: InstituteBinding(),
     ),
     GetPage(

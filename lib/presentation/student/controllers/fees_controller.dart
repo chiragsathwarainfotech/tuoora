@@ -1,12 +1,12 @@
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/api/api_client.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/services/download_service.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/data/repositories/student_fees_repository.dart';
+import 'package:tuoora/data/repositories/student_institute_repository.dart';
 import 'package:tuoora/presentation/student/models/fee_model.dart';
 
 class FeesController extends GetxController {
@@ -35,12 +35,18 @@ class FeesController extends GetxController {
   ).obs;
 
   late final StudentFeesRepository _repository;
+  late final StudentInstituteRepository _instituteRepository;
 
   @override
   void onInit() {
     super.onInit();
     _repository = StudentFeesRepository(Get.find<ApiClient>());
+    _instituteRepository = StudentInstituteRepository(Get.find<ApiClient>());
     loadFees();
+    // Fetch UPI handle + QR url for the Pay Fees screen in the background.
+    // We don't block the fees list on this — the Pay Fees screen has its
+    // own empty-state when payment isn't configured.
+    _loadBillingProfile();
   }
 
   Future<void> loadFees() async {
@@ -53,6 +59,24 @@ class FeesController extends GetxController {
       AppSnackBar.error(AppStrings.errFailedLoadFees);
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  /// Pulls the institute's UPI ID + QR URL from `/student/institute` and
+  /// folds them into [billingProfile]. Silent on failure — the Pay Fees
+  /// screen falls back to its empty state if both fields are missing.
+  Future<void> _loadBillingProfile() async {
+    try {
+      final inst = await _instituteRepository.getInstitute();
+      billingProfile.value = StudentBillingProfile(
+        studentName: billingProfile.value.studentName,
+        rollNumber: billingProfile.value.rollNumber,
+        instituteName: inst.name,
+        instituteUpiHandle: inst.upiId ?? '',
+        instituteUpiQrCodeUrl: inst.upiQrCodeUrl,
+      );
+    } catch (_) {
+      // Leave billingProfile as-is; Pay Fees screen will show empty state.
     }
   }
 
@@ -117,6 +141,7 @@ class FeesController extends GetxController {
 
   Future<void> copyUpiHandle() async {
     final handle = billingProfile.value.instituteUpiHandle;
+    if (handle.isEmpty) return;
     await Clipboard.setData(ClipboardData(text: handle));
     AppSnackBar.success(handle, title: AppStrings.studentPayFeesCopyHint);
   }

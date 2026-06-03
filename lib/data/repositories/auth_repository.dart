@@ -40,13 +40,10 @@ class AuthRepository implements AuthRepositoryImpl {
       'password': password,
     });
     final user = _handleResponse(response, 'STUDENT');
-    // Students have no subscription — clear any stale one from a prior session.
     await Get.find<AuthService>().setSubscription(null);
     return user;
   }
 
-  /// Reads the top-level `subscription` node (sibling of `data`) and stores it
-  /// on [AuthService] so the dashboard banner can react to its status.
   Future<void> _updateSubscription(dynamic response) async {
     try {
       final sub = response.body?['subscription'];
@@ -55,9 +52,7 @@ class AuthRepository implements AuthRepositoryImpl {
             ? Subscription.fromJson(Map<String, dynamic>.from(sub))
             : null,
       );
-    } catch (_) {
-      // Non-fatal: a missing/malformed subscription node shouldn't block login.
-    }
+    } catch (_) {}
   }
 
   User _handleResponse(dynamic response, String role) {
@@ -66,8 +61,38 @@ class AuthRepository implements AuthRepositoryImpl {
     }
 
     final data = response.body['data'];
-    final token = data['token'];
-    return User.fromJson(data, token, role);
+    final token =
+        data['token']?.toString() ?? data['access_token']?.toString() ?? '';
+    final accessToken = data['access_token']?.toString() ?? token;
+    final refreshToken = data['refresh_token']?.toString() ?? '';
+    return User.fromJson(
+      data,
+      token,
+      role,
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+    );
+  }
+
+  @override
+  Future<({String accessToken, String refreshToken})?> refreshAccessToken(
+    String refreshToken,
+  ) async {
+    try {
+      final response = await _apiClient.post(ApiConstants.authRefresh, {
+        'refresh_token': refreshToken,
+      });
+      if (response.status.hasError) return null;
+      final data = response.body?['data'];
+      if (data is! Map) return null;
+      final newAccess =
+          data['access_token']?.toString() ?? data['token']?.toString();
+      final newRefresh = data['refresh_token']?.toString();
+      if (newAccess == null || newAccess.isEmpty) return null;
+      return (accessToken: newAccess, refreshToken: newRefresh ?? refreshToken);
+    } catch (_) {
+      return null;
+    }
   }
 
   @override

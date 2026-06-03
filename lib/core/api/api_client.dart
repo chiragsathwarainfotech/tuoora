@@ -1,9 +1,15 @@
+import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/api_constants.dart';
 import 'package:tuoora/core/services/auth_service.dart';
 import 'package:tuoora/core/services/institute_account_status_handler.dart';
+import 'package:tuoora/data/repositories_impl/auth_repository_impl.dart';
 import 'package:get/get.dart';
 
 class ApiClient extends GetConnect {
+  /// Shared in-flight refresh future so two simultaneous 401s only
+  /// trigger ONE network round-trip to `/auth/refresh`.
+  Future<bool>? _refreshFuture;
+
   @override
   void onInit() {
     httpClient.baseUrl = ApiConstants.baseUrl;
@@ -29,7 +35,28 @@ class ApiClient extends GetConnect {
       return request;
     });
 
-    // Detailed Response & Error Logging
+    httpClient.addAuthenticator<dynamic>((request) async {
+      final path = request.url.path;
+      if (path.endsWith(ApiConstants.authRefresh) ||
+          path.endsWith('${ApiConstants.authRefresh}/')) {
+        await _forceLogout();
+        return request;
+      }
+
+      final authService = Get.find<AuthService>();
+      if (authService.refreshToken.isEmpty) {
+        return request;
+      }
+
+      final ok = await _tryRefresh();
+      if (!ok) {
+        await _forceLogout();
+        return request;
+      }
+      request.headers['Authorization'] = 'Bearer ${authService.token}';
+      return request;
+    });
+
     httpClient.addResponseModifier((request, response) {
       print('📥 [API RESPONSE] ${request.method.toUpperCase()} ${request.url}');
       print('Status Code: ${response.statusCode}');
@@ -42,11 +69,6 @@ class ApiClient extends GetConnect {
           print('Body: ${response.body}');
         } else {
           print('Body: [Binary Data or Unknown Format]');
-        }
-
-        // Handle unauthorized globally if needed
-        if (response.statusCode == 401) {
-          // Get.find<AuthService>().logout();
         }
 
         if (response.statusCode == 403 &&
@@ -73,5 +95,47 @@ class ApiClient extends GetConnect {
     });
 
     super.onInit();
+  }
+
+  Future<bool> _tryRefresh() {
+    final existing = _refreshFuture;
+    if (existing != null) return existing;
+    final fut = _doRefresh();
+    _refreshFuture = fut;
+    fut.whenComplete(() => _refreshFuture = null);
+    return fut;
+  }
+
+  Future<bool> _doRefresh() async {
+    if (!Get.isRegistered<AuthRepositoryImpl>()) return false;
+    final auth = Get.find<AuthService>();
+    final refreshToken = auth.refreshToken;
+    if (refreshToken.isEmpty) return false;
+
+    try {
+      final repo = Get.find<AuthRepositoryImpl>();
+      final fresh = await repo.refreshAccessToken(refreshToken);
+      if (fresh == null) return false;
+      await auth.updateTokens(
+        accessToken: fresh.accessToken,
+        refreshToken: fresh.refreshToken,
+      );
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  Future<void> _forceLogout() async {
+    try {
+      final auth = Get.find<AuthService>();
+      final role = auth.currentUser?.role ?? 'INSTITUTE';
+      await auth.clearSession();
+      Get.offAllNamed(AppRoutes.login, arguments: role);
+    } catch (_) {
+      try {
+        Get.offAllNamed(AppRoutes.login);
+      } catch (_) {}
+    }
   }
 }

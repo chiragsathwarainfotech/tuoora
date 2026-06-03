@@ -40,6 +40,9 @@ abstract class InstituteRepositoryImpl {
   Future<FeeRecord> createFee(Map<String, dynamic> data);
   Future<List<int>> exportFees();
 
+  // Downloads the PDF receipt for a single fee record.
+  Future<List<int>> downloadFeeReceipt(int feeId);
+
   // Reports
   Future<FeeReportResponse> getFeeReport();
   Future<BatchFeeDetailResponse> getBatchFeeReport(int batchId);
@@ -103,14 +106,30 @@ abstract class InstituteRepositoryImpl {
   Future<List<StaffRole>> getStaffRoles();
   Future<List<StaffDepartment>> getStaffDepartments();
   Future<Staff> createStaff(Map<String, dynamic> data, String? imagePath);
-  Future<Staff> updateStaff(int id, Map<String, dynamic> data, String? imagePath);
+  Future<Staff> updateStaff(
+    int id,
+    Map<String, dynamic> data,
+    String? imagePath,
+  );
   Future<SalaryListResponse> getStaffSalaries(int staffId, {int page = 1});
   Future<SalaryPreview> getSalaryPreview(int staffId);
-  Future<AttendanceListResponse> getStaffAttendance(int staffId, {int page = 1, String? month, String? year});
-  Future<AttendanceListResponse> getAttendanceLogs({int? page, String? month, String? year});
+  Future<AttendanceListResponse> getStaffAttendance(
+    int staffId, {
+    int page = 1,
+    String? month,
+    String? year,
+  });
+  Future<AttendanceListResponse> getAttendanceLogs({
+    int? page,
+    String? month,
+    String? year,
+  });
   Future<void> logStaffAttendance(Map<String, dynamic> data);
-  Future<SalaryListResponse> getGlobalSalaries({int? page, String? month, String? year});
+  Future<SalaryListResponse> getGlobalSalaries({
+    int? page,
+    String? month,
+    String? year,
+  });
   Future<void> logSalary(Map<String, dynamic> data);
   Future<void> deleteResource(int id);
 }
-

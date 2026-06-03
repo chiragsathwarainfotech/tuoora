@@ -853,4 +853,25 @@ class AppStrings {
   static const String k1File = '1 file';
   static const String happyBirthday = 'Happy Birthday!';
   static const String thankYou = 'Thank You!';
+
+  // Institute Fee Receipt screen
+  static const String receiptDetailsTitle = 'Receipt Details';
+  static const String downloadReceiptTooltip = 'Download Receipt';
+  static const String receiptBilledTo = 'BILLED TO';
+  static const String receiptPaymentInformation = 'PAYMENT INFORMATION';
+  static const String receiptMethodLabel = 'Method:';
+  static const String receiptPaidDateLabel = 'Paid Date:';
+  static const String receiptDescription = 'DESCRIPTION';
+  static const String receiptAmountHeader = 'AMOUNT';
+  static const String receiptMonthlyAcademicFees = 'Monthly Academic Fees';
+  static const String receiptAmountPaid = 'Amount Paid';
+  static const String receiptDownloadedSuccess = 'Receipt downloaded';
+
+  // Institute Fee report download (toolbar action on the fees list)
+  static const String reportDownloadedSuccess = 'Report downloaded';
+
+  // Institute Record Fee screen
+  static const String pendingFeesLabel = 'Pending Fees:';
+  static const String studentInformationLabel = 'Student Information';
+  static const String feeDateLabel = 'Fee Date';
 }

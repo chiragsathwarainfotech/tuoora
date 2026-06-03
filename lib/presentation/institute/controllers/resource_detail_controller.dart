@@ -63,24 +63,22 @@ class ResourceDetailController extends GetxController {
     String fileName,
     String? extension,
   ) async {
+    isDownloading.value = true;
+    downloadProgress.value = 0.0;
+
+    final fullFileName = extension != null && !fileName.contains('.')
+        ? '$fileName.$extension'
+        : fileName;
+
     try {
-      isDownloading.value = true;
-      downloadProgress.value = 0.0;
-
-      final bytes = await _repository.downloadResource(
-        resourceId,
-        onProgress: (p) {
-          downloadProgress.value = p;
-        },
+      await _downloadService.download(
+        label: 'Downloading $fileName…',
+        fileName: fullFileName,
+        fetch: () => _repository.downloadResource(
+          resourceId,
+          onProgress: (p) => downloadProgress.value = p,
+        ),
       );
-
-      final fullFileName = extension != null && !fileName.contains('.')
-          ? '$fileName.$extension'
-          : fileName;
-
-      await _downloadService.saveFile(bytes: bytes, fileName: fullFileName);
-    } catch (e) {
-      AppSnackBar.error(AppStrings.downloadFailed);
     } finally {
       isDownloading.value = false;
       downloadProgress.value = 0.0;
@@ -92,12 +90,11 @@ class ResourceDetailController extends GetxController {
       isLoading.value = true;
       await _repository.deleteResource(int.parse(resourceId));
 
-      // Update parent list if it exists
       if (Get.isRegistered<ResourcesController>(tag: batchId)) {
         Get.find<ResourcesController>(tag: batchId).removeResource(resourceId);
       }
 
-      Get.back(); // Close detail screen
+      Get.back();
       AppSnackBar.success(AppStrings.resourceDeletedSuccessfully);
     } catch (e) {
       AppSnackBar.error('Failed to delete resource: $e');

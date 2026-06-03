@@ -4,6 +4,7 @@ import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/widgets/app_network_image.dart';
 import 'package:tuoora/config/app_routes.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/data/models/menu_item.dart';
 import 'package:tuoora/presentation/institute/controllers/institute_profile_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/subscription_banner.dart';
@@ -93,22 +94,7 @@ class InstituteDashboard extends GetView<InstituteProfileController> {
                           url: profileController.profileImagePath.value!,
                           fit: BoxFit.cover,
                         )
-                      : Container(
-                          color: AppColors.primaryBrandLight,
-                          child: Center(
-                            child: Text(
-                              profileController.instituteName.value.isNotEmpty
-                                  ? profileController.instituteName.value[0]
-                                        .toUpperCase()
-                                  : 'I',
-                              style: AppTextStyles.outfit(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.primaryBrand,
-                              ),
-                            ),
-                          ),
-                        ),
+                      : CommonLoading(),
                 ),
               ),
             ),

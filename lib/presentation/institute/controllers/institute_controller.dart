@@ -36,6 +36,9 @@ class InstituteController extends GetxController {
   final feesCurrentPage = 1.obs;
   final feesHasMore = true.obs;
 
+  final downloadingReceiptIds = <int>{}.obs;
+  bool isDownloadingReceipt(int id) => downloadingReceiptIds.contains(id);
+
   @override
   void onInit() {
     super.onInit();
@@ -87,20 +90,31 @@ class InstituteController extends GetxController {
   Future<void> refreshFees() => fetchFees(reset: true);
 
   Future<void> downloadFeeReport() async {
+    final fileName = 'Fee_Report_${DateTime.now().millisecondsSinceEpoch}.pdf';
+    await Get.find<DownloadService>().download(
+      label: 'Preparing financial report…',
+      fileName: fileName,
+      successMessage: AppStrings.reportDownloadedSuccess,
+      fetch: () => _instituteRepository.exportFees(),
+    );
+  }
+
+  Future<void> downloadFeeReceipt(int feeId) async {
+    if (downloadingReceiptIds.contains(feeId)) return;
+    downloadingReceiptIds.add(feeId);
+    downloadingReceiptIds.refresh();
+    final fileName =
+        'Receipt_${feeId}_${DateTime.now().millisecondsSinceEpoch}.pdf';
     try {
-      final bytes = await _instituteRepository.exportFees();
-
-      final downloadService = Get.find<DownloadService>();
-      final fileName =
-          'Fee_Report_${DateTime.now().millisecondsSinceEpoch}.pdf';
-
-      await downloadService.saveFile(
-        bytes: bytes,
+      await Get.find<DownloadService>().download(
+        label: 'Preparing receipt…',
         fileName: fileName,
-        successMessage: 'Report downloaded',
+        successMessage: AppStrings.receiptDownloadedSuccess,
+        fetch: () => _instituteRepository.downloadFeeReceipt(feeId),
       );
-    } catch (e) {
-      AppSnackBar.error(AppStrings.downloadFailed);
+    } finally {
+      downloadingReceiptIds.remove(feeId);
+      downloadingReceiptIds.refresh();
     }
   }
 

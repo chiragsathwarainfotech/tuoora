@@ -5,6 +5,7 @@ import 'package:tuoora/presentation/institute/bindings/institute_binding.dart';
 import 'package:tuoora/presentation/institute/view/batches_screen.dart';
 import 'package:tuoora/presentation/institute/view/fee_transaction_history_screen.dart';
 import 'package:tuoora/presentation/institute/view/fees_screen.dart';
+import 'package:tuoora/presentation/institute/view/fee_receipt_screen.dart';
 import 'package:tuoora/presentation/institute/view/institute_main_screen.dart';
 import 'package:tuoora/presentation/institute/view/add_student_screen.dart';
 import 'package:tuoora/presentation/institute/view/batch_details_screen.dart';
@@ -273,6 +274,11 @@ class AppPages {
     GetPage(
       name: AppRoutes.instituteRecordFee,
       page: () => const RecordFeeScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteFeeReceipt,
+      page: () => const FeeReceiptScreen(),
       binding: InstituteBinding(),
     ),
     GetPage(

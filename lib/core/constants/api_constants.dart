@@ -8,14 +8,17 @@ class ApiConstants {
   static const String instituteLogout = '/institute/logout';
   static const String studentLogin = '/student/login';
   static const String studentLogout = '/student/logout';
-  static const String studentNotificationSettings = '/student/notification-settings';
+  static const String studentNotificationSettings =
+      '/student/notification-settings';
   static const String studentProfile = '/student/profile';
   static const String studentProfileAvatar = '/student/profile/avatar';
   static const String studentFeedback = '/student/feedback';
   static const String studentHomeworks = '/student/homeworks';
   static String studentHomeworkDetail(int id) => '/student/homeworks/$id';
-  static String studentHomeworkAttachment(int id) => '/student/homeworks/$id/attachment';
-  static String studentHomeworkAttachmentDownload(int id) => '/student/homeworks/$id/attachment/download';
+  static String studentHomeworkAttachment(int id) =>
+      '/student/homeworks/$id/attachment';
+  static String studentHomeworkAttachmentDownload(int id) =>
+      '/student/homeworks/$id/attachment/download';
   static const String studentAttendance = '/student/attendance';
   static const String studentReport = '/student/report';
   static const String studentInstitute = '/student/institute';
@@ -38,6 +41,8 @@ class ApiConstants {
       '/institute/whatsapp-settings';
   static const String instituteFees = '/institute/fees';
   static const String instituteFeesExport = '/institute/fees/export';
+  static String instituteReceiptDownload(int id) =>
+      '/institute/receipt/$id/download';
   static const String instituteDailyUpdates = '/institute/daily-updates';
   static const String instituteAttendance = '/institute/attendance';
   static const String instituteHomeworks = '/institute/homeworks';

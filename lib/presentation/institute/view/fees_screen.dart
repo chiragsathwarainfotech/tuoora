@@ -148,11 +148,16 @@ class InstituteFeesScreen extends GetView<InstituteController> {
         children: controller.feeRecords.map((record) {
           return Padding(
             padding: const EdgeInsets.only(bottom: AppSpacing.s10),
-            child: _buildFeeItem(
-              record.student?.name ?? 'Unknown Student',
-              '₹${record.totalAmount}',
-              'ID: ${record.studentId}',
-              record.date,
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () =>
+                  Get.toNamed(AppRoutes.instituteFeeReceipt, arguments: record),
+              child: _buildFeeItem(
+                record.student?.name ?? '',
+                '₹${record.totalAmount}',
+                'ID: ${record.student?.enrollmentId}',
+                record.date,
+              ),
             ),
           );
         }).toList(),

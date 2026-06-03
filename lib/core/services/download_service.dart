@@ -1,9 +1,30 @@
 import 'dart:io';
-import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:get/get.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
 
 class DownloadService extends GetxService {
+  Future<void> download({
+    required String label,
+    required Future<List<int>> Function() fetch,
+    required String fileName,
+    String? successMessage,
+  }) async {
+    final snack = AppSnackBar.downloading(label);
+    try {
+      final bytes = await fetch();
+      await snack.close();
+      await saveFile(
+        bytes: bytes,
+        fileName: fileName,
+        successMessage: successMessage,
+      );
+    } catch (_) {
+      await snack.close();
+      AppSnackBar.error(AppStrings.downloadFailed);
+    }
+  }
+
   Future<void> saveFile({
     required List<int> bytes,
     required String fileName,

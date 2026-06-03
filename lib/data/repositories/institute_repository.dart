@@ -222,6 +222,14 @@ class InstituteRepository implements InstituteRepositoryImpl {
   }
 
   @override
+  Future<List<int>> downloadFeeReceipt(int feeId) async {
+    return _downloadFile(
+      ApiConstants.instituteReceiptDownload(feeId),
+      acceptHeader: 'application/pdf',
+    );
+  }
+
+  @override
   Future<FeeReportResponse> getFeeReport() async {
     final response = await _apiClient.get(ApiConstants.instituteReportFee);
     if (response.status.hasError) {

@@ -64,7 +64,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const InstituteLabel('Student Information'),
+        const InstituteLabel(AppStrings.studentInformationLabel),
         if (!controller.isStudentSelected.value) ...[
           Obx(
             () => AppSearchField(
@@ -182,7 +182,55 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
               ],
             ),
           ),
+        if (controller.isStudentSelected.value &&
+            (controller.selectedStudent.value?.totalDue ?? 0) > 0) ...[
+          AppSpacing.v12,
+          _buildPendingFeesBanner(
+            (controller.selectedStudent.value!.totalDue).toDouble(),
+          ),
+        ],
       ],
+    );
+  }
+
+  Widget _buildPendingFeesBanner(double amount) {
+    return Container(
+      padding: AppSpacing.all12,
+      decoration: BoxDecoration(
+        color: AppColors.warningBg,
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+        border: Border.all(
+          color: AppColors.warningAmber.withValues(alpha: 0.4),
+        ),
+      ),
+      child: Row(
+        children: [
+          const Icon(
+            Icons.warning_amber_rounded,
+            size: 18,
+            color: AppColors.warningAmber,
+          ),
+          AppSpacing.h8,
+          Expanded(
+            child: Text(
+              AppStrings.pendingFeesLabel,
+              style: AppTextStyles.outfit(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: AppColors.warningAmber,
+              ),
+            ),
+          ),
+          Text(
+            '₹${NumberFormat('#,##,###.##').format(amount)}',
+            style: AppTextStyles.outfit(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: AppColors.warningAmber,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -253,7 +301,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
           return const SizedBox.shrink();
         }),
         AppSpacing.v20,
-        const InstituteLabel('Fee Date'),
+        const InstituteLabel(AppStrings.feeDateLabel),
         GestureDetector(
           onTap: () => controller.selectRecordDate(context),
           child: Container(
@@ -334,9 +382,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
           children: [
             Icon(
               icon,
-              color: isActive
-                  ? AppColors.primaryBrand
-                  : AppColors.fieldLabel,
+              color: isActive ? AppColors.primaryBrand : AppColors.fieldLabel,
               size: 24,
             ),
             AppSpacing.h12,
@@ -407,9 +453,6 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
               height: 1.4,
             ),
           ),
-          // Only surface the Preview Receipt action once a student is
-          // picked and a valid amount is entered. Otherwise the tap would
-          // just flash an error snackbar, so hide it entirely.
           Obx(() {
             if (!controller.canPreview) return const SizedBox.shrink();
             return Padding(

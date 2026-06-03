@@ -17,14 +17,8 @@ class Student {
   final String updatedAt;
   final String profileImageUrl;
   final dynamic batch;
-
-  /// Outstanding fee amount for this student (server-computed). Positive
-  /// when the student owes money, zero when settled, can be negative when
-  /// the student has overpaid / has a credit.
   final num totalDue;
-
-  /// Past fee transactions for this student. Used to populate the fees
-  /// list below the ID card on the institute Student Profile screen.
+  final num totalPaid;
   final List<StudentFee> fees;
 
   const Student({
@@ -47,6 +41,7 @@ class Student {
     required this.profileImageUrl,
     this.batch,
     this.totalDue = 0,
+    this.totalPaid = 0,
     this.fees = const [],
   });
 
@@ -77,13 +72,18 @@ class Student {
       monthlyFee: json['monthly_fee']?.toString(),
       schoolName: json['school_name']?.toString(),
       status: json['status']?.toString() ?? '1',
-      idHash: json['id_hash']?.toString() ?? '',
+      idHash:
+          json['id_hash']?.toString() ??
+          json['enrollment_id']?.toString() ??
+          '',
       createdAt: json['created_at']?.toString() ?? '',
       updatedAt: json['updated_at']?.toString() ?? '',
       profileImageUrl: json['profile_image_url']?.toString() ?? '',
       batch: json['batch'],
       totalDue: num.tryParse(json['total_due']?.toString() ?? '0') ?? 0,
-      fees: (json['fees'] as List?)
+      totalPaid: num.tryParse(json['total_paid']?.toString() ?? '0') ?? 0,
+      fees:
+          (json['fees'] as List?)
               ?.whereType<Map>()
               .map((e) => StudentFee.fromJson(e.cast<String, dynamic>()))
               .toList() ??
@@ -112,6 +112,7 @@ class Student {
       'profile_image_url': profileImageUrl,
       'batch': batch,
       'total_due': totalDue,
+      'total_paid': totalPaid,
       'fees': fees.map((f) => f.toJson()).toList(),
     };
   }
@@ -136,6 +137,7 @@ class Student {
     String? profileImageUrl,
     dynamic batch,
     num? totalDue,
+    num? totalPaid,
     List<StudentFee>? fees,
   }) {
     return Student(
@@ -158,6 +160,7 @@ class Student {
       profileImageUrl: profileImageUrl ?? this.profileImageUrl,
       batch: batch ?? this.batch,
       totalDue: totalDue ?? this.totalDue,
+      totalPaid: totalPaid ?? this.totalPaid,
       fees: fees ?? this.fees,
     );
   }
@@ -171,10 +174,10 @@ class Student {
     }
     return 'Not Assigned';
   }
+
+  String get enrollmentId => idHash.isNotEmpty ? idHash : id.toString();
 }
 
-/// One fee transaction belonging to a [Student]. Mirrors the entries the
-/// student-list API returns under `student.fees[]`.
 class StudentFee {
   final int id;
   final int studentId;
@@ -204,12 +207,11 @@ class StudentFee {
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'student_id': studentId,
-        'total_amount': totalAmount,
-        'paid_amount': paidAmount,
-        'status': status,
-        'date': date,
-      };
+    'id': id,
+    'student_id': studentId,
+    'total_amount': totalAmount,
+    'paid_amount': paidAmount,
+    'status': status,
+    'date': date,
+  };
 }
-

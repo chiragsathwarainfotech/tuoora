@@ -109,27 +109,18 @@ class ReportsController extends GetxController {
   }
 
   Future<void> exportReport(String type) async {
-    try {
-      List<int> bytes;
-      if (type == 'Fee') {
-        bytes = await _repository.exportFeeReport();
-      } else if (type == 'Attendance') {
-        bytes = await _repository.exportAttendanceReport();
-      } else {
-        bytes = await _repository.exportPerformanceReport();
-      }
-
-      final fileName =
-          '${type}_Report_${DateTime.now().millisecondsSinceEpoch}.pdf';
-
-      await _downloadService.saveFile(
-        bytes: bytes,
-        fileName: fileName,
-        successMessage: 'Report downloaded',
-      );
-    } catch (e) {
-      AppSnackBar.error(AppStrings.downloadFailed);
-    }
+    final fileName =
+        '${type}_Report_${DateTime.now().millisecondsSinceEpoch}.pdf';
+    await _downloadService.download(
+      label: 'Preparing $type report…',
+      fileName: fileName,
+      successMessage: AppStrings.reportDownloadedSuccess,
+      fetch: () {
+        if (type == 'Fee') return _repository.exportFeeReport();
+        if (type == 'Attendance') return _repository.exportAttendanceReport();
+        return _repository.exportPerformanceReport();
+      },
+    );
   }
 
   void loadPerformanceData() {

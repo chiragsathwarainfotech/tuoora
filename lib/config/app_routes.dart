@@ -36,6 +36,7 @@ class AppRoutes {
   static const String instituteAddEditStudent = '/institute/students/add/edit';
   static const String instituteFees = '/institute/fees';
   static const String instituteRecordFee = '/institute/fees/record';
+  static const String instituteFeeReceipt = '/institute/fees/receipt';
   static const String instituteBatches = '/institute/batches';
   static const String instituteMarkAttendance = '/institute/batches/mark';
   static const String instituteBatchDetails = '/institute/batches/details';

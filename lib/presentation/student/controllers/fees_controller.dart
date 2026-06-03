@@ -15,8 +15,6 @@ class FeesController extends GetxController {
   final RxBool isDownloading = false.obs;
   final RxDouble downloadProgress = 0.0.obs;
 
-  /// Aggregate header card values. Defaults are all-zero until the first
-  /// fetch resolves.
   final Rx<FeeSummary> summary = const FeeSummary(
     totalInRupees: 0,
     paidInRupees: 0,
@@ -25,20 +23,10 @@ class FeesController extends GetxController {
     pendingMonthsLabel: '',
   ).obs;
 
-  /// Fees list rendered on the Fees tab.
   final RxList<FeeStatement> statements = <FeeStatement>[].obs;
-
-  /// Set when the user taps a statement; consumed by the receipt screen
-  /// for the header/period/amount values that the receipt-detail API
-  /// does not return on its own.
   final Rxn<FeeStatement> selectedStatement = Rxn<FeeStatement>();
-
-  /// Latest receipt payload from `/student/receipts/{id}` — populated by
-  /// [openReceipt] / [openReceiptById].
   final Rxn<StudentReceipt> currentReceipt = Rxn<StudentReceipt>();
 
-  /// Identity data shown on the Pay-fees screen. Receipt screen now
-  /// reads directly from [currentReceipt] instead.
   final Rx<StudentBillingProfile> billingProfile = const StudentBillingProfile(
     studentName: '',
     rollNumber: '',
@@ -68,8 +56,6 @@ class FeesController extends GetxController {
     }
   }
 
-  /// Opens the receipt screen for [statement] and fetches the receipt
-  /// detail from the API. The screen renders a spinner while loading.
   Future<void> openReceipt(FeeStatement statement) async {
     selectedStatement.value = statement;
     currentReceipt.value = null;
@@ -77,8 +63,6 @@ class FeesController extends GetxController {
     await _fetchReceipt(statement.feeId);
   }
 
-  /// Opens the receipt screen by id alone (used from the receipts-list
-  /// screen which has no [FeeStatement] context).
   Future<void> openReceiptById(int feeId) async {
     selectedStatement.value = null;
     currentReceipt.value = null;
@@ -97,8 +81,6 @@ class FeesController extends GetxController {
     }
   }
 
-  /// Downloads the receipt PDF for the currently-open receipt. The
-  /// receipt screen wires its download button to this.
   Future<void> downloadCurrentReceipt() async {
     final receipt = currentReceipt.value;
     if (receipt == null) return;
@@ -107,31 +89,21 @@ class FeesController extends GetxController {
 
   Future<void> _downloadReceipt(StudentReceipt receipt) async {
     if (isDownloading.value) return;
+    isDownloading.value = true;
+    downloadProgress.value = 0.0;
+    final fileName = receipt.receiptNumber.isNotEmpty
+        ? '${receipt.receiptNumber}.pdf'
+        : 'receipt-${receipt.id}.pdf';
     try {
-      isDownloading.value = true;
-      downloadProgress.value = 0.0;
-
-      AppSnackBar.success(
-        AppStrings.pleaseWaitYourReceiptIsBeing,
-        title: AppStrings.labelDownloading,
-      );
-
-      final bytes = await _repository.downloadFeeReceipt(
-        receipt.id,
-        onProgress: (p) => downloadProgress.value = p,
-      );
-
-      final downloadService = Get.find<DownloadService>();
-      final fileName = receipt.receiptNumber.isNotEmpty
-          ? '${receipt.receiptNumber}.pdf'
-          : 'receipt-${receipt.id}.pdf';
-      await downloadService.saveFile(
-        bytes: Uint8List.fromList(bytes),
+      await Get.find<DownloadService>().download(
+        label: AppStrings.pleaseWaitYourReceiptIsBeing,
         fileName: fileName,
-      );
-    } catch (e) {
-      AppSnackBar.error(
-        'Failed to download receipt: ${e.toString().replaceAll('Exception: ', '')}',
+        fetch: () async => Uint8List.fromList(
+          await _repository.downloadFeeReceipt(
+            receipt.id,
+            onProgress: (p) => downloadProgress.value = p,
+          ),
+        ),
       );
     } finally {
       isDownloading.value = false;

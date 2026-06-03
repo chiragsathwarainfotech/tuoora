@@ -104,6 +104,7 @@ class Batch {
       classroom: classroom,
       staffId: staffId,
       staffName: staff?.fullName,
+      createdAt: DateTime.tryParse(createdAt)?.toLocal(),
     );
   }
 

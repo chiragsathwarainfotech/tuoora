@@ -7,6 +7,7 @@ import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/services/auth_service.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/data/repositories/auth_repository.dart';
 import 'package:tuoora/core/widgets/app_empty_view.dart';
 import 'package:tuoora/core/widgets/app_version_label.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
@@ -121,10 +122,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
                 padding: const EdgeInsets.fromLTRB(100, 14, 16, 14),
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [
-                      AppColors.instBrandOrange,
-                      AppColors.primaryBrand,
-                    ],
+                    colors: [AppColors.instBrandOrange, AppColors.primaryBrand],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -500,6 +498,9 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
   Widget _buildLogOutButton() {
     return ElevatedButton(
       onPressed: () async {
+        try {
+          await Get.find<AuthRepository>().logout('STUDENT');
+        } catch (_) {}
         final authService = Get.find<AuthService>();
         await authService.clearSession();
         Get.offAllNamed(AppRoutes.roleSelection);

@@ -41,18 +41,14 @@ class AttendanceHistoryController extends GetxController {
   }
 
   void prevMonth() {
+    if (!canGoPrev) return;
     viewDate.value = DateTime(viewDate.value.year, viewDate.value.month - 1);
     fetchAttendance();
   }
 
   void nextMonth() {
-    final now = DateTime.now();
-    final nextDate = DateTime(viewDate.value.year, viewDate.value.month + 1);
-    // Do not allow future months
-    if (nextDate.year > now.year || (nextDate.year == now.year && nextDate.month > now.month)) {
-      return;
-    }
-    viewDate.value = nextDate;
+    if (!canGoNext) return;
+    viewDate.value = DateTime(viewDate.value.year, viewDate.value.month + 1);
     fetchAttendance();
   }
 
@@ -79,6 +75,21 @@ class AttendanceHistoryController extends GetxController {
     final view = viewDate.value;
     if (view.year < now.year) return true;
     if (view.year == now.year && view.month < now.month) return true;
+    return false;
+  }
+
+  /// True only when the currently-viewed month is strictly AFTER the month
+  /// the student was assigned to their batch. Once the user reaches the
+  /// assignment month, the Prev arrow disables — they can't scroll into
+  /// months that pre-date their enrolment (there's no data to show).
+  /// Falls back to "always allow" when the API didn't return a
+  /// batch_assigned_date so legacy responses don't break navigation.
+  bool get canGoPrev {
+    final assigned = attendanceData.value?.batchAssignedDate;
+    if (assigned == null) return true;
+    final view = viewDate.value;
+    if (view.year > assigned.year) return true;
+    if (view.year == assigned.year && view.month > assigned.month) return true;
     return false;
   }
 }

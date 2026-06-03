@@ -133,11 +133,29 @@ class AttendanceController extends GetxController {
   }
 
   Future<void> selectDate(BuildContext context) async {
+    final now = DateTime.now();
+    // Floor of the range = the day the batch was created. Falls back to a
+    // safe sentinel when the API didn't return a parseable timestamp.
+    // Stripped to midnight so the picker treats the creation day itself as
+    // selectable (DatePicker compares year/month/day, not the time part).
+    final creation = batch.createdAt;
+    final firstDate = creation != null
+        ? DateTime(creation.year, creation.month, creation.day)
+        : DateTime(2020);
+    // Clamp initialDate into [firstDate, today] — required by showDatePicker;
+    // otherwise it asserts when the user re-opens a stale selection that's
+    // older than the batch creation day (shouldn't normally happen, but
+    // guards against the assert).
+    final today = DateTime(now.year, now.month, now.day);
+    DateTime initial = selectedDate.value;
+    if (initial.isBefore(firstDate)) initial = firstDate;
+    if (initial.isAfter(today)) initial = today;
+
     final DateTime? picked = await AppPickers.date(
       context,
-      initialDate: selectedDate.value,
-      firstDate: DateTime(2020),
-      lastDate: DateTime.now(),
+      initialDate: initial,
+      firstDate: firstDate,
+      lastDate: today,
     );
     if (picked != null && picked != selectedDate.value) {
       selectedDate.value = picked;

@@ -4,6 +4,7 @@ import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/services/auth_service.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/data/repositories/auth_repository.dart';
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
 import 'package:tuoora/core/utils/validation_utils.dart';
 import 'package:tuoora/data/models/institute_profile_model.dart';
@@ -294,6 +295,9 @@ class InstituteProfileController extends GetxController {
   }
 
   void logout() async {
+    try {
+      await Get.find<AuthRepository>().logout('INSTITUTE');
+    } catch (_) {}
     final authService = Get.find<AuthService>();
     await authService.clearSession();
     Get.offAllNamed(AppRoutes.roleSelection);

@@ -13,10 +13,10 @@ class AuthRepository implements AuthRepositoryImpl {
 
   @override
   Future<User> loginInstitute(String email, String password) async {
-    final response = await _apiClient.post(
-      ApiConstants.instituteLogin,
-      {'email': email, 'password': password},
-    );
+    final response = await _apiClient.post(ApiConstants.instituteLogin, {
+      'email': email,
+      'password': password,
+    });
     final user = _handleResponse(response, 'INSTITUTE');
     await _updateSubscription(response);
     return user;
@@ -24,10 +24,10 @@ class AuthRepository implements AuthRepositoryImpl {
 
   @override
   Future<User> loginStudent(String email, String password) async {
-    final response = await _apiClient.post(
-      ApiConstants.studentLogin,
-      {'email': email, 'password': password},
-    );
+    final response = await _apiClient.post(ApiConstants.studentLogin, {
+      'email': email,
+      'password': password,
+    });
     final user = _handleResponse(response, 'STUDENT');
     // Students have no subscription — clear any stale one from a prior session.
     await Get.find<AuthService>().setSubscription(null);
@@ -60,6 +60,17 @@ class AuthRepository implements AuthRepositoryImpl {
   }
 
   @override
+  Future<void> logout(String role) async {
+    final endpoint = role == 'INSTITUTE'
+        ? ApiConstants.instituteLogout
+        : ApiConstants.studentLogout;
+    final response = await _apiClient.post(endpoint, {});
+    if (response.status.hasError) {
+      throw Exception(response.body?['message'] ?? 'Logout failed');
+    }
+  }
+
+  @override
   Future<String> forgotPassword(String email) async {
     final response = await _apiClient.post(
       ApiConstants.instituteForgotPassword,
@@ -89,4 +100,3 @@ class AuthRepository implements AuthRepositoryImpl {
     return response.body['message'] ?? 'Success';
   }
 }
-

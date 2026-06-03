@@ -195,7 +195,15 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _buildCircleNavButton(Icons.chevron_left, controller.prevMonth),
+        // Prev arrow disables once the user reaches the batch-assignment
+        // month — months before they enrolled have no attendance to show.
+        Obx(
+          () => _buildCircleNavButton(
+            Icons.chevron_left,
+            controller.prevMonth,
+            enabled: controller.canGoPrev,
+          ),
+        ),
         Obx(
           () => Text(
             '${controller.currentMonthName} ${controller.currentYear}',
@@ -386,107 +394,141 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
   }
 
   Widget _buildDateBubble(String day, String type) {
-    Color bg;
-    Color fg;
-    bool isDashed = false;
-
-    switch (type) {
-      case 'present':
-      case 'p':
-        bg = AppColors.successBg;
-        fg = AppColors.successGreen;
-        break;
-      case 'absent':
-      case 'a':
-        bg = AppColors.errorBg;
-        fg = AppColors.bohoRed;
-        break;
-      case 'holiday':
-      case 'h':
-        bg = AppColors.errorBg;
-        fg = AppColors.bohoRed;
-        break;
-      case 'p_dashed':
-        bg = Colors.transparent;
-        fg = AppColors.textTertiary;
-        isDashed = true;
-        break;
-      case 'no_class':
-      default:
-        bg = AppColors.scaffoldBg;
-        fg = AppColors.textTertiary;
-    }
-
-    Widget content = Center(
-      child: Text(
-        day,
-        style: AppTextStyles.outfit(
-          fontSize: 12,
-          fontWeight: FontWeight.w600,
-          color: fg,
-        ),
-      ),
-    );
-
-    if (isDashed) {
+    // Dashed sibling-month placeholder is a separate render path.
+    if (type == 'p_dashed') {
       return Center(
         child: CustomPaint(
           painter: _DashedRectPainter(color: AppColors.borderLightGray),
           child: SizedBox(
             width: AppSpacing.s36,
             height: AppSpacing.s36,
-            child: content,
+            child: Center(
+              child: Text(
+                day,
+                style: AppTextStyles.outfit(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textTertiary,
+                ),
+              ),
+            ),
           ),
-        ),
-      );
-    } else {
-      return Center(
-        child: Container(
-          width: AppSpacing.s36,
-          height: AppSpacing.s36,
-          decoration: BoxDecoration(
-            color: bg,
-            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-          ),
-          child: content,
         ),
       );
     }
+
+    // Each state gets its own bg + fg pair so the four statuses are
+    // visually distinct at a glance. Holiday used to share Absent's red,
+    // which was the main source of confusion — it now reads as amber
+    // ("special day off") instead of as a missed attendance.
+    final ({Color bg, Color fg}) palette = switch (type) {
+      'present' || 'p' => (
+        bg: AppColors.successBg,
+        fg: AppColors.greenText,
+      ),
+      'absent' || 'a' => (
+        bg: AppColors.errorBg,
+        fg: AppColors.bohoRed,
+      ),
+      'holiday' || 'h' => (
+        bg: AppColors.warningBg,
+        fg: AppColors.warningAmber,
+      ),
+      _ => (
+        bg: AppColors.fieldBg,
+        fg: AppColors.textMuted,
+      ),
+    };
+
+    final isNoClass = type != 'present' &&
+        type != 'p' &&
+        type != 'absent' &&
+        type != 'a' &&
+        type != 'holiday' &&
+        type != 'h';
+
+    return Center(
+      child: Container(
+        width: AppSpacing.s36,
+        height: AppSpacing.s36,
+        decoration: BoxDecoration(
+          color: palette.bg,
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+        ),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            // Faint × behind the date number on no-class days, so the cell
+            // visually reads as "nothing scheduled" without losing the date.
+            if (isNoClass)
+              Icon(
+                Icons.close_rounded,
+                size: 28,
+                color: AppColors.textMuted.withValues(alpha: 0.20),
+              ),
+            Text(
+              day,
+              style: AppTextStyles.outfit(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: palette.fg,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _buildLegend() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Wrap(
+      alignment: WrapAlignment.center,
+      spacing: AppSpacing.s12,
+      runSpacing: AppSpacing.s8,
       children: [
-        _legendItem(AppColors.successGreen, 'Present'),
-        AppSpacing.h12,
-        _legendItem(AppColors.bohoRed, 'Absent'),
-        AppSpacing.h12,
-        _legendItem(AppColors.bohoRed, 'Holiday'),
-        AppSpacing.h12,
-        _legendItem(AppColors.borderLightGray, 'No class'),
+        _legendItem(AppColors.successBg, AppColors.greenText, 'Present'),
+        _legendItem(AppColors.errorBg, AppColors.bohoRed, 'Absent'),
+        _legendItem(AppColors.warningBg, AppColors.warningAmber, 'Holiday'),
+        _legendItem(
+          AppColors.fieldBg,
+          AppColors.textMuted,
+          'No class',
+          icon: Icons.close_rounded,
+        ),
       ],
     );
   }
 
-  Widget _legendItem(Color color, String label) {
+  /// Each legend chip is a miniature of the cell it represents (same bg,
+  /// same fg ring, optional × for the no-class entry) so a student can map
+  /// chip ↔ calendar day without translation.
+  Widget _legendItem(
+    Color bg,
+    Color fg,
+    String label, {
+    IconData? icon,
+  }) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          width: 10,
-          height: 10,
+          width: 14,
+          height: 14,
           decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: color, width: 2),
+            color: bg,
+            borderRadius: BorderRadius.circular(4),
+            border: Border.all(color: fg.withValues(alpha: 0.45)),
           ),
+          child: icon == null
+              ? null
+              : Icon(icon, size: 10, color: fg.withValues(alpha: 0.7)),
         ),
-        AppSpacing.h4,
+        AppSpacing.h6,
         Text(
           label,
           style: AppTextStyles.outfit(
             fontSize: 10,
-            fontWeight: FontWeight.w400,
+            fontWeight: FontWeight.w500,
             color: AppColors.textSecondary,
           ),
         ),

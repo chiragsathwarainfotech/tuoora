@@ -27,19 +27,32 @@ class AppPickers {
           headerBackgroundColor: AppColors.primaryBrand,
           headerForegroundColor: AppColors.white,
           todayForegroundColor: WidgetStateProperty.resolveWith(
-            (states) => states.contains(WidgetState.selected)
-                ? AppColors.white
-                : AppColors.primaryBrand,
+            (states) {
+              if (states.contains(WidgetState.disabled)) {
+                return AppColors.textMuted.withValues(alpha: 0.4);
+              }
+              return states.contains(WidgetState.selected)
+                  ? AppColors.white
+                  : AppColors.primaryBrand;
+            },
           ),
           todayBackgroundColor: WidgetStateProperty.resolveWith(
             (states) => states.contains(WidgetState.selected)
                 ? AppColors.primaryBrand
                 : Colors.transparent,
           ),
+          // Disabled days (outside firstDate/lastDate) get a low-opacity
+          // muted grey so they read clearly as untappable instead of looking
+          // identical to live days.
           dayForegroundColor: WidgetStateProperty.resolveWith(
-            (states) => states.contains(WidgetState.selected)
-                ? AppColors.white
-                : AppColors.textPrimary,
+            (states) {
+              if (states.contains(WidgetState.disabled)) {
+                return AppColors.textMuted.withValues(alpha: 0.4);
+              }
+              return states.contains(WidgetState.selected)
+                  ? AppColors.white
+                  : AppColors.textPrimary;
+            },
           ),
           dayBackgroundColor: WidgetStateProperty.resolveWith(
             (states) => states.contains(WidgetState.selected)

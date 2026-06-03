@@ -5,7 +5,9 @@ class ApiConstants {
   static const String instituteLogin = '/institute/login';
   static const String instituteRegister = '/institute/register';
   static const String instituteVerifyOtp = '/institute/verify-otp';
+  static const String instituteLogout = '/institute/logout';
   static const String studentLogin = '/student/login';
+  static const String studentLogout = '/student/logout';
   static const String studentNotificationSettings = '/student/notification-settings';
   static const String studentProfile = '/student/profile';
   static const String studentProfileAvatar = '/student/profile/avatar';

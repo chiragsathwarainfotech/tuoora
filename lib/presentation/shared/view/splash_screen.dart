@@ -18,27 +18,7 @@ class SplashScreen extends GetView<SplashController> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.s24,
-                vertical: AppSpacing.s20,
-              ),
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(24),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1),
-                    blurRadius: 20,
-                    offset: const Offset(0, 10),
-                  ),
-                ],
-              ),
-              child: Image.asset(
-                AppImages.logoWithName,
-                height: AppSpacing.s56,
-              ),
-            ),
+            Image.asset(AppImages.logoWithName, height: AppSpacing.s56),
             AppSpacing.v24,
             Text(
               AppStrings.tagLine,
@@ -46,7 +26,7 @@ class SplashScreen extends GetView<SplashController> {
               style: AppTextStyles.outfit(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: AppColors.white.withValues(alpha: 0.9),
+                color: AppColors.white,
                 letterSpacing: 0.6,
               ),
             ),

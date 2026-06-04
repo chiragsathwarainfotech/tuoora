@@ -36,8 +36,6 @@ class ApiConstants {
   static const String instituteStudents = '/institute/students';
   static const String instituteProfile = '/institute/profile';
   static const String instituteProfileUpdate = '/institute/profile/update';
-  /// Save institute's UPI handle + (optional) QR code image. Multipart
-  /// when `upi_qr_code` is a freshly-picked local file.
   static const String institutePaymentUpdate =
       '/institute/profile/payment/update';
   static const String instituteBatches = '/institute/batches';

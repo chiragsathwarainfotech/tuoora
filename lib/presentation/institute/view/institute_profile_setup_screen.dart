@@ -1,8 +1,9 @@
-﻿import 'dart:io';
+import 'dart:io';
 import 'package:tuoora/core/widgets/app_button.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/app_network_image.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/presentation/institute/controllers/signup_controller.dart';
 import 'package:flutter/material.dart';
@@ -31,49 +32,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Center(
-                      child: GestureDetector(
-                        onTap: controller.pickLogo,
-                        child: Obx(
-                          () => Stack(
-                            children: [
-                              Container(
-                                width: 100,
-                                height: 100,
-                                decoration: BoxDecoration(
-                                  color: AppColors.primaryBrandLight,
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: AppColors.brandAppBarColor,
-                                    width: 2,
-                                  ),
-                                  image:
-                                      controller.selectedLogoPath.value != null
-                                      ? DecorationImage(
-                                          image: FileImage(
-                                            File(
-                                              controller
-                                                  .selectedLogoPath
-                                                  .value!,
-                                            ),
-                                          ),
-                                          fit: BoxFit.cover,
-                                        )
-                                      : null,
-                                ),
-                                child: controller.selectedLogoPath.value == null
-                                    ? const Icon(
-                                        Icons.add_a_photo_outlined,
-                                        color: AppColors.brandAppBarColor,
-                                        size: 32,
-                                      )
-                                    : null,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
+                    _buildLogoSection(),
                     AppSpacing.v32,
                     _buildSectionHeader('Finalize Profile'),
                     AppSpacing.v16,
@@ -255,13 +214,88 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
     );
   }
 
+  Widget _buildLogoSection() {
+    return Column(
+      children: [
+        Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Obx(() {
+              final path = controller.selectedLogoPath.value;
+              return Container(
+                width: 140,
+                height: 140,
+                decoration: BoxDecoration(
+                  color: AppColors.primaryBrandLight,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: path == null
+                    ? const Center(
+                        child: Icon(
+                          Icons.school_rounded,
+                          size: 56,
+                          color: AppColors.primaryBrand,
+                        ),
+                      )
+                    : (path.startsWith('http') || !path.contains('/')
+                          ? AppNetworkImage(
+                              url: path,
+                              fit: BoxFit.cover,
+                              errorWidget: const Icon(Icons.error),
+                            )
+                          : Image.file(File(path), fit: BoxFit.cover)),
+              );
+            }),
+            Positioned(
+              bottom: -6,
+              right: -6,
+              child: GestureDetector(
+                onTap: controller.pickLogo,
+                child: Container(
+                  padding: AppSpacing.all10,
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryBrand,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: AppColors.white, width: 3),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.primaryBrand.withValues(alpha: 0.3),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: const Icon(
+                    Icons.camera_alt_rounded,
+                    color: AppColors.white,
+                    size: 18,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        AppSpacing.v16,
+        Text(
+          AppStrings.instLogo,
+          style: AppTextStyles.outfit(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: AppColors.textPrimary,
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildSectionHeader(String title) {
     return Text(
       title,
       style: AppTextStyles.outfit(
-        fontSize: 12,
+        fontSize: 14,
         fontWeight: FontWeight.w600,
-        color: AppColors.brandAppBarColor,
+        color: AppColors.textSecondary,
         letterSpacing: 1.2,
       ),
     );
@@ -286,7 +320,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
           style: AppTextStyles.outfit(
             fontSize: 12,
             fontWeight: FontWeight.w600,
-            color: AppColors.brandAppBarColor,
+            color: AppColors.fieldLabel,
           ),
         ),
         AppSpacing.v8,

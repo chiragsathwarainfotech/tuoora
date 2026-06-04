@@ -112,7 +112,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
         final data = controller.attendanceData.value?.today;
         if (data == null) return const SizedBox();
 
-        final isNotMarked = data.status == 'Not Marked';
+        final isNotMarked = data.status == 'Absent';
 
         return Row(
           children: [
@@ -423,25 +423,14 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
     // which was the main source of confusion — it now reads as amber
     // ("special day off") instead of as a missed attendance.
     final ({Color bg, Color fg}) palette = switch (type) {
-      'present' || 'p' => (
-        bg: AppColors.successBg,
-        fg: AppColors.greenText,
-      ),
-      'absent' || 'a' => (
-        bg: AppColors.errorBg,
-        fg: AppColors.bohoRed,
-      ),
-      'holiday' || 'h' => (
-        bg: AppColors.warningBg,
-        fg: AppColors.warningAmber,
-      ),
-      _ => (
-        bg: AppColors.fieldBg,
-        fg: AppColors.textMuted,
-      ),
+      'present' || 'p' => (bg: AppColors.successBg, fg: AppColors.greenText),
+      'absent' || 'a' => (bg: AppColors.errorBg, fg: AppColors.bohoRed),
+      'holiday' || 'h' => (bg: AppColors.warningBg, fg: AppColors.warningAmber),
+      _ => (bg: AppColors.fieldBg, fg: AppColors.textMuted),
     };
 
-    final isNoClass = type != 'present' &&
+    final isNoClass =
+        type != 'present' &&
         type != 'p' &&
         type != 'absent' &&
         type != 'a' &&
@@ -503,12 +492,7 @@ class AttendanceScreen extends GetView<AttendanceHistoryController> {
   /// Each legend chip is a miniature of the cell it represents (same bg,
   /// same fg ring, optional × for the no-class entry) so a student can map
   /// chip ↔ calendar day without translation.
-  Widget _legendItem(
-    Color bg,
-    Color fg,
-    String label, {
-    IconData? icon,
-  }) {
+  Widget _legendItem(Color bg, Color fg, String label, {IconData? icon}) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [

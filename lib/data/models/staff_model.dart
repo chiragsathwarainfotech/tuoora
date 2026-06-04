@@ -12,6 +12,7 @@ class Staff {
   final String? profileUrl;
   final StaffRole? role;
   final StaffDepartment? department;
+  final DateTime? createdAt;
 
   Staff({
     required this.id,
@@ -27,6 +28,7 @@ class Staff {
     this.profileUrl,
     this.role,
     this.department,
+    this.createdAt,
   });
 
   factory Staff.fromJson(Map<String, dynamic> json) {
@@ -47,6 +49,7 @@ class Staff {
       department: json['department'] != null
           ? StaffDepartment.fromJson(json['department'])
           : null,
+      createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at']) : null,
     );
   }
 }

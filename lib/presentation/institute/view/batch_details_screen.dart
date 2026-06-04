@@ -155,11 +155,9 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
                 AppSpacing.v12,
                 SizedBox(
                   width: double.infinity,
-                  child: Expanded(
-                    child: InstituteMetricCard(
-                      label: AppStrings.instNavStudents,
-                      value: '${controller.studentCount.value}',
-                    ),
+                  child: InstituteMetricCard(
+                    label: AppStrings.instNavStudents,
+                    value: '${controller.studentCount.value}',
                   ),
                 ),
               ],

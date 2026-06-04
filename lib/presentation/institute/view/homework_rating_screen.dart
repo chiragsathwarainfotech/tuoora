@@ -32,28 +32,35 @@ class HomeworkRatingScreen extends StatelessWidget {
               onBackTap: () => Get.back(),
             ),
             Expanded(
-              child: SingleChildScrollView(
-                padding: AppSpacing.x16.add(AppSpacing.y16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _buildHeader(homework),
-                    AppSpacing.v24,
-                    _buildProgressSection(homework),
-                    AppSpacing.v24,
-                    _buildFilterSection(controller),
-                    AppSpacing.v24,
-                    Obx(
-                      () => Column(
-                        children: controller.filteredSubmissions
-                            .map(
-                              (sub) => _buildStudentRatingCard(controller, sub),
-                            )
-                            .toList(),
+              child: Obx(
+                () => controller.isFetchingDetails.value
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.primaryBrand,
+                        ),
+                      )
+                    : SingleChildScrollView(
+                        padding: AppSpacing.x16.add(AppSpacing.y16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            _buildHeader(homework),
+                            AppSpacing.v24,
+                            _buildProgressSection(homework),
+                            AppSpacing.v24,
+                            _buildFilterSection(controller),
+                            AppSpacing.v24,
+                            Column(
+                              children: controller.filteredSubmissions
+                                  .map(
+                                    (sub) => _buildStudentRatingCard(
+                                        controller, sub),
+                                  )
+                                  .toList(),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
               ),
             ),
           ],
@@ -210,6 +217,8 @@ class HomeworkRatingScreen extends StatelessWidget {
           _buildFilterChip(controller, AppStrings.instFilterSubmitted, 1),
           AppSpacing.h12,
           _buildFilterChip(controller, 'Pending', 2),
+          AppSpacing.h12,
+          _buildFilterChip(controller, 'Reviewed', 3),
         ],
       ),
     );

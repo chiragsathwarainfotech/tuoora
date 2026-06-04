@@ -196,7 +196,10 @@ class ResourcesController extends GetxController {
     if (!validateForm()) return;
 
     try {
-      CommonLoading.show();
+      Get.dialog(
+        const Center(child: CommonLoading()),
+        barrierDismissible: false,
+      );
 
       final String typeStr = selectedType.value == ResourceType.image
           ? 'image'
@@ -217,14 +220,15 @@ class ResourcesController extends GetxController {
 
       clearForm();
 
-      CommonLoading.dismiss();
+      // Close loading dialog
+      Get.back();
       // Close creation dialog
       Get.back();
 
       AppSnackBar.success(AppStrings.resourceUploadedSuccessfully);
     } catch (e) {
       // Close loader if open
-      CommonLoading.dismiss();
+      Get.back();
       AppSnackBar.error('Failed to upload resource: ${e.toString()}');
     }
   }

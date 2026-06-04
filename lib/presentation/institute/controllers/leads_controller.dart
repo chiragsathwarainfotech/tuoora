@@ -2,6 +2,7 @@ import 'package:tuoora/core/api/api_exception.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/utils/validation_utils.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/data/models/lead_model.dart';
 import 'package:tuoora/data/repositories_impl/leads_repository_impl.dart';
 import 'package:flutter/material.dart';
@@ -275,10 +276,16 @@ class LeadsController extends GetxController {
   Future<void> deleteLead(int id) async {
     try {
       isLoading.value = true;
+      Get.dialog(
+        const Center(child: CommonLoading()),
+        barrierDismissible: false,
+      );
       await _leadsRepository.deleteLead(id);
       leadsList.removeWhere((l) => l.id == id);
+      Get.back(); // Dismiss loading dialog
       AppSnackBar.success(AppStrings.leadDeletedSuccessfully);
     } catch (e) {
+      Get.back(); // Dismiss loading dialog
       AppSnackBar.error('Failed to delete lead: $e');
     } finally {
       isLoading.value = false;

@@ -316,7 +316,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                 Obx(
                   () => Text(
                     DateFormat(
-                      'dd MMM, yyyy',
+                      'MM/dd/yyyy',
                     ).format(controller.selectedRecordDate.value),
                     style: AppTextStyles.outfit(
                       fontSize: 15,
@@ -538,7 +538,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
             _buildReceiptRow(
               'Record Date',
               DateFormat(
-                'dd MMM, yyyy',
+                'MM/dd/yyyy',
               ).format(controller.selectedRecordDate.value),
             ),
             _buildReceiptRow('Payment Method', controller.paymentMethod.value),

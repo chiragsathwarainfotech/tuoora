@@ -462,9 +462,6 @@ class _SubmitAssignmentButton extends StatelessWidget {
   }
 }
 
-// Non-interactive button skin used for the Completed / Overdue states.
-// Kept inert (no InkWell) so the user can't tap it; styled to read as a
-// status pill in button shape rather than an interactive control.
 class _StaticButton extends StatelessWidget {
   final Color backgroundColor;
   final IconData icon;

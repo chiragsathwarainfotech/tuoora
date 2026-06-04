@@ -200,7 +200,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
                 Obx(
                   () => Text(
                     DateFormat(
-                      'MMM dd, yyyy',
+                      'MM/dd/yyyy',
                     ).format(controller.selectedDate.value),
                     style: AppTextStyles.outfit(
                       fontSize: 14,

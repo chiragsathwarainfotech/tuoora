@@ -205,10 +205,13 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
             ),
           ),
           AppSpacing.v20,
-          AppInputField(
-            label: AppStrings.labelAddressLine1,
-            controller: controller.addressLine1Controller,
-            icon: Icons.location_on_outlined,
+          Obx(
+            () => AppInputField(
+              label: AppStrings.labelAddressLine1,
+              controller: controller.addressLine1Controller,
+              icon: Icons.location_on_outlined,
+              errorText: controller.addressError.value,
+            ),
           ),
           AppSpacing.v20,
           AppInputField(
@@ -217,22 +220,31 @@ class InstituteEditProfileScreen extends GetView<InstituteProfileController> {
             icon: Icons.location_on_outlined,
           ),
           AppSpacing.v20,
-          AppInputField(
-            label: AppStrings.labelCity,
-            controller: controller.cityController,
-            icon: Icons.location_city_rounded,
+          Obx(
+            () => AppInputField(
+              label: AppStrings.labelCity,
+              controller: controller.cityController,
+              icon: Icons.location_city_rounded,
+              errorText: controller.cityError.value,
+            ),
           ),
           AppSpacing.v20,
-          AppInputField(
-            label: AppStrings.labelState,
-            controller: controller.stateController,
-            icon: Icons.map_rounded,
+          Obx(
+            () => AppInputField(
+              label: AppStrings.labelState,
+              controller: controller.stateController,
+              icon: Icons.map_rounded,
+              errorText: controller.stateError.value,
+            ),
           ),
           AppSpacing.v20,
-          AppInputField(
-            label: AppStrings.labelCountry,
-            controller: controller.countryController,
-            icon: Icons.public_rounded,
+          Obx(
+            () => AppInputField(
+              label: AppStrings.labelCountry,
+              controller: controller.countryController,
+              icon: Icons.public_rounded,
+              errorText: controller.countryError.value,
+            ),
           ),
           AppSpacing.v20,
           Obx(

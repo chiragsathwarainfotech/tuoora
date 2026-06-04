@@ -16,16 +16,11 @@ abstract class InstituteRepositoryImpl {
   Future<InstituteSubscriptionData> getSubscriptionData();
   Future<void> updateProfile(Map<String, dynamic> data);
 
-  /// Updates the institute's UPI payment details. [qrImagePath] is a
-  /// local file path when the user just picked a new QR image, or null
-  /// to leave the existing image untouched. Returns the freshly-saved
-  /// `(upiId, upiQrCodeUrl)` so the UI can update without a refetch.
   Future<({String upiId, String? upiQrCodeUrl})> updatePaymentSettings({
     required String upiId,
     String? qrImagePath,
   });
 
-  // Subscription renewal (offline payment proof submission)
   Future<void> renewSubscription({
     required String transactionId,
     required String screenshotPath,
@@ -79,6 +74,7 @@ abstract class InstituteRepositoryImpl {
 
   // Homework
   Future<List<HomeworkModel>> getHomeworks(int batchId);
+  Future<HomeworkModel> getHomeworkDetails(int homeworkId);
   Future<dynamic> createHomework(Map<String, dynamic> data);
   Future<dynamic> submitHomeworkScore(
     int homeworkId,

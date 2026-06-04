@@ -1,4 +1,4 @@
-﻿import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/utils/subscription_guard.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
@@ -100,6 +100,7 @@ class _BatchesScreenState extends State<BatchesScreen> {
                             : Icons.school_outlined,
                         child: ListView.separated(
                           controller: _scrollController,
+                          physics: const AlwaysScrollableScrollPhysics(),
                           padding: AppSpacing.x16.add(
                             const EdgeInsets.only(bottom: 96),
                           ),

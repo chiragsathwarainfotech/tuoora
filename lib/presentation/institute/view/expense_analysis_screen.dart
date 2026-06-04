@@ -1,4 +1,4 @@
-﻿import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
@@ -137,17 +137,23 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
   }
 
   Widget _buildDateAndNavHeader(BuildContext context) {
-    return Obx(
-      () => MonthSelectorWidget(
-        selectedMonth: controller.selectedAnalysisMonth.value,
+    return Obx(() {
+      final selectedDate = controller.selectedAnalysisMonth.value;
+      final isPrevEnabled = selectedDate.year > 2026 ||
+          (selectedDate.year == 2026 && selectedDate.month > 1);
+
+      return MonthSelectorWidget(
+        selectedMonth: selectedDate,
         onMonthChanged: (date) {
           controller.setAnalysisMonth(date);
         },
         isNextEnabled: controller.canGoToNextMonth,
+        isPrevEnabled: isPrevEnabled,
+        minDate: DateTime(2026, 1),
         maxDate: DateTime.now(),
         helpText: 'Select Analysis Month',
-      ),
-    );
+      );
+    });
   }
 
   Widget _buildCategoryList(ExpenseAnalysis? analysis) {

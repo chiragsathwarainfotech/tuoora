@@ -9,6 +9,7 @@ import 'package:tuoora/config/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -46,7 +47,20 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    AppSpacing.v32,
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: IconButton(
+                        icon: const Icon(
+                          Icons.arrow_back_rounded,
+                          color: AppColors.textPrimary,
+                        ),
+                        onPressed: () {
+                          GetStorage().remove('last_selected_role');
+                          Get.offAllNamed(AppRoutes.roleSelection);
+                        },
+                      ),
+                    ),
+                    AppSpacing.v16,
                     Image.asset(AppImages.logoWithName, height: AppSpacing.s48),
                     AppSpacing.v12,
                     Text(

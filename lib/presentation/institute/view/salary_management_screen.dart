@@ -1,4 +1,4 @@
-﻿import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/utils/subscription_guard.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
@@ -78,18 +78,24 @@ class SalaryManagementScreen extends GetView<StaffController> {
   }
 
   Widget _buildMonthPicker(BuildContext context) {
-    return Obx(
-      () => MonthSelectorWidget(
-        selectedMonth: controller.selectedSalaryMonth.value,
+    return Obx(() {
+      final selectedDate = controller.selectedSalaryMonth.value;
+      final isPrevEnabled = selectedDate.year > 2026 ||
+          (selectedDate.year == 2026 && selectedDate.month > 1);
+
+      return MonthSelectorWidget(
+        selectedMonth: selectedDate,
         onMonthChanged: (date) {
           controller.selectedSalaryMonth.value = date;
           controller.fetchGlobalSalaries(page: null);
         },
         isNextEnabled: controller.canGoToNextSalaryMonth,
+        isPrevEnabled: isPrevEnabled,
+        minDate: DateTime(2026, 1),
         maxDate: DateTime.now(),
         helpText: 'Select Payout Month',
-      ),
-    );
+      );
+    });
   }
 
   Widget _buildTotalPaidCard() {

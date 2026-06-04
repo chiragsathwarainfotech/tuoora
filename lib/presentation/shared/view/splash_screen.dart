@@ -13,24 +13,38 @@ class SplashScreen extends GetView<SplashController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.primaryBrand,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(AppImages.logoWithName, height: AppSpacing.s56),
-            AppSpacing.v24,
-            Text(
-              AppStrings.tagLine,
-              textAlign: TextAlign.center,
-              style: AppTextStyles.outfit(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: AppColors.white,
-                letterSpacing: 0.6,
-              ),
+      backgroundColor: AppColors.white,
+      body: TweenAnimationBuilder<double>(
+        tween: Tween<double>(begin: 0.8, end: 1.0),
+        duration: const Duration(milliseconds: 1200),
+        curve: Curves.easeOutBack,
+        builder: (context, scale, child) {
+          return Transform.scale(
+            scale: scale,
+            child: Opacity(
+              opacity: ((scale - 0.8) / 0.2).clamp(0.0, 1.0),
+              child: child,
             ),
-          ],
+          );
+        },
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(AppImages.logoWithName, height: 80),
+              AppSpacing.v24,
+              Text(
+                AppStrings.tagLine,
+                textAlign: TextAlign.center,
+                style: AppTextStyles.outfit(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.textSecondary,
+                  letterSpacing: 0.8,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

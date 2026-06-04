@@ -67,8 +67,6 @@ class InstituteRepository implements InstituteRepositoryImpl {
       throw Exception('Invalid profile response');
     }
 
-    // Refresh the cached subscription so the dashboard banner stays current
-    // (e.g. flips from pending to active once an admin approves a renewal).
     final sub = body['subscription'];
     if (sub != null) {
       await Get.find<AuthService>().setSubscription(
@@ -87,7 +85,8 @@ class InstituteRepository implements InstituteRepositoryImpl {
   }) async {
     final fields = <String, dynamic>{
       'transaction_id': transactionId,
-      if (message != null && message.trim().isNotEmpty) 'message': message.trim(),
+      if (message != null && message.trim().isNotEmpty)
+        'message': message.trim(),
     };
 
     final formData = FormData(fields);
@@ -112,18 +111,22 @@ class InstituteRepository implements InstituteRepositoryImpl {
 
   @override
   Future<void> updateProfile(Map<String, dynamic> data) async {
-    final formData = FormData(data);
+    final Map<String, dynamic> fields = Map.from(data);
+    final String? logoUrl = fields['logo_url'];
 
-    if (data['logo_url'] != null &&
-        data['logo_url'].toString().isNotEmpty &&
-        !data['logo_url'].toString().startsWith('http')) {
+    if (logoUrl != null && logoUrl.isNotEmpty && !logoUrl.startsWith('http')) {
+      fields.remove('logo_url');
+    }
+
+    final formData = FormData(fields);
+
+    if (logoUrl != null && logoUrl.isNotEmpty && !logoUrl.startsWith('http')) {
       formData.files.add(
         MapEntry(
           'logo_url',
-          MultipartFile(data['logo_url'], filename: 'institute_logo.jpg'),
+          MultipartFile(File(logoUrl), filename: 'institute_logo.jpg'),
         ),
       );
-      data.remove('logo_url');
     }
 
     final response = await _apiClient.post(
@@ -495,6 +498,25 @@ class InstituteRepository implements InstituteRepositoryImpl {
     }
 
     return data.map((json) => HomeworkModel.fromJson(json)).toList();
+  }
+
+  @override
+  Future<HomeworkModel> getHomeworkDetails(int homeworkId) async {
+    final response = await _apiClient.get(
+      '${ApiConstants.instituteHomeworks}/$homeworkId',
+    );
+    if (response.status.hasError) {
+      throw Exception(
+        'Failed to fetch homework details: ${response.statusText}',
+      );
+    }
+
+    final body = response.body;
+    if (body == null || body['data'] == null) {
+      throw Exception('Invalid homework details response');
+    }
+
+    return HomeworkModel.fromJson(body['data']);
   }
 
   @override

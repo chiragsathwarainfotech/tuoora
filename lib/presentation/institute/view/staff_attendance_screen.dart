@@ -1,4 +1,4 @@
-﻿import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
@@ -133,28 +133,30 @@ class StaffAttendanceScreen extends GetView<StaffController> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              GestureDetector(
-                onTap: () => controller.previousMonth(),
-                child: const Icon(
+              Obx(
+                () => _buildCircleNavButton(
                   Icons.chevron_left,
-                  color: AppColors.textTertiary,
+                  () => controller.previousMonth(),
+                  enabled: controller.canGoToPrevStaffAttendanceMonth,
                 ),
               ),
-              Text(
-                DateFormat(
-                  'MMMM yyyy',
-                ).format(controller.selectedAttendanceMonth.value),
-                style: AppTextStyles.outfit(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimary,
+              Obx(
+                () => Text(
+                  DateFormat(
+                    'MMMM yyyy',
+                  ).format(controller.selectedAttendanceMonth.value),
+                  style: AppTextStyles.outfit(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textPrimary,
+                  ),
                 ),
               ),
-              GestureDetector(
-                onTap: () => controller.nextMonth(),
-                child: const Icon(
+              Obx(
+                () => _buildCircleNavButton(
                   Icons.chevron_right,
-                  color: AppColors.textTertiary,
+                  () => controller.nextMonth(),
+                  enabled: controller.canGoToNextStaffAttendanceMonth,
                 ),
               ),
             ],
@@ -168,6 +170,27 @@ class StaffAttendanceScreen extends GetView<StaffController> {
           AppSpacing.v24,
           _buildLegend(),
         ],
+      ),
+    );
+  }
+
+  Widget _buildCircleNavButton(
+    IconData icon,
+    VoidCallback onTap, {
+    bool enabled = true,
+  }) {
+    return GestureDetector(
+      onTap: enabled ? onTap : null,
+      child: Container(
+        width: AppSpacing.s36,
+        height: AppSpacing.s36,
+        decoration: BoxDecoration(
+          color: enabled
+              ? AppColors.primaryBrand
+              : AppColors.primaryBrand.withValues(alpha: 0.35),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+        ),
+        child: Icon(icon, color: AppColors.white, size: 24),
       ),
     );
   }

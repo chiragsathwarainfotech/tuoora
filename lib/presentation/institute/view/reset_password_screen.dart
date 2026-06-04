@@ -201,7 +201,7 @@ class ResetPasswordScreen extends GetView<ForgotPasswordController> {
                                             : "Resend code in ",
                                         style: AppTextStyles.outfit(
                                           fontSize: 14,
-                                          color: AppColors.blueSapphire,
+                                          color: AppColors.textSecondary,
                                         ),
                                       ),
                                     ),

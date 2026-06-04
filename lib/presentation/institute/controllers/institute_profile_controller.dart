@@ -13,6 +13,8 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tuoora/core/api/api_exception.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
+import 'dart:io';
+import 'package:permission_handler/permission_handler.dart';
 
 class InstituteProfileController extends GetxController {
   final InstituteRepositoryImpl _instituteRepository;
@@ -42,6 +44,10 @@ class InstituteProfileController extends GetxController {
   final ownerNameError = RxnString();
   final emailError = RxnString();
   final phoneError = RxnString();
+  final addressError = RxnString();
+  final cityError = RxnString();
+  final stateError = RxnString();
+  final countryError = RxnString();
   final pincodeError = RxnString();
 
   // ----- UPI Payment Settings (edit screen + profile-view card) -----
@@ -104,6 +110,10 @@ class InstituteProfileController extends GetxController {
     ownerController.addListener(() => _clearError(ownerNameError));
     emailController.addListener(() => _clearError(emailError));
     phoneController.addListener(() => _clearError(phoneError));
+    addressLine1Controller.addListener(() => _clearError(addressError));
+    cityController.addListener(() => _clearError(cityError));
+    stateController.addListener(() => _clearError(stateError));
+    countryController.addListener(() => _clearError(countryError));
     pincodeController.addListener(() => _clearError(pincodeError));
   }
 
@@ -164,6 +174,35 @@ class InstituteProfileController extends GetxController {
 
   Future<void> pickUpiQrImage(ImageSource source) async {
     try {
+      if (source == ImageSource.camera) {
+        final status = await Permission.camera.request();
+        if (status.isPermanentlyDenied) {
+          openAppSettings();
+          return;
+        } else if (!status.isGranted) {
+          return;
+        }
+      } else if (source == ImageSource.gallery) {
+        if (Platform.isIOS) {
+          final status = await Permission.photos.request();
+          if (status.isPermanentlyDenied) {
+            openAppSettings();
+            return;
+          } else if (!status.isGranted && !status.isLimited) {
+            return;
+          }
+        } else {
+          final storage = await Permission.storage.request();
+          final photos = await Permission.photos.request();
+          if (storage.isPermanentlyDenied || photos.isPermanentlyDenied) {
+            openAppSettings();
+            return;
+          } else if (!storage.isGranted && !photos.isGranted) {
+             return;
+          }
+        }
+      }
+
       final XFile? image = await _picker.pickImage(
         source: source,
         imageQuality: 80,
@@ -256,6 +295,13 @@ class InstituteProfileController extends GetxController {
               ),
               onTap: () async {
                 Get.back();
+                final status = await Permission.camera.request();
+                if (status.isPermanentlyDenied) {
+                  openAppSettings();
+                  return;
+                } else if (!status.isGranted) {
+                  return;
+                }
                 final XFile? image = await _picker.pickImage(
                   source: ImageSource.camera,
                 );
@@ -287,6 +333,24 @@ class InstituteProfileController extends GetxController {
               ),
               onTap: () async {
                 Get.back();
+                if (Platform.isIOS) {
+                  final status = await Permission.photos.request();
+                  if (status.isPermanentlyDenied) {
+                    openAppSettings();
+                    return;
+                  } else if (!status.isGranted && !status.isLimited) {
+                    return;
+                  }
+                } else {
+                  final storage = await Permission.storage.request();
+                  final photos = await Permission.photos.request();
+                  if (storage.isPermanentlyDenied || photos.isPermanentlyDenied) {
+                    openAppSettings();
+                    return;
+                  } else if (!storage.isGranted && !photos.isGranted) {
+                     return;
+                  }
+                }
                 final XFile? image = await _picker.pickImage(
                   source: ImageSource.gallery,
                 );
@@ -376,6 +440,18 @@ class InstituteProfileController extends GetxController {
     if (errors.containsKey('phone')) {
       phoneError.value = (errors['phone'] as List).first.toString();
     }
+    if (errors.containsKey('address')) {
+      addressError.value = (errors['address'] as List).first.toString();
+    }
+    if (errors.containsKey('city')) {
+      cityError.value = (errors['city'] as List).first.toString();
+    }
+    if (errors.containsKey('state')) {
+      stateError.value = (errors['state'] as List).first.toString();
+    }
+    if (errors.containsKey('country')) {
+      countryError.value = (errors['country'] as List).first.toString();
+    }
     if (errors.containsKey('pincode')) {
       pincodeError.value = (errors['pincode'] as List).first.toString();
     }
@@ -386,6 +462,10 @@ class InstituteProfileController extends GetxController {
     ownerNameError.value = null;
     emailError.value = null;
     phoneError.value = null;
+    addressError.value = null;
+    cityError.value = null;
+    stateError.value = null;
+    countryError.value = null;
     pincodeError.value = null;
   }
 

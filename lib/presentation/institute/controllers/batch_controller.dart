@@ -3,6 +3,7 @@ import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/data/models/staff_model.dart';
 import 'package:tuoora/presentation/institute/models/batch_model.dart';
 import 'package:tuoora/core/widgets/common_dialog.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
@@ -296,10 +297,19 @@ class BatchController extends GetxController {
       onConfirm: () async {
         try {
           isLoading.value = true;
+          Get.dialog(
+            const Center(child: CommonLoading()),
+            barrierDismissible: false,
+          );
           await _repository.deleteBatch(int.parse(id));
           batchesList.removeWhere((batch) => batch.id == id);
+          
+          Get.back(); // close loading dialog
+          Get.back(); // Pop the BatchDetailsScreen
+          
           AppSnackBar.success(AppStrings.batchDeletedSuccessfully, title: AppStrings.deleted);
         } catch (e) {
+          Get.back(); // close loading dialog
           AppSnackBar.error(e.toString());
         } finally {
           isLoading.value = false;

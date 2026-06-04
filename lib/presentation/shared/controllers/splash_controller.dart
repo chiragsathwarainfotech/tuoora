@@ -1,6 +1,7 @@
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/services/auth_service.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class SplashController extends GetxController {
   final AuthService _authService = Get.find<AuthService>();
@@ -37,12 +38,14 @@ class SplashController extends GetxController {
       await _authService.clearSession();
     }
 
-    // Not authenticated → always land on role selection. We deliberately
-    // do NOT auto-route to a specific role's login based on a remembered
-    // email — that bug stranded users who'd logged out of one role and
-    // wanted to sign in as the other. The remembered email still
-    // pre-fills the login form once the user picks a role.
-    Get.offAllNamed(AppRoutes.roleSelection);
+    // Not authenticated. If the user previously selected a role,
+    // take them back to that role's login screen. Otherwise, show Role Selection.
+    final lastRole = GetStorage().read('last_selected_role');
+    if (lastRole != null) {
+      Get.offAllNamed(AppRoutes.login, arguments: lastRole);
+    } else {
+      Get.offAllNamed(AppRoutes.roleSelection);
+    }
   }
 
   void _navigateToDashboard(String? role) {

@@ -88,6 +88,33 @@ class StaffController extends GetxController {
     return false;
   }
 
+  bool get canGoToNextStaffAttendanceMonth {
+    final now = DateTime.now();
+    if (selectedAttendanceMonth.value.year < now.year) return true;
+    if (selectedAttendanceMonth.value.year == now.year &&
+        selectedAttendanceMonth.value.month < now.month) {
+      return true;
+    }
+    return false;
+  }
+
+  bool get canGoToPrevStaffAttendanceMonth {
+    final staff = selectedStaff.value;
+    if (staff == null) return true;
+    final createdAt = staff.createdAt;
+    if (createdAt == null) return true;
+
+    final prevMonthDate = DateTime(
+      selectedAttendanceMonth.value.year,
+      selectedAttendanceMonth.value.month - 1,
+    );
+    final createdMonthStart = DateTime(createdAt.year, createdAt.month, 1);
+    if (prevMonthDate.isBefore(createdMonthStart)) {
+      return false;
+    }
+    return true;
+  }
+
   // Add/Edit Staff Reactive State
   final selectedDepartmentId = Rxn<int>();
   final employmentType = 'Salary'.obs;
@@ -491,6 +518,15 @@ class StaffController extends GetxController {
     selectedLogStaff.value = staff;
     logSearchQuery.value = '';
     filteredLogStaffs.clear();
+  }
+
+  void selectLogStaffById(int? id) {
+    if (id == null) {
+      removeLogStaff();
+      return;
+    }
+    final staff = staffList.firstWhereOrNull((s) => s.id == id);
+    if (staff != null) setLogStaff(staff);
   }
 
   void removeLogStaff() => selectedLogStaff.value = null;

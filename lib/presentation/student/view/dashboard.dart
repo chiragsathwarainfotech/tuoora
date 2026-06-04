@@ -114,7 +114,9 @@ class StudentDashboard extends GetView<StudentDashboardController> {
                           }),
                           const SizedBox(height: AppSpacing.s16),
                         ],
-                        const StudentSectionHeader(title: AppStrings.todaySAttendance),
+                        const StudentSectionHeader(
+                          title: AppStrings.todaySAttendance,
+                        ),
                         const SizedBox(height: AppSpacing.s12),
                         GestureDetector(
                           onTap: _openAttendanceTab,
@@ -524,7 +526,7 @@ class _AttendanceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isNotMarked = status.toLowerCase() == 'not marked';
+    final isNotMarked = status == 'Absent';
     final bgColor = isNotMarked ? AppColors.primaryBrand : AppColors.successBg;
     final iconColor = isNotMarked ? AppColors.white : AppColors.successGreen;
     final textColor = isNotMarked

@@ -23,15 +23,44 @@ class CommonStateWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isLoading && isEmpty) {
-      return const Center(child: CommonLoading());
+      return LayoutBuilder(builder: (context, constraints) {
+        if (constraints.maxHeight == double.infinity) {
+          return const Padding(
+            padding: EdgeInsets.all(32.0),
+            child: Center(child: CommonLoading()),
+          );
+        }
+        return SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+            child: const Center(child: CommonLoading()),
+          ),
+        );
+      });
     }
 
     if (isEmpty) {
-      return AppEmptyView(
-        icon: emptyIcon,
-        title: emptyTitle,
-        message: emptySubtitle,
-      );
+      return LayoutBuilder(builder: (context, constraints) {
+        if (constraints.maxHeight == double.infinity) {
+          return AppEmptyView(
+            icon: emptyIcon,
+            title: emptyTitle,
+            message: emptySubtitle,
+          );
+        }
+        return SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+            child: AppEmptyView(
+              icon: emptyIcon,
+              title: emptyTitle,
+              message: emptySubtitle,
+            ),
+          ),
+        );
+      });
     }
 
     return child;

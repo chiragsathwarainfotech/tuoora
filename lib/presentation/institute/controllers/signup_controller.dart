@@ -13,6 +13,8 @@ import 'package:tuoora/data/repositories/auth_repository.dart';
 import 'package:tuoora/core/utils/validation_utils.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'dart:async';
+import 'dart:io';
+import 'package:permission_handler/permission_handler.dart';
 
 class SignupController extends GetxController {
   final _repository = Get.find<InstituteRepository>();
@@ -160,6 +162,35 @@ class SignupController extends GetxController {
   Future<void> _handleImageSelection(ImageSource source) async {
     Get.back();
     try {
+      if (source == ImageSource.camera) {
+        final status = await Permission.camera.request();
+        if (status.isPermanentlyDenied) {
+          openAppSettings();
+          return;
+        } else if (!status.isGranted) {
+          return;
+        }
+      } else if (source == ImageSource.gallery) {
+        if (Platform.isIOS) {
+          final status = await Permission.photos.request();
+          if (status.isPermanentlyDenied) {
+            openAppSettings();
+            return;
+          } else if (!status.isGranted && !status.isLimited) {
+            return;
+          }
+        } else {
+          final storage = await Permission.storage.request();
+          final photos = await Permission.photos.request();
+          if (storage.isPermanentlyDenied || photos.isPermanentlyDenied) {
+            openAppSettings();
+            return;
+          } else if (!storage.isGranted && !photos.isGranted) {
+             return;
+          }
+        }
+      }
+
       final XFile? image = await _picker.pickImage(
         source: source,
         imageQuality: 70,
@@ -328,7 +359,6 @@ class SignupController extends GetxController {
 
       await _repository.updateProfile(data);
 
-      // Update local session with isProfileSetup = true
       final currentUser = _authService.currentUser;
       if (currentUser != null) {
         final updatedUser = User(

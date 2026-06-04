@@ -10,6 +10,7 @@ class HomeworkRatingController extends GetxController {
   final filterIndex = 0.obs; // 0: All, 1: Submitted, 2: Pending
   final submissions = <HomeworkSubmission>[].obs;
   final isLoading = false.obs;
+  final isFetchingDetails = false.obs;
   final _repository = Get.find<InstituteRepositoryImpl>();
 
   HomeworkRatingController(this.homework);
@@ -18,6 +19,19 @@ class HomeworkRatingController extends GetxController {
   void onInit() {
     super.onInit();
     submissions.assignAll(homework.submissions);
+    _fetchHomeworkDetails();
+  }
+
+  Future<void> _fetchHomeworkDetails() async {
+    try {
+      isFetchingDetails.value = true;
+      final detailedHomework = await _repository.getHomeworkDetails(int.parse(homework.id));
+      submissions.assignAll(detailedHomework.submissions);
+    } catch (e) {
+      AppSnackBar.error('Failed to load student list');
+    } finally {
+      isFetchingDetails.value = false;
+    }
   }
 
   bool get canEdit => homework.isActive;
@@ -25,10 +39,13 @@ class HomeworkRatingController extends GetxController {
   List<HomeworkSubmission> get filteredSubmissions {
     if (filterIndex.value == 0) return submissions;
     if (filterIndex.value == 1) {
-      return submissions.where((s) => s.isSubmitted).toList();
+      return submissions.where((s) => s.status.toLowerCase() == 'submitted').toList();
     }
     if (filterIndex.value == 2) {
-      return submissions.where((s) => !s.isSubmitted).toList();
+      return submissions.where((s) => s.status.toLowerCase() == 'pending').toList();
+    }
+    if (filterIndex.value == 3) {
+      return submissions.where((s) => s.status.toLowerCase() == 'reviewed').toList();
     }
     return submissions;
   }

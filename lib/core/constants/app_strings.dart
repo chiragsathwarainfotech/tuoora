@@ -80,7 +80,7 @@ class AppStrings {
   static const String instBatchClassroomHint = 'Enter class room';
   static const String instBatchAssignedStaffLabel = 'Assigned Staff';
   static const String instBatchAssignedStaffHint = 'Select Staff';
-  static const String instSaveBatchBtn = 'Save Batch Details';
+  static const String instSaveBatchBtn = 'Save Batch';
 
   // Institute Batch Resources
   static const String instBatchResourcesTitle = 'Batch Resources';
@@ -121,6 +121,7 @@ class AppStrings {
 
   // Institute Edit Profile
   static const String instChangeLogo = 'Change Logo';
+  static const String instLogo = ' Institute Logo';
   static const String instInstituteNameLabel = 'Institute Name';
   static const String instOwnerNameLabel = 'Owner Name';
   static const String instContactEmailLabel = 'Contact Email';
@@ -305,7 +306,7 @@ class AppStrings {
   static const String labelFeeCollectionReport = 'Fee Collection Report';
   static const String labelNotNow = 'Not Now';
   static const String labelNotifications = 'Notifications';
-  static const String msgOtpResent = 'OTP resend successfully';
+  static const String msgOtpResent = 'OTP resend';
   static const String labelPincode = 'Pincode';
   static const String labelReceipts = 'Receipts';
   static const String labelRecording = 'Recording…';
@@ -334,7 +335,7 @@ class AppStrings {
   static const String deleteBatch = 'Delete Batch';
   static const String areYouSureYouWantTo =
       'Are you sure you want to delete this batch?';
-  static const String batchDeletedSuccessfully = 'Batch deleted successfully';
+  static const String batchDeletedSuccessfully = 'Batch deleted';
   static const String deleted = 'Deleted';
   static const String studentAssignmentIsCurrentlyManagedVia =
       'Student assignment is currently managed via Student Profile';
@@ -359,8 +360,7 @@ class AppStrings {
   static const String thisConversationWasDeleted =
       'This conversation was deleted';
   static const String expenseAdded = 'Expense added';
-  static const String homeworkCreatedSuccessfully =
-      'Homework created successfully';
+  static const String homeworkCreatedSuccessfully = 'Homework created';
   static const String noSubmissionsToRate = 'No submissions to rate';
   static const String ratingsSubmitted = 'Ratings submitted';
   static const String failedToSubmitRatings = 'Failed to submit ratings';
@@ -368,47 +368,42 @@ class AppStrings {
   static const String profileUpdated = 'Profile updated';
   static const String failedToFetchSubscriptionData =
       'Failed to fetch subscription data';
-  static const String leadCreatedSuccessfully = 'Lead created successfully';
-  static const String leadUpdatedSuccessfully = 'Lead updated successfully';
-  static const String leadDeletedSuccessfully = 'Lead deleted successfully';
+  static const String leadCreatedSuccessfully = 'Lead created';
+  static const String leadUpdatedSuccessfully = 'Lead updated';
+  static const String leadDeletedSuccessfully = 'Lead deleted';
   static const String interactionNoteAddedSuccessfully =
-      'Interaction note added successfully';
-  static const String noteUpdatedSuccessfully = 'Note updated successfully';
-  static const String noteCreatedSuccessfully = 'Note created successfully';
-  static const String noteDeletedSuccessfully = 'Note deleted successfully';
+      'Interaction note added';
+  static const String noteUpdatedSuccessfully = 'Note updated';
+  static const String noteCreatedSuccessfully = 'Note created';
+  static const String noteDeletedSuccessfully = 'Note deleted';
   static const String feeRecordCreatedAndCollectedSuccessfully =
-      'Fee record created and collected successfully';
+      'Fee record created and collected';
   static const String failedToLoadFeeReport = 'Failed to load fee report';
   static const String failedToLoadAttendanceReport =
       'Failed to load attendance report';
   static const String failedToLoadPerformanceReport =
       'Failed to load performance report';
   static const String failedToLoadBatchDetails = 'Failed to load batch details';
-  static const String resourceDeletedSuccessfully =
-      'Resource deleted successfully';
+  static const String resourceDeletedSuccessfully = 'Resource deleted';
   static const String onlyImageVideoAndDocumentFiles =
       'Only image, video and document files are allowed.';
   static const String unsupportedFileType = 'Unsupported file type';
   static const String fileTooLarge = 'File too large';
-  static const String resourceUploadedSuccessfully =
-      'Resource uploaded successfully';
+  static const String resourceUploadedSuccessfully = 'Resource uploaded';
   static const String passwordUpdated = 'Password updated';
   static const String selectLogoSource = 'Select Logo Source';
   static const String registrationFailed = 'Registration Failed';
-  static const String otpVerifiedSuccessfully = 'OTP verified successfully.';
+  static const String otpVerifiedSuccessfully = 'OTP verified.';
   static const String verificationFailed = 'Verification Failed';
-  static const String profileCreatedSuccessfully =
-      'Profile created successfully';
+  static const String profileCreatedSuccessfully = 'Profile created';
   static const String setupFailed = 'Setup Failed';
-  static const String salaryRecordSavedSuccessfully =
-      'Salary record saved successfully';
-  static const String attendanceLoggedSuccessfully =
-      'Attendance logged successfully';
+  static const String salaryRecordSavedSuccessfully = 'Salary record saved';
+  static const String attendanceLoggedSuccessfully = 'Attendance logged';
   static const String failedToLoadSalaryPreview =
       'Failed to load salary preview';
-  static const String staffUpdatedSuccessfully = 'Staff updated successfully';
-  static const String staffCreatedSuccessfully = 'Staff created successfully';
-  static const String staffDeletedSuccessfully = 'Staff deleted successfully';
+  static const String staffUpdatedSuccessfully = 'Staff updated';
+  static const String staffCreatedSuccessfully = 'Staff created';
+  static const String staffDeletedSuccessfully = 'Staff deleted';
   static const String reminderSent = 'Reminder Sent';
   static const String onceYouHaveCompletedThePayment =
       'Once you have completed the payment, submit your transaction ';
@@ -418,8 +413,7 @@ class AppStrings {
       'Your renewal request has been submitted. We will review it shortly.';
   static const String pleaseSelectABatchForThis =
       'Please select a batch for this update.';
-  static const String updateBroadcastedSuccessfully =
-      'Update broadcasted successfully';
+  static const String updateBroadcastedSuccessfully = 'Update broadcasted';
   static const String enterAllCredentials = 'Enter all credentials';
   static const String invalidPhoneNumber = 'Invalid phone number';
   static const String settingsSaved = 'Settings saved';
@@ -694,8 +688,7 @@ class AppStrings {
   static const String failedToLoadAssignments = 'Failed to load assignments';
   static const String failedToLoadAssignmentDetails =
       'Failed to load assignment details';
-  static const String assignmentSubmittedSuccessfully =
-      'Assignment submitted successfully.';
+  static const String assignmentSubmittedSuccessfully = 'Assignment submitted.';
   static const String pleaseWaitYourFileIsBeing =
       'Please wait, your file is being downloaded...';
   static const String failedToLoadReceipt = 'Failed to load receipt';
@@ -772,8 +765,7 @@ class AppStrings {
   static const String tipOpenBothFilesToReach =
       'Tip: Open both files to reach 100% progress.';
   static const String yourProgress = 'YOUR PROGRESS';
-  static const String homeworkSubmittedSuccessfully =
-      'Homework submitted successfully!';
+  static const String homeworkSubmittedSuccessfully = 'Homework submitted';
   static const String tuitionTerm1 = 'Tuition - Term 1';
   static const String libraryOverdueFine = 'Library Overdue Fine';
   static const String annualSportsFee = 'Annual Sports Fee';

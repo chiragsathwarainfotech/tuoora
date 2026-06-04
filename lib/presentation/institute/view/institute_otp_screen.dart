@@ -61,25 +61,51 @@ class InstituteOtpScreen extends GetView<SignupController> {
                         child: Column(
                           children: [
                             if (!controller.canResend.value)
-                              Text(
-                                'Didn\'t receive? 00:${controller.timerSeconds.value.toString().padLeft(2, '0')}',
-                                style: AppTextStyles.outfit(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColors.blueSapphire,
-                                ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Didn\'t receive the code? ',
+                                    style: AppTextStyles.outfit(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      color: AppColors.textSecondary,
+                                    ),
+                                  ),
+                                  Text(
+                                    '00:${controller.timerSeconds.value.toString().padLeft(2, '0')}',
+                                    style: AppTextStyles.outfit(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColors.primaryBrand,
+                                    ),
+                                  ),
+                                ],
                               ),
                             if (controller.canResend.value)
-                              TextButton(
-                                onPressed: controller.resendOtp,
-                                child: Text(
-                                  AppStrings.resendOtp,
-                                  style: AppTextStyles.outfit(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                    color: AppColors.primaryBrand,
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Didn\'t receive the code? ',
+                                    style: AppTextStyles.outfit(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      color: AppColors.textSecondary,
+                                    ),
                                   ),
-                                ),
+                                  GestureDetector(
+                                    onTap: controller.resendOtp,
+                                    child: Text(
+                                      AppStrings.resendOtp,
+                                      style: AppTextStyles.outfit(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColors.primaryBrand,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                           ],
                         ),
@@ -106,7 +132,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
           style: AppTextStyles.outfit(
             fontSize: 18,
             fontWeight: FontWeight.w600,
-            color: AppColors.brandAppBarColor,
+            color: AppColors.primaryBrand,
             letterSpacing: 1.5,
           ),
         ),
@@ -119,7 +145,7 @@ class InstituteOtpScreen extends GetView<SignupController> {
               style: AppTextStyles.outfit(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
-                color: AppColors.blueSapphire,
+                color: AppColors.primaryBrand,
                 height: 1.5,
               ),
               children: [

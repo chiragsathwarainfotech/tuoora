@@ -12,6 +12,7 @@ class MonthSelectorWidget extends StatelessWidget {
   final String? helpText;
   final bool isNextEnabled;
   final bool isPrevEnabled;
+  final DateTime? minDate;
   final DateTime? maxDate;
 
   const MonthSelectorWidget({
@@ -21,6 +22,7 @@ class MonthSelectorWidget extends StatelessWidget {
     this.helpText,
     this.isNextEnabled = true,
     this.isPrevEnabled = true,
+    this.minDate,
     this.maxDate,
   });
 
@@ -34,7 +36,7 @@ class MonthSelectorWidget extends StatelessWidget {
             final picked = await Get.dialog<DateTime>(
               AppMonthPicker(
                 initialDate: selectedMonth,
-                firstDate: DateTime(2020),
+                firstDate: minDate ?? DateTime(2020),
                 lastDate: maxDate ?? DateTime.now(),
               ),
             );

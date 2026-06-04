@@ -54,7 +54,16 @@ class RecordFeeController extends GetxController {
 
     final amountVal = ValidationUtils.validateAmount(amount.value, 'Amount');
     amountError.value = amountVal;
-    if (amountVal != null) isValid = false;
+    if (amountVal != null) {
+      isValid = false;
+    } else if (selectedStudent.value != null) {
+      final parsedAmount = double.tryParse(amount.value) ?? 0;
+      final pendingFees = selectedStudent.value!.totalDue;
+      if (parsedAmount > pendingFees) {
+        amountError.value = 'Amount cannot exceed pending fees of ₹$pendingFees';
+        isValid = false;
+      }
+    }
 
     return isValid;
   }

@@ -62,6 +62,14 @@ class StudentFeesRepository {
         .toList();
   }
 
+  Future<Map<String, dynamic>> getPaymentInfo() async {
+    final response = await _apiClient.get(ApiConstants.studentPaymentInfo);
+    if (response.status.hasError) {
+      throw Exception('Failed to load payment info: ${response.statusText}');
+    }
+    return (response.body['data'] as Map<String, dynamic>?) ?? {};
+  }
+
   Future<List<int>> downloadFeeReceipt(
     int feeId, {
     void Function(double)? onProgress,

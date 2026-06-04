@@ -43,9 +43,6 @@ class FeesController extends GetxController {
     _repository = StudentFeesRepository(Get.find<ApiClient>());
     _instituteRepository = StudentInstituteRepository(Get.find<ApiClient>());
     loadFees();
-    // Fetch UPI handle + QR url for the Pay Fees screen in the background.
-    // We don't block the fees list on this — the Pay Fees screen has its
-    // own empty-state when payment isn't configured.
     _loadBillingProfile();
   }
 
@@ -62,22 +59,18 @@ class FeesController extends GetxController {
     }
   }
 
-  /// Pulls the institute's UPI ID + QR URL from `/student/institute` and
-  /// folds them into [billingProfile]. Silent on failure — the Pay Fees
-  /// screen falls back to its empty state if both fields are missing.
   Future<void> _loadBillingProfile() async {
     try {
       final inst = await _instituteRepository.getInstitute();
+      final paymentInfo = await _repository.getPaymentInfo();
       billingProfile.value = StudentBillingProfile(
         studentName: billingProfile.value.studentName,
         rollNumber: billingProfile.value.rollNumber,
         instituteName: inst.name,
-        instituteUpiHandle: inst.upiId ?? '',
-        instituteUpiQrCodeUrl: inst.upiQrCodeUrl,
+        instituteUpiHandle: paymentInfo['upi_id'] ?? '',
+        instituteUpiQrCodeUrl: paymentInfo['upi_qr_code_url'],
       );
-    } catch (_) {
-      // Leave billingProfile as-is; Pay Fees screen will show empty state.
-    }
+    } catch (_) {}
   }
 
   Future<void> openReceipt(FeeStatement statement) async {

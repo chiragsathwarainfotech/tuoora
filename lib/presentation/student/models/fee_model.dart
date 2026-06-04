@@ -118,11 +118,6 @@ class StudentBillingProfile {
   final String rollNumber;
   final String instituteName;
   final String instituteUpiHandle;
-
-  /// Server-hosted UPI QR PNG/JPG the institute uploaded via the
-  /// `/institute/profile/payment/update` endpoint. Null when the
-  /// institute hasn't configured payments yet — the Pay Fees screen
-  /// shows an empty state in that case.
   final String? instituteUpiQrCodeUrl;
 
   const StudentBillingProfile({
@@ -133,8 +128,6 @@ class StudentBillingProfile {
     this.instituteUpiQrCodeUrl,
   });
 
-  /// True when at least one of (QR image, UPI ID) is available so the
-  /// Pay Fees screen can render something actionable.
   bool get hasUpiPayment =>
       (instituteUpiQrCodeUrl != null && instituteUpiQrCodeUrl!.isNotEmpty) ||
       instituteUpiHandle.isNotEmpty;
@@ -175,7 +168,6 @@ class StudentReceipt {
   }
 }
 
-/// Combined response wrapper for `/student/fees`.
 class StudentFeesData {
   final FeeSummary summary;
   final List<FeeStatement> fees;

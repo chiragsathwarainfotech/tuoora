@@ -1,12 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
-import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/presentation/student/controllers/fees_controller.dart';
 import 'package:tuoora/presentation/student/models/fee_model.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
@@ -46,15 +44,6 @@ class StudentPayFeesScreen extends GetView<FeesController> {
                         )
                       else
                         const _UpiUnavailableCard(),
-                      if (hasUpi && profile.instituteUpiHandle.isNotEmpty) ...[
-                        const SizedBox(height: AppSpacing.s12),
-                        _OpenInGooglePayButton(
-                          onTap: () => AppSnackBar.success(
-                            profile.instituteUpiHandle,
-                            title: AppStrings.studentPayFeesOpenInAnyUpi,
-                          ),
-                        ),
-                      ],
                       const SizedBox(height: AppSpacing.s16),
                       _HowItWorksCard(profile: profile, summary: summary),
                       const SizedBox(height: AppSpacing.s8),
@@ -145,28 +134,8 @@ class _UpiCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Text(
-            AppStrings.studentPayFeesScanWith,
-            style: AppTextStyles.outfit(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: AppColors.textTertiary,
-              letterSpacing: 1.4,
-            ),
-          ),
-          const SizedBox(height: AppSpacing.s12),
           _QrBlock(qrUrl: qrUrl, fallbackInitial: profile.instituteName),
-          const SizedBox(height: AppSpacing.s12),
-          if (profile.instituteName.isNotEmpty)
-            Text(
-              profile.instituteName,
-              style: AppTextStyles.outfit(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: AppColors.textPrimary,
-              ),
-            ),
-          const SizedBox(height: 6),
+          const SizedBox(height: AppSpacing.s16),
           if (upiId.isNotEmpty)
             GestureDetector(
               onTap: onCopy,
@@ -174,7 +143,7 @@ class _UpiCard extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: AppSpacing.s10,
-                  vertical: 4,
+                  vertical: 8,
                 ),
                 decoration: BoxDecoration(
                   color: AppColors.background,
@@ -186,38 +155,27 @@ class _UpiCard extends StatelessWidget {
                     Text(
                       upiId,
                       style: AppTextStyles.outfit(
-                        fontSize: 12,
+                        fontSize: 14,
                         color: AppColors.textSecondary,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    const SizedBox(width: 6),
+                    const SizedBox(width: 8),
                     const Icon(
                       Icons.copy_rounded,
-                      size: 12,
+                      size: 16,
                       color: AppColors.textTertiary,
                     ),
                   ],
                 ),
               ),
             )
-          else
-            Text(
-              AppStrings.studentPayFeesUpiOptional,
-              style: AppTextStyles.outfit(
-                fontSize: 11,
-                color: AppColors.textMuted,
-                fontStyle: FontStyle.italic,
-              ),
-            ),
         ],
       ),
     );
   }
 }
 
-/// Renders the institute's hosted UPI QR PNG/JPG when available, or a
-/// branded "QR coming soon" tile when only the UPI ID is set.
 class _QrBlock extends StatelessWidget {
   final String? qrUrl;
   final String fallbackInitial;
@@ -256,9 +214,6 @@ class _QrBlock extends StatelessWidget {
   }
 }
 
-/// Friendly fallback shown when the image fails to load or no QR is set
-/// yet but a UPI ID is. We intentionally do NOT draw a fake QR — that
-/// would be unscannable and misleading.
 class _QrPlaceholder extends StatelessWidget {
   final String initial;
 
@@ -312,9 +267,6 @@ class _QrPlaceholder extends StatelessWidget {
   }
 }
 
-/// Empty-state card shown when the institute hasn't configured any UPI
-/// payment details yet. Replaces both the QR card and the "Open in UPI"
-/// CTA so the student isn't presented with a non-functional button.
 class _UpiUnavailableCard extends StatelessWidget {
   const _UpiUnavailableCard();
 
@@ -334,10 +286,7 @@ class _UpiUnavailableCard extends StatelessWidget {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 12,
-          vertical: 24,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 24),
         child: Column(
           children: [
             Container(
@@ -374,49 +323,6 @@ class _UpiUnavailableCard extends StatelessWidget {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _OpenInGooglePayButton extends StatelessWidget {
-  final VoidCallback onTap;
-
-  const _OpenInGooglePayButton({required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: AppColors.primaryBrand,
-      borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: AppSpacing.s14,
-            horizontal: AppSpacing.s16,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.account_balance_wallet_rounded,
-                size: 18,
-                color: AppColors.white,
-              ),
-              AppSpacing.h12,
-              Text(
-                AppStrings.studentPayFeesOpenInAnyUpi,
-                style: AppTextStyles.outfit(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.white,
-                ),
-              ),
-            ],
-          ),
         ),
       ),
     );

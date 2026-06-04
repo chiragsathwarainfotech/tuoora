@@ -26,6 +26,7 @@ class ApiConstants {
   static const String studentResources = '/student/resources';
   static const String studentDashboard = '/student/dashboard';
   static const String studentFees = '/student/fees';
+  static const String studentPaymentInfo = '/student/payment-info';
   static const String studentReceipts = '/student/receipts';
   static String studentReceiptDetail(int id) => '/student/receipts/$id';
   static String studentFeeDownload(int id) => '/student/fees/$id/download';

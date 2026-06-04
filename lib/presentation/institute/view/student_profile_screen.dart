@@ -29,7 +29,7 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
             Obx(() {
               final student = controller.currentStudent.value;
               final name = student?.name ?? "";
-              final id = student?.id.toString() ?? "";
+              final id = student?.enrollmentID.toString() ?? "";
               final imageUrl = student?.imageUrl ?? "";
               final grade = student?.grade ?? '-';
               return Column(

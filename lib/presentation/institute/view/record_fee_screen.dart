@@ -689,7 +689,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
 
   Widget _buildFixedFooterButton() {
     return Container(
-      padding: AppSpacing.cardPadding,
+      padding: AppSpacing.x16,
       child: AppButton(
         label: AppStrings.instSaveFeeBtn,
         onPressed: () => controller.saveRecord(),

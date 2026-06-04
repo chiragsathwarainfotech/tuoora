@@ -211,7 +211,7 @@ class AssignToBatchScreen extends StatelessWidget {
                         padding: AppSpacing.all16,
                         child: Obx(
                           () => AppButton(
-                            label: AppStrings.confirmSaveAssignment,
+                            label: AppStrings.assignStudent,
                             icon: Icons.check_circle_rounded,
                             isLoading: controller.isLoading.value,
                             isDisabled: controller.selectedStudents.isEmpty,
@@ -246,69 +246,69 @@ class AssignToBatchScreen extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.only(top: 10),
             child: ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: controller.searchResults.length,
-            itemBuilder: (context, index) {
-              final student = controller.searchResults[index];
-              return Container(
-                padding: AppSpacing.cardPadding,
-                margin: AppSpacing.bottom10,
-                decoration: BoxDecoration(
-                  color: AppColors.white,
-                  borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.02),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _buildPickerAvatar(
-                      imageUrl: student.imageUrl,
-                      name: student.name,
-                    ),
-                    AppSpacing.h16,
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            student.name,
-                            style: AppTextStyles.outfit(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.textPrimary,
-                            ),
-                          ),
-                          Text(
-                            'Enrollment ID: ${student.id.toString()}',
-                            style: AppTextStyles.outfit(
-                              fontSize: 12,
-                              color: AppColors.textMuted,
-                            ),
-                          ),
-                        ],
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: controller.searchResults.length,
+              itemBuilder: (context, index) {
+                final student = controller.searchResults[index];
+                return Container(
+                  padding: AppSpacing.cardPadding,
+                  margin: AppSpacing.bottom10,
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.02),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
                       ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        controller.addStudentToSelection(student);
-                      },
-                      child: const Icon(
-                        Icons.add_circle_outline_rounded,
-                        color: AppColors.primaryBrand,
-                        size: 24,
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _buildPickerAvatar(
+                        imageUrl: student.imageUrl,
+                        name: student.name,
                       ),
-                    ),
-                  ],
-                ),
-              );
-            },
+                      AppSpacing.h16,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              student.name,
+                              style: AppTextStyles.outfit(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.textPrimary,
+                              ),
+                            ),
+                            Text(
+                              'Enrollment ID: ${student.id.toString()}',
+                              style: AppTextStyles.outfit(
+                                fontSize: 12,
+                                color: AppColors.textMuted,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          controller.addStudentToSelection(student);
+                        },
+                        child: const Icon(
+                          Icons.add_circle_outline_rounded,
+                          color: AppColors.primaryBrand,
+                          size: 24,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
           );
         }),

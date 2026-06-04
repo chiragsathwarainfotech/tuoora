@@ -141,34 +141,16 @@ class StaffListScreen extends GetView<StaffController> {
           children: [
             _buildStaffAvatar(staff.profileUrl ?? '', staff.fullName, size: 60),
             AppSpacing.v8,
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: Text(
-                staff.fullName,
-                style: AppTextStyles.outfit(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimary,
-                ),
-                textAlign: TextAlign.center,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+            Text(
+              staff.fullName,
+              style: AppTextStyles.outfit(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: AppColors.textPrimary,
               ),
-            ),
-            AppSpacing.v2,
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: Text(
-                staff.role?.name ?? 'No Role',
-                style: AppTextStyles.outfit(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w400,
-                  color: AppColors.textTertiary,
-                ),
-                textAlign: TextAlign.center,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),

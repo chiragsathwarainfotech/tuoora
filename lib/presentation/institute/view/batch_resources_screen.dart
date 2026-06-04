@@ -16,6 +16,7 @@ import 'package:tuoora/core/widgets/app_empty_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:tuoora/presentation/institute/widgets/institute_label.dart';
 
 class BatchResourcesScreen extends StatelessWidget {
   const BatchResourcesScreen({super.key});
@@ -213,6 +214,8 @@ class BatchResourcesScreen extends StatelessWidget {
             maxLines: 3,
           ),
           AppSpacing.v24,
+          const InstituteLabel(AppStrings.attachments),
+          AppSpacing.v4,
           _buildAttachmentButton(controller),
         ],
       ),

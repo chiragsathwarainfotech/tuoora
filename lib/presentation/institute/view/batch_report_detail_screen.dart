@@ -78,7 +78,7 @@ class BatchReportDetailScreen extends StatelessWidget {
     if (reportType == 'Fee') {
       final summary = controller.batchFeeDetail.value?.summary;
       title = 'Batch Collected Total';
-      value = '₹${summary?.totalAmount.toStringAsFixed(0) ?? '0'}';
+      value = '₹${summary?.paidAmount.toStringAsFixed(0) ?? '0'}';
     } else if (reportType == 'Attendance') {
       final summary = controller.batchAttendanceDetail.value?.summary;
       final total = summary?.total ?? 1;

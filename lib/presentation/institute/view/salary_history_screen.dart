@@ -29,8 +29,7 @@ class SalaryHistoryScreen extends GetView<StaffController> {
                       controller.isLoadingSalary.value && salaries.isEmpty,
                   isEmpty: salaries.isEmpty,
                   emptyTitle: AppStrings.noSalaryRecords,
-                  emptySubtitle:
-                      AppStrings.noSalaryPaymentsFoundForThis,
+                  emptySubtitle: AppStrings.noSalaryPaymentsFoundForThis,
                   emptyIcon: Icons.payments_outlined,
                   child: ListView.separated(
                     padding: AppSpacing.screenPaddingTop,
@@ -125,8 +124,8 @@ class SalaryHistoryScreen extends GetView<StaffController> {
               Text(
                 salary.paymentMethod,
                 style: AppTextStyles.outfit(
-                  fontSize: 10,
-                  color: AppColors.primaryBrand,
+                  fontSize: 12,
+                  color: AppColors.successGreen,
                   fontWeight: FontWeight.w600,
                 ),
               ),

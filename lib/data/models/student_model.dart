@@ -4,6 +4,7 @@ class Student {
   final String email;
   final String phone;
   final int instituteId;
+  final String? enrollmentID;
   final int? parentId;
   final int? batchId;
   final String standard;
@@ -27,6 +28,7 @@ class Student {
     required this.email,
     required this.phone,
     required this.instituteId,
+    this.enrollmentID,
     this.parentId,
     this.batchId,
     required this.standard,
@@ -64,6 +66,7 @@ class Student {
       email: json['email']?.toString() ?? '',
       phone: json['phone']?.toString() ?? '',
       instituteId: safeInt(json['institute_id']),
+      enrollmentID: json['enrollment_id'],
       parentId: safeNullableInt(json['parent_id']),
       batchId: safeNullableInt(json['batch_id']),
       standard: json['standard']?.toString() ?? '',
@@ -98,6 +101,7 @@ class Student {
       'email': email,
       'phone': phone,
       'institute_id': instituteId,
+      'enrollment_id': enrollmentID,
       'parent_id': parentId,
       'batch_id': batchId,
       'standard': standard,

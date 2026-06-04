@@ -476,7 +476,6 @@ class InstituteProfileViewScreen extends StatelessWidget {
     );
   }
 
-  // ----------------------------------------------------- support section
   Widget _buildSupportCard() {
     return _card(
       child: Column(

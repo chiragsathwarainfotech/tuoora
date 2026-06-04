@@ -183,7 +183,9 @@ class AddEditNoteScreen extends GetView<NotesController> {
         padding: AppSpacing.all24,
         child: Obx(
           () => AppButton(
-            label: AppStrings.instSaveNoteBtn,
+            label: controller.editingNoteId.value != null
+                ? AppStrings.instEditNoteTitle
+                : AppStrings.instSaveNoteBtn,
             onPressed: () => controller.saveNote(),
             isLoading: controller.isLoading.value,
             borderRadius: 16,

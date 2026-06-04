@@ -20,31 +20,32 @@ class AddExpenseScreen extends GetView<ExpenseController> {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
-        child: Column(
+        child: Stack(
           children: [
-            const InstituteAppBar(title: AppStrings.addExpense),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: AppSpacing.all16,
-                child: Column(
-                  children: [
-                    _buildForm(context),
-                    AppSpacing.v32,
-                    SafeArea(
-                      top: false,
-                      minimum: const EdgeInsets.only(bottom: 16),
-                      child: Obx(
-                        () => AppButton(
-                          onPressed: () => controller.addExpense(),
-                          label: AppStrings.addExpense,
-                          icon: Icons.check_circle_outline_rounded,
-                          isLoading: controller.isLoading.value,
-                        ),
-                      ),
+            Column(
+              children: [
+                const InstituteAppBar(title: AppStrings.addExpense),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: AppSpacing.x16.add(AppSpacing.y16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [_buildForm(context)],
                     ),
-                  ],
+                  ),
                 ),
-              ),
+                Obx(
+                  () => Padding(
+                    padding: AppSpacing.x16,
+                    child: AppButton(
+                      onPressed: () => controller.addExpense(),
+                      label: AppStrings.addExpense,
+                      icon: Icons.check_circle_outline_rounded,
+                      isLoading: controller.isLoading.value,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -83,7 +84,6 @@ class AddExpenseScreen extends GetView<ExpenseController> {
         AppSpacing.v20,
         _buildPaymentTypeToggle(),
         AppSpacing.v24,
-        _buildAddReceiptButton(),
       ],
     );
   }
@@ -278,50 +278,6 @@ class AddExpenseScreen extends GetView<ExpenseController> {
               fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
               color: isSelected ? AppColors.white : AppColors.textSecondary,
             ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildAddReceiptButton() {
-    return GestureDetector(
-      onTap: () => controller.pickReceipt(),
-      child: Obx(
-        () => Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(vertical: 20),
-          decoration: BoxDecoration(
-            color: AppColors.fieldBg,
-            borderRadius: BorderRadius.circular(InputStyles.borderRadius),
-            border: Border.all(
-              color: AppColors.primaryBrand.withValues(alpha: 0.3),
-              width: 1.5,
-            ),
-          ),
-          child: Column(
-            children: [
-              Icon(
-                controller.selectedReceiptPath.value != null
-                    ? Icons.check_circle_rounded
-                    : Icons.file_upload_rounded,
-                color: AppColors.fieldLabel,
-                size: 28,
-              ),
-              AppSpacing.v8,
-              Text(
-                controller.selectedReceiptPath.value != null
-                    ? controller.selectedReceiptPath.value!.split('/').last
-                    : 'Add Receipt',
-                style: AppTextStyles.outfit(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.primaryBrand,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
           ),
         ),
       ),

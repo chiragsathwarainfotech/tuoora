@@ -165,8 +165,6 @@ class LeadsController extends GetxController {
       };
 
       if (editingLeadId.value == null) {
-        leadData['title'] = noteTitleController.text.trim();
-        leadData['note'] = notesController.text.trim();
         await _leadsRepository.createLead(leadData);
         searchQuery.value = '';
         Get.back();
@@ -255,21 +253,21 @@ class LeadsController extends GetxController {
     referenceError.value = rErr;
     if (rErr != null) isValid = false;
 
-    if (editingLeadId.value == null) {
-      final ntErr = ValidationUtils.validateRequired(
-        noteTitleController.text,
-        'Note Title',
-      );
-      noteTitleError.value = ntErr;
-      if (ntErr != null) isValid = false;
-
-      final nCerr = ValidationUtils.validateRequired(
-        notesController.text,
-        'Note',
-      );
-      noteError.value = nCerr;
-      if (nCerr != null) isValid = false;
-    }
+    // if (editingLeadId.value == null) {
+    //   final ntErr = ValidationUtils.validateRequired(
+    //     noteTitleController.text,
+    //     'Note Title',
+    //   );
+    //   noteTitleError.value = ntErr;
+    //   if (ntErr != null) isValid = false;
+    //
+    //   final nCerr = ValidationUtils.validateRequired(
+    //     notesController.text,
+    //     'Note',
+    //   );
+    //   noteError.value = nCerr;
+    //   if (nCerr != null) isValid = false;
+    // }
 
     return isValid;
   }

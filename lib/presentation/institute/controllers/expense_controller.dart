@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/core/api/api_exception.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 
 class ExpenseController extends GetxController {
@@ -36,7 +35,6 @@ class ExpenseController extends GetxController {
   final selectedCategory = Rxn<ExpenseCategory>();
   final selectedDate = DateTime.now().obs;
   final isOnlinePayment = false.obs;
-  final selectedReceiptPath = RxnString();
   final formKey = GlobalKey<FormState>();
 
   // Validation States (Pattern consistent with Add Student)
@@ -194,7 +192,6 @@ class ExpenseController extends GetxController {
     selectedCategory.value = null;
     selectedDate.value = DateTime.now();
     isOnlinePayment.value = false;
-    selectedReceiptPath.value = null;
     triedToSave.value = false;
     amountError.value = null;
     descriptionError.value = null;
@@ -203,18 +200,6 @@ class ExpenseController extends GetxController {
 
   void togglePaymentMethod(bool isOnline) {
     isOnlinePayment.value = isOnline;
-  }
-
-  Future<void> pickReceipt() async {
-    try {
-      FilePickerResult? result = await FilePicker.pickFiles(type: FileType.any);
-
-      if (result != null && result.files.single.path != null) {
-        selectedReceiptPath.value = result.files.single.path!;
-      }
-    } catch (e) {
-      AppSnackBar.error('Failed to pick receipt: $e');
-    }
   }
 
   Future<void> selectDate(BuildContext context) async {
@@ -244,17 +229,13 @@ class ExpenseController extends GetxController {
         'payment_method': isOnlinePayment.value ? 'Online' : 'Cash',
       };
 
-      if (selectedReceiptPath.value != null) {
-        data['receipt_image'] = selectedReceiptPath.value;
-      }
-
       await _repository.createExpense(data);
 
       Get.back();
       AppSnackBar.success(AppStrings.expenseAdded);
       resetForm();
-      loadExpenses(page: 1); // Refresh list
-      loadExpenseAnalysis(); // Refresh analysis
+      loadExpenses(page: 1);
+      loadExpenseAnalysis();
     } catch (e) {
       if (e is ValidationException) {
         _handleValidationErrors(e.errors);

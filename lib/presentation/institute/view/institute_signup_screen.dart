@@ -147,7 +147,7 @@ class InstituteSignupScreen extends GetView<SignupController> {
                           AppStrings.alreadyHaveAnAccount,
                           style: AppTextStyles.outfit(
                             fontSize: 14,
-                            color: AppColors.blueSapphire,
+                            color: AppColors.fieldLabel,
                           ),
                         ),
                         GestureDetector(

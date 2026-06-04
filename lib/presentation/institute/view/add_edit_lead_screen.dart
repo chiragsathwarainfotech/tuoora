@@ -1,6 +1,5 @@
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
-import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
 import 'package:tuoora/core/widgets/app_input_field.dart';
@@ -34,30 +33,15 @@ class AddEditLeadScreen extends GetView<LeadsController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildLeadInformationSection(),
-                    Obx(() {
-                      if (controller.editingLeadId.value == null) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            AppSpacing.v32,
-                            _buildSectionHeader(
-                              Icons.note_alt_rounded,
-                              'Initial Interaction Note',
-                            ),
-                            AppSpacing.v20,
-                            _buildInteractionNoteSection(),
-                          ],
-                        );
-                      }
-                      return const SizedBox.shrink();
-                    }),
                     AppSpacing.v40,
                     SafeArea(
                       top: false,
                       minimum: const EdgeInsets.only(bottom: 16),
                       child: Obx(
                         () => AppButton(
-                          label: AppStrings.instSaveLeadBtn,
+                          label: controller.editingLeadId.value != null
+                              ? AppStrings.instEditLeadTitle
+                              : AppStrings.instSaveLeadBtn,
                           isLoading: controller.isLoading.value,
                           onPressed: () => controller.saveLead(),
                         ),
@@ -70,23 +54,6 @@ class AddEditLeadScreen extends GetView<LeadsController> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildSectionHeader(IconData icon, String title) {
-    return Row(
-      children: [
-        Icon(icon, color: AppColors.fieldLabel, size: 20),
-        AppSpacing.h12,
-        Text(
-          title,
-          style: AppTextStyles.outfit(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: AppColors.textPrimary,
-          ),
-        ),
-      ],
     );
   }
 
@@ -107,7 +74,7 @@ class AddEditLeadScreen extends GetView<LeadsController> {
         AppSpacing.v24,
         Obx(
           () => AppInputField(
-            label: AppStrings.instEmailAddressLabel,
+            label: AppStrings.instStudentEmailLabel,
             hint: AppStrings.instStudentEmailHint,
             controller: controller.emailController,
             keyboardType: TextInputType.emailAddress,
@@ -160,35 +127,6 @@ class AddEditLeadScreen extends GetView<LeadsController> {
             controller: controller.courseController,
             errorText: controller.triedToSave.value
                 ? controller.courseError.value
-                : null,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildInteractionNoteSection() {
-    return Column(
-      children: [
-        Obx(
-          () => AppInputField(
-            label: AppStrings.instNoteTitleLabel,
-            hint: AppStrings.enterNoteTitle,
-            controller: controller.noteTitleController,
-            errorText: controller.triedToSave.value
-                ? controller.noteTitleError.value
-                : null,
-          ),
-        ),
-        AppSpacing.v20,
-        Obx(
-          () => AppInputField(
-            label: AppStrings.instBatchDescLabel,
-            hint: AppStrings.enterNoteDescription,
-            controller: controller.notesController,
-            maxLines: 5,
-            errorText: controller.triedToSave.value
-                ? controller.noteError.value
                 : null,
           ),
         ),

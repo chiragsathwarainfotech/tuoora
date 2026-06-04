@@ -108,15 +108,7 @@ class StaffProfileScreen extends GetView<StaffController> {
                     color: AppColors.textPrimary,
                   ),
                 ),
-                Text(
-                  staff.role?.name ?? 'No Role',
-                  style: AppTextStyles.outfit(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.textSecondary,
-                  ),
-                ),
-                AppSpacing.v16,
+                AppSpacing.v8,
                 _buildContactItem(
                   Icons.email,
                   staff.email,

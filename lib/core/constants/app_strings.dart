@@ -34,7 +34,7 @@ class AppStrings {
   static const String instStudentDobLabel = 'DOB';
   static const String instSelectDobHint = 'Select DOB';
   static const String instFeeTransactionHistoryTitle = 'Transaction History';
-  static const String instConfirmBtn = 'Confirm and Save Student';
+  static const String instConfirmBtn = 'Save Student';
   static const String instStudentPhotoLabel = 'Student Photo';
   static const String instStudentPhotoHint =
       'Upload student photo for digital ID';
@@ -55,7 +55,7 @@ class AppStrings {
   static const String instAutoReceiptDesc =
       'Receipt #FE-2023-1024 will be generated\nautomatically.';
   static const String instPreviewReceipt = 'Preview Receipt';
-  static const String instSaveFeeBtn = 'Save Fee Record';
+  static const String instSaveFeeBtn = 'Save Record';
 
   // Institute Batch Details
   static const String instBatchDetailsTitle = 'Batch Details';
@@ -106,7 +106,7 @@ class AppStrings {
   static const String instClosedLabel = 'CLOSED';
   static const String instSubmissionsLabel = 'Submissions';
   static const String instHomeworkRatingTitle = 'Homework Rating';
-  static const String instGradingProgressLabel = 'Grading Progress';
+  static const String instGradingProgressLabel = 'Assignment Submitted';
   static const String instSubmittedTag = 'SUBMITTED';
   static const String instFilterAll = 'All';
   static const String instBatchHomeworkTitle = 'Batch Homework';
@@ -448,7 +448,6 @@ class AppStrings {
   static const String studentsAssigned = 'Students assigned';
   static const String failedToAssignStudents = 'Failed to assign students';
   static const String assignToBatch = 'Assign to Batch';
-  static const String confirmSaveAssignment = 'Confirm & Save Assignment';
   static const String searchAndAddStudentsToThis =
       'Search and add students to this batch';
   static const String noStudentsSelectedYet = 'No students selected yet';
@@ -504,7 +503,7 @@ class AppStrings {
   static const String addAttachmentImagePdf = 'Add Attachment (Image/PDF)';
   static const String editInstituteProfile = 'Edit Institute Profile';
   static const String instituteInformation = 'INSTITUTE INFORMATION';
-  static const String saveProfileChanges = 'Save Profile Changes';
+  static const String saveProfileChanges = 'Save Changes';
   static const String expenseAnalysis = 'Expense Analysis';
   static const String categoriesBreakdown = 'Categories Breakdown';
   static const String noDataForThisMonth = 'No Data for this month';
@@ -879,7 +878,7 @@ class AppStrings {
 
   // Institute Record Fee screen
   static const String pendingFeesLabel = 'Pending Fees:';
-  static const String studentInformationLabel = 'Student Information';
+  static const String studentInformationLabel = 'Student name';
   static const String feeDateLabel = 'Fee Date';
 
   // Institute UPI Payment Settings (edit + profile-view card)

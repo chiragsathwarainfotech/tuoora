@@ -549,6 +549,12 @@ class AppStrings {
       'Learn how we protect your data';
   static const String helpCenter = 'Help Center';
   static const String getAssistanceAndFaqs = 'Get assistance and FAQs';
+
+  // Hosted legal pages — opened in the external browser. Keep these in
+  // sync with whatever is published at tuoora.com.
+  static const String urlPrivacyPolicy = 'https://tuoora.com/privacy-policy';
+  static const String urlTermsConditions = 'https://tuoora.com/terms-conditions';
+  static const String errFailedOpenLink = 'Could not open the link';
   static const String signOutOfYourAccount = 'Sign out of your account';
   static const String instituteProfileAreYouSureYouWantTo =
       'Are you sure you want to log out from your account?';

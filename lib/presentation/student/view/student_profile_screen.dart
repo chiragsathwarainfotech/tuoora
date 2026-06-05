@@ -7,6 +7,8 @@ import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/services/auth_service.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/utils/url_launcher_utils.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/data/repositories/auth_repository.dart';
 import 'package:tuoora/core/widgets/app_empty_view.dart';
 import 'package:tuoora/core/widgets/app_version_label.dart';
@@ -476,14 +478,17 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
   Widget _buildHelpCard() {
     return _buildCardWrap(
       children: [
-        const ProfileMenuTile(
+        ProfileMenuTile(
           icon: Icons.chat_bubble_outline_rounded,
           title: AppStrings.helpSupport,
+          onTap: () => AppSnackBar.warning(AppStrings.comingSoon),
         ),
         Divider(height: 1, color: AppColors.borderGrey.withValues(alpha: 0.5)),
-        const ProfileMenuTile(
+        ProfileMenuTile(
           icon: Icons.shield_outlined,
           title: AppStrings.privacyTerms,
+          onTap: () =>
+              UrlLauncherUtils.openExternal(AppStrings.urlPrivacyPolicy),
         ),
         Divider(height: 1, color: AppColors.borderGrey.withValues(alpha: 0.5)),
         ProfileMenuTile(

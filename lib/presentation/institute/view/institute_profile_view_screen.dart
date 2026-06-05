@@ -6,6 +6,7 @@ import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/controllers/institute_profile_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
+import 'package:tuoora/core/utils/url_launcher_utils.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/core/widgets/app_version_label.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
@@ -486,13 +487,15 @@ class InstituteProfileViewScreen extends StatelessWidget {
             icon: Icons.description_outlined,
             title: AppStrings.termsConditions,
             subtitle: AppStrings.readOurTermsOfService,
-            onTap: () => AppSnackBar.warning(AppStrings.comingSoon),
+            onTap: () =>
+                UrlLauncherUtils.openExternal(AppStrings.urlTermsConditions),
           ),
           _buildSettingsItem(
             icon: Icons.privacy_tip_outlined,
             title: AppStrings.privacyPolicy,
             subtitle: AppStrings.learnHowWeProtectYourData,
-            onTap: () => AppSnackBar.warning(AppStrings.comingSoon),
+            onTap: () =>
+                UrlLauncherUtils.openExternal(AppStrings.urlPrivacyPolicy),
           ),
           _buildSettingsItem(
             icon: Icons.help_center_outlined,

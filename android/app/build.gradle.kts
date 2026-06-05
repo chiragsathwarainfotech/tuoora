@@ -9,9 +9,9 @@ plugins {
     id("com.google.gms.google-services")
 }
 
-// Load signing config from android/key.properties (kept out of git).
+// Load signing config from android/keystore.properties (kept out of git).
 val keystoreProperties = Properties()
-val keystorePropertiesFile = rootProject.file("key.properties")
+val keystorePropertiesFile = rootProject.file("keystore.properties")
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 }

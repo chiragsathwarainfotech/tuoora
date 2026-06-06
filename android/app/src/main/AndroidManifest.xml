@@ -1,4 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -10,18 +11,29 @@
         android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="29" />
-    <!-- Android 13+ scoped media access — required by file_picker when picking
-         audio/video from system storage. image_picker uses the Photo Picker
-         and doesn't actually need these, but we declare them so file_picker's
-         audio path works on API 33+. -->
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
-    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <!-- Voice message recording in chat -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <!--
+        Play Console policy: apps with one-time / infrequent media access
+        must NOT declare these broad-access permissions. image_picker uses
+        the system Photo Picker on Android 13+ (no permission needed) and
+        file_picker uses the Storage Access Framework (no permission
+        needed). We force-remove them in case any plugin tries to inject
+        them via manifest-merger.
+    -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"
+        tools:node="remove" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"
+        tools:node="remove" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO"
+        tools:node="remove" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED"
+        tools:node="remove" />
+
     <application
         android:label="Tuoora"
         android:name="${applicationName}"

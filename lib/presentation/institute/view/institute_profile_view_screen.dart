@@ -4,6 +4,7 @@ import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/data/models/institute_profile_model.dart';
 import 'package:tuoora/presentation/institute/controllers/institute_profile_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/core/utils/url_launcher_utils.dart';
@@ -105,9 +106,6 @@ class InstituteProfileViewScreen extends StatelessWidget {
     );
   }
 
-  /// Shared card wrapper — white surface, 8 dp radius, 8 dp padding, soft
-  /// shadow. Matches the pattern used by `_buildFormSection` on the edit
-  /// profile screen and many other institute screens.
   Widget _card({required Widget child}) {
     return Container(
       padding: AppSpacing.cardPadding,
@@ -126,8 +124,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
     );
   }
 
-  // -------------------------------------------------------------- header
-  Widget _buildHeaderCard(dynamic p) {
+  Widget _buildHeaderCard(InstituteProfile p) {
     return _card(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16),
@@ -172,7 +169,17 @@ class InstituteProfileViewScreen extends StatelessWidget {
               'Owner: ${p.name}',
               textAlign: TextAlign.center,
               style: AppTextStyles.outfit(
-                fontSize: 13,
+                fontSize: 14,
+                color: AppColors.textSecondary,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            AppSpacing.v4,
+            Text(
+              'Institute Code: ${p.instituteCode}',
+              textAlign: TextAlign.center,
+              style: AppTextStyles.outfit(
+                fontSize: 14,
                 color: AppColors.textSecondary,
                 fontWeight: FontWeight.w500,
               ),
@@ -183,7 +190,6 @@ class InstituteProfileViewScreen extends StatelessWidget {
     );
   }
 
-  // ----------------------------------------------------- contact section
   Widget _buildContactCard(dynamic p) {
     return _card(
       child: Column(

@@ -1,6 +1,7 @@
 class InstituteProfile {
   final int id;
   final String name;
+  final String? instituteCode;
   final String email;
   final String phone;
   final String? instituteName;
@@ -17,20 +18,13 @@ class InstituteProfile {
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final String? logoUrl;
-
-  /// Merchant UPI handle (e.g. `merchant@bank`) configured by the
-  /// institute so students can pay fees directly. Empty / null when the
-  /// institute hasn't set up UPI payments yet.
   final String? upiId;
-
-  /// Absolute URL of the QR-code image the institute uploaded for UPI
-  /// scans. Surfaced on the institute profile view and student-side
-  /// pay-fees screen.
   final String? upiQrCodeUrl;
 
   InstituteProfile({
     required this.id,
     required this.name,
+    this.instituteCode,
     required this.email,
     required this.phone,
     this.instituteName,
@@ -55,6 +49,7 @@ class InstituteProfile {
     return InstituteProfile(
       id: json['id'],
       name: json['name']?.toString() ?? '',
+      instituteCode: json['institute_code']?.toString() ?? '',
       email: json['email']?.toString() ?? '',
       phone: json['phone']?.toString() ?? '',
       instituteName: json['institute_name']?.toString(),
@@ -84,6 +79,7 @@ class InstituteProfile {
     return {
       'id': id,
       'name': name,
+      'institute_code': instituteCode,
       'email': email,
       'phone': phone,
       'institute_name': instituteName,
@@ -109,6 +105,7 @@ class InstituteProfile {
     return InstituteProfile(
       id: id,
       name: name,
+      instituteCode: instituteCode,
       email: email,
       phone: phone,
       instituteName: instituteName,

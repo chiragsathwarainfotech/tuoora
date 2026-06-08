@@ -1,10 +1,3 @@
-/// Subscription summary returned at the top level of the institute login and
-/// profile responses (the `subscription` node, sibling of `data`).
-///
-/// Only [status] drives app behaviour today:
-///   active  -> full access, no banner
-///   expired -> show the "subscription expired" banner with a Renew action
-///   pending -> a renewal request is awaiting admin review (review banner)
 class Subscription {
   final int id;
   final int? instituteId;

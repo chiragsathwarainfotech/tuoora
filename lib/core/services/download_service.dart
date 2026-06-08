@@ -4,7 +4,7 @@ import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
 
 class DownloadService extends GetxService {
-  Future<void> download({
+  Future<String?> download({
     required String label,
     required Future<List<int>> Function() fetch,
     required String fileName,
@@ -14,7 +14,7 @@ class DownloadService extends GetxService {
     try {
       final bytes = await fetch();
       await snack.close();
-      await saveFile(
+      return await saveFile(
         bytes: bytes,
         fileName: fileName,
         successMessage: successMessage,
@@ -22,10 +22,11 @@ class DownloadService extends GetxService {
     } catch (_) {
       await snack.close();
       AppSnackBar.error(AppStrings.downloadFailed);
+      return null;
     }
   }
 
-  Future<void> saveFile({
+  Future<String?> saveFile({
     required List<int> bytes,
     required String fileName,
     String? successMessage,
@@ -53,8 +54,10 @@ class DownloadService extends GetxService {
       await file.writeAsBytes(bytes);
 
       AppSnackBar.success(successMessage ?? 'File downloaded');
+      return filePath;
     } catch (e) {
       AppSnackBar.error(AppStrings.downloadFailed);
+      return null;
     }
   }
 }

@@ -147,34 +147,42 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          AppStrings.recipient,
+          AppStrings.targetAudience,
           style: AppTextStyles.outfit(
             fontSize: 14,
             fontWeight: FontWeight.w600,
             color: AppColors.fieldLabel,
           ),
         ),
-        AppSpacing.v16,
+        AppSpacing.v12,
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 4,
+          ),
           decoration: BoxDecoration(
             color: AppColors.fieldBg,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Obx(
             () => DropdownButtonHideUnderline(
-              child: DropdownButton<UpdateRecipient>(
-                value: controller.selectedRecipient.value,
+              child: DropdownButton<UpdateTargetType>(
+                value: controller.selectedAudience.value,
                 isExpanded: true,
                 icon: const Icon(
                   Icons.keyboard_arrow_down_rounded,
                   color: AppColors.textPrimary,
                 ),
-                items: UpdateRecipient.values.map((UpdateRecipient value) {
-                  return DropdownMenuItem<UpdateRecipient>(
+                items: UpdateTargetType.values.map((
+                  UpdateTargetType value,
+                ) {
+                  String label = value == UpdateTargetType.all
+                      ? 'All Students'
+                      : 'Specific Batch';
+                  return DropdownMenuItem<UpdateTargetType>(
                     value: value,
                     child: Text(
-                      value.name.capitalizeFirst!,
+                      label,
                       style: AppTextStyles.outfit(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -184,20 +192,20 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                   );
                 }).toList(),
                 onChanged: (val) => val != null
-                    ? controller.selectedRecipient.value = val
+                    ? controller.selectedAudience.value = val
                     : null,
               ),
             ),
           ),
         ),
         Obx(() {
-          if (controller.selectedRecipient.value != UpdateRecipient.parents) {
+          if (controller.selectedAudience.value == UpdateTargetType.batch) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AppSpacing.v24,
                 Text(
-                  AppStrings.targetAudience,
+                  AppStrings.selectBatch,
                   style: AppTextStyles.outfit(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -205,113 +213,56 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                   ),
                 ),
                 AppSpacing.v12,
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.fieldBg,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<UpdateTargetType>(
-                      value: controller.selectedAudience.value,
-                      isExpanded: true,
-                      icon: const Icon(
-                        Icons.keyboard_arrow_down_rounded,
-                        color: AppColors.textPrimary,
+                if (controller.isLoadingBatches.value)
+                  const CommonLoading(size: 24, strokeWidth: 2)
+                else if (controller.availableBatches.isEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Text(
+                      AppStrings.noBatchesFound,
+                      style: AppTextStyles.outfit(
+                        fontSize: 14,
+                        color: Colors.redAccent,
                       ),
-                      items: UpdateTargetType.values.map((
-                        UpdateTargetType value,
-                      ) {
-                        String label = value == UpdateTargetType.all
-                            ? 'All Students'
-                            : 'Specific Batch';
-                        return DropdownMenuItem<UpdateTargetType>(
-                          value: value,
-                          child: Text(
-                            label,
-                            style: AppTextStyles.outfit(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.textPrimary,
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (val) => val != null
-                          ? controller.selectedAudience.value = val
-                          : null,
                     ),
-                  ),
-                ),
-                if (controller.selectedAudience.value ==
-                    UpdateTargetType.batch) ...[
-                  AppSpacing.v24,
-                  Text(
-                    AppStrings.selectBatch,
-                    style: AppTextStyles.outfit(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.fieldLabel,
+                  )
+                else
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 4,
                     ),
-                  ),
-                  AppSpacing.v12,
-                  Obx(() {
-                    if (controller.isLoadingBatches.value) {
-                      return const CommonLoading(size: 24, strokeWidth: 2);
-                    }
-                    if (controller.availableBatches.isEmpty) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Text(
-                          AppStrings.noBatchesFound,
-                          style: AppTextStyles.outfit(
-                            fontSize: 14,
-                            color: Colors.redAccent,
-                          ),
+                    decoration: BoxDecoration(
+                      color: AppColors.fieldBg,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<Batch>(
+                        value: controller.selectedBatch.value,
+                        isExpanded: true,
+                        icon: const Icon(
+                          Icons.keyboard_arrow_down_rounded,
+                          color: AppColors.textPrimary,
                         ),
-                      );
-                    }
-                    return Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.fieldBg,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<Batch>(
-                          value: controller.selectedBatch.value,
-                          isExpanded: true,
-                          icon: const Icon(
-                            Icons.keyboard_arrow_down_rounded,
-                            color: AppColors.textPrimary,
-                          ),
-                          items: controller.availableBatches.map((Batch value) {
-                            return DropdownMenuItem<Batch>(
-                              value: value,
-                              child: Text(
-                                '${value.name} • ${value.subject}',
-                                style: AppTextStyles.outfit(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColors.textPrimary,
-                                ),
+                        items: controller.availableBatches.map((Batch value) {
+                          return DropdownMenuItem<Batch>(
+                            value: value,
+                            child: Text(
+                              '${value.name} • ${value.subject}',
+                              style: AppTextStyles.outfit(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.textPrimary,
                               ),
-                            );
-                          }).toList(),
-                          onChanged: (val) => val != null
-                              ? controller.selectedBatch.value = val
-                              : null,
-                        ),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (val) => val != null
+                            ? controller.selectedBatch.value = val
+                            : null,
                       ),
-                    );
-                  }),
-                ],
+                    ),
+                  ),
               ],
             );
           }

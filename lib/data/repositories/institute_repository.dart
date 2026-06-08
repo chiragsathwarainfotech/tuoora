@@ -714,6 +714,18 @@ class InstituteRepository implements InstituteRepositoryImpl {
   }
 
   @override
+  Future<ExpenseCategory> createExpenseCategory(Map<String, dynamic> data) async {
+    final response = await _apiClient.post(
+      ApiConstants.instituteExpenseCategories,
+      data,
+    );
+    if (response.status.hasError) {
+      throw Exception('Failed to create category: ${response.statusText}');
+    }
+    return ExpenseCategory.fromJson(response.body['data']);
+  }
+
+  @override
   Future<ExpenseModel> createExpense(Map<String, dynamic> data) async {
     final Map<String, dynamic> fields = Map.from(data);
     final String? receiptPath = fields.remove('receipt_image');

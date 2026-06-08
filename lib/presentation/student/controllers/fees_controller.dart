@@ -8,6 +8,7 @@ import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/data/repositories/student_fees_repository.dart';
 import 'package:tuoora/data/repositories/student_institute_repository.dart';
 import 'package:tuoora/presentation/student/models/fee_model.dart';
+import 'package:tuoora/core/widgets/pdf_viewer_popup.dart';
 
 class FeesController extends GetxController {
   final RxBool isLoading = true.obs;
@@ -112,7 +113,7 @@ class FeesController extends GetxController {
         ? '${receipt.receiptNumber}.pdf'
         : 'receipt-${receipt.id}.pdf';
     try {
-      await Get.find<DownloadService>().download(
+      final path = await Get.find<DownloadService>().download(
         label: AppStrings.pleaseWaitYourReceiptIsBeing,
         fileName: fileName,
         fetch: () async => Uint8List.fromList(
@@ -122,6 +123,9 @@ class FeesController extends GetxController {
           ),
         ),
       );
+      if (path != null) {
+        PdfViewerPopup.show(path: path);
+      }
     } finally {
       isDownloading.value = false;
       downloadProgress.value = 0.0;

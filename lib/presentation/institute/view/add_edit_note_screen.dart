@@ -100,61 +100,112 @@ class AddEditNoteScreen extends GetView<NotesController> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    ...controller.noteCategories.map((cat) {
-                      final isSelected =
-                          controller.selectedCategoryName.value == cat.name;
-                      final Color catColor = Color(
-                        int.parse(cat.color.replaceAll('#', '0xFF')),
-                      );
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          ...controller.noteCategories.map((cat) {
+                            final isSelected =
+                                controller.selectedCategoryName.value ==
+                                cat.name;
+                            final Color catColor = Color(
+                              int.parse(cat.color.replaceAll('#', '0xFF')),
+                            );
 
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: GestureDetector(
-                          onTap: () {
-                            controller.selectedCategoryName.value = cat.name;
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 10,
-                            ),
-                            decoration: BoxDecoration(
-                              color: isSelected
-                                  ? catColor
-                                  : AppColors.fieldBg.withValues(alpha: 0.5),
-                              borderRadius: BorderRadius.circular(
-                                AppSpacing.cardRadius,
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: GestureDetector(
+                                onTap: () {
+                                  controller.selectedCategoryName.value =
+                                      cat.name;
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 20,
+                                    vertical: 10,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: isSelected
+                                        ? catColor
+                                        : AppColors.fieldBg.withValues(
+                                            alpha: 0.5,
+                                          ),
+                                    borderRadius: BorderRadius.circular(
+                                      AppSpacing.cardRadius,
+                                    ),
+                                    border: Border.all(
+                                      color: isSelected
+                                          ? catColor
+                                          : AppColors.borderGrey.withValues(
+                                              alpha: 0.3,
+                                            ),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    cat.name,
+                                    style: AppTextStyles.outfit(
+                                      fontSize: 13,
+                                      fontWeight: isSelected
+                                          ? FontWeight.w600
+                                          : FontWeight.w500,
+                                      color: isSelected
+                                          ? AppColors.white
+                                          : AppColors.textSecondary,
+                                    ),
+                                  ),
+                                ),
                               ),
-                              border: Border.all(
-                                color: isSelected
-                                    ? catColor
-                                    : AppColors.borderGrey.withValues(
-                                        alpha: 0.3,
-                                      ),
-                              ),
-                            ),
-                            child: Text(
-                              cat.name,
-                              style: AppTextStyles.outfit(
-                                fontSize: 13,
-                                fontWeight: isSelected
-                                    ? FontWeight.w600
-                                    : FontWeight.w500,
-                                color: isSelected
-                                    ? AppColors.white
-                                    : AppColors.textSecondary,
-                              ),
+                            );
+                          }),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  GestureDetector(
+                    onTap: () => controller.showImagePickerOptions(),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 10,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryBrand,
+                        borderRadius: BorderRadius.circular(
+                          AppSpacing.cardRadius,
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.image_outlined,
+                            size: 16,
+                            color: AppColors.white,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            controller.selectedImagePath.value != null
+                                ? 'Image Added'
+                                : 'Add Image',
+                            style: AppTextStyles.outfit(
+                              fontSize: 13,
+                              fontWeight:
+                                  controller.selectedImagePath.value != null
+                                  ? FontWeight.w600
+                                  : FontWeight.w500,
+                              color: AppColors.white,
                             ),
                           ),
-                        ),
-                      );
-                    }),
-                  ],
-                ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
               if (controller.categoryError.value != null)
                 Padding(

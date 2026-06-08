@@ -1,4 +1,4 @@
-﻿import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/utils/subscription_guard.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
@@ -13,6 +13,7 @@ import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/widgets/app_search_field.dart';
 import 'package:tuoora/core/constants/app_images.dart';
 import 'package:tuoora/core/widgets/app_action_icon.dart';
+import 'package:tuoora/core/widgets/app_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -168,6 +169,15 @@ class NotesListScreen extends GetView<NotesController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            if (note.imageUrl != null && note.imageUrl!.isNotEmpty) ...[
+              AppNetworkImage(
+                url: note.imageUrl!,
+                width: double.infinity,
+                height: 160,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              AppSpacing.v12,
+            ],
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

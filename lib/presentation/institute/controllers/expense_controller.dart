@@ -135,6 +135,18 @@ class ExpenseController extends GetxController {
     }
   }
 
+  Future<void> createNewCategory(String name) async {
+    try {
+      final newCategory = await _repository.createExpenseCategory({'name': name});
+      categories.add(newCategory);
+      selectedCategory.value = newCategory;
+      AppSnackBar.success('Category "$name" created successfully.');
+    } catch (e) {
+      debugPrint('Error creating category: $e');
+      AppSnackBar.error('Failed to create category.');
+    }
+  }
+
   Future<void> loadExpenseAnalysis() async {
     try {
       isAnalysisLoading.value = true;

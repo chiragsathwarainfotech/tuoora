@@ -63,7 +63,7 @@ class AddEditLeadScreen extends GetView<LeadsController> {
       children: [
         Obx(
           () => AppInputField(
-            label: AppStrings.instStudentNameLabel,
+            label: AppStrings.instStudentFullNameLabel,
             hint: AppStrings.instStudentNameHint,
             controller: controller.nameController,
             errorText: controller.triedToSave.value

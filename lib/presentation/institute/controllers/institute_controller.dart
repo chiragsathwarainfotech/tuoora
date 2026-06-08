@@ -8,6 +8,7 @@ import 'package:tuoora/core/services/download_service.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tuoora/core/widgets/pdf_viewer_popup.dart';
 
 class InstituteController extends GetxController {
   final _currentIndex = 0.obs;
@@ -106,12 +107,15 @@ class InstituteController extends GetxController {
     final fileName =
         'Receipt_${feeId}_${DateTime.now().millisecondsSinceEpoch}.pdf';
     try {
-      await Get.find<DownloadService>().download(
+      final path = await Get.find<DownloadService>().download(
         label: 'Preparing receipt…',
         fileName: fileName,
         successMessage: AppStrings.receiptDownloadedSuccess,
         fetch: () => _instituteRepository.downloadFeeReceipt(feeId),
       );
+      if (path != null) {
+        PdfViewerPopup.show(path: path);
+      }
     } finally {
       downloadingReceiptIds.remove(feeId);
       downloadingReceiptIds.refresh();

@@ -92,13 +92,29 @@ class AddExpenseScreen extends GetView<ExpenseController> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          AppStrings.labelCategory,
-          style: AppTextStyles.outfit(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: AppColors.fieldLabel,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              AppStrings.labelCategory,
+              style: AppTextStyles.outfit(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: AppColors.fieldLabel,
+              ),
+            ),
+            GestureDetector(
+              onTap: () => _showAddCategoryDialog(),
+              child: Text(
+                '+ NEW',
+                style: AppTextStyles.outfit(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.primaryBrand,
+                ),
+              ),
+            ),
+          ],
         ),
         AppSpacing.v8,
         Obx(
@@ -278,6 +294,78 @@ class AddExpenseScreen extends GetView<ExpenseController> {
               fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
               color: isSelected ? AppColors.white : AppColors.textSecondary,
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showAddCategoryDialog() {
+    final textController = TextEditingController();
+    Get.dialog(
+      Dialog(
+        backgroundColor: AppColors.white,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 16),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+        ),
+        child: Padding(
+          padding: AppSpacing.all24,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'CREATE NEW CATEGORY',
+                style: AppTextStyles.outfit(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textSecondary,
+                  letterSpacing: 1.0,
+                ),
+              ),
+              AppSpacing.v16,
+              Row(
+                children: [
+                  Expanded(
+                    child: AppInputField(
+                      hint: 'Category Name...',
+                      label: "",
+                      controller: textController,
+                    ),
+                  ),
+                  AppSpacing.h12,
+                  ElevatedButton(
+                    onPressed: () {
+                      if (textController.text.trim().isNotEmpty) {
+                        controller.createNewCategory(
+                          textController.text.trim(),
+                        );
+                        Get.back();
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primaryBrand,
+                      foregroundColor: AppColors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 16,
+                      ),
+                    ),
+                    child: Text(
+                      'Add',
+                      style: AppTextStyles.outfit(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),

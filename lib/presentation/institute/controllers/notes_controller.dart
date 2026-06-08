@@ -1,10 +1,15 @@
+import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/utils/validation_utils.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/data/models/note_model.dart';
 import 'package:tuoora/data/repositories_impl/notes_repository_impl.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:tuoora/core/api/api_exception.dart';
 
 class NotesController extends GetxController {
@@ -36,6 +41,9 @@ class NotesController extends GetxController {
   final titleError = RxnString();
   final contentError = RxnString();
   final categoryError = RxnString();
+
+  final ImagePicker _picker = ImagePicker();
+  final selectedImagePath = RxnString();
 
   @override
   void onInit() {
@@ -144,6 +152,7 @@ class NotesController extends GetxController {
     titleController.clear();
     contentController.clear();
     selectedCategoryName.value = null;
+    selectedImagePath.value = null;
     triedToSave.value = false;
     _resetErrors();
   }
@@ -160,18 +169,40 @@ class NotesController extends GetxController {
 
     try {
       isLoading.value = true;
-      final noteData = {
+      final Map<String, dynamic> fields = {
         'title': titleController.text.trim(),
         'content': contentController.text.trim(),
         'category': selectedCategoryName.value,
       };
 
+      dynamic requestData;
+      if (selectedImagePath.value != null &&
+          !selectedImagePath.value!.startsWith('http')) {
+        final formData = FormData(fields);
+        formData.files.add(
+          MapEntry(
+            'image',
+            MultipartFile(
+              File(selectedImagePath.value!),
+              filename: selectedImagePath.value!.split('/').last,
+            ),
+          ),
+        );
+        if (editingNoteId.value != null) {
+          formData.fields.add(const MapEntry('_method', 'PUT'));
+        }
+        requestData = formData;
+      } else {
+        requestData = fields;
+      }
+
       if (editingNoteId.value != null) {
-        await _notesRepository.updateNote(editingNoteId.value!, noteData);
+        if (requestData is FormData) {}
+        await _notesRepository.updateNote(editingNoteId.value!, requestData);
         Get.back();
         AppSnackBar.success(AppStrings.noteUpdatedSuccessfully);
       } else {
-        await _notesRepository.createNote(noteData);
+        await _notesRepository.createNote(requestData);
         Get.back();
         AppSnackBar.success(AppStrings.noteCreatedSuccessfully);
       }
@@ -247,7 +278,6 @@ class NotesController extends GetxController {
 
       final index = notesList.indexWhere((n) => n.id == note.id);
       if (index != -1) {
-        // Use copyWith to preserve categoryRelation and other fields
         notesList[index] = note.copyWith(isBookmarked: newStatus);
 
         if (isBookmarkView.value && !newStatus) {
@@ -257,6 +287,98 @@ class NotesController extends GetxController {
     } catch (e) {
       AppSnackBar.error('Failed to update bookmark: $e');
     }
+  }
+
+  Future<void> pickImage(ImageSource source) async {
+    final XFile? image = await _picker.pickImage(source: source);
+    if (image == null) return;
+    selectedImagePath.value = image.path;
+  }
+
+  void showImagePickerOptions() {
+    Get.bottomSheet(
+      SafeArea(
+        top: false,
+        minimum: const EdgeInsets.only(bottom: 12),
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.s24,
+            AppSpacing.s24,
+            AppSpacing.s24,
+            AppSpacing.s16,
+          ),
+          decoration: const BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 36,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: AppSpacing.s12),
+                decoration: BoxDecoration(
+                  color: AppColors.borderGrey,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              ListTile(
+                leading: Container(
+                  padding: AppSpacing.all8,
+                  decoration: const BoxDecoration(
+                    color: AppColors.primaryBrandLight,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.camera_alt_rounded,
+                    color: AppColors.primaryBrand,
+                  ),
+                ),
+                title: Text(
+                  AppStrings.labelCamera,
+                  style: AppTextStyles.outfit(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                onTap: () async {
+                  Get.back();
+                  await pickImage(ImageSource.camera);
+                },
+              ),
+              AppSpacing.v8,
+              ListTile(
+                leading: Container(
+                  padding: AppSpacing.all8,
+                  decoration: const BoxDecoration(
+                    color: AppColors.primaryBrandLight,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.photo_library_rounded,
+                    color: AppColors.primaryBrand,
+                  ),
+                ),
+                title: Text(
+                  AppStrings.labelGallery,
+                  style: AppTextStyles.outfit(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                onTap: () async {
+                  Get.back();
+                  await pickImage(ImageSource.gallery);
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override

@@ -21,7 +21,6 @@ class UpdatesController extends GetxController {
 
   // Create Update State
   final selectedCategory = UpdateCategory.Academic.obs;
-  final selectedRecipient = UpdateRecipient.students.obs;
   final selectedAudience = UpdateTargetType.all.obs;
   final selectedBatch = Rxn<Batch>();
 
@@ -119,9 +118,7 @@ class UpdatesController extends GetxController {
     // When the audience is a specific batch we must have a batch selected,
     // otherwise the request goes out with target_type=batch and no batch_id
     // and the backend rejects it.
-    final targetsBatch =
-        selectedRecipient.value != UpdateRecipient.parents &&
-        selectedAudience.value == UpdateTargetType.batch;
+    final targetsBatch = selectedAudience.value == UpdateTargetType.batch;
     if (targetsBatch && selectedBatch.value == null) {
       AppSnackBar.error(AppStrings.pleaseSelectABatchForThis);
       return;
@@ -130,7 +127,7 @@ class UpdatesController extends GetxController {
     try {
       isCreating.value = true;
       final dailyUpdate = DailyUpdate(
-        recipient: selectedRecipient.value,
+        recipient: UpdateRecipient.students, // Default or ignored by backend
         targetType: selectedAudience.value,
         topic: subjectController.text,
         description: messageController.text,
@@ -151,7 +148,6 @@ class UpdatesController extends GetxController {
       messageController.clear();
       attachments.clear();
       selectedCategory.value = UpdateCategory.Academic;
-      selectedRecipient.value = UpdateRecipient.students;
       selectedAudience.value = UpdateTargetType.all;
       if (availableBatches.isNotEmpty) {
         selectedBatch.value = availableBatches.first;

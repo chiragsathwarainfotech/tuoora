@@ -22,6 +22,7 @@ class AppStrings {
 
   // Institute Add Student
   static const String instStudentNameLabel = 'Name';
+  static const String instStudentFullNameLabel = 'Full Name';
   static const String instStudentNameHint = 'Enter Name';
   static const String instParentNameLabel = 'Parent Name';
   static const String instParentNameHint = "Enter Parent name";
@@ -51,10 +52,6 @@ class AppStrings {
   static const String instPaymentMethodLabel = 'Payment Method';
   static const String instPaymentCash = 'Cash';
   static const String instPaymentOnline = 'Online';
-  static const String instAutoReceiptTitle = 'Auto-generate Receipt';
-  static const String instAutoReceiptDesc =
-      'Receipt #FE-2023-1024 will be generated\nautomatically.';
-  static const String instPreviewReceipt = 'Preview Receipt';
   static const String instSaveFeeBtn = 'Save Record';
 
   // Institute Batch Details
@@ -428,7 +425,7 @@ class AppStrings {
   static const String updateProfessionalInformationAndProfilePicture =
       'Update professional information and profile picture';
   static const String selectDepartment = 'Select Department';
-  static const String addExpense = 'Add Expense';
+  static const String addExpense = 'Save Expense';
   static const String enterAmount = 'Enter amount';
   static const String addSalary = 'Add Salary';
   static const String paymentDate = 'Payment Date';
@@ -609,9 +606,6 @@ class AppStrings {
   static const String overallAveragePerformance = 'Overall Average Performance';
   static const String addTransaction = 'Add Transaction';
   static const String recordFeeEnterAmount = 'Enter Amount';
-  static const String receiptPreview = 'Receipt Preview';
-  static const String totalAmount = 'Total Amount';
-  static const String closePreview = 'Close Preview';
   static const String attendanceReports = 'Attendance Reports';
   static const String comprehensiveAnalysisOfDailyWeeklyAnd =
       'Comprehensive analysis of daily, weekly, and monthly student presence across all active batches.';

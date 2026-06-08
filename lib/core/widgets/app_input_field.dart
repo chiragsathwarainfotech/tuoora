@@ -72,16 +72,18 @@ class AppInputField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: AppTextStyles.outfit(
-            fontSize: labelFontSize ?? 14,
-            fontWeight: labelFontWeight ?? FontWeight.w800,
-            color: labelColor ?? AppColors.fieldLabel,
-            letterSpacing: labelLetterSpacing,
+        if (label.isNotEmpty) ...[
+          Text(
+            label,
+            style: AppTextStyles.outfit(
+              fontSize: labelFontSize ?? 14,
+              fontWeight: labelFontWeight ?? FontWeight.w800,
+              color: labelColor ?? AppColors.fieldLabel,
+              letterSpacing: labelLetterSpacing,
+            ),
           ),
-        ),
-        SizedBox(height: labelSpacing ?? 8.0),
+          SizedBox(height: labelSpacing ?? 8.0),
+        ],
         _buildField(),
         if (errorText != null) ...[
           const SizedBox(height: 4),

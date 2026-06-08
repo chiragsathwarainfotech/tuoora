@@ -7,26 +7,24 @@ class User {
   final String refreshToken;
   final String token;
   final String role; // 'INSTITUTE', 'STUDENT'
-
-  // Institute specific
   final String? instituteName;
   final String? logo;
   final String? address;
-
-  // Student specific
   final int? instituteId;
   final int? batchId;
   final String? standard;
   final String? idHash;
-
   final String? city;
   final String? state;
   final String? pincode;
   final String? website;
   final String? youtube;
   final String? instagram;
-
   final bool isProfileSetup;
+  final String? emailVerifiedAt;
+
+  bool get isEmailVerified =>
+      emailVerifiedAt != null && emailVerifiedAt!.isNotEmpty;
 
   const User({
     required this.id,
@@ -51,6 +49,7 @@ class User {
     this.youtube,
     this.instagram,
     this.isProfileSetup = true,
+    this.emailVerifiedAt,
   });
 
   factory User.fromJson(
@@ -83,6 +82,7 @@ class User {
       youtube: json['youtube'],
       instagram: json['instagram'],
       isProfileSetup: json['is_profile_setup'] ?? true,
+      emailVerifiedAt: json['email_verified_at']?.toString(),
     );
   }
 
@@ -110,6 +110,7 @@ class User {
       'youtube': youtube,
       'instagram': instagram,
       'is_profile_setup': isProfileSetup,
+      'email_verified_at': emailVerifiedAt,
     };
   }
 
@@ -137,6 +138,7 @@ class User {
       youtube: youtube,
       instagram: instagram,
       isProfileSetup: isProfileSetup,
+      emailVerifiedAt: emailVerifiedAt,
     );
   }
 }

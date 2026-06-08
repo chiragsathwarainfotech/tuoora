@@ -549,11 +549,9 @@ class AppStrings {
       'Learn how we protect your data';
   static const String helpCenter = 'Help Center';
   static const String getAssistanceAndFaqs = 'Get assistance and FAQs';
-
-  // Hosted legal pages — opened in the external browser. Keep these in
-  // sync with whatever is published at tuoora.com.
   static const String urlPrivacyPolicy = 'https://tuoora.com/privacy-policy';
-  static const String urlTermsConditions = 'https://tuoora.com/terms-conditions';
+  static const String urlTermsConditions =
+      'https://tuoora.com/terms-conditions';
   static const String errFailedOpenLink = 'Could not open the link';
   static const String signOutOfYourAccount = 'Sign out of your account';
   static const String instituteProfileAreYouSureYouWantTo =
@@ -678,6 +676,8 @@ class AppStrings {
   static const String yourSubscriptionHasBeenExpired =
       'Your subscription has been expired.';
   static const String loginFailed = 'Login Failed';
+  static const String errEmailNotVerified =
+      'Your email is not verified yet. Please complete OTP verification to continue.';
   static const String password = 'Password';
   static const String recoveryForThisRoleWillBe =
       'Recovery for this role will be available soon.';

@@ -22,11 +22,22 @@ class SignupController extends GetxController {
   final _authService = Get.find<AuthService>();
 
   SignupController();
+  bool _fromLoginRedirect = false;
 
   @override
   void onInit() {
     super.onInit();
     _prefillFromSession();
+    _prefillFromRouteArguments();
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+    if (_fromLoginRedirect) {
+      _fromLoginRedirect = false;
+      _autoSendFreshOtpOnArrival();
+    }
   }
 
   void _prefillFromSession() {
@@ -41,6 +52,34 @@ class SignupController extends GetxController {
       if (instituteOwnerNameController.text.isEmpty) {
         instituteOwnerNameController.text = user.name;
       }
+    }
+  }
+
+  void _prefillFromRouteArguments() {
+    final args = Get.arguments;
+    if (args is! Map) return;
+    final email = args['email']?.toString();
+    final password = args['password']?.toString();
+    if (email != null && email.isNotEmpty) {
+      emailController.text = email;
+    }
+    if (password != null && password.isNotEmpty) {
+      passwordController.text = password;
+    }
+    _fromLoginRedirect = true;
+  }
+
+  Future<void> _autoSendFreshOtpOnArrival() async {
+    final email = emailController.text.trim();
+    if (email.isEmpty) return;
+    isLoading.value = true;
+    try {
+      await _authRepository.forgotPassword(email);
+    } catch (_) {
+      // Resend manually after the 60-second cooldown.
+    } finally {
+      isLoading.value = false;
+      startTimer();
     }
   }
 
@@ -186,7 +225,7 @@ class SignupController extends GetxController {
             openAppSettings();
             return;
           } else if (!storage.isGranted && !photos.isGranted) {
-             return;
+            return;
           }
         }
       }
@@ -281,6 +320,7 @@ class SignupController extends GetxController {
         role: 'INSTITUTE',
         instituteName: instituteNameController.text,
         isProfileSetup: false,
+        emailVerifiedAt: DateTime.now().toUtc().toIso8601String(),
       );
 
       await _authService.saveSession(
@@ -394,7 +434,7 @@ class SignupController extends GetxController {
 
   void startTimer() {
     canResend.value = false;
-    timerSeconds.value = 60;
+    timerSeconds.value = 15;
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (timerSeconds.value > 0) {

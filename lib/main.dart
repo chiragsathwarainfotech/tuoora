@@ -13,6 +13,7 @@ import 'package:tuoora/core/api/api_client.dart';
 import 'package:tuoora/core/widgets/dotted_background.dart';
 import 'package:tuoora/core/services/auth_service.dart';
 import 'package:tuoora/core/services/institute_account_status_handler.dart';
+import 'package:tuoora/core/services/server_error_handler.dart';
 import 'package:tuoora/core/services/media_cache_service.dart';
 import 'package:tuoora/core/services/notifications/notification_router.dart';
 import 'package:tuoora/core/services/push_notification_service.dart';
@@ -39,6 +40,7 @@ void main() async {
   Get.put(ApiClient());
   Get.put(MediaCacheService());
   Get.put(InstituteAccountStatusHandler());
+  Get.put(ServerErrorHandler());
   await Get.putAsync(() => AuthService().init());
   await Get.putAsync(() => NotificationRouter().init());
   await Get.putAsync(() => PushNotificationService().init());

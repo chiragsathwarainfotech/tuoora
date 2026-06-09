@@ -2,6 +2,7 @@ import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/api_constants.dart';
 import 'package:tuoora/core/services/auth_service.dart';
 import 'package:tuoora/core/services/institute_account_status_handler.dart';
+import 'package:tuoora/core/services/server_error_handler.dart';
 import 'package:tuoora/data/repositories_impl/auth_repository_impl.dart';
 import 'package:get/get.dart';
 
@@ -89,9 +90,17 @@ class ApiClient extends GetConnect {
         if (response.statusCode == 401) {
           _forceLogout();
         }
+
+        final code = response.statusCode ?? 0;
+        if (code >= 500 && code < 600) {
+          if (Get.isRegistered<ServerErrorHandler>()) {
+            ServerErrorHandler.to.showError();
+          }
+        }
       } else {
-        // Log body only in debug mode or if specifically needed, keeping it minimal for now
-        // print('Body: ${response.body}');
+        if (Get.isRegistered<ServerErrorHandler>()) {
+          ServerErrorHandler.to.dismiss();
+        }
       }
 
       print('--------------------------------------------------');

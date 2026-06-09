@@ -16,6 +16,8 @@ import 'package:tuoora/core/constants/app_images.dart';
 import 'package:tuoora/core/widgets/app_action_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:tuoora/core/services/auth_service.dart';
 
 class InstituteProfileViewScreen extends StatelessWidget {
   const InstituteProfileViewScreen({super.key});
@@ -90,6 +92,8 @@ class InstituteProfileViewScreen extends StatelessWidget {
                         _buildAccountCard(context),
                         AppSpacing.v16,
                         _buildSupportCard(),
+                        AppSpacing.v16,
+                        _buildActivePlanCard(),
                         AppSpacing.v16,
                         _buildLogoutCard(context, controller),
                         AppSpacing.v24,
@@ -737,6 +741,176 @@ class InstituteProfileViewScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget _buildActivePlanCard() {
+    return Obx(() {
+      final authService = Get.find<AuthService>();
+      final sub = authService.subscription;
+      if (sub == null) return const SizedBox.shrink();
+
+      final daysLeft = sub.endDate != null
+          ? sub.endDate!.difference(DateTime.now()).inDays
+          : 0;
+      final bool isExpiringSoon = daysLeft >= 0 && daysLeft <= 7;
+      final dateFormat = DateFormat('dd MMM yyyy');
+
+      return _card(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Current Active Plan',
+                  style: AppTextStyles.outfit(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: AppColors.successGreen.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+                  ),
+                  child: const Icon(
+                    Icons.verified_rounded,
+                    color: AppColors.successGreen,
+                    size: 20,
+                  ),
+                ),
+              ],
+            ),
+            AppSpacing.v8,
+            Text(
+              sub.planName.toUpperCase(),
+              style: AppTextStyles.outfit(
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+                color: AppColors.textPrimary,
+                letterSpacing: 0.5,
+              ),
+            ),
+            AppSpacing.v16,
+            if (sub.endDate != null) ...[
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: AppColors.fieldBg,
+                  borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryBrandLight,
+                        borderRadius: BorderRadius.circular(
+                          AppSpacing.cardRadius,
+                        ),
+                      ),
+                      child: const Icon(
+                        Icons.calendar_today_rounded,
+                        color: AppColors.primaryBrand,
+                        size: 16,
+                      ),
+                    ),
+                    AppSpacing.h12,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'REMAINING',
+                            style: AppTextStyles.outfit(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.textMuted,
+                              letterSpacing: 0.8,
+                            ),
+                          ),
+                          AppSpacing.v4,
+                          Text(
+                            '$daysLeft days remaining — expires ${dateFormat.format(sub.endDate!)}',
+                            style: AppTextStyles.outfit(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.textPrimary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (isExpiringSoon) ...[
+                AppSpacing.v12,
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: AppColors.warningBg,
+                    border: Border.all(
+                      color: AppColors.warningAmber.withValues(alpha: 0.3),
+                    ),
+                    borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: AppColors.primaryBrandLight,
+                          borderRadius: BorderRadius.circular(
+                            AppSpacing.cardRadius,
+                          ),
+                        ),
+                        child: const Icon(
+                          Icons.error_outline_rounded,
+                          color: AppColors.primaryBrand,
+                          size: 16,
+                        ),
+                      ),
+                      AppSpacing.h12,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'EXPIRING SOON',
+                              style: AppTextStyles.outfit(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w800,
+                                color: AppColors.primaryBrand,
+                                letterSpacing: 0.8,
+                              ),
+                            ),
+                            AppSpacing.v4,
+                            Text(
+                              'Expires in $daysLeft days — Renew now to avoid interruption',
+                              style: AppTextStyles.outfit(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.primaryBrand,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ],
+          ],
+        ),
+      );
+    });
   }
 
   void _showWhatsAppComingSoonDialog(BuildContext context) {

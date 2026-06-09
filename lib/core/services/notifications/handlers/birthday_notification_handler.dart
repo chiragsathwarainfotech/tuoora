@@ -7,11 +7,6 @@ import 'package:tuoora/core/services/notifications/base_notification_handler.dar
 import 'package:tuoora/core/services/notifications/notification_payload.dart';
 import 'package:tuoora/presentation/student/widgets/birthday_wish_dialog.dart';
 
-/// Handles `data.type == "birthday_celebration"` taps — fired on a student's
-/// birthday.
-///
-/// Student-only: brings the student to the dashboard (so the celebration shows
-/// over the home screen) and pops a [BirthdayWishDialog].
 class BirthdayNotificationHandler extends BaseNotificationHandler {
   @override
   String get tag => 'BirthdayNotificationHandler';
@@ -23,7 +18,6 @@ class BirthdayNotificationHandler extends BaseNotificationHandler {
       return;
     }
 
-    // Land on the dashboard so the celebration shows over the home screen.
     if (Get.currentRoute != AppRoutes.studentDashboard) {
       log('navigating to dashboard (current=${Get.currentRoute})');
       Get.offAllNamed<dynamic>(AppRoutes.studentDashboard);

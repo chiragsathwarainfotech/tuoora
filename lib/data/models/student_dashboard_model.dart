@@ -15,6 +15,7 @@ class StudentDashboardData {
   final TodayAttendance todayAttendance;
   final List<StudentResourceModel> studyMaterials;
   final List<PendingFee> pendingFees;
+  final bool isBirthdayToday;
 
   StudentDashboardData({
     required this.studentName,
@@ -30,6 +31,7 @@ class StudentDashboardData {
     required this.todayAttendance,
     required this.studyMaterials,
     required this.pendingFees,
+    required this.isBirthdayToday,
   });
 
   factory StudentDashboardData.fromJson(Map<String, dynamic> json) {
@@ -62,6 +64,7 @@ class StudentDashboardData {
               ?.map((e) => PendingFee.fromJson(e))
               .toList() ??
           [],
+      isBirthdayToday: json['is_birthday_today'] ?? false,
     );
   }
 }

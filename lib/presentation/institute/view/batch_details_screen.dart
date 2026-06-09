@@ -61,16 +61,23 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
               ],
             ),
             Expanded(
-              child: SingleChildScrollView(
-                padding: AppSpacing.x16,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _buildBatchHeader(),
-                    AppSpacing.v24,
-                    _buildCourseManagementSection(),
-                    AppSpacing.v24,
-                  ],
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  await controller.refreshStudents();
+                },
+                color: AppColors.primaryBrand,
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: AppSpacing.x16,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _buildBatchHeader(),
+                      AppSpacing.v24,
+                      _buildCourseManagementSection(),
+                      AppSpacing.v24,
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -140,14 +147,14 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
                     Expanded(
                       child: InstituteMetricCard(
                         label: AppStrings.instTotalCollectionLabel,
-                        value: '₹${batch.totalExpected?.toString() ?? '0'}',
+                        value: '₹${controller.totalExpected.value}',
                       ),
                     ),
                     AppSpacing.h12,
                     Expanded(
                       child: InstituteMetricCard(
                         label: AppStrings.instFeesPaidLabel,
-                        value: '₹${batch.totalPaid?.toString() ?? '0'}',
+                        value: '₹${controller.totalPaid.value}',
                       ),
                     ),
                   ],

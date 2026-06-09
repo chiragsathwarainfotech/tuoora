@@ -118,15 +118,15 @@ class BatchController extends GetxController {
   }
 
   Future<void> loadBatches({bool isRefresh = true}) async {
+    if (isLoading.value || isMoreLoading.value) return;
+
     if (isRefresh) {
       currentPage.value = 1;
-      // Only show central loading if we don't have ANY data yet
-      // This prevents double loaders (RefreshIndicator + CommonStateWidget)
       if (batchesList.isEmpty) {
         isLoading.value = true;
       }
     } else {
-      if (currentPage.value >= lastPage.value) return;
+      if (currentPage.value > lastPage.value) return;
       isMoreLoading.value = true;
     }
 
@@ -146,9 +146,7 @@ class BatchController extends GetxController {
       }
 
       lastPage.value = response.lastPage;
-      if (currentPage.value < lastPage.value) {
-        currentPage.value++;
-      }
+      currentPage.value++;
     } catch (e) {
       AppSnackBar.error('Failed to load batches: ${e.toString()}');
     } finally {
@@ -303,11 +301,14 @@ class BatchController extends GetxController {
           );
           await _repository.deleteBatch(int.parse(id));
           batchesList.removeWhere((batch) => batch.id == id);
-          
+
           Get.back(); // close loading dialog
           Get.back(); // Pop the BatchDetailsScreen
-          
-          AppSnackBar.success(AppStrings.batchDeletedSuccessfully, title: AppStrings.deleted);
+
+          AppSnackBar.success(
+            AppStrings.batchDeletedSuccessfully,
+            title: AppStrings.deleted,
+          );
         } catch (e) {
           Get.back(); // close loading dialog
           AppSnackBar.error(e.toString());

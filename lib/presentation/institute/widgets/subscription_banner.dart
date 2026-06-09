@@ -17,59 +17,82 @@ class SubscriptionBanner extends StatelessWidget {
     return Obx(() {
       final subscription = authService.subscription;
       if (subscription == null || subscription.isActive) {
-        if (subscription != null && subscription.endDate != null) {
-          final daysLeft = subscription.endDate!
-              .difference(DateTime.now())
-              .inDays;
-          if (daysLeft >= 0 && daysLeft <= 7) {
-            return _buildBanner(
-              icon: Icons.warning_amber_rounded,
-              accent: AppColors.primaryBrand,
-              background: AppColors.primaryBrandLight,
-              title: 'Your Plan is Expiring Soon!',
-              messageWidget: RichText(
-                text: TextSpan(
-                  style: AppTextStyles.outfit(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.textTertiary,
-                    height: 1.4,
-                  ),
-                  children: [
-                    const TextSpan(text: 'Your subscription has only '),
-                    TextSpan(
-                      text: '$daysLeft ${daysLeft == 1 ? 'Day' : 'Days'} Left',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.primaryBrand,
-                      ),
-                    ),
-                    const TextSpan(
-                      text: '. Renew now to prevent any service disruption.',
-                    ),
-                  ],
-                ),
-              ),
-              action: 'Renew Subscription Now',
-              onAction: () => Get.toNamed(AppRoutes.instituteSubscriptionRenew),
-            );
-          }
-        }
         return const SizedBox.shrink();
+      }
+
+      if (subscription.isExpireSoon) {
+        final daysLeft = subscription.daysLeft;
+        return _buildBanner(
+          icon: Icons.warning_amber_rounded,
+          accent: AppColors.primaryBrand,
+          background: AppColors.primaryBrandLight,
+          title: 'Your Plan is Expiring Soon!',
+          messageWidget: RichText(
+            text: TextSpan(
+              style: AppTextStyles.outfit(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                color: AppColors.textTertiary,
+                height: 1.4,
+              ),
+              children: [
+                const TextSpan(text: 'Your subscription has only '),
+                TextSpan(
+                  text: '$daysLeft ${daysLeft == 1 ? 'Day' : 'Days'} Left',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.primaryBrand,
+                  ),
+                ),
+                const TextSpan(
+                  text: '. Renew now to prevent any service disruption.',
+                ),
+              ],
+            ),
+          ),
+          action: 'Renew Subscription Now',
+          onAction: () => Get.toNamed(AppRoutes.instituteSubscriptionRenew),
+        );
       }
 
       if (subscription.isPending) {
         return _buildBanner(
-          icon: Icons.hourglass_top_rounded,
+          icon: Icons.autorenew_rounded,
           accent: AppColors.warningAmber,
           background: AppColors.warningBg,
-          title: AppStrings.renewalRequestPendingReview,
+          title: 'Renewal Request Pending Review',
           message:
               'We have received your payment proof and transaction reference. Our billing team will verify it shortly.',
         );
       }
 
-      // expired (or any non-active, non-pending status)
+      if (subscription.isReject) {
+        return _buildBanner(
+          icon: Icons.cancel_outlined,
+          accent: AppColors.errorRed,
+          background: AppColors.errorBg,
+          title: 'Renewal Request Rejected',
+          message:
+              'Your previous renewal request was rejected. Please review your payment details and submit again.',
+          action: 'Try Again',
+          onAction: () => Get.toNamed(AppRoutes.instituteSubscriptionRenew),
+        );
+      }
+
+      if (subscription.isCancel) {
+        return _buildBanner(
+          icon: Icons.do_not_disturb_alt_rounded,
+          accent: AppColors.errorRed,
+          background: AppColors.errorBg,
+          title: 'Subscription Cancelled',
+          message:
+              'Your subscription has been cancelled. Please renew to restore full functionality to your institute.',
+          action: 'Renew Subscription Now',
+          onAction: () => Get.toNamed(AppRoutes.instituteSubscriptionRenew),
+        );
+      }
+
+      // Default to expired for any other non-active states
       return _buildBanner(
         icon: Icons.error_outline_rounded,
         accent: AppColors.errorRed,

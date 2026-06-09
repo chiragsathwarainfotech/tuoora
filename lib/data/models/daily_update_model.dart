@@ -87,6 +87,10 @@ class DailyUpdate {
       'target_type': targetType.name,
     };
 
+    if (date != null) {
+      data['date'] = "${date!.year.toString().padLeft(4, '0')}-${date!.month.toString().padLeft(2, '0')}-${date!.day.toString().padLeft(2, '0')}";
+    }
+
     if (targetType == UpdateTargetType.all) {
       if (studentId != null) data['student_id'] = studentId;
     } else if (targetType == UpdateTargetType.batch) {

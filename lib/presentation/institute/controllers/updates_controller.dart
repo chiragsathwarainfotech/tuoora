@@ -23,6 +23,7 @@ class UpdatesController extends GetxController {
   final selectedCategory = UpdateCategory.Academic.obs;
   final selectedAudience = UpdateTargetType.all.obs;
   final selectedBatch = Rxn<Batch>();
+  final selectedHolidayDate = Rxn<DateTime>();
 
   final subjectController = TextEditingController();
   final messageController = TextEditingController();
@@ -33,6 +34,7 @@ class UpdatesController extends GetxController {
   final triedToSave = false.obs;
   final subjectError = RxnString();
   final messageError = RxnString();
+  final holidayDateError = RxnString();
 
   bool validateForm() {
     bool isValid = true;
@@ -51,6 +53,13 @@ class UpdatesController extends GetxController {
       messageError.value = null;
     }
 
+    if (selectedCategory.value == UpdateCategory.Holiday && selectedHolidayDate.value == null) {
+      holidayDateError.value = 'Holiday date is required';
+      isValid = false;
+    } else {
+      holidayDateError.value = null;
+    }
+
     return isValid;
   }
 
@@ -67,9 +76,19 @@ class UpdatesController extends GetxController {
   Future<void> fetchBatches() async {
     try {
       isLoadingBatches.value = true;
-      final response = await _instituteRepository.listBatches();
-      availableBatches.assignAll(response.items);
-      if (availableBatches.isNotEmpty) {
+      int page = 1;
+      int lastPage = 1;
+      final allBatches = <Batch>[];
+
+      do {
+        final response = await _instituteRepository.listBatches(page: page);
+        allBatches.addAll(response.items);
+        lastPage = response.lastPage;
+        page++;
+      } while (page <= lastPage);
+
+      availableBatches.assignAll(allBatches);
+      if (availableBatches.isNotEmpty && selectedBatch.value == null) {
         selectedBatch.value = availableBatches.first;
       }
     } catch (e) {
@@ -129,6 +148,7 @@ class UpdatesController extends GetxController {
         description: messageController.text,
         category: selectedCategory.value,
         batchId: targetsBatch ? selectedBatch.value?.id : null,
+        date: selectedCategory.value == UpdateCategory.Holiday ? selectedHolidayDate.value : null,
       );
 
       await _updateRepository.createDailyUpdate(dailyUpdate.toJson());
@@ -144,6 +164,7 @@ class UpdatesController extends GetxController {
       if (availableBatches.isNotEmpty) {
         selectedBatch.value = availableBatches.first;
       }
+      selectedHolidayDate.value = null;
       triedToSave.value = false;
       subjectError.value = null;
       messageError.value = null;

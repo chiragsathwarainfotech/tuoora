@@ -6,6 +6,9 @@ class Subscription {
   final DateTime? startDate;
   final DateTime? endDate;
   final String status;
+  final String effectiveStatus;
+  final String statusLabel;
+  final int daysLeft;
 
   const Subscription({
     required this.id,
@@ -15,11 +18,17 @@ class Subscription {
     this.startDate,
     this.endDate,
     required this.status,
+    this.effectiveStatus = '',
+    this.statusLabel = '',
+    this.daysLeft = 0,
   });
 
-  bool get isActive => status.toLowerCase() == 'active';
-  bool get isExpired => status.toLowerCase() == 'expired';
-  bool get isPending => status.toLowerCase() == 'pending';
+  bool get isActive => effectiveStatus.toLowerCase() == 'active';
+  bool get isExpired => effectiveStatus.toLowerCase() == 'expired';
+  bool get isPending => effectiveStatus.toLowerCase() == 'pending';
+  bool get isCancel => effectiveStatus.toLowerCase() == 'cancel';
+  bool get isExpireSoon => effectiveStatus.toLowerCase() == 'expire_soon';
+  bool get isReject => effectiveStatus.toLowerCase() == 'reject';
 
   Subscription copyWith({String? status}) {
     return Subscription(
@@ -30,6 +39,9 @@ class Subscription {
       startDate: startDate,
       endDate: endDate,
       status: status ?? this.status,
+      effectiveStatus: effectiveStatus,
+      statusLabel: statusLabel,
+      daysLeft: daysLeft,
     );
   }
 
@@ -47,6 +59,9 @@ class Subscription {
       startDate: parseDate(json['start_date']),
       endDate: parseDate(json['end_date']),
       status: (json['status'] ?? '').toString(),
+      effectiveStatus: (json['effective_status'] ?? json['status'] ?? '').toString(),
+      statusLabel: (json['status_label'] ?? '').toString(),
+      daysLeft: json['days_left'] ?? 0,
     );
   }
 
@@ -59,6 +74,9 @@ class Subscription {
       'start_date': startDate?.toIso8601String(),
       'end_date': endDate?.toIso8601String(),
       'status': status,
+      'effective_status': effectiveStatus,
+      'status_label': statusLabel,
+      'days_left': daysLeft,
     };
   }
 }

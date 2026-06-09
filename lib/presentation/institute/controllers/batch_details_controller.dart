@@ -25,6 +25,8 @@ class BatchDetailsController extends GetxController {
   final assignedStudents = <BatchStudent>[].obs;
   final isLoading = false.obs;
   final studentCount = 0.obs;
+  final totalExpected = ''.obs;
+  final totalPaid = ''.obs;
 
   final assignedSearchController = TextEditingController();
   final assignedSearchQuery = ''.obs;
@@ -46,15 +48,17 @@ class BatchDetailsController extends GetxController {
   void onInit() {
     super.onInit();
     studentCount.value = int.tryParse(batch.studentCount.split(' ')[0]) ?? 0;
-    _loadAssignedStudents();
+    totalExpected.value = batch.totalExpected?.toString() ?? '0';
+    totalPaid.value = batch.totalPaid?.toString() ?? '0';
+    _loadAssignedStudents(batch.students);
   }
 
-  void _loadAssignedStudents() {
+  void _loadAssignedStudents(List<dynamic>? studentsList) {
     assignedStudents.clear();
 
-    if (batch.students != null && batch.students!.isNotEmpty) {
+    if (studentsList != null && studentsList.isNotEmpty) {
       final List<BatchStudent> loadedStudents = [];
-      for (var s in batch.students!) {
+      for (var s in studentsList) {
         final studentModel = Student(
           id: s.id,
           name: s.name,
@@ -114,9 +118,18 @@ class BatchDetailsController extends GetxController {
   }
 
   Future<void> refreshStudents() async {
-    // This could be used if we had a "Get Batch Details" API
-    // For now, it just ensures the local state is fresh
-    _loadAssignedStudents();
+    if (Get.isRegistered<BatchController>()) {
+      final bc = Get.find<BatchController>();
+      await bc.loadBatches(isRefresh: true);
+      
+      final updatedBatch = bc.batchesList.firstWhereOrNull((b) => b.id == batch.id);
+      if (updatedBatch != null) {
+        studentCount.value = int.tryParse(updatedBatch.studentCount.split(' ')[0]) ?? 0;
+        totalExpected.value = updatedBatch.totalExpected?.toString() ?? '0';
+        totalPaid.value = updatedBatch.totalPaid?.toString() ?? '0';
+        _loadAssignedStudents(updatedBatch.students);
+      }
+    }
   }
 
   @override

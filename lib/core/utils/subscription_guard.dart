@@ -28,14 +28,14 @@ class SubscriptionGuard {
   /// grey out add affordances.
   static bool get blocksAdd {
     final sub = _subscription;
-    return sub != null && !sub.isActive;
+    return sub != null && !(sub.isActive || sub.isExpireSoon);
   }
 
   /// Runs [onAllowed] only when adding is permitted. Otherwise shows a prompt
   /// explaining why and (when expired) offering to open the renewal screen.
   static void runAddAction(VoidCallback onAllowed) {
     final sub = _subscription;
-    if (sub == null || sub.isActive) {
+    if (sub == null || sub.isActive || sub.isExpireSoon) {
       onAllowed();
       return;
     }

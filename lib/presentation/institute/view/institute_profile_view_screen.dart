@@ -749,11 +749,20 @@ class InstituteProfileViewScreen extends StatelessWidget {
       final sub = authService.subscription;
       if (sub == null) return const SizedBox.shrink();
 
-      final daysLeft = sub.endDate != null
-          ? sub.endDate!.difference(DateTime.now()).inDays
-          : 0;
-      final bool isExpiringSoon = daysLeft >= 0 && daysLeft <= 7;
+      final int daysLeft = sub.daysLeft;
+      final bool isExpiringSoon = sub.isExpireSoon;
       final dateFormat = DateFormat('dd MMM yyyy');
+
+      Color statusColor = AppColors.successGreen;
+      IconData statusIcon = Icons.verified_rounded;
+      
+      if (sub.isPending) {
+        statusColor = AppColors.warningAmber;
+        statusIcon = Icons.autorenew_rounded;
+      } else if (sub.isReject || sub.isCancel || sub.isExpired) {
+        statusColor = AppColors.errorRed;
+        statusIcon = Icons.error_outline_rounded;
+      }
 
       return _card(
         child: Column(
@@ -773,12 +782,12 @@ class InstituteProfileViewScreen extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(
-                    color: AppColors.successGreen.withValues(alpha: 0.1),
+                    color: statusColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
                   ),
-                  child: const Icon(
-                    Icons.verified_rounded,
-                    color: AppColors.successGreen,
+                  child: Icon(
+                    statusIcon,
+                    color: statusColor,
                     size: 20,
                   ),
                 ),

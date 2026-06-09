@@ -29,17 +29,11 @@ class _BatchesScreenState extends State<BatchesScreen> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
-    // Fetch every time the screen is created (not just first time) so
-    // the user sees fresh data when re-entering after creating a batch
-    // elsewhere or following a deep link.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.loadBatches(isRefresh: true);
     });
   }
 
-  /// Awaits a pushed route then refreshes — covers the "go to detail /
-  /// add screen, come back" path where the previous State is preserved
-  /// by the Navigator (so initState doesn't fire again).
   Future<void> _pushAndRefresh(Future<dynamic>? push) async {
     await push;
     controller.loadBatches(isRefresh: true);

@@ -11,6 +11,8 @@ import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:tuoora/presentation/institute/controllers/updates_controller.dart';
 import 'package:get/get.dart';
+import 'package:tuoora/core/widgets/app_pickers.dart';
+import 'package:intl/intl.dart';
 
 class CreateUpdateScreen extends GetView<UpdatesController> {
   const CreateUpdateScreen({super.key});
@@ -24,7 +26,10 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
           body: SafeArea(
             child: Column(
               children: [
-                const InstituteAppBar(title: AppStrings.createUpdate, isRoot: false),
+                const InstituteAppBar(
+                  title: AppStrings.createUpdate,
+                  isRoot: false,
+                ),
                 Expanded(
                   child: SingleChildScrollView(
                     padding: AppSpacing.screenPadding,
@@ -60,6 +65,18 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                             ),
                           ),
                         ),
+                        Obx(() {
+                          if (controller.selectedCategory.value ==
+                              UpdateCategory.Holiday) {
+                            return Column(
+                              children: [
+                                AppSpacing.v32,
+                                _buildHolidayDateCard(context, controller),
+                              ],
+                            );
+                          }
+                          return const SizedBox.shrink();
+                        }),
                         AppSpacing.v32,
                         Obx(
                           () => AppInputField(
@@ -156,10 +173,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
         ),
         AppSpacing.v12,
         Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 4,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           decoration: BoxDecoration(
             color: AppColors.fieldBg,
             borderRadius: BorderRadius.circular(12),
@@ -173,9 +187,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                   Icons.keyboard_arrow_down_rounded,
                   color: AppColors.textPrimary,
                 ),
-                items: UpdateTargetType.values.map((
-                  UpdateTargetType value,
-                ) {
+                items: UpdateTargetType.values.map((UpdateTargetType value) {
                   String label = value == UpdateTargetType.all
                       ? 'All Students'
                       : 'Specific Batch';
@@ -374,6 +386,98 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
         icon: Icons.send_rounded,
         onPressed: () => controller.broadcastUpdate(),
       ),
+    );
+  }
+
+  Widget _buildHolidayDateCard(
+    BuildContext context,
+    UpdatesController controller,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'HOLIDAY DATE',
+          style: AppTextStyles.outfit(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: AppColors.fieldLabel,
+          ),
+        ),
+        AppSpacing.v12,
+        GestureDetector(
+          onTap: () async {
+            final now = DateTime.now();
+            final date = await AppPickers.date(
+              context,
+              initialDate: controller.selectedHolidayDate.value ?? now,
+              firstDate: now,
+              lastDate: now.add(const Duration(days: 365 * 5)),
+            );
+            if (date != null) {
+              controller.selectedHolidayDate.value = date;
+              controller.holidayDateError.value = null;
+            }
+          },
+          child: Obx(
+            () => Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              decoration: BoxDecoration(
+                color: AppColors.fieldBg,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color:
+                      controller.triedToSave.value &&
+                          controller.holidayDateError.value != null
+                      ? AppColors.errorRed
+                      : Colors.transparent,
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    controller.selectedHolidayDate.value != null
+                        ? DateFormat(
+                            'MM/dd/yyyy',
+                          ).format(controller.selectedHolidayDate.value!)
+                        : 'mm/dd/yyyy',
+                    style: AppTextStyles.outfit(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: controller.selectedHolidayDate.value != null
+                          ? AppColors.textPrimary
+                          : AppColors.textMuted,
+                    ),
+                  ),
+                  const Icon(
+                    Icons.calendar_today_rounded,
+                    color: AppColors.textPrimary,
+                    size: 20,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        Obx(() {
+          if (controller.triedToSave.value &&
+              controller.holidayDateError.value != null) {
+            return Padding(
+              padding: const EdgeInsets.only(top: 8, left: 4),
+              child: Text(
+                controller.holidayDateError.value!,
+                style: AppTextStyles.outfit(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.errorRed,
+                ),
+              ),
+            );
+          }
+          return const SizedBox.shrink();
+        }),
+      ],
     );
   }
 }

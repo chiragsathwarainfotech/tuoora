@@ -74,6 +74,11 @@ class InstituteUpdatesScreen extends StatelessWidget {
                             iconColor = AppColors.bohoRed;
                             icon = Icons.celebration_rounded;
                             break;
+                          case UpdateCategory.Holiday:
+                            iconBg = AppColors.errorBg;
+                            iconColor = AppColors.bohoRed;
+                            icon = Icons.holiday_village;
+                            break;
                           case UpdateCategory.Other:
                             iconBg = AppColors.warningBg;
                             iconColor = AppColors.orangeTag;
@@ -121,10 +126,6 @@ class InstituteUpdatesScreen extends StatelessWidget {
     );
   }
 
-  // Compact pill-shaped "View File" affordance that mirrors the web's
-  // attachment chip. Tapping it opens the details dialog (mirrors web's
-  // expanded card) — clicking the attachment row in the dialog opens the
-  // file inside the in-app viewer.
   Widget _buildViewFileButton(DailyUpdate update) {
     return Align(
       alignment: Alignment.centerLeft,
@@ -265,8 +266,7 @@ class InstituteUpdatesScreen extends StatelessWidget {
                         padding: const EdgeInsets.all(AppSpacing.s8),
                         decoration: BoxDecoration(
                           color: AppColors.primaryBrandLight,
-                          borderRadius:
-                              BorderRadius.circular(AppSpacing.s8),
+                          borderRadius: BorderRadius.circular(AppSpacing.s8),
                         ),
                         child: const Icon(
                           Icons.attach_file_rounded,
@@ -319,8 +319,13 @@ class InstituteUpdatesScreen extends StatelessWidget {
     final url = update.attachment;
     if (url == null || url.trim().isEmpty) return;
     final lower = url.toLowerCase();
-    final isImage = ['.jpg', '.jpeg', '.png', '.gif', '.webp']
-        .any(lower.endsWith);
+    final isImage = [
+      '.jpg',
+      '.jpeg',
+      '.png',
+      '.gif',
+      '.webp',
+    ].any(lower.endsWith);
     final isVideo = ['.mp4', '.mov', '.m4v', '.webm'].any(lower.endsWith);
     final title = update.topic ?? 'Attachment';
     if (isImage) {

@@ -44,7 +44,7 @@ class SubscriptionBanner extends StatelessWidget {
         title: AppStrings.yourSubscriptionHasBeenExpired,
         message:
             'Primary academic and data management operations are restricted. Renew now to restore full access.',
-        action: 'Renew',
+        action: 'Renew Subscription Now',
         onAction: () => Get.toNamed(AppRoutes.instituteSubscriptionRenew),
       );
     });

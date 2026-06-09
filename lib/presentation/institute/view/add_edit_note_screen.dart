@@ -3,7 +3,6 @@ import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/widgets/app_input_field.dart';
-import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/presentation/institute/controllers/notes_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
@@ -78,6 +77,14 @@ class AddEditNoteScreen extends GetView<NotesController> {
     );
   }
 
+  // Static icon mapping for the hard-coded category names. If a new
+  // category is ever added to [NotesController.noteCategoryNames] without
+  // an entry here, it falls back to the bookmark icon.
+  static const Map<String, IconData> _categoryIcons = {
+    'Personal': Icons.person_outline_rounded,
+    'Work': Icons.work_outline_rounded,
+  };
+
   Widget _buildCategorySelection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,119 +99,28 @@ class AddEditNoteScreen extends GetView<NotesController> {
         ),
         AppSpacing.v12,
         Obx(() {
-          if (controller.isCategoriesLoading.value &&
-              controller.noteCategories.isEmpty) {
-            return const CommonLoading();
-          }
-
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         children: [
-                          ...controller.noteCategories.map((cat) {
-                            final isSelected =
-                                controller.selectedCategoryName.value ==
-                                cat.name;
-                            final Color catColor = Color(
-                              int.parse(cat.color.replaceAll('#', '0xFF')),
-                            );
-
-                            return Padding(
+                          for (final name in NotesController.noteCategoryNames)
+                            Padding(
                               padding: const EdgeInsets.only(right: 10),
-                              child: GestureDetector(
-                                onTap: () {
-                                  controller.selectedCategoryName.value =
-                                      cat.name;
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 20,
-                                    vertical: 10,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: isSelected
-                                        ? catColor
-                                        : AppColors.fieldBg.withValues(
-                                            alpha: 0.5,
-                                          ),
-                                    borderRadius: BorderRadius.circular(
-                                      AppSpacing.cardRadius,
-                                    ),
-                                    border: Border.all(
-                                      color: isSelected
-                                          ? catColor
-                                          : AppColors.borderGrey.withValues(
-                                              alpha: 0.3,
-                                            ),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    cat.name,
-                                    style: AppTextStyles.outfit(
-                                      fontSize: 13,
-                                      fontWeight: isSelected
-                                          ? FontWeight.w600
-                                          : FontWeight.w500,
-                                      color: isSelected
-                                          ? AppColors.white
-                                          : AppColors.textSecondary,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          }),
+                              child: _categoryChip(name),
+                            ),
                         ],
                       ),
                     ),
                   ),
                   const SizedBox(width: 12),
-                  GestureDetector(
-                    onTap: () => controller.showImagePickerOptions(),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 10,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.primaryBrand,
-                        borderRadius: BorderRadius.circular(
-                          AppSpacing.cardRadius,
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.image_outlined,
-                            size: 16,
-                            color: AppColors.white,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            controller.selectedImagePath.value != null
-                                ? 'Image Added'
-                                : 'Add Image',
-                            style: AppTextStyles.outfit(
-                              fontSize: 13,
-                              fontWeight:
-                                  controller.selectedImagePath.value != null
-                                  ? FontWeight.w600
-                                  : FontWeight.w500,
-                              color: AppColors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  _addImageChip(),
                 ],
               ),
               if (controller.categoryError.value != null)
@@ -223,6 +139,83 @@ class AddEditNoteScreen extends GetView<NotesController> {
           );
         }),
       ],
+    );
+  }
+
+  Widget _categoryChip(String name) {
+    final isSelected = controller.selectedCategoryName.value == name;
+    final icon = _categoryIcons[name] ?? Icons.bookmark_outline_rounded;
+    return GestureDetector(
+      onTap: () => controller.selectedCategoryName.value = name,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? AppColors.primaryBrand
+              : AppColors.fieldBg.withValues(alpha: 0.5),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+          border: Border.all(
+            color: isSelected
+                ? AppColors.primaryBrand
+                : AppColors.borderGrey.withValues(alpha: 0.3),
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              size: 16,
+              color: isSelected ? AppColors.white : AppColors.textSecondary,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              name,
+              style: AppTextStyles.outfit(
+                fontSize: 13,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                color: isSelected ? AppColors.white : AppColors.textSecondary,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _addImageChip() {
+    return GestureDetector(
+      onTap: () => controller.showImagePickerOptions(),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        decoration: BoxDecoration(
+          color: AppColors.primaryBrand,
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(
+              Icons.image_outlined,
+              size: 16,
+              color: AppColors.white,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              controller.selectedImagePath.value != null
+                  ? 'Image Added'
+                  : 'Add Image',
+              style: AppTextStyles.outfit(
+                fontSize: 13,
+                fontWeight: controller.selectedImagePath.value != null
+                    ? FontWeight.w600
+                    : FontWeight.w500,
+                color: AppColors.white,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 

@@ -115,9 +115,6 @@ class UpdatesController extends GetxController {
     triedToSave.value = true;
     if (!validateForm()) return;
 
-    // When the audience is a specific batch we must have a batch selected,
-    // otherwise the request goes out with target_type=batch and no batch_id
-    // and the backend rejects it.
     final targetsBatch = selectedAudience.value == UpdateTargetType.batch;
     if (targetsBatch && selectedBatch.value == null) {
       AppSnackBar.error(AppStrings.pleaseSelectABatchForThis);
@@ -127,15 +124,10 @@ class UpdatesController extends GetxController {
     try {
       isCreating.value = true;
       final dailyUpdate = DailyUpdate(
-        recipient: UpdateRecipient.students, // Default or ignored by backend
         targetType: selectedAudience.value,
         topic: subjectController.text,
         description: messageController.text,
         category: selectedCategory.value,
-        // No per-student targeting exists in this screen — only "All
-        // Students" or "Specific Batch". studentId must stay null so we
-        // never send a bogus student_id (a hardcoded mock here used to make
-        // "All Students" broadcasts fail intermittently).
         batchId: targetsBatch ? selectedBatch.value?.id : null,
       );
 

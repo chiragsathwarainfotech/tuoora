@@ -6,7 +6,6 @@ class DailyUpdate {
   final int? batchId;
   final int? instituteId;
   final int? studentId;
-  final UpdateRecipient recipient;
   final UpdateCategory category;
   final UpdateTargetType targetType;
   final String? standard;
@@ -26,7 +25,6 @@ class DailyUpdate {
     this.batchId,
     this.instituteId,
     this.studentId,
-    required this.recipient,
     required this.category,
     required this.targetType,
     this.standard,
@@ -56,10 +54,6 @@ class DailyUpdate {
       instituteId: json['institute_id'],
       studentId: json['student_id'],
       topic: json['topic'],
-      recipient: UpdateRecipient.values.firstWhere(
-        (e) => e.name == json['recipient'],
-        orElse: () => UpdateRecipient.students,
-      ),
       category: UpdateCategory.values.firstWhere(
         (e) =>
             e.name.toLowerCase() ==
@@ -113,14 +107,10 @@ class DailyUpdate {
   }
 
   String get audience {
-    if (recipient == UpdateRecipient.parents) return 'Parents';
-    String prefix = recipient == UpdateRecipient.both
-        ? 'Both - '
-        : 'Students - ';
     if (targetType == UpdateTargetType.batch) {
-      return '$prefix${batch?.name ?? "Batch"}';
+      return batch?.name ?? 'Batch';
     }
-    return '${prefix}All Students';
+    return 'All Students';
   }
 }
 
@@ -139,4 +129,3 @@ class DailyUpdateBatch {
     );
   }
 }
-

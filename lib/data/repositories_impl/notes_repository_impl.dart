@@ -28,19 +28,6 @@ class NotesRepositoryImpl {
     return NoteListResponse.fromJson(response.body);
   }
 
-  Future<List<NoteCategory>> getNoteCategories() async {
-    final response = await _apiClient.get(ApiConstants.instituteNoteCategories);
-
-    if (response.status.hasError) {
-      throw Exception(
-        'Failed to fetch note categories: ${response.statusText}',
-      );
-    }
-
-    final List<dynamic> data = response.body['data'] ?? [];
-    return data.map((json) => NoteCategory.fromJson(json)).toList();
-  }
-
   Future<void> createNote(dynamic noteData) async {
     final response = await _apiClient.post(
       ApiConstants.instituteNotes,

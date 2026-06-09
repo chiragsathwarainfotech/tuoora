@@ -23,14 +23,6 @@ enum NotificationKind {
   }
 }
 
-enum UpdateRecipient {
-  students,
-  parents,
-  both;
-
-  String toJson() => name;
-}
-
 enum UpdateTargetType {
   all,
   batch;
@@ -43,6 +35,7 @@ enum UpdateCategory {
   Administrative,
   Emergency,
   Event,
+  Holiday,
   Other;
 
   String toJson() => name;

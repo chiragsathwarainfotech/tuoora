@@ -30,8 +30,13 @@ class NotesController extends GetxController {
   final contentController = TextEditingController();
   final triedToSave = false.obs;
 
-  final noteCategories = <NoteCategory>[].obs;
-  final isCategoriesLoading = false.obs;
+  /// Static, hard-coded categories shown as chips on the add/edit-note
+  /// screen. We dropped the `/note-categories` API call because the
+  /// business only needs these two buckets — fewer round-trips, no
+  /// loading spinner, no failure case. The string sent to the backend
+  /// in the `category` field is exactly this value (e.g. `Personal`).
+  static const List<String> noteCategoryNames = ['Personal', 'Work'];
+
   final selectedCategoryName = RxnString();
 
   final selectedNote = Rxn<Note>();
@@ -49,7 +54,6 @@ class NotesController extends GetxController {
   void onInit() {
     super.onInit();
     fetchNotes();
-    fetchNoteCategories();
 
     // Search debouncing
     debounce(
@@ -66,18 +70,6 @@ class NotesController extends GetxController {
   void _clearError(RxnString error) {
     if (triedToSave.value && error.value != null) {
       error.value = null;
-    }
-  }
-
-  Future<void> fetchNoteCategories() async {
-    try {
-      isCategoriesLoading.value = true;
-      final categories = await _notesRepository.getNoteCategories();
-      noteCategories.assignAll(categories);
-    } catch (e) {
-      debugPrint('Error fetching note categories: $e');
-    } finally {
-      isCategoriesLoading.value = false;
     }
   }
 

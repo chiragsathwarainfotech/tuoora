@@ -34,14 +34,9 @@ class AssignToBatchController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // Seed the picker with every globally-loaded student that is not yet
-    // assigned to any batch, so the institute can scan the unassigned roster
-    // immediately without typing anything.
     _loadUnassignedStudents();
   }
 
-  // Filters [instituteController.students] down to those with no batch and
-  // not already enrolled in / picked for THIS batch.
   void _loadUnassignedStudents() {
     final existingIds = batchDetailsController.assignedStudents
         .map((s) => s.student.id)

@@ -6,9 +6,8 @@ import 'package:tuoora/data/repositories_impl/auth_repository_impl.dart';
 import 'package:get/get.dart';
 
 class ApiClient extends GetConnect {
-  /// Shared in-flight refresh future so two simultaneous 401s only
-  /// trigger ONE network round-trip to `/auth/refresh`.
   Future<bool>? _refreshFuture;
+  bool _loggingOut = false;
 
   @override
   void onInit() {
@@ -45,6 +44,7 @@ class ApiClient extends GetConnect {
 
       final authService = Get.find<AuthService>();
       if (authService.refreshToken.isEmpty) {
+        await _forceLogout();
         return request;
       }
 
@@ -84,6 +84,10 @@ class ApiClient extends GetConnect {
               );
             }
           }
+        }
+
+        if (response.statusCode == 401) {
+          _forceLogout();
         }
       } else {
         // Log body only in debug mode or if specifically needed, keeping it minimal for now
@@ -127,6 +131,8 @@ class ApiClient extends GetConnect {
   }
 
   Future<void> _forceLogout() async {
+    if (_loggingOut) return;
+    _loggingOut = true;
     try {
       final auth = Get.find<AuthService>();
       final role = auth.currentUser?.role ?? 'INSTITUTE';
@@ -136,6 +142,13 @@ class ApiClient extends GetConnect {
       try {
         Get.offAllNamed(AppRoutes.login);
       } catch (_) {}
+    } finally {
+      // Release the guard after a short delay so any in-flight 401s
+      // from sibling requests are absorbed silently, but a *future*
+      // unrelated session can log out cleanly again.
+      Future<void>.delayed(const Duration(seconds: 3), () {
+        _loggingOut = false;
+      });
     }
   }
 }

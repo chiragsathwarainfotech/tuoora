@@ -133,12 +133,14 @@ class StaffProfileScreen extends GetView<StaffController> {
       children: [
         Icon(icon, size: 16, color: iconColor),
         AppSpacing.h12,
-        Text(
-          value,
-          style: AppTextStyles.outfit(
-            fontSize: 13,
-            fontWeight: FontWeight.w400,
-            color: iconColor,
+        Flexible(
+          child: Text(
+            value,
+            style: AppTextStyles.outfit(
+              fontSize: 13,
+              fontWeight: FontWeight.w400,
+              color: iconColor,
+            ),
           ),
         ),
       ],

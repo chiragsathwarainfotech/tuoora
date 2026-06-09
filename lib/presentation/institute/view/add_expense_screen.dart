@@ -66,6 +66,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
             icon: Icons.currency_rupee_rounded,
             controller: controller.amountController,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            maxLength: 6,
             errorText: controller.amountError.value,
           ),
         ),

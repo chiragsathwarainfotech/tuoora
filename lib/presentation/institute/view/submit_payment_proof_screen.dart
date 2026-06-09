@@ -11,8 +11,7 @@ import 'package:tuoora/core/widgets/app_input_field.dart';
 import 'package:tuoora/presentation/institute/controllers/subscription_renewal_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 
-class SubmitPaymentProofScreen
-    extends GetView<SubscriptionRenewalController> {
+class SubmitPaymentProofScreen extends GetView<SubscriptionRenewalController> {
   const SubmitPaymentProofScreen({super.key});
 
   @override
@@ -100,7 +99,7 @@ class SubmitPaymentProofScreen
           style: AppTextStyles.outfit(
             fontSize: 12,
             fontWeight: FontWeight.w600,
-            color: AppColors.brandAppBarColor,
+            color: AppColors.fieldLabel,
             letterSpacing: 1.0,
           ),
         ),
@@ -112,6 +111,7 @@ class SubmitPaymentProofScreen
             onTap: controller.pickScreenshot,
             child: Container(
               height: AppSpacing.s140,
+              width: double.infinity,
               decoration: BoxDecoration(
                 color: AppColors.fieldBg,
                 borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
@@ -122,7 +122,9 @@ class SubmitPaymentProofScreen
               ),
               child: path != null
                   ? ClipRRect(
-                      borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+                      borderRadius: BorderRadius.circular(
+                        AppSpacing.cardRadius,
+                      ),
                       child: Image.file(
                         File(path),
                         width: double.infinity,

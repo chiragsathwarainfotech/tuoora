@@ -231,18 +231,13 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                 ),
                 clipBehavior: Clip.antiAlias,
                 child: path == null
-                    ? const Center(
-                        child: Icon(
-                          Icons.school_rounded,
-                          size: 56,
-                          color: AppColors.primaryBrand,
-                        ),
-                      )
+                    ? _buildInitialsPlaceholder()
                     : (path.startsWith('http') || !path.contains('/')
                           ? AppNetworkImage(
                               url: path,
                               fit: BoxFit.cover,
-                              errorWidget: const Icon(Icons.error),
+                              errorWidget: _buildInitialsPlaceholder(),
+                              placeholder: _buildInitialsPlaceholder(),
                             )
                           : Image.file(File(path), fit: BoxFit.cover)),
               );
@@ -286,6 +281,32 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildInitialsPlaceholder() {
+    String name = controller.instituteNameController.text.trim();
+    if (name.isEmpty) name = controller.instituteOwnerNameController.text.trim();
+    
+    String initials = 'IN';
+    if (name.isNotEmpty) {
+      List<String> parts = name.trim().split(RegExp(r'\s+'));
+      if (parts.length > 1) {
+        initials = '${parts.first[0]}${parts.last[0]}'.toUpperCase();
+      } else {
+        initials = name.substring(0, name.length >= 2 ? 2 : 1).toUpperCase();
+      }
+    }
+    
+    return Center(
+      child: Text(
+        initials,
+        style: AppTextStyles.outfit(
+          fontSize: 36,
+          fontWeight: FontWeight.w700,
+          color: AppColors.primaryBrand,
+        ),
+      ),
     );
   }
 

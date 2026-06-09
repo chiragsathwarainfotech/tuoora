@@ -14,6 +14,7 @@ import 'package:tuoora/presentation/institute/controllers/batch_controller.dart'
 import 'package:tuoora/core/widgets/app_search_field.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class AssignToBatchController extends GetxController {
@@ -74,7 +75,10 @@ class AssignToBatchController extends GetxController {
                 (s.name.toLowerCase().contains(trimmed.toLowerCase()) ||
                     s.id.toString().toLowerCase().contains(
                       trimmed.toLowerCase(),
-                    )) &&
+                    ) ||
+                    (s.enrollmentId.toLowerCase().contains(
+                      trimmed.toLowerCase(),
+                    ))) &&
                 s.batchId == null &&
                 !existingIds.contains(s.id) &&
                 !selectedIds.contains(s.id),
@@ -281,7 +285,7 @@ class AssignToBatchScreen extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              'Enrollment ID: ${student.id.toString()}',
+                              'Enrollment ID: ${student.enrollmentID}',
                               style: AppTextStyles.outfit(
                                 fontSize: 12,
                                 color: AppColors.textMuted,
@@ -370,7 +374,7 @@ class AssignToBatchScreen extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          'Enrollment ID: ${bs.student.id}',
+                          'Enrollment ID: ${bs.student.enrollmentId}',
                           style: AppTextStyles.outfit(
                             fontSize: 12,
                             color: AppColors.textMuted,
@@ -420,6 +424,7 @@ class AssignToBatchScreen extends StatelessWidget {
                                 val,
                               ),
                               keyboardType: TextInputType.number,
+                              inputFormatters: [LengthLimitingTextInputFormatter(6)],
                               style: AppTextStyles.outfit(
                                 fontWeight: FontWeight.w600,
                               ),

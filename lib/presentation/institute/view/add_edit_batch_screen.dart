@@ -62,6 +62,7 @@ class AddEditBatchScreen extends GetView<BatchController> {
                         keyboardType: TextInputType.number,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(6),
                         ],
                         errorText: controller.feeError.value,
                       ),

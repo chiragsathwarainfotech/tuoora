@@ -7,11 +7,6 @@ import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/services/auth_service.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 
-/// Institute-only banner shown on top of the dashboard based on the cached
-/// subscription status:
-///   active  -> nothing
-///   expired -> "subscription expired" with a Renew action
-///   pending -> "renewal request pending review" (message only)
 class SubscriptionBanner extends StatelessWidget {
   const SubscriptionBanner({super.key});
 
@@ -22,6 +17,44 @@ class SubscriptionBanner extends StatelessWidget {
     return Obx(() {
       final subscription = authService.subscription;
       if (subscription == null || subscription.isActive) {
+        if (subscription != null && subscription.endDate != null) {
+          final daysLeft = subscription.endDate!
+              .difference(DateTime.now())
+              .inDays;
+          if (daysLeft >= 0 && daysLeft <= 7) {
+            return _buildBanner(
+              icon: Icons.warning_amber_rounded,
+              accent: AppColors.primaryBrand,
+              background: AppColors.primaryBrandLight,
+              title: 'Your Plan is Expiring Soon!',
+              messageWidget: RichText(
+                text: TextSpan(
+                  style: AppTextStyles.outfit(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.textTertiary,
+                    height: 1.4,
+                  ),
+                  children: [
+                    const TextSpan(text: 'Your subscription has only '),
+                    TextSpan(
+                      text: '$daysLeft ${daysLeft == 1 ? 'Day' : 'Days'} Left',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.primaryBrand,
+                      ),
+                    ),
+                    const TextSpan(
+                      text: '. Renew now to prevent any service disruption.',
+                    ),
+                  ],
+                ),
+              ),
+              action: 'Renew Subscription Now',
+              onAction: () => Get.toNamed(AppRoutes.instituteSubscriptionRenew),
+            );
+          }
+        }
         return const SizedBox.shrink();
       }
 
@@ -55,7 +88,8 @@ class SubscriptionBanner extends StatelessWidget {
     required Color accent,
     required Color background,
     required String title,
-    required String message,
+    String? message,
+    Widget? messageWidget,
     String? action,
     VoidCallback? onAction,
   }) {
@@ -97,15 +131,17 @@ class SubscriptionBanner extends StatelessWidget {
                   ),
                 ),
                 AppSpacing.v4,
-                Text(
-                  message,
-                  style: AppTextStyles.outfit(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.textTertiary,
-                    height: 1.4,
+                if (messageWidget != null) messageWidget,
+                if (message != null)
+                  Text(
+                    message,
+                    style: AppTextStyles.outfit(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.textTertiary,
+                      height: 1.4,
+                    ),
                   ),
-                ),
                 if (action != null && onAction != null) ...[
                   AppSpacing.v12,
                   GestureDetector(
@@ -131,7 +167,7 @@ class SubscriptionBanner extends StatelessWidget {
                           Text(
                             action,
                             style: AppTextStyles.outfit(
-                              fontSize: 13,
+                              fontSize: 14,
                               fontWeight: FontWeight.w600,
                               color: AppColors.white,
                             ),

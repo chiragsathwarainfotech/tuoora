@@ -392,6 +392,12 @@ class InstituteProfileController extends GetxController {
     phoneError.value = phoneErr;
     if (phoneErr != null) return;
 
+    final pincodeText = pincodeController.text.trim();
+    if (pincodeText.isNotEmpty && pincodeText.length != 6) {
+      pincodeError.value = 'Pincode must be 6 digits';
+      return;
+    }
+
     try {
       isLoading.value = true;
       final updateData = {

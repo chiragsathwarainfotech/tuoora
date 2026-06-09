@@ -11,6 +11,7 @@ import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/core/widgets/app_search_field.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_label.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class RecordFeeScreen extends GetView<RecordFeeController> {
@@ -258,6 +259,7 @@ class RecordFeeScreen extends GetView<RecordFeeController> {
                   child: TextField(
                     onChanged: (value) => controller.amount.value = value,
                     keyboardType: TextInputType.number,
+                    inputFormatters: [LengthLimitingTextInputFormatter(6)],
                     decoration: InputDecoration(
                       hintText: AppStrings.recordFeeEnterAmount,
                       border: InputBorder.none,

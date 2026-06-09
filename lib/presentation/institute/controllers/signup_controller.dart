@@ -364,9 +364,14 @@ class SignupController extends GetxController {
     countryError.value = countryController.text.trim().isEmpty
         ? 'Country is required'
         : null;
-    pincodeError.value = pincodeController.text.trim().isEmpty
-        ? 'Pincode is required'
-        : null;
+    final pincodeText = pincodeController.text.trim();
+    if (pincodeText.isEmpty) {
+      pincodeError.value = 'Pincode is required';
+    } else if (pincodeText.length != 6) {
+      pincodeError.value = 'Pincode must be 6 digits';
+    } else {
+      pincodeError.value = null;
+    }
     if (ownerNameError.value != null ||
         instituteNameError.value != null ||
         phoneError.value != null ||

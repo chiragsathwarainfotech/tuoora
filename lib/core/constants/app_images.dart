@@ -22,6 +22,7 @@ class AppImages {
   static const String icModuleExpense = '$_iconsPath/expense.svg';
   static const String icModuleUpdates = '$_iconsPath/updates.svg';
   static const String icModuleFees = '$_iconsPath/fees.svg';
+  static const String icWhatsapp = '$_iconsPath/whatsapp.svg';
 
   // --- Batch Details — Course Management Tab Icons ---
   static const String icBatchStudents = '$_iconsPath/batch-students.svg';

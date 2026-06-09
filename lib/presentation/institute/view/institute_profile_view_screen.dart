@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
@@ -86,7 +87,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
                         AppSpacing.v16,
                         _buildUpiPaymentCard(controller),
                         AppSpacing.v16,
-                        _buildAccountCard(),
+                        _buildAccountCard(context),
                         AppSpacing.v16,
                         _buildSupportCard(),
                         AppSpacing.v16,
@@ -137,22 +138,20 @@ class InstituteProfileViewScreen extends StatelessWidget {
                 color: AppColors.primaryBrandLight,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(color: AppColors.fieldBorder),
-                image: p.logoUrl != null
-                    ? DecorationImage(
-                        image: CachedNetworkImageProvider(p.logoUrl!),
-                        fit: BoxFit.cover,
-                      )
-                    : null,
               ),
-              child: p.logoUrl == null
-                  ? const Center(
-                      child: Icon(
-                        Icons.school_rounded,
-                        size: 56,
-                        color: AppColors.primaryBrand,
-                      ),
-                    )
-                  : null,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: p.logoUrl != null && p.logoUrl!.isNotEmpty
+                    ? CachedNetworkImage(
+                        imageUrl: p.logoUrl!,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) =>
+                            _buildInitialsPlaceholder(p),
+                        errorWidget: (context, url, error) =>
+                            _buildInitialsPlaceholder(p),
+                      )
+                    : _buildInitialsPlaceholder(p),
+              ),
             ),
             AppSpacing.v16,
             Text(
@@ -190,6 +189,29 @@ class InstituteProfileViewScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildInitialsPlaceholder(InstituteProfile p) {
+    String name = p.instituteName ?? p.name;
+    String initials = 'IN';
+    if (name.isNotEmpty) {
+      List<String> parts = name.trim().split(RegExp(r'\s+'));
+      if (parts.length > 1) {
+        initials = '${parts.first[0]}${parts.last[0]}'.toUpperCase();
+      } else {
+        initials = name.substring(0, name.length >= 2 ? 2 : 1).toUpperCase();
+      }
+    }
+    return Center(
+      child: Text(
+        initials,
+        style: AppTextStyles.outfit(
+          fontSize: 36,
+          fontWeight: FontWeight.w700,
+          color: AppColors.primaryBrand,
+        ),
+      ),
+    );
+  }
+
   Widget _buildContactCard(dynamic p) {
     return _card(
       child: Column(
@@ -205,7 +227,6 @@ class InstituteProfileViewScreen extends StatelessWidget {
     );
   }
 
-  // ---------------------------------------------------- location section
   Widget _buildLocationCard(dynamic p) {
     final address = [
       p.address,
@@ -230,12 +251,6 @@ class InstituteProfileViewScreen extends StatelessWidget {
     );
   }
 
-  // ------------------------------------------------- UPI payment section
-  /// "UPI Payment Details" card — surfaces the saved UPI handle + QR
-  /// image when configured, or an "Add Payment Details" empty state
-  /// (with its own CTA button) when the institute hasn't set anything up
-  /// yet. The trailing edit link only appears once configured, so the
-  /// empty state owns its own primary action.
   Widget _buildUpiPaymentCard(InstituteProfileController controller) {
     return _card(
       child: Obx(() {
@@ -446,8 +461,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
     );
   }
 
-  // ----------------------------------------------------- account section
-  Widget _buildAccountCard() {
+  Widget _buildAccountCard(BuildContext context) {
     return _card(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -469,7 +483,8 @@ class InstituteProfileViewScreen extends StatelessWidget {
             icon: Icons.chat_bubble_outline_rounded,
             title: AppStrings.instWhatsAppIntegration,
             subtitle: AppStrings.automateAlertsViaMetaApi,
-            onTap: () => Get.toNamed(AppRoutes.instituteWhatsApp),
+            isComingSoon: true,
+            onTap: () => _showWhatsAppComingSoonDialog(context),
           ),
           _buildSettingsItem(
             icon: Icons.qr_code_2_rounded,
@@ -515,7 +530,6 @@ class InstituteProfileViewScreen extends StatelessWidget {
     );
   }
 
-  // ------------------------------------------------------ logout section
   Widget _buildLogoutCard(
     BuildContext context,
     InstituteProfileController controller,
@@ -599,6 +613,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
     required VoidCallback onTap,
     Color? iconColor,
     bool isLast = false,
+    bool isComingSoon = false,
   }) {
     return InkWell(
       onTap: onTap,
@@ -644,6 +659,25 @@ class InstituteProfileViewScreen extends StatelessWidget {
                 ],
               ),
             ),
+            if (isComingSoon) ...[
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppColors.primaryBrandLight,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  'COMING SOON',
+                  style: AppTextStyles.outfit(
+                    fontSize: 9,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.primaryBrand,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+              ),
+              AppSpacing.h8,
+            ],
             Icon(
               Icons.chevron_right_rounded,
               color: AppColors.textMuted,
@@ -701,6 +735,122 @@ class InstituteProfileViewScreen extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  void _showWhatsAppComingSoonDialog(BuildContext context) {
+    Get.dialog(
+      Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+        ),
+        insetPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.s16),
+        child: Container(
+          padding: AppSpacing.all24,
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Align(
+                alignment: Alignment.topRight,
+                child: InkWell(
+                  onTap: () => Get.back(),
+                  child: const Icon(
+                    Icons.close_rounded,
+                    size: 20,
+                    color: AppColors.textMuted,
+                  ),
+                ),
+              ),
+              AppSpacing.v12,
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      color: Color(0xFF25D366),
+                      borderRadius: BorderRadius.circular(
+                        AppSpacing.cardRadius,
+                      ),
+                    ),
+                  ),
+                  SvgPicture.asset(AppImages.icWhatsapp, width: 48, height: 48),
+                ],
+              ),
+              AppSpacing.v20,
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: AppColors.primaryBrandLight,
+                  borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+                ),
+                child: Text(
+                  'COMING SOON',
+                  style: AppTextStyles.outfit(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.primaryBrand,
+                    letterSpacing: 1.0,
+                  ),
+                ),
+              ),
+              AppSpacing.v20,
+              Text(
+                'WhatsApp Integration',
+                style: AppTextStyles.outfit(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+              AppSpacing.v16,
+              Text(
+                'We\'re building a direct integration with the Meta WhatsApp Cloud API. Soon you\'ll be able to send fee reminders, receipts, and daily updates straight to parents\' phones.',
+                textAlign: TextAlign.center,
+                style: AppTextStyles.outfit(
+                  fontSize: 13,
+                  height: 1.5,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.textTertiary,
+                ),
+              ),
+              AppSpacing.v32,
+              ElevatedButton(
+                onPressed: () => Get.back(),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.darkSlate,
+                  foregroundColor: AppColors.white,
+                  elevation: 0,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 40,
+                    vertical: 14,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+                  ),
+                ),
+                child: Text(
+                  'GOT IT',
+                  style: AppTextStyles.outfit(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 1.0,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

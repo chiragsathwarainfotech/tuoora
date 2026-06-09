@@ -271,7 +271,7 @@ class BatchStudentsScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Enrollment ID: ${bs.student.id}',
+                        'Enrollment ID: ${bs.student.enrollmentId}',
                         style: AppTextStyles.outfit(
                           fontSize: 12,
                           color: AppColors.textMuted,

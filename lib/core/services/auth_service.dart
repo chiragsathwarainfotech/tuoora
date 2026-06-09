@@ -1,5 +1,6 @@
 import 'package:tuoora/data/models/user_model.dart';
 import 'package:tuoora/data/models/subscription_model.dart';
+import 'package:tuoora/core/services/push_notification_service.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -116,6 +117,14 @@ class AuthService extends GetxService {
     _token.value = '';
     _refreshToken.value = '';
     _subscription.value = null;
+
+    try {
+      if (Get.isRegistered<PushNotificationService>()) {
+        await Get.find<PushNotificationService>().deleteToken();
+      }
+    } catch (e) {
+      print('AuthService: Failed to delete FCM token: $e');
+    }
 
     await _storage.remove('user');
     await _storage.remove('token');

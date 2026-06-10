@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/core/utils/validation_utils.dart';
 import 'package:intl/intl.dart';
+import 'package:tuoora/data/repositories_impl/student_repository_impl.dart';
 import 'institute_controller.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/core/api/api_exception.dart';
@@ -15,6 +16,8 @@ class RecordFeeController extends GetxController {
       Get.find<InstituteController>();
   final InstituteRepositoryImpl _instituteRepository =
       Get.find<InstituteRepositoryImpl>();
+  final StudentRepositoryImpl _studentRepository =
+      Get.find<StudentRepositoryImpl>();
 
   final searchQuery = ''.obs;
   final isStudentSelected = false.obs;
@@ -60,7 +63,8 @@ class RecordFeeController extends GetxController {
       final parsedAmount = double.tryParse(amount.value) ?? 0;
       final pendingFees = selectedStudent.value!.totalDue;
       if (parsedAmount > pendingFees) {
-        amountError.value = 'Amount cannot exceed pending fees of ₹$pendingFees';
+        amountError.value =
+            'Amount cannot exceed pending fees of ₹$pendingFees';
         isValid = false;
       }
     }
@@ -90,23 +94,31 @@ class RecordFeeController extends GetxController {
     });
   }
 
-  void _performSearch() {
+  Future<void> _performSearch() async {
     if (searchQuery.value.isEmpty) {
       filteredStudents.assignAll(instituteController.students);
     } else {
-      filteredStudents.assignAll(
-        instituteController.students
-            .where(
-              (s) =>
-                  s.name.toLowerCase().contains(
-                    searchQuery.value.toLowerCase(),
-                  ) ||
-                  s.id.toString().toLowerCase().contains(
-                    searchQuery.value.toLowerCase(),
-                  ),
-            )
-            .toList(),
-      );
+      try {
+        final students = await _studentRepository.listStudents(
+          search: searchQuery.value,
+        );
+        filteredStudents.assignAll(students);
+      } catch (e) {
+        // Fallback to local filter if API fails
+        filteredStudents.assignAll(
+          instituteController.students
+              .where(
+                (s) =>
+                    s.name.toLowerCase().contains(
+                      searchQuery.value.toLowerCase(),
+                    ) ||
+                    s.id.toString().toLowerCase().contains(
+                      searchQuery.value.toLowerCase(),
+                    ),
+              )
+              .toList(),
+        );
+      }
     }
   }
 

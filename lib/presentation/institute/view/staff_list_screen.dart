@@ -1,4 +1,4 @@
-﻿import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/utils/subscription_guard.dart';
@@ -58,31 +58,41 @@ class StaffListScreen extends GetView<StaffController> {
                             child: RefreshIndicator(
                               color: AppColors.primaryBrand,
                               onRefresh: () => controller.fetchStaffs(page: 1),
-                              child: GridView.builder(
-                                padding: const EdgeInsets.only(bottom: 96),
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 3,
-                                      crossAxisSpacing: 12,
-                                      mainAxisSpacing: 10,
-                                      childAspectRatio: 0.8,
+                              child: CustomScrollView(
+                                slivers: [
+                                  SliverPadding(
+                                    padding: const EdgeInsets.only(bottom: 16),
+                                    sliver: SliverGrid(
+                                      gridDelegate:
+                                          const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 3,
+                                        crossAxisSpacing: 12,
+                                        mainAxisSpacing: 10,
+                                        childAspectRatio: 0.8,
+                                      ),
+                                      delegate: SliverChildBuilderDelegate(
+                                        (context, index) {
+                                          return _buildStaffCard(staffs[index]);
+                                        },
+                                        childCount: staffs.length,
+                                      ),
                                     ),
-                                itemCount:
-                                    staffs.length +
-                                    (controller.currentPage.value <
-                                            controller.lastPage.value
-                                        ? 1
-                                        : 0),
-                                itemBuilder: (context, index) {
-                                  if (index == staffs.length) {
-                                    return const Padding(
-                                      padding: EdgeInsets.all(16.0),
-                                      child: CommonLoading(),
-                                    );
-                                  }
-                                  final staff = staffs[index];
-                                  return _buildStaffCard(staff);
-                                },
+                                  ),
+                                  if (controller.currentPage.value <
+                                      controller.lastPage.value)
+                                    const SliverToBoxAdapter(
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 24.0),
+                                        child: Center(
+                                          child: CommonLoading(),
+                                        ),
+                                      ),
+                                    ),
+                                  const SliverToBoxAdapter(
+                                    child: SizedBox(height: 96), // Space for FAB
+                                  ),
+                                ],
                               ),
                             ),
                           ),

@@ -831,7 +831,7 @@ class AppStrings {
   static const String profileUnavailable = 'Profile unavailable';
   static const String profile = 'Profile';
   static const String attendance = 'ATTENDANCE';
-  static const String assignmentCompleted = 'ASSIGNMENT COMPLETED';
+  static const String assignment = 'ASSIGNMENT';
   static const String chat = 'Chat';
   static const String notificationPreferences = 'Notification preferences';
   static const String language = 'Language';

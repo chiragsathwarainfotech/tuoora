@@ -336,14 +336,16 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
           child: _buildStatCard(
             label: AppStrings.attendance,
             value: '${stats.attendancePct}%',
+            subValue: stats.attendanceLabel,
             valueColor: AppColors.primaryBrand,
           ),
         ),
         const SizedBox(width: 8),
         Expanded(
           child: _buildStatCard(
-            label: AppStrings.assignmentCompleted,
+            label: AppStrings.assignment,
             value: '${stats.assignmentsPct}%',
+            subValue: stats.assignmentsLabel,
             valueColor: AppColors.primaryBrand,
           ),
         ),
@@ -354,6 +356,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
   Widget _buildStatCard({
     required String label,
     required String value,
+    required String subValue,
     Color? valueColor,
   }) {
     return Container(
@@ -375,14 +378,28 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
             ),
           ),
           const SizedBox(height: 6),
-          Text(
-            value,
-            style: AppTextStyles.outfit(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-              color: valueColor ?? AppColors.textPrimary,
-              height: 1,
-            ),
+          Row(
+            children: [
+              Text(
+                value,
+                style: AppTextStyles.outfit(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: valueColor ?? AppColors.textPrimary,
+                  height: 1,
+                ),
+              ),
+              const SizedBox(width: 6),
+              Text(
+                subValue,
+                style: AppTextStyles.outfit(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textPrimary,
+                  height: 1,
+                ),
+              ),
+            ],
           ),
         ],
       ),

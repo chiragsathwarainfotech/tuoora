@@ -83,12 +83,14 @@ class StudentProfileStats {
   final String attendanceLabel;
   final int assignmentsPct;
   final String assignmentsLabel;
+  final int performanceScore;
 
   StudentProfileStats({
     required this.attendancePct,
     required this.attendanceLabel,
     required this.assignmentsPct,
     required this.assignmentsLabel,
+    required this.performanceScore,
   });
 
   factory StudentProfileStats.fromJson(Map<String, dynamic> json) {
@@ -97,6 +99,7 @@ class StudentProfileStats {
       attendanceLabel: json['attendance_label'] ?? '',
       assignmentsPct: json['assignments_pct'] ?? 0,
       assignmentsLabel: json['assignments_label'] ?? '',
+      performanceScore: json['performance_score'] ?? 0,
     );
   }
 }

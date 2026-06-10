@@ -9,6 +9,7 @@ import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/services/media_cache_service.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
+import 'package:tuoora/core/widgets/pdf_viewer_popup.dart';
 import 'package:tuoora/presentation/institute/view/in_app_resource_viewer.dart';
 
 /// Renders a single chat attachment (image / video / audio / document) and
@@ -183,6 +184,7 @@ class ChatAttachmentView extends StatelessWidget {
 
     return GestureDetector(
       onTap: onTap,
+      behavior: HitTestBehavior.opaque,
       child: Container(
         constraints: const BoxConstraints(maxWidth: 240),
         padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
@@ -283,9 +285,16 @@ class ChatAttachmentView extends StatelessWidget {
         _open(InAppResourceViewer.audio(url: path, title: AppStrings.studentAssignmentAttachmentAudio));
         break;
       case _MediaKind.document:
-        _open(
-          InAppResourceViewer.web(url: path, title: _displayFilename(path)),
-        );
+        if (path.toLowerCase().endsWith('.pdf')) {
+          PdfViewerPopup.show(path: path, title: _displayFilename(path));
+        } else {
+          // Non-PDF documents need Google Docs Viewer which requires a public HTTP URL.
+          // If we downloaded it, the URL is still remote, so use the remote URL.
+          final targetUrl = url.startsWith('http') ? url : path;
+          _open(
+            InAppResourceViewer.web(url: targetUrl, title: _displayFilename(targetUrl)),
+          );
+        }
         break;
     }
   }

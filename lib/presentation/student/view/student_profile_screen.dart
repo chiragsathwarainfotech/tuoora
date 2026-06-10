@@ -60,6 +60,8 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
                       children: [
                         _buildHeroCard(profile.header),
                         const SizedBox(height: 12),
+                        _buildPerformanceScoreCard(profile.stats),
+                        const SizedBox(height: 12),
                         _buildStatsRow(profile.stats),
                         const SizedBox(height: 12),
                         _buildGridActions(),
@@ -249,6 +251,74 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
                         ),
                       ),
                     ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPerformanceScoreCard(StudentProfileStats stats) {
+    return Container(
+      padding: AppSpacing.cardPadding,
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+        border: Border.all(color: AppColors.borderGrey.withValues(alpha: 0.5)),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'PERFORMANCE SCORE',
+                  style: AppTextStyles.outfit(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textSecondary,
+                    letterSpacing: 1,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  'Overall Academic Standing',
+                  style: AppTextStyles.outfit(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            width: 56,
+            height: 56,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                SizedBox(
+                  width: 56,
+                  height: 56,
+                  child: CircularProgressIndicator(
+                    value: stats.performanceScore / 100,
+                    strokeWidth: 6,
+                    color: AppColors.primaryBrand,
+                    backgroundColor: AppColors.primaryBrandLight,
+                  ),
+                ),
+                Text(
+                  '${stats.performanceScore}',
+                  style: AppTextStyles.outfit(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.primaryBrand,
                   ),
                 ),
               ],

@@ -53,21 +53,8 @@ class LoginController extends GetxController {
       }
 
       if (user != null) {
-        // Institute-side gate: if the server returned `email_verified_at: null`,
-        // the user signed up but never completed OTP. Block the login flow,
-        // show a clear inline error, and bounce them to the OTP screen with
-        // email + password preserved so they can resume verification without
-        // re-registering. We do NOT save the session because the access token
-        // belongs to an unverified account.
         if (role == 'INSTITUTE' && !user.isEmailVerified) {
-          // Surface the unverified-email error inline above the form
-          // (red callout). The OTP screen itself already announces "we
-          // sent a 6-digit code to ..." so a redundant snackbar would
-          // just stack noise on top of the same message — skip it.
           accountError.value = AppStrings.errEmailNotVerified;
-          // Hold on the login screen for ~10s so the user can fully read
-          // the red inline error before we auto-redirect to the OTP
-          // screen to resume verification.
           await Future<void>.delayed(const Duration(seconds: 10));
           Get.toNamed(
             AppRoutes.instituteOtp,

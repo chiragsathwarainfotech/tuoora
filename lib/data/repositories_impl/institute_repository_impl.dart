@@ -67,6 +67,7 @@ abstract class InstituteRepositoryImpl {
   Future<Batch> createBatch(Map<String, dynamic> data);
   Future<Batch> updateBatch(int id, Map<String, dynamic> data);
   Future<void> deleteBatch(int id);
+  Future<void> closeBatch(int id);
 
   // Attendance
   Future<List<AttendanceRecordModel>> getAttendance(String date, int batchId);

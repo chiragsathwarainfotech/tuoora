@@ -12,6 +12,7 @@ import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/constants/app_images.dart';
 import 'package:tuoora/core/widgets/app_action_icon.dart';
 import 'package:tuoora/core/widgets/status_badge.dart';
+import 'package:tuoora/core/widgets/common_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -107,7 +108,13 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
         children: [
           Row(
             children: [
-              StatusBadge.fromLabel(batch.statusLabel),
+              Obx(
+                () => StatusBadge.fromLabel(
+                  controller.isStatusClosed.value
+                      ? 'Closed'
+                      : batch.statusLabel,
+                ),
+              ),
               AppSpacing.h12,
               Text(
                 'Batch ID: ${batch.id.length > 4 ? batch.id.substring(0, 4) : batch.id}',
@@ -117,6 +124,49 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
                   color: AppColors.textTertiary,
                 ),
               ),
+              const Spacer(),
+              Obx(() {
+                if (controller.isStatusClosed.value) {
+                  return const SizedBox.shrink();
+                }
+                return GestureDetector(
+                  onTap: () {
+                    CommonDialog.show(
+                      title: 'Close Batch',
+                      description:
+                          'Are you sure you want to close this batch? This action cannot be undone.',
+                      confirmText: 'Close',
+                      icon: Icons.highlight_remove_rounded,
+                      iconColor: AppColors.primaryBrand,
+                      iconBgColor: AppColors.primaryBrandLight,
+                      confirmButtonColor: AppColors.primaryBrand,
+                      onConfirm: () {
+                        controller.closeBatch();
+                      },
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.errorBg,
+                      borderRadius: BorderRadius.circular(
+                        AppSpacing.cardRadius,
+                      ),
+                    ),
+                    child: Text(
+                      'Close Batch',
+                      style: AppTextStyles.outfit(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.bohoRed,
+                      ),
+                    ),
+                  ),
+                );
+              }),
             ],
           ),
           AppSpacing.v16,

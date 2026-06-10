@@ -466,6 +466,18 @@ class InstituteRepository implements InstituteRepositoryImpl {
   }
 
   @override
+  Future<void> closeBatch(int id) async {
+    final response = await _apiClient.post(
+      ApiConstants.instituteCloseBatch(id),
+      {},
+    );
+    if (response.status.hasError) {
+      final message = response.body?['message'] ?? 'Failed to close batch';
+      throw Exception(message);
+    }
+  }
+
+  @override
   Future<void> markAttendance(Map<String, dynamic> data) async {
     final response = await _apiClient.post(
       ApiConstants.instituteBatchAttendance,

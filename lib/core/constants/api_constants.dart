@@ -80,6 +80,9 @@ class ApiConstants {
   static String assignStudentsToBatch(int batchId) =>
       '/institute/batches/$batchId/assign-students';
 
+  static String instituteCloseBatch(int batchId) =>
+      '/institute/batches/$batchId/close';
+
   // Reports Endpoints
   static const String instituteReportFee = '/institute/reports/fee';
   static const String instituteReportFeeExport =

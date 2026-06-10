@@ -21,11 +21,6 @@ class BatchModel {
   final String? classroom;
   final int? staffId;
   final String? staffName;
-
-  /// Day the batch was created. Used as the lower bound on the attendance
-  /// date picker so the user can't navigate to dates that pre-date the
-  /// batch. Null when the API didn't return a parseable timestamp — the
-  /// picker then falls back to a safe sentinel.
   final DateTime? createdAt;
 
   BatchModel({

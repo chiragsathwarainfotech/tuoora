@@ -360,7 +360,7 @@ class _StudentChatMessagesScreenState extends State<StudentChatMessagesScreen> {
       constraints: BoxConstraints(maxWidth: Get.width * 0.75),
       padding: isVisualAttachment
           ? const EdgeInsets.all(4)
-          : const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          : const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: isMe ? AppColors.primaryBrand : AppColors.white,
         borderRadius: BorderRadius.only(
@@ -399,7 +399,7 @@ class _StudentChatMessagesScreenState extends State<StudentChatMessagesScreen> {
           Padding(
             padding: isVisualAttachment
                 ? const EdgeInsets.fromLTRB(8, 4, 8, 4)
-                : const EdgeInsets.only(top: 4),
+                : const EdgeInsets.only(top: 2),
             child: Align(
               alignment: Alignment.bottomRight,
               child: Row(

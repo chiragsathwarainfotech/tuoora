@@ -536,7 +536,10 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
   void _showLogoutDialog(BuildContext context) {
     Get.dialog(
       AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        insetPadding: EdgeInsets.symmetric(horizontal: AppSpacing.s16),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+        ),
         title: Text(
           AppStrings.logOut,
           style: AppTextStyles.outfit(fontWeight: FontWeight.w600),
@@ -569,7 +572,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primaryBrand,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
               ),
             ),
             child: Text(

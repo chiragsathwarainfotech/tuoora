@@ -15,6 +15,10 @@ class StatusBadge extends StatelessWidget {
 
   factory StatusBadge.danger(String label) =>
       StatusBadge._(label: label, backgroundColor: AppColors.bohoRed);
+
+  factory StatusBadge.reviewed(String label) =>
+      StatusBadge._(label: label, backgroundColor: Colors.lightGreen);
+
   factory StatusBadge.fromLabel(String label) {
     final first = label.trim().toUpperCase().split(RegExp(r'\s+')).first;
     const successTokens = {'ACTIVE', 'SUBMITTED', 'OPEN', 'PAID', 'PRESENT'};
@@ -26,6 +30,7 @@ class StatusBadge extends StatelessWidget {
       'INACTIVE',
       'ABSENT',
     };
+    if (first == 'REVIEWED') return StatusBadge.reviewed(label);
     if (successTokens.contains(first)) return StatusBadge.success(label);
     if (dangerTokens.contains(first)) return StatusBadge.danger(label);
     return StatusBadge.danger(label);

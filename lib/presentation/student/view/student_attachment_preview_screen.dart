@@ -46,6 +46,16 @@ class StudentAttachmentPreviewScreen
           return _Body(attachment: attachment);
         }),
       ),
+      bottomNavigationBar: Obx(() {
+        final attachment = controller.selectedAttachment.value;
+        if (attachment == null || controller.isAttachmentLoading.value) {
+          return const SizedBox.shrink();
+        }
+        return const Padding(
+          padding: EdgeInsets.fromLTRB(16, 0, 16, 24),
+          child: _ActionRow(),
+        );
+      }),
     );
   }
 }
@@ -61,17 +71,21 @@ class _Body extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         StudentAppBar(title: attachment.name, showDefaultActions: false),
-        Padding(
-          padding: AppSpacing.screenPaddingTop,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              _PreviewSurface(attachment: attachment),
-              const SizedBox(height: AppSpacing.s12),
-              _FileInfoCard(attachment: attachment),
-              const SizedBox(height: AppSpacing.s12),
-              const _ActionRow(),
-            ],
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: Center(
+                    child: _PreviewSurface(attachment: attachment),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                _FileInfoCard(attachment: attachment),
+              ],
+            ),
           ),
         ),
       ],

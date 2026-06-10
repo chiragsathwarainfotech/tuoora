@@ -10,6 +10,7 @@ import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/data/models/student_notification_model.dart';
 import 'package:tuoora/data/repositories/student_notifications_repository.dart';
 import 'package:tuoora/presentation/student/controllers/assignments_controller.dart';
+import 'package:tuoora/presentation/student/controllers/student_controller.dart';
 
 /// View-model for a single notification row. Encapsulates the icon /
 /// colour / time-ago decisions so the screen widget stays declarative.
@@ -79,7 +80,12 @@ class StudentNotificationsController extends GetxController {
         Get.toNamed(AppRoutes.studentEventDetail, arguments: n);
         break;
       case NotificationKind.feeReminders:
-        Get.toNamed(AppRoutes.studentFeeHistory);
+        if (Get.isRegistered<StudentController>()) {
+          Get.until((route) => route.settings.name == AppRoutes.studentDashboard);
+          Get.find<StudentController>().changePage(2);
+        } else {
+          Get.offAllNamed(AppRoutes.studentDashboard);
+        }
         break;
       default:
         break;

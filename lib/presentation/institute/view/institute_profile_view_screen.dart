@@ -699,7 +699,10 @@ class InstituteProfileViewScreen extends StatelessWidget {
   ) {
     Get.dialog(
       AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        insetPadding: EdgeInsets.symmetric(horizontal: AppSpacing.s16),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+        ),
         title: Text(
           AppStrings.logout,
           style: AppTextStyles.outfit(fontWeight: FontWeight.w600),
@@ -727,7 +730,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primaryBrand,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
               ),
             ),
             child: Text(
@@ -755,7 +758,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
 
       Color statusColor = AppColors.successGreen;
       IconData statusIcon = Icons.verified_rounded;
-      
+
       if (sub.isPending) {
         statusColor = AppColors.warningAmber;
         statusIcon = Icons.autorenew_rounded;
@@ -785,11 +788,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
                     color: statusColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
                   ),
-                  child: Icon(
-                    statusIcon,
-                    color: statusColor,
-                    size: 20,
-                  ),
+                  child: Icon(statusIcon, color: statusColor, size: 20),
                 ),
               ],
             ),

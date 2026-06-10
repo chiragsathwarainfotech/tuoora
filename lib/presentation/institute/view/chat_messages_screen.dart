@@ -239,7 +239,7 @@ class ChatMessagesScreen extends GetView<ChatController> {
       constraints: BoxConstraints(maxWidth: Get.width * 0.75),
       padding: isVisualAttachment
           ? const EdgeInsets.all(4)
-          : AppSpacing.cardPadding,
+          : const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: isMe ? AppColors.primaryBrand : AppColors.white,
         borderRadius: BorderRadius.only(
@@ -278,7 +278,7 @@ class ChatMessagesScreen extends GetView<ChatController> {
           Padding(
             padding: isVisualAttachment
                 ? const EdgeInsets.fromLTRB(8, 4, 8, 4)
-                : const EdgeInsets.only(top: 4),
+                : const EdgeInsets.only(top: 2),
             child: Align(
               alignment: Alignment.bottomRight,
               child: Row(

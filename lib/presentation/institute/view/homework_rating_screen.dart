@@ -66,16 +66,18 @@ class HomeworkRatingScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: !controller.canEdit
-          ? const SizedBox.shrink()
-          : Obx(
-              () => InstituteBottomButton(
-                label: AppStrings.submitRatings,
-                icon: Icons.check_circle_rounded,
-                isLoading: controller.isLoading.value,
-                onTap: () => controller.submitRatings(),
-              ),
-            ),
+      bottomNavigationBar: Obx(() {
+        if (!controller.canEdit) return const SizedBox.shrink();
+        if (controller.filterIndex.value == 2 || controller.filterIndex.value == 3) {
+          return const SizedBox.shrink();
+        }
+        return InstituteBottomButton(
+          label: AppStrings.submitRatings,
+          icon: Icons.check_circle_rounded,
+          isLoading: controller.isLoading.value,
+          onTap: () => controller.submitRatings(),
+        );
+      }),
     );
   }
 
@@ -330,7 +332,7 @@ class HomeworkRatingScreen extends StatelessWidget {
                   child: Row(
                     children: [
                       IconButton(
-                        onPressed: controller.canEdit
+                        onPressed: (controller.canEdit && sub.status.toLowerCase() != 'reviewed')
                             ? () => controller.updateScore(
                                 sub.studentId.toString(),
                                 sub.score - 1,
@@ -351,7 +353,7 @@ class HomeworkRatingScreen extends StatelessWidget {
                       ),
                       AppSpacing.h12,
                       IconButton(
-                        onPressed: controller.canEdit
+                        onPressed: (controller.canEdit && sub.status.toLowerCase() != 'reviewed')
                             ? () => controller.updateScore(
                                 sub.studentId.toString(),
                                 sub.score + 1,

@@ -2,46 +2,43 @@ import 'package:flutter/material.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/enums/app_enums.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
+import 'package:get/get.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:tuoora/data/models/student_notification_model.dart';
 
 class StudentEventDetailScreen extends StatelessWidget {
   const StudentEventDetailScreen({super.key});
 
+  StudentNotification? get notification {
+    if (Get.arguments is StudentNotification) {
+      return Get.arguments as StudentNotification;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final notif = notification;
+    final title = notif?.title ?? AppStrings.details;
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const StudentAppBar(
-              title: AppStrings.scienceDayExhibition,
-              showDefaultActions: false,
-            ),
+            StudentAppBar(title: title, showDefaultActions: false),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(AppSpacing.s16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    _buildImageCard(),
+                    _buildImageCard(notif),
                     const SizedBox(height: AppSpacing.s16),
-                    _buildInfoCard(),
-                    const SizedBox(height: AppSpacing.s16),
-                    _buildDetailsCard(),
-                    const SizedBox(height: AppSpacing.s24),
-                    Text(
-                      AppStrings.studentAssignmentDetailAttachments,
-                      style: AppTextStyles.outfit(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.textTertiary,
-                      ),
-                    ),
-                    const SizedBox(height: AppSpacing.s12),
-                    _buildAttachmentsCard(),
+                    _buildDetailsCard(notif),
                   ],
                 ),
               ),
@@ -52,51 +49,67 @@ class StudentEventDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildImageCard() {
+  Widget _buildImageCard(StudentNotification? notif) {
+    final title = notif?.title ?? AppStrings.scienceDayExhibition;
+    final isEvent = notif?.kind == NotificationKind.eventsHolidays;
+
     return Container(
       height: 180,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(AppSpacing.s12),
-        gradient: const LinearGradient(
-          colors: [AppColors.turquoiseBlue, AppColors.greenText],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        gradient: notif?.image == null
+            ? const LinearGradient(
+                colors: [AppColors.turquoiseBlue, AppColors.greenText],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              )
+            : null,
+        image: notif?.image != null
+            ? DecorationImage(
+                image: CachedNetworkImageProvider(notif!.image!),
+                fit: BoxFit.cover,
+                colorFilter: ColorFilter.mode(
+                  Colors.black.withValues(alpha: 0.4),
+                  BlendMode.darken,
+                ),
+              )
+            : null,
       ),
       padding: const EdgeInsets.all(AppSpacing.s16),
       child: Stack(
         children: [
-          Positioned(
-            right: -50,
-            top: -20,
-            child: Container(
-              width: 200,
-              height: 200,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: AppColors.white.withValues(alpha: 0.2),
-                  width: 2,
+          if (notif?.image == null) ...[
+            Positioned(
+              right: -50,
+              top: -20,
+              child: Container(
+                width: 200,
+                height: 200,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: AppColors.white.withValues(alpha: 0.2),
+                    width: 2,
+                  ),
                 ),
               ),
             ),
-          ),
-          Positioned(
-            right: -20,
-            top: 10,
-            child: Container(
-              width: 140,
-              height: 140,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: AppColors.white.withValues(alpha: 0.2),
-                  width: 2,
+            Positioned(
+              right: -20,
+              top: 10,
+              child: Container(
+                width: 140,
+                height: 140,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: AppColors.white.withValues(alpha: 0.2),
+                    width: 2,
+                  ),
                 ),
               ),
             ),
-          ),
-
+          ],
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -110,7 +123,7 @@ class StudentEventDetailScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(AppSpacing.s16),
                 ),
                 child: Text(
-                  AppStrings.event,
+                  isEvent ? 'Event / Holiday' : 'Update',
                   style: AppTextStyles.outfit(
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
@@ -120,19 +133,10 @@ class StudentEventDetailScreen extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                AppStrings.scienceDayExhibition,
+                title,
                 style: AppTextStyles.outfit(
                   fontSize: 22,
                   fontWeight: FontWeight.w900,
-                  color: AppColors.white,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                AppStrings.saturday24May20261000,
-                style: AppTextStyles.outfit(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
                   color: AppColors.white,
                 ),
               ),
@@ -143,59 +147,7 @@ class StudentEventDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoCard() {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.s12),
-        border: Border.all(color: AppColors.borderGrey),
-      ),
-      child: Column(
-        children: [
-          _buildInfoRow('When', 'Saturday, 24 May 2026 • 10:00 AM - 1:00 PM'),
-          const Divider(height: 1, color: AppColors.borderGrey),
-          _buildInfoRow('Where', 'Saraswati Coaching • Hall A'),
-          const Divider(height: 1, color: AppColors.borderGrey),
-          _buildInfoRow('Hosted by', 'Mr. R. Verma & Mrs. Iyer'),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildInfoRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.all(AppSpacing.s16),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 80,
-            child: Text(
-              label,
-              style: AppTextStyles.outfit(
-                fontSize: 13,
-                fontWeight: FontWeight.w400,
-                color: AppColors.textTertiary,
-              ),
-            ),
-          ),
-          Expanded(
-            child: Text(
-              value,
-              style: AppTextStyles.outfit(
-                fontSize: 13,
-                fontWeight: FontWeight.w500,
-                color: AppColors.textPrimary,
-              ),
-              textAlign: TextAlign.right,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDetailsCard() {
+  Widget _buildDetailsCard(StudentNotification? notif) {
     return Container(
       padding: const EdgeInsets.all(AppSpacing.s16),
       decoration: BoxDecoration(
@@ -216,7 +168,7 @@ class StudentEventDetailScreen extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.s12),
           Text(
-            AppStrings.annualScienceDayWhereStudentsDemo,
+            notif?.message ?? AppStrings.annualScienceDayWhereStudentsDemo,
             style: AppTextStyles.outfit(
               fontSize: 13,
               fontWeight: FontWeight.w400,
@@ -224,84 +176,6 @@ class StudentEventDetailScreen extends StatelessWidget {
               height: 1.5,
             ),
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAttachmentsCard() {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.s12),
-        border: Border.all(color: AppColors.borderGrey),
-      ),
-      child: Column(
-        children: [
-          _buildAttachmentRow(
-            Icons.description,
-            AppColors.successGreen,
-            AppColors.successBg,
-            'Schedule_ScienceDay.pdf',
-            'Document - 120 KB',
-          ),
-          const Divider(height: 1, color: AppColors.borderGrey),
-          _buildAttachmentRow(
-            Icons.image,
-            AppColors.bohoRed,
-            AppColors.errorBg,
-            'Floor_plan_HallA.png',
-            'Image - 480 KB',
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAttachmentRow(
-    IconData icon,
-    Color iconColor,
-    Color iconBg,
-    String title,
-    String subtitle,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.all(AppSpacing.s16),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: iconBg,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(icon, color: iconColor, size: 20),
-          ),
-          AppSpacing.h12,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: AppTextStyles.outfit(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-                Text(
-                  subtitle,
-                  style: AppTextStyles.outfit(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w400,
-                    color: AppColors.textTertiary,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const Icon(Icons.chevron_right, color: AppColors.textMuted, size: 20),
         ],
       ),
     );

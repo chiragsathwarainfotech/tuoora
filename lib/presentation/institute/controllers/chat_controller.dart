@@ -748,8 +748,14 @@ class ChatController extends GetxController {
 
     if (msg.isMe) {
       // Multi-device echo of our own send. Append only if visible, and
-      // fold in any buffered acks first so the tick is correct on land.
-      if (selectedChat.value?.id == msg.chatId) {
+      final expectedOpenId = selectedChat.value?.id == '_' 
+          ? '${selectedChat.value?.participantRole}_${selectedChat.value?.participantId}'.toLowerCase()
+          : selectedChat.value?.id.toLowerCase();
+          
+      if (expectedOpenId == msg.chatId.toLowerCase()) {
+        if (selectedChat.value?.id == '_') {
+          selectedChat.value = selectedChat.value?.copyWith(id: msg.chatId);
+        }
         messages.add(_applyPendingAcks(msg));
         _scrollToBottom();
       }
@@ -762,7 +768,18 @@ class ChatController extends GetxController {
       _chatRepository.markReceived(mid).catchError((_) => null);
     }
 
-    if (selectedChat.value?.id == msg.chatId) {
+    final openChat = selectedChat.value;
+    final expectedOpenId = openChat?.id == '_' 
+        ? '${openChat?.participantRole}_${openChat?.participantId}'.toLowerCase()
+        : openChat?.id.toLowerCase();
+
+    if (expectedOpenId == msg.chatId.toLowerCase()) {
+      // If this was a placeholder chat ('_'), upgrade its ID now so future
+      // comparisons and API calls work correctly.
+      if (openChat?.id == '_') {
+        selectedChat.value = openChat?.copyWith(id: msg.chatId);
+      }
+
       // User is actively viewing the chat → show + mark read.
       messages.add(msg);
       _scrollToBottom();
@@ -839,7 +856,9 @@ class ChatController extends GetxController {
   }
 
   void _bumpUnreadFor(Message msg) {
-    final idx = chatsList.indexWhere((c) => c.id == msg.chatId);
+    final idx = chatsList.indexWhere(
+      (c) => c.id.toLowerCase() == msg.chatId.toLowerCase(),
+    );
     if (idx == -1) {
       // Brand-new conversation we didn't know about — pull the list fresh.
       fetchChats();
@@ -859,7 +878,9 @@ class ChatController extends GetxController {
   }
 
   void _bumpChatPreview(Message msg) {
-    final idx = chatsList.indexWhere((c) => c.id == msg.chatId);
+    final idx = chatsList.indexWhere(
+      (c) => c.id.toLowerCase() == msg.chatId.toLowerCase(),
+    );
     if (idx == -1) return;
     final old = chatsList[idx];
     final updated = old.copyWith(
@@ -910,7 +931,9 @@ class ChatController extends GetxController {
 
   void startChatWithParticipant(ChatParticipant participant) {
     final composedId = '${participant.role}_${participant.id}';
-    final existing = chatsList.firstWhereOrNull((c) => c.id == composedId);
+    final existing = chatsList.firstWhereOrNull(
+      (c) => c.id.toLowerCase() == composedId.toLowerCase(),
+    );
     if (existing != null) {
       openChat(existing);
       return;
@@ -936,7 +959,9 @@ class ChatController extends GetxController {
 
     // Clear local unread badge as soon as the chat opens. The history
     // endpoint server-side appears to already bulk-mark messages as read.
-    final idx = chatsList.indexWhere((c) => c.id == chat.id);
+    final idx = chatsList.indexWhere(
+      (c) => c.id.toLowerCase() == chat.id.toLowerCase(),
+    );
     if (idx != -1 && chatsList[idx].unreadCount > 0) {
       chatsList[idx] = chatsList[idx].copyWith(unreadCount: 0);
       _filterChats();
@@ -1008,7 +1033,7 @@ class ChatController extends GetxController {
       return;
     }
     _removeChatLocally(id);
-    if (selectedChat.value?.id == id) {
+    if (selectedChat.value?.id.toLowerCase() == id.toLowerCase()) {
       if (Get.currentRoute == AppRoutes.instituteChatMessages ||
           Get.currentRoute == AppRoutes.studentChat) {
         Get.until(
@@ -1023,7 +1048,7 @@ class ChatController extends GetxController {
   }
 
   void _removeChatLocally(String chatId) {
-    chatsList.removeWhere((c) => c.id == chatId);
+    chatsList.removeWhere((c) => c.id.toLowerCase() == chatId.toLowerCase());
     _filterChats();
   }
 

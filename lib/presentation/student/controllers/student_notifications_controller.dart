@@ -75,12 +75,10 @@ class StudentNotificationsController extends GetxController {
         if (refId != null) _openHomework(refId);
         break;
       case NotificationKind.dailyUpdate:
-        Get.toNamed(AppRoutes.studentEventDetail);
+      case NotificationKind.eventsHolidays:
+        Get.toNamed(AppRoutes.studentEventDetail, arguments: n);
         break;
-      case NotificationKind.holidays:
-        Get.toNamed(AppRoutes.studentHolidayDetail);
-        break;
-      case NotificationKind.paymentReceiver:
+      case NotificationKind.feeReminders:
         Get.toNamed(AppRoutes.studentFeeHistory);
         break;
       default:
@@ -110,8 +108,8 @@ class StudentNotificationsController extends GetxController {
   bool _isDeepLinkable(StudentNotification n) {
     switch (n.kind) {
       case NotificationKind.dailyUpdate:
-      case NotificationKind.holidays:
-      case NotificationKind.paymentReceiver:
+      case NotificationKind.eventsHolidays:
+      case NotificationKind.feeReminders:
       case NotificationKind.homeworkReminder:
       case NotificationKind.homework:
         return true;
@@ -160,13 +158,13 @@ class StudentNotificationsController extends GetxController {
           bg: AppColors.subjectPhysicsSoft,
           fg: AppColors.subjectPhysics,
         );
-      case NotificationKind.holidays:
+      case NotificationKind.eventsHolidays:
         return const _NotificationVisuals(
           icon: Icons.celebration_outlined,
           bg: AppColors.successBg,
           fg: AppColors.successGreen,
         );
-      case NotificationKind.paymentReceiver:
+      case NotificationKind.feeReminders:
         return const _NotificationVisuals(
           icon: Icons.currency_rupee,
           bg: AppColors.errorBg,

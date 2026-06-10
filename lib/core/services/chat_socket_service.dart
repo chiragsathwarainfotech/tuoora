@@ -48,7 +48,9 @@ class ChatSocketConfig {
 
   static const String authEndpoint = 'https://tuoora.com/broadcasting/auth';
 
-  static String channelFor(String myId) => 'private-chat.$myId';
+  static String channelFor(String myType, String myId) {
+    return 'private-chat.$myType.$myId';
+  }
 
   /// Pusher protocol URL. The query parameters are required by laravel-
   /// websockets for protocol version negotiation. Omits the port if it's
@@ -155,8 +157,6 @@ class ChatSocketService extends GetxService {
     _isConnected.value = false;
     _reconnectAttempts = 0;
   }
-
-  // ---------------------------------------------------------------- inner
 
   Future<void> _openConnection() async {
     if (_intentionalDisconnect) return;
@@ -302,9 +302,10 @@ class ChatSocketService extends GetxService {
 
   Future<void> _subscribePrivate() async {
     final myId = _myUserId;
+    final myType = _myUserType;
     final socketId = _socketId;
-    if (myId == null || socketId == null) return;
-    final channelName = ChatSocketConfig.channelFor(myId);
+    if (myId == null || myType == null || socketId == null) return;
+    final channelName = ChatSocketConfig.channelFor(myType, myId);
 
     final auth = await _fetchChannelAuth(channelName, socketId);
     if (auth == null) {

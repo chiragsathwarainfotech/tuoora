@@ -76,7 +76,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
                         const SizedBox(height: 8),
                         _buildHelpCard(),
                         const SizedBox(height: 16),
-                        _buildLogOutButton(),
+                        _buildLogOutButton(context),
                         const SizedBox(height: 16),
                         const AppVersionLabel(),
                         const SizedBox(height: 16),
@@ -500,16 +500,9 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
     );
   }
 
-  Widget _buildLogOutButton() {
+  Widget _buildLogOutButton(BuildContext context) {
     return ElevatedButton(
-      onPressed: () async {
-        try {
-          await Get.find<AuthRepository>().logout('STUDENT');
-        } catch (_) {}
-        final authService = Get.find<AuthService>();
-        await authService.clearSession();
-        Get.offAllNamed(AppRoutes.roleSelection);
-      },
+      onPressed: () => _showLogoutDialog(context),
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.errorBg,
         elevation: 0,
@@ -533,6 +526,58 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
               fontSize: 14,
               fontWeight: FontWeight.w600,
               color: AppColors.error,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showLogoutDialog(BuildContext context) {
+    Get.dialog(
+      AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Text(
+          AppStrings.logOut,
+          style: AppTextStyles.outfit(fontWeight: FontWeight.w600),
+        ),
+        content: Text(
+          AppStrings.instituteProfileAreYouSureYouWantTo,
+          style: AppTextStyles.outfit(color: AppColors.textSecondary),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text(
+              AppStrings.labelCancel,
+              style: AppTextStyles.outfit(
+                color: AppColors.textSecondary,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              Get.back();
+              try {
+                await Get.find<AuthRepository>().logout('STUDENT');
+              } catch (_) {}
+              final authService = Get.find<AuthService>();
+              await authService.clearSession();
+              Get.offAllNamed(AppRoutes.roleSelection);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primaryBrand,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            child: Text(
+              AppStrings.logOut,
+              style: AppTextStyles.outfit(
+                color: AppColors.white,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
         ],

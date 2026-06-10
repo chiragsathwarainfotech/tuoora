@@ -164,7 +164,7 @@ class ChatAttachmentView extends StatelessWidget {
             width: 220,
             color: Colors.black87,
             alignment: Alignment.center,
-            child: _indicator(affordance, progress, onDark: true),
+            child: _indicator(affordance, progress, onDark: true, kind: kind),
           ),
         ),
       );
@@ -225,7 +225,7 @@ class ChatAttachmentView extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8),
-            _indicator(affordance, progress, onDark: false),
+            _indicator(affordance, progress, onDark: false, kind: kind),
           ],
         ),
       ),
@@ -233,7 +233,7 @@ class ChatAttachmentView extends StatelessWidget {
   }
 
   // Centred/trailing indicator: download icon, % progress ring, or play/open.
-  Widget _indicator(_Affordance a, double progress, {required bool onDark}) {
+  Widget _indicator(_Affordance a, double progress, {required bool onDark, required _MediaKind kind}) {
     final color = onDark ? AppColors.white : AppColors.primaryBrand;
     switch (a) {
       case _Affordance.download:
@@ -263,6 +263,9 @@ class ChatAttachmentView extends StatelessWidget {
           ),
         );
       case _Affordance.ready:
+        if (kind == _MediaKind.document) {
+          return const SizedBox.shrink();
+        }
         return Icon(
           Icons.play_circle_outline_rounded,
           color: color,

@@ -87,54 +87,52 @@ class _NotificationCard extends StatelessWidget {
             ],
           ),
           padding: AppSpacing.cardPadding,
-          child: Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        display.title,
-                        style: AppTextStyles.outfit(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.textPrimary,
-                        ),
-                      ),
-                    ),
-                    if (display.showChevron) ...[
-                      AppSpacing.h4,
-                      const Icon(
-                        Icons.chevron_right,
-                        size: 18,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Text(
+                      display.title,
+                      style: AppTextStyles.outfit(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.textPrimary,
                       ),
-                    ],
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  display.message,
-                  style: AppTextStyles.outfit(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    color: AppColors.textSecondary,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                if (display.timeAgo.isNotEmpty)
-                  Text(
-                    display.timeAgo,
-                    style: AppTextStyles.outfit(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.primaryBrand,
                     ),
                   ),
-              ],
-            ),
+                  if (display.showChevron) ...[
+                    AppSpacing.h4,
+                    const Icon(
+                      Icons.chevron_right,
+                      size: 18,
+                      color: AppColors.textPrimary,
+                    ),
+                  ],
+                ],
+              ),
+              const SizedBox(height: 4),
+              Text(
+                display.message,
+                style: AppTextStyles.outfit(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: AppColors.textSecondary,
+                ),
+              ),
+              const SizedBox(height: 4),
+              if (display.timeAgo.isNotEmpty)
+                Text(
+                  display.timeAgo,
+                  style: AppTextStyles.outfit(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.primaryBrand,
+                  ),
+                ),
+            ],
           ),
         ),
       ),

@@ -7,8 +7,8 @@ enum NotificationKind {
   dailyUpdate('daily_update'),
   batchAssignment('batch_assignment'),
   batchRemoval('batch_removal'),
-  holidays('holidays'),
-  paymentReceiver('payment_receiver'),
+  eventsHolidays('events_holidays'),
+  feeReminders('fee_reminder'),
   unknown('');
 
   final String value;

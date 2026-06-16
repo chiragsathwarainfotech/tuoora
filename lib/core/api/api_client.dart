@@ -1,14 +1,18 @@
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/api_constants.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/services/auth_service.dart';
 import 'package:tuoora/core/services/institute_account_status_handler.dart';
 import 'package:tuoora/core/services/server_error_handler.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/data/repositories_impl/auth_repository_impl.dart';
 import 'package:get/get.dart';
 
 class ApiClient extends GetConnect {
   Future<bool>? _refreshFuture;
   bool _loggingOut = false;
+
+  bool get isLoggingOut => _loggingOut;
 
   @override
   void onInit() {
@@ -147,14 +151,15 @@ class ApiClient extends GetConnect {
       final role = auth.currentUser?.role ?? 'INSTITUTE';
       await auth.clearSession();
       Get.offAllNamed(AppRoutes.login, arguments: role);
+      AppSnackBar.warning(
+        AppStrings.errSessionExpired,
+        title: AppStrings.sessionExpiredTitle,
+      );
     } catch (_) {
       try {
         Get.offAllNamed(AppRoutes.login);
       } catch (_) {}
     } finally {
-      // Release the guard after a short delay so any in-flight 401s
-      // from sibling requests are absorbed silently, but a *future*
-      // unrelated session can log out cleanly again.
       Future<void>.delayed(const Duration(seconds: 3), () {
         _loggingOut = false;
       });

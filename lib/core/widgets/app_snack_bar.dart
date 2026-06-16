@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tuoora/core/api/api_client.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 
 class AppSnackBar {
@@ -25,6 +26,9 @@ class AppSnackBar {
   }
 
   static void error(String message, {String title = 'Error'}) {
+    if (Get.isRegistered<ApiClient>() && Get.find<ApiClient>().isLoggingOut) {
+      return;
+    }
     Get.snackbar(
       title,
       message,

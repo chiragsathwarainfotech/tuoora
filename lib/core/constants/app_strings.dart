@@ -672,6 +672,9 @@ class AppStrings {
   static const String loginFailed = 'Login Failed';
   static const String errEmailNotVerified =
       'Your email is not verified yet. Please complete OTP verification to continue.';
+  static const String sessionExpiredTitle = 'Session expired';
+  static const String errSessionExpired =
+      'Your session has timed out. Please log in again.';
   static const String password = 'Password';
   static const String recoveryForThisRoleWillBe =
       'Recovery for this role will be available soon.';

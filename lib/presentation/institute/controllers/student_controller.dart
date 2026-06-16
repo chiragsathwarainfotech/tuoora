@@ -25,11 +25,6 @@ class InstituteStudentController extends GetxController {
   final isFormValid = false.obs;
   final triedToSave = false.obs;
   final currentStudent = Rxn<Student>();
-
-  /// Loading flag specifically for the "Send Fee Reminder" button on the
-  /// Student Profile ID card. Kept separate from [isLoading] so the rest
-  /// of the screen doesn't show the full-page overlay while the button is
-  /// the only thing in flight.
   final isSendingFeeReminder = false.obs;
 
   final nameController = TextEditingController();
@@ -410,6 +405,35 @@ class InstituteStudentController extends GetxController {
       AppSnackBar.error('Failed to send fee reminder: $e');
     } finally {
       isSendingFeeReminder.value = false;
+    }
+  }
+
+  Future<void> sendPassword() async {
+    final student = currentStudent.value;
+    if (student == null) return;
+    try {
+      isLoading.value = true;
+      final message = await _studentRepository.sendPassword(student.id);
+      AppSnackBar.success(message);
+    } catch (e) {
+      AppSnackBar.error('Failed to send password: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> resetPassword(String newPassword) async {
+    final student = currentStudent.value;
+    if (student == null) return;
+    try {
+      isLoading.value = true;
+      await _studentRepository.resetPassword(student.id, newPassword);
+      Get.back(); // Close the dialog
+      AppSnackBar.success('Password updated successfully');
+    } catch (e) {
+      AppSnackBar.error('Failed to reset password: $e');
+    } finally {
+      isLoading.value = false;
     }
   }
 

@@ -1,5 +1,4 @@
 import 'package:tuoora/core/widgets/app_button.dart';
-import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_images.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
@@ -176,35 +175,29 @@ class _LoginScreenState extends State<LoginScreen> {
                                   letterSpacing: 1.0,
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  if (_selectedRole == 'INSTITUTE') {
+                              if (_selectedRole == 'INSTITUTE')
+                                TextButton(
+                                  onPressed: () {
                                     Get.toNamed(
                                       AppRoutes.instituteForgotPassword,
                                     );
-                                  } else {
-                                    AppSnackBar.warning(
-                                      AppStrings.recoveryForThisRoleWillBe,
-                                      title: AppStrings.loginComingSoon,
-                                    );
-                                  }
-                                },
-                                style: TextButton.styleFrom(
-                                  padding: EdgeInsets.zero,
-                                  minimumSize: Size.zero,
-                                  tapTargetSize:
-                                      MaterialTapTargetSize.shrinkWrap,
-                                ),
-                                child: Text(
-                                  AppStrings.loginForgotPassword,
-                                  style: AppTextStyles.outfit(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                    color: AppColors.primaryBrand,
-                                    letterSpacing: 1.0,
+                                  },
+                                  style: TextButton.styleFrom(
+                                    padding: EdgeInsets.zero,
+                                    minimumSize: Size.zero,
+                                    tapTargetSize:
+                                        MaterialTapTargetSize.shrinkWrap,
+                                  ),
+                                  child: Text(
+                                    AppStrings.loginForgotPassword,
+                                    style: AppTextStyles.outfit(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColors.primaryBrand,
+                                      letterSpacing: 1.0,
+                                    ),
                                   ),
                                 ),
-                              ),
                             ],
                           ),
                           AppSpacing.v8,

@@ -14,6 +14,8 @@ import 'package:tuoora/core/widgets/common_dialog.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tuoora/core/widgets/app_button.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 
 class StudentProfileScreen extends GetView<InstituteStudentController> {
   final bool showBottomNav;
@@ -65,6 +67,46 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
                             imageUrl: imageUrl,
                             grade: grade,
                             student: student,
+                          ),
+                          const SizedBox(height: AppSpacing.s24),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: AppButton(
+                                  label: 'Forgot Password',
+                                  onPressed: () {
+                                    if (student != null) {
+                                      controller.sendPassword();
+                                    }
+                                  },
+                                  icon: Icons.email_outlined,
+                                  backgroundColor: AppColors.white,
+                                  foregroundColor: AppColors.warningAmber, // It looks a bit more amber/yellow in the image
+                                  borderColor: AppColors.warningAmber,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
+                                  padding: const EdgeInsets.symmetric(vertical: AppSpacing.s14),
+                                ),
+                              ),
+                              const SizedBox(width: AppSpacing.s16),
+                              Expanded(
+                                child: AppButton(
+                                  label: 'Reset Password',
+                                  onPressed: () {
+                                    if (student != null) {
+                                      _showResetPasswordDialog(context, student);
+                                    }
+                                  },
+                                  icon: Icons.lock_outline,
+                                  backgroundColor: AppColors.white,
+                                  foregroundColor: AppColors.studentProgressBlue,
+                                  borderColor: AppColors.studentProgressBlue,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
+                                  padding: const EdgeInsets.symmetric(vertical: AppSpacing.s14),
+                                ),
+                              ),
+                            ],
                           ),
                           if (student != null && student.fees.isNotEmpty) ...[
                             const SizedBox(height: AppSpacing.s24),
@@ -469,6 +511,261 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
     if (parts.isEmpty || parts.first.isEmpty) return '?';
     if (parts.length == 1) return parts.first[0].toUpperCase();
     return (parts.first[0] + parts.last[0]).toUpperCase();
+  }
+
+  void _showResetPasswordDialog(BuildContext context, Student student) {
+    final obscurePassword = true.obs;
+    final passwordController = TextEditingController();
+
+    Get.dialog(
+      Dialog(
+        insetPadding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.s16,
+          vertical: AppSpacing.s24,
+        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        child: SingleChildScrollView(
+          child: Container(
+            padding: AppSpacing.all24,
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(24),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Header
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFEEF2FF), // Very light indigo
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Icon(
+                        Icons.lock_outline,
+                        color: Color(0xFF4F46E5), // Indigo
+                        size: 24,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Reset Student Password',
+                            style: AppTextStyles.outfit(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.textPrimary,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            'DIRECT PASSWORD UPDATE',
+                            style: AppTextStyles.outfit(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.textTertiary,
+                              letterSpacing: 1.0,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () => Get.back(),
+                      child: const Icon(
+                        Icons.close_rounded,
+                        color: AppColors.textTertiary,
+                        size: 24,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24),
+                // Description
+                Text(
+                  'Update the password for ${student.name}. The new password must satisfy the platform password policy.',
+                  style: AppTextStyles.outfit(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    color: AppColors.textSecondary,
+                    height: 1.5,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                // Input Field Label
+                Text(
+                  'NEW PASSWORD',
+                  style: AppTextStyles.outfit(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textSecondary,
+                    letterSpacing: 1.0,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                // Input Field
+                Obx(() => Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: AppColors.fieldBorder),
+                  ),
+                  child: TextField(
+                    controller: passwordController,
+                    obscureText: obscurePassword.value,
+                    style: AppTextStyles.outfit(
+                      fontSize: 14,
+                      color: AppColors.textPrimary,
+                    ),
+                    decoration: InputDecoration(
+                      hintText: 'Enter secure password',
+                      hintStyle: AppTextStyles.outfit(
+                        fontSize: 14,
+                        color: AppColors.textMuted,
+                      ),
+                      border: InputBorder.none,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 14,
+                      ),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          obscurePassword.value
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined,
+                          color: AppColors.textMuted,
+                          size: 20,
+                        ),
+                        onPressed: () => obscurePassword.toggle(),
+                      ),
+                    ),
+                  ),
+                )),
+                const SizedBox(height: 16),
+                // Requirements
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: AppColors.fieldBorder),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'PASSWORD REQUIREMENTS:',
+                        style: AppTextStyles.outfit(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.textDarkGrey,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      _buildRequirementBullet('8 to 15 characters'),
+                      _buildRequirementBullet('At least 1 uppercase letter'),
+                      _buildRequirementBullet('At least 1 digit (number)'),
+                      _buildRequirementBullet('At least 1 special character (@#\$% etc.)'),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 24),
+                // Buttons
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () => Get.back(),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.surfaceBg,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: Text(
+                          'Cancel',
+                          style: AppTextStyles.outfit(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.textPrimary,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          final password = passwordController.text;
+                          if (password.isEmpty) {
+                            AppSnackBar.error('Please enter a new password');
+                            return;
+                          }
+                          controller.resetPassword(password);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF4F46E5), // Indigo matching image
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: Text(
+                          'Save Password',
+                          style: AppTextStyles.outfit(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRequirementBullet(String text) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 6),
+      child: Row(
+        children: [
+          Container(
+            width: 4,
+            height: 4,
+            decoration: const BoxDecoration(
+              color: AppColors.textMuted,
+              shape: BoxShape.circle,
+            ),
+          ),
+          const SizedBox(width: 8),
+          Text(
+            text,
+            style: AppTextStyles.outfit(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: AppColors.textSecondary,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   void _showDeleteConfirmation(BuildContext context, String studentName) {

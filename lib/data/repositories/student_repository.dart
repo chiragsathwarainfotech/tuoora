@@ -126,6 +126,29 @@ class StudentRepository implements StudentRepositoryImpl {
     }
   }
 
+  @override
+  Future<String> sendPassword(dynamic id) async {
+    final response = await _apiClient.post(
+      '${ApiConstants.instituteStudents}/$id/send-password',
+      {},
+    );
+    if (response.status.hasError) {
+      _handleError(response, 'Failed to send password');
+    }
+    return response.body?['message'] ?? 'Password has been generated and sent to student email successfully!';
+  }
+
+  @override
+  Future<void> resetPassword(dynamic id, String password) async {
+    final response = await _apiClient.post(
+      '${ApiConstants.instituteStudents}/$id/reset-password',
+      {'password': password},
+    );
+    if (response.status.hasError) {
+      _handleError(response, 'Failed to reset password');
+    }
+  }
+
   void _handleError(Response response, String defaultMessage) {
     if (response.statusCode == 422 && response.body?['errors'] != null) {
       throw ValidationException(response.body['errors']);

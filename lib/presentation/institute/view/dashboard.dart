@@ -84,24 +84,39 @@ class InstituteDashboard extends GetView<InstituteProfileController> {
                     width: 2,
                   ),
                 ),
-                child: ClipOval(
-                  child:
-                      profileController.profileImagePath.value != null &&
-                          profileController.profileImagePath.value!.startsWith(
-                            'http',
-                          )
-                      ? AppNetworkImage(
-                          url: profileController.profileImagePath.value!,
-                          fit: BoxFit.cover,
-                        )
-                      : CommonLoading(),
-                ),
+                child: ClipOval(child: _buildProfileImage(profileController)),
               ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  Widget _buildProfileImage(InstituteProfileController profileController) {
+    final imagePath = profileController.profileImagePath.value;
+
+    if (imagePath == null ||
+        imagePath.isEmpty ||
+        !imagePath.startsWith('http')) {
+      return Container(
+        color: AppColors.primaryBrandLight,
+        child: Center(
+          child: Text(
+            profileController.instituteName.value.isNotEmpty
+                ? profileController.instituteName.value[0].toUpperCase()
+                : 'T',
+            style: AppTextStyles.outfit(
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              color: AppColors.primaryBrand,
+            ),
+          ),
+        ),
+      );
+    }
+
+    return AppNetworkImage(url: imagePath, fit: BoxFit.cover);
   }
 
   Widget _buildModulesGrid() {

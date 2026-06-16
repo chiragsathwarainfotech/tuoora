@@ -154,7 +154,7 @@ class SubscriptionBanner extends StatelessWidget {
                   ),
                 ),
                 AppSpacing.v4,
-                if (messageWidget != null) messageWidget,
+                ?messageWidget,
                 if (message != null)
                   Text(
                     message,

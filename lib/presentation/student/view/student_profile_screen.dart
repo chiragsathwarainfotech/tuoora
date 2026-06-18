@@ -79,6 +79,8 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
                         _buildHelpCard(),
                         const SizedBox(height: 16),
                         _buildLogOutButton(context),
+                        const SizedBox(height: 12),
+                        _buildDeleteAccountButton(context),
                         const SizedBox(height: 16),
                         const AppVersionLabel(),
                         const SizedBox(height: 16),
@@ -613,6 +615,91 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
               fontSize: 14,
               fontWeight: FontWeight.w600,
               color: AppColors.error,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDeleteAccountButton(BuildContext context) {
+    return OutlinedButton(
+      onPressed: () => _showDeleteAccountDialog(context),
+      style: OutlinedButton.styleFrom(
+        padding: const EdgeInsets.symmetric(vertical: 14),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+        ),
+        side: BorderSide(color: AppColors.error.withValues(alpha: 0.4)),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(
+            Icons.delete_forever_rounded,
+            color: AppColors.error,
+            size: 18,
+          ),
+          const SizedBox(width: 8),
+          Text(
+            AppStrings.deleteAccount,
+            style: AppTextStyles.outfit(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: AppColors.error,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showDeleteAccountDialog(BuildContext context) {
+    Get.dialog(
+      AlertDialog(
+        insetPadding: EdgeInsets.symmetric(horizontal: AppSpacing.s16),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+        ),
+        title: Text(
+          AppStrings.deleteAccountConfirmTitle,
+          style: AppTextStyles.outfit(fontWeight: FontWeight.w700),
+        ),
+        content: Text(
+          AppStrings.deleteAccountConfirmMessage,
+          style: AppTextStyles.outfit(
+            color: AppColors.textSecondary,
+            height: 1.5,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text(
+              AppStrings.labelCancel,
+              style: AppTextStyles.outfit(
+                color: AppColors.textSecondary,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Get.back();
+              controller.deleteAccount();
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.error,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+              ),
+            ),
+            child: Text(
+              AppStrings.deleteAccountConfirmButton,
+              style: AppTextStyles.outfit(
+                color: AppColors.white,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
         ],

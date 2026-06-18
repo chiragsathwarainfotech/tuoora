@@ -7,15 +7,14 @@ import 'package:image_picker/image_picker.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/api/api_client.dart';
+import 'package:tuoora/core/services/auth_service.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/data/models/student_profile_model.dart';
 import 'package:tuoora/data/repositories/student_profile_repository.dart';
 
 class StudentProfileController extends GetxController {
-  /// Local path of the most-recently-picked image. Shown immediately
-  /// after picking so the avatar updates without waiting on the upload.
-  /// Cleared on upload failure so the UI reverts to the prior avatar.
   final RxString profileImagePath = ''.obs;
   final ImagePicker _picker = ImagePicker();
 
@@ -38,6 +37,24 @@ class StudentProfileController extends GetxController {
       profileData.value = data;
     } catch (e) {
       AppSnackBar.error(AppStrings.errFailedLoadProfile);
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> deleteAccount() async {
+    try {
+      isLoading.value = true;
+      await _repository.deleteAccount();
+      final authService = Get.find<AuthService>();
+      await authService.clearSession();
+      Get.offAllNamed(AppRoutes.roleSelection);
+      AppSnackBar.success(AppStrings.accountDeletedSuccessfully);
+    } catch (e) {
+      AppSnackBar.error(
+        e.toString().replaceAll('Exception: ', ''),
+        title: AppStrings.accountDeletionFailed,
+      );
     } finally {
       isLoading.value = false;
     }

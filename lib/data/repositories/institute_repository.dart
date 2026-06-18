@@ -78,6 +78,16 @@ class InstituteRepository implements InstituteRepositoryImpl {
   }
 
   @override
+  Future<void> deleteAccount() async {
+    final response = await _apiClient.delete(
+      ApiConstants.instituteAccountDelete,
+    );
+    if (response.status.hasError) {
+      _handleError(response, 'Failed to delete account');
+    }
+  }
+
+  @override
   Future<void> renewSubscription({
     required String transactionId,
     required String screenshotPath,

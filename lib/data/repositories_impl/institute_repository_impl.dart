@@ -16,6 +16,8 @@ abstract class InstituteRepositoryImpl {
   Future<InstituteSubscriptionData> getSubscriptionData();
   Future<void> updateProfile(Map<String, dynamic> data);
 
+  Future<void> deleteAccount();
+
   Future<({String upiId, String? upiQrCodeUrl})> updatePaymentSettings({
     required String upiId,
     String? qrImagePath,

@@ -50,13 +50,18 @@ class InstituteDashboard extends GetView<InstituteProfileController> {
       child: Row(
         children: [
           Obx(
-            () => Text(
-              profileController.instituteName.value.isNotEmpty
-                  ? profileController.instituteName.value
-                  : 'Tuoora',
-              style: AppTextStyles.outfit(
-                fontSize: 24,
-                fontWeight: FontWeight.w800,
+            () => Flexible(
+              child: Text(
+                profileController.instituteName.value.isNotEmpty
+                    ? profileController.instituteName.value
+                    : 'Tuoora',
+                maxLines: 1,
+                softWrap: false,
+                overflow: TextOverflow.visible,
+                style: AppTextStyles.outfit(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                ),
               ),
             ),
           ),

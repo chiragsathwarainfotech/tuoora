@@ -159,18 +159,10 @@ class InstituteProfileController extends GetxController {
     }
   }
 
-  // -------------------------------------------------- UPI payment edit
-  /// True when the institute has configured at least one of (QR image,
-  /// UPI handle). Drives the profile view's choice between showing the
-  /// saved details vs the empty "Add Payment Details" CTA.
   bool get hasUpiPayment =>
-      upiId.value.trim().isNotEmpty ||
-      (upiQrCodeUrl.value ?? '').isNotEmpty;
+      upiId.value.trim().isNotEmpty || (upiQrCodeUrl.value ?? '').isNotEmpty;
 
-  /// QR image source for the edit screen preview — prefers the freshly
-  /// picked local file, falls back to the saved network URL, then null.
-  String? get upiQrPreviewSource =>
-      upiQrLocalPath.value ?? upiQrCodeUrl.value;
+  String? get upiQrPreviewSource => upiQrLocalPath.value ?? upiQrCodeUrl.value;
 
   Future<void> pickUpiQrImage(ImageSource source) async {
     try {
@@ -198,7 +190,7 @@ class InstituteProfileController extends GetxController {
             openAppSettings();
             return;
           } else if (!storage.isGranted && !photos.isGranted) {
-             return;
+            return;
           }
         }
       }
@@ -254,9 +246,7 @@ class InstituteProfileController extends GetxController {
       AppSnackBar.success(AppStrings.paymentSettingsSaved);
       Get.back();
     } catch (e) {
-      AppSnackBar.error(
-        e.toString().replaceAll('Exception: ', ''),
-      );
+      AppSnackBar.error(e.toString().replaceAll('Exception: ', ''));
     } finally {
       isSavingPayment.value = false;
     }
@@ -344,11 +334,12 @@ class InstituteProfileController extends GetxController {
                 } else {
                   final storage = await Permission.storage.request();
                   final photos = await Permission.photos.request();
-                  if (storage.isPermanentlyDenied || photos.isPermanentlyDenied) {
+                  if (storage.isPermanentlyDenied ||
+                      photos.isPermanentlyDenied) {
                     openAppSettings();
                     return;
                   } else if (!storage.isGranted && !photos.isGranted) {
-                     return;
+                    return;
                   }
                 }
                 final XFile? image = await _picker.pickImage(
@@ -487,6 +478,24 @@ class InstituteProfileController extends GetxController {
     final authService = Get.find<AuthService>();
     await authService.clearSession();
     Get.offAllNamed(AppRoutes.roleSelection);
+  }
+
+  Future<void> deleteAccount() async {
+    try {
+      isLoading.value = true;
+      await _instituteRepository.deleteAccount();
+      final authService = Get.find<AuthService>();
+      await authService.clearSession();
+      Get.offAllNamed(AppRoutes.roleSelection);
+      AppSnackBar.success(AppStrings.accountDeletedSuccessfully);
+    } catch (e) {
+      AppSnackBar.error(
+        e.toString().replaceAll('Exception: ', ''),
+        title: AppStrings.accountDeletionFailed,
+      );
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   @override

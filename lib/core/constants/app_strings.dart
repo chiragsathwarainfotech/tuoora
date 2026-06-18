@@ -549,7 +549,14 @@ class AppStrings {
   static const String urlPrivacyPolicy = 'https://tuoora.com/privacy-policy';
   static const String urlTermsConditions =
       'https://tuoora.com/terms-conditions';
+  static const String urlInstituteSubscription =
+      'https://tuoora.com/institute/subscription';
   static const String errFailedOpenLink = 'Could not open the link';
+  static const String subscriptionManageOnWebTitle =
+      'Manage Subscription on Web';
+  static const String subscriptionManageOnWebMessage =
+      'For subscription plans, renewal, and billing, please visit our website. We will open it in your default browser.';
+  static const String subscriptionOpenWebButton = 'Open in Browser';
   static const String signOutOfYourAccount = 'Sign out of your account';
   static const String instituteProfileAreYouSureYouWantTo =
       'Are you sure you want to log out from your account?';
@@ -675,6 +682,16 @@ class AppStrings {
   static const String sessionExpiredTitle = 'Session expired';
   static const String errSessionExpired =
       'Your session has timed out. Please log in again.';
+  static const String deleteAccount = 'Delete Account';
+  static const String deleteAccountSubtitle =
+      'Permanently remove your account and data';
+  static const String deleteAccountConfirmTitle = 'Delete account?';
+  static const String deleteAccountConfirmMessage =
+      'This will permanently delete your account, profile, and associated data. Fee records may be retained as required by law. This action cannot be undone.';
+  static const String deleteAccountConfirmButton = 'Delete';
+  static const String accountDeletedSuccessfully = 'Account deleted';
+  static const String accountDeletionFailed = 'Could not delete account';
+
   static const String password = 'Password';
   static const String recoveryForThisRoleWillBe =
       'Recovery for this role will be available soon.';

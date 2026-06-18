@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:get/get.dart';
@@ -6,9 +8,18 @@ import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/services/auth_service.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/utils/url_launcher_utils.dart';
 
 class SubscriptionBanner extends StatelessWidget {
   const SubscriptionBanner({super.key});
+
+  void _handleRenewAction() {
+    if (Platform.isIOS) {
+      UrlLauncherUtils.openExternal(AppStrings.urlInstituteSubscription);
+    } else {
+      Get.toNamed(AppRoutes.instituteSubscriptionRenew);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +62,7 @@ class SubscriptionBanner extends StatelessWidget {
             ),
           ),
           action: 'Renew Subscription Now',
-          onAction: () => Get.toNamed(AppRoutes.instituteSubscriptionRenew),
+          onAction: _handleRenewAction,
         );
       }
 
@@ -75,7 +86,7 @@ class SubscriptionBanner extends StatelessWidget {
           message:
               'Your previous renewal request was rejected. Please review your payment details and submit again.',
           action: 'Try Again',
-          onAction: () => Get.toNamed(AppRoutes.instituteSubscriptionRenew),
+          onAction: _handleRenewAction,
         );
       }
 
@@ -88,7 +99,7 @@ class SubscriptionBanner extends StatelessWidget {
           message:
               'Your subscription has been cancelled. Please renew to restore full functionality to your institute.',
           action: 'Renew Subscription Now',
-          onAction: () => Get.toNamed(AppRoutes.instituteSubscriptionRenew),
+          onAction: _handleRenewAction,
         );
       }
 

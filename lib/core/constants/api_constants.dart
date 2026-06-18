@@ -13,6 +13,7 @@ class ApiConstants {
       '/student/notification-settings';
   static const String studentProfile = '/student/profile';
   static const String studentProfileAvatar = '/student/profile/avatar';
+  static const String studentAccountDelete = '/student/profile/delete';
   static const String studentFeedback = '/student/feedback';
   static const String studentHomeworks = '/student/homeworks';
   static String studentHomeworkDetail(int id) => '/student/homeworks/$id';
@@ -36,6 +37,7 @@ class ApiConstants {
   static const String instituteStudents = '/institute/students';
   static const String instituteProfile = '/institute/profile';
   static const String instituteProfileUpdate = '/institute/profile/update';
+  static const String instituteAccountDelete = '/institute/profile/delete';
   static const String institutePaymentUpdate =
       '/institute/profile/payment/update';
   static const String instituteBatches = '/institute/batches';

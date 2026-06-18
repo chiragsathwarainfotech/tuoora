@@ -1,6 +1,10 @@
+import 'dart:io' show Platform;
+
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/utils/url_launcher_utils.dart';
+import 'package:tuoora/core/widgets/app_button.dart';
 import 'package:tuoora/data/models/institute_subscription_model.dart';
 import 'package:tuoora/presentation/institute/controllers/institute_subscription_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
@@ -21,7 +25,10 @@ class InstituteSubscriptionScreen
       body: SafeArea(
         child: Column(
           children: [
-            const InstituteAppBar(title: AppStrings.subscriptionPlans, isRoot: false),
+            const InstituteAppBar(
+              title: AppStrings.subscriptionPlans,
+              isRoot: false,
+            ),
             Expanded(
               child: Obx(() {
                 if (controller.isLoading.value) {
@@ -52,13 +59,17 @@ class InstituteSubscriptionScreen
                       children: [
                         _buildActivePlanCard(data.subscription, data.history),
                         AppSpacing.v24,
-                        _buildHeroHeader(),
-                        AppSpacing.v20,
-                        _buildPlansRow(data.plans, data.subscription),
-                        AppSpacing.v24,
-                        _buildFeatureCards(),
-                        AppSpacing.v24,
-                        _buildRecentBillingTable(data.history),
+                        if (Platform.isIOS)
+                          _buildManageOnWebCard()
+                        else ...[
+                          _buildHeroHeader(),
+                          AppSpacing.v20,
+                          _buildPlansRow(data.plans, data.subscription),
+                          AppSpacing.v24,
+                          _buildFeatureCards(),
+                          AppSpacing.v24,
+                          _buildRecentBillingTable(data.history),
+                        ],
                       ],
                     ),
                   ),
@@ -176,6 +187,71 @@ class InstituteSubscriptionScreen
                 ),
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildManageOnWebCard() {
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 16,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Container(
+            width: 96,
+            height: 96,
+            decoration: const BoxDecoration(
+              color: AppColors.primaryBrandLight,
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.open_in_browser_rounded,
+              size: 48,
+              color: AppColors.primaryBrand,
+            ),
+          ),
+          AppSpacing.v20,
+          Text(
+            AppStrings.subscriptionManageOnWebTitle,
+            textAlign: TextAlign.center,
+            style: AppTextStyles.outfit(
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+              color: AppColors.textPrimary,
+            ),
+          ),
+          AppSpacing.v8,
+          Text(
+            AppStrings.subscriptionManageOnWebMessage,
+            textAlign: TextAlign.center,
+            style: AppTextStyles.outfit(
+              fontSize: 13,
+              height: 1.6,
+              color: AppColors.textSecondary,
+            ),
+          ),
+          AppSpacing.v20,
+          SizedBox(
+            width: double.infinity,
+            child: AppButton(
+              label: AppStrings.subscriptionOpenWebButton,
+              icon: Icons.open_in_new_rounded,
+              onPressed: () => UrlLauncherUtils.openExternal(
+                AppStrings.urlInstituteSubscription,
+              ),
+            ),
           ),
         ],
       ),

@@ -21,6 +21,19 @@ class StudentProfileRepository implements StudentProfileRepositoryImpl {
   }
 
   @override
+  Future<void> deleteAccount() async {
+    final response = await _apiClient.delete(
+      ApiConstants.studentAccountDelete,
+    );
+    if (response.status.hasError) {
+      throw Exception(
+        response.body?['message']?.toString() ??
+            'Failed to delete account: ${response.statusText}',
+      );
+    }
+  }
+
+  @override
   Future<void> submitFeedback(Map<String, dynamic> data) async {
     final response = await _apiClient.post(ApiConstants.studentFeedback, data);
     if (response.status.hasError) {

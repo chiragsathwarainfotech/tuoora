@@ -8,6 +8,7 @@ import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
 import 'package:tuoora/core/widgets/app_input_field.dart';
+import 'package:tuoora/core/widgets/subscription_manage_on_web_view.dart';
 import 'package:tuoora/presentation/institute/controllers/subscription_renewal_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 
@@ -16,6 +17,23 @@ class SubmitPaymentProofScreen extends GetView<SubscriptionRenewalController> {
 
   @override
   Widget build(BuildContext context) {
+    if (Platform.isIOS) {
+      return Scaffold(
+        backgroundColor: AppColors.scaffoldBg,
+        body: SafeArea(
+          child: Column(
+            children: [
+              InstituteAppBar(
+                title: AppStrings.labelSubmitPaymentProof,
+                onBackTap: () => Get.back(),
+              ),
+              const Expanded(child: SubscriptionManageOnWebView()),
+            ],
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(

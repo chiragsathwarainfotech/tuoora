@@ -95,6 +95,8 @@ class InstituteProfileViewScreen extends StatelessWidget {
                         AppSpacing.v16,
                         _buildActivePlanCard(),
                         AppSpacing.v16,
+                        _buildDeleteAccountCard(context, controller),
+                        AppSpacing.v16,
                         _buildLogoutCard(context, controller),
                         AppSpacing.v24,
                         const AppVersionLabel(),
@@ -550,7 +552,22 @@ class InstituteProfileViewScreen extends StatelessWidget {
     );
   }
 
-  // ------------------------------------------------------------- shared
+  Widget _buildDeleteAccountCard(
+    BuildContext context,
+    InstituteProfileController controller,
+  ) {
+    return _card(
+      child: _buildSettingsItem(
+        icon: Icons.delete_forever_rounded,
+        title: AppStrings.deleteAccount,
+        subtitle: AppStrings.deleteAccountSubtitle,
+        iconColor: AppColors.bohoRed,
+        onTap: () => _showDeleteAccountDialog(context, controller),
+        isLast: true,
+      ),
+    );
+  }
+
   Widget _cardSectionHeader(String title, IconData icon) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(4, 4, 4, 12),
@@ -735,6 +752,62 @@ class InstituteProfileViewScreen extends StatelessWidget {
             ),
             child: Text(
               AppStrings.logout,
+              style: AppTextStyles.outfit(
+                color: AppColors.white,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showDeleteAccountDialog(
+    BuildContext context,
+    InstituteProfileController controller,
+  ) {
+    Get.dialog(
+      AlertDialog(
+        insetPadding: EdgeInsets.symmetric(horizontal: AppSpacing.s16),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+        ),
+        title: Text(
+          AppStrings.deleteAccountConfirmTitle,
+          style: AppTextStyles.outfit(fontWeight: FontWeight.w700),
+        ),
+        content: Text(
+          AppStrings.deleteAccountConfirmMessage,
+          style: AppTextStyles.outfit(
+            color: AppColors.textSecondary,
+            height: 1.5,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text(
+              AppStrings.labelCancel,
+              style: AppTextStyles.outfit(
+                color: AppColors.textSecondary,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Get.back();
+              controller.deleteAccount();
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.bohoRed,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+              ),
+            ),
+            child: Text(
+              AppStrings.deleteAccountConfirmButton,
               style: AppTextStyles.outfit(
                 color: AppColors.white,
                 fontWeight: FontWeight.w600,

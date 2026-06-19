@@ -31,17 +31,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            InstituteAppBar(
-              title: AppStrings.instituteProfile,
-              isRoot: false,
-              actions: [
-                IconButton(
-                  onPressed: () => Get.toNamed(AppRoutes.instituteEditProfile),
-                  icon: const AppActionIcon(asset: AppImages.icEdit),
-                ),
-                AppSpacing.h8,
-              ],
-            ),
+            InstituteAppBar(title: AppStrings.instituteProfile, isRoot: false),
             Expanded(
               child: Obx(() {
                 if (controller.isLoading.value &&
@@ -133,64 +123,100 @@ class InstituteProfileViewScreen extends StatelessWidget {
 
   Widget _buildHeaderCard(InstituteProfile p) {
     return _card(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        child: Column(
-          children: [
-            Container(
-              width: 120,
-              height: 120,
-              decoration: BoxDecoration(
-                color: AppColors.primaryBrandLight,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.fieldBorder),
+      child: Stack(
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                width: 88,
+                height: 88,
+                decoration: BoxDecoration(
+                  color: AppColors.primaryBrandLight,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: AppColors.fieldBorder),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: p.logoUrl != null && p.logoUrl!.isNotEmpty
+                      ? CachedNetworkImage(
+                          imageUrl: p.logoUrl!,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) =>
+                              _buildInitialsPlaceholder(p),
+                          errorWidget: (context, url, error) =>
+                              _buildInitialsPlaceholder(p),
+                        )
+                      : _buildInitialsPlaceholder(p),
+                ),
               ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(15),
-                child: p.logoUrl != null && p.logoUrl!.isNotEmpty
-                    ? CachedNetworkImage(
-                        imageUrl: p.logoUrl!,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) =>
-                            _buildInitialsPlaceholder(p),
-                        errorWidget: (context, url, error) =>
-                            _buildInitialsPlaceholder(p),
-                      )
-                    : _buildInitialsPlaceholder(p),
+              AppSpacing.h12,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 44),
+                      child: Text(
+                        p.instituteName ?? p.name,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyles.outfit(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.textPrimary,
+                          height: 1.2,
+                        ),
+                      ),
+                    ),
+                    AppSpacing.v6,
+                    Text(
+                      'Owner: ${p.name}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyles.outfit(
+                        fontSize: 13,
+                        color: AppColors.textSecondary,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    AppSpacing.v4,
+                    Text(
+                      'Code: ${p.instituteCode}',
+                      style: AppTextStyles.outfit(
+                        fontSize: 13,
+                        color: AppColors.textSecondary,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Positioned(
+            top: 0,
+            right: 0,
+            child: Material(
+              color: AppColors.primaryBrandLight,
+              shape: const CircleBorder(),
+              clipBehavior: Clip.antiAlias,
+              child: InkWell(
+                onTap: () => Get.toNamed(AppRoutes.instituteEditProfile),
+                child: const SizedBox(
+                  width: 36,
+                  height: 36,
+                  child: Icon(
+                    Icons.edit_outlined,
+                    size: 18,
+                    color: AppColors.primaryBrand,
+                  ),
+                ),
               ),
             ),
-            AppSpacing.v16,
-            Text(
-              p.instituteName ?? p.name,
-              textAlign: TextAlign.center,
-              style: AppTextStyles.outfit(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                color: AppColors.textPrimary,
-              ),
-            ),
-            AppSpacing.v4,
-            Text(
-              'Owner: ${p.name}',
-              textAlign: TextAlign.center,
-              style: AppTextStyles.outfit(
-                fontSize: 14,
-                color: AppColors.textSecondary,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            AppSpacing.v4,
-            Text(
-              'Institute Code: ${p.instituteCode}',
-              textAlign: TextAlign.center,
-              style: AppTextStyles.outfit(
-                fontSize: 14,
-                color: AppColors.textSecondary,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -801,7 +827,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
               controller.deleteAccount();
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.bohoRed,
+              backgroundColor: AppColors.primaryBrand,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
               ),

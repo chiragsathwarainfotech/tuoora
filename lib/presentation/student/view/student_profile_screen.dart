@@ -14,6 +14,7 @@ import 'package:tuoora/core/widgets/app_empty_view.dart';
 import 'package:tuoora/core/widgets/app_version_label.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/core/widgets/student_bottom_nav.dart';
+import 'package:tuoora/presentation/student/widgets/performance_gauge.dart';
 import 'package:tuoora/presentation/student/widgets/profile_grid_action.dart';
 import 'package:tuoora/presentation/student/widgets/profile_menu_tile.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
@@ -78,9 +79,32 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
                         const SizedBox(height: 8),
                         _buildHelpCard(),
                         const SizedBox(height: 16),
-                        _buildLogOutButton(context),
-                        const SizedBox(height: 12),
-                        _buildDeleteAccountButton(context),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Expanded(
+                              child: _actionButton(
+                                context,
+                                header: AppStrings.logOut,
+                                icon: Icons.logout_rounded,
+                                onPressed: () {
+                                  _showLogoutDialog(context);
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: _actionButton(
+                                context,
+                                header: AppStrings.deleteAccount,
+                                icon: Icons.delete_forever_rounded,
+                                onPressed: () {
+                                  _showDeleteAccountDialog(context);
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
                         const SizedBox(height: 16),
                         const AppVersionLabel(),
                         const SizedBox(height: 16),
@@ -125,7 +149,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
             children: [
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.fromLTRB(100, 14, 16, 14),
+                padding: const EdgeInsets.fromLTRB(100, 14, 16, 4),
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     colors: [AppColors.instBrandOrange, AppColors.primaryBrand],
@@ -271,62 +295,8 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
         borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         border: Border.all(color: AppColors.borderGrey.withValues(alpha: 0.5)),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'PERFORMANCE SCORE',
-                  style: AppTextStyles.outfit(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.textSecondary,
-                    letterSpacing: 1,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  'Overall Academic Standing',
-                  style: AppTextStyles.outfit(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            width: 56,
-            height: 56,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                SizedBox(
-                  width: 56,
-                  height: 56,
-                  child: CircularProgressIndicator(
-                    value: stats.performanceScore / 100,
-                    strokeWidth: 6,
-                    color: AppColors.primaryBrand,
-                    backgroundColor: AppColors.primaryBrandLight,
-                  ),
-                ),
-                Text(
-                  '${stats.performanceScore}',
-                  style: AppTextStyles.outfit(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.primaryBrand,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+      child: Center(
+        child: PerformanceGauge(score: stats.performanceScore, size: 180),
       ),
     );
   }
@@ -589,42 +559,16 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
     );
   }
 
-  Widget _buildLogOutButton(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () => _showLogoutDialog(context),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.errorBg,
-        elevation: 0,
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(
-            Icons.arrow_forward_rounded,
-            color: AppColors.error,
-            size: 18,
-          ),
-          const SizedBox(width: 8),
-          Text(
-            AppStrings.logOut,
-            style: AppTextStyles.outfit(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: AppColors.error,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDeleteAccountButton(BuildContext context) {
+  Widget _actionButton(
+    BuildContext context, {
+    required String header,
+    required IconData icon,
+    required VoidCallback onPressed,
+  }) {
     return OutlinedButton(
-      onPressed: () => _showDeleteAccountDialog(context),
+      onPressed: () {
+        onPressed();
+      },
       style: OutlinedButton.styleFrom(
         padding: const EdgeInsets.symmetric(vertical: 14),
         shape: RoundedRectangleBorder(
@@ -635,14 +579,10 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(
-            Icons.delete_forever_rounded,
-            color: AppColors.error,
-            size: 18,
-          ),
+          Icon(icon, color: AppColors.error, size: 18),
           const SizedBox(width: 8),
           Text(
-            AppStrings.deleteAccount,
+            header,
             style: AppTextStyles.outfit(
               fontSize: 14,
               fontWeight: FontWeight.w600,
@@ -663,14 +603,11 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
         ),
         title: Text(
           AppStrings.deleteAccountConfirmTitle,
-          style: AppTextStyles.outfit(fontWeight: FontWeight.w700),
+          style: AppTextStyles.outfit(fontWeight: FontWeight.w600),
         ),
         content: Text(
           AppStrings.deleteAccountConfirmMessage,
-          style: AppTextStyles.outfit(
-            color: AppColors.textSecondary,
-            height: 1.5,
-          ),
+          style: AppTextStyles.outfit(color: AppColors.textSecondary),
         ),
         actions: [
           TextButton(
@@ -689,7 +626,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
               controller.deleteAccount();
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.error,
+              backgroundColor: AppColors.primaryBrand,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
               ),

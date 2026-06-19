@@ -15,6 +15,7 @@ class AppColors {
   static const Color brandAppBarColor = Color(0xFF663322);
   static const Color instBrandOrange = Color(0xFFFF6600);
   static const Color successGreen = Color(0xFF10B981);
+  static const Color green = Color(0xFF43A047);
   static const Color orangeTag = Color(0xFFC2410C);
   static const Color subjectPhysics = Color(0xFF06B6D4);
 

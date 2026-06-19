@@ -13,6 +13,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tuoora/core/api/api_exception.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'dart:io';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -481,20 +482,20 @@ class InstituteProfileController extends GetxController {
   }
 
   Future<void> deleteAccount() async {
+    CommonLoading.show();
     try {
-      isLoading.value = true;
       await _instituteRepository.deleteAccount();
       final authService = Get.find<AuthService>();
       await authService.clearSession();
+      CommonLoading.dismiss();
       Get.offAllNamed(AppRoutes.roleSelection);
       AppSnackBar.success(AppStrings.accountDeletedSuccessfully);
     } catch (e) {
+      CommonLoading.dismiss();
       AppSnackBar.error(
         e.toString().replaceAll('Exception: ', ''),
         title: AppStrings.accountDeletionFailed,
       );
-    } finally {
-      isLoading.value = false;
     }
   }
 

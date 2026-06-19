@@ -41,6 +41,13 @@ class ApiClient extends GetConnect {
 
     httpClient.addAuthenticator<dynamic>((request) async {
       final path = request.url.path;
+
+      // Do not attempt to authenticate or force logout if the request is a login request
+      if (path.endsWith(ApiConstants.instituteLogin) ||
+          path.endsWith(ApiConstants.studentLogin)) {
+        return request;
+      }
+
       if (path.endsWith(ApiConstants.authRefresh) ||
           path.endsWith('${ApiConstants.authRefresh}/')) {
         await _forceLogout();
@@ -92,7 +99,11 @@ class ApiClient extends GetConnect {
         }
 
         if (response.statusCode == 401) {
-          _forceLogout();
+          final urlStr = request.url.toString();
+          if (!urlStr.contains(ApiConstants.instituteLogin) &&
+              !urlStr.contains(ApiConstants.studentLogin)) {
+            _forceLogout();
+          }
         }
 
         final code = response.statusCode ?? 0;

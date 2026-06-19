@@ -50,7 +50,7 @@ class InstituteDashboard extends GetView<InstituteProfileController> {
       child: Row(
         children: [
           Obx(
-            () => Flexible(
+            () => Expanded(
               child: Text(
                 profileController.instituteName.value.isNotEmpty
                     ? profileController.instituteName.value
@@ -65,7 +65,6 @@ class InstituteDashboard extends GetView<InstituteProfileController> {
               ),
             ),
           ),
-          const Spacer(),
           GestureDetector(
             onTap: () => Get.toNamed(AppRoutes.instituteNotifications),
             child: const Icon(

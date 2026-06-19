@@ -1,18 +1,18 @@
 import 'dart:io';
-
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/services/auth_service.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/api/api_client.dart';
-import 'package:tuoora/core/services/auth_service.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/data/models/student_profile_model.dart';
 import 'package:tuoora/data/repositories/student_profile_repository.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 
 class StudentProfileController extends GetxController {
   final RxString profileImagePath = ''.obs;
@@ -44,7 +44,7 @@ class StudentProfileController extends GetxController {
 
   Future<void> deleteAccount() async {
     try {
-      isLoading.value = true;
+      CommonLoading.show();
       await _repository.deleteAccount();
       final authService = Get.find<AuthService>();
       await authService.clearSession();
@@ -56,7 +56,7 @@ class StudentProfileController extends GetxController {
         title: AppStrings.accountDeletionFailed,
       );
     } finally {
-      isLoading.value = false;
+      CommonLoading.dismiss();
     }
   }
 

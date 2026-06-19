@@ -13,7 +13,6 @@ import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/core/widgets/app_version_label.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/core/constants/app_images.dart';
-import 'package:tuoora/core/widgets/app_action_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';

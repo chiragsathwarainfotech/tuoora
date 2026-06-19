@@ -692,6 +692,13 @@ class AppStrings {
   static const String accountDeletedSuccessfully = 'Account deleted';
   static const String accountDeletionFailed = 'Could not delete account';
 
+  // In-app update (Play in-app updates flexible flow)
+  static const String updateReadyTitle = 'Update ready';
+  static const String updateReadyMessage =
+      'A new version of Tuoora has been downloaded. Restart to apply.';
+  static const String updateRestartButton = 'Restart';
+  static const String updateLaterButton = 'Later';
+
   static const String password = 'Password';
   static const String recoveryForThisRoleWillBe =
       'Recovery for this role will be available soon.';

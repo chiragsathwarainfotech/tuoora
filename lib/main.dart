@@ -11,6 +11,7 @@ import 'config/app_routes.dart';
 import 'config/app_theme.dart';
 import 'package:tuoora/core/api/api_client.dart';
 import 'package:tuoora/core/widgets/dotted_background.dart';
+import 'package:tuoora/core/services/app_update_service.dart';
 import 'package:tuoora/core/services/auth_service.dart';
 import 'package:tuoora/core/services/institute_account_status_handler.dart';
 import 'package:tuoora/core/services/server_error_handler.dart';
@@ -41,11 +42,15 @@ void main() async {
   Get.put(MediaCacheService());
   Get.put(InstituteAccountStatusHandler());
   Get.put(ServerErrorHandler());
+  Get.put(AppUpdateService());
   await Get.putAsync(() => AuthService().init());
   await Get.putAsync(() => NotificationRouter().init());
   await Get.putAsync(() => PushNotificationService().init());
 
   runApp(const FeeEasyApp());
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    AppUpdateService.to.checkForUpdate();
+  });
 }
 
 class FeeEasyApp extends StatelessWidget {

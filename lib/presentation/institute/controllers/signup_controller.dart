@@ -1,4 +1,5 @@
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,10 @@ import 'package:tuoora/data/models/user_model.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tuoora/data/repositories/auth_repository.dart';
 import 'package:tuoora/core/utils/validation_utils.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'dart:async';
+import 'dart:io';
+import 'package:permission_handler/permission_handler.dart';
 
 class SignupController extends GetxController {
   final _repository = Get.find<InstituteRepository>();
@@ -18,11 +22,22 @@ class SignupController extends GetxController {
   final _authService = Get.find<AuthService>();
 
   SignupController();
+  bool _fromLoginRedirect = false;
 
   @override
   void onInit() {
     super.onInit();
     _prefillFromSession();
+    _prefillFromRouteArguments();
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+    if (_fromLoginRedirect) {
+      _fromLoginRedirect = false;
+      _autoSendFreshOtpOnArrival();
+    }
   }
 
   void _prefillFromSession() {
@@ -34,6 +49,37 @@ class SignupController extends GetxController {
       if (instituteNameController.text.isEmpty) {
         instituteNameController.text = user.instituteName ?? '';
       }
+      if (instituteOwnerNameController.text.isEmpty) {
+        instituteOwnerNameController.text = user.name;
+      }
+    }
+  }
+
+  void _prefillFromRouteArguments() {
+    final args = Get.arguments;
+    if (args is! Map) return;
+    final email = args['email']?.toString();
+    final password = args['password']?.toString();
+    if (email != null && email.isNotEmpty) {
+      emailController.text = email;
+    }
+    if (password != null && password.isNotEmpty) {
+      passwordController.text = password;
+    }
+    _fromLoginRedirect = true;
+  }
+
+  Future<void> _autoSendFreshOtpOnArrival() async {
+    final email = emailController.text.trim();
+    if (email.isEmpty) return;
+    isLoading.value = true;
+    try {
+      await _authRepository.forgotPassword(email);
+    } catch (_) {
+      // Resend manually after the 60-second cooldown.
+    } finally {
+      isLoading.value = false;
+      startTimer();
     }
   }
 
@@ -58,6 +104,22 @@ class SignupController extends GetxController {
   final canResend = false.obs;
   Timer? _timer;
 
+  /// Inline per-field error messages for the signup + OTP flows. Replaces
+  /// the old "Please fill in all fields" blanket snackbar so the user sees
+  /// which specific input is missing or invalid.
+  final instituteNameError = RxnString();
+  final ownerNameError = RxnString();
+  final emailError = RxnString();
+  final passwordError = RxnString();
+  final otpError = RxnString();
+  // Profile-setup screen fields (completeProfile flow).
+  final phoneError = RxnString();
+  final addressLine1Error = RxnString();
+  final cityError = RxnString();
+  final stateError = RxnString();
+  final countryError = RxnString();
+  final pincodeError = RxnString();
+
   final selectedLogoPath = Rxn<String>();
   final _picker = ImagePicker();
 
@@ -76,10 +138,10 @@ class SignupController extends GetxController {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Select Logo Source',
-              style: AppTextStyles.manrope(
+              AppStrings.selectLogoSource,
+              style: AppTextStyles.outfit(
                 fontSize: 18,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 color: AppColors.textPrimary,
               ),
             ),
@@ -97,10 +159,10 @@ class SignupController extends GetxController {
                 ),
               ),
               title: Text(
-                'Camera',
-                style: AppTextStyles.manrope(
+                AppStrings.labelCamera,
+                style: AppTextStyles.outfit(
                   fontSize: 16,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
                 ),
               ),
@@ -120,10 +182,10 @@ class SignupController extends GetxController {
                 ),
               ),
               title: Text(
-                'Gallery',
-                style: AppTextStyles.manrope(
+                AppStrings.labelGallery,
+                style: AppTextStyles.outfit(
                   fontSize: 16,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
                 ),
               ),
@@ -139,6 +201,35 @@ class SignupController extends GetxController {
   Future<void> _handleImageSelection(ImageSource source) async {
     Get.back();
     try {
+      if (source == ImageSource.camera) {
+        final status = await Permission.camera.request();
+        if (status.isPermanentlyDenied) {
+          openAppSettings();
+          return;
+        } else if (!status.isGranted) {
+          return;
+        }
+      } else if (source == ImageSource.gallery) {
+        if (Platform.isIOS) {
+          final status = await Permission.photos.request();
+          if (status.isPermanentlyDenied) {
+            openAppSettings();
+            return;
+          } else if (!status.isGranted && !status.isLimited) {
+            return;
+          }
+        } else {
+          final storage = await Permission.storage.request();
+          final photos = await Permission.photos.request();
+          if (storage.isPermanentlyDenied || photos.isPermanentlyDenied) {
+            openAppSettings();
+            return;
+          } else if (!storage.isGranted && !photos.isGranted) {
+            return;
+          }
+        }
+      }
+
       final XFile? image = await _picker.pickImage(
         source: source,
         imageQuality: 70,
@@ -147,7 +238,7 @@ class SignupController extends GetxController {
         selectedLogoPath.value = image.path;
       }
     } catch (e) {
-      Get.snackbar('Error', 'Failed to pick image');
+      AppSnackBar.error(AppStrings.errFailedPickImage);
     }
   }
 
@@ -155,35 +246,30 @@ class SignupController extends GetxController {
     final email = emailController.text.trim();
     final password = passwordController.text;
     final instituteName = instituteNameController.text.trim();
+    final ownerName = instituteOwnerNameController.text.trim();
 
-    if (instituteName.isEmpty || email.isEmpty || password.isEmpty) {
-      Get.snackbar(
-        'Error',
-        'Please fill in all fields',
-        backgroundColor: Colors.red.withValues(alpha: 0.1),
-        colorText: Colors.red,
-      );
+    // Per-field validation — each error renders under its own input.
+    instituteNameError.value = instituteName.isEmpty
+        ? 'Institute name is required'
+        : null;
+    ownerNameError.value = ownerName.isEmpty ? 'Owner name is required' : null;
+    emailError.value = email.isEmpty ? 'Email is required' : null;
+    passwordError.value = password.isEmpty ? 'Password is required' : null;
+    if (instituteNameError.value != null ||
+        ownerNameError.value != null ||
+        emailError.value != null ||
+        passwordError.value != null) {
       return;
     }
 
     if (!GetUtils.isEmail(email)) {
-      Get.snackbar(
-        'Error',
-        'Please enter a valid email',
-        backgroundColor: Colors.red.withValues(alpha: 0.1),
-        colorText: Colors.red,
-      );
+      emailError.value = 'Enter a valid email';
       return;
     }
 
-    final passwordError = ValidationUtils.validatePassword(password);
-    if (passwordError != null) {
-      Get.snackbar(
-        'Invalid Password',
-        passwordError,
-        backgroundColor: Colors.red.withValues(alpha: 0.1),
-        colorText: Colors.red,
-      );
+    final pwdValidation = ValidationUtils.validatePassword(password);
+    if (pwdValidation != null) {
+      passwordError.value = pwdValidation;
       return;
     }
 
@@ -191,25 +277,19 @@ class SignupController extends GetxController {
     try {
       final message = await _repository.registerInstitute({
         'email': email,
+        'name': ownerName,
         'password': password,
         'institute_name': instituteName,
       });
 
-      Get.snackbar(
-        'Success',
-        message,
-        backgroundColor: Colors.green.withValues(alpha: 0.1),
-        colorText: Colors.green,
-      );
+      AppSnackBar.success(message);
 
       Get.toNamed(AppRoutes.instituteOtp);
       startTimer();
     } catch (e) {
-      Get.snackbar(
-        'Registration Failed',
+      AppSnackBar.error(
         e.toString().replaceAll('Exception: ', ''),
-        backgroundColor: Colors.red.withValues(alpha: 0.1),
-        colorText: Colors.red,
+        title: AppStrings.registrationFailed,
       );
     } finally {
       isLoading.value = false;
@@ -221,14 +301,10 @@ class SignupController extends GetxController {
     final email = emailController.text.trim();
 
     if (otp.isEmpty) {
-      Get.snackbar(
-        'Error',
-        'Please enter OTP',
-        backgroundColor: Colors.red.withValues(alpha: 0.1),
-        colorText: Colors.red,
-      );
+      otpError.value = 'OTP is required';
       return;
     }
+    otpError.value = null;
 
     isLoading.value = true;
     try {
@@ -236,30 +312,30 @@ class SignupController extends GetxController {
 
       final user = User(
         id: 0,
-        name: instituteNameController.text,
+        name: instituteOwnerNameController.text,
         email: email,
         token: token,
+        accessToken: token,
+        refreshToken: '',
         role: 'INSTITUTE',
         instituteName: instituteNameController.text,
         isProfileSetup: false,
+        emailVerifiedAt: DateTime.now().toUtc().toIso8601String(),
       );
 
-      await _authService.saveSession(user, stayAuthenticated: true);
-
-      Get.snackbar(
-        'Success',
-        'OTP verified successfully.',
-        backgroundColor: Colors.green.withValues(alpha: 0.1),
-        colorText: Colors.green,
+      await _authService.saveSession(
+        user,
+        stayAuthenticated: true,
+        loggedIn: false,
       );
+
+      AppSnackBar.success(AppStrings.otpVerifiedSuccessfully);
 
       Get.toNamed(AppRoutes.instituteProfileSetup);
     } catch (e) {
-      Get.snackbar(
-        'Verification Failed',
+      AppSnackBar.error(
         e.toString().replaceAll('Exception: ', ''),
-        backgroundColor: Colors.red.withValues(alpha: 0.1),
-        colorText: Colors.red,
+        title: AppStrings.verificationFailed,
       );
     } finally {
       isLoading.value = false;
@@ -267,19 +343,43 @@ class SignupController extends GetxController {
   }
 
   Future<void> completeProfile() async {
-    if (instituteOwnerNameController.text.isEmpty ||
-        phoneController.text.isEmpty ||
-        addressLine1Controller.text.isEmpty ||
-        cityController.text.isEmpty ||
-        stateController.text.isEmpty ||
-        countryController.text.isEmpty ||
-        pincodeController.text.isEmpty) {
-      Get.snackbar(
-        'Error',
-        'Please fill in all required fields',
-        backgroundColor: Colors.red.withValues(alpha: 0.1),
-        colorText: Colors.red,
-      );
+    ownerNameError.value = instituteOwnerNameController.text.trim().isEmpty
+        ? 'Owner name is required'
+        : null;
+    instituteNameError.value = instituteNameController.text.trim().isEmpty
+        ? 'Institute name is required'
+        : null;
+    phoneError.value = phoneController.text.trim().isEmpty
+        ? 'Phone number is required'
+        : null;
+    addressLine1Error.value = addressLine1Controller.text.trim().isEmpty
+        ? 'Address is required'
+        : null;
+    cityError.value = cityController.text.trim().isEmpty
+        ? 'City is required'
+        : null;
+    stateError.value = stateController.text.trim().isEmpty
+        ? 'State is required'
+        : null;
+    countryError.value = countryController.text.trim().isEmpty
+        ? 'Country is required'
+        : null;
+    final pincodeText = pincodeController.text.trim();
+    if (pincodeText.isEmpty) {
+      pincodeError.value = 'Pincode is required';
+    } else if (pincodeText.length != 6) {
+      pincodeError.value = 'Pincode must be 6 digits';
+    } else {
+      pincodeError.value = null;
+    }
+    if (ownerNameError.value != null ||
+        instituteNameError.value != null ||
+        phoneError.value != null ||
+        addressLine1Error.value != null ||
+        cityError.value != null ||
+        stateError.value != null ||
+        countryError.value != null ||
+        pincodeError.value != null) {
       return;
     }
 
@@ -304,7 +404,6 @@ class SignupController extends GetxController {
 
       await _repository.updateProfile(data);
 
-      // Update local session with isProfileSetup = true
       final currentUser = _authService.currentUser;
       if (currentUser != null) {
         final updatedUser = User(
@@ -312,6 +411,8 @@ class SignupController extends GetxController {
           name: data['name'],
           email: currentUser.email,
           token: currentUser.token,
+          accessToken: currentUser.accessToken,
+          refreshToken: currentUser.refreshToken,
           role: currentUser.role,
           instituteName: data['institute_name'],
           phone: data['phone'],
@@ -325,18 +426,11 @@ class SignupController extends GetxController {
       }
 
       Get.offAllNamed(AppRoutes.instituteDashboard);
-      Get.snackbar(
-        'Success',
-        'Profile created successfully',
-        backgroundColor: Colors.green.withValues(alpha: 0.1),
-        colorText: Colors.green,
-      );
+      AppSnackBar.success(AppStrings.profileCreatedSuccessfully);
     } catch (e) {
-      Get.snackbar(
-        'Setup Failed',
+      AppSnackBar.error(
         e.toString().replaceAll('Exception: ', ''),
-        backgroundColor: Colors.red.withValues(alpha: 0.1),
-        colorText: Colors.red,
+        title: AppStrings.setupFailed,
       );
     } finally {
       isLoading.value = false;
@@ -345,7 +439,7 @@ class SignupController extends GetxController {
 
   void startTimer() {
     canResend.value = false;
-    timerSeconds.value = 60;
+    timerSeconds.value = 15;
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (timerSeconds.value > 0) {
@@ -364,15 +458,10 @@ class SignupController extends GetxController {
     isLoading.value = true;
     try {
       await _authRepository.forgotPassword(email);
-      Get.snackbar(
-        'Success',
-        'OTP resend successfully',
-        backgroundColor: Colors.green.withValues(alpha: 0.1),
-        colorText: Colors.green,
-      );
+      AppSnackBar.success(AppStrings.msgOtpResent);
       startTimer();
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      AppSnackBar.error(e.toString());
     } finally {
       isLoading.value = false;
     }

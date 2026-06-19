@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/core/api/api_client.dart';
 import 'package:tuoora/core/enums/app_enums.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/data/repositories/student_profile_repository.dart';
 
 extension FeedbackRatingExtension on FeedbackRating {
@@ -58,10 +60,9 @@ class StudentFeedbackController extends GetxController {
   Future<void> submitFeedback() async {
     final message = messageController.text.trim();
     if (message.isEmpty) {
-      Get.snackbar(
-        'Validation Error',
-        'Please enter a message before submitting.',
-        snackPosition: SnackPosition.BOTTOM,
+      AppSnackBar.warning(
+        AppStrings.pleaseEnterAMessageBeforeSubmitting,
+        title: AppStrings.validationError,
       );
       return;
     }
@@ -76,17 +77,9 @@ class StudentFeedbackController extends GetxController {
 
       await _repository.submitFeedback(data);
       Get.back();
-      Get.snackbar(
-        'Success',
-        'Thank you! Your feedback has been sent.',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackBar.success(AppStrings.thankYouYourFeedbackHasBeen);
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Failed to submit feedback. Please try again.',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackBar.error(AppStrings.failedToSubmitFeedbackPleaseTry);
     } finally {
       isLoading.value = false;
     }

@@ -1,8 +1,10 @@
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
 import 'package:tuoora/core/widgets/app_input_field.dart';
+import 'package:tuoora/core/widgets/input_styles.dart';
 import 'package:tuoora/presentation/institute/controllers/expense_controller.dart';
 import 'package:tuoora/presentation/institute/models/expense_model.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
@@ -18,27 +20,32 @@ class AddExpenseScreen extends GetView<ExpenseController> {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
-        child: Column(
+        child: Stack(
           children: [
-            const InstituteAppBar(title: 'Add New Expense'),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: AppSpacing.all24,
-                child: Column(
-                  children: [
-                    _buildFormCard(context),
-                    AppSpacing.v32,
-                    Obx(
-                      () => AppButton(
-                        onPressed: () => controller.addExpense(),
-                        label: 'Add Expense',
-                        icon: Icons.check_circle_outline_rounded,
-                        isLoading: controller.isLoading.value,
-                      ),
+            Column(
+              children: [
+                const InstituteAppBar(title: AppStrings.addExpense),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: AppSpacing.x16.add(AppSpacing.y16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [_buildForm(context)],
                     ),
-                  ],
+                  ),
                 ),
-              ),
+                Obx(
+                  () => Padding(
+                    padding: AppSpacing.x16,
+                    child: AppButton(
+                      onPressed: () => controller.addExpense(),
+                      label: AppStrings.addExpense,
+                      icon: Icons.check_circle_outline_rounded,
+                      isLoading: controller.isLoading.value,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -46,55 +53,39 @@ class AddExpenseScreen extends GetView<ExpenseController> {
     );
   }
 
-  Widget _buildFormCard(BuildContext context) {
-    return Container(
-      padding: AppSpacing.all24,
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+  Widget _buildForm(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildCategoryDropdown(),
+        AppSpacing.v20,
+        Obx(
+          () => AppInputField(
+            label: AppStrings.instAmountLabel,
+            hint: AppStrings.enterAmount,
+            icon: Icons.currency_rupee_rounded,
+            controller: controller.amountController,
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            maxLength: 6,
+            errorText: controller.amountError.value,
           ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildCategoryDropdown(),
-          AppSpacing.v20,
-          Obx(
-            () => AppInputField(
-              label: 'AMOUNT',
-              hint: '0.00',
-              icon: Icons.currency_rupee_rounded,
-              controller: controller.amountController,
-              keyboardType: const TextInputType.numberWithOptions(
-                decimal: true,
-              ),
-              errorText: controller.amountError.value,
-            ),
+        ),
+        AppSpacing.v20,
+        Obx(
+          () => AppInputField(
+            label: AppStrings.instBatchDescLabel,
+            hint: AppStrings.hintEnterDescription,
+            icon: Icons.description_rounded,
+            controller: controller.descriptionController,
+            errorText: controller.descriptionError.value,
           ),
-          AppSpacing.v20,
-          Obx(
-            () => AppInputField(
-              label: 'DESCRIPTION',
-              hint: 'What was this for?',
-              icon: Icons.description_rounded,
-              controller: controller.descriptionController,
-              errorText: controller.descriptionError.value,
-            ),
-          ),
-          AppSpacing.v20,
-          _buildDatePicker(context),
-          AppSpacing.v20,
-          _buildPaymentTypeToggle(),
-          AppSpacing.v24,
-          _buildAddReceiptButton(),
-        ],
-      ),
+        ),
+        AppSpacing.v20,
+        _buildDatePicker(context),
+        AppSpacing.v20,
+        _buildPaymentTypeToggle(),
+        AppSpacing.v24,
+      ],
     );
   }
 
@@ -102,13 +93,29 @@ class AddExpenseScreen extends GetView<ExpenseController> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'CATEGORY',
-          style: AppTextStyles.manrope(
-            fontSize: 14,
-            fontWeight: FontWeight.w800,
-            color: AppColors.brandAppBarColor,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              AppStrings.labelCategory,
+              style: AppTextStyles.outfit(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: AppColors.fieldLabel,
+              ),
+            ),
+            GestureDetector(
+              onTap: () => _showAddCategoryDialog(),
+              child: Text(
+                '+ NEW',
+                style: AppTextStyles.outfit(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.primaryBrand,
+                ),
+              ),
+            ),
+          ],
         ),
         AppSpacing.v8,
         Obx(
@@ -116,27 +123,24 @@ class AddExpenseScreen extends GetView<ExpenseController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 12),
                 decoration: BoxDecoration(
-                  color: AppColors.primaryBrandLight.withValues(alpha: 0.3),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: controller.categoryError.value != null
-                        ? Colors.redAccent
-                        : AppColors.primaryBrand.withValues(alpha: 0.2),
-                    width: 1.5,
-                  ),
+                  color: AppColors.fieldBg,
+                  borderRadius: BorderRadius.circular(InputStyles.borderRadius),
+                  border: controller.categoryError.value != null
+                      ? Border.all(color: Colors.redAccent, width: 1.5)
+                      : null,
                 ),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<ExpenseCategory>(
                     value: controller.selectedCategory.value,
                     isExpanded: true,
                     hint: Text(
-                      'Select Category',
-                      style: AppTextStyles.manrope(
+                      AppStrings.hintSelectCategory,
+                      style: AppTextStyles.outfit(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.textSecondary,
+                        color: AppColors.textPrimary,
                       ),
                     ),
                     items: controller.categories.map((
@@ -146,7 +150,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
                         value: category,
                         child: Text(
                           category.name,
-                          style: AppTextStyles.manrope(
+                          style: AppTextStyles.outfit(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                             color: AppColors.textPrimary,
@@ -167,7 +171,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
                   padding: const EdgeInsets.only(top: 8, left: 4),
                   child: Text(
                     controller.categoryError.value!,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 12,
                       color: Colors.redAccent,
                       fontWeight: FontWeight.w500,
@@ -186,40 +190,36 @@ class AddExpenseScreen extends GetView<ExpenseController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'DATE',
-          style: AppTextStyles.manrope(
+          AppStrings.labelDate,
+          style: AppTextStyles.outfit(
             fontSize: 14,
-            fontWeight: FontWeight.w800,
-            color: AppColors.brandAppBarColor,
+            fontWeight: FontWeight.w600,
+            color: AppColors.fieldLabel,
           ),
         ),
         AppSpacing.v8,
         GestureDetector(
           onTap: () => controller.selectDate(context),
           child: Container(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: AppColors.primaryBrandLight.withValues(alpha: 0.3),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: AppColors.primaryBrand.withValues(alpha: 0.2),
-                width: 1.5,
-              ),
+              color: AppColors.fieldBg,
+              borderRadius: BorderRadius.circular(InputStyles.borderRadius),
             ),
             child: Row(
               children: [
                 const Icon(
                   Icons.calendar_today_rounded,
-                  color: AppColors.primaryBrand,
+                  color: AppColors.fieldLabel,
                   size: 20,
                 ),
                 AppSpacing.h12,
                 Obx(
                   () => Text(
                     DateFormat(
-                      'MMM dd, yyyy',
+                      'MM/dd/yyyy',
                     ).format(controller.selectedDate.value),
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                       color: AppColors.textPrimary,
@@ -239,19 +239,19 @@ class AddExpenseScreen extends GetView<ExpenseController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'PAYMENT TYPE',
-          style: AppTextStyles.manrope(
+          AppStrings.instPaymentMethodLabel,
+          style: AppTextStyles.outfit(
             fontSize: 14,
-            fontWeight: FontWeight.w800,
-            color: AppColors.brandAppBarColor,
+            fontWeight: FontWeight.w600,
+            color: AppColors.fieldLabel,
           ),
         ),
         AppSpacing.v8,
         Container(
           padding: const EdgeInsets.all(4),
           decoration: BoxDecoration(
-            color: AppColors.primaryBrandLight.withValues(alpha: 0.3),
-            borderRadius: BorderRadius.circular(12),
+            color: AppColors.fieldBg,
+            borderRadius: BorderRadius.circular(InputStyles.borderRadius),
           ),
           child: Obx(
             () => Row(
@@ -290,7 +290,7 @@ class AddExpenseScreen extends GetView<ExpenseController> {
         child: Center(
           child: Text(
             label,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 14,
               fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
               color: isSelected ? AppColors.white : AppColors.textSecondary,
@@ -301,43 +301,70 @@ class AddExpenseScreen extends GetView<ExpenseController> {
     );
   }
 
-  Widget _buildAddReceiptButton() {
-    return GestureDetector(
-      onTap: () => controller.pickReceipt(),
-      child: Obx(
-        () => Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(vertical: 20),
-          decoration: BoxDecoration(
-            color: AppColors.primaryBrandLight.withValues(alpha: 0.3),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: AppColors.primaryBrand.withValues(alpha: 0.2),
-              style: BorderStyle.solid,
-              width: 1.5,
-            ),
-          ),
+  void _showAddCategoryDialog() {
+    final textController = TextEditingController();
+    Get.dialog(
+      Dialog(
+        backgroundColor: AppColors.white,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 16),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+        ),
+        child: Padding(
+          padding: AppSpacing.all24,
           child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(
-                controller.selectedReceiptPath.value != null
-                    ? Icons.check_circle_rounded
-                    : Icons.file_upload_rounded,
-                color: AppColors.primaryBrand,
-                size: 28,
-              ),
-              AppSpacing.v8,
               Text(
-                controller.selectedReceiptPath.value != null
-                    ? controller.selectedReceiptPath.value!.split('/').last
-                    : 'Add Receipt',
-                style: AppTextStyles.manrope(
-                  fontSize: 14,
+                'CREATE NEW CATEGORY',
+                style: AppTextStyles.outfit(
+                  fontSize: 12,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.primaryBrand,
+                  color: AppColors.textSecondary,
+                  letterSpacing: 1.0,
                 ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+              ),
+              AppSpacing.v16,
+              Row(
+                children: [
+                  Expanded(
+                    child: AppInputField(
+                      hint: 'Category Name...',
+                      label: "",
+                      controller: textController,
+                    ),
+                  ),
+                  AppSpacing.h12,
+                  ElevatedButton(
+                    onPressed: () {
+                      if (textController.text.trim().isNotEmpty) {
+                        controller.createNewCategory(
+                          textController.text.trim(),
+                        );
+                        Get.back();
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primaryBrand,
+                      foregroundColor: AppColors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 16,
+                      ),
+                    ),
+                    child: Text(
+                      'Add',
+                      style: AppTextStyles.outfit(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

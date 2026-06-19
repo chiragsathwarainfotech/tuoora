@@ -1,4 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
@@ -38,11 +41,11 @@ class _StudentHomeworkDetailScreenState
           onPressed: () => Get.back(),
         ),
         title: Text(
-          'Homework Details',
-          style: AppTextStyles.manrope(
+          AppStrings.homeworkDetails,
+          style: AppTextStyles.outfit(
             fontSize: 18,
-            fontWeight: FontWeight.w800,
-            color: AppColors.primaryBrand,
+            fontWeight: FontWeight.w600,
+            color: AppColors.textPrimary,
           ),
         ),
       ),
@@ -75,8 +78,8 @@ class _StudentHomeworkDetailScreenState
       width: double.infinity,
       padding: AppSpacing.all32,
       decoration: BoxDecoration(
-        color: AppColors.studentUpdateIconColor,
-        borderRadius: BorderRadius.circular(AppSpacing.s32),
+        color: AppColors.subjectPhysics,
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: AppColors.primaryBrand.withValues(alpha: 0.2),
@@ -98,10 +101,10 @@ class _StudentHomeworkDetailScreenState
               borderRadius: BorderRadius.circular(AppSpacing.s12),
             ),
             child: Text(
-              'MATHEMATICS',
-              style: AppTextStyles.manrope(
+              AppStrings.mathematics,
+              style: AppTextStyles.outfit(
                 fontSize: 10,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 color: AppColors.white,
                 letterSpacing: 1.2,
               ),
@@ -109,8 +112,8 @@ class _StudentHomeworkDetailScreenState
           ),
           AppSpacing.v24,
           Text(
-            'Advanced\nCalculus',
-            style: AppTextStyles.manrope(
+            AppStrings.advancedNcalculus,
+            style: AppTextStyles.outfit(
               fontSize: 32,
               fontWeight: FontWeight.w800,
               color: AppColors.white,
@@ -130,8 +133,8 @@ class _StudentHomeworkDetailScreenState
                 Icons.access_time_rounded,
                 _isSubmitted ? 'Status: Submitted' : 'Status: Pending',
                 _isSubmitted
-                    ? AppColors.darkGreen.withValues(alpha: 0.8)
-                    : AppColors.studentTomorrowPillText.withValues(alpha: 0.8),
+                    ? AppColors.greenText.withValues(alpha: 0.8)
+                    : AppColors.bohoRed.withValues(alpha: 0.8),
               ),
             ],
           ),
@@ -156,9 +159,9 @@ class _StudentHomeworkDetailScreenState
           AppSpacing.h6,
           Text(
             label,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 11,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               color: AppColors.white,
             ),
           ),
@@ -172,7 +175,7 @@ class _StudentHomeworkDetailScreenState
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.s28),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -200,10 +203,10 @@ class _StudentHomeworkDetailScreenState
               ),
               AppSpacing.h16,
               Text(
-                'Instructions from\nTutor',
-                style: AppTextStyles.manrope(
+                AppStrings.instructionsFromNtutor,
+                style: AppTextStyles.outfit(
                   fontSize: 18,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.darkSlate,
                   height: 1.2,
                 ),
@@ -212,8 +215,8 @@ class _StudentHomeworkDetailScreenState
           ),
           AppSpacing.v24,
           Text(
-            'Welcome to the final module of our Calculus series. For this assignment, please focus on the practical applications of Green\'s Theorem and Stoke\'s Theorem.',
-            style: AppTextStyles.lexend(
+            AppStrings.welcomeToTheFinalModuleOf,
+            style: AppTextStyles.outfit(
               fontSize: 13,
               fontWeight: FontWeight.w400,
               color: AppColors.textSecondary,
@@ -222,10 +225,10 @@ class _StudentHomeworkDetailScreenState
           ),
           AppSpacing.v20,
           Text(
-            'Specific Tasks:',
-            style: AppTextStyles.manrope(
+            AppStrings.specificTasks,
+            style: AppTextStyles.outfit(
               fontSize: 14,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.darkSlate,
             ),
           ),
@@ -243,7 +246,7 @@ class _StudentHomeworkDetailScreenState
           Container(
             padding: AppSpacing.all20,
             decoration: BoxDecoration(
-              color: AppColors.scaffoldBg,
+              color: AppColors.surfaceBg,
               borderRadius: BorderRadius.circular(AppSpacing.s16),
               border: const Border(
                 left: BorderSide(
@@ -253,8 +256,8 @@ class _StudentHomeworkDetailScreenState
               ),
             ),
             child: Text(
-              'Graphs must be plotted clearly. Hand-drawn sketches are acceptable if scanned at high resolution (300 DPI minimum).',
-              style: AppTextStyles.lexend(
+              AppStrings.graphsMustBePlottedClearlyHand,
+              style: AppTextStyles.outfit(
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
                 fontStyle: FontStyle.italic,
@@ -286,7 +289,7 @@ class _StudentHomeworkDetailScreenState
           Expanded(
             child: Text(
               text,
-              style: AppTextStyles.lexend(
+              style: AppTextStyles.outfit(
                 fontSize: 13,
                 fontWeight: FontWeight.w400,
                 color: AppColors.textSecondary,
@@ -308,29 +311,31 @@ class _StudentHomeworkDetailScreenState
       ),
       child: Row(
         children: [
-          const CircleAvatar(
+          CircleAvatar(
             radius: AppSpacing.s22,
-            backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=12'),
+            backgroundImage: CachedNetworkImageProvider(
+              'https://i.pravatar.cc/150?img=12',
+            ),
           ),
           AppSpacing.h16,
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'ASSIGNED TUTOR',
-                style: AppTextStyles.manrope(
+                AppStrings.assignedTutor,
+                style: AppTextStyles.outfit(
                   fontSize: 9,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textMuted,
                   letterSpacing: 0.8,
                 ),
               ),
               AppSpacing.v2,
               Text(
-                'Dr. Elena Vance',
-                style: AppTextStyles.manrope(
+                AppStrings.drElenaVance,
+                style: AppTextStyles.outfit(
                   fontSize: 15,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.darkSlate,
                 ),
               ),
@@ -349,15 +354,15 @@ class _StudentHomeworkDetailScreenState
           children: [
             const Icon(
               Icons.link_rounded,
-              color: AppColors.primaryBrand,
+              color: AppColors.fieldLabel,
               size: AppSpacing.s24,
             ),
             AppSpacing.h12,
             Text(
-              'Attachments',
-              style: AppTextStyles.manrope(
+              AppStrings.attachments,
+              style: AppTextStyles.outfit(
                 fontSize: 18,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 color: AppColors.textPrimary,
               ),
             ),
@@ -368,7 +373,7 @@ class _StudentHomeworkDetailScreenState
           padding: AppSpacing.all24,
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(AppSpacing.s28),
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.02),
@@ -392,8 +397,8 @@ class _StudentHomeworkDetailScreenState
               ),
               AppSpacing.v24,
               Text(
-                'Tip: Open both files to reach 100% progress.',
-                style: AppTextStyles.lexend(
+                AppStrings.tipOpenBothFilesToReach,
+                style: AppTextStyles.outfit(
                   fontSize: 11,
                   color: AppColors.textTertiary,
                   fontStyle: FontStyle.italic,
@@ -413,7 +418,7 @@ class _StudentHomeworkDetailScreenState
       child: Container(
         padding: AppSpacing.all16,
         decoration: BoxDecoration(
-          color: AppColors.scaffoldBg,
+          color: AppColors.surfaceBg,
           borderRadius: BorderRadius.circular(AppSpacing.s16),
           border: Border.all(color: AppColors.borderGrey),
         ),
@@ -434,17 +439,17 @@ class _StudentHomeworkDetailScreenState
                 children: [
                   Text(
                     name,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 14,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.darkSlate,
                     ),
                   ),
                   Text(
                     type,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 9,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.textMuted,
                       letterSpacing: 0.5,
                     ),
@@ -476,19 +481,19 @@ class _StudentHomeworkDetailScreenState
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'YOUR PROGRESS',
-                style: AppTextStyles.manrope(
+                AppStrings.yourProgress,
+                style: AppTextStyles.outfit(
                   fontSize: 10,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textTertiary,
                   letterSpacing: 1.0,
                 ),
               ),
               Text(
                 '${(_progress * 100).toInt()}%',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 12,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
                 ),
               ),
@@ -539,14 +544,7 @@ class _StudentHomeworkDetailScreenState
         onPressed: isEnabled
             ? () {
                 setState(() => _isSubmitted = true);
-                Get.snackbar(
-                  'Success',
-                  'Homework submitted successfully!',
-                  backgroundColor: AppColors.darkGreen,
-                  colorText: AppColors.white,
-                  snackPosition: SnackPosition.BOTTOM,
-                  margin: const EdgeInsets.all(16),
-                );
+                AppSnackBar.success(AppStrings.homeworkSubmittedSuccessfully);
               }
             : null,
       ),

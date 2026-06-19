@@ -1,10 +1,32 @@
 import 'dart:io';
-import 'package:tuoora/core/constants/app_colors.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 
 class DownloadService extends GetxService {
-  Future<void> saveFile({
+  Future<String?> download({
+    required String label,
+    required Future<List<int>> Function() fetch,
+    required String fileName,
+    String? successMessage,
+  }) async {
+    final snack = AppSnackBar.downloading(label);
+    try {
+      final bytes = await fetch();
+      await snack.close();
+      return await saveFile(
+        bytes: bytes,
+        fileName: fileName,
+        successMessage: successMessage,
+      );
+    } catch (_) {
+      await snack.close();
+      AppSnackBar.error(AppStrings.downloadFailed);
+      return null;
+    }
+  }
+
+  Future<String?> saveFile({
     required List<int> bytes,
     required String fileName,
     String? successMessage,
@@ -31,25 +53,11 @@ class DownloadService extends GetxService {
       final file = File(filePath);
       await file.writeAsBytes(bytes);
 
-      Get.snackbar(
-        'Success',
-        successMessage ?? 'File downloaded successfully to Downloads folder',
-        backgroundColor: AppColors.darkGreen,
-        colorText: AppColors.white,
-        snackPosition: SnackPosition.BOTTOM,
-        margin: const EdgeInsets.all(16),
-        duration: const Duration(seconds: 4),
-      );
+      AppSnackBar.success(successMessage ?? 'File downloaded');
+      return filePath;
     } catch (e) {
-      print('Download Error: $e');
-      Get.snackbar(
-        'Download Failed',
-        'Could not save file: ${e.toString()}',
-        backgroundColor: Colors.redAccent,
-        colorText: AppColors.white,
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      AppSnackBar.error(AppStrings.downloadFailed);
+      return null;
     }
   }
 }
-

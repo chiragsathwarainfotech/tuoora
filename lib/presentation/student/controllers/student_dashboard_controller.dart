@@ -1,9 +1,14 @@
 import 'package:get/get.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/api/api_client.dart';
 import 'package:tuoora/core/enums/app_enums.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/data/models/student_dashboard_model.dart';
 import 'package:tuoora/data/repositories/student_dashboard_repository.dart';
+import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:tuoora/presentation/student/models/assignment_model.dart';
+import 'package:tuoora/presentation/student/widgets/birthday_wish_dialog.dart';
 
 class TodayClassDisplay {
   final String dayNumber;
@@ -83,10 +88,27 @@ class StudentDashboardController extends GetxController {
       isLoading.value = true;
       final data = await _repository.getDashboardData();
       dashboardData.value = data;
+      
+      _checkAndShowBirthdayWish(data);
     } catch (e) {
-      Get.snackbar('Error', 'Failed to load dashboard data');
+      AppSnackBar.error(AppStrings.failedToLoadDashboardData);
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  void _checkAndShowBirthdayWish(StudentDashboardData data) {
+    if (!data.isBirthdayToday) return;
+
+    final box = GetStorage();
+    final lastShownDate = box.read<String>('last_birthday_wish_date');
+    final todayStr = DateTime.now().toIso8601String().split('T').first;
+
+    if (lastShownDate != todayStr) {
+      box.write('last_birthday_wish_date', todayStr);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        BirthdayWishDialog.show(name: data.studentName.split(' ').first);
+      });
     }
   }
 

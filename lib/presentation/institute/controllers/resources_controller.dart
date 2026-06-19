@@ -1,4 +1,5 @@
 import 'package:tuoora/core/enums/app_enums.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/presentation/institute/models/batch_model.dart';
 import 'package:tuoora/presentation/institute/models/resource_model.dart';
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
@@ -72,37 +73,121 @@ class ResourcesController extends GetxController {
     return isValid;
   }
 
+  // Allowed extensions per resource category. Anything outside these three
+  // sets (audio, archives, executables, etc.) is rejected at the picker.
+  static const Set<String> _imageExts = {
+    'jpg',
+    'jpeg',
+    'png',
+    'gif',
+    'webp',
+    'heic',
+    'bmp',
+  };
+  static const Set<String> _videoExts = {
+    'mp4',
+    'mov',
+    'avi',
+    'mkv',
+    'webm',
+    'm4v',
+  };
+  static const Set<String> _documentExts = {
+    'pdf',
+    'doc',
+    'docx',
+    'ppt',
+    'pptx',
+    'xls',
+    'xlsx',
+    'txt',
+    'csv',
+    'rtf',
+  };
+
+  // Size caps in MB per category.
+  static const double _imageMaxMb = 5;
+  static const double _documentMaxMb = 10;
+  static const double _videoMaxMb = 20;
+
   Future<void> pickFile() async {
     try {
-      FilePickerResult? result = await FilePicker.pickFiles(type: FileType.any);
+      // Restrict the picker to allowed extensions so the OS file chooser
+      // hides obviously-invalid files (e.g. audio, archives).
+      final List<String> allowed = [
+        ..._imageExts,
+        ..._videoExts,
+        ..._documentExts,
+      ];
+      final FilePickerResult? result = await FilePicker.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: allowed,
+      );
 
-      if (result != null && result.files.single.path != null) {
-        final file = result.files.single;
-        final extension = file.name.split('.').last.toLowerCase();
-        final isVideo = ['mp4', 'mov', 'avi'].contains(extension);
+      if (result == null || result.files.single.path == null) return;
+      final file = result.files.single;
+      final String ext = file.name.contains('.')
+          ? file.name.split('.').last.toLowerCase()
+          : '';
 
-        if (isVideo) {
-          final double sizeInMb = file.size / (1024 * 1024);
-          if (sizeInMb > 50) {
-            AppSnackBar.error(
-              'Video files must be under 50 MB. Selected file is ${sizeInMb.toStringAsFixed(2)} MB.',
-              title: 'File Too Large',
-            );
-            return;
-          }
-          selectedType.value = ResourceType.video;
-        } else if (['jpg', 'jpeg', 'png'].contains(extension)) {
-          selectedType.value = ResourceType.image;
-        } else {
-          selectedType.value = ResourceType.document;
-        }
-
-        selectedFilePath.value = file.path!;
-        selectedFileName.value = file.name;
-        fileError.value = null;
+      // Belt-and-braces: validate type again in case the OS picker ignored
+      // [allowedExtensions] (some Android pickers do).
+      final ResourceType? category = _categoryFor(ext);
+      if (category == null) {
+        AppSnackBar.error(
+          AppStrings.onlyImageVideoAndDocumentFiles,
+          title: AppStrings.unsupportedFileType,
+        );
+        return;
       }
+
+      // Size check against the category cap.
+      final double sizeMb = file.size / (1024 * 1024);
+      final double limit = _limitFor(category);
+      if (sizeMb > limit) {
+        AppSnackBar.error(
+          '${_labelFor(category)} files must be under ${limit.toStringAsFixed(0)} MB. '
+          'Selected file is ${sizeMb.toStringAsFixed(2)} MB.',
+          title: AppStrings.fileTooLarge,
+        );
+        return;
+      }
+
+      selectedType.value = category;
+      selectedFilePath.value = file.path!;
+      selectedFileName.value = file.name;
+      fileError.value = null;
     } catch (e) {
       AppSnackBar.error('Failed to pick file: ${e.toString()}');
+    }
+  }
+
+  ResourceType? _categoryFor(String ext) {
+    if (_imageExts.contains(ext)) return ResourceType.image;
+    if (_videoExts.contains(ext)) return ResourceType.video;
+    if (_documentExts.contains(ext)) return ResourceType.document;
+    return null;
+  }
+
+  double _limitFor(ResourceType type) {
+    switch (type) {
+      case ResourceType.image:
+        return _imageMaxMb;
+      case ResourceType.video:
+        return _videoMaxMb;
+      case ResourceType.document:
+        return _documentMaxMb;
+    }
+  }
+
+  String _labelFor(ResourceType type) {
+    switch (type) {
+      case ResourceType.image:
+        return 'Image';
+      case ResourceType.video:
+        return 'Video';
+      case ResourceType.document:
+        return 'Document';
     }
   }
 
@@ -111,7 +196,10 @@ class ResourcesController extends GetxController {
     if (!validateForm()) return;
 
     try {
-      CommonLoading.show();
+      Get.dialog(
+        const Center(child: CommonLoading()),
+        barrierDismissible: false,
+      );
 
       final String typeStr = selectedType.value == ResourceType.image
           ? 'image'
@@ -132,14 +220,15 @@ class ResourcesController extends GetxController {
 
       clearForm();
 
-      CommonLoading.dismiss();
+      // Close loading dialog
+      Get.back();
       // Close creation dialog
       Get.back();
 
-      AppSnackBar.success('Resource uploaded successfully');
+      AppSnackBar.success(AppStrings.resourceUploadedSuccessfully);
     } catch (e) {
       // Close loader if open
-      CommonLoading.dismiss();
+      Get.back();
       AppSnackBar.error('Failed to upload resource: ${e.toString()}');
     }
   }

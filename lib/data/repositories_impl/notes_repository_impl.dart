@@ -1,3 +1,4 @@
+import 'package:get/get_connect/http/src/multipart/form_data.dart';
 import 'package:tuoora/core/api/api_client.dart';
 import 'package:tuoora/core/api/api_exception.dart';
 import 'package:tuoora/core/constants/api_constants.dart';
@@ -27,20 +28,7 @@ class NotesRepositoryImpl {
     return NoteListResponse.fromJson(response.body);
   }
 
-  Future<List<NoteCategory>> getNoteCategories() async {
-    final response = await _apiClient.get(ApiConstants.instituteNoteCategories);
-
-    if (response.status.hasError) {
-      throw Exception(
-        'Failed to fetch note categories: ${response.statusText}',
-      );
-    }
-
-    final List<dynamic> data = response.body['data'] ?? [];
-    return data.map((json) => NoteCategory.fromJson(json)).toList();
-  }
-
-  Future<void> createNote(Map<String, dynamic> noteData) async {
+  Future<void> createNote(dynamic noteData) async {
     final response = await _apiClient.post(
       ApiConstants.instituteNotes,
       noteData,
@@ -51,8 +39,9 @@ class NotesRepositoryImpl {
     }
   }
 
-  Future<void> updateNote(int id, Map<String, dynamic> noteData) async {
-    final response = await _apiClient.put(
+  Future<void> updateNote(int id, dynamic noteData) async {
+    final isFormData = noteData is FormData;
+    final response = await (isFormData ? _apiClient.post : _apiClient.put)(
       '${ApiConstants.instituteNotes}/$id',
       noteData,
     );
@@ -93,4 +82,3 @@ class NotesRepositoryImpl {
     throw Exception(message);
   }
 }
-

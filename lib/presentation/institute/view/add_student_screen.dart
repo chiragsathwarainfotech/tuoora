@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
@@ -33,14 +34,13 @@ class AddEditStudentScreen extends GetView<InstituteStudentController> {
                 ),
                 Expanded(
                   child: SingleChildScrollView(
-                    padding: AppSpacing.x24.add(AppSpacing.y16),
+                    padding: AppSpacing.x16.add(AppSpacing.y16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         _buildMainFormCard(context),
                         AppSpacing.v24,
                         _buildActionButtons(),
-                        AppSpacing.v32,
                       ],
                     ),
                   ),
@@ -63,10 +63,10 @@ class AddEditStudentScreen extends GetView<InstituteStudentController> {
 
   Widget _buildMainFormCard(BuildContext context) {
     return Container(
-      padding: AppSpacing.all24,
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
@@ -114,7 +114,7 @@ class AddEditStudentScreen extends GetView<InstituteStudentController> {
                                         .profileImageUrl
                                         .contains('ui-avatars.com'))
                               ? DecorationImage(
-                                  image: NetworkImage(
+                                  image: CachedNetworkImageProvider(
                                     controller
                                         .currentStudent
                                         .value!
@@ -146,7 +146,7 @@ class AddEditStudentScreen extends GetView<InstituteStudentController> {
                                   _getInitials(
                                     controller.currentStudent.value?.name ?? "",
                                   ),
-                                  style: AppTextStyles.manrope(
+                                  style: AppTextStyles.outfit(
                                     fontSize: 24,
                                     fontWeight: FontWeight.w800,
                                     color: AppColors.primaryBrand,
@@ -183,16 +183,16 @@ class AddEditStudentScreen extends GetView<InstituteStudentController> {
                   children: [
                     Text(
                       AppStrings.instStudentPhotoLabel,
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 16,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.textPrimary,
                       ),
                     ),
                     AppSpacing.v4,
                     Text(
                       AppStrings.instStudentPhotoHint,
-                      style: AppTextStyles.lexend(
+                      style: AppTextStyles.outfit(
                         fontSize: 13,
                         fontWeight: FontWeight.w400,
                         color: AppColors.textTertiary,
@@ -208,44 +208,10 @@ class AddEditStudentScreen extends GetView<InstituteStudentController> {
           Obx(
             () => AppInputField(
               label: AppStrings.instStudentNameLabel,
-              hint: AppStrings.instNameHint,
+              hint: AppStrings.instStudentNameHint,
               icon: Icons.person,
               controller: controller.nameController,
               errorText: controller.nameError.value,
-            ),
-          ),
-          AppSpacing.v20,
-          Obx(
-            () => AppInputField(
-              label: AppStrings.instStudentEmailLabel,
-              hint: 'student@example.com',
-              icon: Icons.email_rounded,
-              controller: controller.emailController,
-              keyboardType: TextInputType.emailAddress,
-              enabled: controller.editingStudentId.value == null,
-              errorText: controller.emailError.value,
-            ),
-          ),
-          AppSpacing.v20,
-          Obx(
-            () => AppInputField(
-              label: AppStrings.instStudentDobLabel,
-              hint: 'YYYY-MM-DD',
-              icon: Icons.calendar_today_rounded,
-              controller: controller.dobController,
-              readOnly: true,
-              onTap: () => controller.selectDOB(context),
-              errorText: controller.dobError.value,
-            ),
-          ),
-          AppSpacing.v20,
-          Obx(
-            () => AppInputField(
-              label: AppStrings.instGuardianNameLabel,
-              hint: AppStrings.instGuardianHint,
-              icon: Icons.group,
-              controller: controller.parentNameController,
-              errorText: controller.parentNameError.value,
             ),
           ),
           AppSpacing.v20,
@@ -264,11 +230,46 @@ class AddEditStudentScreen extends GetView<InstituteStudentController> {
           AppSpacing.v20,
           Obx(
             () => AppInputField(
+              label: AppStrings.instStudentEmailLabel,
+              hint: AppStrings.instStudentEmailHint,
+              icon: Icons.email_rounded,
+              controller: controller.emailController,
+              keyboardType: TextInputType.emailAddress,
+              enabled: controller.editingStudentId.value == null,
+              errorText: controller.emailError.value,
+            ),
+          ),
+          AppSpacing.v20,
+          Obx(
+            () => AppInputField(
+              label: AppStrings.instStudentDobLabel,
+              hint: AppStrings.instSelectDobHint,
+              icon: Icons.calendar_today_rounded,
+              controller: controller.dobController,
+              readOnly: true,
+              onTap: () => controller.selectDOB(context),
+              errorText: controller.dobError.value,
+            ),
+          ),
+          AppSpacing.v20,
+          Obx(
+            () => AppInputField(
               label: AppStrings.instGradeLabel,
               hint: AppStrings.instGradeHint,
               icon: Icons.school,
               controller: controller.standardController,
               errorText: controller.standardError.value,
+            ),
+          ),
+
+          AppSpacing.v20,
+          Obx(
+            () => AppInputField(
+              label: AppStrings.instParentNameLabel,
+              hint: AppStrings.instParentNameHint,
+              icon: Icons.group,
+              controller: controller.parentNameController,
+              errorText: controller.parentNameError.value,
             ),
           ),
         ],
@@ -277,42 +278,19 @@ class AddEditStudentScreen extends GetView<InstituteStudentController> {
   }
 
   Widget _buildActionButtons() {
-    return Column(
-      children: [
-        Obx(
-          () => AppButton(
-            label: controller.editingStudentId.value != null
-                ? 'Update Student'
-                : AppStrings.instConfirmBtn,
-            onPressed: () => controller.saveStudent(
-              isEdit: controller.editingStudentId.value != null,
-            ),
+    return SafeArea(
+      top: false,
+      minimum: const EdgeInsets.only(bottom: 16),
+      child: Obx(
+        () => AppButton(
+          label: controller.editingStudentId.value != null
+              ? 'Update Student'
+              : AppStrings.instConfirmBtn,
+          onPressed: () => controller.saveStudent(
+            isEdit: controller.editingStudentId.value != null,
           ),
         ),
-        AppSpacing.v16,
-        GestureDetector(
-          onTap: () => controller.discardChanges(),
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: AppSpacing.s18),
-            decoration: BoxDecoration(
-              color: Colors.transparent,
-              borderRadius: BorderRadius.circular(AppSpacing.s12),
-              border: Border.all(color: AppColors.borderGrey, width: 1.5),
-            ),
-            child: Center(
-              child: Text(
-                AppStrings.instDiscardBtn,
-                style: AppTextStyles.manrope(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.primaryBrand,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
+      ),
     );
   }
 
@@ -325,6 +303,6 @@ class AddEditStudentScreen extends GetView<InstituteStudentController> {
         initials += names[names.length - 1][0].toUpperCase();
       }
     }
-    return initials.isEmpty ? '?' : initials;
+    return initials.isEmpty ? 'SP' : initials;
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
@@ -16,7 +17,7 @@ class StudentHolidayDetailScreen extends StatelessWidget {
         child: Column(
           children: [
             const StudentAppBar(
-              title: 'Holiday • Buddha Purnima',
+              title: AppStrings.holidayBuddhaPurnima,
               showDefaultActions: false,
             ),
             Expanded(
@@ -61,8 +62,8 @@ class StudentHolidayDetailScreen extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.s16),
           Text(
-            'Buddha Purnima',
-            style: AppTextStyles.manrope(
+            AppStrings.buddhaPurnima,
+            style: AppTextStyles.outfit(
               fontSize: 22,
               fontWeight: FontWeight.w900,
               color: AppColors.textPrimary,
@@ -70,8 +71,8 @@ class StudentHolidayDetailScreen extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            'Wednesday, 21 May 2026',
-            style: AppTextStyles.lexend(
+            AppStrings.wednesday21May2026,
+            style: AppTextStyles.outfit(
               fontSize: 13,
               fontWeight: FontWeight.w400,
               color: AppColors.textTertiary,
@@ -83,10 +84,10 @@ class StudentHolidayDetailScreen extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
               child: Text(
-                'INSTITUTE CLOSED',
-                style: AppTextStyles.manrope(
+                AppStrings.instituteClosed,
+                style: AppTextStyles.outfit(
                   fontSize: 10,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textSecondary,
                   letterSpacing: 1.0,
                 ),
@@ -107,8 +108,8 @@ class StudentHolidayDetailScreen extends StatelessWidget {
         border: Border.all(color: AppColors.borderGrey),
       ),
       child: Text(
-        'Marks the birth of Gautama Buddha. The institute will remain closed for the day. There are no assignment deadlines on this day; pending submissions roll over to Thursday.',
-        style: AppTextStyles.lexend(
+        AppStrings.marksTheBirthOfGautamaBuddha,
+        style: AppTextStyles.outfit(
           fontSize: 13,
           fontWeight: FontWeight.w400,
           color: AppColors.textSecondary,
@@ -131,12 +132,12 @@ class StudentHolidayDetailScreen extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: AppColors.studentPresentBg,
+              color: AppColors.successBg,
               borderRadius: BorderRadius.circular(8),
             ),
             child: const Icon(
               Icons.arrow_forward,
-              color: AppColors.studentPresentText,
+              color: AppColors.successGreen,
               size: 20,
             ),
           ),
@@ -146,19 +147,19 @@ class StudentHolidayDetailScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'CLASSES RESUME',
-                  style: AppTextStyles.manrope(
+                  AppStrings.classesResume,
+                  style: AppTextStyles.outfit(
                     fontSize: 10,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textTertiary,
                     letterSpacing: 0.5,
                   ),
                 ),
                 Text(
-                  'Thursday, 22 May 2026 at 8:00 AM',
-                  style: AppTextStyles.manrope(
+                  AppStrings.thursday22May2026At8,
+                  style: AppTextStyles.outfit(
                     fontSize: 13,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                 ),

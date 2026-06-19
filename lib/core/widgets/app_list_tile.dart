@@ -40,7 +40,7 @@ class AppListTile extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                         color: Theme.of(context).colorScheme.onSurface,
@@ -50,7 +50,7 @@ class AppListTile extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text(
                         subtitle!,
-                        style: AppTextStyles.lexend(
+                        style: AppTextStyles.outfit(
                           fontSize: 14,
                           color: Theme.of(
                             context,

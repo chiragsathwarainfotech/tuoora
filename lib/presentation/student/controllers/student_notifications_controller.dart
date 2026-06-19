@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:get/get.dart';
 
 import 'package:tuoora/config/app_routes.dart';
@@ -9,6 +10,7 @@ import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/data/models/student_notification_model.dart';
 import 'package:tuoora/data/repositories/student_notifications_repository.dart';
 import 'package:tuoora/presentation/student/controllers/assignments_controller.dart';
+import 'package:tuoora/presentation/student/controllers/student_controller.dart';
 
 /// View-model for a single notification row. Encapsulates the icon /
 /// colour / time-ago decisions so the screen widget stays declarative.
@@ -53,7 +55,7 @@ class StudentNotificationsController extends GetxController {
       final list = await _repository.getNotifications();
       items.assignAll(list);
     } catch (_) {
-      AppSnackBar.error('Failed to load notifications');
+      AppSnackBar.error(AppStrings.failedToLoadNotifications);
     } finally {
       isLoading.value = false;
     }
@@ -74,13 +76,16 @@ class StudentNotificationsController extends GetxController {
         if (refId != null) _openHomework(refId);
         break;
       case NotificationKind.dailyUpdate:
-        Get.toNamed(AppRoutes.studentEventDetail);
+      case NotificationKind.eventsHolidays:
+        Get.toNamed(AppRoutes.studentEventDetail, arguments: n);
         break;
-      case NotificationKind.holidays:
-        Get.toNamed(AppRoutes.studentHolidayDetail);
-        break;
-      case NotificationKind.paymentReceiver:
-        Get.toNamed(AppRoutes.studentFeeHistory);
+      case NotificationKind.feeReminders:
+        if (Get.isRegistered<StudentController>()) {
+          Get.until((route) => route.settings.name == AppRoutes.studentDashboard);
+          Get.find<StudentController>().changePage(2);
+        } else {
+          Get.offAllNamed(AppRoutes.studentDashboard);
+        }
         break;
       default:
         break;
@@ -109,8 +114,8 @@ class StudentNotificationsController extends GetxController {
   bool _isDeepLinkable(StudentNotification n) {
     switch (n.kind) {
       case NotificationKind.dailyUpdate:
-      case NotificationKind.holidays:
-      case NotificationKind.paymentReceiver:
+      case NotificationKind.eventsHolidays:
+      case NotificationKind.feeReminders:
       case NotificationKind.homeworkReminder:
       case NotificationKind.homework:
         return true;
@@ -125,26 +130,26 @@ class StudentNotificationsController extends GetxController {
       case NotificationKind.homeworkReminder:
         return const _NotificationVisuals(
           icon: Icons.chrome_reader_mode_outlined,
-          bg: AppColors.amberLight,
-          fg: AppColors.studentTomorrowPillText,
+          bg: AppColors.errorBg,
+          fg: AppColors.bohoRed,
         );
       case NotificationKind.homeworkGraded:
         return const _NotificationVisuals(
           icon: Icons.auto_awesome,
-          bg: AppColors.studentBrandSoft,
-          fg: AppColors.studentBrand,
+          bg: AppColors.primaryBrandLight,
+          fg: AppColors.primaryBrand,
         );
       case NotificationKind.attendance:
         return const _NotificationVisuals(
           icon: Icons.calendar_today_outlined,
-          bg: AppColors.studentPresentBg,
-          fg: AppColors.studentPresentText,
+          bg: AppColors.successBg,
+          fg: AppColors.successGreen,
         );
       case NotificationKind.resource:
         return const _NotificationVisuals(
           icon: Icons.menu_book_outlined,
           bg: AppColors.subjectPhysicsSoft,
-          fg: AppColors.darkGreen,
+          fg: AppColors.greenText,
         );
       case NotificationKind.dailyUpdate:
         return const _NotificationVisuals(
@@ -156,20 +161,20 @@ class StudentNotificationsController extends GetxController {
       case NotificationKind.batchRemoval:
         return const _NotificationVisuals(
           icon: Icons.groups_outlined,
-          bg: AppColors.studentUpdateIconBg,
-          fg: AppColors.studentUpdateIconColor,
+          bg: AppColors.subjectPhysicsSoft,
+          fg: AppColors.subjectPhysics,
         );
-      case NotificationKind.holidays:
+      case NotificationKind.eventsHolidays:
         return const _NotificationVisuals(
           icon: Icons.celebration_outlined,
-          bg: AppColors.studentPresentBg,
-          fg: AppColors.studentPresentText,
+          bg: AppColors.successBg,
+          fg: AppColors.successGreen,
         );
-      case NotificationKind.paymentReceiver:
+      case NotificationKind.feeReminders:
         return const _NotificationVisuals(
           icon: Icons.currency_rupee,
-          bg: AppColors.amberLight,
-          fg: AppColors.studentTomorrowPillText,
+          bg: AppColors.errorBg,
+          fg: AppColors.bohoRed,
         );
       default:
         return const _NotificationVisuals(

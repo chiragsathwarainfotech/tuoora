@@ -1,4 +1,6 @@
-﻿import 'package:tuoora/core/constants/app_colors.dart';
+﻿import 'package:cached_network_image/cached_network_image.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/utils/subscription_guard.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/config/app_routes.dart';
@@ -12,8 +14,50 @@ import 'package:tuoora/core/widgets/app_search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class StudentsRegistryScreen extends GetView<InstituteController> {
+class StudentsRegistryScreen extends StatefulWidget {
   const StudentsRegistryScreen({super.key});
+
+  @override
+  State<StudentsRegistryScreen> createState() => _StudentsRegistryScreenState();
+}
+
+class _StudentsRegistryScreenState extends State<StudentsRegistryScreen> {
+  final controller = Get.find<InstituteController>();
+  final _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+    // Fetch on every screen creation so the user sees fresh data each
+    // time the registry is opened (not just the first time).
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.fetchStudents(reset: true);
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+            _scrollController.position.maxScrollExtent - 200 &&
+        !controller.isLoadingStudents.value &&
+        !controller.isLoadMore.value) {
+      controller.loadMoreStudents();
+    }
+  }
+
+  /// Awaits a navigation push then refreshes the registry. Covers the
+  /// "go to sub-screen, come back" path that doesn't re-fire initState
+  /// (the previous route's State is preserved by the Navigator).
+  Future<void> _pushAndRefresh(Future<dynamic>? push) async {
+    await push;
+    controller.fetchStudents(reset: true);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,22 +72,66 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
                   title: AppStrings.instNavStudents,
                   onBackTap: () => Get.back(),
                 ),
+                Padding(
+                  padding: AppSpacing.screenPadding,
+                  child: AppSearchField(
+                    hintText: AppStrings.instStudentSearchHint,
+                    onChanged: controller.onSearchChanged,
+                  ),
+                ),
                 Expanded(
                   child: RefreshIndicator(
                     onRefresh: () => controller.fetchStudents(reset: true),
                     color: AppColors.primaryBrand,
-                    child: Padding(
-                      padding: AppSpacing.x24,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          AppSpacing.v16,
-                          _buildSearchBar(),
-                          AppSpacing.v20,
-                          Expanded(child: _buildStudentsList()),
-                        ],
-                      ),
-                    ),
+                    child: Obx(() {
+                      final isSearching =
+                          controller.searchQuery.value.trim().isNotEmpty;
+                      return CommonStateWidget(
+                        isLoading: controller.isLoadingStudents.value,
+                        isEmpty: controller.students.isEmpty,
+                        emptyTitle: isSearching
+                            ? 'No students found'
+                            : 'No students available',
+                        emptySubtitle: isSearching
+                            ? 'Try searching with a different name'
+                            : 'Start by adding a new student to the registry',
+                        emptyIcon: isSearching
+                            ? Icons.search_off_rounded
+                            : Icons.people_outline_rounded,
+                        child: ListView.builder(
+                          controller: _scrollController,
+                          padding: AppSpacing.x16.add(
+                            const EdgeInsets.only(bottom: 96),
+                          ),
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          itemCount: controller.students.length +
+                              (controller.isLoadMore.value ? 1 : 0),
+                          itemBuilder: (context, index) {
+                            if (index == controller.students.length) {
+                              return const Center(
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: CommonLoading(
+                                    size: 20,
+                                    strokeWidth: 2,
+                                  ),
+                                ),
+                              );
+                            }
+                            final student = controller.students[index];
+                            return Padding(
+                              padding: AppSpacing.bottom16,
+                              child: _buildStudentCard(
+                                name: student.name,
+                                id: student.id,
+                                grade: student.grade,
+                                imageUrl: student.imageUrl,
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    }),
                   ),
                 ),
               ],
@@ -52,74 +140,17 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Get.toNamed(AppRoutes.instituteAddEditStudent),
-        backgroundColor: AppColors.primaryBrand,
+        onPressed: () => SubscriptionGuard.runAddAction(
+          () => _pushAndRefresh(
+            Get.toNamed(AppRoutes.instituteAddEditStudent),
+          ),
+        ),
+        backgroundColor: SubscriptionGuard.blocksAdd
+            ? AppColors.textMuted
+            : AppColors.primaryBrand,
         child: const Icon(Icons.add, color: AppColors.white, size: 28),
       ),
     );
-  }
-
-  Widget _buildSearchBar() {
-    return AppSearchField(
-      hintText: AppStrings.instStudentSearchHint,
-      onChanged: controller.onSearchChanged,
-    );
-  }
-
-  Widget _buildStudentsList() {
-    return Obx(() {
-      return CommonStateWidget(
-        isLoading: controller.isLoadingStudents.value,
-        isEmpty: controller.students.isEmpty,
-        emptyTitle: controller.searchQuery.value.isNotEmpty
-            ? 'No students found'
-            : 'No students available',
-        emptySubtitle: controller.searchQuery.value.isNotEmpty
-            ? 'Try searching with a different name'
-            : 'Start by adding a new student to the registry',
-        emptyIcon: controller.searchQuery.value.isNotEmpty
-            ? Icons.search_off_rounded
-            : Icons.people_outline_rounded,
-        child: NotificationListener<ScrollNotification>(
-          onNotification: (ScrollNotification scrollInfo) {
-            if (scrollInfo.metrics.pixels >=
-                    scrollInfo.metrics.maxScrollExtent - 200 &&
-                !controller.isLoadingStudents.value &&
-                !controller.isLoadMore.value) {
-              controller.loadMoreStudents();
-            }
-            return true;
-          },
-          child: ListView.builder(
-            itemCount:
-                controller.students.length +
-                (controller.isLoadMore.value ? 1 : 0),
-            padding: EdgeInsets.zero,
-            physics: const AlwaysScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              if (index == controller.students.length) {
-                return const Center(
-                  child: Padding(
-                    padding: AppSpacing.all16,
-                    child: CommonLoading(size: 24, strokeWidth: 2),
-                  ),
-                );
-              }
-              final student = controller.students[index];
-              return Padding(
-                padding: AppSpacing.bottom16,
-                child: _buildStudentCard(
-                  name: student.name,
-                  id: student.id,
-                  grade: student.grade,
-                  imageUrl: student.imageUrl,
-                ),
-              );
-            },
-          ),
-        ),
-      );
-    });
   }
 
   Widget _buildStudentCard({
@@ -131,19 +162,23 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
     return GestureDetector(
       onTap: () {
         Get.delete<InstituteStudentController>();
-        Get.toNamed(
-          AppRoutes.instituteStudentProfile,
-          arguments: {
-            'studentId': id,
-            'student': controller.students.firstWhere((s) => s.id == id),
-          },
+        // Re-fetch the registry when the profile is closed so any
+        // edit/delete done over there is reflected back here.
+        _pushAndRefresh(
+          Get.toNamed(
+            AppRoutes.instituteStudentProfile,
+            arguments: {
+              'studentId': id,
+              'student': controller.students.firstWhere((s) => s.id == id),
+            },
+          ),
         );
       },
       child: Container(
-        padding: AppSpacing.all16,
+        padding: AppSpacing.cardPadding,
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.03),
@@ -163,9 +198,9 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
                 children: [
                   Text(
                     name,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 16,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.textPrimary,
                     ),
                   ),
@@ -177,12 +212,12 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
                           const Icon(
                             Icons.school_rounded,
                             size: AppSpacing.s18,
-                            color: AppColors.primaryBrand,
+                            color: AppColors.fieldLabel,
                           ),
                           AppSpacing.h4,
                           Text(
                             grade,
-                            style: AppTextStyles.lexend(
+                            style: AppTextStyles.outfit(
                               fontSize: AppSpacing.s16,
                               fontWeight: FontWeight.w500,
                               color: AppColors.textSecondary,
@@ -212,7 +247,7 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
           color: AppColors.primaryBrandLight,
           shape: BoxShape.circle,
           image: DecorationImage(
-            image: NetworkImage(imageUrl),
+            image: CachedNetworkImageProvider(imageUrl),
             fit: BoxFit.cover,
           ),
         ),
@@ -238,9 +273,9 @@ class StudentsRegistryScreen extends GetView<InstituteController> {
       child: Center(
         child: Text(
           initials,
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 20,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.primaryBrand,
           ),
         ),

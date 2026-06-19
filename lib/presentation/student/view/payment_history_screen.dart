@@ -1,4 +1,5 @@
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/widgets/payment_item_tile.dart';
 import 'package:flutter/material.dart';
@@ -31,9 +32,9 @@ class PaymentHistoryScreen extends StatelessWidget {
         ),
         title: Text(
           title,
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 18,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.darkSlate,
           ),
         ),
@@ -44,14 +45,14 @@ class PaymentHistoryScreen extends StatelessWidget {
         children: [
           _buildMonthHeader('October 2023'),
           const PaymentItemTile(
-            title: 'Tuition - Term 1',
+            title: AppStrings.tuitionTerm1,
             date: 'Oct 02, 2023',
             ref: '#AE-9921',
             amount: '₹1,800.00',
           ),
           AppSpacing.v16,
           const PaymentItemTile(
-            title: 'Library Overdue Fine',
+            title: AppStrings.libraryOverdueFine,
             date: 'Oct 01, 2023',
             ref: '#AE-9850',
             amount: '₹15.00',
@@ -59,14 +60,14 @@ class PaymentHistoryScreen extends StatelessWidget {
           AppSpacing.v32,
           _buildMonthHeader('September 2023'),
           const PaymentItemTile(
-            title: 'Annual Sports Fee',
+            title: AppStrings.annualSportsFee,
             date: 'Sept 15, 2023',
             ref: '#AE-8840',
             amount: '₹150.00',
           ),
           AppSpacing.v16,
           const PaymentItemTile(
-            title: 'Lab Maintenance',
+            title: AppStrings.labMaintenance,
             date: 'Sept 10, 2023',
             ref: '#AE-8720',
             amount: '₹25.00',
@@ -74,14 +75,14 @@ class PaymentHistoryScreen extends StatelessWidget {
           AppSpacing.v32,
           _buildMonthHeader('August 2023'),
           const PaymentItemTile(
-            title: 'Registration Charges',
+            title: AppStrings.registrationCharges,
             date: 'Aug 01, 2023',
             ref: '#AE-8120',
             amount: '₹300.00',
           ),
           AppSpacing.v16,
           const PaymentItemTile(
-            title: 'ID Card Replacement',
+            title: AppStrings.idCardReplacement,
             date: 'Aug 01, 2023',
             ref: '#AE-8110',
             amount: '₹10.00',
@@ -97,9 +98,9 @@ class PaymentHistoryScreen extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: AppSpacing.s16),
       child: Text(
         month.toUpperCase(),
-        style: AppTextStyles.manrope(
+        style: AppTextStyles.outfit(
           fontSize: 12,
-          fontWeight: FontWeight.w800,
+          fontWeight: FontWeight.w600,
           color: AppColors.textTertiary,
           letterSpacing: 1.2,
         ),

@@ -1,10 +1,11 @@
 import 'package:tuoora/core/utils/validation_utils.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/data/repositories/auth_repository.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'dart:async';
-import 'package:tuoora/core/constants/app_colors.dart';
 
 class ForgotPasswordController extends GetxController {
   final _authRepository = Get.find<AuthRepository>();
@@ -14,46 +15,52 @@ class ForgotPasswordController extends GetxController {
   final emailController = TextEditingController();
   final otpController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
 
   final isLoading = false.obs;
+  // Separate flag for the resend-OTP action so tapping "Resend Code" doesn't
+  // trigger the Reset Password button's loading spinner (which watches
+  // [isLoading]).
+  final isResending = false.obs;
   final obscurePassword = true.obs;
+  final obscureConfirmPassword = true.obs;
   final timerSeconds = 60.obs;
   final canResend = false.obs;
   Timer? _timer;
 
+  /// Inline per-field error messages — show below each input instead of
+  /// stacking everything into one snackbar that can't pinpoint the field.
+  final emailError = RxnString();
+  final otpError = RxnString();
+  final passwordError = RxnString();
+  final confirmPasswordError = RxnString();
+
   void togglePasswordVisibility() =>
       obscurePassword.value = !obscurePassword.value;
 
+  void toggleConfirmPasswordVisibility() =>
+      obscureConfirmPassword.value = !obscureConfirmPassword.value;
+
   Future<void> sendOtp() async {
     final email = emailController.text.trim();
-    if (email.isEmpty || !GetUtils.isEmail(email)) {
-      Get.snackbar(
-        'Error',
-        'Please enter a valid email address',
-        backgroundColor: AppColors.errorRed.withValues(alpha: 0.1),
-        colorText: AppColors.errorRed,
-      );
+    if (email.isEmpty) {
+      emailError.value = 'Email is required';
       return;
     }
+    if (!GetUtils.isEmail(email)) {
+      emailError.value = 'Enter a valid email';
+      return;
+    }
+    emailError.value = null;
 
     isLoading.value = true;
     try {
       final message = await _authRepository.forgotPassword(email);
-      Get.snackbar(
-        'Success',
-        message,
-        backgroundColor: Colors.green.withValues(alpha: 0.1),
-        colorText: Colors.green,
-      );
+      AppSnackBar.success(message);
       Get.toNamed(AppRoutes.instituteResetPassword, arguments: email);
       startTimer();
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        e.toString().replaceAll('Exception: ', ''),
-        backgroundColor: AppColors.errorRed.withValues(alpha: 0.1),
-        colorText: AppColors.errorRed,
-      );
+      AppSnackBar.error(e.toString().replaceAll('Exception: ', ''));
     } finally {
       isLoading.value = false;
     }
@@ -63,25 +70,28 @@ class ForgotPasswordController extends GetxController {
     final email = emailController.text.trim();
     final otp = otpController.text.trim();
     final password = passwordController.text.trim();
+    final confirmPassword = confirmPasswordController.text.trim();
 
-    if (otp.isEmpty || password.isEmpty) {
-      Get.snackbar(
-        'Error',
-        'Please fill in all fields',
-        backgroundColor: AppColors.errorRed.withValues(alpha: 0.1),
-        colorText: AppColors.errorRed,
-      );
+    // Per-field validation — each error renders under its own input.
+    otpError.value = otp.isEmpty ? 'OTP is required' : null;
+    passwordError.value = password.isEmpty ? 'Password is required' : null;
+    confirmPasswordError.value = confirmPassword.isEmpty
+        ? 'Confirm your password'
+        : null;
+    if (otpError.value != null ||
+        passwordError.value != null ||
+        confirmPasswordError.value != null) {
       return;
     }
 
-    final passwordError = ValidationUtils.validatePassword(password);
-    if (passwordError != null) {
-      Get.snackbar(
-        'Invalid Password',
-        passwordError,
-        backgroundColor: AppColors.errorRed.withValues(alpha: 0.1),
-        colorText: AppColors.errorRed,
-      );
+    final pwdValidation = ValidationUtils.validatePassword(password);
+    if (pwdValidation != null) {
+      passwordError.value = pwdValidation;
+      return;
+    }
+
+    if (password != confirmPassword) {
+      confirmPasswordError.value = 'Passwords do not match';
       return;
     }
 
@@ -91,21 +101,12 @@ class ForgotPasswordController extends GetxController {
         'email': email,
         'otp': otp,
         'password': password,
+        'password_confirmation': confirmPassword,
       });
-      Get.snackbar(
-        'Success',
-        message,
-        backgroundColor: Colors.green.withValues(alpha: 0.1),
-        colorText: Colors.green,
-      );
+      AppSnackBar.success(message);
       Get.offAllNamed(AppRoutes.login, arguments: 'INSTITUTE');
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        e.toString().replaceAll('Exception: ', ''),
-        backgroundColor: AppColors.errorRed.withValues(alpha: 0.1),
-        colorText: AppColors.errorRed,
-      );
+      AppSnackBar.error(e.toString().replaceAll('Exception: ', ''));
     } finally {
       isLoading.value = false;
     }
@@ -129,25 +130,15 @@ class ForgotPasswordController extends GetxController {
     final email = emailController.text.trim();
     if (email.isEmpty) return;
 
-    isLoading.value = true;
+    isResending.value = true;
     try {
       await _authRepository.forgotPassword(email);
-      Get.snackbar(
-        'Success',
-        'OTP resend successfully',
-        backgroundColor: Colors.green.withValues(alpha: 0.1),
-        colorText: Colors.green,
-      );
+      AppSnackBar.success(AppStrings.msgOtpResent);
       startTimer();
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        e.toString().replaceAll('Exception: ', ''),
-        backgroundColor: AppColors.errorRed.withValues(alpha: 0.1),
-        colorText: AppColors.errorRed,
-      );
+      AppSnackBar.error(e.toString().replaceAll('Exception: ', ''));
     } finally {
-      isLoading.value = false;
+      isResending.value = false;
     }
   }
 
@@ -165,6 +156,7 @@ class ForgotPasswordController extends GetxController {
     emailController.dispose();
     otpController.dispose();
     passwordController.dispose();
+    confirmPasswordController.dispose();
     super.onClose();
   }
 }

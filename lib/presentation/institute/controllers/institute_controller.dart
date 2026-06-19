@@ -1,13 +1,14 @@
 import 'package:tuoora/config/app_routes.dart';
-import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/data/models/student_model.dart';
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
 import 'package:tuoora/data/repositories_impl/student_repository_impl.dart';
 import 'package:tuoora/presentation/institute/models/fee_record.dart';
 import 'package:tuoora/core/services/download_service.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tuoora/core/widgets/pdf_viewer_popup.dart';
 
 class InstituteController extends GetxController {
   final _currentIndex = 0.obs;
@@ -35,6 +36,9 @@ class InstituteController extends GetxController {
   final currentMonthTotal = 0.0.obs;
   final feesCurrentPage = 1.obs;
   final feesHasMore = true.obs;
+
+  final downloadingReceiptIds = <int>{}.obs;
+  bool isDownloadingReceipt(int id) => downloadingReceiptIds.contains(id);
 
   @override
   void onInit() {
@@ -78,12 +82,7 @@ class InstituteController extends GetxController {
         feesCurrentPage.value++;
       }
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Failed to fetch fees: $e',
-        backgroundColor: Colors.red.withValues(alpha: 0.7),
-        colorText: AppColors.white,
-      );
+      AppSnackBar.error(AppStrings.errFailedLoadFees);
     } finally {
       isLoadingFees.value = false;
     }
@@ -92,35 +91,34 @@ class InstituteController extends GetxController {
   Future<void> refreshFees() => fetchFees(reset: true);
 
   Future<void> downloadFeeReport() async {
+    final fileName = 'Fee_Report_${DateTime.now().millisecondsSinceEpoch}.pdf';
+    await Get.find<DownloadService>().download(
+      label: 'Preparing financial report…',
+      fileName: fileName,
+      successMessage: AppStrings.reportDownloadedSuccess,
+      fetch: () => _instituteRepository.exportFees(),
+    );
+  }
+
+  Future<void> downloadFeeReceipt(int feeId) async {
+    if (downloadingReceiptIds.contains(feeId)) return;
+    downloadingReceiptIds.add(feeId);
+    downloadingReceiptIds.refresh();
+    final fileName =
+        'Receipt_${feeId}_${DateTime.now().millisecondsSinceEpoch}.pdf';
     try {
-      Get.snackbar(
-        'Downloading',
-        'Preparing your financial report...',
-        backgroundColor: AppColors.primaryBrand,
-        colorText: AppColors.white,
-        snackPosition: SnackPosition.BOTTOM,
-        showProgressIndicator: true,
-      );
-
-      final bytes = await _instituteRepository.exportFees();
-
-      final downloadService = Get.find<DownloadService>();
-      final fileName =
-          'Fee_Report_${DateTime.now().millisecondsSinceEpoch}.pdf';
-
-      await downloadService.saveFile(
-        bytes: bytes,
+      final path = await Get.find<DownloadService>().download(
+        label: 'Preparing receipt…',
         fileName: fileName,
-        successMessage: 'Record download successfully',
+        successMessage: AppStrings.receiptDownloadedSuccess,
+        fetch: () => _instituteRepository.downloadFeeReceipt(feeId),
       );
-    } catch (e) {
-      Get.snackbar(
-        'Download Error',
-        e.toString().replaceAll('Exception: ', ''),
-        backgroundColor: Colors.redAccent,
-        colorText: AppColors.white,
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      if (path != null) {
+        PdfViewerPopup.show(path: path);
+      }
+    } finally {
+      downloadingReceiptIds.remove(feeId);
+      downloadingReceiptIds.refresh();
     }
   }
 
@@ -156,12 +154,7 @@ class InstituteController extends GetxController {
         currentPage.value++;
       }
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Failed to fetch students: $e',
-        backgroundColor: Colors.red.withValues(alpha: 0.7),
-        colorText: AppColors.white,
-      );
+      AppSnackBar.error(AppStrings.failedToLoadStudents);
     } finally {
       isLoadingStudents.value = false;
       isLoadMore.value = false;

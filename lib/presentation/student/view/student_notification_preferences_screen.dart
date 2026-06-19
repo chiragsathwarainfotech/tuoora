@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
@@ -19,7 +20,7 @@ class StudentNotificationPreferencesScreen
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const StudentAppBar(
-              title: 'Notifications',
+              title: AppStrings.labelNotifications,
               showDefaultActions: false,
             ),
             Expanded(
@@ -31,10 +32,10 @@ class StudentNotificationPreferencesScreen
                     _buildMuteCard(),
                     const SizedBox(height: 24),
                     Text(
-                      'CATEGORIES',
-                      style: AppTextStyles.manrope(
+                      AppStrings.categories,
+                      style: AppTextStyles.outfit(
                         fontSize: 12,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.textSecondary,
                       ),
                     ),
@@ -63,7 +64,7 @@ class StudentNotificationPreferencesScreen
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: AppColors.scaffoldBg,
+              color: AppColors.surfaceBg,
               borderRadius: BorderRadius.circular(8),
             ),
             child: const Icon(
@@ -78,17 +79,17 @@ class StudentNotificationPreferencesScreen
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Mute everything',
-                  style: AppTextStyles.manrope(
+                  AppStrings.muteEverything,
+                  style: AppTextStyles.outfit(
                     fontSize: 14,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Stops all push alerts. In-app notifications still appear.',
-                  style: AppTextStyles.lexend(
+                  AppStrings.stopsAllPushAlertsInApp,
+                  style: AppTextStyles.outfit(
                     fontSize: 11,
                     color: AppColors.textSecondary,
                   ),
@@ -119,8 +120,8 @@ class StudentNotificationPreferencesScreen
           Obx(
             () => _buildToggleRow(
               icon: Icons.currency_rupee_rounded,
-              title: 'Fee reminders',
-              subtitle: 'Due dates and payment confirmations',
+              title: AppStrings.feeReminders,
+              subtitle: AppStrings.dueDatesAndPaymentConfirmations,
               value: controller.feeReminders.value,
               onChanged: controller.toggleFeeReminders,
             ),
@@ -132,8 +133,8 @@ class StudentNotificationPreferencesScreen
           Obx(
             () => _buildToggleRow(
               icon: Icons.tablet_mac_rounded,
-              title: 'Assignment alerts',
-              subtitle: 'New assignments and grading',
+              title: AppStrings.assignmentAlerts,
+              subtitle: AppStrings.newAssignmentsAndGrading,
               value: controller.assignmentAlerts.value,
               onChanged: controller.toggleAssignmentAlerts,
             ),
@@ -145,8 +146,8 @@ class StudentNotificationPreferencesScreen
           Obx(
             () => _buildToggleRow(
               icon: Icons.calendar_today_outlined,
-              title: 'Attendance',
-              subtitle: 'Marked present / absent',
+              title: AppStrings.instAttendanceTitle,
+              subtitle: AppStrings.markedPresentAbsent,
               value: controller.attendance.value,
               onChanged: controller.toggleAttendance,
             ),
@@ -158,8 +159,8 @@ class StudentNotificationPreferencesScreen
           Obx(
             () => _buildToggleRow(
               icon: Icons.auto_awesome_rounded,
-              title: 'Daily updates',
-              subtitle: 'Topics covered in class',
+              title: AppStrings.dailyUpdates,
+              subtitle: AppStrings.topicsCoveredInClass,
               value: controller.dailyUpdates.value,
               onChanged: controller.toggleDailyUpdates,
             ),
@@ -171,8 +172,8 @@ class StudentNotificationPreferencesScreen
           Obx(
             () => _buildToggleRow(
               icon: Icons.event_note_rounded,
-              title: 'Events & holidays',
-              subtitle: 'Institute-wide notices',
+              title: AppStrings.eventsHolidays,
+              subtitle: AppStrings.instituteWideNotices,
               value: controller.eventsHolidays.value,
               onChanged: controller.toggleEventsHolidays,
             ),
@@ -196,7 +197,7 @@ class StudentNotificationPreferencesScreen
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: AppColors.scaffoldBg,
+              color: AppColors.surfaceBg,
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(icon, size: 18, color: AppColors.textSecondary),
@@ -208,7 +209,7 @@ class StudentNotificationPreferencesScreen
               children: [
                 Text(
                   title,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 14,
                     fontWeight: value ? FontWeight.w800 : FontWeight.w700,
                     color: AppColors.textPrimary,
@@ -217,7 +218,7 @@ class StudentNotificationPreferencesScreen
                 const SizedBox(height: 2),
                 Text(
                   subtitle,
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 11,
                     color: AppColors.textSecondary,
                   ),

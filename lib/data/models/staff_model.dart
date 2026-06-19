@@ -12,6 +12,7 @@ class Staff {
   final String? profileUrl;
   final StaffRole? role;
   final StaffDepartment? department;
+  final DateTime? createdAt;
 
   Staff({
     required this.id,
@@ -27,6 +28,7 @@ class Staff {
     this.profileUrl,
     this.role,
     this.department,
+    this.createdAt,
   });
 
   factory Staff.fromJson(Map<String, dynamic> json) {
@@ -47,6 +49,7 @@ class Staff {
       department: json['department'] != null
           ? StaffDepartment.fromJson(json['department'])
           : null,
+      createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at']) : null,
     );
   }
 }
@@ -138,6 +141,40 @@ class StaffSalary {
       status: json['status']?.toString() ?? '',
       notes: json['notes']?.toString(),
       staff: json['staff'] != null ? Staff.fromJson(json['staff']) : null,
+    );
+  }
+}
+
+/// Pre-fill data returned by GET /institute/salaries/preview/{staffId}.
+/// The institute fetches this when staff is picked on the Add Salary form
+/// so the screen can show the leaves count and suggest a base salary.
+class SalaryPreview {
+  final String staffName;
+  final String? employeeId;
+  final String baseSalary;
+  final num suggestedDeductions;
+  final num suggestedBonus;
+  final int leaves;
+
+  SalaryPreview({
+    required this.staffName,
+    this.employeeId,
+    required this.baseSalary,
+    required this.suggestedDeductions,
+    required this.suggestedBonus,
+    required this.leaves,
+  });
+
+  factory SalaryPreview.fromJson(Map<String, dynamic> json) {
+    return SalaryPreview(
+      staffName: json['staff_name']?.toString() ?? '',
+      employeeId: json['employee_id']?.toString(),
+      baseSalary: json['base_salary']?.toString() ?? '0.00',
+      suggestedDeductions:
+          num.tryParse(json['suggested_deductions']?.toString() ?? '0') ?? 0,
+      suggestedBonus:
+          num.tryParse(json['suggested_bonus']?.toString() ?? '0') ?? 0,
+      leaves: int.tryParse(json['leaves']?.toString() ?? '0') ?? 0,
     );
   }
 }

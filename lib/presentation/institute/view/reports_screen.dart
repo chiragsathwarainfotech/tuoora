@@ -1,4 +1,5 @@
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/controllers/reports_controller.dart';
@@ -23,38 +24,42 @@ class ReportsScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const InstituteAppBar(title: 'Reports', isRoot: false),
+            const InstituteAppBar(title: AppStrings.labelReports, isRoot: false),
             Expanded(
               child: ListView(
-                padding: AppSpacing.all24,
+                padding: AppSpacing.all16,
                 children: [
                   _buildReportCard(
-                    title: 'Fee Reports',
+                    title: AppStrings.attendanceReports,
                     subtitle:
-                        'Collection summaries, pending dues, and batch-wise financial insights.',
-                    icon: Icons.account_balance_wallet_rounded,
-                    color: AppColors.primaryBrand,
-                    onTap: () => Get.toNamed(AppRoutes.instituteFeeReport),
-                  ),
-                  AppSpacing.v16,
-                  _buildReportCard(
-                    title: 'Attendance Reports',
-                    subtitle:
-                        'Daily attendance rates, absentee tracking, and batch consistency trends.',
+                        AppStrings.comprehensiveAnalysisOfDailyWeeklyAnd,
                     icon: Icons.calendar_today_rounded,
                     color: AppColors.primaryBrand,
-                    onTap: () =>
-                        Get.toNamed(AppRoutes.instituteAttendanceReport),
+                    onTap: () {
+                      Get.toNamed(AppRoutes.instituteAttendanceReport);
+                    },
                   ),
-                  AppSpacing.v16,
+                  AppSpacing.v10,
                   _buildReportCard(
-                    title: 'Performance Reports',
+                    title: AppStrings.labelFeeCollectionReport,
                     subtitle:
-                        'Academic progress, average grades, and performance analysis across batches.',
+                        AppStrings.deepDiveIntoExaminationResultsAssignment,
+                    icon: Icons.account_balance_wallet_rounded,
+                    color: AppColors.primaryBrand,
+                    onTap: () {
+                      Get.toNamed(AppRoutes.instituteFeeReport);
+                    },
+                  ),
+                  AppSpacing.v10,
+                  _buildReportCard(
+                    title: AppStrings.studentPerformanceReports,
+                    subtitle:
+                        AppStrings.academicProgressAverageGradesAndPerformance,
                     icon: Icons.insights_rounded,
                     color: AppColors.primaryBrand,
-                    onTap: () =>
-                        Get.toNamed(AppRoutes.institutePerformanceReport),
+                    onTap: () {
+                      Get.toNamed(AppRoutes.institutePerformanceReport);
+                    },
                   ),
                 ],
               ),
@@ -75,10 +80,10 @@ class ReportsScreen extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: AppSpacing.all24,
+        padding: AppSpacing.cardPadding,
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           boxShadow: [
             BoxShadow(
               color: color.withValues(alpha: 0.08),
@@ -104,16 +109,16 @@ class ReportsScreen extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 20,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.brandAppBarColor,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textPrimary,
                     ),
                   ),
                   AppSpacing.v4,
                   Text(
                     subtitle,
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 13,
                       color: AppColors.textTertiary,
                       height: 1.4,

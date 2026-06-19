@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
@@ -10,7 +12,9 @@ import 'package:tuoora/presentation/institute/controllers/institute_controller.d
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
 import 'package:tuoora/presentation/institute/controllers/batch_controller.dart';
 import 'package:tuoora/core/widgets/app_search_field.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class AssignToBatchController extends GetxController {
@@ -28,9 +32,34 @@ class AssignToBatchController extends GetxController {
 
   AssignToBatchController(this.batch, this.batchDetailsController);
 
+  @override
+  void onInit() {
+    super.onInit();
+    _loadUnassignedStudents();
+  }
+
+  void _loadUnassignedStudents() {
+    final existingIds = batchDetailsController.assignedStudents
+        .map((s) => s.student.id)
+        .toSet();
+    final selectedIds = selectedStudents.map((s) => s.student.id).toSet();
+
+    searchResults.assignAll(
+      instituteController.students
+          .where(
+            (s) =>
+                s.batchId == null &&
+                !existingIds.contains(s.id) &&
+                !selectedIds.contains(s.id),
+          )
+          .toList(),
+    );
+  }
+
   void searchStudents(String query) {
-    if (query.isEmpty) {
-      searchResults.clear();
+    final trimmed = query.trim();
+    if (trimmed.isEmpty) {
+      _loadUnassignedStudents();
       return;
     }
 
@@ -43,10 +72,13 @@ class AssignToBatchController extends GetxController {
       instituteController.students
           .where(
             (s) =>
-                (s.name.toLowerCase().contains(query.toLowerCase()) ||
+                (s.name.toLowerCase().contains(trimmed.toLowerCase()) ||
                     s.id.toString().toLowerCase().contains(
-                      query.toLowerCase(),
-                    )) &&
+                      trimmed.toLowerCase(),
+                    ) ||
+                    (s.enrollmentId.toLowerCase().contains(
+                      trimmed.toLowerCase(),
+                    ))) &&
                 s.batchId == null &&
                 !existingIds.contains(s.id) &&
                 !selectedIds.contains(s.id),
@@ -60,11 +92,18 @@ class AssignToBatchController extends GetxController {
       BatchStudent(student: student, assignedFee: batch.baseFee),
     );
     searchController.clear();
-    searchResults.clear();
+    // Re-show the default unassigned roster (now excluding the just-picked
+    // student) so the picker stays usable for the next selection.
+    _loadUnassignedStudents();
   }
 
   void removeStudentFromSelection(int studentId) {
     selectedStudents.removeWhere((s) => s.student.id == studentId);
+    // If the user is currently on the default (no-search) view, refresh so
+    // the un-selected student reappears in the available list.
+    if (searchController.text.trim().isEmpty) {
+      _loadUnassignedStudents();
+    }
   }
 
   void updateStudentFee(int studentId, String feeStr) {
@@ -96,10 +135,12 @@ class AssignToBatchController extends GetxController {
       }
 
       batchDetailsController.assignedStudents.addAll(selectedStudents);
-      
+
       // Update global students list to reflect new batch assignment
       for (var bs in selectedStudents) {
-        final updatedStudent = bs.student.copyWith(batchId: int.parse(batch.id));
+        final updatedStudent = bs.student.copyWith(
+          batchId: int.parse(batch.id),
+        );
         instituteController.updateStudent(updatedStudent);
       }
 
@@ -107,12 +148,9 @@ class AssignToBatchController extends GetxController {
           batchDetailsController.assignedStudents.length;
       batchDetailsController.assignedStudents.refresh();
       Get.back();
-      Get.snackbar(
-        'Success',
-        '${selectedStudents.length} students assigned to batch successfully.',
-      );
+      AppSnackBar.success(AppStrings.studentsAssigned);
     } catch (e) {
-      Get.snackbar('Error', 'Failed to assign students: ${e.toString()}');
+      AppSnackBar.error(AppStrings.failedToAssignStudents);
     } finally {
       isLoading.value = false;
     }
@@ -143,22 +181,20 @@ class AssignToBatchScreen extends StatelessWidget {
         child: Column(
           children: [
             InstituteAppBar(
-              title: 'Assign to Batch',
+              title: AppStrings.assignToBatch,
               onBackTap: () => Get.back(),
             ),
             Expanded(
               child: Stack(
                 children: [
                   SingleChildScrollView(
-                    padding: AppSpacing.x24.add(AppSpacing.y16),
+                    padding: AppSpacing.x16.add(AppSpacing.y16),
                     child: Column(
                       children: [
                         _buildSearchSection(controller),
                         AppSpacing.v24,
                         Obx(() => _buildSelectionList(controller)),
-                        const SizedBox(
-                          height: 120,
-                        ), // Space for the pinned button
+                        const SizedBox(height: 120),
                       ],
                     ),
                   ),
@@ -166,29 +202,22 @@ class AssignToBatchScreen extends StatelessWidget {
                     bottom: 0,
                     left: 0,
                     right: 0,
-                    child: Container(
-                      padding: AppSpacing.all24,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            AppColors.scaffoldBg.withValues(alpha: 0.0),
-                            AppColors.scaffoldBg.withValues(alpha: 0.9),
-                            AppColors.scaffoldBg,
-                          ],
-                          stops: const [0.0, 0.3, 1.0],
-                        ),
-                      ),
-                      child: Obx(
-                        () => AppButton(
-                          label: 'Confirm & Save Assignment',
-                          icon: Icons.check_circle_rounded,
-                          isLoading: controller.isLoading.value,
-                          isDisabled: controller.selectedStudents.isEmpty,
-                          onPressed: controller.selectedStudents.isEmpty
-                              ? null
-                              : controller.confirmAssignment,
+                    child: SafeArea(
+                      top: false,
+                      minimum: const EdgeInsets.only(bottom: 16),
+                      child: Container(
+                        color: AppColors.scaffoldBg,
+                        padding: AppSpacing.all16,
+                        child: Obx(
+                          () => AppButton(
+                            label: AppStrings.assignStudent,
+                            icon: Icons.check_circle_rounded,
+                            isLoading: controller.isLoading.value,
+                            isDisabled: controller.selectedStudents.isEmpty,
+                            onPressed: controller.selectedStudents.isEmpty
+                                ? null
+                                : controller.confirmAssignment,
+                          ),
                         ),
                       ),
                     ),
@@ -207,50 +236,76 @@ class AssignToBatchScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         AppSearchField(
-          hintText: 'Search and add students to this batch',
+          hintText: AppStrings.searchAndAddStudentsToThis,
           controller: controller.searchController,
           onChanged: controller.searchStudents,
         ),
         Obx(() {
           if (controller.searchResults.isEmpty) return const SizedBox.shrink();
-          return Container(
-            margin: const EdgeInsets.only(top: 4),
-            decoration: BoxDecoration(
-              color: AppColors.white,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: ListView.separated(
+          return Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: controller.searchResults.length,
-              separatorBuilder: (context, index) => const Divider(height: 1),
               itemBuilder: (context, index) {
                 final student = controller.searchResults[index];
-                return ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: AppColors.primaryBrandLight,
-                    child: Text(student.name[0]),
+                return Container(
+                  padding: AppSpacing.cardPadding,
+                  margin: AppSpacing.bottom10,
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.02),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
-                  title: Text(
-                    student.name,
-                    style: AppTextStyles.manrope(fontWeight: FontWeight.w700),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _buildPickerAvatar(
+                        imageUrl: student.imageUrl,
+                        name: student.name,
+                      ),
+                      AppSpacing.h16,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              student.name,
+                              style: AppTextStyles.outfit(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.textPrimary,
+                              ),
+                            ),
+                            Text(
+                              'Enrollment ID: ${student.enrollmentID}',
+                              style: AppTextStyles.outfit(
+                                fontSize: 12,
+                                color: AppColors.textMuted,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          controller.addStudentToSelection(student);
+                        },
+                        child: const Icon(
+                          Icons.add_circle_outline_rounded,
+                          color: AppColors.primaryBrand,
+                          size: 24,
+                        ),
+                      ),
+                    ],
                   ),
-                  subtitle: Text(
-                    student.id.toString(),
-                    style: AppTextStyles.lexend(fontSize: 12),
-                  ),
-                  trailing: const Icon(
-                    Icons.add_circle_outline_rounded,
-                    color: AppColors.primaryBrand,
-                  ),
-                  onTap: () => controller.addStudentToSelection(student),
                 );
               },
             ),
@@ -274,8 +329,8 @@ class AssignToBatchScreen extends StatelessWidget {
               ),
               AppSpacing.v16,
               Text(
-                'No students selected yet',
-                style: AppTextStyles.lexend(color: AppColors.textMuted),
+                AppStrings.noStudentsSelectedYet,
+                style: AppTextStyles.outfit(color: AppColors.textMuted),
               ),
             ],
           ),
@@ -290,8 +345,8 @@ class AssignToBatchScreen extends StatelessWidget {
       itemBuilder: (context, index) {
         final bs = controller.selectedStudents[index];
         return Container(
-          margin: const EdgeInsets.only(bottom: 16),
-          padding: AppSpacing.all16,
+          margin: AppSpacing.bottom10,
+          padding: AppSpacing.cardPadding,
           decoration: BoxDecoration(
             color: AppColors.white,
             borderRadius: BorderRadius.circular(16),
@@ -301,19 +356,9 @@ class AssignToBatchScreen extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Container(
-                      width: 48,
-                      height: 48,
-                      color: AppColors.primaryBrandLight,
-                      child: Center(
-                        child: Text(
-                          bs.student.name[0],
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
+                  _buildSelectedAvatar(
+                    imageUrl: bs.student.imageUrl,
+                    name: bs.student.name,
                   ),
                   AppSpacing.h12,
                   Expanded(
@@ -322,15 +367,15 @@ class AssignToBatchScreen extends StatelessWidget {
                       children: [
                         Text(
                           bs.student.name,
-                          style: AppTextStyles.manrope(
+                          style: AppTextStyles.outfit(
                             fontSize: 16,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w600,
                             color: AppColors.textPrimary,
                           ),
                         ),
                         Text(
-                          'ID: ${bs.student.id}',
-                          style: AppTextStyles.lexend(
+                          'Enrollment ID: ${bs.student.enrollmentId}',
+                          style: AppTextStyles.outfit(
                             fontSize: 12,
                             color: AppColors.textMuted,
                           ),
@@ -358,7 +403,7 @@ class AssignToBatchScreen extends StatelessWidget {
                         vertical: 12,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.scaffoldBg,
+                        color: AppColors.surfaceBg,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
@@ -379,11 +424,12 @@ class AssignToBatchScreen extends StatelessWidget {
                                 val,
                               ),
                               keyboardType: TextInputType.number,
-                              style: AppTextStyles.manrope(
-                                fontWeight: FontWeight.w700,
+                              inputFormatters: [LengthLimitingTextInputFormatter(6)],
+                              style: AppTextStyles.outfit(
+                                fontWeight: FontWeight.w600,
                               ),
                               decoration: const InputDecoration(
-                                hintText: 'Enter Fee',
+                                hintText: AppStrings.enterFee,
                                 border: InputBorder.none,
                                 isDense: true,
                               ),
@@ -399,6 +445,83 @@ class AssignToBatchScreen extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildPickerAvatar({required String imageUrl, required String name}) {
+    final bool hasPhoto =
+        imageUrl.isNotEmpty &&
+        imageUrl.startsWith('http') &&
+        !imageUrl.contains('ui-avatars.com');
+    final String initial = name.trim().isEmpty
+        ? '?'
+        : name.trim()[0].toUpperCase();
+    return Container(
+      width: 40,
+      height: 40,
+      decoration: BoxDecoration(
+        color: AppColors.primaryBrandLight,
+        shape: BoxShape.circle,
+        image: hasPhoto
+            ? DecorationImage(
+                image: CachedNetworkImageProvider(imageUrl),
+                fit: BoxFit.cover,
+              )
+            : null,
+      ),
+      child: hasPhoto
+          ? null
+          : Center(
+              child: Text(
+                initial,
+                style: AppTextStyles.outfit(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.primaryBrand,
+                ),
+              ),
+            ),
+    );
+  }
+
+  Widget _buildSelectedAvatar({
+    required String imageUrl,
+    required String name,
+  }) {
+    final bool hasPhoto =
+        imageUrl.isNotEmpty &&
+        imageUrl.startsWith('http') &&
+        !imageUrl.contains('ui-avatars.com');
+    final String initial = name.trim().isEmpty
+        ? '?'
+        : name.trim()[0].toUpperCase();
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        width: 48,
+        height: 48,
+        decoration: BoxDecoration(
+          color: AppColors.primaryBrandLight,
+          image: hasPhoto
+              ? DecorationImage(
+                  image: CachedNetworkImageProvider(imageUrl),
+                  fit: BoxFit.cover,
+                )
+              : null,
+        ),
+        child: hasPhoto
+            ? null
+            : Center(
+                child: Text(
+                  initial,
+                  style: AppTextStyles.outfit(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.primaryBrand,
+                  ),
+                ),
+              ),
+      ),
     );
   }
 }

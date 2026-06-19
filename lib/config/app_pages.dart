@@ -1,9 +1,11 @@
 import 'package:tuoora/data/repositories/student_notifications_repository.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/presentation/institute/bindings/institute_binding.dart';
 import 'package:tuoora/presentation/institute/view/batches_screen.dart';
 import 'package:tuoora/presentation/institute/view/fee_transaction_history_screen.dart';
 import 'package:tuoora/presentation/institute/view/fees_screen.dart';
+import 'package:tuoora/presentation/institute/view/fee_receipt_screen.dart';
 import 'package:tuoora/presentation/institute/view/institute_main_screen.dart';
 import 'package:tuoora/presentation/institute/view/add_student_screen.dart';
 import 'package:tuoora/presentation/institute/view/batch_details_screen.dart';
@@ -13,9 +15,13 @@ import 'package:tuoora/presentation/institute/view/student_profile_screen.dart'
     as institute_student_profile;
 import 'package:tuoora/presentation/institute/view/record_fee_screen.dart';
 import 'package:tuoora/presentation/institute/view/edit_profile_screen.dart';
-import 'package:tuoora/presentation/institute/view/institute_security_screen.dart';
+import 'package:tuoora/presentation/institute/view/institute_change_password_screen.dart';
 import 'package:tuoora/presentation/institute/view/institute_subscription_screen.dart';
+import 'package:tuoora/presentation/institute/view/subscription_renewal_screen.dart';
+import 'package:tuoora/presentation/institute/view/submit_payment_proof_screen.dart';
+import 'package:tuoora/presentation/institute/bindings/subscription_renewal_binding.dart';
 import 'package:tuoora/presentation/institute/view/institute_whatsapp_screen.dart';
+import 'package:tuoora/presentation/institute/view/institute_upi_payment_settings_screen.dart';
 import 'package:tuoora/presentation/institute/view/fee_report_screen.dart';
 import 'package:tuoora/presentation/institute/view/attendance_report_screen.dart';
 import 'package:tuoora/presentation/institute/view/performance_report_screen.dart';
@@ -170,7 +176,7 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.studentFeeHistory,
-      page: () => const PaymentHistoryScreen(title: 'Fee History'),
+      page: () => const PaymentHistoryScreen(title: AppStrings.feeHistory),
     ),
 
     GetPage(
@@ -194,8 +200,6 @@ class AppPages {
       name: AppRoutes.studentReceiptsList,
       page: () => const StudentReceiptsListScreen(),
       binding: BindingsBuilder(() {
-        // FeesController owns the receipt screen state — make sure it
-        // exists so taps from the list can hand off cleanly.
         if (!Get.isRegistered<FeesController>()) {
           Get.lazyPut<FeesController>(() => FeesController(), fenix: true);
         }
@@ -274,6 +278,11 @@ class AppPages {
       binding: InstituteBinding(),
     ),
     GetPage(
+      name: AppRoutes.instituteFeeReceipt,
+      page: () => const FeeReceiptScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
       name: AppRoutes.instituteBatchDetails,
       page: () => const BatchDetailsScreen(),
       binding: InstituteBinding(),
@@ -304,8 +313,8 @@ class AppPages {
       binding: InstituteBinding(),
     ),
     GetPage(
-      name: AppRoutes.instituteSecurity,
-      page: () => const InstituteSecurityScreen(),
+      name: AppRoutes.instituteChangePassword,
+      page: () => const InstituteChangePasswordScreen(),
       binding: InstituteBinding(),
     ),
     GetPage(
@@ -314,8 +323,23 @@ class AppPages {
       binding: InstituteBinding(),
     ),
     GetPage(
+      name: AppRoutes.instituteSubscriptionRenew,
+      page: () => const SubscriptionRenewalScreen(),
+      binding: SubscriptionRenewalBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteSubmitPaymentProof,
+      page: () => const SubmitPaymentProofScreen(),
+      binding: SubscriptionRenewalBinding(),
+    ),
+    GetPage(
       name: AppRoutes.instituteWhatsApp,
       page: () => const InstituteWhatsAppScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteUpiPaymentSettings,
+      page: () => const InstituteUpiPaymentSettingsScreen(),
       binding: InstituteBinding(),
     ),
     GetPage(

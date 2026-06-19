@@ -1,6 +1,5 @@
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
-import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
 import 'package:tuoora/core/widgets/app_input_field.dart';
@@ -29,46 +28,25 @@ class AddEditLeadScreen extends GetView<LeadsController> {
             ),
             Expanded(
               child: SingleChildScrollView(
-                padding: AppSpacing.x24.add(AppSpacing.y16),
+                padding: AppSpacing.x16.add(AppSpacing.y16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildLeadInformationSection(),
-                    AppSpacing.v32,
-                    _buildSectionHeader(
-                      Icons.school_rounded,
-                      AppStrings.instCourseSelectionHeading,
-                    ),
-                    AppSpacing.v20,
-                    _buildCourseSelectionSection(),
-                    
-                    Obx(() {
-                      if (controller.editingLeadId.value == null) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            AppSpacing.v32,
-                            _buildSectionHeader(
-                              Icons.note_alt_rounded,
-                              'Initial Interaction Note',
-                            ),
-                            AppSpacing.v20,
-                            _buildInteractionNoteSection(),
-                          ],
-                        );
-                      }
-                      return const SizedBox.shrink();
-                    }),
-                    
                     AppSpacing.v40,
-                    Obx(
-                      () => AppButton(
-                        label: AppStrings.instSaveLeadBtn,
-                        isLoading: controller.isLoading.value,
-                        onPressed: () => controller.saveLead(),
+                    SafeArea(
+                      top: false,
+                      minimum: const EdgeInsets.only(bottom: 16),
+                      child: Obx(
+                        () => AppButton(
+                          label: controller.editingLeadId.value != null
+                              ? AppStrings.instEditLeadTitle
+                              : AppStrings.instSaveLeadBtn,
+                          isLoading: controller.isLoading.value,
+                          onPressed: () => controller.saveLead(),
+                        ),
                       ),
                     ),
-                    AppSpacing.v24,
                   ],
                 ),
               ),
@@ -79,31 +57,14 @@ class AddEditLeadScreen extends GetView<LeadsController> {
     );
   }
 
-  Widget _buildSectionHeader(IconData icon, String title) {
-    return Row(
-      children: [
-        Icon(icon, color: AppColors.primaryBrand, size: 20),
-        AppSpacing.h12,
-        Text(
-          title,
-          style: AppTextStyles.manrope(
-            fontSize: 16,
-            fontWeight: FontWeight.w800,
-            color: AppColors.primaryBrand,
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget _buildLeadInformationSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Obx(
           () => AppInputField(
-            label: AppStrings.instFullNameLabel,
-            hint: AppStrings.instFullNameHint,
+            label: AppStrings.instStudentFullNameLabel,
+            hint: AppStrings.instStudentNameHint,
             controller: controller.nameController,
             errorText: controller.triedToSave.value
                 ? controller.nameError.value
@@ -113,8 +74,8 @@ class AddEditLeadScreen extends GetView<LeadsController> {
         AppSpacing.v24,
         Obx(
           () => AppInputField(
-            label: AppStrings.instEmailAddressLabel,
-            hint: AppStrings.instEmailAddressHint,
+            label: AppStrings.instStudentEmailLabel,
+            hint: AppStrings.instStudentEmailHint,
             controller: controller.emailController,
             keyboardType: TextInputType.emailAddress,
             errorText: controller.triedToSave.value
@@ -125,8 +86,8 @@ class AddEditLeadScreen extends GetView<LeadsController> {
         AppSpacing.v24,
         Obx(
           () => AppInputField(
-            label: AppStrings.instPhoneNumberLabelAlt,
-            hint: AppStrings.instPhoneNumberHint,
+            label: AppStrings.instPhoneLabel,
+            hint: AppStrings.instPhoneHint,
             controller: controller.phoneController,
             keyboardType: TextInputType.phone,
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -158,45 +119,14 @@ class AddEditLeadScreen extends GetView<LeadsController> {
                 : null,
           ),
         ),
-      ],
-    );
-  }
-
-  Widget _buildCourseSelectionSection() {
-    return Obx(
-      () => AppInputField(
-        label: AppStrings.instCourseSelectionLabel,
-        hint: AppStrings.instCourseSelectionHint,
-        controller: controller.courseController,
-        errorText: controller.triedToSave.value
-            ? controller.courseError.value
-            : null,
-      ),
-    );
-  }
-
-  Widget _buildInteractionNoteSection() {
-    return Column(
-      children: [
+        AppSpacing.v24,
         Obx(
           () => AppInputField(
-            label: 'NOTE TITLE',
-            hint: 'e.g., Initial Inquiry',
-            controller: controller.noteTitleController,
+            label: AppStrings.instCourseSelectionLabel,
+            hint: AppStrings.instCourseSelectionHint,
+            controller: controller.courseController,
             errorText: controller.triedToSave.value
-                ? controller.noteTitleError.value
-                : null,
-          ),
-        ),
-        AppSpacing.v20,
-        Obx(
-          () => AppInputField(
-            label: 'NOTE DESCRIPTION',
-            hint: 'Add more details about the interaction...',
-            controller: controller.notesController,
-            maxLines: 5,
-            errorText: controller.triedToSave.value
-                ? controller.noteError.value
+                ? controller.courseError.value
                 : null,
           ),
         ),
@@ -204,4 +134,3 @@ class AddEditLeadScreen extends GetView<LeadsController> {
     );
   }
 }
-

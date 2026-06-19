@@ -1,5 +1,6 @@
 ﻿import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/controllers/staff_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
@@ -19,7 +20,7 @@ class SalaryHistoryScreen extends GetView<StaffController> {
       body: SafeArea(
         child: Column(
           children: [
-            const InstituteAppBar(title: 'Salary History'),
+            const InstituteAppBar(title: AppStrings.salaryHistory),
             Expanded(
               child: Obx(() {
                 final salaries = controller.salaryList;
@@ -27,14 +28,13 @@ class SalaryHistoryScreen extends GetView<StaffController> {
                   isLoading:
                       controller.isLoadingSalary.value && salaries.isEmpty,
                   isEmpty: salaries.isEmpty,
-                  emptyTitle: 'No Salary Records',
-                  emptySubtitle:
-                      'No salary payments found for this staff member.',
+                  emptyTitle: AppStrings.noSalaryRecords,
+                  emptySubtitle: AppStrings.noSalaryPaymentsFoundForThis,
                   emptyIcon: Icons.payments_outlined,
                   child: ListView.separated(
-                    padding: AppSpacing.all24,
+                    padding: AppSpacing.screenPaddingTop,
                     itemCount: salaries.length,
-                    separatorBuilder: (_, _) => AppSpacing.v16,
+                    separatorBuilder: (_, _) => AppSpacing.v10,
                     itemBuilder: (context, index) {
                       final salary = salaries[index];
                       return _buildSalaryCard(salary);
@@ -61,10 +61,10 @@ class SalaryHistoryScreen extends GetView<StaffController> {
     final dateStr = 'Paid on ${DateFormat('MMM dd, yyyy').format(paymentDate)}';
 
     return Container(
-      padding: AppSpacing.all20,
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -94,15 +94,15 @@ class SalaryHistoryScreen extends GetView<StaffController> {
               children: [
                 Text(
                   monthStr,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 16,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                 ),
                 Text(
                   dateStr,
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 12,
                     color: AppColors.textTertiary,
                   ),
@@ -114,18 +114,18 @@ class SalaryHistoryScreen extends GetView<StaffController> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                'â‚¹${salary.netSalary}',
-                style: AppTextStyles.manrope(
+                '₹${salary.netSalary}',
+                style: AppTextStyles.outfit(
                   fontSize: 18,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
                 ),
               ),
               Text(
                 salary.paymentMethod,
-                style: AppTextStyles.lexend(
-                  fontSize: 10,
-                  color: AppColors.primaryBrand,
+                style: AppTextStyles.outfit(
+                  fontSize: 12,
+                  color: AppColors.successGreen,
                   fontWeight: FontWeight.w600,
                 ),
               ),

@@ -30,7 +30,7 @@ class InstituteAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: AppSpacing.x24.add(
+      padding: AppSpacing.x16.add(
         const EdgeInsets.only(top: AppSpacing.s16, bottom: AppSpacing.s8),
       ),
       child: Row(
@@ -50,19 +50,19 @@ class InstituteAppBar extends StatelessWidget implements PreferredSizeWidget {
                         title,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: AppTextStyles.manrope(
+                        style: AppTextStyles.outfit(
                           fontSize: 18,
-                          fontWeight: FontWeight.w800,
-                          color: AppColors.brandAppBarColor,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textPrimary,
                         ),
                       ),
                       if (subtitle != null)
                         Text(
                           subtitle!,
-                          style: AppTextStyles.lexend(
+                          style: AppTextStyles.outfit(
                             fontSize: 12,
                             color: AppColors.textTertiary,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w400,
                           ),
                         ),
                     ],
@@ -88,14 +88,14 @@ class InstituteAppBar extends StatelessWidget implements PreferredSizeWidget {
         width: AppSpacing.s40,
         height: AppSpacing.s40,
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: AppColors.fieldBg,
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: AppColors.borderGrey),
+          border: Border.all(color: AppColors.fieldBorder),
         ),
         child: Center(
           child: Icon(
             isRoot ? Icons.menu_rounded : Icons.arrow_back_ios_new_rounded,
-            color: AppColors.brandAppBarColor,
+            color: AppColors.textPrimary,
             size: isRoot ? AppSpacing.s22 : AppSpacing.s18,
           ),
         ),
@@ -110,7 +110,7 @@ class InstituteAppBar extends StatelessWidget implements PreferredSizeWidget {
           onTap: () => Get.toNamed(AppRoutes.instituteChats),
           child: const Icon(
             Icons.chat_bubble_outline_rounded,
-            color: AppColors.brandAppBarColor,
+            color: AppColors.fieldLabel,
             size: AppSpacing.s24,
           ),
         ),
@@ -119,7 +119,7 @@ class InstituteAppBar extends StatelessWidget implements PreferredSizeWidget {
           onTap: () => Get.toNamed(AppRoutes.instituteNotifications),
           child: const Icon(
             Icons.notifications_none_rounded,
-            color: AppColors.brandAppBarColor,
+            color: AppColors.fieldLabel,
             size: AppSpacing.s26,
           ),
         ),

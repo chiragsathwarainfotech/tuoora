@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/app_empty_view.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/presentation/student/controllers/student_receipts_list_controller.dart';
 import 'package:tuoora/presentation/student/models/fee_model.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
@@ -17,54 +20,29 @@ class StudentReceiptsListScreen extends GetView<StudentReceiptsListController> {
       body: SafeArea(
         child: Column(
           children: [
-            const StudentAppBar(title: 'Receipts', showDefaultActions: false),
+            const StudentAppBar(title: AppStrings.labelReceipts, showDefaultActions: false),
             Expanded(
               child: Obx(() {
                 if (controller.isLoading.value) {
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.studentBrand,
-                    ),
-                  );
+                  return const CommonLoading(color: AppColors.primaryBrand);
                 }
                 final items = controller.receipts;
                 if (items.isEmpty) {
-                  return Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(AppSpacing.s24),
-                      child: Text(
-                        'No receipts available yet.',
-                        style: AppTextStyles.lexend(
-                          fontSize: 13,
-                          color: AppColors.textSecondary,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
+                  return const AppEmptyView(
+                    icon: Icons.receipt_long_outlined,
+                    title: AppStrings.noReceiptsAvailableYet,
                   );
                 }
                 return RefreshIndicator(
-                  color: AppColors.studentBrand,
+                  color: AppColors.primaryBrand,
                   onRefresh: controller.loadReceipts,
                   child: ListView.separated(
-                    padding: const EdgeInsets.all(AppSpacing.s16),
-                    itemCount: items.length + 1,
+                    padding: AppSpacing.screenPaddingTop,
+                    itemCount: items.length,
                     separatorBuilder: (_, _) =>
                         const SizedBox(height: AppSpacing.s10),
                     itemBuilder: (context, index) {
-                      if (index == 0) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: AppSpacing.s8),
-                          child: Text(
-                            '${items.length} ${items.length == 1 ? "receipt" : "receipts"} available',
-                            style: AppTextStyles.lexend(
-                              fontSize: 12,
-                              color: AppColors.textSecondary,
-                            ),
-                          ),
-                        );
-                      }
-                      final receipt = items[index - 1];
+                      final receipt = items[index];
                       return _ReceiptCard(
                         receipt: receipt,
                         onTap: () => controller.openReceipt(receipt),
@@ -91,30 +69,30 @@ class _ReceiptCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: AppColors.white,
-      borderRadius: BorderRadius.circular(AppSpacing.s12),
+      borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(AppSpacing.s12),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         child: Ink(
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(AppSpacing.s12),
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
             border: Border.all(
               color: AppColors.borderGrey.withValues(alpha: 0.5),
             ),
           ),
-          padding: const EdgeInsets.all(AppSpacing.s12),
+          padding: AppSpacing.cardPadding,
           child: Row(
             children: [
               Container(
                 padding: const EdgeInsets.all(AppSpacing.s12),
                 decoration: BoxDecoration(
-                  color: AppColors.studentPresentBg,
-                  borderRadius: BorderRadius.circular(AppSpacing.s8),
+                  color: AppColors.successGreen,
+                  borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
                 ),
                 child: const Icon(
                   Icons.receipt_long_rounded,
-                  color: AppColors.studentPresentBg,
+                  color: AppColors.white,
                   size: 20,
                 ),
               ),
@@ -127,9 +105,9 @@ class _ReceiptCard extends StatelessWidget {
                       receipt.receiptNumber.isNotEmpty
                           ? receipt.receiptNumber
                           : 'Receipt #${receipt.id}',
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 14,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.textPrimary,
                       ),
                       maxLines: 1,
@@ -142,7 +120,7 @@ class _ReceiptCard extends StatelessWidget {
                         if (receipt.paymentMethod.isNotEmpty)
                           receipt.paymentMethod,
                       ].join('  ·  '),
-                      style: AppTextStyles.lexend(
+                      style: AppTextStyles.outfit(
                         fontSize: 11,
                         color: AppColors.textSecondary,
                       ),
@@ -155,9 +133,9 @@ class _ReceiptCard extends StatelessWidget {
               AppSpacing.h8,
               Text(
                 '₹${receipt.amount}',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 14,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
                 ),
               ),

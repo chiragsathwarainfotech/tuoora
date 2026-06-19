@@ -18,6 +18,10 @@ class BatchModel {
   final dynamic totalPaid;
   final List<String> days;
   final List<dynamic>? students;
+  final String? classroom;
+  final int? staffId;
+  final String? staffName;
+  final DateTime? createdAt;
 
   BatchModel({
     required this.id,
@@ -36,6 +40,9 @@ class BatchModel {
     this.totalPaid,
     this.days = const ['Mon', 'Wed', 'Fri'],
     this.students,
+    this.classroom,
+    this.staffId,
+    this.staffName,
+    this.createdAt,
   });
 }
-

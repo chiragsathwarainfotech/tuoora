@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/data/models/institute_subscription_model.dart';
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
 
@@ -21,7 +23,7 @@ class InstituteSubscriptionController extends GetxController {
       isLoading.value = true;
       subscriptionData.value = await _repository.getSubscriptionData();
     } catch (e) {
-      Get.snackbar('Error', 'Failed to fetch subscription data');
+      AppSnackBar.error(AppStrings.failedToFetchSubscriptionData);
     } finally {
       isLoading.value = false;
     }

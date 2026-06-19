@@ -1,17 +1,39 @@
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
 import 'package:tuoora/core/widgets/app_input_field.dart';
-import 'package:tuoora/data/models/staff_model.dart';
+import 'package:tuoora/core/widgets/input_styles.dart';
 import 'package:tuoora/presentation/institute/controllers/staff_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
-import 'package:tuoora/core/widgets/app_search_field.dart';
+import 'package:tuoora/core/widgets/app_pickers.dart';
+import 'package:tuoora/presentation/institute/widgets/institute_label.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-class AddSalaryScreen extends GetView<StaffController> {
+class AddSalaryScreen extends StatefulWidget {
   const AddSalaryScreen({super.key});
+
+  @override
+  State<AddSalaryScreen> createState() => _AddSalaryScreenState();
+}
+
+class _AddSalaryScreenState extends State<AddSalaryScreen> {
+  final StaffController controller = Get.find<StaffController>();
+
+  @override
+  void initState() {
+    super.initState();
+    // Defer to post-frame so Rx mutations don't fire while ancestor widgets
+    // (e.g. the dotted-background CustomPaint from GetMaterialApp.builder)
+    // are still building. The primary reset happens at the launch site —
+    // this is a safety net for any other entry path into this route.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) controller.initAddSalaryMode();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,35 +42,25 @@ class AddSalaryScreen extends GetView<StaffController> {
       body: SafeArea(
         child: Column(
           children: [
-            const InstituteAppBar(title: 'Add Salary'),
+            const InstituteAppBar(title: AppStrings.addSalary),
             Expanded(
               child: SingleChildScrollView(
-                padding: AppSpacing.all24,
+                padding: AppSpacing.all16,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildSectionCard(
-                      label: 'SELECT STAFF MEMBER',
-                      child: Obx(() {
-                        if (controller.selectedAddSalaryStaff.value != null) {
-                          return _buildSelectedStaffCard(
-                            controller.selectedAddSalaryStaff.value!,
-                          );
-                        } else {
-                          return _buildStaffSearchField();
-                        }
-                      }),
-                    ),
+                    const InstituteLabel('Select Staff Member'),
+                    _buildStaffDropdown(),
                     AppSpacing.v20,
                     AppInputField(
-                      label: 'PAYMENT DATE',
+                      label: AppStrings.paymentDate,
                       hint: 'MM/dd/yyyy',
                       icon: Icons.calendar_today_rounded,
                       controller: controller.salaryDateController,
                       readOnly: true,
                       onTap: () async {
-                        final picked = await showDatePicker(
-                          context: context,
+                        final picked = await AppPickers.date(
+                          context,
                           initialDate: controller.selectedSalaryDate.value,
                           firstDate: DateTime(2020),
                           lastDate: DateTime.now(),
@@ -60,31 +72,25 @@ class AddSalaryScreen extends GetView<StaffController> {
                     ),
                     AppSpacing.v20,
                     AppInputField(
-                      label: 'SALARY AMOUNT',
+                      label: AppStrings.salaryAmount,
                       controller: controller.salaryAmountController,
-                      hint: '0.00',
+                      hint: AppStrings.k000,
                       icon: Icons.currency_rupee_sharp,
                       keyboardType: const TextInputType.numberWithOptions(
                         decimal: true,
                       ),
                       onChanged: (_) => controller.update(),
                     ),
+                    AppSpacing.v20,
+                    _buildLeavesAndDeductionRow(),
                     AppSpacing.v24,
-                    Text(
-                      'PAYMENT METHOD',
-                      style: AppTextStyles.manrope(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.brandAppBarColor,
-                      ),
-                    ),
-                    AppSpacing.v12,
+                    const InstituteLabel('Payment Method'),
                     _buildPaymentMethodToggle(),
                     AppSpacing.v24,
                     AppInputField(
-                      label: 'NOTES (OPTIONAL)',
+                      label: AppStrings.notesOptional,
                       controller: controller.salaryNotesController,
-                      hint: 'Add any specific details regarding bonuses...',
+                      hint: AppStrings.enterOptionalNote,
                       maxLines: 3,
                     ),
                     AppSpacing.v32,
@@ -102,182 +108,110 @@ class AddSalaryScreen extends GetView<StaffController> {
     );
   }
 
-  Widget _buildSectionCard({required String label, required Widget child}) {
-    return Container(
-      padding: AppSpacing.all20,
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.background),
-      ),
-      child: Column(
+  Widget _buildStaffDropdown() {
+    return Obx(() {
+      final selectedId = controller.selectedAddSalaryStaff.value?.id;
+      final isValueInList = controller.staffList.any((s) => s.id == selectedId);
+      final isStaffEmpty = controller.staffList.isEmpty;
+      return Container(
+        constraints: const BoxConstraints(minHeight: 48),
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        decoration: BoxDecoration(
+          color: AppColors.fieldBg,
+          borderRadius: BorderRadius.circular(InputStyles.borderRadius),
+          border: Border.all(color: AppColors.fieldBorder),
+        ),
+        child: DropdownButtonHideUnderline(
+          child: DropdownButton<int>(
+            value: isValueInList ? selectedId : null,
+            isExpanded: true,
+            hint: Text(
+              isStaffEmpty ? 'Loading staff...' : 'Select Staff',
+              style: AppTextStyles.outfit(
+                fontSize: 14,
+                color: AppColors.fieldLabel,
+              ),
+            ),
+            icon: const Icon(
+              Icons.keyboard_arrow_down_rounded,
+              color: AppColors.fieldLabel,
+            ),
+            style: AppTextStyles.outfit(
+              fontSize: 14,
+              color: AppColors.textPrimary,
+              fontWeight: FontWeight.w500,
+            ),
+            dropdownColor: AppColors.white,
+            items: controller.staffList
+                .map(
+                  (staff) => DropdownMenuItem<int>(
+                    value: staff.id,
+                    child: Text(
+                      staff.fullName,
+                      style: AppTextStyles.outfit(
+                        fontSize: 14,
+                        color: AppColors.textPrimary,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                )
+                .toList(),
+            onChanged: isStaffEmpty ? null : controller.selectSalaryStaffById,
+          ),
+        ),
+      );
+    });
+  }
+
+  Widget _buildLeavesAndDeductionRow() {
+    return Obx(() {
+      if (controller.selectedAddSalaryStaff.value == null) {
+        return const SizedBox.shrink();
+      }
+      return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            label,
-            style: AppTextStyles.manrope(
-              fontSize: 12,
-              fontWeight: FontWeight.w800,
-              color: AppColors.textTertiary,
-              letterSpacing: 0.5,
-            ),
-          ),
-          AppSpacing.v12,
-          child,
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStaffSearchField() {
-    return Column(
-      children: [
-        AppSearchField(
-          hintText: 'Search by name or role...',
-          onChanged: (val) => controller.searchSalaryStaff(val),
-        ),
-        Obx(() {
-          if (controller.filteredSalaryStaffs.isEmpty ||
-              controller.salarySearchQuery.value.isEmpty) {
-            return const SizedBox.shrink();
-          }
-          return Container(
-            margin: const EdgeInsets.only(top: 8),
-            decoration: BoxDecoration(
-              color: AppColors.white,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: AppColors.background),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            constraints: const BoxConstraints(maxHeight: 200),
-            child: ListView.separated(
-              shrinkWrap: true,
-              padding: EdgeInsets.zero,
-              itemCount: controller.filteredSalaryStaffs.length,
-              separatorBuilder: (_, _) => const Divider(height: 1),
-              itemBuilder: (context, index) {
-                final staff = controller.filteredSalaryStaffs[index];
-                return ListTile(
-                  leading: _buildStaffAvatar(staff.fullName, staff.profileUrl),
-                  title: Text(
-                    staff.fullName,
-                    style: AppTextStyles.manrope(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  subtitle: Text(
-                    staff.role?.name ?? "",
-                    style: AppTextStyles.lexend(
-                      fontSize: 12,
-                      color: AppColors.textTertiary,
-                    ),
-                  ),
-                  onTap: () => controller.setSalaryStaff(staff),
-                );
-              },
-            ),
-          );
-        }),
-      ],
-    );
-  }
-
-  Widget _buildSelectedStaffCard(Staff staff) {
-    return Container(
-      padding: AppSpacing.all12,
-      decoration: BoxDecoration(
-        color: AppColors.paleSilver.withValues(alpha: 0.2),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: AppColors.primaryBrand.withValues(alpha: 0.2),
-        ),
-      ),
-      child: Row(
-        children: [
-          _buildStaffAvatar(staff.fullName, staff.profileUrl),
-          AppSpacing.h12,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  staff.fullName,
-                  style: AppTextStyles.manrope(
+          const InstituteLabel('Leaves & Deduction'),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: 96,
+                child: AppInputField(
+                  label: '',
+                  controller: controller.salaryLeavesDisplayController,
+                  hint: '0',
+                  readOnly: true,
+                  labelSpacing: 0,
+                  textStyle: AppTextStyles.outfit(
                     fontSize: 14,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textPrimary,
                   ),
                 ),
-                Text(
-                  staff.role?.name ?? "",
-                  style: AppTextStyles.lexend(
-                    fontSize: 11,
-                    color: AppColors.textTertiary,
+              ),
+              AppSpacing.h8,
+              Expanded(
+                child: AppInputField(
+                  label: '',
+                  controller: controller.salaryDeductionController,
+                  hint: AppStrings.deductionAmt,
+                  icon: Icons.currency_rupee_sharp,
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
                   ),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
+                  ],
+                  labelSpacing: 0,
                 ),
-              ],
-            ),
-          ),
-          IconButton(
-            onPressed: () => controller.removeSalaryStaff(),
-            icon: const Icon(
-              Icons.delete_outline_rounded,
-              color: AppColors.bohoRed,
-              size: 20,
-            ),
+              ),
+            ],
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildStaffAvatar(String name, String? profileUrl) {
-    return Container(
-      width: 40,
-      height: 40,
-      decoration: BoxDecoration(
-        color: AppColors.primaryBrand.withValues(alpha: 0.1),
-        shape: BoxShape.circle,
-      ),
-      child: profileUrl != null && profileUrl.isNotEmpty
-          ? ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: Image.network(
-                profileUrl,
-                fit: BoxFit.cover,
-                errorBuilder: (_, _, _) => _buildInitials(name),
-              ),
-            )
-          : _buildInitials(name),
-    );
-  }
-
-  Widget _buildInitials(String name) {
-    return Center(
-      child: Text(
-        getInitials(name),
-        style: AppTextStyles.manrope(
-          fontSize: 14,
-          fontWeight: FontWeight.w800,
-          color: AppColors.primaryBrand,
-        ),
-      ),
-    );
-  }
-
-  String getInitials(String name) {
-    if (name.isEmpty) return 'S';
-    List<String> names = name.split(' ');
-    if (names.length > 1) {
-      return (names[0][0] + names[names.length - 1][0]).toUpperCase();
-    }
-    return names[0][0].toUpperCase();
+      );
+    });
   }
 
   Widget _buildPaymentMethodToggle() {
@@ -338,9 +272,9 @@ class AddSalaryScreen extends GetView<StaffController> {
           AppSpacing.v12,
           Text(
             label,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 16,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               color: isSelected ? color : AppColors.textTertiary,
             ),
           ),
@@ -370,18 +304,18 @@ class AddSalaryScreen extends GetView<StaffController> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Total Disbursement',
-                    style: AppTextStyles.manrope(
+                    AppStrings.totalDisbursement,
+                    style: AppTextStyles.outfit(
                       fontSize: 16,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.textPrimary,
                     ),
                   ),
                   Text(
                     '₹$amount',
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 22,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.primaryBrand,
                     ),
                   ),
@@ -401,8 +335,8 @@ class AddSalaryScreen extends GetView<StaffController> {
                   AppSpacing.h12,
                   Expanded(
                     child: Text(
-                      'This payment will be recorded in the general ledger and deducted from the monthly payroll budget.',
-                      style: AppTextStyles.lexend(
+                      AppStrings.thisPaymentWillBeRecordedIn,
+                      style: AppTextStyles.outfit(
                         fontSize: 12,
                         color: AppColors.textSecondary,
                       ),
@@ -418,16 +352,20 @@ class AddSalaryScreen extends GetView<StaffController> {
   }
 
   Widget _buildSaveButton() {
-    return Obx(
-      () => AppButton(
-        onPressed: controller.isSaving.value
-            ? null
-            : () => controller.saveSalaryRecord(),
-        label: controller.isSaving.value ? 'Saving...' : 'Save Salary Record',
-        icon: controller.isSaving.value
-            ? null
-            : Icons.check_circle_outline_rounded,
-        isLoading: controller.isSaving.value,
+    return SafeArea(
+      top: false,
+      minimum: const EdgeInsets.only(bottom: 16),
+      child: Obx(
+        () => AppButton(
+          onPressed: controller.isSaving.value
+              ? null
+              : () => controller.saveSalaryRecord(),
+          label: controller.isSaving.value ? 'Saving...' : 'Save Salary Record',
+          icon: controller.isSaving.value
+              ? null
+              : Icons.check_circle_outline_rounded,
+          isLoading: controller.isSaving.value,
+        ),
       ),
     );
   }

@@ -2,222 +2,98 @@ class AppStrings {
   // Global
   static const String appName = 'Tuoora';
 
-  // Login Screen
-  static const String loginHeader = 'SECURE ACCESS';
-  static const String loginWelcome = 'Welcome Back';
-  static const String loginSubtitle =
-      'Step back into your clarified sanctuary of\nlearning.';
-  static const String stayAuthenticated = 'Stay authenticated on this device';
-  static const String signInButton = 'Sign in to Tuoora';
-  static const String enrolmentText = 'New to Tuoora? ';
-  static const String enrolmentLink = 'Enrolment Office';
+  // Login / Splash / Signup brand tagline
+  static const String tagLine = 'A bridge of knowledge for all.';
+  static const String rememberMe = 'Remember Me';
+  static const String signInButton = 'Sign In';
 
   // Dashboards
-  static const String studentOverviewLabel = 'STUDENT OVERVIEW';
-
   static const String instCourseManagementHeader = 'Course Management';
-  static const String instDeleteBatchTitle = 'Delete Batch';
-  static const String instDeleteBatchConfirm =
-      'Are you sure you want to delete this batch?';
-  static const String instDeleteConfirmBtn = 'Yes, Delete';
-
-  static const String currentHomework = 'Current Homework';
-  static const String homeworkTracker = 'Homework Tracker';
-  static const String latestNews = 'Latest News';
-  static const String recentUpdates = 'Recent Updates';
-  static const String viewAll = 'VIEW ALL';
-  static const String viewAllAlt = 'View All';
-
-  // Dashboard Sections
-  static const String academicProgress = 'Academic Progress';
-  static const String attendanceStatus = 'Attendance Status';
-  static const String feeSummary = 'Fee Summary';
-  static const String financialHealth = 'Financial Health';
-  static const String payNow = 'Pay Now';
-  static const String viewFeeHistory = 'View Fee History';
-
-  // Mock / Sample Strings (usually fetched from backend)
-  static const String dummyStudentGreeting = 'Hello, Julian';
-  static const String dummyStudentSubtitle =
-      'Your academic journey is looking bright\ntoday.';
-  static const String dummyParentMonitoring = 'Monitoring: Leo Jenkins';
-  static const String dummyParentClass = 'Class 4-B | Academic Year 2024';
-
-  // Institute Dashboard
-  static const String instOverview = 'Overview';
-  static const String instSummary = 'Institute Summary';
-  static const String instTotalStudents = 'Total Students';
-  static const String instPendingFees = 'PENDING FEES';
-  static const String instAttendance = 'ATTENDANCE';
-  static const String instActiveBatches = 'Active Batches';
-  static const String instUpcomingCollection = 'Upcoming Collection';
-  static const String instScheduledFor = 'Scheduled for Oct 15th';
-  static const String instHighPriority = 'HIGH PRIORITY';
-  static const String instSendReminders = 'Send Fee Reminders';
 
   // Institute Nav
   static const String instNavDashboard = 'Dashboard';
   static const String instNavStudents = 'Students';
   static const String instNavBatches = 'Batches';
   static const String instNavFees = 'Fees';
-  static const String instProfile = 'Profile';
-
-  // Institute Login
-  static const String instLoginSubtitle =
-      "Sign in to manage your institute's\nperspective.";
-  static const String instEmailLabel = 'Email or Phone Number';
-  static const String instEmailHint = 'owner@institute.edu';
-  static const String instPasswordLabel = 'Password';
-  static const String instForgotPassword = 'Forgot Password?';
-  static const String instSignInBtn = 'Sign In';
-  static const String instExpandReach = 'OR EXPAND YOUR REACH';
-  static const String instRegistrationBtn = 'Institute Registration';
-  static const String instTermsPrefix = 'By continuing, you agree to our ';
-  static const String instTerms = 'Terms of Service';
-  static const String instTermsAnd = ' and\n';
-  static const String instPrivacy = 'Privacy Policy';
-
-  // Institute Drawer
-  static const String instDrawerAdminName = 'Academic Atelier';
-  static const String instDrawerAdminRole = 'Administrator';
-  static const String instDrawerAttendance = 'Attendance';
-  static const String instDrawerReports = 'Reports';
-  static const String instDrawerUpdates = 'Updates';
-  static const String instDrawerTeacherManagement = 'Teachers';
-  static const String instDrawerNotesManagement = 'Notes';
-  static const String instDrawerExpenseManagement = 'Expenses';
-  static const String instDrawerLeadManagement = 'Leads';
-  static const String instDrawerStudentEngagement = 'Engagement';
 
   // Institute Students Registry
-  static const String instStudentRegistry = 'Student Registry';
   static const String instStudentSearchHint = 'Search by student name';
-  static const String instBadgeActive = 'ACTIVE';
-  static const String instBadgePending = 'PENDING';
+  static const String instBatchSearchHint = 'Search by batch name';
 
   // Institute Add Student
-  static const String instAddStudentTitle = 'Add Student';
-  static const String instStudentIdentity = 'Student Identity';
-  static const String instUploadPhotoDesc =
-      'Upload student photo for\ndigital ID';
-  static const String instStudentNameLabel = 'Student Name';
-  static const String instStudentNameHint = 'Full Name';
+  static const String instStudentNameLabel = 'Name';
+  static const String instStudentFullNameLabel = 'Full Name';
+  static const String instStudentNameHint = 'Enter Name';
   static const String instParentNameLabel = 'Parent Name';
-  static const String instParentNameHint = "Father or Mother's Name";
+  static const String instParentNameHint = "Enter Parent name";
   static const String instPhoneLabel = 'Phone Number';
-  static const String instPhoneHint = '+91 00000 00000';
-  static const String instGradeLabel = 'Grade / Standard';
-  static const String instGradeHint = 'Select Grade';
-  static const String instBatchAssignmentLabel = 'Batch Assignment';
-  static const String instMorningBatch = 'Morning Batch';
-  static const String instMorningTime = '08:00 AM -\n10:00 AM';
-  static const String instEveningBatch = 'Evening Batch';
-  static const String instEveningTime = '04:00 PM -\n06:00 PM';
-  static const String instFeeStructureLabel = 'Fee Structure (Initial)';
-  static const String instMonthlyFeeLabel = 'Standard Monthly\nFee';
-  static const String instMonthlyFeeAmount = '₹2,500.00';
-  static const String instEditStructureBtn = 'Edit\nStructure';
-  static const String instStudentEmailLabel = 'Student Email';
-  static const String instStudentDobLabel = 'Date of Birth';
-  static const String instSelectBatchLabel = 'Select Batch';
+  static const String instPhoneHint = 'Enter number';
+  static const String instGradeLabel = 'Graduation';
+  static const String instGradeHint = 'Enter Graduation';
+  static const String instStudentEmailLabel = 'Email';
+  static const String instStudentEmailHint = 'Enter Email';
+  static const String instStudentDobLabel = 'DOB';
+  static const String instSelectDobHint = 'Select DOB';
   static const String instFeeTransactionHistoryTitle = 'Transaction History';
-  static const String instConfirmBtn = 'Confirm and Save Student';
-  static const String instNameHint = 'Full Name';
-  static const String instGuardianHint = "Father or Mother's Name";
+  static const String instConfirmBtn = 'Save Student';
   static const String instStudentPhotoLabel = 'Student Photo';
   static const String instStudentPhotoHint =
       'Upload student photo for digital ID';
-  static const String instDiscardBtn = 'Discard Changes';
 
   // Institute Fees
   static const String instFeesTitle = 'Financial Ledger';
-  static const String instTotalCollected = 'TOTAL COLLECTED';
   static const String instCurrentMonthCollected = 'CURRENT MONTH COLLECTION';
-  static const String instTotalCollectedAmount = '₹124,500';
-  static const String instCollectedTrend = '12% vs last month';
-  static const String instTotalPending = 'TOTAL PENDING';
-  static const String instCurrentMonthPending = 'CURRENT MONTH PENDING';
-  static const String instTotalPendingAmount = '₹18,240';
-  static const String instOutstandingInvoices = '42 Outstanding Invoices';
-  static const String instFinancialReport = 'Financial Report';
-  static const String instMonthlyBreakdown = 'Monthly breakdown PDF';
   static const String instFeeRegistry = 'Student Fee Registry';
   static const String instStatusPaid = 'Paid';
-  static const String instStatusDue = 'Due';
-  static const String instStatusPending = 'Pending';
 
   // Institute Record Fee
-  static const String instRecordFeeTitle = 'Record Fee';
-  static const String instStudentInfoLabel = 'STUDENT INFORMATION';
-  static const String instSearchStudentHint = 'Search Student...';
-  static const String instRecordStatusLabel = 'STATUS';
-  static const String instStatusPartial = 'Partial';
-  static const String instFeeMonthLabel = 'Fee Month';
-  static const String instAmountLabel = 'Amount (₹)';
+  static const String instSearchStudentHint = 'Search Student';
+  static const String instAmountLabel = 'Amount';
   static const String instPaymentMethodLabel = 'Payment Method';
   static const String instPaymentCash = 'Cash';
   static const String instPaymentOnline = 'Online';
-  static const String instAutoReceiptTitle = 'Auto-generate Receipt';
-  static const String instAutoReceiptDesc =
-      'Receipt #FE-2023-1024 will be generated\nautomatically.';
-  static const String instPreviewReceipt = 'Preview Receipt';
-  static const String instSaveFeeBtn = 'Save Fee Record';
+  static const String instSaveFeeBtn = 'Save Record';
 
   // Institute Batch Details
   static const String instBatchDetailsTitle = 'Batch Details';
-  static const String instActiveBatchTag = 'ACTIVE BATCH';
-  static const String instStudentsCountLabel = 'Students';
-  static const String instFeesPaidLabel = 'Fees Paid';
-  static const String instTotalCollectionLabel = 'Total Coll.';
-  static const String instStudentEnrollmentLabel = 'Student Enrollment';
-  static const String instAddStudentToBatch = 'Add Student to Batch';
-  static const String instAttendanceRateLabel = 'Attendance';
-  static const String instAverageAttendance =
-      'Average attendance for this batch over\nthe last 30 days.';
-  static const String instStudentListLabel = 'Student List';
+  static const String instFeesPaidLabel = 'Collection';
+  static const String instTotalCollectionLabel = 'Total Fee';
 
   // Institute Add/Edit Batch
   static const String instEditBatchTitle = 'Edit Batch';
   static const String instAddBatchTitle = 'Add Batch';
   static const String instBatchNameLabelAlt = 'Batch Name';
-  static const String instBatchNameHint = 'e.g., Advanced Algebra - Section A';
+  static const String instBatchNameHint = 'Enter batch name';
   static const String instBatchSubjectLabel = 'Subject';
-  static const String instBatchSubjectHint = 'e.g., Advanced Mathematics';
-  static const String instBatchDescLabel = 'Batch Description';
-  static const String instBatchDescHint =
-      'Enter batch details or topics covered...';
-  static const String instBatchFeeLabelAlt = 'Batch Fee (₹)';
-  static const String instBatchFeeHint = 'e.g., 2500';
-  static const String instScheduleSettings = 'Schedule Settings';
-  static const String instTimeSlot = 'TIME SLOT';
+  static const String instBatchSubjectHint = 'Enter subject';
+  static const String instBatchDescLabel = 'Description';
+  static const String instBatchDescHint = 'Enter batch description';
+  static const String instBatchFeeLabelAlt = 'Fees (₹)';
+  static const String instBatchFeeHint = 'Enter fee';
+  static const String instTimeSlot = 'Time Slot';
   static const String instChangeBtn = 'Change';
-  static const String instActiveDaysLabel = 'ACTIVE DAYS';
-  static const String instSaveBatchBtn = 'Save Batch Details';
+  static const String instActiveDaysLabel = 'Days';
+  static const String instBatchClassroomLabel = 'Classroom / Venue';
+  static const String instBatchClassroomHint = 'Enter class room';
+  static const String instBatchAssignedStaffLabel = 'Assigned Staff';
+  static const String instBatchAssignedStaffHint = 'Select Staff';
+  static const String instSaveBatchBtn = 'Save Batch';
 
   // Institute Batch Resources
   static const String instBatchResourcesTitle = 'Batch Resources';
-  static const String instNoResources = 'No resources found';
   static const String instUploadContentHeader = 'Upload Content';
-  static const String instResourceSubjectLabel = 'Subject';
-  static const String instResourceDescriptionLabel = 'Description';
-  static const String instAttachmentLabel = 'Attachment';
   static const String instAttachFileHint = 'Attach Image, Video or Document';
-  static const String instCancelBtn = 'Cancel';
   static const String instUploadBtn = 'Upload';
   static const String instResourceDetailTitle = 'Resource View';
   static const String instDownloadResourceBtn = 'Download Resource';
-  static const String instPreviewNotAvailable =
-      'Preview not available for this document';
 
   // Institute Add Homework
   static const String instAddHomeworkTitle = 'Add Homework';
   static const String instHomeworkSubjectLabel = 'Subject Title';
-  static const String instHomeworkSubjectHint = 'e.g., Advanced Physics';
   static const String instDueDateLabel = 'Due Date';
-  static const String instDueDateHint = 'mm/dd/yyyy';
+  static const String instDueDateHint = 'Select date';
   static const String instInstructionDetailsLabel = 'Instruction Details';
-  static const String instInstructionDetailsHint =
-      'Please complete the problems...';
+  static const String instInstructionDetailsHint = 'Enter instruction detail';
   static const String instResourceMaterialsLabel = 'Resource Materials';
   static const String instAddAttachmentBtn = 'Add Attachment';
   static const String instAddAttachmentDesc = 'Image or PDF documents';
@@ -225,148 +101,48 @@ class AppStrings {
   static const String instSearchAssignmentsHint = 'Search assignments...';
   static const String instActiveLabel = 'ACTIVE';
   static const String instClosedLabel = 'CLOSED';
-  static const String instDueLabel = 'Due';
-  static const String instEndedLabel = 'Ended';
   static const String instSubmissionsLabel = 'Submissions';
   static const String instHomeworkRatingTitle = 'Homework Rating';
-  static const String instSaveAllRatingsBtn = 'Save All Ratings';
-  static const String instGradingProgressLabel = 'Grading Progress';
+  static const String instGradingProgressLabel = 'Assignment Submitted';
   static const String instSubmittedTag = 'SUBMITTED';
   static const String instFilterAll = 'All';
   static const String instBatchHomeworkTitle = 'Batch Homework';
   static const String instFilterSubmitted = 'Submitted';
-  static const String instFilterMissing = 'Missing';
-  static const String instFilterLate = 'Late';
   static const String instScoreLabel = 'Score';
-  static const String instSendReminderBtn = 'Send Reminder';
-
-  // Institute Batches Overview
-  static const String instActiveBatchesTitle = 'Active Batches';
-  static const String instActiveBatchesSubtitle =
-      'Managing current student cohorts and scheduling';
-  static const String instStatusHighCapacity = 'HIGH CAPACITY';
-  static const String instStatusFull = 'FULL';
-  static const String instStatusOpen = 'OPEN';
-  static const String instAssignBtn = 'Assign';
-  static const String instEditBtn = 'Edit';
-  static const String instBatchAnalytics = 'Batch Analytics';
-  static const String instRealTimeResource = 'Real-time resource utilization';
-  static const String instOverallCapacity = 'OVERALL CAPACITY';
-  static const String instSeatOccupancy =
-      '110 / 130 seats occupied across active sessions';
-  static const String instAvgAttendanceLabelAlt = 'AVG. ATTENDANCE';
-  static const String instResourcesLabel = 'RESOURCES';
-  static const String instResourceOptimal = 'Optimal';
 
   // Institute Attendance Marking
-  static const String instAttendanceMarkingHeading = 'ATTENDANCE MARKING';
   static const String instAttendanceTitle = 'Attendance';
-  static const String instSelectActiveBatchHeading = 'SELECT ACTIVE BATCH';
-  static const String instSelectClassDesc =
-      'Select a class to start marking student attendance.';
-  static const String instSampleDateLabel = 'October 24, 2023';
-  static const String instBatchPhysics = 'Advanced Physics';
-  static const String instBatchChemistry = 'Organic Chem';
-  static const String instBatchMathematics = 'Calculus II';
-  static const String instBatchHistory = 'Modern History';
-
-  // Institute Mark Attendance
-  static const String instMarkAttendanceTitle = 'Mark Attendance';
-  static const String instMarkAllPresent = 'Mark All Present';
-  static const String instSubmitAttendance = 'Submit Attendance';
-  static const String instSearchStudentHintAlt =
-      'Search student by name or ID...';
-  static const String instStatusPresentRaw = 'PRESENT';
-  static const String instStatusAbsentRaw = 'ABSENT';
 
   // Institute Student Profile
   static const String instStudentProfileTitle = 'Student Profile';
-  static const String instAcademicContactInfo =
-      'Academic & Contact Information';
-  static const String instBatchNameLabel = 'BATCH NAME';
-  static const String instAdmissionDateLabel = 'DATE OF ADMISSION';
-  static const String instGuardianNameLabel = 'GUARDIAN NAME';
-  static const String instProfilePhoneLabel = 'PHONE NUMBER';
-  static const String instGuardianPhoneLabel = 'GUARDIAN PHONE NUMBER';
-  static const String instResAddressLabel = 'RESIDENTIAL ADDRESS';
-  static const String instFeeBalanceHeading = 'Fee Balance';
-  static const String instCurrentAcadYear = 'Current academic year';
-  static const String instAllDuesCleared = 'All Dues Cleared';
-  static const String instViewReceipts = 'View Receipts';
-  static const String instEditProfile = 'Edit Profile';
-  static const String instDeleteStudent = 'Delete Student';
 
   // Institute Edit Profile
   static const String instChangeLogo = 'Change Logo';
+  static const String instLogo = ' Institute Logo';
   static const String instInstituteNameLabel = 'Institute Name';
   static const String instOwnerNameLabel = 'Owner Name';
   static const String instContactEmailLabel = 'Contact Email';
-  static const String instPhoneNumberLabel = 'Phone Number';
-  static const String instSecurityNote = 'Security Note';
-  static const String instSecurityNoteDesc =
-      'Updating your email will require a one-time verification. Ensure your phone number is correct for WhatsApp integration features.';
-  static const String instSaveProfileChanges = 'Save Profile Changes';
-
-  // Institute Profile View
-  static const String instAccountManagement = 'Account Management';
-  static const String instPasswordSecurity = 'Password & Security';
-  static const String instUpdateCredentials = 'Update credentials and 2FA';
-  static const String instPrivacySettings = 'Privacy Settings';
-  static const String instManageVisibility =
-      'Manage visibility and data sharing';
-  static const String instNotificationPrefs = 'Notification Preferences';
-  static const String instEmailSmsSettings = 'Email, SMS and push settings';
-  static const String instSignOutLabel = 'Sign Out';
-  static const String instTerminateSession = 'Securely terminate session';
-
-  // Plan Details
-  static const String instActivePlan = 'ACTIVE PLAN';
-  static const String instInstitutionPremium = 'Institution Premium';
-  static const String instMemberSince = 'Member since';
-  static const String instNextRenewal = 'Next Renewal';
-  static const String instMonthlyUsage = 'Monthly Usage';
-  static const String instUpgradePlanBtn = 'Upgrade/Renew Plan';
-  static const String instViewBillingHistory =
-      'VIEW BILLING HISTORY AND INVOICES';
 
   // Institute Security
-  static const String instAccountSecurityTitle = 'Security';
-  static const String instSecurityBreadcrumb = 'Account > Security';
-  static const String instSecurityDesc =
-      'Manage your account protection, password requirements, and multi-factor authentication settings.';
-  static const String instUpdatePasswordLabel = 'Update Password';
   static const String instCurrentPasswordLabel = 'Current Password';
   static const String instNewPasswordLabel = 'New Password';
   static const String instConfirmPasswordLabel = 'Confirm New Password';
   static const String instUpdatePasswordBtn = 'Update Password';
-  static const String instLastChangedPrefix = 'Last changed:';
-  static const String instActiveSessions = 'Active Sessions';
-  static const String instLogoutAllDevices = 'Log out all devices';
-  static const String instTwoFactorAuth = 'Two-Factor Auth';
-  static const String instTwoFactorDesc =
-      'Add an extra layer of security to your institute\'s data by requiring a code from your phone.';
-  static const String instSmsActive = 'SMS verification active';
-  static const String instSetupAuthApp = 'Setup Authenticator App';
-  static const String instProSecurityTips = 'Pro-Security Tips';
-  static const String instSecureInfrastructure = 'SECURE INFRASTRUCTURE';
 
   // Institute Subscription
-  static const String instSubscriptionPlan = 'Subscription Plan';
-  static const String instCurrentPremium = 'Premium';
-  static const String instChooseYourPlan = 'Choose your plan';
-  static const String instUsageCapacity = 'Usage Capacity';
-  static const String instStudentsEnrolledSuffix = 'students enrolled';
-  static const String instIncludedBenefits = 'Included Benefits';
   static const String instAutomatedBilling = 'Automated Billing';
   static const String instAutoBillingDesc =
-      'Real-time invoice generation & SMS alerts';
+      'Streamline your finance department with automated invoices.';
   static const String instPrioritySupport = 'Priority Support';
   static const String instPrioritySupportDesc =
-      'Dedicated manager available 24/7';
-  static const String instWhatsAppOption = 'WhatsApp Integration';
-  static const String instWhatsAppOptionDesc = 'Direct fee reminders via API';
-  static const String instRecentBilling = 'Recent Billing';
-  static const String instRenewUpgradeBtn = 'Renew or Upgrade Plan';
+      '24/7 access to our specialized support engineers.';
+  static const String instWhatsAppOptionDesc =
+      'Keep parents and students informed via automated WhatsApp.';
+  static const String instRecentBilling = 'Recent Billing History';
+  static const String instChooseBestPlan =
+      'Choose the best plan for your campus';
+  static const String instScalableSolutions =
+      'Scalable solutions for individual schools to large university networks.';
 
   // Institute WhatsApp Integration
   static const String instWhatsAppIntegration = 'WhatsApp Integration';
@@ -392,72 +168,25 @@ class AppStrings {
   static const String instHolidayNotices = 'Holiday Notices';
   static const String instHolidayNoticesDesc =
       'General Institute announcements';
-  static const String instImpactQuote =
-      '"Automated messaging reduces administrative calls by 40%"';
-
-  // Parent Attendance
-  static const String academicIntegrity = 'ACADEMIC INTEGRITY';
-  static const String overallAttendance = 'Overall Attendance';
-  static const String attendanceConsistencyQuote =
-      'Consistent presence leads to academic excellence. Keep up the great momentum!';
-  static const String thisTerm = 'THIS TERM';
-  static const String viewFullStatement = 'View Full Statement';
-  static const String attendanceStatusPresent = 'PRESENT';
-  static const String attendanceStatusAbsent = 'ABSENT';
-  static const String attendanceSubtitlePresent = 'Attended all sessions';
-  static const String attendanceSubtitleAbsent = 'Unexcused Absence';
-
-  // Parent Reports
-  static const String academicSynthesis = 'Academic Synthesis';
-  static const String reportTermSubtitle =
-      'Comprehensive performance analysis for Term 2, 2024';
-  static const String exportPdf = 'Export PDF';
-  static const String financialOverviewLabel = 'FINANCIAL OVERVIEW';
-  static const String partialPayment = 'PARTIAL PAYMENT';
-  static const String feeStatus = 'Fee Status';
-  static const String engagementLabel = 'ENGAGEMENT';
-  static const String attendanceInsights = 'Attendance Insights';
-  static const String academicSuccessLabel = 'ACADEMIC SUCCESS';
-  static const String homeworkCompletionRate = 'Homework Completion Rate';
-  static const String subjectBreakdown = 'Subject Breakdown';
-  static const String highCorrelationInsight =
-      'Insight: High Correlation Detected';
 
   // Institute Leads Management
   static const String instLeadsManagementTitle = 'Leads Management';
   static const String instSearchLeadsHint = 'Search leads by name or course...';
-  static const String instFilterByDateRange = 'Filter by Date Range';
   static const String instCallBtn = 'Call';
   static const String instAppliedSuffix = 'Applied';
-  static const String instAppliedYesterday = 'Applied yesterday';
   static const String instLeadDetailsTitle = 'Lead Details';
   static const String instAddLeadTitle = 'Add Lead';
   static const String instEditLeadTitle = 'Edit Lead';
-  static const String instLeadInfoHeading = 'Lead Information';
-  static const String instLeadInfoSubtitle =
-      'Update contact and course preferences';
-  static const String instFullNameLabel = 'FULL NAME';
-  static const String instFullNameHint = 'e.g. Alex Rivera';
-  static const String instEmailAddressLabel = 'EMAIL ADDRESS';
-  static const String instEmailAddressHint = 'alex@company.com';
-  static const String instPhoneNumberLabelAlt = 'PHONE NUMBER';
-  static const String instPhoneNumberHint = '+1 (555) 000-0000';
-  static const String instAddressLabel = 'ADDRESS';
-  static const String instAddressHint = 'e.g. 123 Business Way, Suite 100';
-  static const String instReferenceLabel = 'REFERENCE';
+  static const String instEmailAddressLabel = 'Email Address';
+  static const String instAddressLabel = 'Address';
+  static const String instAddressHint = 'Enter address';
+  static const String instReferenceLabel = 'Reference';
   static const String instReferenceHint =
-      'e.g. LinkedIn, Referral, Google Search';
-  static const String instCourseSelectionHeading = 'COURSE SELECTION';
-  static const String instCourseSelectionLabel = 'COURSE SELECTION';
+      'e.g. LinkedIn, Social Media, Referral';
+  static const String instCourseSelectionLabel = 'Course Selection';
   static const String instCourseSelectionHint = 'Enter course name';
-  static const String instInteractionNotesHeading = 'INTERACTION NOTES';
-  static const String instInteractionNotesLabel = 'INTERACTION NOTES';
-  static const String instInteractionNotesHint =
-      'Add any specific details or past interactions with the lead...';
   static const String instSaveLeadBtn = 'Save Lead';
-  static const String instActiveProspectTag = 'ACTIVE PROSPECT';
   static const String instInteractionHistoryHeading = 'INTERACTION HISTORY';
-  static const String instToday = 'TODAY';
 
   // Institute Notes Management
   static const String instNotesManagementTitle = 'My Notes';
@@ -469,7 +198,6 @@ class AppStrings {
   static const String instNoteContentLabel = 'Content';
   static const String instNoteContentHint = 'Write your note here...';
   static const String instSaveNoteBtn = 'Save Note';
-  static const String instNoNotesFound = 'No notes found';
   static const String instDeleteNoteTitle = 'Delete Note';
   static const String instDeleteNoteConfirm =
       'Are you sure you want to delete this note?';
@@ -488,13 +216,8 @@ class AppStrings {
       'You\'re all caught up — no pending work right now.';
   static const String studentAssignmentsEmptyCompleted =
       'No completed assignments to show yet.';
-  static const String studentDueToday = 'DUE TODAY';
-  static const String studentDueTomorrow = 'DUE TOMORROW';
   static const String studentTodayPill = 'Today';
   static const String studentTomorrowPill = 'Tomorrow';
-  static const String studentSubjectMathematics = 'MATHEMATICS';
-  static const String studentSubjectPhysics = 'PHYSICS';
-  static const String studentSubjectChemistry = 'CHEMISTRY';
   static const String studentDonePill = 'Done';
 
   // Student — Assignment detail screen
@@ -502,8 +225,6 @@ class AppStrings {
   static const String studentAssignmentDetailInstructions = 'INSTRUCTIONS';
   static const String studentAssignmentDetailAttachments = 'ATTACHMENTS';
   static const String studentAssignmentDetailAssignedBy = 'Assigned by:';
-  static const String studentAssignmentDetailCompletedPill = 'Completed';
-  static const String studentAssignmentDetailPendingTitle = 'Pending';
   static const String studentAssignmentAttachmentDocument = 'Document';
   static const String studentAssignmentAttachmentImage = 'Image';
   static const String studentAssignmentAttachmentVideo = 'Video';
@@ -511,9 +232,7 @@ class AppStrings {
 
   // Student — Attachment preview screen.
   static const String studentAttachmentDownload = 'Download';
-  static const String studentAttachmentShare = 'Share';
   static const String studentAttachmentDownloadStarted = 'Downloading…';
-  static const String studentAttachmentShareStarted = 'Sharing…';
   static const String studentAttachmentNoneSelected = 'No attachment selected';
 
   // Student — Fees tab.
@@ -521,15 +240,10 @@ class AppStrings {
   static const String studentFeesPaidPercent = 'PAID';
   static const String studentFeesBilledAcross = 'billed across';
   static const String studentFeesMonths = 'months';
-  static const String studentFeesLegendPaid = 'PAID';
   static const String studentFeesLegendPending = 'PENDING';
   static const String studentFeesPayNowPrefix = 'Pay ₹';
   static const String studentFeesPayNowSuffix = 'now';
   static const String studentFeesStatementsTitle = 'STATEMENT';
-  static const String studentFeesPillPending = 'Pending';
-  static const String studentFeesPillPaid = 'Paid';
-  static const String studentFeesDuePrefix = 'Due';
-  static const String studentFeesPaidPrefix = 'Paid';
 
   // Student — Receipt screen.
   static const String studentReceiptTitle = 'Receipt';
@@ -537,30 +251,685 @@ class AppStrings {
   static const String studentReceiptRollNo = 'Roll no.';
   static const String studentReceiptInstitute = 'Institute';
   static const String studentReceiptInvoiceNo = 'Invoice no.';
-  static const String studentReceiptPeriod = 'Period';
-  static const String studentReceiptDueDate = 'Due date';
-  static const String studentReceiptLateFee = 'Late fee';
-  static const String studentReceiptDownload = 'Download';
   static const String studentReceiptContact = 'Contact';
 
   // Student — Pay Fees screen.
   static const String studentPayFeesTitle = 'Pay fees';
   static const String studentPayFeesOutstanding = 'TOTAL OUTSTANDING';
   static const String studentPayFeesScanWith = 'SCAN WITH ANY UPI APP';
-  static const String studentPayFeesOpenInGooglePay = 'Open in Google Pay';
-  static const String studentPayFeesAppPhonePe = 'PhonePe';
-  static const String studentPayFeesAppPaytm = 'Paytm';
-  static const String studentPayFeesAppAnyUpi = 'Any UPI';
+  static const String studentPayFeesOpenInAnyUpi = 'Open in Any UPI App';
   static const String studentPayFeesHowItWorks = 'HOW IT WORKS';
   static const String studentPayFeesStep1 =
-      'Tap "Open in Google Pay" or scan the QR with any UPI app.';
+      'Tap "Open in Any UPI App" or scan the QR with any UPI app.';
   static const String studentPayFeesStep2Prefix = 'Confirm the amount';
   static const String studentPayFeesStep2Suffix = 'and pay to';
   static const String studentPayFeesStep3 =
       'The institute will mark your fee as paid once received — usually '
       'within a few minutes.';
-  static const String studentPayFeesDisclaimer =
-      'Payments go directly to the institute\'s UPI account. Tuoora '
-      'never holds your money.';
   static const String studentPayFeesCopyHint = 'UPI handle copied';
+  static const String studentPayFeesUpiUnavailableTitle =
+      'Payments not set up yet';
+  static const String studentPayFeesUpiUnavailableBody =
+      "Your institute hasn't configured UPI payments yet. Please ask them to set up a UPI QR code so you can pay fees online.";
+  static const String studentPayFeesUpiIdLabel = 'UPI ID';
+  static const String studentPayFeesUpiOptional =
+      'UPI ID not provided. Use the QR code above to pay.';
+
+  // Shared / common labels and messages
+  static const String validationErrorsBelow =
+      'Please correct the highlighted errors';
+  static const String labelCamera = 'Camera';
+  static const String labelGallery = 'Gallery';
+  static const String downloadFailed = 'Download failed';
+  static const String hintEnterEmail = 'Enter email';
+  static const String labelDate = 'Date';
+  static const String hintEnterDescription = 'Enter description';
+  static const String errFailedLoadProfile = 'Failed to load profile';
+  static const String labelReports = 'Reports';
+  static const String hintPasswordDots = '••••••••';
+  static const String labelAddressLine1 = 'Address Line 1';
+  static const String labelAddressLine2 = 'Address Line 2';
+  static const String labelCancel = 'Cancel';
+  static const String labelCategory = 'Category';
+  static const String labelChangePassword = 'Change Password';
+  static const String labelCity = 'City';
+  static const String labelCountry = 'Country';
+  static const String labelDeleteChat = 'Delete chat';
+  static const String labelDownloading = 'Downloading';
+  static const String hintEnterNewPassword = 'Enter new password';
+  static const String errFailedLoadAttendance = 'Failed to load attendance';
+  static const String errFailedLoadFees = 'Failed to load fees';
+  static const String errFailedPickImage = 'Failed to pick image';
+  static const String labelFeeCollectionReport = 'Fee Collection Report';
+  static const String labelNotNow = 'Not Now';
+  static const String labelNotifications = 'Notifications';
+  static const String msgOtpResent = 'OTP resend';
+  static const String labelPincode = 'Pincode';
+  static const String labelReceipts = 'Receipts';
+  static const String labelRecording = 'Recording…';
+  static const String labelRemove = 'Remove';
+  static const String labelRetry = 'Retry';
+  static const String hintSelectCategory = 'Select Category';
+  static const String labelState = 'State';
+  static const String labelStudyMaterial = 'Study material';
+  static const String labelSubmitPaymentProof = 'Submit Payment Proof';
+  static const String labelTapToRetry = 'Tap to retry';
+  static const String hintTypeMessage = 'Type a message...';
+
+  static const String feeHistory = 'Fee History';
+  static const String instituteAccountBlocked = 'Institute Account Blocked';
+  static const String logout = 'Logout';
+  static const String yourRenewalRequestIsUnderReview =
+      'Your renewal request is under review. Adding new records will be ';
+  static const String renewalUnderReview = 'Renewal Under Review';
+  static const String subscriptionExpired = 'Subscription Expired';
+  static const String yourSubscriptionHasExpiredSoAdding =
+      'Your subscription has expired, so adding new records is disabled. ';
+  static const String renewNow = 'Renew Now';
+  static const String attendanceSubmitted = 'Attendance submitted';
+  static const String failedToSubmitAttendance = 'Failed to submit attendance';
+  static const String failedToLoadStaffList = 'Failed to load staff list';
+  static const String deleteBatch = 'Delete Batch';
+  static const String areYouSureYouWantTo =
+      'Are you sure you want to delete this batch?';
+  static const String batchDeletedSuccessfully = 'Batch deleted';
+  static const String deleted = 'Deleted';
+  static const String studentAssignmentIsCurrentlyManagedVia =
+      'Student assignment is currently managed via Student Profile';
+  static const String notice = 'Notice';
+  static const String studentRemoved = 'Student removed';
+  static const String failedToRemoveStudent = 'Failed to remove student';
+  static const String invalidRecipient = 'Invalid recipient';
+  static const String cannotRetryTheOriginalFileIs =
+      'Cannot retry — the original file is no longer on this device. ';
+  static const String maximumSizeLimit = 'Maximum size limit';
+  static const String couldNotStartRecording = 'Could not start recording';
+  static const String microphonePermissionNeeded =
+      'Microphone permission needed';
+  static const String enableMicrophone = 'Enable Microphone';
+  static const String microphoneAccessIsOffForThis =
+      'Microphone access is off for this app. Enable it from Settings to send voice messages.';
+  static const String openSettings = 'Open Settings';
+  static const String couldNotOpenSettings = 'Could not open settings';
+  static const String couldNotFinishRecording = 'Could not finish recording';
+  static const String invalidConversation = 'Invalid conversation';
+  static const String conversationDeleted = 'Conversation deleted';
+  static const String thisConversationWasDeleted =
+      'This conversation was deleted';
+  static const String expenseAdded = 'Expense added';
+  static const String homeworkCreatedSuccessfully = 'Homework created';
+  static const String noSubmissionsToRate = 'No submissions to rate';
+  static const String ratingsSubmitted = 'Ratings submitted';
+  static const String failedToSubmitRatings = 'Failed to submit ratings';
+  static const String failedToLoadStudents = 'Failed to load students';
+  static const String profileUpdated = 'Profile updated';
+  static const String failedToFetchSubscriptionData =
+      'Failed to fetch subscription data';
+  static const String leadCreatedSuccessfully = 'Lead created';
+  static const String leadUpdatedSuccessfully = 'Lead updated';
+  static const String leadDeletedSuccessfully = 'Lead deleted';
+  static const String interactionNoteAddedSuccessfully =
+      'Interaction note added';
+  static const String noteUpdatedSuccessfully = 'Note updated';
+  static const String noteCreatedSuccessfully = 'Note created';
+  static const String noteDeletedSuccessfully = 'Note deleted';
+  static const String feeRecordCreatedAndCollectedSuccessfully =
+      'Fee record created and collected';
+  static const String failedToLoadFeeReport = 'Failed to load fee report';
+  static const String failedToLoadAttendanceReport =
+      'Failed to load attendance report';
+  static const String failedToLoadPerformanceReport =
+      'Failed to load performance report';
+  static const String failedToLoadBatchDetails = 'Failed to load batch details';
+  static const String resourceDeletedSuccessfully = 'Resource deleted';
+  static const String onlyImageVideoAndDocumentFiles =
+      'Only image, video and document files are allowed.';
+  static const String unsupportedFileType = 'Unsupported file type';
+  static const String fileTooLarge = 'File too large';
+  static const String resourceUploadedSuccessfully = 'Resource uploaded';
+  static const String passwordUpdated = 'Password updated';
+  static const String selectLogoSource = 'Select Logo Source';
+  static const String registrationFailed = 'Registration Failed';
+  static const String otpVerifiedSuccessfully = 'OTP verified.';
+  static const String verificationFailed = 'Verification Failed';
+  static const String profileCreatedSuccessfully = 'Profile created';
+  static const String setupFailed = 'Setup Failed';
+  static const String salaryRecordSavedSuccessfully = 'Salary record saved';
+  static const String attendanceLoggedSuccessfully = 'Attendance logged';
+  static const String failedToLoadSalaryPreview =
+      'Failed to load salary preview';
+  static const String staffUpdatedSuccessfully = 'Staff updated';
+  static const String staffCreatedSuccessfully = 'Staff created';
+  static const String staffDeletedSuccessfully = 'Staff deleted';
+  static const String reminderSent = 'Reminder Sent';
+  static const String onceYouHaveCompletedThePayment =
+      'Once you have completed the payment, submit your transaction ';
+  static const String submitDetails = 'Submit Details';
+  static const String notYet = 'Not Yet';
+  static const String yourRenewalRequestHasBeenSubmitted =
+      'Your renewal request has been submitted. We will review it shortly.';
+  static const String pleaseSelectABatchForThis =
+      'Please select a batch for this update.';
+  static const String updateBroadcastedSuccessfully = 'Update broadcasted';
+  static const String enterAllCredentials = 'Enter all credentials';
+  static const String invalidPhoneNumber = 'Invalid phone number';
+  static const String settingsSaved = 'Settings saved';
+  static const String failedToSaveSettings = 'Failed to save settings';
+  static const String enterNoteTitle = 'Enter note title';
+  static const String enterNoteDescription = 'Enter note description';
+  static const String enterName = 'Enter name';
+  static const String department = 'Department';
+  static const String employmentType = 'Employment Type';
+  static const String k000 = '0.00';
+  static const String profilePhoto = 'Profile Photo';
+  static const String updateProfessionalInformationAndProfilePicture =
+      'Update professional information and profile picture';
+  static const String selectDepartment = 'Select Department';
+  static const String addExpense = 'Save Expense';
+  static const String enterAmount = 'Enter amount';
+  static const String addSalary = 'Add Salary';
+  static const String paymentDate = 'Payment Date';
+  static const String salaryAmount = 'Salary Amount';
+  static const String notesOptional = 'Notes (OPTIONAL)';
+  static const String enterOptionalNote = 'Enter optional note';
+  static const String deductionAmt = 'Deduction Amt';
+  static const String totalDisbursement = 'Total Disbursement';
+  static const String thisPaymentWillBeRecordedIn =
+      'This payment will be recorded in the general ledger and deducted from the monthly payroll budget.';
+  static const String studentsAssigned = 'Students assigned';
+  static const String failedToAssignStudents = 'Failed to assign students';
+  static const String assignToBatch = 'Assign to Batch';
+  static const String searchAndAddStudentsToThis =
+      'Search and add students to this batch';
+  static const String noStudentsSelectedYet = 'No students selected yet';
+  static const String enterFee = 'Enter Fee';
+  static const String attendanceManagement = 'Attendance Management';
+  static const String noRecordsFound = 'No Records Found';
+  static const String noAttendanceLogsFoundForThis =
+      'No attendance logs found for this month.';
+  static const String attendanceReport = 'Attendance Report';
+  static const String noAttendanceDataAvailable =
+      'No attendance data available';
+  static const String overallAttendancePercentage =
+      'Overall Attendance Percentage';
+  static const String homework = 'Homework';
+  static const String resources = 'Resources';
+  static const String studentBreakdown = 'Student Breakdown';
+  static const String attendanceRate = 'Attendance Rate';
+  static const String averageScore = 'Average Score';
+  static const String noResourcesFound = 'No resources found';
+  static const String enterTitle = 'Enter title';
+  static const String batchStudents = 'Batch Students';
+  static const String assignStudent = 'Assign Student';
+  static const String totalEnrolled = 'TOTAL ENROLLED';
+  static const String searchEnrolledStudents = 'Search enrolled students...';
+  static const String noStudentsFound = 'No students found';
+  static const String removeStudent = 'Remove Student';
+  static const String faculty = 'Faculty: ';
+  static const String billingHistory = 'Billing History';
+  static const String chats = 'Chats';
+  static const String noChatsFound = 'No Chats Found';
+  static const String startANewConversationToSee =
+      'Start a new conversation to see your chats here.';
+  static const String searchChats = 'Search chats...';
+  static const String tapToStartChatting = 'Tap to start chatting';
+  static const String typeAMessageToStartYour =
+      'Type a message to start your conversation.';
+  static const String chatMessagesAreYouSureYouWantTo =
+      'Are you sure you want to delete your chat with ';
+  static const String selectMember = 'Select Member';
+  static const String noMembersFound = 'No Members Found';
+  static const String weCouldnTFindAnyMembers =
+      'We couldn\'t find any members matching your search.';
+  static const String searchMembers = 'Search members...';
+  static const String createUpdate = 'Create Update';
+  static const String topic = 'Topic';
+  static const String enterTopic = 'Enter topic';
+  static const String messageContent = 'Message Content';
+  static const String writeYourMessageHere = 'Write your message here...';
+  static const String recipient = 'Recipient';
+  static const String targetAudience = 'Target Audience';
+  static const String selectBatch = 'Select Batch';
+  static const String noBatchesFound = 'No batches found';
+  static const String addAttachmentImagePdf = 'Add Attachment (Image/PDF)';
+  static const String editInstituteProfile = 'Edit Institute Profile';
+  static const String instituteInformation = 'INSTITUTE INFORMATION';
+  static const String saveProfileChanges = 'Save Changes';
+  static const String expenseAnalysis = 'Expense Analysis';
+  static const String categoriesBreakdown = 'Categories Breakdown';
+  static const String noDataForThisMonth = 'No Data for this month';
+  static const String addExpensesToSeeTheAnalysis =
+      'Add expenses to see the analysis.';
+  static const String totalSpending = 'Total Spending';
+  static const String expensesOverview = 'Expenses Overview';
+  static const String noExpensesFound = 'No expenses found';
+  static const String noReportDataAvailable = 'No report data available';
+  static const String totalCollectionAcrossBatches =
+      'Total Collection Across Batches';
+  static const String pastTransactions = 'Past Transactions';
+  static const String totalFeesCollected = 'Total Fees Collected';
+  static const String status = 'Status';
+  static const String k1245000 = '₹12,450.00';
+  static const String active = 'Active';
+  static const String noFeeRecordsFound = 'No fee records found';
+  static const String forgotPassword = 'Forgot Password';
+  static const String enterYourRegisteredEmailAddressAnd =
+      'Enter your registered email address and we\'ll send you an OTP to reset your password.';
+  static const String sendResetCode = 'Send Reset Code';
+  static const String submitRatings = 'Submit Ratings';
+  static const String confirmNewPassword = 'Confirm new password';
+  static const String notification = 'Notification';
+  static const String noNotificationsYet = 'No notifications yet';
+  static const String verify = 'Verify';
+  static const String resendOtp = 'Resend OTP';
+  static const String checkYourEmail = 'CHECK YOUR EMAIL';
+  static const String xxxxxx = 'XXXXXX';
+  static const String completeSetup = 'Complete Setup';
+  static const String enterAddressLine1 = 'Enter address line 1';
+  static const String enterAddressLine2 = 'Enter address line 2';
+  static const String enterCity = 'Enter city';
+  static const String enterState = 'Enter state';
+  static const String enterCountry = 'Enter country';
+  static const String enterPincode = 'Enter pincode';
+  static const String finish = 'Finish';
+  static const String instituteProfile = 'Institute Profile';
+  static const String updateYourLoginCredentials =
+      'Update your login credentials';
+  static const String subscription = 'Subscription';
+  static const String manageYourActivePlan = 'Manage your active plan';
+  static const String automateAlertsViaMetaApi = 'Automate alerts via Meta API';
+  static const String termsConditions = 'Terms & Conditions';
+  static const String readOurTermsOfService = 'Read our terms of service';
+  static const String comingSoon = 'Coming soon';
+  static const String privacyPolicy = 'Privacy Policy';
+  static const String learnHowWeProtectYourData =
+      'Learn how we protect your data';
+  static const String helpCenter = 'Help Center';
+  static const String getAssistanceAndFaqs = 'Get assistance and FAQs';
+  static const String urlPrivacyPolicy = 'https://tuoora.com/privacy-policy';
+  static const String urlTermsConditions =
+      'https://tuoora.com/terms-conditions';
+  static const String urlInstituteSubscription =
+      'https://tuoora.com/institute/subscription';
+  static const String errFailedOpenLink = 'Could not open the link';
+  static const String subscriptionManageOnWebTitle =
+      'Manage Subscription on Web';
+  static const String subscriptionManageOnWebMessage =
+      'For subscription plans, renewal, and billing, please visit our website. We will open it in your default browser.';
+  static const String subscriptionOpenWebButton = 'Open in Browser';
+  static const String signOutOfYourAccount = 'Sign out of your account';
+  static const String instituteProfileAreYouSureYouWantTo =
+      'Are you sure you want to log out from your account?';
+  static const String enterInstituteName = 'Enter institute name';
+  static const String enterOwnerName = 'Enter owner name';
+  static const String createAccount = 'Create Account';
+  static const String alreadyHaveAnAccount = 'Already have an account? ';
+  static const String subscriptionPlans = 'Subscription Plans';
+  static const String failedToLoadSubscriptionData =
+      'Failed to load subscription data.';
+  static const String latestBilling = 'LATEST BILLING';
+  static const String updates = 'Updates';
+  static const String noUpdatesFound = 'No Updates Found';
+  static const String broadcastYourFirstUpdateToStudents =
+      'Broadcast your first update to students and parents to keep them informed.';
+  static const String viewFile = 'VIEW FILE';
+  static const String target = 'TARGET: ';
+  static const String viewFileAttachment = 'View File Attachment';
+  static const String clickToOpen = 'CLICK TO OPEN';
+  static const String label = '••••••••••••••••••••••••••••••••';
+  static const String k1234567890 = '1234567890';
+  static const String k1059 = '1059...';
+  static const String k2941 = '2941...';
+  static const String leadNotFound = 'Lead not found';
+  static const String noInteractionHistoryAvailable =
+      'No interaction history available';
+  static const String addInteractionNote = 'Add Interaction Note';
+  static const String enterLeadTitle = 'Enter lead title';
+  static const String submit = 'Submit';
+  static const String noLeadsFound = 'No Leads Found';
+  static const String startAddingLeadsToManageYour =
+      'Start adding leads to manage your potential students.';
+  static const String deleteLead = 'Delete Lead';
+  static const String leadsManagementAreYouSureYouWantTo =
+      'Are you sure you want to delete this lead?';
+  static const String addAttendance = 'Add Attendance';
+  static const String absentReason = 'Absent Reason';
+  static const String enterReason = 'Enter reason';
+  static const String searchMemberByName = 'Search member by name';
+  static const String logAttendance = 'Log Attendance';
+  static const String markAttendance = 'Mark Attendance';
+  static const String thereAreNoStudentsAssignedTo =
+      'There are no students assigned to this batch or matching your search.';
+  static const String submitAttendance = 'Submit Attendance';
+  static const String allPresent = 'All Present';
+  static const String allAbsent = 'All Absent';
+  static const String searchStudentByNameOrId =
+      'Search student by name or ID...';
+  static const String present = 'PRESENT';
+  static const String absent = 'ABSENT';
+  static const String studentPerformanceReport = 'Student Performance Report';
+  static const String noPerformanceDataAvailable =
+      'No performance data available';
+  static const String overallAveragePerformance = 'Overall Average Performance';
+  static const String addTransaction = 'Add Transaction';
+  static const String recordFeeEnterAmount = 'Enter Amount';
+  static const String attendanceReports = 'Attendance Reports';
+  static const String comprehensiveAnalysisOfDailyWeeklyAnd =
+      'Comprehensive analysis of daily, weekly, and monthly student presence across all active batches.';
+  static const String deepDiveIntoExaminationResultsAssignment =
+      'Deep dive into examination results, assignment completion rates, and individual student growth curves.';
+  static const String studentPerformanceReports = 'Student Performance Reports';
+  static const String academicProgressAverageGradesAndPerformance =
+      'Academic progress, average grades, and performance analysis across batches.';
+  static const String setNewPassword = 'Set New Password';
+  static const String aVerificationCodeHasBeenSent =
+      'A verification code has been sent to your email. Enter it below along with your new access key.';
+  static const String verificationCode = 'Verification code';
+  static const String enter6DigitCode = 'Enter 6-digit code';
+  static const String confirmPassword = 'Confirm Password';
+  static const String enterConfirmPassword = 'Enter confirm password';
+  static const String resetPassword = 'Reset Password';
+  static const String resendCode = 'Resend Code';
+  static const String deleteResource = 'Delete Resource';
+  static const String resourceDetailAreYouSureYouWantTo =
+      'Are you sure you want to delete this resource?';
+  static const String salaryHistory = 'Salary History';
+  static const String noSalaryRecords = 'No Salary Records';
+  static const String noSalaryPaymentsFoundForThis =
+      'No salary payments found for this staff member.';
+  static const String salaryManagement = 'Salary Management';
+  static const String payoutHistory = 'Payout History';
+  static const String noSalaryPayoutRecordsFoundFor =
+      'No salary payout records found for this month.';
+  static const String noAttendanceData = 'No Attendance Data';
+  static const String noAttendanceRecordsFoundForThis =
+      'No attendance records found for this month.';
+  static const String staffManagement = 'Staff Management';
+  static const String noStaffFound = 'No Staff Found';
+  static const String searchStaff = 'Search Staff';
+  static const String staff = 'Staff';
+  static const String salary = 'Salary';
+  static const String staffProfile = 'Staff Profile';
+  static const String noStaffSelected = 'No staff selected';
+  static const String deleteStaff = 'Delete Staff';
+  static const String feesHistory = 'Fees History';
+  static const String studentIdentityCard = 'STUDENT IDENTITY CARD';
+  static const String deleteStudent = 'Delete Student';
+  static const String enterYourTransactionDetailsSoOur =
+      'Enter your transaction details so our billing team can verify and activate your subscription.';
+  static const String transactionIdRefNumber = 'TRANSACTION ID / REF NUMBER';
+  static const String enterUtrRefNoOrTxn = 'Enter UTR, Ref No. or Txn ID';
+  static const String messageOptional = 'MESSAGE (OPTIONAL)';
+  static const String enterAnySpecificNote = 'Enter any specific note...';
+  static const String submitProof = 'Submit Proof';
+  static const String paymentScreenshot = 'PAYMENT SCREENSHOT';
+  static const String uploadScreenshotJpgPng = 'Upload screenshot (JPG, PNG)';
+  static const String offlineSubscriptionRenewal =
+      'Offline Subscription Renewal';
+  static const String payUsingTheDetailsBelowThen =
+      'Pay using the details below, then submit your transaction proof to restore access.';
+  static const String iVeCompletedPayment = 'I\'ve Completed Payment';
+  static const String qrCodeWillAppearHere = 'QR code will appear here';
+  static const String bankTransferDetails = 'BANK TRANSFER DETAILS';
+  static const String export = 'Export';
+  static const String renewalRequestPendingReview =
+      'Renewal Request Pending Review';
+  static const String yourSubscriptionHasBeenExpired =
+      'Your subscription has been expired.';
+  static const String loginFailed = 'Login Failed';
+  static const String errEmailNotVerified =
+      'Your email is not verified yet. Please complete OTP verification to continue.';
+  static const String sessionExpiredTitle = 'Session expired';
+  static const String errSessionExpired =
+      'Your session has timed out. Please log in again.';
+  static const String deleteAccount = 'Delete Account';
+  static const String deleteAccountSubtitle =
+      'Permanently remove your account and data';
+  static const String deleteAccountConfirmTitle = 'Delete account?';
+  static const String deleteAccountConfirmMessage =
+      'This will permanently delete your account, profile, and associated data. Fee records may be retained as required by law. This action cannot be undone.';
+  static const String deleteAccountConfirmButton = 'Delete';
+  static const String accountDeletedSuccessfully = 'Account deleted';
+  static const String accountDeletionFailed = 'Could not delete account';
+
+  // In-app update (Play in-app updates flexible flow)
+  static const String updateReadyTitle = 'Update ready';
+  static const String updateReadyMessage =
+      'A new version of Tuoora has been downloaded. Restart to apply.';
+  static const String updateRestartButton = 'Restart';
+  static const String updateLaterButton = 'Later';
+
+  static const String password = 'Password';
+  static const String recoveryForThisRoleWillBe =
+      'Recovery for this role will be available soon.';
+  static const String loginComingSoon = 'Coming Soon';
+  static const String loginForgotPassword = 'Forgot Password?';
+  static const String orExpandYourReach = 'OR EXPAND YOUR REACH';
+  static const String instituteRegistration = 'Institute Registration';
+  static const String loginAsInstitute = 'Login as Institute';
+  static const String manageStudentsBatchesAndAcademicOperations =
+      'Manage students, batches, and academic operations.';
+  static const String loginAsStudent = 'Login as Student';
+  static const String viewYourClassesFeesHomeworkAnd =
+      'View your classes, fees, homework and more.';
+  static const String failedToLoadAssignments = 'Failed to load assignments';
+  static const String failedToLoadAssignmentDetails =
+      'Failed to load assignment details';
+  static const String assignmentSubmittedSuccessfully = 'Assignment submitted.';
+  static const String pleaseWaitYourFileIsBeing =
+      'Please wait, your file is being downloaded...';
+  static const String failedToLoadReceipt = 'Failed to load receipt';
+  static const String pleaseWaitYourReceiptIsBeing =
+      'Please wait, your receipt is being downloaded...';
+  static const String failedToLoadDashboardData =
+      'Failed to load dashboard data';
+  static const String pleaseEnterAMessageBeforeSubmitting =
+      'Please enter a message before submitting.';
+  static const String validationError = 'Validation Error';
+  static const String thankYouYourFeedbackHasBeen =
+      'Thank you! Your feedback has been sent.';
+  static const String failedToSubmitFeedbackPleaseTry =
+      'Failed to submit feedback. Please try again.';
+  static const String failedToLoadInstituteDetails =
+      'Failed to load institute details';
+  static const String failedToFetchNotificationSettings =
+      'Failed to fetch notification settings';
+  static const String failedToUpdateSettings = 'Failed to update settings';
+  static const String failedToLoadNotifications =
+      'Failed to load notifications';
+  static const String profilePhotoUpdated = 'Profile photo updated';
+  static const String uploadFailed = 'Upload failed';
+  static const String failedToLoadReceipts = 'Failed to load receipts';
+  static const String failedToLoadReports = 'Failed to load reports';
+  static const String failedToLoadStudyMaterials =
+      'Failed to load study materials';
+  static const String noAttendanceRecords = 'No attendance records';
+  static const String today = 'TODAY';
+  static const String month = 'MONTH';
+  static const String monthlySummary = 'MONTHLY SUMMARY';
+  static const String goToToday = 'GO TO TODAY';
+  static const String nothingToShowYet = 'Nothing to show yet';
+  static const String assignments = 'ASSIGNMENTS';
+  static const String todaySAttendance = 'TODAY\'S ATTENDANCE';
+  static const String studyMaterialThisWeek = 'STUDY MATERIAL THIS WEEK';
+  static const String pendingFees = 'PENDING FEES';
+  static const String theIndustrialRevolutionSocioEconomicImpacts =
+      'The Industrial Revolution: Socio-Economic Impacts';
+  static const String quantumMechanicsParticleInABox =
+      'Quantum Mechanics: Particle in a Box Experiment';
+  static const String comparativeAnalysisRomanticismVsRealism =
+      'Comparative Analysis: Romanticism vs. Realism';
+  static const String homeworkCenter = 'Homework Center';
+  static const String manageAssignmentsUploadedByYourTutors =
+      'Manage assignments uploaded by your tutors.';
+  static const String weeklyGoal = 'WEEKLY GOAL';
+  static const String k68 = '68%';
+  static const String mathematics = 'MATHEMATICS';
+  static const String dueToday = 'DUE TODAY';
+  static const String byProfHenderson = 'By Prof. Henderson';
+  static const String advancedCalculusNvolumeIntegrals =
+      'Advanced Calculus:\nVolume Integrals';
+  static const String completeTheProblemSetOnPage =
+      'Complete the problem set on page 412. Focus on spherical coordinates and...';
+  static const String k24StudentsSubmitted = '24 students submitted';
+  static const String openTask = 'Open Task';
+  static const String dueDate = 'DUE DATE';
+  static const String preparationGuide = 'Preparation Guide';
+  static const String modernLiteratureFinalsStudyGuideIs =
+      'Modern Literature finals study guide is now available for download.';
+  static const String downloadPdf = 'Download PDF';
+  static const String homeworkDetails = 'Homework Details';
+  static const String advancedNcalculus = 'Advanced\nCalculus';
+  static const String instructionsFromNtutor = 'Instructions from\nTutor';
+  static const String welcomeToTheFinalModuleOf =
+      'Welcome to the final module of our Calculus series. For this assignment, please focus on the practical applications of Green\'s Theorem and Stoke\'s Theorem.';
+  static const String specificTasks = 'Specific Tasks:';
+  static const String graphsMustBePlottedClearlyHand =
+      'Graphs must be plotted clearly. Hand-drawn sketches are acceptable if scanned at high resolution (300 DPI minimum).';
+  static const String assignedTutor = 'ASSIGNED TUTOR';
+  static const String drElenaVance = 'Dr. Elena Vance';
+  static const String attachments = 'Attachments';
+  static const String tipOpenBothFilesToReach =
+      'Tip: Open both files to reach 100% progress.';
+  static const String yourProgress = 'YOUR PROGRESS';
+  static const String homeworkSubmittedSuccessfully = 'Homework submitted';
+  static const String tuitionTerm1 = 'Tuition - Term 1';
+  static const String libraryOverdueFine = 'Library Overdue Fine';
+  static const String annualSportsFee = 'Annual Sports Fee';
+  static const String labMaintenance = 'Lab Maintenance';
+  static const String registrationCharges = 'Registration Charges';
+  static const String idCardReplacement = 'ID Card Replacement';
+  static const String noAssignmentSelected = 'No assignment selected';
+  static const String overdueCannotSubmit = 'Overdue — cannot submit';
+  static const String studentAttachmentPreview000 = '0:00';
+  static const String sayHelloTo = 'Say Hello to !';
+  static const String clickBelowToStartYourConversation =
+      'Click below to start your conversation.';
+  static const String sayHello = 'Say Hello';
+  static const String saraswatiCoachingCentre = 'Saraswati Coaching Centre';
+  static const String messageTheInstitute = 'Message the institute...';
+  static const String scienceDayExhibition = 'Science Day exhibition';
+  static const String event = 'EVENT';
+  static const String saturday24May20261000 =
+      'Saturday, 24 May 2026 - 10:00 AM - 1:00 PM';
+  static const String details = 'DETAILS';
+  static const String annualScienceDayWhereStudentsDemo =
+      'Annual Science Day where students demo their term project. Set up by 9:30 AM, judging starts at 10:30. Bring your printed report, props and three pens. Parents are welcome from 10 AM onward — tea and snacks will be served outside the hall.';
+  static const String may2026 = 'MAY 2026';
+  static const String k4500 = '₹4,500';
+  static const String aLateFeeOf100Applies =
+      'A late fee of ₹100 applies after the due date. Pay in cash at the institute or transfer via UPI.';
+  static const String openInvoice = 'Open invoice';
+  static const String tellUsWhatSMissing = 'Tell us what\'s missing';
+  static const String howSItGoing = 'HOW\'S IT GOING?';
+  static const String yourMessage = 'YOUR MESSAGE';
+  static const String whatWouldMakeTuooraMoreUseful =
+      'What would make Tuoora more useful to you?';
+  static const String sendToTuoora = 'Send to Tuoora';
+  static const String noFeeStatementsYet = 'No fee statements yet';
+  static const String holidayBuddhaPurnima = 'Holiday • Buddha Purnima';
+  static const String buddhaPurnima = 'Buddha Purnima';
+  static const String wednesday21May2026 = 'Wednesday, 21 May 2026';
+  static const String instituteClosed = 'INSTITUTE CLOSED';
+  static const String marksTheBirthOfGautamaBuddha =
+      'Marks the birth of Gautama Buddha. The institute will remain closed for the day. There are no assignment deadlines on this day; pending submissions roll over to Thursday.';
+  static const String classesResume = 'CLASSES RESUME';
+  static const String thursday22May2026At8 = 'Thursday, 22 May 2026 at 8:00 AM';
+  static const String instituteDetailsUnavailable =
+      'Institute details unavailable';
+  static const String location = 'LOCATION';
+  static const String chatWithInstitute = 'Chat with institute';
+  static const String directions = 'Directions';
+  static const String categories = 'CATEGORIES';
+  static const String muteEverything = 'Mute everything';
+  static const String stopsAllPushAlertsInApp =
+      'Stops all push alerts. In-app notifications still appear.';
+  static const String feeReminders = 'Fee reminders';
+  static const String dueDatesAndPaymentConfirmations =
+      'Due dates and payment confirmations';
+  static const String assignmentAlerts = 'Assignment alerts';
+  static const String newAssignmentsAndGrading = 'New assignments and grading';
+  static const String markedPresentAbsent = 'Marked present / absent';
+  static const String dailyUpdates = 'Daily updates';
+  static const String topicsCoveredInClass = 'Topics covered in class';
+  static const String eventsHolidays = 'Events & holidays';
+  static const String instituteWideNotices = 'Institute-wide notices';
+  static const String youReAllCaughtUp = 'You\'re all caught up';
+  static const String profileUnavailable = 'Profile unavailable';
+  static const String profile = 'Profile';
+  static const String attendance = 'ATTENDANCE';
+  static const String assignment = 'ASSIGNMENT';
+  static const String chat = 'Chat';
+  static const String notificationPreferences = 'Notification preferences';
+  static const String language = 'Language';
+  static const String theme = 'Theme';
+  static const String helpSupport = 'Help & support';
+  static const String privacyTerms = 'Privacy & terms';
+  static const String studentProfileTellUsWhatSMissing =
+      'Tell us what\'s missing';
+  static const String logOut = 'Log out';
+  static const String noReceiptSelected = 'No receipt selected';
+  static const String thisIsASystemGeneratedReceipt =
+      'This is a system generated receipt and doesn\'t require a signature.';
+  static const String paymentMethod = 'Payment method';
+  static const String noReceiptsAvailableYet = 'No receipts available yet';
+  static const String files = 'FILES';
+  static const String noStudyMaterialFound = 'No study material found';
+  static const String k1File = '1 file';
+  static const String happyBirthday = 'Happy Birthday!';
+  static const String thankYou = 'Thank You!';
+
+  // Institute Fee Receipt screen
+  static const String receiptDetailsTitle = 'Receipt Details';
+  static const String downloadReceiptTooltip = 'Download Receipt';
+  static const String receiptBilledTo = 'BILLED TO';
+  static const String receiptPaymentInformation = 'PAYMENT INFORMATION';
+  static const String receiptMethodLabel = 'Method:';
+  static const String receiptPaidDateLabel = 'Paid Date:';
+  static const String receiptDescription = 'DESCRIPTION';
+  static const String receiptAmountHeader = 'AMOUNT';
+  static const String receiptMonthlyAcademicFees = 'Monthly Academic Fees';
+  static const String receiptAmountPaid = 'Amount Paid';
+  static const String receiptDownloadedSuccess = 'Receipt downloaded';
+
+  // Institute Fee report download (toolbar action on the fees list)
+  static const String reportDownloadedSuccess = 'Report downloaded';
+
+  // Institute Record Fee screen
+  static const String pendingFeesLabel = 'Pending Fees:';
+  static const String studentInformationLabel = 'Student name';
+  static const String feeDateLabel = 'Fee Date';
+
+  // Institute UPI Payment Settings (edit + profile-view card)
+  static const String upiPaymentSettingsTitle = 'UPI Payment Settings';
+  static const String upiPaymentSettingsSubtitle =
+      'Configure UPI ID and QR code to enable direct online fee payments for your students';
+  static const String upiConfigurationsHeader = 'UPI Configurations';
+  static const String upiIdLabel = 'UPI ID (VPA) — Optional';
+  static const String upiQrCodeLabelRequired = 'UPI QR Code Image *';
+  static const String upiQrCodeRequiredHelper =
+      'QR code is required so students can scan and pay fees directly.';
+  static const String upiQrRequiredError = 'Please upload a UPI QR code image';
+  static const String upiIdHint = 'name@bank or phone@upi';
+  static const String upiIdHelper =
+      'Enter a valid merchant VPA or personal UPI ID (e.g. name@bank, phone@upi).';
+  static const String upiQrCodeLabel = 'UPI QR Code Image';
+  static const String upiQrCodeSpecHeader = 'QR Code Specifications';
+  static const String upiQrCodeSpec =
+      'Please upload the QR code generated from your business app (GPay, PhonePe, Paytm, BHIM, etc.). Max size 2MB. Format: PNG, JPG, JPEG.';
+  static const String chooseFile = 'Choose File';
+  static const String saveSettings = 'Save Settings';
+  static const String paymentSettingsSaved = 'Payment settings updated';
+
+  // Institute Profile view — UPI Payment Details card
+  static const String upiPaymentDetailsCardTitle = 'UPI Payment Details';
+  static const String upiPaymentScanHint = 'Scan QR code to pay student fees.';
+  static const String upiPaymentEmptyTitle = 'UPI not configured';
+  static const String upiPaymentEmptySubtitle =
+      'Add your UPI ID and QR code so students can pay fees online.';
+  static const String upiPaymentManageTile = 'UPI Payment Settings';
+  static const String upiPaymentManageSubtitle =
+      'Manage UPI ID and QR code for fee collection';
+  static const String addPaymentDetails = 'Add Payment Details';
+  static const String editSettings = 'Edit Settings';
 }

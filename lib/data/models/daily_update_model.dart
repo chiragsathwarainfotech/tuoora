@@ -6,7 +6,6 @@ class DailyUpdate {
   final int? batchId;
   final int? instituteId;
   final int? studentId;
-  final UpdateRecipient recipient;
   final UpdateCategory category;
   final UpdateTargetType targetType;
   final String? standard;
@@ -26,7 +25,6 @@ class DailyUpdate {
     this.batchId,
     this.instituteId,
     this.studentId,
-    required this.recipient,
     required this.category,
     required this.targetType,
     this.standard,
@@ -56,10 +54,6 @@ class DailyUpdate {
       instituteId: json['institute_id'],
       studentId: json['student_id'],
       topic: json['topic'],
-      recipient: UpdateRecipient.values.firstWhere(
-        (e) => e.name == json['recipient'],
-        orElse: () => UpdateRecipient.students,
-      ),
       category: UpdateCategory.values.firstWhere(
         (e) =>
             e.name.toLowerCase() ==
@@ -87,19 +81,20 @@ class DailyUpdate {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {
-      'recipient': recipient.name,
       'topic': topic,
       'description': description,
       'category': category.name,
+      'target_type': targetType.name,
     };
 
-    if (recipient != UpdateRecipient.parents) {
-      data['target_type'] = targetType.name;
-      if (targetType == UpdateTargetType.all) {
-        if (studentId != null) data['student_id'] = studentId;
-      } else if (targetType == UpdateTargetType.batch) {
-        if (batchId != null) data['batch_id'] = batchId;
-      }
+    if (date != null) {
+      data['date'] = "${date!.year.toString().padLeft(4, '0')}-${date!.month.toString().padLeft(2, '0')}-${date!.day.toString().padLeft(2, '0')}";
+    }
+
+    if (targetType == UpdateTargetType.all) {
+      if (studentId != null) data['student_id'] = studentId;
+    } else if (targetType == UpdateTargetType.batch) {
+      if (batchId != null) data['batch_id'] = batchId;
     }
 
     return data;
@@ -116,14 +111,10 @@ class DailyUpdate {
   }
 
   String get audience {
-    if (recipient == UpdateRecipient.parents) return 'Parents';
-    String prefix = recipient == UpdateRecipient.both
-        ? 'Both - '
-        : 'Students - ';
     if (targetType == UpdateTargetType.batch) {
-      return '$prefix${batch?.name ?? "Batch"}';
+      return batch?.name ?? 'Batch';
     }
-    return '${prefix}All Students';
+    return 'All Students';
   }
 }
 
@@ -142,4 +133,3 @@ class DailyUpdateBatch {
     );
   }
 }
-

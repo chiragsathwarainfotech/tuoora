@@ -3,6 +3,7 @@ import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
+import 'package:tuoora/core/widgets/input_styles.dart';
 import 'package:tuoora/presentation/institute/controllers/batch_controller.dart';
 import 'package:tuoora/core/widgets/app_input_field.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
@@ -53,13 +54,6 @@ class AddEditBatchScreen extends GetView<BatchController> {
                       ),
                     ),
                     AppSpacing.v24,
-                    AppInputField(
-                      label: AppStrings.instBatchDescLabel,
-                      controller: controller.descriptionController,
-                      hint: AppStrings.instBatchDescHint,
-                      maxLines: 3,
-                    ),
-                    AppSpacing.v24,
                     Obx(
                       () => AppInputField(
                         label: AppStrings.instBatchFeeLabelAlt,
@@ -68,27 +62,30 @@ class AddEditBatchScreen extends GetView<BatchController> {
                         keyboardType: TextInputType.number,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(6),
                         ],
                         errorText: controller.feeError.value,
                       ),
                     ),
-                    AppSpacing.v32,
-                    _buildSectionHeader(
-                      Icons.access_time_filled_rounded,
-                      AppStrings.instScheduleSettings,
+                    AppSpacing.v24,
+                    AppInputField(
+                      label: AppStrings.instBatchDescLabel,
+                      controller: controller.descriptionController,
+                      hint: AppStrings.instBatchDescHint,
+                      maxLines: 3,
                     ),
-                    AppSpacing.v20,
-                    _buildScheduleCard(context),
+                    AppSpacing.v24,
+                    const InstituteLabel(AppStrings.instTimeSlot),
+                    _buildTimeSlotField(context),
                     AppSpacing.v24,
                     const InstituteLabel(AppStrings.instActiveDaysLabel),
-                    AppSpacing.v4,
                     Obx(() {
                       if (controller.daysError.value != null) {
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 8.0),
                           child: Text(
                             controller.daysError.value!,
-                            style: AppTextStyles.manrope(
+                            style: AppTextStyles.outfit(
                               fontSize: 12,
                               color: Colors.redAccent,
                               fontWeight: FontWeight.w500,
@@ -100,6 +97,14 @@ class AddEditBatchScreen extends GetView<BatchController> {
                     }),
                     AppSpacing.v12,
                     _buildDaysSelection(),
+                    AppSpacing.v24,
+                    AppInputField(
+                      label: AppStrings.instBatchClassroomLabel,
+                      controller: controller.classroomController,
+                      hint: AppStrings.instBatchClassroomHint,
+                    ),
+                    AppSpacing.v24,
+                    _buildAssignedStaffField(),
                     AppSpacing.v32,
                     _buildSaveButton(context),
                     AppSpacing.v24,
@@ -113,91 +118,51 @@ class AddEditBatchScreen extends GetView<BatchController> {
     );
   }
 
-  Widget _buildSectionHeader(IconData icon, String title) {
-    return Row(
-      children: [
-        Icon(icon, color: AppColors.primaryBrand, size: 20),
-        AppSpacing.h12,
-        Text(
-          title,
-          style: AppTextStyles.manrope(
-            fontSize: 16,
-            fontWeight: FontWeight.w800,
-            color: AppColors.primaryBrand,
-          ),
+  Widget _buildTimeSlotField(BuildContext context) {
+    return GestureDetector(
+      onTap: () => _showTimeRangePicker(context),
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        // minHeight matches the rendered height of a single-line AppInputField
+        // (Material's default ~48 dp touch target), so the time slot sits at
+        // the exact same height as Batch Description / Batch Fee above it.
+        constraints: const BoxConstraints(minHeight: 48),
+        padding: InputStyles.contentPadding,
+        decoration: BoxDecoration(
+          color: AppColors.fieldBg,
+          borderRadius: BorderRadius.circular(InputStyles.borderRadius),
+          border: Border.all(color: AppColors.fieldBorder),
         ),
-      ],
-    );
-  }
-
-  Widget _buildScheduleCard(BuildContext context) {
-    return Container(
-      padding: AppSpacing.all20,
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            AppStrings.instTimeSlot,
-            style: AppTextStyles.manrope(
-              fontSize: 12,
-              fontWeight: FontWeight.w800,
-              color: AppColors.textTertiary,
-              letterSpacing: 0.5,
+        child: Row(
+          children: [
+            const Icon(
+              Icons.access_time_filled,
+              color: AppColors.fieldLabel,
+              size: AppSpacing.s20,
             ),
-          ),
-          AppSpacing.v16,
-          Container(
-            padding: AppSpacing.all16,
-            decoration: BoxDecoration(
-              color: AppColors.paleSilver,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Row(
-              children: [
-                const Icon(
-                  Icons.access_time_filled,
-                  color: AppColors.primaryBrand,
-                  size: 24,
-                ),
-                AppSpacing.h16,
-                Expanded(
-                  child: Obx(
-                    () => Text(
-                      '${controller.startTime.value.format(context)} — ${controller.endTime.value.format(context)}',
-                      style: AppTextStyles.manrope(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.textPrimary,
-                      ),
-                    ),
+            AppSpacing.h12,
+            Expanded(
+              child: Obx(
+                () => Text(
+                  '${controller.startTime.value.format(context)} — ${controller.endTime.value.format(context)}',
+                  style: AppTextStyles.outfit(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.textPrimary,
                   ),
                 ),
-                TextButton(
-                  onPressed: () => _showTimeRangePicker(context),
-                  child: Text(
-                    AppStrings.instChangeBtn,
-                    style: AppTextStyles.manrope(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.primaryBrand,
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
-        ],
+            Text(
+              AppStrings.instChangeBtn,
+              style: AppTextStyles.outfit(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: AppColors.fieldLabel,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -219,18 +184,18 @@ class AddEditBatchScreen extends GetView<BatchController> {
           return GestureDetector(
             onTap: () => controller.toggleDay(day),
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              padding: AppSpacing.cardPadding,
               decoration: BoxDecoration(
                 color: isSelected
                     ? AppColors.primaryBrand
-                    : AppColors.paleSilver,
-                borderRadius: BorderRadius.circular(12),
+                    : AppColors.fieldBg,
+                borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
               ),
               child: Text(
                 day,
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 14,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: isSelected ? AppColors.white : AppColors.textSecondary,
                 ),
               ),
@@ -241,16 +206,114 @@ class AddEditBatchScreen extends GetView<BatchController> {
     );
   }
 
+  Widget _buildAssignedStaffField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          AppStrings.instBatchAssignedStaffLabel,
+          style: AppTextStyles.outfit(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: AppColors.fieldLabel,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Obx(() {
+          final hasError = controller.staffError.value != null;
+          final selectedId = controller.selectedStaffId.value;
+          final isValueInList = controller.staffList.any(
+            (s) => s.id == selectedId,
+          );
+          return Container(
+            constraints: const BoxConstraints(minHeight: 48),
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            decoration: BoxDecoration(
+              color: AppColors.fieldBg,
+              borderRadius: BorderRadius.circular(InputStyles.borderRadius),
+              border: Border.all(
+                color: hasError ? Colors.redAccent : AppColors.fieldBorder,
+                width: hasError ? 1.5 : 1,
+              ),
+            ),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<int>(
+                value: isValueInList ? selectedId : null,
+                isExpanded: true,
+                hint: Text(
+                  controller.isLoadingStaff.value
+                      ? 'Loading staff...'
+                      : AppStrings.instBatchAssignedStaffHint,
+                  style: AppTextStyles.outfit(
+                    fontSize: 14,
+                    color: AppColors.fieldLabel,
+                  ),
+                ),
+                icon: const Icon(
+                  Icons.keyboard_arrow_down_rounded,
+                  color: AppColors.fieldLabel,
+                ),
+                style: AppTextStyles.outfit(
+                  fontSize: 14,
+                  color: AppColors.textPrimary,
+                  fontWeight: FontWeight.w500,
+                ),
+                dropdownColor: AppColors.white,
+                items: controller.staffList
+                    .map(
+                      (staff) => DropdownMenuItem<int>(
+                        value: staff.id,
+                        child: Text(
+                          staff.fullName,
+                          style: AppTextStyles.outfit(
+                            fontSize: 14,
+                            color: AppColors.textPrimary,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    )
+                    .toList(),
+                onChanged: controller.isLoadingStaff.value
+                    ? null
+                    : controller.selectStaff,
+              ),
+            ),
+          );
+        }),
+        Obx(() {
+          final err = controller.staffError.value;
+          if (err == null) return const SizedBox.shrink();
+          return Padding(
+            padding: const EdgeInsets.only(top: 4, left: 4),
+            child: Text(
+              err,
+              style: AppTextStyles.outfit(
+                fontSize: 12,
+                color: Colors.redAccent,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          );
+        }),
+      ],
+    );
+  }
+
   Widget _buildSaveButton(BuildContext context) {
-    return Obx(
-      () => AppButton(
-        label: AppStrings.instSaveBatchBtn,
-        icon: Icons.save_rounded,
-        isLoading: controller.isLoading.value,
-        onPressed: () {
-          FocusScope.of(context).unfocus();
-          controller.saveBatch(context);
-        },
+    return SafeArea(
+      top: false,
+      minimum: const EdgeInsets.only(bottom: 16),
+      child: Obx(
+        () => AppButton(
+          label: AppStrings.instSaveBatchBtn,
+          icon: Icons.save_rounded,
+          isLoading: controller.isLoading.value,
+          onPressed: () {
+            FocusScope.of(context).unfocus();
+            controller.saveBatch(context);
+          },
+        ),
       ),
     );
   }

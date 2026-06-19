@@ -2,11 +2,13 @@ class StudentAttendanceModel {
   final AttendanceTodayModel today;
   final AttendanceCalendarModel calendar;
   final AttendanceSummaryModel summary;
+  final DateTime? batchAssignedDate;
 
   StudentAttendanceModel({
     required this.today,
     required this.calendar,
     required this.summary,
+    this.batchAssignedDate,
   });
 
   factory StudentAttendanceModel.fromJson(Map<String, dynamic> json) {
@@ -14,6 +16,9 @@ class StudentAttendanceModel {
       today: AttendanceTodayModel.fromJson(json['today'] ?? {}),
       calendar: AttendanceCalendarModel.fromJson(json['calendar'] ?? {}),
       summary: AttendanceSummaryModel.fromJson(json['summary'] ?? {}),
+      batchAssignedDate: DateTime.tryParse(
+        json['batch_assigned_date']?.toString() ?? '',
+      )?.toLocal(),
     );
   }
 }
@@ -22,10 +27,7 @@ class AttendanceTodayModel {
   final String status;
   final String text;
 
-  AttendanceTodayModel({
-    required this.status,
-    required this.text,
-  });
+  AttendanceTodayModel({required this.status, required this.text});
 
   factory AttendanceTodayModel.fromJson(Map<String, dynamic> json) {
     return AttendanceTodayModel(

@@ -79,6 +79,18 @@ class StudentHomeworkRepository implements StudentHomeworkRepositoryImpl {
     );
   }
 
+  @override
+  Future<void> submitHomework(int id) async {
+    final response = await _apiClient.post(
+      '${ApiConstants.studentHomeworks}/$id/submit',
+      {},
+    );
+    if (response.status.hasError) {
+      final message = response.body?['message'] ?? 'Failed to submit homework';
+      throw Exception(message);
+    }
+  }
+
   Future<List<int>> _downloadFile(
     String endpoint, {
     String acceptHeader = '*/*',

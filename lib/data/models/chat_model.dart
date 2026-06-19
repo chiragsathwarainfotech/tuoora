@@ -60,6 +60,7 @@ class Chat {
   }
 
   Chat copyWith({
+    String? id,
     String? lastMessage,
     String? lastMessageTime,
     int? unreadCount,
@@ -67,7 +68,7 @@ class Chat {
     DateTime? lastMessageAt,
   }) {
     return Chat(
-      id: id,
+      id: id ?? this.id,
       participantName: participantName,
       participantId: participantId,
       participantImage: participantImage,
@@ -150,9 +151,10 @@ class Message {
   MessageStatus get status {
     if (failed) return MessageStatus.failed;
     if (id.isEmpty) return MessageStatus.sending;
-    if (readAt != null && receivedAt != null) return MessageStatus.read;
+    // Read implies received — if backend skipped the MessageReceived event
+    // (or only the read ack made it through), still show the blue tick.
+    if (readAt != null) return MessageStatus.read;
     if (receivedAt != null) return MessageStatus.delivered;
-    if (readAt != null) return MessageStatus.delivered;
     return MessageStatus.sent;
   }
 
@@ -191,12 +193,14 @@ class Message {
     required String myUserId,
     required String myUserType,
   }) {
+    String stripAppModels(String type) => type.replaceFirst('App\\Models\\', '');
     final senderId = json['sender_id']?.toString() ?? '';
-    final senderType = json['sender_type']?.toString() ?? '';
+    final senderType = stripAppModels(json['sender_type']?.toString() ?? '');
     final receiverId = json['receiver_id']?.toString() ?? '';
-    final receiverType = json['receiver_type']?.toString() ?? '';
+    final receiverType = stripAppModels(json['receiver_type']?.toString() ?? '');
 
-    final isMine = senderId == myUserId && senderType == myUserType;
+    final isMine = senderId == myUserId &&
+        senderType.toLowerCase() == myUserType.toLowerCase();
     final otherId = isMine ? receiverId : senderId;
     final otherType = isMine ? receiverType : senderType;
 

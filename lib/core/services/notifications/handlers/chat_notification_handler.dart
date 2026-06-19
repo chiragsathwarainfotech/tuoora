@@ -30,7 +30,8 @@ class ChatNotificationHandler extends BaseNotificationHandler {
       return;
     }
 
-    final targetRoute = role == 'STUDENT'
+    final isStudent = role == 'STUDENT';
+    final targetRoute = isStudent
         ? AppRoutes.studentChat
         : AppRoutes.instituteChatMessages;
 
@@ -39,15 +40,43 @@ class ChatNotificationHandler extends BaseNotificationHandler {
       return;
     }
 
-    // Pre-seed selectedChat so the messages screen header shows the right
-    // participant immediately. Skipped silently if controller isn't ready.
-    _preseedSelectedChat(senderId: senderId, senderType: senderType);
+    if (isStudent) {
+      // The student messages screen self-initializes (its initState always
+      // opens the institute chat and fetches messages), so we only need to
+      // pre-seed the header and fire-and-forget navigate.
+      _preseedSelectedChat(senderId: senderId, senderType: senderType);
+      log('pushing $targetRoute (student, current=${Get.currentRoute})');
+      // Never await Get.toNamed (its future resolves on pop, not push), and
+      // never use offNamed (it replaces the dashboard and breaks back-nav).
+      Get.toNamed<dynamic>(targetRoute);
+      return;
+    }
 
-    log('pushing $targetRoute (current=${Get.currentRoute})');
-    // Fire-and-forget — never await Get.toNamed (its future resolves on
-    // pop, not push). Never use offNamed to retry — it replaces the
-    // dashboard underneath and breaks back navigation.
-    Get.toNamed<dynamic>(targetRoute);
+    // Institute side: the messages screen is a passive GetView that renders
+    // controller.messages and does NOT fetch on its own. Pre-seeding alone
+    // left it empty (the bug). Route through openChat() so the conversation
+    // is actually loaded — it sets selectedChat, calls fetchMessages AND
+    // navigates to the messages route.
+    if (!Get.isRegistered<ChatController>()) {
+      log('institute: ChatController not registered — fallback navigate');
+      Get.toNamed<dynamic>(targetRoute);
+      return;
+    }
+    final controller = Get.find<ChatController>();
+    final composedId = '${senderType}_$senderId';
+    final chat = controller.chatsList.firstWhereOrNull(
+          (c) => c.id == composedId,
+        ) ??
+        Chat(
+          id: composedId,
+          participantName: 'Chat',
+          participantId: senderId,
+          lastMessage: '',
+          lastMessageTime: '',
+          participantRole: senderType,
+        );
+    log('institute: openChat id=$composedId (current=${Get.currentRoute})');
+    controller.openChat(chat);
   }
 
   void _preseedSelectedChat({

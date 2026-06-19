@@ -16,6 +16,19 @@ abstract class InstituteRepositoryImpl {
   Future<InstituteSubscriptionData> getSubscriptionData();
   Future<void> updateProfile(Map<String, dynamic> data);
 
+  Future<void> deleteAccount();
+
+  Future<({String upiId, String? upiQrCodeUrl})> updatePaymentSettings({
+    required String upiId,
+    String? qrImagePath,
+  });
+
+  Future<void> renewSubscription({
+    required String transactionId,
+    required String screenshotPath,
+    String? message,
+  });
+
   // Authentication
   Future<String> registerInstitute(Map<String, dynamic> data);
   Future<String> verifyOtp(Map<String, dynamic> data);
@@ -33,6 +46,9 @@ abstract class InstituteRepositoryImpl {
   Future<FeeRecord> createFee(Map<String, dynamic> data);
   Future<List<int>> exportFees();
 
+  // Downloads the PDF receipt for a single fee record.
+  Future<List<int>> downloadFeeReceipt(int feeId);
+
   // Reports
   Future<FeeReportResponse> getFeeReport();
   Future<BatchFeeDetailResponse> getBatchFeeReport(int batchId);
@@ -49,10 +65,11 @@ abstract class InstituteRepositoryImpl {
   Future<List<int>> exportPerformanceReport();
 
   // Batches Management
-  Future<BatchListResponse> listBatches({int page = 1});
+  Future<BatchListResponse> listBatches({int page = 1, String? search});
   Future<Batch> createBatch(Map<String, dynamic> data);
   Future<Batch> updateBatch(int id, Map<String, dynamic> data);
   Future<void> deleteBatch(int id);
+  Future<void> closeBatch(int id);
 
   // Attendance
   Future<List<AttendanceRecordModel>> getAttendance(String date, int batchId);
@@ -60,6 +77,7 @@ abstract class InstituteRepositoryImpl {
 
   // Homework
   Future<List<HomeworkModel>> getHomeworks(int batchId);
+  Future<HomeworkModel> getHomeworkDetails(int homeworkId);
   Future<dynamic> createHomework(Map<String, dynamic> data);
   Future<dynamic> submitHomeworkScore(
     int homeworkId,
@@ -87,6 +105,7 @@ abstract class InstituteRepositoryImpl {
   // Expenses
   Future<ExpenseListResponse> listExpenses({int page = 1});
   Future<List<ExpenseCategory>> getExpenseCategories();
+  Future<ExpenseCategory> createExpenseCategory(Map<String, dynamic> data);
   Future<ExpenseModel> createExpense(Map<String, dynamic> data);
   Future<ExpenseAnalysis> getExpenseAnalysis(String month, String year);
 
@@ -96,13 +115,30 @@ abstract class InstituteRepositoryImpl {
   Future<List<StaffRole>> getStaffRoles();
   Future<List<StaffDepartment>> getStaffDepartments();
   Future<Staff> createStaff(Map<String, dynamic> data, String? imagePath);
-  Future<Staff> updateStaff(int id, Map<String, dynamic> data, String? imagePath);
+  Future<Staff> updateStaff(
+    int id,
+    Map<String, dynamic> data,
+    String? imagePath,
+  );
   Future<SalaryListResponse> getStaffSalaries(int staffId, {int page = 1});
-  Future<AttendanceListResponse> getStaffAttendance(int staffId, {int page = 1, String? month, String? year});
-  Future<AttendanceListResponse> getAttendanceLogs({int? page, String? month, String? year});
+  Future<SalaryPreview> getSalaryPreview(int staffId);
+  Future<AttendanceListResponse> getStaffAttendance(
+    int staffId, {
+    int page = 1,
+    String? month,
+    String? year,
+  });
+  Future<AttendanceListResponse> getAttendanceLogs({
+    int? page,
+    String? month,
+    String? year,
+  });
   Future<void> logStaffAttendance(Map<String, dynamic> data);
-  Future<SalaryListResponse> getGlobalSalaries({int? page, String? month, String? year});
+  Future<SalaryListResponse> getGlobalSalaries({
+    int? page,
+    String? month,
+    String? year,
+  });
   Future<void> logSalary(Map<String, dynamic> data);
   Future<void> deleteResource(int id);
 }
-

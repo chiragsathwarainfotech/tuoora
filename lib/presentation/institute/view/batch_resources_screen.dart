@@ -1,5 +1,6 @@
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/utils/subscription_guard.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/enums/app_enums.dart';
@@ -11,9 +12,11 @@ import 'package:tuoora/presentation/institute/models/resource_model.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/core/widgets/common_dialog.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
+import 'package:tuoora/core/widgets/app_empty_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:tuoora/presentation/institute/widgets/institute_label.dart';
 
 class BatchResourcesScreen extends StatelessWidget {
   const BatchResourcesScreen({super.key});
@@ -39,33 +42,18 @@ class BatchResourcesScreen extends StatelessWidget {
                   return const CommonLoading();
                 }
                 if (controller.resources.isEmpty) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.folder_open_outlined,
-                          size: 64,
-                          color: AppColors.textMuted.withValues(alpha: 0.5),
-                        ),
-                        AppSpacing.v16,
-                        Text(
-                          'No resources found',
-                          style: AppTextStyles.manrope(
-                            fontSize: 16,
-                            color: AppColors.textMuted,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
+                  return const AppEmptyView(
+                    icon: Icons.folder_open_outlined,
+                    title: AppStrings.noResourcesFound,
                   );
                 }
                 return ListView.builder(
-                  padding: AppSpacing.all24,
+                  padding: AppSpacing.all16.add(
+                    const EdgeInsets.only(bottom: 80),
+                  ),
                   itemCount: controller.resources.length,
                   itemBuilder: (context, index) =>
-                      _buildResourceItem(controller.resources[index]),
+                      _buildResourceItem(controller.resources[index], index),
                 );
               }),
             ),
@@ -73,23 +61,35 @@ class BatchResourcesScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _showUploadDialog(context, controller),
-        backgroundColor: AppColors.primaryBrand,
+        onPressed: () => SubscriptionGuard.runAddAction(
+          () => _showUploadDialog(context, controller),
+        ),
+        backgroundColor: SubscriptionGuard.blocksAdd
+            ? AppColors.textMuted
+            : AppColors.primaryBrand,
         child: const Icon(Icons.add, color: AppColors.white),
       ),
     );
   }
 
-  Widget _buildResourceItem(ResourceModel resource) {
+  static const List<Color> _stripePalette = <Color>[
+    AppColors.instBrandOrange,
+    AppColors.successGreen,
+    AppColors.orangeTag,
+    AppColors.subjectPhysics,
+    AppColors.successGreen,
+  ];
+
+  Widget _buildResourceItem(ResourceModel resource, int index) {
+    final Color stripe = _stripePalette[index % _stripePalette.length];
     return GestureDetector(
       onTap: () =>
           Get.toNamed(AppRoutes.instituteResourceDetail, arguments: resource),
       child: Container(
-        margin: const EdgeInsets.only(bottom: 16),
-        padding: AppSpacing.all16,
+        margin: AppSpacing.bottom10,
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.02),
@@ -98,66 +98,91 @@ class BatchResourcesScreen extends StatelessWidget {
             ),
           ],
         ),
-        child: Row(
-          children: [
-            Container(
-              padding: AppSpacing.all12,
-              decoration: BoxDecoration(
-                color: _getResourceColor(resource.type).withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(
-                _getResourceIcon(resource.type),
-                color: _getResourceColor(resource.type),
-                size: 24,
-              ),
-            ),
-            AppSpacing.h16,
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    resource.subject,
-                    style: AppTextStyles.manrope(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.textPrimary,
-                    ),
-                  ),
-                  AppSpacing.v4,
-                  Text(
-                    resource.description,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTextStyles.lexend(
-                      fontSize: 12,
-                      color: AppColors.textTertiary,
-                    ),
-                  ),
-                  AppSpacing.v8,
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.access_time_rounded,
-                        size: 12,
-                        color: AppColors.textMuted,
-                      ),
-                      AppSpacing.h4,
-                      Text(
-                        DateFormat('MMM dd, yyyy').format(resource.uploadedAt),
-                        style: AppTextStyles.lexend(
-                          fontSize: 10,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+          child: IntrinsicHeight(
+            child: Row(
+              children: [
+                Container(width: 4, color: stripe),
+                Expanded(
+                  child: Padding(
+                    padding: AppSpacing.cardPadding,
+                    child: Row(
+                      children: [
+                        Container(
+                          height: 48,
+                          width: 48,
+                          decoration: BoxDecoration(
+                            color: _getResourceColor(
+                              resource.type,
+                            ).withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(
+                              AppSpacing.cardRadius,
+                            ),
+                          ),
+                          child: Icon(
+                            _getResourceIcon(resource.type),
+                            color: _getResourceColor(resource.type),
+                            size: 24,
+                          ),
+                        ),
+                        AppSpacing.h16,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                resource.subject,
+                                style: AppTextStyles.outfit(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.textPrimary,
+                                ),
+                              ),
+                              AppSpacing.v4,
+                              Text(
+                                resource.description,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppTextStyles.outfit(
+                                  fontSize: 12,
+                                  color: AppColors.textTertiary,
+                                ),
+                              ),
+                              AppSpacing.v8,
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.access_time_rounded,
+                                    size: 12,
+                                    color: AppColors.textMuted,
+                                  ),
+                                  AppSpacing.h4,
+                                  Text(
+                                    DateFormat(
+                                      'MMM dd, yyyy',
+                                    ).format(resource.uploadedAt),
+                                    style: AppTextStyles.outfit(
+                                      fontSize: 10,
+                                      color: AppColors.textMuted,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Icon(
+                          Icons.chevron_right_rounded,
                           color: AppColors.textMuted,
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            const Icon(Icons.chevron_right_rounded, color: AppColors.textMuted),
-          ],
+          ),
         ),
       ),
     );
@@ -173,9 +198,9 @@ class BatchResourcesScreen extends StatelessWidget {
         children: [
           Obx(
             () => AppInputField(
-              label: AppStrings.instResourceSubjectLabel,
+              label: AppStrings.instNoteTitleLabel,
               controller: controller.subjectController,
-              hint: 'e.g., Physics Notes',
+              hint: AppStrings.enterTitle,
               errorText: controller.triedToSave.value
                   ? controller.subjectError.value
                   : null,
@@ -183,12 +208,14 @@ class BatchResourcesScreen extends StatelessWidget {
           ),
           AppSpacing.v16,
           AppInputField(
-            label: AppStrings.instResourceDescriptionLabel,
+            label: AppStrings.instBatchDescLabel,
             controller: controller.descriptionController,
-            hint: 'e.g., Chapter 1 derivation',
+            hint: AppStrings.hintEnterDescription,
             maxLines: 3,
           ),
           AppSpacing.v24,
+          const InstituteLabel(AppStrings.attachments),
+          AppSpacing.v4,
           _buildAttachmentButton(controller),
         ],
       ),
@@ -209,7 +236,7 @@ class BatchResourcesScreen extends StatelessWidget {
             child: Container(
               padding: AppSpacing.all16,
               decoration: BoxDecoration(
-                color: AppColors.paleSilver,
+                color: AppColors.fieldBg,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
                   color: hasError ? Colors.redAccent : Colors.transparent,
@@ -220,7 +247,7 @@ class BatchResourcesScreen extends StatelessWidget {
                 children: [
                   const Icon(
                     Icons.attach_file_rounded,
-                    color: AppColors.primaryBrand,
+                    color: AppColors.fieldLabel,
                   ),
                   AppSpacing.h12,
                   Expanded(
@@ -228,7 +255,7 @@ class BatchResourcesScreen extends StatelessWidget {
                       fileName.isEmpty
                           ? AppStrings.instAttachFileHint
                           : fileName,
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 14,
                         fontWeight: fileName.isEmpty
                             ? FontWeight.w500
@@ -248,7 +275,7 @@ class BatchResourcesScreen extends StatelessWidget {
               padding: const EdgeInsets.only(top: 8, left: 4),
               child: Text(
                 controller.fileError.value!,
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 12,
                   color: Colors.redAccent,
                   fontWeight: FontWeight.w500,

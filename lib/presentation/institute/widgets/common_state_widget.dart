@@ -1,6 +1,4 @@
-import 'package:tuoora/core/constants/app_colors.dart';
-import 'package:tuoora/core/constants/app_text_styles.dart';
-import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/app_empty_view.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
 
@@ -25,46 +23,44 @@ class CommonStateWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isLoading && isEmpty) {
-      return const Center(child: CommonLoading());
+      return LayoutBuilder(builder: (context, constraints) {
+        if (constraints.maxHeight == double.infinity) {
+          return const Padding(
+            padding: EdgeInsets.all(32.0),
+            child: Center(child: CommonLoading()),
+          );
+        }
+        return SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+            child: const Center(child: CommonLoading()),
+          ),
+        );
+      });
     }
 
     if (isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              padding: AppSpacing.all24,
-              decoration: const BoxDecoration(
-                color: AppColors.primaryBrandLight,
-                shape: BoxShape.circle,
-              ),
-              child: Icon(emptyIcon, size: 64, color: AppColors.primaryBrand),
+      return LayoutBuilder(builder: (context, constraints) {
+        if (constraints.maxHeight == double.infinity) {
+          return AppEmptyView(
+            icon: emptyIcon,
+            title: emptyTitle,
+            message: emptySubtitle,
+          );
+        }
+        return SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+            child: AppEmptyView(
+              icon: emptyIcon,
+              title: emptyTitle,
+              message: emptySubtitle,
             ),
-            AppSpacing.v24,
-            Text(
-              emptyTitle,
-              style: AppTextStyles.manrope(
-                fontSize: 18,
-                fontWeight: FontWeight.w800,
-                color: AppColors.brandAppBarColor,
-              ),
-            ),
-            AppSpacing.v8,
-            Padding(
-              padding: AppSpacing.x32,
-              child: Text(
-                emptySubtitle,
-                textAlign: TextAlign.center,
-                style: AppTextStyles.lexend(
-                  fontSize: 14,
-                  color: AppColors.textTertiary,
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
+          ),
+        );
+      });
     }
 
     return child;

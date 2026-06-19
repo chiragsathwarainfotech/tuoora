@@ -6,5 +6,8 @@ abstract class StudentRepositoryImpl {
   Future<Student> getStudentById(int id);
   Future<Student> updateStudent(int id, Map<String, dynamic> data);
   Future<bool> deleteStudent(int id);
+  Future<void> sendFeeReminder(dynamic id);
+  Future<String> sendPassword(dynamic id);
+  Future<void> resetPassword(dynamic id, String password);
 }
 

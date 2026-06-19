@@ -3,11 +3,14 @@ import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
+import 'package:tuoora/core/widgets/app_pickers.dart';
 import 'package:tuoora/presentation/institute/controllers/homework_controller.dart';
 import 'package:tuoora/presentation/institute/models/batch_model.dart';
 import 'package:tuoora/core/widgets/app_input_field.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_label.dart';
+import 'package:tuoora/core/constants/app_images.dart';
+import 'package:tuoora/core/widgets/app_action_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -31,7 +34,7 @@ class AddHomeworkScreen extends StatelessWidget {
             ),
             Expanded(
               child: SingleChildScrollView(
-                padding: AppSpacing.x24.add(AppSpacing.y16),
+                padding: AppSpacing.x16.add(AppSpacing.y16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -39,7 +42,7 @@ class AddHomeworkScreen extends StatelessWidget {
                       () => AppInputField(
                         label: AppStrings.instHomeworkSubjectLabel,
                         controller: controller.titleController,
-                        hint: AppStrings.instHomeworkSubjectHint,
+                        hint: AppStrings.instBatchSubjectHint,
                         errorText: controller.titleError.value,
                       ),
                     ),
@@ -71,8 +74,8 @@ class AddHomeworkScreen extends StatelessWidget {
   Widget _buildDatePicker(BuildContext context, HomeworkController controller) {
     return GestureDetector(
       onTap: () async {
-        final date = await showDatePicker(
-          context: context,
+        final date = await AppPickers.date(
+          context,
           initialDate: DateTime.now().add(const Duration(days: 1)),
           firstDate: DateTime.now(),
           lastDate: DateTime.now().add(const Duration(days: 365)),
@@ -87,7 +90,7 @@ class AddHomeworkScreen extends StatelessWidget {
           Container(
             padding: AppSpacing.all16,
             decoration: BoxDecoration(
-              color: AppColors.paleSilver,
+              color: AppColors.fieldBg,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
                 color: controller.dateError.value != null
@@ -109,7 +112,7 @@ class AddHomeworkScreen extends StatelessWidget {
                         : DateFormat(
                             'MM/dd/yyyy',
                           ).format(controller.dueDate.value!),
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 14,
                       color: controller.dueDate.value == null
                           ? AppColors.textMuted
@@ -129,7 +132,7 @@ class AddHomeworkScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 8.0, left: 4.0),
                 child: Text(
                   controller.dateError.value!,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 12,
                     color: Colors.redAccent,
                     fontWeight: FontWeight.w500,
@@ -174,16 +177,16 @@ class AddHomeworkScreen extends StatelessWidget {
                     AppSpacing.v12,
                     Text(
                       AppStrings.instAddAttachmentBtn,
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 16,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.textPrimary,
                       ),
                     ),
                     AppSpacing.v4,
                     Text(
                       AppStrings.instAddAttachmentDesc,
-                      style: AppTextStyles.lexend(
+                      style: AppTextStyles.outfit(
                         fontSize: 12,
                         color: AppColors.textTertiary,
                       ),
@@ -201,7 +204,7 @@ class AddHomeworkScreen extends StatelessWidget {
                     Text(
                       controller.selectedAttachment.value!.split('/').last,
                       textAlign: TextAlign.center,
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: AppColors.textPrimary,
@@ -210,13 +213,10 @@ class AddHomeworkScreen extends StatelessWidget {
                     AppSpacing.v12,
                     TextButton.icon(
                       onPressed: controller.removeAttachment,
-                      icon: const Icon(
-                        Icons.delete_outline_rounded,
-                        color: AppColors.bohoRed,
-                      ),
+                      icon: const AppActionIcon(asset: AppImages.icDelete),
                       label: Text(
-                        'Remove',
-                        style: AppTextStyles.manrope(
+                        AppStrings.labelRemove,
+                        style: AppTextStyles.outfit(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                           color: AppColors.bohoRed,
@@ -231,13 +231,17 @@ class AddHomeworkScreen extends StatelessWidget {
   }
 
   Widget _buildSaveButton(BuildContext context, HomeworkController controller) {
-    return Obx(
-      () => AppButton(
-        label: AppStrings.instCreateHomeworkBtn,
-        isLoading: controller.isLoading.value,
-        onPressed: () {
-          controller.createHomework();
-        },
+    return SafeArea(
+      top: false,
+      minimum: const EdgeInsets.only(bottom: 16),
+      child: Obx(
+        () => AppButton(
+          label: AppStrings.instCreateHomeworkBtn,
+          isLoading: controller.isLoading.value,
+          onPressed: () {
+            controller.createHomework();
+          },
+        ),
       ),
     );
   }

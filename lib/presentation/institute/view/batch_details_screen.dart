@@ -9,7 +9,12 @@ import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_info_row.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_metric_card.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/constants/app_images.dart';
+import 'package:tuoora/core/widgets/app_action_icon.dart';
+import 'package:tuoora/core/widgets/status_badge.dart';
+import 'package:tuoora/core/widgets/common_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class BatchDetailsScreen extends StatefulWidget {
@@ -45,34 +50,35 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
                     batchController.initEditMode(controller.batch);
                     Get.toNamed(AppRoutes.instituteEditBatch);
                   },
-                  icon: const Icon(
-                    Icons.edit_outlined,
-                    color: AppColors.primaryBrand,
-                  ),
+                  icon: const AppActionIcon(asset: AppImages.icEdit),
                 ),
                 IconButton(
                   onPressed: () => batchController.deleteBatchWithConfirmation(
                     controller.batch.id,
                   ),
-                  icon: const Icon(
-                    Icons.delete_outline_rounded,
-                    color: AppColors.bohoRed,
-                  ),
+                  icon: const AppActionIcon(asset: AppImages.icDelete),
                 ),
                 AppSpacing.h8,
               ],
             ),
             Expanded(
-              child: SingleChildScrollView(
-                padding: AppSpacing.x24.add(AppSpacing.y16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _buildBatchHeader(),
-                    AppSpacing.v32,
-                    _buildCourseManagementSection(),
-                    AppSpacing.v32,
-                  ],
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  await controller.refreshStudents();
+                },
+                color: AppColors.primaryBrand,
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: AppSpacing.x16,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _buildBatchHeader(),
+                      AppSpacing.v24,
+                      _buildCourseManagementSection(),
+                      AppSpacing.v24,
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -85,10 +91,10 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
   Widget _buildBatchHeader() {
     final batch = controller.batch;
     return Container(
-      padding: AppSpacing.all24,
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
@@ -102,49 +108,80 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
         children: [
           Row(
             children: [
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.s10,
-                  vertical: AppSpacing.s6,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.primaryBrandLight,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  AppStrings.instActiveBatchTag,
-                  style: AppTextStyles.manrope(
-                    fontSize: 9,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.primaryBrand,
-                    letterSpacing: 0.5,
-                  ),
+              Obx(
+                () => StatusBadge.fromLabel(
+                  controller.isStatusClosed.value
+                      ? 'Closed'
+                      : batch.statusLabel,
                 ),
               ),
               AppSpacing.h12,
               Text(
-                'ID: #${batch.id.length > 4 ? batch.id.substring(0, 4) : batch.id}',
-                style: AppTextStyles.manrope(
+                'Batch ID: ${batch.id.length > 4 ? batch.id.substring(0, 4) : batch.id}',
+                style: AppTextStyles.outfit(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                   color: AppColors.textTertiary,
                 ),
               ),
+              const Spacer(),
+              Obx(() {
+                if (controller.isStatusClosed.value) {
+                  return const SizedBox.shrink();
+                }
+                return GestureDetector(
+                  onTap: () {
+                    CommonDialog.show(
+                      title: 'Close Batch',
+                      description:
+                          'Are you sure you want to close this batch? This action cannot be undone.',
+                      confirmText: 'Close',
+                      icon: Icons.highlight_remove_rounded,
+                      iconColor: AppColors.primaryBrand,
+                      iconBgColor: AppColors.primaryBrandLight,
+                      confirmButtonColor: AppColors.primaryBrand,
+                      onConfirm: () {
+                        controller.closeBatch();
+                      },
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.errorBg,
+                      borderRadius: BorderRadius.circular(
+                        AppSpacing.cardRadius,
+                      ),
+                    ),
+                    child: Text(
+                      'Close Batch',
+                      style: AppTextStyles.outfit(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.bohoRed,
+                      ),
+                    ),
+                  ),
+                );
+              }),
             ],
           ),
           AppSpacing.v16,
           Text(
             batch.title,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 24,
               fontWeight: FontWeight.w800,
-              color: AppColors.primaryBrand,
+              color: AppColors.textPrimary,
             ),
           ),
           AppSpacing.v8,
           Text(
             batch.description,
-            style: AppTextStyles.lexend(
+            style: AppTextStyles.outfit(
               fontSize: 14,
               fontWeight: FontWeight.w400,
               color: AppColors.textSecondary,
@@ -159,22 +196,15 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
                   children: [
                     Expanded(
                       child: InstituteMetricCard(
-                        label: AppStrings.instStudentsCountLabel,
-                        value: '${controller.studentCount.value}',
+                        label: AppStrings.instTotalCollectionLabel,
+                        value: '₹${controller.totalExpected.value}',
                       ),
                     ),
                     AppSpacing.h12,
                     Expanded(
                       child: InstituteMetricCard(
                         label: AppStrings.instFeesPaidLabel,
-                        value:
-                            batch.totalExpected != null &&
-                                double.tryParse(
-                                      batch.totalExpected.toString(),
-                                    ) !=
-                                    0
-                            ? '${((double.tryParse(batch.totalPaid?.toString() ?? '0') ?? 0) / (double.tryParse(batch.totalExpected.toString()) ?? 1) * 100).toStringAsFixed(0)}%'
-                            : '0%',
+                        value: '₹${controller.totalPaid.value}',
                       ),
                     ),
                   ],
@@ -183,8 +213,8 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: InstituteMetricCard(
-                    label: AppStrings.instTotalCollectionLabel,
-                    value: '₹${batch.totalExpected?.toString() ?? '0'}',
+                    label: AppStrings.instNavStudents,
+                    value: '${controller.studentCount.value}',
                   ),
                 ),
               ],
@@ -200,98 +230,120 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
             icon: Icons.calendar_month_rounded,
             text: batch.days.join(', '),
           ),
-          AppSpacing.v12,
-          const InstituteInfoRow(
-            icon: Icons.person_rounded,
-            text: 'Prof. Julian Archer',
-          ),
+          if (batch.classroom != null &&
+              batch.classroom!.trim().isNotEmpty) ...[
+            AppSpacing.v12,
+            InstituteInfoRow(
+              icon: Icons.location_on_rounded,
+              text: batch.classroom!,
+            ),
+          ],
+          if (batch.staffName != null &&
+              batch.staffName!.trim().isNotEmpty) ...[
+            AppSpacing.v12,
+            InstituteInfoRow(
+              icon: Icons.person_rounded,
+              text: batch.staffName!,
+            ),
+          ],
         ],
       ),
     );
   }
 
+  static const List<Color> _accentPalette = <Color>[
+    AppColors.primaryBrand,
+    AppColors.successGreen,
+    AppColors.bohoRed,
+    AppColors.subjectPhysics,
+  ];
+
   Widget _buildCourseManagementSection() {
+    final tiles = <_ManagementTileData>[
+      _ManagementTileData(
+        svgAsset: AppImages.icBatchStudents,
+        title: AppStrings.instNavStudents,
+        onTap: () => Get.toNamed(
+          AppRoutes.instituteBatchStudents,
+          arguments: controller.batch,
+        ),
+      ),
+      _ManagementTileData(
+        svgAsset: AppImages.icBatchHomework,
+        title: AppStrings.homework,
+        onTap: () => Get.toNamed(
+          AppRoutes.instituteBatchHomework,
+          arguments: controller.batch,
+        ),
+      ),
+      _ManagementTileData(
+        svgAsset: AppImages.icBatchAttendance,
+        title: AppStrings.instAttendanceTitle,
+        onTap: () => Get.toNamed(
+          AppRoutes.instituteMarkAttendance,
+          arguments: controller.batch,
+        ),
+      ),
+      _ManagementTileData(
+        svgAsset: AppImages.icBatchResource,
+        title: AppStrings.resources,
+        onTap: () => Get.toNamed(
+          AppRoutes.instituteBatchResources,
+          arguments: controller.batch,
+        ),
+      ),
+    ];
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           AppStrings.instCourseManagementHeader,
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 20,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.textPrimary,
           ),
         ),
         AppSpacing.v20,
-        GridView.count(
+        GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          crossAxisCount: 3,
-          mainAxisSpacing: 16,
-          crossAxisSpacing: 16,
-          childAspectRatio: 0.85,
-          children: [
-            _buildManagementTile(
-              icon: Icons.people_alt_rounded,
-              title: AppStrings.instNavStudents,
-              onTap: () => Get.toNamed(
-                AppRoutes.instituteBatchStudents,
-                arguments: controller.batch,
-              ),
-            ),
-            _buildManagementTile(
-              icon: Icons.assignment_rounded,
-              title: 'Homework',
-              onTap: () => Get.toNamed(
-                AppRoutes.instituteBatchHomework,
-                arguments: controller.batch,
-              ),
-            ),
-            _buildManagementTile(
-              icon: Icons.menu_book_rounded,
-              title: 'Resources',
-              onTap: () => Get.toNamed(
-                AppRoutes.instituteBatchResources,
-                arguments: controller.batch,
-              ),
-            ),
-          ],
-        ),
-        AppSpacing.v16,
-        GridView.count(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          crossAxisCount: 3,
-          mainAxisSpacing: 16,
-          crossAxisSpacing: 16,
-          childAspectRatio: 0.85,
-          children: [
-            _buildManagementTile(
-              icon: Icons.checklist_rtl_rounded,
-              title: AppStrings.instAttendanceTitle,
-              onTap: () => Get.toNamed(
-                AppRoutes.instituteMarkAttendance,
-                arguments: controller.batch,
-              ),
-            ),
-          ],
+          itemCount: tiles.length,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            mainAxisSpacing: 16,
+            crossAxisSpacing: 16,
+            childAspectRatio: 1,
+          ),
+          itemBuilder: (context, index) {
+            final tile = tiles[index];
+            final accent = _accentPalette[index % _accentPalette.length];
+            return _buildManagementTile(
+              svgAsset: tile.svgAsset,
+              title: tile.title,
+              onTap: tile.onTap,
+              accent: accent,
+            );
+          },
         ),
       ],
     );
   }
 
   Widget _buildManagementTile({
-    required IconData icon,
+    required String svgAsset,
     required String title,
     required VoidCallback onTap,
+    required Color accent,
   }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: AppSpacing.all12,
+        padding: AppSpacing.cardPadding,
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.03),
@@ -303,15 +355,28 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, color: AppColors.primaryBrand, size: 28),
+            SvgPicture.asset(
+              svgAsset,
+              width: 48,
+              height: 48,
+              theme: SvgTheme(currentColor: accent),
+              colorFilter: ColorFilter.mode(accent, BlendMode.srcIn),
+            ),
+
             AppSpacing.v12,
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: AppTextStyles.manrope(
-                fontSize: 14,
-                fontWeight: FontWeight.w800,
-                color: AppColors.textPrimary,
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                title,
+                maxLines: 1,
+                softWrap: false,
+                overflow: TextOverflow.fade,
+                textAlign: TextAlign.center,
+                style: AppTextStyles.outfit(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textPrimary,
+                ),
               ),
             ),
           ],
@@ -319,4 +384,16 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
       ),
     );
   }
+}
+
+class _ManagementTileData {
+  final String svgAsset;
+  final String title;
+  final VoidCallback onTap;
+
+  const _ManagementTileData({
+    required this.svgAsset,
+    required this.title,
+    required this.onTap,
+  });
 }

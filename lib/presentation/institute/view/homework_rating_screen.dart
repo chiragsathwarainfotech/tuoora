@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/status_badge.dart';
 import 'package:tuoora/presentation/institute/controllers/homework_rating_controller.dart';
 import 'package:tuoora/presentation/institute/models/homework_model.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
@@ -30,43 +32,52 @@ class HomeworkRatingScreen extends StatelessWidget {
               onBackTap: () => Get.back(),
             ),
             Expanded(
-              child: SingleChildScrollView(
-                padding: AppSpacing.x24.add(AppSpacing.y16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _buildHeader(homework),
-                    AppSpacing.v24,
-                    _buildProgressSection(homework),
-                    AppSpacing.v24,
-                    _buildFilterSection(controller),
-                    AppSpacing.v24,
-                    Obx(
-                      () => Column(
-                        children: controller.filteredSubmissions
-                            .map(
-                              (sub) => _buildStudentRatingCard(controller, sub),
-                            )
-                            .toList(),
+              child: Obx(
+                () => controller.isFetchingDetails.value
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.primaryBrand,
+                        ),
+                      )
+                    : SingleChildScrollView(
+                        padding: AppSpacing.x16.add(AppSpacing.y16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            _buildHeader(homework),
+                            AppSpacing.v24,
+                            _buildProgressSection(homework),
+                            AppSpacing.v24,
+                            _buildFilterSection(controller),
+                            AppSpacing.v24,
+                            Column(
+                              children: controller.filteredSubmissions
+                                  .map(
+                                    (sub) => _buildStudentRatingCard(
+                                        controller, sub),
+                                  )
+                                  .toList(),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
               ),
             ),
           ],
         ),
       ),
-      bottomNavigationBar: !controller.canEdit
-          ? const SizedBox.shrink()
-          : Obx(
-              () => InstituteBottomButton(
-                label: 'Submit Ratings',
-                icon: Icons.check_circle_rounded,
-                isLoading: controller.isLoading.value,
-                onTap: () => controller.submitRatings(),
-              ),
-            ),
+      bottomNavigationBar: Obx(() {
+        if (!controller.canEdit) return const SizedBox.shrink();
+        if (controller.filterIndex.value == 2 || controller.filterIndex.value == 3) {
+          return const SizedBox.shrink();
+        }
+        return InstituteBottomButton(
+          label: AppStrings.submitRatings,
+          icon: Icons.check_circle_rounded,
+          isLoading: controller.isLoading.value,
+          onTap: () => controller.submitRatings(),
+        );
+      }),
     );
   }
 
@@ -79,10 +90,10 @@ class HomeworkRatingScreen extends StatelessWidget {
           children: [
             Text(
               hw.subject.toUpperCase(),
-              style: AppTextStyles.lexend(
+              style: AppTextStyles.outfit(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
-                color: AppColors.primaryBrand,
+                color: AppColors.textTertiary,
                 letterSpacing: 1,
               ),
             ),
@@ -94,9 +105,9 @@ class HomeworkRatingScreen extends StatelessWidget {
               ),
               child: Text(
                 'BATCH ${hw.batchId}',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 10,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.primaryBrand,
                 ),
               ),
@@ -106,7 +117,7 @@ class HomeworkRatingScreen extends StatelessWidget {
         AppSpacing.v8,
         Text(
           hw.title,
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 28,
             fontWeight: FontWeight.w800,
             color: AppColors.textPrimary,
@@ -115,7 +126,7 @@ class HomeworkRatingScreen extends StatelessWidget {
         AppSpacing.v8,
         Text(
           hw.description,
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 16,
             color: AppColors.textPrimary,
           ),
@@ -151,9 +162,9 @@ class HomeworkRatingScreen extends StatelessWidget {
                   AppSpacing.h8,
                   Text(
                     AppStrings.instGradingProgressLabel,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 14,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.textSecondary,
                     ),
                   ),
@@ -164,15 +175,15 @@ class HomeworkRatingScreen extends StatelessWidget {
                   children: [
                     TextSpan(
                       text: '$submitted/$total ',
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 24,
                         fontWeight: FontWeight.w800,
-                        color: AppColors.primaryBrand,
+                        color: AppColors.textPrimary,
                       ),
                     ),
                     TextSpan(
                       text: AppStrings.instSubmittedTag,
-                      style: AppTextStyles.lexend(
+                      style: AppTextStyles.outfit(
                         fontSize: 10,
                         fontWeight: FontWeight.w600,
                         color: AppColors.textTertiary,
@@ -208,6 +219,8 @@ class HomeworkRatingScreen extends StatelessWidget {
           _buildFilterChip(controller, AppStrings.instFilterSubmitted, 1),
           AppSpacing.h12,
           _buildFilterChip(controller, 'Pending', 2),
+          AppSpacing.h12,
+          _buildFilterChip(controller, 'Reviewed', 3),
         ],
       ),
     );
@@ -233,9 +246,9 @@ class HomeworkRatingScreen extends StatelessWidget {
           ),
           child: Text(
             label,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 14,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               color: isSelected ? AppColors.white : AppColors.textSecondary,
             ),
           ),
@@ -254,7 +267,7 @@ class HomeworkRatingScreen extends StatelessWidget {
       padding: AppSpacing.all16,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -275,15 +288,15 @@ class HomeworkRatingScreen extends StatelessWidget {
                   children: [
                     Text(
                       sub.studentName,
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 16,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.textPrimary,
                       ),
                     ),
                     Text(
                       'ID: #${sub.studentId}',
-                      style: AppTextStyles.lexend(
+                      style: AppTextStyles.outfit(
                         fontSize: 12,
                         color: AppColors.textTertiary,
                       ),
@@ -291,30 +304,16 @@ class HomeworkRatingScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: _getStatusColor(sub.status).withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Text(
-                  sub.status,
-                  style: AppTextStyles.manrope(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w800,
-                    color: _getStatusColor(sub.status),
-                  ),
-                ),
-              ),
+              StatusBadge.fromLabel(sub.status),
             ],
           ),
-          AppSpacing.v16,
-          if (isSubmitted)
+          if (isSubmitted) ...[
+            AppSpacing.v16,
             Row(
               children: [
                 Text(
                   AppStrings.instScoreLabel,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: AppColors.textSecondary,
@@ -333,7 +332,7 @@ class HomeworkRatingScreen extends StatelessWidget {
                   child: Row(
                     children: [
                       IconButton(
-                        onPressed: controller.canEdit
+                        onPressed: (controller.canEdit && sub.status.toLowerCase() != 'reviewed')
                             ? () => controller.updateScore(
                                 sub.studentId.toString(),
                                 sub.score - 1,
@@ -346,15 +345,15 @@ class HomeworkRatingScreen extends StatelessWidget {
                       AppSpacing.h12,
                       Text(
                         sub.score.toStringAsFixed(0),
-                        style: AppTextStyles.manrope(
+                        style: AppTextStyles.outfit(
                           fontSize: 16,
-                          fontWeight: FontWeight.w800,
-                          color: AppColors.primaryBrand,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textPrimary,
                         ),
                       ),
                       AppSpacing.h12,
                       IconButton(
-                        onPressed: controller.canEdit
+                        onPressed: (controller.canEdit && sub.status.toLowerCase() != 'reviewed')
                             ? () => controller.updateScore(
                                 sub.studentId.toString(),
                                 sub.score + 1,
@@ -370,45 +369,14 @@ class HomeworkRatingScreen extends StatelessWidget {
                 AppSpacing.h8,
                 Text(
                   '/ 10',
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 14,
                     color: AppColors.textTertiary,
                   ),
                 ),
               ],
-            )
-          else
-            ElevatedButton(
-              onPressed: () =>
-                  controller.sendReminder(sub.studentId.toString()),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.textSecondary,
-                minimumSize: const Size(double.infinity, 44),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                elevation: 0,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    Icons.notifications_outlined,
-                    size: 18,
-                    color: AppColors.white,
-                  ),
-                  AppSpacing.h8,
-                  Text(
-                    AppStrings.instSendReminderBtn,
-                    style: AppTextStyles.manrope(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.white,
-                    ),
-                  ),
-                ],
-              ),
             ),
+          ],
         ],
       ),
     );
@@ -426,7 +394,7 @@ class HomeworkRatingScreen extends StatelessWidget {
           color: AppColors.primaryBrandLight,
           shape: BoxShape.circle,
           image: DecorationImage(
-            image: NetworkImage(imageUrl),
+            image: CachedNetworkImageProvider(imageUrl),
             fit: BoxFit.cover,
           ),
         ),
@@ -452,9 +420,9 @@ class HomeworkRatingScreen extends StatelessWidget {
       child: Center(
         child: Text(
           initials,
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 16,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.primaryBrand,
           ),
         ),
@@ -462,14 +430,4 @@ class HomeworkRatingScreen extends StatelessWidget {
     );
   }
 
-  Color _getStatusColor(String status) {
-    switch (status.toUpperCase()) {
-      case 'SUBMITTED':
-        return AppColors.darkGreen;
-      case 'PENDING':
-        return AppColors.bohoRed;
-      default:
-        return AppColors.textTertiary;
-    }
-  }
 }

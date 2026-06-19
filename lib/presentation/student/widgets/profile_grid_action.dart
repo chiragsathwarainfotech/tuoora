@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/theme/app_spacing.dart';
 
 class ProfileGridAction extends StatelessWidget {
   final IconData icon;
@@ -23,10 +24,10 @@ class ProfileGridAction extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        padding: AppSpacing.cardPadding,
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           border: Border.all(
             color: AppColors.borderGrey.withValues(alpha: 0.5),
           ),
@@ -35,25 +36,29 @@ class ProfileGridAction extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              padding: const EdgeInsets.all(6),
+              padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: iconBgColor,
                 shape: BoxShape.circle,
               ),
               child: Icon(icon, color: iconColor),
             ),
-            const SizedBox(width: 4),
+            const SizedBox(width: 6),
             Expanded(
-              child: Text(
-                label,
-                style: AppTextStyles.manrope(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.textPrimary,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  softWrap: false,
+                  overflow: TextOverflow.fade,
+                  style: AppTextStyles.outfit(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textPrimary,
+                  ),
                 ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
               ),
             ),
           ],

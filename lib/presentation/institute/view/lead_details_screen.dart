@@ -21,41 +21,22 @@ class LeadDetailsScreen extends GetView<LeadsController> {
         child: Obx(() {
           final lead = controller.selectedLead.value;
           if (lead == null) {
-            return const Center(child: Text('Lead not found'));
+            return const Center(child: Text(AppStrings.leadNotFound));
           }
           return Column(
             children: [
               const InstituteAppBar(title: AppStrings.instLeadDetailsTitle),
               Expanded(
                 child: SingleChildScrollView(
-                  padding: AppSpacing.x24.add(AppSpacing.y16),
+                  padding: AppSpacing.x16.add(AppSpacing.y16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildHeader(lead),
-                      AppSpacing.v32,
-                      _buildContactSection(lead),
-                      AppSpacing.v32,
-                      _buildInfoCard(
-                        Icons.school_rounded,
-                        AppStrings.instCourseSelectionLabel,
-                        lead.courseSelection ?? "",
-                      ),
-                      AppSpacing.v16,
-                      _buildInfoCard(
-                        Icons.location_on_rounded,
-                        AppStrings.instAddressLabel,
-                        lead.address ?? "",
-                      ),
-                      AppSpacing.v16,
-                      _buildInfoCard(
-                        Icons.campaign_rounded,
-                        AppStrings.instReferenceLabel,
-                        lead.reference ?? "",
-                      ),
+                      AppSpacing.v24,
+                      _buildDetailsSection(lead),
                       AppSpacing.v32,
                       _buildInteractionHistory(lead, context),
-                      AppSpacing.v32,
                     ],
                   ),
                 ),
@@ -70,187 +51,90 @@ class LeadDetailsScreen extends GetView<LeadsController> {
 
   Widget _buildHeader(Lead lead) {
     final dateFormat = DateFormat('MMM dd, yyyy');
-    return Container(
-      padding: AppSpacing.all24,
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.primaryBrandLight,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  lead.status,
-                  style: AppTextStyles.manrope(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.primaryBrand,
-                    letterSpacing: 0.5,
-                  ),
-                ),
-              ),
-              Text(
-                '${AppStrings.instAppliedSuffix} ${dateFormat.format(lead.createdAt)}',
-                style: AppTextStyles.lexend(
-                  fontSize: 12,
-                  color: AppColors.textTertiary,
-                ),
-              ),
-            ],
-          ),
-          AppSpacing.v16,
-          Text(
-            lead.fullName,
-            style: AppTextStyles.manrope(
-              fontSize: 28,
-              fontWeight: FontWeight.w800,
-              color: AppColors.primaryBrand,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildContactSection(Lead lead) {
-    return Container(
-      padding: AppSpacing.all20,
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          _buildContactRow(Icons.email_rounded, 'EMAIL', lead.email),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 16),
-            child: Divider(height: 1, color: AppColors.background),
-          ),
-          _buildContactRow(Icons.phone_rounded, 'PHONE', lead.phone),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildContactRow(IconData icon, String label, String value) {
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, color: AppColors.primaryBrand, size: 20),
-        AppSpacing.h16,
-        Expanded(
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              lead.fullName,
+              style: AppTextStyles.outfit(
+                fontSize: 28,
+                fontWeight: FontWeight.w800,
+                color: AppColors.textPrimary,
+              ),
+            ),
+            Text(
+              '${AppStrings.instAppliedSuffix} ${dateFormat.format(lead.createdAt)}',
+              style: AppTextStyles.outfit(
+                fontSize: 12,
+                color: AppColors.textTertiary,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDetailsSection(Lead lead) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildFlatField('EMAIL', lead.email),
+        _buildFlatField('PHONE', lead.phone),
+        _buildFlatField(AppStrings.instAddressLabel, lead.address ?? ''),
+        _buildFlatField(
+          AppStrings.instReferenceLabel,
+          lead.reference ?? '',
+          isLast: true,
+        ),
+        _buildFlatField(
+          AppStrings.instCourseSelectionLabel,
+          lead.courseSelection ?? '',
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFlatField(String label, String value, {bool isLast = false}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: AppSpacing.s12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 label,
-                style: AppTextStyles.lexend(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w700,
+                style: AppTextStyles.outfit(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textTertiary,
                   letterSpacing: 1.0,
                 ),
               ),
               AppSpacing.v4,
               Text(
-                value,
-                style: AppTextStyles.manrope(
+                value.isEmpty ? '—' : value,
+                style: AppTextStyles.outfit(
                   fontSize: 16,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
                 ),
               ),
             ],
           ),
         ),
+        if (!isLast)
+          Divider(
+            height: 1,
+            thickness: 1,
+            color: AppColors.borderGrey.withValues(alpha: 0.6),
+          ),
       ],
-    );
-  }
-
-  Widget _buildInfoCard(
-    IconData icon,
-    String label,
-    String value, {
-    String? subtitle,
-  }) {
-    return Container(
-      width: double.infinity,
-      padding: AppSpacing.all20,
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(icon, color: AppColors.primaryBrand, size: 18),
-              AppSpacing.h12,
-              Text(
-                label,
-                style: AppTextStyles.lexend(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.textTertiary,
-                  letterSpacing: 1.0,
-                ),
-              ),
-            ],
-          ),
-          AppSpacing.v12,
-          Text(
-            value,
-            style: AppTextStyles.manrope(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-              color: AppColors.textPrimary,
-            ),
-          ),
-          if (subtitle != null) ...[
-            AppSpacing.v4,
-            Text(
-              subtitle,
-              style: AppTextStyles.lexend(
-                fontSize: 13,
-                color: AppColors.textSecondary,
-              ),
-            ),
-          ],
-        ],
-      ),
     );
   }
 
@@ -262,16 +146,16 @@ class LeadDetailsScreen extends GetView<LeadsController> {
           children: [
             const Icon(
               Icons.history_rounded,
-              color: AppColors.primaryBrand,
+              color: AppColors.fieldLabel,
               size: 20,
             ),
             AppSpacing.h12,
             Text(
               AppStrings.instInteractionHistoryHeading,
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 16,
-                fontWeight: FontWeight.w800,
-                color: AppColors.primaryBrand,
+                fontWeight: FontWeight.w600,
+                color: AppColors.textPrimary,
               ),
             ),
             const Spacer(),
@@ -284,7 +168,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
                 ),
                 decoration: BoxDecoration(
                   color: AppColors.primaryBrand.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
                 ),
                 child: Row(
                   children: [
@@ -295,10 +179,10 @@ class LeadDetailsScreen extends GetView<LeadsController> {
                     ),
                     AppSpacing.h8,
                     Text(
-                      'Add Note',
-                      style: AppTextStyles.manrope(
+                      AppStrings.instAddNoteTitle,
+                      style: AppTextStyles.outfit(
                         fontSize: 12,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.primaryBrand,
                       ),
                     ),
@@ -319,7 +203,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
               borderRadius: BorderRadius.circular(16),
             ),
             child: const Center(
-              child: Text('No interaction history available'),
+              child: Text(AppStrings.noInteractionHistoryAvailable),
             ),
           ),
       ],
@@ -332,7 +216,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 6.0),
             child: Column(
               children: [
                 Container(
@@ -355,10 +239,11 @@ class LeadDetailsScreen extends GetView<LeadsController> {
           AppSpacing.h16,
           Expanded(
             child: Container(
-              padding: AppSpacing.all16,
+              padding: AppSpacing.cardPadding,
+              margin: AppSpacing.bottom10,
               decoration: BoxDecoration(
                 color: AppColors.white,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.02),
@@ -375,15 +260,15 @@ class LeadDetailsScreen extends GetView<LeadsController> {
                     children: [
                       Text(
                         item.title,
-                        style: AppTextStyles.manrope(
+                        style: AppTextStyles.outfit(
                           fontSize: 14,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w600,
                           color: AppColors.textPrimary,
                         ),
                       ),
                       Text(
                         DateFormat('MMM dd, yyyy').format(item.createdAt),
-                        style: AppTextStyles.lexend(
+                        style: AppTextStyles.outfit(
                           fontSize: 10,
                           fontWeight: FontWeight.w500,
                           color: AppColors.textTertiary,
@@ -394,7 +279,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
                   AppSpacing.v8,
                   Text(
                     item.note,
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 12,
                       color: AppColors.textSecondary,
                       height: 1.4,
@@ -437,9 +322,13 @@ class LeadDetailsScreen extends GetView<LeadsController> {
 
     Get.dialog(
       Dialog(
+        insetPadding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.s16,
+          vertical: AppSpacing.s24,
+        ),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         child: Container(
-          padding: AppSpacing.all28,
+          padding: AppSpacing.all16,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -448,11 +337,11 @@ class LeadDetailsScreen extends GetView<LeadsController> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Add Interaction Note',
-                    style: AppTextStyles.manrope(
+                    AppStrings.addInteractionNote,
+                    style: AppTextStyles.outfit(
                       fontSize: 18,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.primaryBrand,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textPrimary,
                     ),
                   ),
                   GestureDetector(
@@ -468,8 +357,8 @@ class LeadDetailsScreen extends GetView<LeadsController> {
               AppSpacing.v24,
               Obx(
                 () => _buildDialogField(
-                  label: 'TITLE',
-                  hint: 'e.g., Follow-up Call',
+                  label: AppStrings.instNoteTitleLabel,
+                  hint: AppStrings.enterLeadTitle,
                   controller: controller.noteTitleController,
                   errorText: controller.noteTitleError.value,
                 ),
@@ -477,8 +366,8 @@ class LeadDetailsScreen extends GetView<LeadsController> {
               AppSpacing.v20,
               Obx(
                 () => _buildDialogField(
-                  label: 'NOTE',
-                  hint: 'Details about the interaction...',
+                  label: AppStrings.instBatchDescLabel,
+                  hint: AppStrings.hintEnterDescription,
                   controller: controller.notesController,
                   maxLines: 4,
                   errorText: controller.noteError.value,
@@ -487,7 +376,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
               AppSpacing.v32,
               Obx(
                 () => AppButton(
-                  label: 'Submit Note',
+                  label: AppStrings.submit,
                   isLoading: controller.isLoading.value,
                   onPressed: () => controller.addLeadNote(),
                 ),
@@ -511,9 +400,9 @@ class LeadDetailsScreen extends GetView<LeadsController> {
       children: [
         Text(
           label,
-          style: AppTextStyles.lexend(
-            fontSize: 10,
-            fontWeight: FontWeight.w700,
+          style: AppTextStyles.outfit(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
             color: AppColors.textTertiary,
             letterSpacing: 1.0,
           ),
@@ -522,7 +411,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           decoration: BoxDecoration(
-            color: AppColors.paleSilver,
+            color: AppColors.fieldBg,
             borderRadius: BorderRadius.circular(12),
             border: errorText != null
                 ? Border.all(color: Colors.redAccent, width: 1.5)
@@ -531,15 +420,15 @@ class LeadDetailsScreen extends GetView<LeadsController> {
           child: TextField(
             controller: controller,
             maxLines: maxLines,
-            style: AppTextStyles.lexend(
+            style: AppTextStyles.outfit(
               fontSize: 14,
               color: AppColors.textPrimary,
             ),
             decoration: InputDecoration(
               hintText: hint,
-              hintStyle: AppTextStyles.lexend(
+              hintStyle: AppTextStyles.outfit(
                 fontSize: 14,
-                color: AppColors.blueSapphire,
+                color: AppColors.fieldLabel,
               ),
               border: InputBorder.none,
               contentPadding: const EdgeInsets.symmetric(vertical: 14),
@@ -550,7 +439,7 @@ class LeadDetailsScreen extends GetView<LeadsController> {
           const SizedBox(height: 4),
           Text(
             errorText,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 11,
               color: Colors.redAccent,
               fontWeight: FontWeight.w500,

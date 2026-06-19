@@ -1,4 +1,5 @@
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/services/download_service.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
@@ -62,41 +63,21 @@ class ResourceDetailController extends GetxController {
     String fileName,
     String? extension,
   ) async {
+    isDownloading.value = true;
+    downloadProgress.value = 0.0;
+
+    final fullFileName = extension != null && !fileName.contains('.')
+        ? '$fileName.$extension'
+        : fileName;
+
     try {
-      isDownloading.value = true;
-      downloadProgress.value = 0.0;
-
-      Get.snackbar(
-        'Downloading',
-        'Please wait, your file is being downloaded...',
-        snackPosition: SnackPosition.BOTTOM,
-        showProgressIndicator: true,
-        backgroundColor: AppColors.primaryBrand,
-        colorText: AppColors.white,
-      );
-
-      final bytes = await _repository.downloadResource(
-        resourceId,
-        onProgress: (p) {
-          downloadProgress.value = p;
-        },
-      );
-
-      // If extension is not provided, we can try to guess it or just use a default
-      final fullFileName = extension != null && !fileName.contains('.')
-          ? '$fileName.$extension'
-          : fileName;
-
-      await _downloadService.saveFile(bytes: bytes, fileName: fullFileName);
-
-      // We don't need a second snackbar here as saveFile already shows one on success.
-    } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Failed to download file: ${e.toString().replaceAll('Exception: ', '')}',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.redAccent,
-        colorText: AppColors.white,
+      await _downloadService.download(
+        label: 'Downloading $fileName…',
+        fileName: fullFileName,
+        fetch: () => _repository.downloadResource(
+          resourceId,
+          onProgress: (p) => downloadProgress.value = p,
+        ),
       );
     } finally {
       isDownloading.value = false;
@@ -109,13 +90,12 @@ class ResourceDetailController extends GetxController {
       isLoading.value = true;
       await _repository.deleteResource(int.parse(resourceId));
 
-      // Update parent list if it exists
       if (Get.isRegistered<ResourcesController>(tag: batchId)) {
         Get.find<ResourcesController>(tag: batchId).removeResource(resourceId);
       }
 
-      Get.back(); // Close detail screen
-      AppSnackBar.success('Resource deleted successfully');
+      Get.back();
+      AppSnackBar.success(AppStrings.resourceDeletedSuccessfully);
     } catch (e) {
       AppSnackBar.error('Failed to delete resource: $e');
     } finally {

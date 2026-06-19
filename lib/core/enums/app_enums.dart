@@ -7,8 +7,8 @@ enum NotificationKind {
   dailyUpdate('daily_update'),
   batchAssignment('batch_assignment'),
   batchRemoval('batch_removal'),
-  holidays('holidays'),
-  paymentReceiver('payment_receiver'),
+  eventsHolidays('events_holidays'),
+  feeReminders('fee_reminder'),
   unknown('');
 
   final String value;
@@ -23,14 +23,6 @@ enum NotificationKind {
   }
 }
 
-enum UpdateRecipient {
-  students,
-  parents,
-  both;
-
-  String toJson() => name;
-}
-
 enum UpdateTargetType {
   all,
   batch;
@@ -43,12 +35,11 @@ enum UpdateCategory {
   Administrative,
   Emergency,
   Event,
+  Holiday,
   Other;
 
   String toJson() => name;
 }
-
-enum AppInputFieldVariant { standard, profile }
 
 enum ResourceType { image, video, document }
 

@@ -1,5 +1,6 @@
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/utils/subscription_guard.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/presentation/institute/controllers/institute_controller.dart';
@@ -7,6 +8,7 @@ import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
+import 'package:tuoora/core/widgets/app_empty_view.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -30,7 +32,7 @@ class InstituteFeesScreen extends GetView<InstituteController> {
                 color: AppColors.primaryBrand,
                 child: SingleChildScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),
-                  padding: AppSpacing.x24,
+                  padding: AppSpacing.x16,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -40,11 +42,10 @@ class InstituteFeesScreen extends GetView<InstituteController> {
                           controller.currentMonthTotal.value,
                         ),
                       ),
-                      AppSpacing.v32,
+                      AppSpacing.v24,
                       _buildRegistryHeader(controller),
                       AppSpacing.v16,
                       _buildRegistryList(controller),
-                      AppSpacing.v32,
                     ],
                   ),
                 ),
@@ -55,8 +56,12 @@ class InstituteFeesScreen extends GetView<InstituteController> {
       ),
       floatingActionButton: FloatingActionButton(
         heroTag: 'fees_fab_unique_tag',
-        onPressed: () => Get.toNamed(AppRoutes.instituteRecordFee),
-        backgroundColor: AppColors.primaryBrand,
+        onPressed: () => SubscriptionGuard.runAddAction(
+          () => Get.toNamed(AppRoutes.instituteRecordFee),
+        ),
+        backgroundColor: SubscriptionGuard.blocksAdd
+            ? AppColors.textMuted
+            : AppColors.primaryBrand,
         child: const Icon(Icons.add, color: AppColors.white, size: 28),
       ),
     );
@@ -64,20 +69,20 @@ class InstituteFeesScreen extends GetView<InstituteController> {
 
   Widget _buildTotalCollectedCard(double amount) {
     return Container(
-      padding: AppSpacing.all24,
+      padding: AppSpacing.cardPadding,
       width: double.infinity,
       decoration: BoxDecoration(
         color: AppColors.primaryBrand,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             AppStrings.instCurrentMonthCollected,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 12,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.white.withValues(alpha: 0.7),
               letterSpacing: 1.2,
             ),
@@ -85,7 +90,7 @@ class InstituteFeesScreen extends GetView<InstituteController> {
           AppSpacing.v12,
           Text(
             '₹${NumberFormat('#,##,###.##').format(amount)}',
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 32,
               fontWeight: FontWeight.w800,
               color: AppColors.white,
@@ -102,9 +107,9 @@ class InstituteFeesScreen extends GetView<InstituteController> {
       children: [
         Text(
           AppStrings.instFeeRegistry,
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 18,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.textPrimary,
           ),
         ),
@@ -112,12 +117,12 @@ class InstituteFeesScreen extends GetView<InstituteController> {
           behavior: HitTestBehavior.translucent,
           onTap: () => controller.downloadFeeReport(),
           child: Container(
-            padding: AppSpacing.all8,
+            padding: AppSpacing.cardPadding,
             decoration: BoxDecoration(
               color: AppColors.primaryBrand,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
             ),
-            child: const Icon(Icons.download, color: AppColors.white, size: 26),
+            child: const Icon(Icons.download, color: AppColors.white, size: 24),
           ),
         ),
       ],
@@ -133,38 +138,26 @@ class InstituteFeesScreen extends GetView<InstituteController> {
       }
 
       if (controller.feeRecords.isEmpty) {
-        return Center(
-          child: Column(
-            children: [
-              AppSpacing.v48,
-              Icon(
-                Icons.receipt_long_outlined,
-                size: 64,
-                color: AppColors.primaryBrand,
-              ),
-              AppSpacing.v16,
-              Text(
-                'No fee records found',
-                style: AppTextStyles.manrope(
-                  fontSize: 18,
-                  color: AppColors.brandAppBarColor,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ],
-          ),
+        return const AppEmptyView(
+          icon: Icons.receipt_long_outlined,
+          title: AppStrings.noFeeRecordsFound,
         );
       }
 
       return Column(
         children: controller.feeRecords.map((record) {
           return Padding(
-            padding: const EdgeInsets.only(bottom: AppSpacing.s12),
-            child: _buildFeeItem(
-              record.student?.name ?? 'Unknown Student',
-              '₹${record.totalAmount}',
-              'ID: ${record.studentId}',
-              record.date,
+            padding: const EdgeInsets.only(bottom: AppSpacing.s10),
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () =>
+                  Get.toNamed(AppRoutes.instituteFeeReceipt, arguments: record),
+              child: _buildFeeItem(
+                record.student?.name ?? '',
+                '₹${record.totalAmount}',
+                'ID: ${record.student?.enrollmentId}',
+                record.date,
+              ),
             ),
           );
         }).toList(),
@@ -179,10 +172,10 @@ class InstituteFeesScreen extends GetView<InstituteController> {
     DateTime date,
   ) {
     return Container(
-      padding: AppSpacing.all16,
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         border: Border.all(color: AppColors.borderGrey),
         boxShadow: [
           BoxShadow(
@@ -199,9 +192,9 @@ class InstituteFeesScreen extends GetView<InstituteController> {
             backgroundColor: AppColors.primaryBrandLight,
             child: Text(
               name.isNotEmpty ? name[0] : '?',
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 18,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 color: AppColors.primaryBrand,
               ),
             ),
@@ -216,18 +209,18 @@ class InstituteFeesScreen extends GetView<InstituteController> {
                   children: [
                     Text(
                       name,
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 16,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.textPrimary,
                       ),
                     ),
                     Text(
                       amount,
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 16,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.primaryBrand,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textPrimary,
                       ),
                     ),
                   ],
@@ -238,7 +231,7 @@ class InstituteFeesScreen extends GetView<InstituteController> {
                   children: [
                     Text(
                       studentId,
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
                         color: AppColors.textTertiary,
@@ -246,7 +239,7 @@ class InstituteFeesScreen extends GetView<InstituteController> {
                     ),
                     Text(
                       DateFormat('dd MMM, yyyy').format(date),
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                         color: AppColors.textTertiary,

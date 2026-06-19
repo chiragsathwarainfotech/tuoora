@@ -10,6 +10,14 @@ class StudentInstituteModel {
   final InstituteLocation location;
   final InstituteSocial social;
 
+  /// Payee VPA (e.g. `merchant@bank`). Surfaced on the student Pay Fees
+  /// screen so the student can copy it / type it into their UPI app.
+  final String? upiId;
+
+  /// Hosted QR-code PNG/JPG the institute uploaded; null when the
+  /// institute hasn't configured payments yet.
+  final String? upiQrCodeUrl;
+
   StudentInstituteModel({
     required this.id,
     required this.name,
@@ -21,7 +29,15 @@ class StudentInstituteModel {
     this.website,
     required this.location,
     required this.social,
+    this.upiId,
+    this.upiQrCodeUrl,
   });
+
+  /// Convenience: true when the institute has configured at least the
+  /// QR code (the backend currently requires QR; UPI ID is optional).
+  bool get hasUpiPayment =>
+      (upiQrCodeUrl != null && upiQrCodeUrl!.isNotEmpty) ||
+      (upiId != null && upiId!.isNotEmpty);
 
   factory StudentInstituteModel.fromJson(Map<String, dynamic> json) {
     return StudentInstituteModel(
@@ -35,6 +51,8 @@ class StudentInstituteModel {
       website: json['website'],
       location: InstituteLocation.fromJson(json['location'] ?? {}),
       social: InstituteSocial.fromJson(json['social'] ?? {}),
+      upiId: json['upi_id']?.toString(),
+      upiQrCodeUrl: json['upi_qr_code_url']?.toString(),
     );
   }
 }

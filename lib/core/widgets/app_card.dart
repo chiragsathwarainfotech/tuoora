@@ -14,11 +14,8 @@ class AppCard extends StatelessWidget {
     return Material(
       color: AppColors.white,
       elevation: elevation ?? 2.0,
-      borderRadius: BorderRadius.circular(AppSpacing.s16),
-      child: Padding(
-        padding: padding ?? EdgeInsets.all(AppSpacing.s16),
-        child: child,
-      ),
+      borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+      child: Padding(padding: padding ?? AppSpacing.cardPadding, child: child),
     );
   }
 }

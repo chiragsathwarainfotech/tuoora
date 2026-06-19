@@ -1,4 +1,5 @@
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
@@ -43,17 +44,17 @@ class BatchReportDetailScreen extends StatelessWidget {
                 }
 
                 return SingleChildScrollView(
-                  padding: AppSpacing.all24,
+                  padding: AppSpacing.all16,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildOverviewCard(reportType, reportsController),
                       AppSpacing.v32,
                       Text(
-                        'Student Breakdown',
-                        style: AppTextStyles.manrope(
+                        AppStrings.studentBreakdown,
+                        style: AppTextStyles.outfit(
                           fontSize: 18,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w600,
                           color: AppColors.textPrimary,
                         ),
                       ),
@@ -77,7 +78,7 @@ class BatchReportDetailScreen extends StatelessWidget {
     if (reportType == 'Fee') {
       final summary = controller.batchFeeDetail.value?.summary;
       title = 'Batch Collected Total';
-      value = '₹${summary?.totalAmount.toStringAsFixed(0) ?? '0'}';
+      value = '₹${summary?.paidAmount.toStringAsFixed(0) ?? '0'}';
     } else if (reportType == 'Attendance') {
       final summary = controller.batchAttendanceDetail.value?.summary;
       final total = summary?.total ?? 1;
@@ -101,7 +102,7 @@ class BatchReportDetailScreen extends StatelessWidget {
       for (var f in fees) {
         items.add(
           Padding(
-            padding: const EdgeInsets.only(bottom: AppSpacing.s12),
+            padding: AppSpacing.bottom10,
             child: ReportStudentItemCard(
               name: f.student?.name ?? '',
               metric: 'Paid',
@@ -120,12 +121,12 @@ class BatchReportDetailScreen extends StatelessWidget {
         final percentage = (a.presentDays / total) * 100;
         items.add(
           Padding(
-            padding: const EdgeInsets.only(bottom: AppSpacing.s12),
+            padding: AppSpacing.bottom10,
             child: ReportStudentItemCard(
               name: a.studentName,
               metric: '${percentage.toStringAsFixed(1)}%',
               metricColor: _getMetricColor(percentage),
-              subtitle: 'Attendance Rate',
+              subtitle: AppStrings.attendanceRate,
             ),
           ),
         );
@@ -138,12 +139,12 @@ class BatchReportDetailScreen extends StatelessWidget {
         final score = double.tryParse(s.avgScore.replaceAll('%', '')) ?? 0.0;
         items.add(
           Padding(
-            padding: const EdgeInsets.only(bottom: AppSpacing.s12),
+            padding: AppSpacing.bottom10,
             child: ReportStudentItemCard(
               name: s.studentName,
               metric: s.avgScore,
               metricColor: _getMetricColor(score),
-              subtitle: 'Average Score',
+              subtitle: AppStrings.averageScore,
             ),
           ),
         );
@@ -159,4 +160,3 @@ class BatchReportDetailScreen extends StatelessWidget {
     return AppColors.errorRed;
   }
 }
-

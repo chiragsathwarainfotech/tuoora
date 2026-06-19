@@ -1,10 +1,12 @@
-import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/widgets/app_pickers.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/data/models/student_model.dart';
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/core/utils/validation_utils.dart';
 import 'package:intl/intl.dart';
+import 'package:tuoora/data/repositories_impl/student_repository_impl.dart';
 import 'institute_controller.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/core/api/api_exception.dart';
@@ -14,6 +16,8 @@ class RecordFeeController extends GetxController {
       Get.find<InstituteController>();
   final InstituteRepositoryImpl _instituteRepository =
       Get.find<InstituteRepositoryImpl>();
+  final StudentRepositoryImpl _studentRepository =
+      Get.find<StudentRepositoryImpl>();
 
   final searchQuery = ''.obs;
   final isStudentSelected = false.obs;
@@ -30,6 +34,18 @@ class RecordFeeController extends GetxController {
   final studentError = RxnString();
   final amountError = RxnString();
 
+  /// True when every required field has a usable value, so the Preview
+  /// Receipt action is safe to show. Mirrors the conditions [validateForm]
+  /// would assert without mutating the error fields.
+  bool get canPreview {
+    if (selectedStudent.value == null) return false;
+    final trimmed = amount.value.trim();
+    if (trimmed.isEmpty) return false;
+    final parsed = double.tryParse(trimmed);
+    if (parsed == null || parsed <= 0) return false;
+    return true;
+  }
+
   bool validateForm() {
     bool isValid = true;
 
@@ -41,7 +57,17 @@ class RecordFeeController extends GetxController {
 
     final amountVal = ValidationUtils.validateAmount(amount.value, 'Amount');
     amountError.value = amountVal;
-    if (amountVal != null) isValid = false;
+    if (amountVal != null) {
+      isValid = false;
+    } else if (selectedStudent.value != null) {
+      final parsedAmount = double.tryParse(amount.value) ?? 0;
+      final pendingFees = selectedStudent.value!.totalDue;
+      if (parsedAmount > pendingFees) {
+        amountError.value =
+            'Amount cannot exceed pending fees of ₹$pendingFees';
+        isValid = false;
+      }
+    }
 
     return isValid;
   }
@@ -68,23 +94,31 @@ class RecordFeeController extends GetxController {
     });
   }
 
-  void _performSearch() {
+  Future<void> _performSearch() async {
     if (searchQuery.value.isEmpty) {
       filteredStudents.assignAll(instituteController.students);
     } else {
-      filteredStudents.assignAll(
-        instituteController.students
-            .where(
-              (s) =>
-                  s.name.toLowerCase().contains(
-                    searchQuery.value.toLowerCase(),
-                  ) ||
-                  s.id.toString().toLowerCase().contains(
-                    searchQuery.value.toLowerCase(),
-                  ),
-            )
-            .toList(),
-      );
+      try {
+        final students = await _studentRepository.listStudents(
+          search: searchQuery.value,
+        );
+        filteredStudents.assignAll(students);
+      } catch (e) {
+        // Fallback to local filter if API fails
+        filteredStudents.assignAll(
+          instituteController.students
+              .where(
+                (s) =>
+                    s.name.toLowerCase().contains(
+                      searchQuery.value.toLowerCase(),
+                    ) ||
+                    s.id.toString().toLowerCase().contains(
+                      searchQuery.value.toLowerCase(),
+                    ),
+              )
+              .toList(),
+        );
+      }
     }
   }
 
@@ -106,23 +140,11 @@ class RecordFeeController extends GetxController {
   }
 
   Future<void> selectRecordDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
+    final DateTime? picked = await AppPickers.date(
+      context,
       initialDate: selectedRecordDate.value,
       firstDate: DateTime(2020),
       lastDate: DateTime.now(),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.light(
-              primary: AppColors.primaryBrand,
-              onPrimary: AppColors.white,
-              onSurface: AppColors.textPrimary,
-            ),
-          ),
-          child: child!,
-        );
-      },
     );
     if (picked != null) {
       selectedRecordDate.value = picked;
@@ -149,11 +171,11 @@ class RecordFeeController extends GetxController {
       await instituteController.refreshFees();
 
       Get.back();
-      AppSnackBar.success('Fee record created and collected successfully');
+      AppSnackBar.success(AppStrings.feeRecordCreatedAndCollectedSuccessfully);
     } catch (e) {
       if (e is ValidationException) {
         _handleValidationErrors(e.errors);
-        AppSnackBar.error('Please correct the highlighted errors');
+        AppSnackBar.error(AppStrings.validationErrorsBelow);
       } else {
         AppSnackBar.error(e.toString().replaceAll('Exception: ', ''));
       }

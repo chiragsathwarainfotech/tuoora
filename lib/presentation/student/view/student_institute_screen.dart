@@ -1,3 +1,5 @@
+import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -5,6 +7,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/widgets/app_empty_view.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
 import 'package:tuoora/presentation/student/controllers/student_institute_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -19,44 +23,50 @@ class StudentInstituteScreen extends GetView<StudentInstituteController> {
       body: SafeArea(
         child: Column(
           children: [
-            const StudentAppBar(title: 'Institute', showDefaultActions: false),
+            const StudentAppBar(title: AppStrings.studentReceiptInstitute, showDefaultActions: false),
             Expanded(
               child: Obx(() {
                 if (controller.isLoading.value) {
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.primaryBrand,
-                    ),
-                  );
+                  return const CommonLoading(color: AppColors.primaryBrand);
                 }
 
                 final institute = controller.instituteData.value;
                 if (institute == null) {
-                  return const Center(child: Text('No institute data found'));
+                  return const AppEmptyView(
+                    icon: Icons.school_outlined,
+                    title: AppStrings.instituteDetailsUnavailable,
+                    message:
+                        'We couldn\'t load your institute info. Please try again later.',
+                  );
                 }
 
-                return SingleChildScrollView(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      _buildHeroCard(institute),
-                      const SizedBox(height: 16),
-                      _buildContactCard(institute),
-                      const SizedBox(height: 16),
-                      _buildChatButton(),
-                      const SizedBox(height: 32),
-                      Text(
-                        'LOCATION',
-                        style: AppTextStyles.manrope(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w800,
-                          color: AppColors.textSecondary,
+                return RefreshIndicator(
+                  onRefresh: controller.fetchInstitute,
+                  color: AppColors.primaryBrand,
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        _buildHeroCard(institute),
+                        const SizedBox(height: 16),
+                        _buildContactCard(institute),
+                        const SizedBox(height: 16),
+                        _buildChatButton(),
+                        const SizedBox(height: 32),
+                        Text(
+                          AppStrings.location,
+                          style: AppTextStyles.outfit(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.textSecondary,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      _buildMapCard(institute),
-                    ],
+                        const SizedBox(height: 8),
+                        _buildMapCard(institute),
+                      ],
+                    ),
                   ),
                 );
               }),
@@ -69,10 +79,10 @@ class StudentInstituteScreen extends GetView<StudentInstituteController> {
 
   Widget _buildHeroCard(dynamic institute) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         border: Border.all(color: AppColors.borderGrey.withValues(alpha: 0.5)),
       ),
       child: Column(
@@ -93,10 +103,10 @@ class StudentInstituteScreen extends GetView<StudentInstituteController> {
                       height: 72,
                       fit: BoxFit.cover,
                       placeholder: (context, url) =>
-                          const CircularProgressIndicator(),
+                          const CommonLoading(color: AppColors.primaryBrand),
                       errorWidget: (context, url, error) => Text(
                         institute.initials,
-                        style: AppTextStyles.manrope(
+                        style: AppTextStyles.outfit(
                           fontSize: 24,
                           fontWeight: FontWeight.w800,
                           color: AppColors.white,
@@ -106,7 +116,7 @@ class StudentInstituteScreen extends GetView<StudentInstituteController> {
                   )
                 : Text(
                     institute.initials,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 24,
                       fontWeight: FontWeight.w800,
                       color: AppColors.white,
@@ -116,9 +126,9 @@ class StudentInstituteScreen extends GetView<StudentInstituteController> {
           const SizedBox(height: 16),
           Text(
             institute.name,
-            style: AppTextStyles.manrope(
-              fontSize: 16,
-              fontWeight: FontWeight.w800,
+            style: AppTextStyles.outfit(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
               color: AppColors.textPrimary,
             ),
             textAlign: TextAlign.center,
@@ -132,7 +142,7 @@ class StudentInstituteScreen extends GetView<StudentInstituteController> {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         border: Border.all(color: AppColors.borderGrey.withValues(alpha: 0.5)),
       ),
       child: Column(
@@ -164,21 +174,21 @@ class StudentInstituteScreen extends GetView<StudentInstituteController> {
 
   Widget _buildInfoRow(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: AppSpacing.cardPadding,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             label,
-            style: AppTextStyles.lexend(
-              fontSize: 13,
+            style: AppTextStyles.outfit(
+              fontSize: 14,
               color: AppColors.textTertiary,
             ),
           ),
           Text(
             value,
-            style: AppTextStyles.lexend(
-              fontSize: 13,
+            style: AppTextStyles.outfit(
+              fontSize: 14,
               fontWeight: FontWeight.w500,
               color: AppColors.textPrimary,
             ),
@@ -190,11 +200,10 @@ class StudentInstituteScreen extends GetView<StudentInstituteController> {
 
   Widget _buildChatButton() {
     return AppButton(
-      label: 'Chat with institute',
+      label: AppStrings.chatWithInstitute,
       icon: Icons.chat_bubble_outline_rounded,
-      backgroundColor: AppColors.studentTomorrowPillText,
-      borderRadius: 8,
-      padding: const EdgeInsets.symmetric(vertical: 16),
+      backgroundColor: AppColors.primaryBrand,
+      borderRadius: AppSpacing.cardRadius,
       onPressed: () => Get.toNamed(AppRoutes.studentChat),
     );
   }
@@ -206,7 +215,6 @@ class StudentInstituteScreen extends GetView<StudentInstituteController> {
         '${location.city ?? ''}, ${location.state ?? ''} ${location.pincode ?? ''}'
             .trim();
 
-    // Fallback if parts are empty
     final displayAddr1 = addressLine1.isNotEmpty
         ? addressLine1
         : (location.fullAddress ?? 'Address not available');
@@ -215,30 +223,29 @@ class StudentInstituteScreen extends GetView<StudentInstituteController> {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppColors.borderGrey.withValues(alpha: 0.5)),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+        border: Border.all(color: AppColors.fieldBorder),
       ),
       child: Column(
         children: [
-          // The map image placeholder
           Container(
             height: 160,
             decoration: const BoxDecoration(
-              color: AppColors.studentPresentBg,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
+              color: AppColors.successBg,
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(AppSpacing.cardRadius),
+              ),
             ),
             child: Stack(
               children: [
-                // Draw some decorative lines and blocks to mimic a map
                 Positioned.fill(
                   child: CustomPaint(painter: MapBackgroundPainter()),
                 ),
-                // Map marker
                 Center(
                   child: Icon(
                     Icons.location_on_rounded,
                     size: 40,
-                    color: AppColors.studentTomorrowPillText,
+                    color: AppColors.primaryBrand,
                     shadows: [
                       Shadow(
                         color: Colors.black.withValues(alpha: 0.3),
@@ -251,20 +258,19 @@ class StudentInstituteScreen extends GetView<StudentInstituteController> {
               ],
             ),
           ),
-          // Location details
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: AppSpacing.cardPadding,
             child: Row(
               children: [
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppColors.errorBg,
-                    borderRadius: BorderRadius.circular(8),
+                    color: AppColors.primaryBrand,
+                    borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
                   ),
                   child: const Icon(
                     Icons.domain_rounded,
-                    color: AppColors.studentBrand,
+                    color: AppColors.white,
                     size: 20,
                   ),
                 ),
@@ -275,9 +281,9 @@ class StudentInstituteScreen extends GetView<StudentInstituteController> {
                     children: [
                       Text(
                         displayAddr1,
-                        style: AppTextStyles.manrope(
+                        style: AppTextStyles.outfit(
                           fontSize: 14,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w600,
                           color: AppColors.textPrimary,
                         ),
                         maxLines: 2,
@@ -287,8 +293,8 @@ class StudentInstituteScreen extends GetView<StudentInstituteController> {
                         const SizedBox(height: 4),
                         Text(
                           displayAddr2,
-                          style: AppTextStyles.lexend(
-                            fontSize: 11,
+                          style: AppTextStyles.outfit(
+                            fontSize: 12,
                             color: AppColors.textSecondary,
                           ),
                           maxLines: 2,
@@ -314,29 +320,31 @@ class StudentInstituteScreen extends GetView<StudentInstituteController> {
                   },
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
+                      horizontal: 8,
+                      vertical: 4,
                     ),
                     side: BorderSide(
                       color: AppColors.borderGrey.withValues(alpha: 0.5),
                     ),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6),
+                      borderRadius: BorderRadius.circular(
+                        AppSpacing.cardRadius,
+                      ),
                     ),
                   ),
                   child: Row(
                     children: [
                       const Icon(
                         Icons.arrow_forward_rounded,
-                        size: 14,
-                        color: AppColors.textSecondary,
+                        size: 18,
+                        color: AppColors.primaryBrand,
                       ),
                       const SizedBox(width: 6),
                       Text(
-                        'Directions',
-                        style: AppTextStyles.manrope(
+                        AppStrings.directions,
+                        style: AppTextStyles.outfit(
                           fontSize: 12,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w600,
                           color: AppColors.textPrimary,
                         ),
                       ),
@@ -356,12 +364,12 @@ class MapBackgroundPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final roadPaint = Paint()
-      ..color = Colors.white
+      ..color = AppColors.white
       ..strokeWidth = 6
       ..style = PaintingStyle.stroke;
 
     final blockPaint = Paint()
-      ..color = AppColors.greenBg
+      ..color = AppColors.successBg
       ..style = PaintingStyle.fill;
 
     // Draw horizontal road

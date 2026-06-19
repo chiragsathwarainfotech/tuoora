@@ -1,6 +1,7 @@
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/presentation/institute/models/homework_model.dart';
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
-import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:get/get.dart';
 
 class HomeworkRatingController extends GetxController {
@@ -9,6 +10,7 @@ class HomeworkRatingController extends GetxController {
   final filterIndex = 0.obs; // 0: All, 1: Submitted, 2: Pending
   final submissions = <HomeworkSubmission>[].obs;
   final isLoading = false.obs;
+  final isFetchingDetails = false.obs;
   final _repository = Get.find<InstituteRepositoryImpl>();
 
   HomeworkRatingController(this.homework);
@@ -17,6 +19,19 @@ class HomeworkRatingController extends GetxController {
   void onInit() {
     super.onInit();
     submissions.assignAll(homework.submissions);
+    _fetchHomeworkDetails();
+  }
+
+  Future<void> _fetchHomeworkDetails() async {
+    try {
+      isFetchingDetails.value = true;
+      final detailedHomework = await _repository.getHomeworkDetails(int.parse(homework.id));
+      submissions.assignAll(detailedHomework.submissions);
+    } catch (e) {
+      AppSnackBar.error('Failed to load student list');
+    } finally {
+      isFetchingDetails.value = false;
+    }
   }
 
   bool get canEdit => homework.isActive;
@@ -24,10 +39,13 @@ class HomeworkRatingController extends GetxController {
   List<HomeworkSubmission> get filteredSubmissions {
     if (filterIndex.value == 0) return submissions;
     if (filterIndex.value == 1) {
-      return submissions.where((s) => s.isSubmitted).toList();
+      return submissions.where((s) => s.status.toLowerCase() == 'submitted').toList();
     }
     if (filterIndex.value == 2) {
-      return submissions.where((s) => !s.isSubmitted).toList();
+      return submissions.where((s) => s.status.toLowerCase() == 'pending').toList();
+    }
+    if (filterIndex.value == 3) {
+      return submissions.where((s) => s.status.toLowerCase() == 'reviewed').toList();
     }
     return submissions;
   }
@@ -59,7 +77,7 @@ class HomeworkRatingController extends GetxController {
           .toList();
 
       if (scores.isEmpty) {
-        Get.snackbar('Notice', 'No submissions to rate');
+        AppSnackBar.warning(AppStrings.noSubmissionsToRate);
         return;
       }
 
@@ -67,21 +85,13 @@ class HomeworkRatingController extends GetxController {
       await _repository.submitHomeworkScore(int.parse(homework.id), data);
 
       Get.back(result: true);
-      Get.snackbar(
-        'Success',
-        'Ratings submitted successfully',
-        backgroundColor: AppColors.darkGreen,
-        colorText: AppColors.white,
-      );
+      AppSnackBar.success(AppStrings.ratingsSubmitted);
     } catch (e) {
-      Get.snackbar('Error', 'Failed to submit ratings: ${e.toString()}');
+      AppSnackBar.error(AppStrings.failedToSubmitRatings);
     } finally {
       isLoading.value = false;
     }
   }
 
-  void sendReminder(String studentId) {
-    Get.snackbar('Reminder Sent', 'A reminder has been sent to the student.');
-  }
 }
 

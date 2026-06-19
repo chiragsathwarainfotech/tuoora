@@ -1,9 +1,12 @@
 import 'package:tuoora/config/app_routes.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_images.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class RoleSelectionScreen extends StatelessWidget {
   const RoleSelectionScreen({super.key});
@@ -13,41 +16,35 @@ class RoleSelectionScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: AppSpacing.x24,
+        child: Padding(
+          padding: AppSpacing.x16,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              AppSpacing.v32,
               _buildLogo(),
-              AppSpacing.v40,
-              Text(
-                'Tuoora',
-                textAlign: TextAlign.center,
-                style: AppTextStyles.manrope(
-                  fontSize: 32,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.textPrimary,
-                  height: 1.3,
-                ),
-              ),
-              AppSpacing.v32,
+              AppSpacing.v24,
               _buildRoleCard(
-                title: 'Login as Institute',
-                subtitle: 'Manage students, batches, and academic operations.',
+                title: AppStrings.loginAsInstitute,
+                subtitle: AppStrings.manageStudentsBatchesAndAcademicOperations,
                 icon: Icons.business_rounded,
                 iconColor: AppColors.primaryBrand,
-                onTap: () =>
-                    Get.toNamed(AppRoutes.login, arguments: 'INSTITUTE'),
+                onTap: () {
+                  GetStorage().write('last_selected_role', 'INSTITUTE');
+                  Get.toNamed(AppRoutes.login, arguments: 'INSTITUTE');
+                },
               ),
               AppSpacing.v16,
               _buildRoleCard(
-                title: 'Login as Student',
-                subtitle: 'View your classes, fees, homework and more.',
+                title: AppStrings.loginAsStudent,
+                subtitle: AppStrings.viewYourClassesFeesHomeworkAnd,
                 icon: Icons.school_rounded,
                 iconColor: AppColors.primaryBrand,
-                onTap: () => Get.toNamed(AppRoutes.login, arguments: 'STUDENT'),
+                onTap: () {
+                  GetStorage().write('last_selected_role', 'STUDENT');
+                  Get.toNamed(AppRoutes.login, arguments: 'STUDENT');
+                },
               ),
+              AppSpacing.v48,
             ],
           ),
         ),
@@ -57,36 +54,16 @@ class RoleSelectionScreen extends StatelessWidget {
 
   Widget _buildLogo() {
     return Center(
-      child: Container(
-        padding: AppSpacing.all4,
-        width: 160,
-        height: 160,
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(24),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 15,
-              offset: const Offset(0, 5),
-            ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-          child: Image.asset(
-            'assets/logo.png',
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) {
-              return Container(
-                color: AppColors.primaryBrand,
-                child: const Center(
-                  child: Icon(Icons.school, color: AppColors.white, size: 64),
-                ),
-              );
-            },
-          ),
-        ),
+      child: Image.asset(
+        AppImages.logoWithName,
+        height: AppSpacing.s64,
+        errorBuilder: (context, error, stackTrace) {
+          return const Icon(
+            Icons.school,
+            color: AppColors.primaryBrand,
+            size: AppSpacing.s64,
+          );
+        },
       ),
     );
   }
@@ -101,10 +78,10 @@ class RoleSelectionScreen extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: AppSpacing.all16,
+        padding: AppSpacing.cardPadding,
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           border: Border.all(color: AppColors.borderGrey, width: 1),
           boxShadow: [
             BoxShadow(
@@ -121,7 +98,7 @@ class RoleSelectionScreen extends StatelessWidget {
               height: AppSpacing.s72,
               decoration: BoxDecoration(
                 color: iconColor.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
               ),
               child: Center(child: Icon(icon, color: iconColor, size: 32)),
             ),
@@ -132,16 +109,16 @@ class RoleSelectionScreen extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 17,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.textPrimary,
                     ),
                   ),
                   AppSpacing.v4,
                   Text(
                     subtitle,
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
                       color: AppColors.textTertiary,

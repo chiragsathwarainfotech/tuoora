@@ -1,5 +1,6 @@
-﻿import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/controllers/staff_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
@@ -21,7 +22,7 @@ class StaffAttendanceScreen extends GetView<StaffController> {
       body: SafeArea(
         child: Column(
           children: [
-            InstituteAppBar(title: 'Attendance', subtitle: staffName),
+            InstituteAppBar(title: AppStrings.instAttendanceTitle, subtitle: staffName),
             Expanded(
               child: Obx(() {
                 return CommonStateWidget(
@@ -29,11 +30,11 @@ class StaffAttendanceScreen extends GetView<StaffController> {
                       controller.isLoadingAttendance.value &&
                       controller.attendanceList.isEmpty,
                   isEmpty: false,
-                  emptyTitle: 'No Attendance Data',
-                  emptySubtitle: 'No attendance records found for this month.',
+                  emptyTitle: AppStrings.noAttendanceData,
+                  emptySubtitle: AppStrings.noAttendanceRecordsFoundForThis,
                   emptyIcon: Icons.calendar_today_outlined,
                   child: SingleChildScrollView(
-                    padding: AppSpacing.all24,
+                    padding: AppSpacing.screenPaddingTop,
                     child: Column(
                       children: [
                         _buildSummaryCard(),
@@ -55,10 +56,10 @@ class StaffAttendanceScreen extends GetView<StaffController> {
 
   Widget _buildSummaryCard() {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 32),
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       ),
       child: Row(
         children: [
@@ -99,7 +100,7 @@ class StaffAttendanceScreen extends GetView<StaffController> {
             AppSpacing.h12,
             Text(
               count,
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 32,
                 fontWeight: FontWeight.w800,
                 color: AppColors.textPrimary,
@@ -109,9 +110,9 @@ class StaffAttendanceScreen extends GetView<StaffController> {
         ),
         Text(
           label,
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 12,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w600,
             color: AppColors.textTertiary,
             letterSpacing: 1.0,
           ),
@@ -122,38 +123,40 @@ class StaffAttendanceScreen extends GetView<StaffController> {
 
   Widget _buildCalendarCard() {
     return Container(
-      padding: AppSpacing.all24,
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       ),
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              GestureDetector(
-                onTap: () => controller.previousMonth(),
-                child: const Icon(
+              Obx(
+                () => _buildCircleNavButton(
                   Icons.chevron_left,
-                  color: AppColors.textTertiary,
+                  () => controller.previousMonth(),
+                  enabled: controller.canGoToPrevStaffAttendanceMonth,
                 ),
               ),
-              Text(
-                DateFormat(
-                  'MMMM yyyy',
-                ).format(controller.selectedAttendanceMonth.value),
-                style: AppTextStyles.manrope(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.textPrimary,
+              Obx(
+                () => Text(
+                  DateFormat(
+                    'MMMM yyyy',
+                  ).format(controller.selectedAttendanceMonth.value),
+                  style: AppTextStyles.outfit(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textPrimary,
+                  ),
                 ),
               ),
-              GestureDetector(
-                onTap: () => controller.nextMonth(),
-                child: const Icon(
+              Obx(
+                () => _buildCircleNavButton(
                   Icons.chevron_right,
-                  color: AppColors.textTertiary,
+                  () => controller.nextMonth(),
+                  enabled: controller.canGoToNextStaffAttendanceMonth,
                 ),
               ),
             ],
@@ -167,6 +170,27 @@ class StaffAttendanceScreen extends GetView<StaffController> {
           AppSpacing.v24,
           _buildLegend(),
         ],
+      ),
+    );
+  }
+
+  Widget _buildCircleNavButton(
+    IconData icon,
+    VoidCallback onTap, {
+    bool enabled = true,
+  }) {
+    return GestureDetector(
+      onTap: enabled ? onTap : null,
+      child: Container(
+        width: AppSpacing.s36,
+        height: AppSpacing.s36,
+        decoration: BoxDecoration(
+          color: enabled
+              ? AppColors.primaryBrand
+              : AppColors.primaryBrand.withValues(alpha: 0.35),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+        ),
+        child: Icon(icon, color: AppColors.white, size: 24),
       ),
     );
   }
@@ -244,9 +268,9 @@ class StaffAttendanceScreen extends GetView<StaffController> {
                   width: 32,
                   child: Text(
                     d,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 12,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.textMuted,
                     ),
                     textAlign: TextAlign.center,
@@ -285,9 +309,9 @@ class StaffAttendanceScreen extends GetView<StaffController> {
             child: Center(
               child: Text(
                 date,
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 14,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
                 ),
               ),
@@ -340,9 +364,9 @@ class StaffAttendanceScreen extends GetView<StaffController> {
         AppSpacing.h8,
         Text(
           label,
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: 10,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.textTertiary,
             letterSpacing: 0.5,
           ),
@@ -352,17 +376,16 @@ class StaffAttendanceScreen extends GetView<StaffController> {
   }
 
   Widget _buildRemarksCard() {
-    // Show remark for the latest entry if available
     final latestRemark = controller.attendanceList.firstWhereOrNull(
       (a) => a.note != null && a.note!.isNotEmpty,
     );
 
     return Container(
       width: double.infinity,
-      padding: AppSpacing.all24,
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -372,7 +395,7 @@ class StaffAttendanceScreen extends GetView<StaffController> {
               Container(
                 padding: AppSpacing.all8,
                 decoration: BoxDecoration(
-                  color: AppColors.scaffoldBg,
+                  color: AppColors.surfaceBg,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Icon(
@@ -386,9 +409,9 @@ class StaffAttendanceScreen extends GetView<StaffController> {
                 latestRemark != null
                     ? '${DateFormat('MMM dd').format(DateTime.parse(latestRemark.date)).toUpperCase()} REMARKS'
                     : 'LATEST REMARKS',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 12,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textTertiary,
                   letterSpacing: 0.5,
                 ),
@@ -398,7 +421,7 @@ class StaffAttendanceScreen extends GetView<StaffController> {
           AppSpacing.v20,
           Text(
             latestRemark?.note ?? 'No remarks for this month.',
-            style: AppTextStyles.lexend(
+            style: AppTextStyles.outfit(
               fontSize: 15,
               fontWeight: FontWeight.w400,
               color: AppColors.textSecondary,

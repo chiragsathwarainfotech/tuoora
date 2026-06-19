@@ -1,14 +1,19 @@
-﻿import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/utils/subscription_guard.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/widgets/common_dialog.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/presentation/institute/controllers/notes_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/presentation/institute/widgets/common_state_widget.dart';
 import 'package:tuoora/data/models/note_model.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/widgets/app_search_field.dart';
+import 'package:tuoora/core/constants/app_images.dart';
+import 'package:tuoora/core/widgets/app_action_icon.dart';
+import 'package:tuoora/core/widgets/app_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -43,7 +48,7 @@ class NotesListScreen extends GetView<NotesController> {
             ),
             Expanded(
               child: Padding(
-                padding: AppSpacing.x24,
+                padding: AppSpacing.x16,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -76,23 +81,21 @@ class NotesListScreen extends GetView<NotesController> {
                               return false;
                             },
                             child: RefreshIndicator(
+                              color: AppColors.primaryBrand,
                               onRefresh: () => controller.fetchNotes(page: 1),
                               child: ListView.separated(
-                                padding: const EdgeInsets.only(bottom: 100),
                                 itemCount:
                                     notes.length +
                                     (controller.currentPage.value <
                                             controller.lastPage.value
                                         ? 1
                                         : 0),
-                                separatorBuilder: (_, _) => AppSpacing.v16,
+                                separatorBuilder: (_, _) => AppSpacing.v10,
                                 itemBuilder: (context, index) {
                                   if (index == notes.length) {
-                                    return const Center(
-                                      child: Padding(
-                                        padding: EdgeInsets.all(16.0),
-                                        child: CircularProgressIndicator(),
-                                      ),
+                                    return const Padding(
+                                      padding: EdgeInsets.all(16.0),
+                                      child: CommonLoading(),
                                     );
                                   }
                                   final note = notes[index];
@@ -112,11 +115,13 @@ class NotesListScreen extends GetView<NotesController> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () => SubscriptionGuard.runAddAction(() {
           controller.prepareForAdd();
           Get.toNamed(AppRoutes.instituteAddEditNote);
-        },
-        backgroundColor: AppColors.primaryBrand,
+        }),
+        backgroundColor: SubscriptionGuard.blocksAdd
+            ? AppColors.textMuted
+            : AppColors.primaryBrand,
         child: const Icon(Icons.add, color: AppColors.white),
       ),
     );
@@ -132,7 +137,6 @@ class NotesListScreen extends GetView<NotesController> {
   Widget _buildNoteCard(Note note) {
     final dateFormat = DateFormat('MMM dd, yyyy');
 
-    // Get color from relation if available
     Color catColor = AppColors.primaryBrand;
     if (note.categoryRelation != null) {
       try {
@@ -150,10 +154,10 @@ class NotesListScreen extends GetView<NotesController> {
         Get.toNamed(AppRoutes.instituteAddEditNote);
       },
       child: Container(
-        padding: AppSpacing.all20,
+        padding: AppSpacing.cardPadding,
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.05),
@@ -165,6 +169,15 @@ class NotesListScreen extends GetView<NotesController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            if (note.imageUrl != null && note.imageUrl!.isNotEmpty) ...[
+              AppNetworkImage(
+                url: note.imageUrl!,
+                width: double.infinity,
+                height: 160,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              AppSpacing.v12,
+            ],
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -174,9 +187,9 @@ class NotesListScreen extends GetView<NotesController> {
                     children: [
                       Text(
                         note.title,
-                        style: AppTextStyles.manrope(
+                        style: AppTextStyles.outfit(
                           fontSize: 16,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w600,
                           color: AppColors.textPrimary,
                         ),
                       ),
@@ -188,16 +201,18 @@ class NotesListScreen extends GetView<NotesController> {
                         ),
                         decoration: BoxDecoration(
                           color: catColor.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(
+                            AppSpacing.cardRadius,
+                          ),
                           border: Border.all(
                             color: catColor.withValues(alpha: 0.2),
                           ),
                         ),
                         child: Text(
                           note.category,
-                          style: AppTextStyles.manrope(
+                          style: AppTextStyles.outfit(
                             fontSize: 10,
-                            fontWeight: FontWeight.w800,
+                            fontWeight: FontWeight.w600,
                             color: catColor,
                             letterSpacing: 0.5,
                           ),
@@ -218,7 +233,7 @@ class NotesListScreen extends GetView<NotesController> {
                           ? Icons.bookmark_rounded
                           : Icons.bookmark_border_rounded,
                       color: AppColors.primaryBrand,
-                      size: 20,
+                      size: 24,
                     );
                   }),
                 ),
@@ -229,29 +244,27 @@ class NotesListScreen extends GetView<NotesController> {
               note.content,
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
-              style: AppTextStyles.lexend(
-                fontSize: 13,
+              style: AppTextStyles.outfit(
+                fontSize: 14,
                 color: AppColors.textSecondary,
-                height: 1.5,
               ),
             ),
-            AppSpacing.v16,
+            AppSpacing.v10,
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   dateFormat.format(note.createdAt),
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 11,
                     color: AppColors.textTertiary,
                   ),
                 ),
                 GestureDetector(
                   onTap: () => _showDeleteConfirmation(note),
-                  child: const Icon(
-                    Icons.delete_outline_rounded,
-                    color: AppColors.bohoRed,
-                    size: 18,
+                  child: const AppActionIcon(
+                    asset: AppImages.icDelete,
+                    size: 24,
                   ),
                 ),
               ],

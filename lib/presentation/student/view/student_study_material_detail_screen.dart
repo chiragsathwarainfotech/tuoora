@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/student/controllers/student_study_material_detail_controller.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
 import 'package:tuoora/presentation/student/widgets/student_attachment_tile.dart';
@@ -24,15 +26,15 @@ class StudentStudyMaterialDetailScreen
             const SizedBox(height: 16),
             Expanded(
               child: ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: AppSpacing.x16,
                 children: [
                   _buildHeaderCard(material),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 16),
                   Text(
-                    'FILES',
-                    style: AppTextStyles.manrope(
+                    AppStrings.files,
+                    style: AppTextStyles.outfit(
                       fontSize: 12,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.textSecondary,
                     ),
                   ),
@@ -58,16 +60,14 @@ class StudentStudyMaterialDetailScreen
   Widget _buildHeaderCard(StudentResourceModel item) {
     final hash = item.subject.hashCode;
     final isDark = hash % 2 == 0;
-    final bgColor = isDark
-        ? AppColors.studentBrandSoft
-        : AppColors.studentPresentBg;
+    final bgColor = isDark ? AppColors.primaryBrandLight : AppColors.successBg;
     final textColor = isDark ? AppColors.error : AppColors.errorRed;
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         border: Border.all(color: AppColors.borderGrey.withValues(alpha: 0.5)),
       ),
       child: Column(
@@ -79,13 +79,13 @@ class StudentStudyMaterialDetailScreen
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
                   color: bgColor,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
                 ),
                 child: Text(
                   item.subject,
-                  style: AppTextStyles.manrope(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w800,
+                  style: AppTextStyles.outfit(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
                     color: textColor,
                   ),
                 ),
@@ -94,7 +94,7 @@ class StudentStudyMaterialDetailScreen
               Expanded(
                 child: Text(
                   '${item.batchName} • ${item.date}',
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 11,
                     color: AppColors.textTertiary,
                   ),
@@ -107,7 +107,7 @@ class StudentStudyMaterialDetailScreen
           const SizedBox(height: 12),
           Text(
             item.description,
-            style: AppTextStyles.lexend(
+            style: AppTextStyles.outfit(
               fontSize: 12,
               color: AppColors.textSecondary,
               height: 1.4,

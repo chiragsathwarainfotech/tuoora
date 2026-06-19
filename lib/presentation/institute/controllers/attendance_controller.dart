@@ -1,3 +1,5 @@
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/presentation/institute/models/batch_model.dart';
 import 'package:tuoora/presentation/institute/models/attendance_record_model.dart';
@@ -5,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
-import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/widgets/app_pickers.dart';
 
 class AttendanceStudent {
   final int id;
@@ -103,7 +105,7 @@ class AttendanceController extends GetxController {
 
       filterStudents();
     } catch (e) {
-      Get.snackbar('Error', 'Failed to fetch attendance: ${e.toString()}');
+      AppSnackBar.error(AppStrings.errFailedLoadAttendance);
     } finally {
       isLoading.value = false;
     }
@@ -122,25 +124,38 @@ class AttendanceController extends GetxController {
 
       CommonLoading.dismiss();
       Get.back();
-      Get.snackbar(
-        'Success',
-        'Attendance submitted successfully',
-        backgroundColor: AppColors.darkGreen,
-        colorText: AppColors.white,
-      );
+      AppSnackBar.success(AppStrings.attendanceSubmitted);
     } catch (e) {
-      Get.snackbar('Error', 'Failed to submit attendance: ${e.toString()}');
+      AppSnackBar.error(AppStrings.failedToSubmitAttendance);
     } finally {
       CommonLoading.dismiss();
     }
   }
 
   Future<void> selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate.value,
-      firstDate: DateTime(2020),
-      lastDate: DateTime.now(),
+    final now = DateTime.now();
+    // Floor of the range = the day the batch was created. Falls back to a
+    // safe sentinel when the API didn't return a parseable timestamp.
+    // Stripped to midnight so the picker treats the creation day itself as
+    // selectable (DatePicker compares year/month/day, not the time part).
+    final creation = batch.createdAt;
+    final firstDate = creation != null
+        ? DateTime(creation.year, creation.month, creation.day)
+        : DateTime(2020);
+    // Clamp initialDate into [firstDate, today] — required by showDatePicker;
+    // otherwise it asserts when the user re-opens a stale selection that's
+    // older than the batch creation day (shouldn't normally happen, but
+    // guards against the assert).
+    final today = DateTime(now.year, now.month, now.day);
+    DateTime initial = selectedDate.value;
+    if (initial.isBefore(firstDate)) initial = firstDate;
+    if (initial.isAfter(today)) initial = today;
+
+    final DateTime? picked = await AppPickers.date(
+      context,
+      initialDate: initial,
+      firstDate: firstDate,
+      lastDate: today,
     );
     if (picked != null && picked != selectedDate.value) {
       selectedDate.value = picked;

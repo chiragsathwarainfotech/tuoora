@@ -1,45 +1,42 @@
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_images.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/app_network_image.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/data/models/menu_item.dart';
 import 'package:tuoora/presentation/institute/controllers/institute_profile_controller.dart';
+import 'package:tuoora/presentation/institute/widgets/subscription_banner.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-class InstituteDashboard extends StatelessWidget {
+class InstituteDashboard extends GetView<InstituteProfileController> {
   const InstituteDashboard({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _buildTopHeader(),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AppSpacing.v24,
-                  Text(
-                    'INSTITUTIONAL PORTAL',
-                    style: AppTextStyles.lexend(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.brandAppBarColor,
-                      letterSpacing: 1,
-                    ),
-                  ),
-                  AppSpacing.v24,
-                  _buildModulesGrid(),
-                ],
+      body: RefreshIndicator(
+        onRefresh: () => controller.fetchProfile(),
+        color: AppColors.primaryBrand,
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _buildTopHeader(),
+              const SubscriptionBanner(),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 16.0,
+                ),
+                child: _buildModulesGrid(),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -53,23 +50,26 @@ class InstituteDashboard extends StatelessWidget {
       child: Row(
         children: [
           Obx(
-            () => Text(
-              profileController.instituteName.value.isNotEmpty
-                  ? profileController.instituteName.value
-                  : 'Tuoora',
-              style: AppTextStyles.manrope(
-                fontSize: 24,
-                fontWeight: FontWeight.w800,
-                color: AppColors.primaryBrand,
+            () => Expanded(
+              child: Text(
+                profileController.instituteName.value.isNotEmpty
+                    ? profileController.instituteName.value
+                    : 'Tuoora',
+                maxLines: 1,
+                softWrap: false,
+                overflow: TextOverflow.visible,
+                style: AppTextStyles.outfit(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                ),
               ),
             ),
           ),
-          const Spacer(),
           GestureDetector(
             onTap: () => Get.toNamed(AppRoutes.instituteNotifications),
             child: const Icon(
-              Icons.notifications_rounded,
-              color: AppColors.primaryBrand,
+              Icons.notifications_outlined,
+              color: AppColors.fieldLabel,
               size: 28,
             ),
           ),
@@ -87,33 +87,7 @@ class InstituteDashboard extends StatelessWidget {
                     width: 2,
                   ),
                 ),
-                child: ClipOval(
-                  child:
-                      profileController.profileImagePath.value != null &&
-                          profileController.profileImagePath.value!.startsWith(
-                            'http',
-                          )
-                      ? Image.network(
-                          profileController.profileImagePath.value!,
-                          fit: BoxFit.cover,
-                        )
-                      : Container(
-                          color: AppColors.primaryBrandLight,
-                          child: Center(
-                            child: Text(
-                              profileController.instituteName.value.isNotEmpty
-                                  ? profileController.instituteName.value[0]
-                                        .toUpperCase()
-                                  : 'I',
-                              style: AppTextStyles.manrope(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w800,
-                                color: AppColors.primaryBrand,
-                              ),
-                            ),
-                          ),
-                        ),
-                ),
+                child: ClipOval(child: _buildProfileImage(profileController)),
               ),
             ),
           ),
@@ -122,57 +96,83 @@ class InstituteDashboard extends StatelessWidget {
     );
   }
 
+  Widget _buildProfileImage(InstituteProfileController profileController) {
+    final imagePath = profileController.profileImagePath.value;
+
+    if (imagePath == null ||
+        imagePath.isEmpty ||
+        !imagePath.startsWith('http')) {
+      return Container(
+        color: AppColors.primaryBrandLight,
+        child: Center(
+          child: Text(
+            profileController.instituteName.value.isNotEmpty
+                ? profileController.instituteName.value[0].toUpperCase()
+                : 'T',
+            style: AppTextStyles.outfit(
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              color: AppColors.primaryBrand,
+            ),
+          ),
+        ),
+      );
+    }
+
+    return AppNetworkImage(url: imagePath, fit: BoxFit.cover);
+  }
+
   Widget _buildModulesGrid() {
     final modules = [
       ModuleItem(
         'Students',
-        Icons.people_rounded,
         () => Get.toNamed(AppRoutes.instituteStudents),
+        AppImages.icModuleStaff,
       ),
       ModuleItem(
         'Batches',
-        Icons.layers_rounded,
         () => Get.toNamed(AppRoutes.instituteBatches),
+        AppImages.icModuleBatch,
       ),
       ModuleItem(
         'Fees',
-        Icons.account_balance_wallet_rounded,
         () => Get.toNamed(AppRoutes.instituteFees),
+        AppImages.icModuleFees,
       ),
       ModuleItem(
         'Staffs',
-        Icons.person_search_rounded,
         () => Get.toNamed(AppRoutes.instituteStaffs),
+        AppImages.icModuleStaff,
       ),
       ModuleItem(
         'Chats',
-        Icons.chat,
         () => Get.toNamed(AppRoutes.instituteChats),
+        AppImages.icModuleChat,
       ),
       ModuleItem(
         'Reports',
-        Icons.insert_chart_rounded,
         () => Get.toNamed(AppRoutes.instituteReports),
+        AppImages.icModuleReports,
       ),
       ModuleItem(
         'Leads',
-        Icons.leaderboard_rounded,
         () => Get.toNamed(AppRoutes.instituteLeads),
+        AppImages.icModuleLead,
       ),
       ModuleItem(
         'Notes',
-        Icons.note_alt_rounded,
         () => Get.toNamed(AppRoutes.instituteNotes),
+        AppImages.icModuleNotes,
       ),
       ModuleItem(
         'Expenses',
-        Icons.payments_rounded,
         () => Get.toNamed(AppRoutes.instituteExpenses),
+        AppImages.icModuleExpense,
       ),
       ModuleItem(
         'Updates',
-        Icons.campaign_rounded,
         () => Get.toNamed(AppRoutes.instituteUpdates),
+        AppImages.icModuleUpdates,
       ),
     ];
 
@@ -188,18 +188,28 @@ class InstituteDashboard extends StatelessWidget {
       itemCount: modules.length,
       itemBuilder: (context, index) {
         final item = modules[index];
-        return _buildGridItem(item);
+        final accent = _accentPalette[index % _accentPalette.length];
+        return _buildGridItem(item, accent);
       },
     );
   }
 
-  Widget _buildGridItem(ModuleItem item) {
+  static const List<Color> _accentPalette = <Color>[
+    AppColors.primaryBrand,
+    AppColors.successGreen,
+    AppColors.bohoRed,
+    AppColors.subjectPhysics,
+    AppColors.orangeTag,
+    AppColors.successGreen,
+  ];
+
+  Widget _buildGridItem(ModuleItem item, Color accent) {
     return GestureDetector(
       onTap: item.onTap,
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(8),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.03),
@@ -211,21 +221,20 @@ class InstituteDashboard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: const BoxDecoration(
-                color: AppColors.primaryBrandLight,
-                shape: BoxShape.circle,
-              ),
-              child: Icon(item.icon, color: AppColors.primaryBrand, size: 24),
+            SvgPicture.asset(
+              item.svgAsset,
+              width: 48,
+              height: 48,
+              theme: SvgTheme(currentColor: accent),
+              colorFilter: ColorFilter.mode(accent, BlendMode.srcIn),
             ),
             AppSpacing.v12,
             Text(
               item.title,
               textAlign: TextAlign.center,
-              style: AppTextStyles.manrope(
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
+              style: AppTextStyles.outfit(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
                 color: AppColors.textPrimary,
               ),
             ),

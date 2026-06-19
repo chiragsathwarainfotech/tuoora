@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/theme/app_spacing.dart';
 
 class ProfileMenuTile extends StatelessWidget {
   final IconData icon;
@@ -21,26 +22,22 @@ class ProfileMenuTile extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        padding: AppSpacing.cardPadding,
         child: Row(
           children: [
             Container(
-              padding: const EdgeInsets.all(8),
+              padding: AppSpacing.cardPadding,
               decoration: BoxDecoration(
-                color: AppColors.scaffoldBg,
-                borderRadius: BorderRadius.circular(8),
+                color: AppColors.surfaceBg,
+                borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
               ),
-              child: Icon(
-                icon,
-                size: 18,
-                color: AppColors.textSecondary,
-              ),
+              child: Icon(icon, size: 18, color: AppColors.textSecondary),
             ),
             const SizedBox(width: 16),
             Expanded(
               child: Text(
                 title,
-                style: AppTextStyles.lexend(
+                style: AppTextStyles.outfit(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   color: AppColors.textPrimary,
@@ -50,7 +47,7 @@ class ProfileMenuTile extends StatelessWidget {
             if (trailingText != null) ...[
               Text(
                 trailingText!,
-                style: AppTextStyles.lexend(
+                style: AppTextStyles.outfit(
                   fontSize: 12,
                   color: AppColors.textTertiary,
                 ),

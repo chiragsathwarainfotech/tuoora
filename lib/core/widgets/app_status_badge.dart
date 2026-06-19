@@ -23,9 +23,9 @@ class AppStatusBadge extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: AppTextStyles.manrope(
+        style: AppTextStyles.outfit(
           fontSize: 10,
-          fontWeight: FontWeight.w800,
+          fontWeight: FontWeight.w600,
           color: textColor,
           letterSpacing: 1.0,
         ),

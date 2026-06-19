@@ -1,4 +1,5 @@
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/enums/app_enums.dart';
@@ -10,6 +11,8 @@ import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:tuoora/presentation/institute/controllers/updates_controller.dart';
 import 'package:get/get.dart';
+import 'package:tuoora/core/widgets/app_pickers.dart';
+import 'package:intl/intl.dart';
 
 class CreateUpdateScreen extends GetView<UpdatesController> {
   const CreateUpdateScreen({super.key});
@@ -23,19 +26,22 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
           body: SafeArea(
             child: Column(
               children: [
-                const InstituteAppBar(title: 'Create Update', isRoot: false),
+                const InstituteAppBar(
+                  title: AppStrings.createUpdate,
+                  isRoot: false,
+                ),
                 Expanded(
                   child: SingleChildScrollView(
-                    padding: AppSpacing.all24,
+                    padding: AppSpacing.screenPadding,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Select Category',
-                          style: AppTextStyles.manrope(
+                          AppStrings.hintSelectCategory,
+                          style: AppTextStyles.outfit(
                             fontSize: 14,
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.brandAppBarColor,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.fieldLabel,
                           ),
                         ),
                         AppSpacing.v16,
@@ -45,32 +51,44 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                         AppSpacing.v32,
                         Obx(
                           () => AppInputField(
-                            label: 'Topic',
-                            hint: 'e.g., Q3 Fee Installment Reminder',
+                            label: AppStrings.topic,
+                            hint: AppStrings.enterTopic,
                             controller: controller.subjectController,
                             labelSpacing: 12.0,
                             errorText: controller.triedToSave.value
                                 ? controller.subjectError.value
                                 : null,
-                            textStyle: AppTextStyles.manrope(
+                            textStyle: AppTextStyles.outfit(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
                               color: AppColors.textPrimary,
                             ),
                           ),
                         ),
+                        Obx(() {
+                          if (controller.selectedCategory.value ==
+                              UpdateCategory.Holiday) {
+                            return Column(
+                              children: [
+                                AppSpacing.v32,
+                                _buildHolidayDateCard(context, controller),
+                              ],
+                            );
+                          }
+                          return const SizedBox.shrink();
+                        }),
                         AppSpacing.v32,
                         Obx(
                           () => AppInputField(
-                            label: 'Message Content',
-                            hint: 'Write your message here...',
+                            label: AppStrings.messageContent,
+                            hint: AppStrings.writeYourMessageHere,
                             controller: controller.messageController,
                             maxLines: 6,
                             labelSpacing: 12.0,
                             errorText: controller.triedToSave.value
                                 ? controller.messageError.value
                                 : null,
-                            textStyle: AppTextStyles.manrope(
+                            textStyle: AppTextStyles.outfit(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
                               color: AppColors.textPrimary,
@@ -79,15 +97,12 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                         ),
                         AppSpacing.v32,
                         _buildAttachmentSection(controller),
-                        AppSpacing.v32,
-                        _buildBroadcastChannels(controller),
-                        AppSpacing.v40,
                       ],
                     ),
                   ),
                 ),
                 Padding(
-                  padding: AppSpacing.all24,
+                  padding: AppSpacing.x16,
                   child: _buildBroadcastButton(controller),
                 ),
               ],
@@ -117,7 +132,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
             return GestureDetector(
               onTap: () => controller.selectedCategory.value = cat,
               child: Container(
-                margin: const EdgeInsets.only(right: 12),
+                margin: const EdgeInsets.only(right: 10),
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
                   vertical: 12,
@@ -125,14 +140,14 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                 decoration: BoxDecoration(
                   color: isSelected
                       ? AppColors.primaryBrand
-                      : AppColors.paleSilver,
-                  borderRadius: BorderRadius.circular(12),
+                      : AppColors.fieldBg,
+                  borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
                 ),
                 child: Text(
                   cat.name,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 14,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     color: isSelected ? AppColors.white : AppColors.textPrimary,
                   ),
                 ),
@@ -145,119 +160,108 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
   }
 
   Widget _buildTargetAudienceCard(UpdatesController controller) {
-    return Container(
-      padding: AppSpacing.all20,
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          AppStrings.targetAudience,
+          style: AppTextStyles.outfit(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: AppColors.fieldLabel,
           ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Recipient',
-                style: AppTextStyles.manrope(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.brandAppBarColor,
+        ),
+        AppSpacing.v12,
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          decoration: BoxDecoration(
+            color: AppColors.fieldBg,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Obx(
+            () => DropdownButtonHideUnderline(
+              child: DropdownButton<UpdateTargetType>(
+                value: controller.selectedAudience.value,
+                isExpanded: true,
+                icon: const Icon(
+                  Icons.keyboard_arrow_down_rounded,
+                  color: AppColors.textPrimary,
                 ),
-              ),
-              const Icon(
-                Icons.people_outline_rounded,
-                color: AppColors.textMuted,
-                size: 20,
-              ),
-            ],
-          ),
-          AppSpacing.v16,
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-            decoration: BoxDecoration(
-              color: AppColors.paleSilver,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Obx(
-              () => DropdownButtonHideUnderline(
-                child: DropdownButton<UpdateRecipient>(
-                  value: controller.selectedRecipient.value,
-                  isExpanded: true,
-                  icon: const Icon(
-                    Icons.keyboard_arrow_down_rounded,
-                    color: AppColors.textPrimary,
-                  ),
-                  items: UpdateRecipient.values.map((UpdateRecipient value) {
-                    return DropdownMenuItem<UpdateRecipient>(
-                      value: value,
-                      child: Text(
-                        value.name.capitalizeFirst!,
-                        style: AppTextStyles.manrope(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.textPrimary,
-                        ),
+                items: UpdateTargetType.values.map((UpdateTargetType value) {
+                  String label = value == UpdateTargetType.all
+                      ? 'All Students'
+                      : 'Specific Batch';
+                  return DropdownMenuItem<UpdateTargetType>(
+                    value: value,
+                    child: Text(
+                      label,
+                      style: AppTextStyles.outfit(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textPrimary,
                       ),
-                    );
-                  }).toList(),
-                  onChanged: (val) => val != null
-                      ? controller.selectedRecipient.value = val
-                      : null,
-                ),
+                    ),
+                  );
+                }).toList(),
+                onChanged: (val) => val != null
+                    ? controller.selectedAudience.value = val
+                    : null,
               ),
             ),
           ),
-          Obx(() {
-            if (controller.selectedRecipient.value != UpdateRecipient.parents) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AppSpacing.v24,
-                  Text(
-                    'Target Audience',
-                    style: AppTextStyles.manrope(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.brandAppBarColor,
-                    ),
+        ),
+        Obx(() {
+          if (controller.selectedAudience.value == UpdateTargetType.batch) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AppSpacing.v24,
+                Text(
+                  AppStrings.selectBatch,
+                  style: AppTextStyles.outfit(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.fieldLabel,
                   ),
-                  AppSpacing.v12,
+                ),
+                AppSpacing.v12,
+                if (controller.isLoadingBatches.value)
+                  const CommonLoading(size: 24, strokeWidth: 2)
+                else if (controller.availableBatches.isEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Text(
+                      AppStrings.noBatchesFound,
+                      style: AppTextStyles.outfit(
+                        fontSize: 14,
+                        color: Colors.redAccent,
+                      ),
+                    ),
+                  )
+                else
                   Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 16,
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: AppColors.paleSilver,
+                      color: AppColors.fieldBg,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: DropdownButtonHideUnderline(
-                      child: DropdownButton<UpdateTargetType>(
-                        value: controller.selectedAudience.value,
+                      child: DropdownButton<Batch>(
+                        value: controller.selectedBatch.value,
                         isExpanded: true,
                         icon: const Icon(
                           Icons.keyboard_arrow_down_rounded,
                           color: AppColors.textPrimary,
                         ),
-                        items: UpdateTargetType.values.map((
-                          UpdateTargetType value,
-                        ) {
-                          String label = value == UpdateTargetType.all
-                              ? 'All Students'
-                              : 'Specific Batch';
-                          return DropdownMenuItem<UpdateTargetType>(
+                        items: controller.availableBatches.map((Batch value) {
+                          return DropdownMenuItem<Batch>(
                             value: value,
                             child: Text(
-                              label,
-                              style: AppTextStyles.manrope(
+                              '${value.name} • ${value.subject}',
+                              style: AppTextStyles.outfit(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
                                 color: AppColors.textPrimary,
@@ -266,86 +270,17 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                           );
                         }).toList(),
                         onChanged: (val) => val != null
-                            ? controller.selectedAudience.value = val
+                            ? controller.selectedBatch.value = val
                             : null,
                       ),
                     ),
                   ),
-                  if (controller.selectedAudience.value ==
-                      UpdateTargetType.batch) ...[
-                    AppSpacing.v24,
-                    Text(
-                      'Select Batch',
-                      style: AppTextStyles.manrope(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.brandAppBarColor,
-                      ),
-                    ),
-                    AppSpacing.v12,
-                    Obx(() {
-                      if (controller.isLoadingBatches.value) {
-                        return const CommonLoading(size: 24, strokeWidth: 2);
-                      }
-                      if (controller.availableBatches.isEmpty) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: Text(
-                            'No batches found',
-                            style: AppTextStyles.manrope(
-                              fontSize: 14,
-                              color: Colors.redAccent,
-                            ),
-                          ),
-                        );
-                      }
-                      return Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppColors.paleSilver,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton<Batch>(
-                            value: controller.selectedBatch.value,
-                            isExpanded: true,
-                            icon: const Icon(
-                              Icons.keyboard_arrow_down_rounded,
-                              color: AppColors.textPrimary,
-                            ),
-                            items: controller.availableBatches.map((
-                              Batch value,
-                            ) {
-                              return DropdownMenuItem<Batch>(
-                                value: value,
-                                child: Text(
-                                  '${value.name} • ${value.subject}',
-                                  style: AppTextStyles.manrope(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                    color: AppColors.textPrimary,
-                                  ),
-                                ),
-                              );
-                            }).toList(),
-                            onChanged: (val) => val != null
-                                ? controller.selectedBatch.value = val
-                                : null,
-                          ),
-                        ),
-                      );
-                    }),
-                  ],
-                ],
-              );
-            }
-            return const SizedBox.shrink();
-          }),
-        ],
-      ),
+              ],
+            );
+          }
+          return const SizedBox.shrink();
+        }),
+      ],
     );
   }
 
@@ -372,10 +307,10 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                 ),
                 AppSpacing.h12,
                 Text(
-                  'Add Attachment (Image/PDF)',
-                  style: AppTextStyles.manrope(
+                  AppStrings.addAttachmentImagePdf,
+                  style: AppTextStyles.outfit(
                     fontSize: 14,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.primaryBrand,
                   ),
                 ),
@@ -415,7 +350,7 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
                       Expanded(
                         child: Text(
                           fileName,
-                          style: AppTextStyles.manrope(
+                          style: AppTextStyles.outfit(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
                           ),
@@ -442,110 +377,107 @@ class CreateUpdateScreen extends GetView<UpdatesController> {
     );
   }
 
-  Widget _buildBroadcastChannels(UpdatesController controller) {
+  Widget _buildBroadcastButton(UpdatesController controller) {
+    return SafeArea(
+      top: false,
+      minimum: const EdgeInsets.only(bottom: 16),
+      child: AppButton(
+        label: AppStrings.createUpdate,
+        icon: Icons.send_rounded,
+        onPressed: () => controller.broadcastUpdate(),
+      ),
+    );
+  }
+
+  Widget _buildHolidayDateCard(
+    BuildContext context,
+    UpdatesController controller,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Broadcast Channels',
-          style: AppTextStyles.manrope(
+          'HOLIDAY DATE',
+          style: AppTextStyles.outfit(
             fontSize: 14,
-            fontWeight: FontWeight.w800,
-            color: AppColors.brandAppBarColor,
+            fontWeight: FontWeight.w600,
+            color: AppColors.fieldLabel,
           ),
         ),
-        AppSpacing.v16,
-        Obx(
-          () => _buildChannelItem(
-            icon: Icons.notifications_rounded,
-            title: 'App Notification',
-            subtitle: 'Push to devices',
-            value: controller.appNotificationEnabled.value,
-            onChanged: (val) => controller.appNotificationEnabled.value = val,
-          ),
-        ),
-        AppSpacing.v16,
-        Obx(
-          () => _buildChannelItem(
-            icon: Icons.chat_bubble_rounded,
-            title: 'WhatsApp Message',
-            subtitle: 'Direct message',
-            value: controller.whatsappEnabled.value,
-            onChanged: (val) => controller.whatsappEnabled.value = val,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildChannelItem({
-    required IconData icon,
-    required String title,
-    required String subtitle,
-    required bool value,
-    required ValueChanged<bool> onChanged,
-  }) {
-    return Container(
-      padding: AppSpacing.all16,
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: AppSpacing.all12,
-            decoration: BoxDecoration(
-              color: AppColors.successBg,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(icon, color: AppColors.primaryBrand, size: 20),
-          ),
-          AppSpacing.h16,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: AppTextStyles.manrope(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w800,
+        AppSpacing.v12,
+        GestureDetector(
+          onTap: () async {
+            final now = DateTime.now();
+            final date = await AppPickers.date(
+              context,
+              initialDate: controller.selectedHolidayDate.value ?? now,
+              firstDate: now,
+              lastDate: now.add(const Duration(days: 365 * 5)),
+            );
+            if (date != null) {
+              controller.selectedHolidayDate.value = date;
+              controller.holidayDateError.value = null;
+            }
+          },
+          child: Obx(
+            () => Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              decoration: BoxDecoration(
+                color: AppColors.fieldBg,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color:
+                      controller.triedToSave.value &&
+                          controller.holidayDateError.value != null
+                      ? AppColors.errorRed
+                      : Colors.transparent,
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    controller.selectedHolidayDate.value != null
+                        ? DateFormat(
+                            'MM/dd/yyyy',
+                          ).format(controller.selectedHolidayDate.value!)
+                        : 'mm/dd/yyyy',
+                    style: AppTextStyles.outfit(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: controller.selectedHolidayDate.value != null
+                          ? AppColors.textPrimary
+                          : AppColors.textMuted,
+                    ),
+                  ),
+                  const Icon(
+                    Icons.calendar_today_rounded,
                     color: AppColors.textPrimary,
+                    size: 20,
                   ),
-                ),
-                Text(
-                  subtitle,
-                  style: AppTextStyles.lexend(
-                    fontSize: 11,
-                    color: AppColors.textTertiary,
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-          Switch.adaptive(
-            value: value,
-            onChanged: onChanged,
-            activeThumbColor: AppColors.primaryBrand,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBroadcastButton(UpdatesController controller) {
-    return AppButton(
-      label: 'Broadcast Update',
-      icon: Icons.send_rounded,
-      onPressed: () => controller.broadcastUpdate(),
+        ),
+        Obx(() {
+          if (controller.triedToSave.value &&
+              controller.holidayDateError.value != null) {
+            return Padding(
+              padding: const EdgeInsets.only(top: 8, left: 4),
+              child: Text(
+                controller.holidayDateError.value!,
+                style: AppTextStyles.outfit(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.errorRed,
+                ),
+              ),
+            );
+          }
+          return const SizedBox.shrink();
+        }),
+      ],
     );
   }
 }

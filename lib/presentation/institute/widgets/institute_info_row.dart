@@ -20,23 +20,20 @@ class InstituteInfoRow extends StatelessWidget {
     return Container(
       padding: AppSpacing.all16,
       decoration: BoxDecoration(
-        color: AppColors.primaryBrandLight,
+        color: AppColors.fieldBg,
         borderRadius: BorderRadius.circular(12),
+        border: Border.all(width: 1.5, color: AppColors.fieldBorder),
       ),
       child: Row(
         children: [
-          Icon(
-            icon,
-            color: iconColor ?? AppColors.primaryBrand,
-            size: 20,
-          ),
+          Icon(icon, color: iconColor ?? AppColors.fieldLabel, size: 20),
           AppSpacing.h16,
           Expanded(
             child: Text(
               text,
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 14,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
                 color: AppColors.textPrimary,
               ),
             ),
@@ -46,4 +43,3 @@ class InstituteInfoRow extends StatelessWidget {
     );
   }
 }
-

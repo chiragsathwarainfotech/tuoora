@@ -1,3 +1,6 @@
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/data/models/student_model.dart';
 import 'package:tuoora/presentation/institute/controllers/institute_controller.dart';
 import 'package:tuoora/presentation/institute/models/batch_model.dart';
@@ -23,6 +26,9 @@ class BatchDetailsController extends GetxController {
   final assignedStudents = <BatchStudent>[].obs;
   final isLoading = false.obs;
   final studentCount = 0.obs;
+  final totalExpected = ''.obs;
+  final totalPaid = ''.obs;
+  final isStatusClosed = false.obs;
 
   final assignedSearchController = TextEditingController();
   final assignedSearchQuery = ''.obs;
@@ -44,15 +50,18 @@ class BatchDetailsController extends GetxController {
   void onInit() {
     super.onInit();
     studentCount.value = int.tryParse(batch.studentCount.split(' ')[0]) ?? 0;
-    _loadAssignedStudents();
+    totalExpected.value = batch.totalExpected?.toString() ?? '0';
+    totalPaid.value = batch.totalPaid?.toString() ?? '0';
+    isStatusClosed.value = batch.statusLabel.toLowerCase() == 'closed';
+    _loadAssignedStudents(batch.students);
   }
 
-  void _loadAssignedStudents() {
+  void _loadAssignedStudents(List<dynamic>? studentsList) {
     assignedStudents.clear();
 
-    if (batch.students != null && batch.students!.isNotEmpty) {
+    if (studentsList != null && studentsList.isNotEmpty) {
       final List<BatchStudent> loadedStudents = [];
-      for (var s in batch.students!) {
+      for (var s in studentsList) {
         final studentModel = Student(
           id: s.id,
           name: s.name,
@@ -81,11 +90,6 @@ class BatchDetailsController extends GetxController {
     try {
       isLoading.value = true;
 
-      final studentName = assignedStudents
-          .firstWhereOrNull((s) => s.student.id == studentId)
-          ?.student
-          .name;
-
       await _repository.removeStudentFromBatch(int.parse(batch.id), studentId);
 
       // Refresh the batches list in BatchController
@@ -98,7 +102,7 @@ class BatchDetailsController extends GetxController {
           .firstWhereOrNull((s) => s.student.id == studentId)
           ?.student;
       if (student != null) {
-        // We use -1 or null? The copyWith expects int?. 
+        // We use -1 or null? The copyWith expects int?.
         // Usually, safeNullableInt handles null.
         instituteController.updateStudent(student.copyWith(batchId: null));
       }
@@ -108,21 +112,54 @@ class BatchDetailsController extends GetxController {
       studentCount.value = assignedStudents.length;
       assignedStudents.refresh();
 
-      Get.snackbar(
-        'Success',
-        '${studentName ?? 'Student'} removed from batch successfully.',
-      );
+      AppSnackBar.success(AppStrings.studentRemoved);
     } catch (e) {
-      Get.snackbar('Error', 'Failed to remove student: ${e.toString()}');
+      AppSnackBar.error(AppStrings.failedToRemoveStudent);
     } finally {
       isLoading.value = false;
     }
   }
 
   Future<void> refreshStudents() async {
-    // This could be used if we had a "Get Batch Details" API
-    // For now, it just ensures the local state is fresh
-    _loadAssignedStudents();
+    if (Get.isRegistered<BatchController>()) {
+      final bc = Get.find<BatchController>();
+      await bc.loadBatches(isRefresh: true);
+
+      final updatedBatch = bc.batchesList.firstWhereOrNull(
+        (b) => b.id == batch.id,
+      );
+      if (updatedBatch != null) {
+        studentCount.value =
+            int.tryParse(updatedBatch.studentCount.split(' ')[0]) ?? 0;
+        totalExpected.value = updatedBatch.totalExpected?.toString() ?? '0';
+        totalPaid.value = updatedBatch.totalPaid?.toString() ?? '0';
+        _loadAssignedStudents(updatedBatch.students);
+        isStatusClosed.value =
+            updatedBatch.statusLabel.toLowerCase() == 'closed';
+      }
+    }
+  }
+
+  Future<void> closeBatch() async {
+    try {
+      isLoading.value = true;
+      CommonLoading.show();
+      await _repository.closeBatch(int.parse(batch.id));
+
+      if (Get.isRegistered<BatchController>()) {
+        final bc = Get.find<BatchController>();
+        await bc.loadBatches(isRefresh: true);
+      }
+
+      CommonLoading.dismiss();
+      AppSnackBar.success('Batch Closed');
+      isStatusClosed.value = true;
+    } catch (e) {
+      CommonLoading.dismiss();
+      AppSnackBar.error(e.toString());
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   @override
@@ -131,4 +168,3 @@ class BatchDetailsController extends GetxController {
     super.onClose();
   }
 }
-

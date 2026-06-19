@@ -1,6 +1,7 @@
 class InstituteProfile {
   final int id;
   final String name;
+  final String? instituteCode;
   final String email;
   final String phone;
   final String? instituteName;
@@ -17,10 +18,13 @@ class InstituteProfile {
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final String? logoUrl;
+  final String? upiId;
+  final String? upiQrCodeUrl;
 
   InstituteProfile({
     required this.id,
     required this.name,
+    this.instituteCode,
     required this.email,
     required this.phone,
     this.instituteName,
@@ -37,12 +41,15 @@ class InstituteProfile {
     this.createdAt,
     this.updatedAt,
     this.logoUrl,
+    this.upiId,
+    this.upiQrCodeUrl,
   });
 
   factory InstituteProfile.fromJson(Map<String, dynamic> json) {
     return InstituteProfile(
       id: json['id'],
       name: json['name']?.toString() ?? '',
+      instituteCode: json['institute_code']?.toString() ?? '',
       email: json['email']?.toString() ?? '',
       phone: json['phone']?.toString() ?? '',
       instituteName: json['institute_name']?.toString(),
@@ -63,6 +70,8 @@ class InstituteProfile {
           ? DateTime.parse(json['updated_at'])
           : null,
       logoUrl: json['logo_url']?.toString(),
+      upiId: json['upi_id']?.toString(),
+      upiQrCodeUrl: json['upi_qr_code_url']?.toString(),
     );
   }
 
@@ -70,6 +79,7 @@ class InstituteProfile {
     return {
       'id': id,
       'name': name,
+      'institute_code': instituteCode,
       'email': email,
       'phone': phone,
       'institute_name': instituteName,
@@ -86,7 +96,34 @@ class InstituteProfile {
       'created_at': createdAt?.toIso8601String(),
       'updated_at': updatedAt?.toIso8601String(),
       'logo_url': logoUrl,
+      'upi_id': upiId,
+      'upi_qr_code_url': upiQrCodeUrl,
     };
   }
-}
 
+  InstituteProfile copyWithPayment({String? upiId, String? upiQrCodeUrl}) {
+    return InstituteProfile(
+      id: id,
+      name: name,
+      instituteCode: instituteCode,
+      email: email,
+      phone: phone,
+      instituteName: instituteName,
+      address: address,
+      addressLine2: addressLine2,
+      city: city,
+      state: state,
+      country: country,
+      pincode: pincode,
+      website: website,
+      youtube: youtube,
+      instagram: instagram,
+      status: status,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
+      logoUrl: logoUrl,
+      upiId: upiId ?? this.upiId,
+      upiQrCodeUrl: upiQrCodeUrl ?? this.upiQrCodeUrl,
+    );
+  }
+}

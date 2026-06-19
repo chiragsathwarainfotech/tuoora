@@ -2,6 +2,7 @@ import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/app_pickers.dart';
 import 'package:tuoora/data/repositories_impl/student_repository_impl.dart';
 import 'package:tuoora/presentation/institute/controllers/institute_controller.dart';
 import 'package:tuoora/core/utils/validation_utils.dart';
@@ -24,6 +25,7 @@ class InstituteStudentController extends GetxController {
   final isFormValid = false.obs;
   final triedToSave = false.obs;
   final currentStudent = Rxn<Student>();
+  final isSendingFeeReminder = false.obs;
 
   final nameController = TextEditingController();
   final parentNameController = TextEditingController();
@@ -222,8 +224,8 @@ class InstituteStudentController extends GetxController {
       }
     }
 
-    final DateTime? picked = await showDatePicker(
-      context: context,
+    final DateTime? picked = await AppPickers.date(
+      context,
       initialDate: initialDate,
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
@@ -268,10 +270,10 @@ class InstituteStudentController extends GetxController {
                 color: AppColors.primaryBrand,
               ),
               title: Text(
-                'Camera',
-                style: AppTextStyles.manrope(
+                AppStrings.labelCamera,
+                style: AppTextStyles.outfit(
                   fontSize: 16,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
                 ),
               ),
@@ -287,10 +289,10 @@ class InstituteStudentController extends GetxController {
                 color: AppColors.primaryBrand,
               ),
               title: Text(
-                'Gallery',
-                style: AppTextStyles.manrope(
+                AppStrings.labelGallery,
+                style: AppTextStyles.outfit(
                   fontSize: 16,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
                 ),
               ),
@@ -357,7 +359,7 @@ class InstituteStudentController extends GetxController {
     } catch (e) {
       if (e is ValidationException) {
         _handleValidationErrors(e.errors);
-        AppSnackBar.error('Please correct the highlighted errors');
+        AppSnackBar.error(AppStrings.validationErrorsBelow);
       } else {
         AppSnackBar.error('Failed to save student: $e');
       }
@@ -387,6 +389,52 @@ class InstituteStudentController extends GetxController {
       standardError.value = (errors['standard'] as List).first.toString();
     }
     isFormValid.value = false;
+  }
+
+  Future<void> sendFeeReminder() async {
+    final student = currentStudent.value;
+    if (student == null) return;
+    try {
+      isSendingFeeReminder.value = true;
+      await _studentRepository.sendFeeReminder(student.id);
+      AppSnackBar.success(
+        'Fee reminder sent to ${student.name}',
+        title: AppStrings.reminderSent,
+      );
+    } catch (e) {
+      AppSnackBar.error('Failed to send fee reminder: $e');
+    } finally {
+      isSendingFeeReminder.value = false;
+    }
+  }
+
+  Future<void> sendPassword() async {
+    final student = currentStudent.value;
+    if (student == null) return;
+    try {
+      isLoading.value = true;
+      final message = await _studentRepository.sendPassword(student.id);
+      AppSnackBar.success(message);
+    } catch (e) {
+      AppSnackBar.error('Failed to send password: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> resetPassword(String newPassword) async {
+    final student = currentStudent.value;
+    if (student == null) return;
+    try {
+      isLoading.value = true;
+      await _studentRepository.resetPassword(student.id, newPassword);
+      Get.back(); // Close the dialog
+      AppSnackBar.success('Password updated successfully');
+    } catch (e) {
+      AppSnackBar.error('Failed to reset password: $e');
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   Future<void> deleteStudent() async {

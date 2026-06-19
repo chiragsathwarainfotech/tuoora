@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
@@ -32,9 +33,9 @@ class StudentChatScreen extends StatelessWidget {
               child: Center(
                 child: Text(
                   'SC',
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 14,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.white,
                   ),
                 ),
@@ -45,16 +46,16 @@ class StudentChatScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Saraswati Coaching Centre',
-                  style: AppTextStyles.manrope(
+                  AppStrings.saraswatiCoachingCentre,
+                  style: AppTextStyles.outfit(
                     fontSize: 14,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                 ),
                 Text(
-                  'Institute',
-                  style: AppTextStyles.lexend(
+                  AppStrings.studentReceiptInstitute,
+                  style: AppTextStyles.outfit(
                     fontSize: 11,
                     fontWeight: FontWeight.w400,
                     color: AppColors.textTertiary,
@@ -154,16 +155,16 @@ class StudentChatScreen extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
-                  color: AppColors.paleSilver.withValues(alpha: 0.5),
+                  color: AppColors.fieldBg.withValues(alpha: 0.5),
                   borderRadius: BorderRadius.circular(24),
                 ),
                 child: Row(
                   children: [
                     Expanded(
                       child: TextField(
-                        style: AppTextStyles.lexend(fontSize: 14),
+                        style: AppTextStyles.outfit(fontSize: 14),
                         decoration: const InputDecoration(
-                          hintText: 'Message the institute...',
+                          hintText: AppStrings.messageTheInstitute,
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.symmetric(vertical: 12),
                         ),
@@ -277,9 +278,9 @@ class StudentChatScreen extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             label,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 10,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               color: AppColors.textSecondary,
             ),
           ),
@@ -296,9 +297,9 @@ class StudentChatScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s16),
           child: Text(
             date,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 10,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.textTertiary,
               letterSpacing: 1.0,
             ),
@@ -325,7 +326,7 @@ class StudentChatScreen extends StatelessWidget {
             ),
             child: Text(
               text,
-              style: AppTextStyles.lexend(
+              style: AppTextStyles.outfit(
                 fontSize: 13,
                 fontWeight: FontWeight.w400,
                 color: AppColors.textPrimary,
@@ -336,7 +337,7 @@ class StudentChatScreen extends StatelessWidget {
           const SizedBox(height: AppSpacing.s4),
           Text(
             time,
-            style: AppTextStyles.lexend(
+            style: AppTextStyles.outfit(
               fontSize: 10,
               fontWeight: FontWeight.w400,
               color: AppColors.textMuted,
@@ -362,7 +363,7 @@ class StudentChatScreen extends StatelessWidget {
             ),
             child: Text(
               text,
-              style: AppTextStyles.lexend(
+              style: AppTextStyles.outfit(
                 fontSize: 13,
                 fontWeight: FontWeight.w500,
                 color: AppColors.white,
@@ -373,7 +374,7 @@ class StudentChatScreen extends StatelessWidget {
           const SizedBox(height: AppSpacing.s4),
           Text(
             time,
-            style: AppTextStyles.lexend(
+            style: AppTextStyles.outfit(
               fontSize: 10,
               fontWeight: FontWeight.w400,
               color: AppColors.textMuted,
@@ -394,7 +395,7 @@ class StudentChatScreen extends StatelessWidget {
         ),
         margin: const EdgeInsets.symmetric(horizontal: AppSpacing.s32),
         decoration: BoxDecoration(
-          color: AppColors.amberLight,
+          color: AppColors.errorBg,
           borderRadius: BorderRadius.circular(AppSpacing.s8),
         ),
         child: Row(
@@ -409,7 +410,7 @@ class StudentChatScreen extends StatelessWidget {
             Expanded(
               child: Text(
                 text,
-                style: AppTextStyles.lexend(
+                style: AppTextStyles.outfit(
                   fontSize: 11,
                   fontWeight: FontWeight.w400,
                   color: AppColors.textPrimary,

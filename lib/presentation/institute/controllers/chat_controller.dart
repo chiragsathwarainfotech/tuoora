@@ -1,15 +1,19 @@
 import 'dart:async';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:record/record.dart';
 
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/services/auth_service.dart';
 import 'package:tuoora/core/services/chat_socket_service.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
+import 'package:tuoora/core/widgets/common_dialog.dart';
 import 'package:tuoora/data/models/chat_model.dart';
 import 'package:tuoora/data/repositories_impl/chat_repository_impl.dart';
 
@@ -29,6 +33,35 @@ class ChatController extends GetxController {
   final messageController = TextEditingController();
   final scrollController = ScrollController();
 
+  static const int _messagesPerPage = 20;
+  int _messagesPage = 1;
+
+  /// True while an older page is being fetched (drives the top spinner).
+  final isLoadingMore = false.obs;
+
+  /// False once the server returns a short page — no more history to load.
+  final hasMoreMessages = true.obs;
+
+  /// True when the user has scrolled up far enough that the latest message
+  /// is off-screen — drives the floating "scroll to bottom" button.
+  final showScrollToBottom = false.obs;
+
+  // ----------------------------------------------------- voice recording
+  final AudioRecorder _recorder = AudioRecorder();
+  final isRecording = false.obs;
+  final recordSeconds = 0.obs;
+  Timer? _recordTimer;
+  String? _recordPath;
+
+  // -------------------------------------------------- upload progress
+  /// Local file path of the attachment currently being uploaded. The
+  /// optimistic bubble matches its [Message.attachment] against this and
+  /// shows the progress ring while non-empty. Reset to '' on done/error.
+  final uploadingPath = ''.obs;
+
+  /// 0..100 — bytes uploaded as reported by GetConnect's `uploadProgress`.
+  final uploadProgress = 0.0.obs;
+
   final availableParticipants = <ChatParticipant>[].obs;
   final filteredParticipants = <ChatParticipant>[].obs;
   final participantSearchQuery = ''.obs;
@@ -44,11 +77,14 @@ class ChatController extends GetxController {
   StreamSubscription<MessageAck>? _onMessageReadSub;
   StreamSubscription<ChatDeleted>? _onChatDeletedSub;
 
+  final _pendingAcks = <String, _PendingAck>{};
+
   @override
   void onInit() {
     super.onInit();
     _subscribeToSocketStreams();
     fetchChats();
+    scrollController.addListener(_onScroll);
 
     debounce(
       searchQuery,
@@ -69,11 +105,35 @@ class ChatController extends GetxController {
     _onMessageReadSub?.cancel();
     _onChatDeletedSub?.cancel();
     messageController.dispose();
+    scrollController.removeListener(_onScroll);
     scrollController.dispose();
+    _recordTimer?.cancel();
+    _recorder.dispose();
     super.onClose();
   }
 
-  // ---------------------------------------------------------------- chats
+  String get recordTimeLabel {
+    final s = recordSeconds.value;
+    final m = s ~/ 60;
+    final sec = (s % 60).toString().padLeft(2, '0');
+    return '$m:$sec';
+  }
+
+  void _onScroll() {
+    if (!scrollController.hasClients) return;
+    final pos = scrollController.position;
+    final distanceFromBottom = pos.maxScrollExtent - pos.pixels;
+    final shouldShow = distanceFromBottom > 300;
+    if (shouldShow != showScrollToBottom.value) {
+      showScrollToBottom.value = shouldShow;
+    }
+
+    if (pos.pixels <= 200 && !isLoadingMore.value && hasMoreMessages.value) {
+      loadOlderMessages();
+    }
+  }
+
+  void scrollToBottom() => _scrollToExtent(animate: true);
 
   Future<void> fetchChats() async {
     try {
@@ -82,8 +142,6 @@ class ChatController extends GetxController {
       chatsList.assignAll(chats);
       _filterChats();
 
-      // Derive my identity from any chat (the backend embeds my_id/my_type
-      // on every entry). Fall back to AuthService if there are no chats yet.
       if (chats.isNotEmpty &&
           chats.first.myId != null &&
           chats.first.myRole != null) {
@@ -93,7 +151,6 @@ class ChatController extends GetxController {
         _deriveMyIdentityFromAuth();
       }
 
-      // Best-effort socket connect — failures don't block the chat list.
       _ensureSocketConnected();
     } catch (e) {
       AppSnackBar.error('Failed to load chats: $e');
@@ -110,18 +167,16 @@ class ChatController extends GetxController {
     _myUserType = _mapAuthRoleToChatType(user.role);
   }
 
-  /// AuthService stores roles in shouty form (`'INSTITUTE'`, `'STUDENT'`,
-  /// `'PARENT'`) while the chat backend uses model names. Map here once.
   String _mapAuthRoleToChatType(String role) {
     switch (role.toUpperCase()) {
       case 'INSTITUTE':
         return 'Institute';
-      case 'STAFF':
-        return 'Staff';
+      // case 'STAFF':
+      //   return 'Staff';
       case 'STUDENT':
         return 'Student';
-      case 'PARENT':
-        return 'StudentParent';
+      // case 'PARENT':
+      //   return 'StudentParent';
       default:
         return role;
     }
@@ -142,17 +197,21 @@ class ChatController extends GetxController {
     }
   }
 
-  // ----------------------------------------------------------- messages
-
   Future<void> fetchMessages(String chatId) async {
     try {
       isLoading.value = true;
+      _messagesPage = 1;
+      isLoadingMore.value = false;
+      hasMoreMessages.value = true;
       final chatMessages = await _chatRepository.getChatMessages(
         chatId,
         myUserId: _myUserId ?? '',
         myUserType: _myUserType ?? '',
+        page: _messagesPage,
+        perPage: _messagesPerPage,
       );
       messages.assignAll(chatMessages);
+      hasMoreMessages.value = chatMessages.length >= _messagesPerPage;
       if (kDebugMode) {
         final mine = chatMessages.where((m) => m.isMe).toList();
         final invariantBreaks = mine
@@ -165,13 +224,69 @@ class ChatController extends GetxController {
           '(impossible state from backend): $invariantBreaks',
         );
       }
-      _scrollToBottom();
+      _scrollToBottom(animate: false);
     } catch (e) {
       AppSnackBar.error(
         'Failed to load messages: ${e.toString().replaceAll('Exception: ', '')}',
       );
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  Future<void> loadOlderMessages() async {
+    if (isLoadingMore.value || !hasMoreMessages.value) return;
+    final chat = selectedChat.value;
+    if (chat == null) return;
+
+    isLoadingMore.value = true;
+    try {
+      final nextPage = _messagesPage + 1;
+      final older = await _chatRepository.getChatMessages(
+        chat.id,
+        myUserId: _myUserId ?? '',
+        myUserType: _myUserType ?? '',
+        page: nextPage,
+        perPage: _messagesPerPage,
+      );
+
+      _messagesPage = nextPage;
+      hasMoreMessages.value = older.length >= _messagesPerPage;
+      if (older.isEmpty) return;
+
+      final existingIds = messages
+          .where((m) => m.id.isNotEmpty)
+          .map((m) => m.id)
+          .toSet();
+      final fresh = older
+          .where((m) => m.id.isEmpty || !existingIds.contains(m.id))
+          .toList();
+      if (fresh.isEmpty) return;
+
+      final hasClients = scrollController.hasClients;
+      final beforeMax = hasClients
+          ? scrollController.position.maxScrollExtent
+          : 0.0;
+      final beforePixels = hasClients ? scrollController.position.pixels : 0.0;
+
+      messages.assignAll([...fresh, ...messages]);
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!scrollController.hasClients) return;
+        final afterMax = scrollController.position.maxScrollExtent;
+        final delta = afterMax - beforeMax;
+        if (delta > 0) {
+          scrollController.jumpTo(
+            (beforePixels + delta).clamp(0.0, afterMax).toDouble(),
+          );
+        }
+      });
+    } catch (e) {
+      AppSnackBar.error(
+        'Failed to load older messages: ${e.toString().replaceAll('Exception: ', '')}',
+      );
+    } finally {
+      isLoadingMore.value = false;
     }
   }
 
@@ -182,11 +297,10 @@ class ChatController extends GetxController {
 
     final receiverId = int.tryParse(chat.participantId);
     if (receiverId == null) {
-      AppSnackBar.error('Invalid recipient');
+      AppSnackBar.error(AppStrings.invalidRecipient);
       return;
     }
 
-    // Optimistic insert so the bubble shows up instantly (single grey tick).
     final now = DateTime.now();
     final optimistic = Message(
       id: '',
@@ -234,15 +348,6 @@ class ChatController extends GetxController {
     }
   }
 
-  /// Re-attempts a message whose previous send was marked as `failed`.
-  /// Removes the failed bubble from the list and re-fires either the text
-  /// or attachment send path depending on the message type.
-  ///
-  /// Note: if the backend persisted the original send but failed to return
-  /// a 2xx response (e.g. a 500 caused by serialization), retrying creates
-  /// a duplicate. The chat-history endpoint is the only source of truth in
-  /// that case — the user can swipe back and reopen to reconcile, or just
-  /// delete the duplicate.
   Future<void> retrySend(Message failed) async {
     if (!failed.failed) return;
     final chat = selectedChat.value;
@@ -290,8 +395,24 @@ class ChatController extends GetxController {
 
     final receiverId = int.tryParse(chat.participantId);
     if (receiverId == null) {
-      AppSnackBar.error('Invalid recipient');
+      AppSnackBar.error(AppStrings.invalidRecipient);
       return;
+    }
+
+    // Enforce per-type upload size limits before we optimistically add the
+    // bubble or hit the network.
+    final limitMb = _attachmentLimitMb(type);
+    if (limitMb != null) {
+      final sizeMb = await file.length() / (1024 * 1024);
+      if (sizeMb > limitMb) {
+        AppSnackBar.error(
+          '${_attachmentTypeLabel(type)} files must be under '
+          '${limitMb.toStringAsFixed(0)} MB. Selected file is '
+          '${sizeMb.toStringAsFixed(2)} MB.',
+          title: AppStrings.maximumSizeLimit,
+        );
+        return;
+      }
     }
 
     final now = DateTime.now();
@@ -304,8 +425,6 @@ class ChatController extends GetxController {
       receiverType: chat.participantRole,
       content: caption,
       messageType: type,
-      // Local file path — the bubble renderer falls back to Image.file /
-      // file-aware widgets when the attachment doesn't start with http.
       attachment: file.path,
       createdAt: now,
       isMe: true,
@@ -316,6 +435,8 @@ class ChatController extends GetxController {
 
     try {
       isSending.value = true;
+      uploadingPath.value = file.path;
+      uploadProgress.value = 0.0;
       final sent = await _chatRepository.sendMessage(
         receiverId: receiverId,
         receiverType: chat.participantRole,
@@ -324,6 +445,9 @@ class ChatController extends GetxController {
         attachment: file,
         myUserId: _myUserId ?? '',
         myUserType: _myUserType ?? '',
+        onSendProgress: (percent) {
+          uploadProgress.value = percent.clamp(0.0, 100.0);
+        },
       );
       if (kDebugMode) {
         debugPrint(
@@ -340,20 +464,186 @@ class ChatController extends GetxController {
       );
     } finally {
       isSending.value = false;
+      uploadingPath.value = '';
+      uploadProgress.value = 0.0;
+    }
+  }
+
+  Future<void> startRecording() async {
+    if (isRecording.value) return;
+
+    final granted = await _ensureMicPermission();
+    if (!granted) return;
+
+    try {
+      final dir = Directory('${Directory.systemTemp.path}/tuoora_voice');
+      if (!await dir.exists()) await dir.create(recursive: true);
+      _recordPath =
+          '${dir.path}/voice_${DateTime.now().millisecondsSinceEpoch}.m4a';
+
+      await _recorder.start(
+        const RecordConfig(encoder: AudioEncoder.aacLc),
+        path: _recordPath!,
+      );
+      isRecording.value = true;
+      recordSeconds.value = 0;
+      _recordTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+        recordSeconds.value++;
+      });
+    } catch (e) {
+      isRecording.value = false;
+      AppSnackBar.error(AppStrings.couldNotStartRecording);
+    }
+  }
+
+  Future<bool> _ensureMicPermission() async {
+    PermissionStatus status;
+    try {
+      status = await Permission.microphone.status;
+    } catch (_) {
+      status = PermissionStatus.denied;
+    }
+
+    if (status.isGranted || status.isLimited) return true;
+
+    PermissionStatus result;
+    try {
+      result = await Permission.microphone.request();
+    } catch (_) {
+      result = PermissionStatus.denied;
+    }
+
+    if (result.isGranted || result.isLimited) return true;
+
+    if (result.isPermanentlyDenied || result.isRestricted) {
+      _showOpenSettingsDialog();
+    } else {
+      AppSnackBar.warning(AppStrings.microphonePermissionNeeded);
+    }
+    return false;
+  }
+
+  void _showOpenSettingsDialog() {
+    CommonDialog.show(
+      title: AppStrings.enableMicrophone,
+      description: AppStrings.microphoneAccessIsOffForThis,
+      icon: Icons.mic_off_rounded,
+      confirmText: AppStrings.openSettings,
+      cancelText: AppStrings.labelNotNow,
+      onConfirm: () async {
+        try {
+          await openAppSettings();
+        } catch (_) {
+          AppSnackBar.error(AppStrings.couldNotOpenSettings);
+        }
+      },
+    );
+  }
+
+  /// Discards the in-progress recording without sending.
+  Future<void> cancelRecording() async {
+    if (!isRecording.value) return;
+    _recordTimer?.cancel();
+    isRecording.value = false;
+    recordSeconds.value = 0;
+    try {
+      await _recorder.stop();
+    } catch (_) {}
+    final path = _recordPath;
+    _recordPath = null;
+    if (path != null) {
+      final f = File(path);
+      if (await f.exists()) await f.delete();
+    }
+  }
+
+  /// Stops recording and sends the captured clip as an audio attachment.
+  Future<void> stopAndSendRecording() async {
+    if (!isRecording.value) return;
+    _recordTimer?.cancel();
+    final seconds = recordSeconds.value;
+    isRecording.value = false;
+    recordSeconds.value = 0;
+
+    String? path;
+    try {
+      path = await _recorder.stop();
+    } catch (e) {
+      AppSnackBar.error(AppStrings.couldNotFinishRecording);
+      return;
+    }
+    path ??= _recordPath;
+    _recordPath = null;
+
+    // Ignore accidental ultra-short taps.
+    if (path == null || seconds < 1) {
+      if (path != null) {
+        final f = File(path);
+        if (await f.exists()) await f.delete();
+      }
+      return;
+    }
+    await sendAttachment(file: File(path), type: 'audio');
+  }
+
+  // Per-type upload caps (MB). Document is intentionally uncapped here.
+  double? _attachmentLimitMb(String type) {
+    switch (type) {
+      case 'image':
+        return 5;
+      case 'audio':
+        return 10;
+      case 'video':
+        return 20;
+      default:
+        return null;
+    }
+  }
+
+  String _attachmentTypeLabel(String type) {
+    switch (type) {
+      case 'image':
+        return 'Image';
+      case 'audio':
+        return 'Audio';
+      case 'video':
+        return 'Video';
+      case 'document':
+        return 'Document';
+      default:
+        return 'File';
     }
   }
 
   void _replaceOptimisticWithCanonical(Message optimistic, Message canonical) {
+    final folded = _applyPendingAcks(canonical);
+
     final idx = messages.indexOf(optimistic);
     if (idx == -1) {
-      // The socket echoed the message back before our HTTP response. If we
-      // haven't already accepted it, append; otherwise leave it alone.
-      if (!messages.any((m) => m.id == canonical.id && canonical.id.isNotEmpty)) {
-        messages.add(canonical);
+      if (!messages.any((m) => m.id == folded.id && folded.id.isNotEmpty)) {
+        messages.add(folded);
       }
       return;
     }
-    messages[idx] = canonical;
+    messages[idx] = folded;
+  }
+
+  /// Merges any buffered ack timestamps for [msg]'s id into a fresh copy.
+  /// Removes the buffer entry on hit so it isn't applied twice.
+  Message _applyPendingAcks(Message msg) {
+    if (msg.id.isEmpty) return msg;
+    final pending = _pendingAcks.remove(msg.id);
+    if (pending == null) return msg;
+    if (kDebugMode) {
+      debugPrint(
+        '[ChatController] applying buffered ack to id=${msg.id}: '
+        'received=${pending.receivedAt}, read=${pending.readAt}',
+      );
+    }
+    return msg.copyWith(
+      receivedAt: pending.receivedAt ?? msg.receivedAt,
+      readAt: pending.readAt ?? msg.readAt,
+    );
   }
 
   void _markOptimisticFailed(Message optimistic) {
@@ -361,8 +651,6 @@ class ChatController extends GetxController {
     if (idx == -1) return;
     messages[idx] = optimistic.copyWith(failed: true);
   }
-
-  // ----------------------------------------------------- socket handlers
 
   void _subscribeToSocketStreams() {
     if (!Get.isRegistered<ChatSocketService>()) {
@@ -376,8 +664,9 @@ class ChatController extends GetxController {
     }
     final socket = Get.find<ChatSocketService>();
     _onMessageSentSub = socket.onMessageSent.listen(_onIncomingMessage);
-    _onMessageReceivedSub =
-        socket.onMessageReceived.listen(_onMessageReceivedAck);
+    _onMessageReceivedSub = socket.onMessageReceived.listen(
+      _onMessageReceivedAck,
+    );
     _onMessageReadSub = socket.onMessageRead.listen(_onMessageReadAck);
     _onChatDeletedSub = socket.onChatDeleted.listen(_onChatDeletedRemote);
     if (kDebugMode) {
@@ -408,38 +697,47 @@ class ChatController extends GetxController {
         'isMe=${msg.isMe} openChat=$openId',
       );
     }
-    // Drop duplicates — the same message arrives via our own send response
-    // AND via the broadcast echo on our own channel.
     if (msg.id.isNotEmpty && messages.any((m) => m.id == msg.id)) return;
 
     if (msg.isMe) {
-      // Multi-device echo of our own send. Append only if visible.
-      if (selectedChat.value?.id == msg.chatId) {
-        messages.add(msg);
+      final expectedOpenId = selectedChat.value?.id == '_'
+          ? '${selectedChat.value?.participantRole}_${selectedChat.value?.participantId}'
+                .toLowerCase()
+          : selectedChat.value?.id.toLowerCase();
+
+      if (expectedOpenId == msg.chatId.toLowerCase()) {
+        if (selectedChat.value?.id == '_') {
+          selectedChat.value = selectedChat.value?.copyWith(id: msg.chatId);
+        }
+        messages.add(_applyPendingAcks(msg));
         _scrollToBottom();
       }
       return;
     }
 
-    // Incoming from the other side — always confirm delivery to the server.
     final mid = int.tryParse(msg.id);
     if (mid != null) {
       _chatRepository.markReceived(mid).catchError((_) => null);
     }
 
-    if (selectedChat.value?.id == msg.chatId) {
-      // User is actively viewing the chat → show + mark read.
+    final openChat = selectedChat.value;
+    final expectedOpenId = openChat?.id == '_'
+        ? '${openChat?.participantRole}_${openChat?.participantId}'
+              .toLowerCase()
+        : openChat?.id.toLowerCase();
+
+    if (expectedOpenId == msg.chatId.toLowerCase()) {
+      if (openChat?.id == '_') {
+        selectedChat.value = openChat?.copyWith(id: msg.chatId);
+      }
+
       messages.add(msg);
       _scrollToBottom();
-      // Also refresh the list-tile preview so it's correct when the
-      // user navigates back (unread count stays 0 — they're reading it
-      // right now).
       _bumpChatPreview(msg);
       if (mid != null) {
         _chatRepository.markRead(mid).catchError((_) => null);
       }
     } else {
-      // Background — update the list tile, bump unread count.
       _bumpUnreadFor(msg);
     }
   }
@@ -471,10 +769,17 @@ class ChatController extends GetxController {
   }) {
     final idx = messages.indexWhere((m) => m.id == messageId);
     if (idx == -1) {
+      final existing = _pendingAcks[messageId];
+      _pendingAcks[messageId] = _PendingAck(
+        receivedAt: receivedAt ?? existing?.receivedAt,
+        readAt: readAt ?? existing?.readAt,
+      );
       if (kDebugMode) {
         debugPrint(
           '[ChatController] _updateMessageStatus: id=$messageId not in '
-          'open conversation (size=${messages.length})',
+          'open conversation (size=${messages.length}) — buffered ack '
+          '(received=${_pendingAcks[messageId]!.receivedAt}, '
+          'read=${_pendingAcks[messageId]!.readAt})',
         );
       }
       return;
@@ -493,7 +798,9 @@ class ChatController extends GetxController {
   }
 
   void _bumpUnreadFor(Message msg) {
-    final idx = chatsList.indexWhere((c) => c.id == msg.chatId);
+    final idx = chatsList.indexWhere(
+      (c) => c.id.toLowerCase() == msg.chatId.toLowerCase(),
+    );
     if (idx == -1) {
       // Brand-new conversation we didn't know about — pull the list fresh.
       fetchChats();
@@ -504,15 +811,18 @@ class ChatController extends GetxController {
       lastMessage: msg.content,
       lastMessageType: msg.messageType,
       lastMessageAt: msg.createdAt,
-      lastMessageTime:
-          msg.createdAt == null ? old.lastMessageTime : msg.timestamp,
+      lastMessageTime: msg.createdAt == null
+          ? old.lastMessageTime
+          : msg.timestamp,
       unreadCount: old.unreadCount + 1,
     );
     _moveToTop(idx, updated);
   }
 
   void _bumpChatPreview(Message msg) {
-    final idx = chatsList.indexWhere((c) => c.id == msg.chatId);
+    final idx = chatsList.indexWhere(
+      (c) => c.id.toLowerCase() == msg.chatId.toLowerCase(),
+    );
     if (idx == -1) return;
     final old = chatsList[idx];
     final updated = old.copyWith(
@@ -563,7 +873,9 @@ class ChatController extends GetxController {
 
   void startChatWithParticipant(ChatParticipant participant) {
     final composedId = '${participant.role}_${participant.id}';
-    final existing = chatsList.firstWhereOrNull((c) => c.id == composedId);
+    final existing = chatsList.firstWhereOrNull(
+      (c) => c.id.toLowerCase() == composedId.toLowerCase(),
+    );
     if (existing != null) {
       openChat(existing);
       return;
@@ -589,14 +901,18 @@ class ChatController extends GetxController {
 
     // Clear local unread badge as soon as the chat opens. The history
     // endpoint server-side appears to already bulk-mark messages as read.
-    final idx = chatsList.indexWhere((c) => c.id == chat.id);
+    final idx = chatsList.indexWhere(
+      (c) => c.id.toLowerCase() == chat.id.toLowerCase(),
+    );
     if (idx != -1 && chatsList[idx].unreadCount > 0) {
       chatsList[idx] = chatsList[idx].copyWith(unreadCount: 0);
       _filterChats();
     }
 
     final isStudent = Get.currentRoute.startsWith('/student');
-    Get.toNamed(isStudent ? AppRoutes.studentChat : AppRoutes.instituteChatMessages);
+    Get.toNamed(
+      isStudent ? AppRoutes.studentChat : AppRoutes.instituteChatMessages,
+    );
   }
 
   /// Called when the user leaves the chat messages screen (via system back,
@@ -616,7 +932,7 @@ class ChatController extends GetxController {
     if (target == null) return;
     final receiverId = int.tryParse(target.participantId);
     if (receiverId == null) {
-      AppSnackBar.error('Invalid conversation');
+      AppSnackBar.error(AppStrings.invalidConversation);
       return;
     }
 
@@ -628,17 +944,18 @@ class ChatController extends GetxController {
       );
       _removeChatLocally(target.id);
       // If we're sitting on the chat-messages route, pop back to the list.
-      if (Get.currentRoute == AppRoutes.instituteChatMessages || Get.currentRoute == AppRoutes.studentChat) {
+      if (Get.currentRoute == AppRoutes.instituteChatMessages ||
+          Get.currentRoute == AppRoutes.studentChat) {
         Get.until(
-          (route) => route.settings.name != AppRoutes.instituteChatMessages && route.settings.name != AppRoutes.studentChat,
+          (route) =>
+              route.settings.name != AppRoutes.instituteChatMessages &&
+              route.settings.name != AppRoutes.studentChat,
         );
       }
       closeChat();
-      AppSnackBar.success('Conversation deleted');
+      AppSnackBar.success(AppStrings.conversationDeleted);
     } catch (e) {
-      AppSnackBar.error(
-        e.toString().replaceAll('Exception: ', ''),
-      );
+      AppSnackBar.error(e.toString().replaceAll('Exception: ', ''));
     } finally {
       isLoading.value = false;
     }
@@ -658,31 +975,65 @@ class ChatController extends GetxController {
       return;
     }
     _removeChatLocally(id);
-    if (selectedChat.value?.id == id) {
-      if (Get.currentRoute == AppRoutes.instituteChatMessages || Get.currentRoute == AppRoutes.studentChat) {
+    if (selectedChat.value?.id.toLowerCase() == id.toLowerCase()) {
+      if (Get.currentRoute == AppRoutes.instituteChatMessages ||
+          Get.currentRoute == AppRoutes.studentChat) {
         Get.until(
-          (route) => route.settings.name != AppRoutes.instituteChatMessages && route.settings.name != AppRoutes.studentChat,
+          (route) =>
+              route.settings.name != AppRoutes.instituteChatMessages &&
+              route.settings.name != AppRoutes.studentChat,
         );
       }
       closeChat();
-      AppSnackBar.success('This conversation was deleted');
+      AppSnackBar.success(AppStrings.thisConversationWasDeleted);
     }
   }
 
   void _removeChatLocally(String chatId) {
-    chatsList.removeWhere((c) => c.id == chatId);
+    chatsList.removeWhere((c) => c.id.toLowerCase() == chatId.toLowerCase());
     _filterChats();
   }
 
-  void _scrollToBottom() {
-    Future.delayed(const Duration(milliseconds: 100), () {
-      if (scrollController.hasClients) {
-        scrollController.animateTo(
-          scrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeOut,
-        );
+  /// Scrolls the message list to the very bottom.
+  ///
+  /// We schedule the jump for AFTER the current frame is laid out, then do a
+  /// second pass on a short delay. The second pass is what fixes the
+  /// "stuck a few messages above the last one" bug: attachment bubbles
+  /// (images/videos) and multi-line text expand their height asynchronously,
+  /// so the first `maxScrollExtent` is an underestimate. Re-reading it after
+  /// layout settles lands us on the real bottom.
+  void _scrollToBottom({bool animate = true}) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollToExtent(animate: animate);
+      // Extra passes: lazy ListView.builder extents and late-loading
+      // attachments keep growing the list height after the first layout.
+      for (final ms in const [120, 300, 600]) {
+        Future.delayed(Duration(milliseconds: ms), () {
+          _scrollToExtent(animate: animate);
+        });
       }
     });
   }
+
+  void _scrollToExtent({required bool animate}) {
+    if (!scrollController.hasClients) return;
+    final target = scrollController.position.maxScrollExtent;
+    if (animate) {
+      scrollController.animateTo(
+        target,
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeOut,
+      );
+    } else {
+      scrollController.jumpTo(target);
+    }
+  }
+}
+
+/// Stashed delivery/read timestamps for a message whose canonical id wasn't
+/// known when the broadcast arrived. See [ChatController._pendingAcks].
+class _PendingAck {
+  final DateTime? receivedAt;
+  final DateTime? readAt;
+  const _PendingAck({this.receivedAt, this.readAt});
 }

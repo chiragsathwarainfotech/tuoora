@@ -7,6 +7,7 @@ import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/enums/app_enums.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/presentation/student/controllers/attachment_preview_controller.dart';
 import 'package:tuoora/presentation/student/models/assignment_model.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
@@ -37,11 +38,7 @@ class StudentAttachmentPreviewScreen
                   showDefaultActions: false,
                 ),
                 const Expanded(
-                  child: Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.primaryBrand,
-                    ),
-                  ),
+                  child: CommonLoading(color: AppColors.primaryBrand),
                 ),
               ],
             );
@@ -49,6 +46,16 @@ class StudentAttachmentPreviewScreen
           return _Body(attachment: attachment);
         }),
       ),
+      bottomNavigationBar: Obx(() {
+        final attachment = controller.selectedAttachment.value;
+        if (attachment == null || controller.isAttachmentLoading.value) {
+          return const SizedBox.shrink();
+        }
+        return const Padding(
+          padding: EdgeInsets.fromLTRB(16, 0, 16, 24),
+          child: _ActionRow(),
+        );
+      }),
     );
   }
 }
@@ -65,21 +72,18 @@ class _Body extends StatelessWidget {
       children: [
         StudentAppBar(title: attachment.name, showDefaultActions: false),
         Expanded(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(
-              AppSpacing.s16,
-              AppSpacing.s4,
-              AppSpacing.s16,
-              AppSpacing.s24,
-            ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                _PreviewSurface(attachment: attachment),
-                const SizedBox(height: AppSpacing.s12),
+                Expanded(
+                  child: Center(
+                    child: _PreviewSurface(attachment: attachment),
+                  ),
+                ),
+                const SizedBox(height: 24),
                 _FileInfoCard(attachment: attachment),
-                const SizedBox(height: AppSpacing.s12),
-                _ActionRow(attachment: attachment),
               ],
             ),
           ),
@@ -118,7 +122,7 @@ class _ImagePreview extends StatelessWidget {
   Widget build(BuildContext context) {
     final url = attachment.url;
     return ClipRRect(
-      borderRadius: BorderRadius.circular(AppSpacing.s14),
+      borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       child: Container(
         color: AppColors.background,
         constraints: const BoxConstraints(minHeight: 240),
@@ -145,10 +149,10 @@ class _VideoPreview extends StatelessWidget {
   Widget build(BuildContext context) {
     final duration = attachment.durationLabel ?? '0:00';
     return ClipRRect(
-      borderRadius: BorderRadius.circular(AppSpacing.s14),
+      borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       child: Container(
         height: 220,
-        color: AppColors.attachmentShareButton,
+        color: AppColors.textPrimary,
         child: Stack(
           children: [
             Center(
@@ -161,7 +165,7 @@ class _VideoPreview extends StatelessWidget {
                 ),
                 child: const Icon(
                   Icons.play_arrow_rounded,
-                  color: AppColors.attachmentShareButton,
+                  color: AppColors.textPrimary,
                   size: 36,
                 ),
               ),
@@ -184,8 +188,8 @@ class _VideoPreview extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '0:00',
-                        style: AppTextStyles.lexend(
+                        AppStrings.studentAttachmentPreview000,
+                        style: AppTextStyles.outfit(
                           fontSize: 10,
                           color: AppColors.white.withValues(alpha: 0.85),
                           fontWeight: FontWeight.w500,
@@ -193,7 +197,7 @@ class _VideoPreview extends StatelessWidget {
                       ),
                       Text(
                         duration,
-                        style: AppTextStyles.lexend(
+                        style: AppTextStyles.outfit(
                           fontSize: 10,
                           color: AppColors.white.withValues(alpha: 0.85),
                           fontWeight: FontWeight.w500,
@@ -221,19 +225,18 @@ class _DocumentPreview extends StatelessWidget {
     final ext = attachment.inferredExtension;
     final pages = attachment.pageCount ?? 1;
     return Container(
-      padding: const EdgeInsets.all(AppSpacing.s14),
       decoration: BoxDecoration(
         color: AppColors.background,
-        borderRadius: BorderRadius.circular(AppSpacing.s14),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
-            padding: const EdgeInsets.all(AppSpacing.s16),
+            padding: AppSpacing.cardPadding,
             decoration: BoxDecoration(
               color: AppColors.white,
-              borderRadius: BorderRadius.circular(AppSpacing.s12),
+              borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.04),
@@ -247,9 +250,9 @@ class _DocumentPreview extends StatelessWidget {
               children: [
                 Text(
                   _docHeadline(attachment.name),
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 14,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                 ),
@@ -280,18 +283,18 @@ class _DocumentPreview extends StatelessWidget {
             children: [
               Text(
                 'PAGE 1 OF $pages',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 10,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textTertiary,
                   letterSpacing: 1.2,
                 ),
               ),
               Text(
                 '${ext.isEmpty ? 'FILE' : ext} · ${attachment.sizeLabel}',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 10,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textTertiary,
                   letterSpacing: 1.2,
                 ),
@@ -319,10 +322,9 @@ class _AudioPreview extends StatelessWidget {
     final duration = attachment.durationLabel ?? '0:00';
     return Container(
       height: 180,
-      padding: const EdgeInsets.all(AppSpacing.s14),
       decoration: BoxDecoration(
-        color: AppColors.studentBrandSoft,
-        borderRadius: BorderRadius.circular(AppSpacing.s14),
+        color: AppColors.primaryBrandLight,
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -350,9 +352,9 @@ class _AudioPreview extends StatelessWidget {
           const SizedBox(height: AppSpacing.s12),
           Text(
             duration,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 13,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.orangeTag,
             ),
           ),
@@ -369,13 +371,7 @@ class _LoadingPlaceholder extends StatelessWidget {
   Widget build(BuildContext context) {
     return const SizedBox(
       height: 240,
-      child: Center(
-        child: SizedBox(
-          width: 24,
-          height: 24,
-          child: CircularProgressIndicator(strokeWidth: 2),
-        ),
-      ),
+      child: CommonLoading(color: AppColors.primaryBrand),
     );
   }
 }
@@ -402,10 +398,10 @@ class _FileInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(AppSpacing.s12),
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.s14),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -425,9 +421,9 @@ class _FileInfoCard extends StatelessWidget {
               children: [
                 Text(
                   attachment.name,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 13,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                   maxLines: 1,
@@ -436,7 +432,7 @@ class _FileInfoCard extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   _metaLine(attachment),
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 11,
                     color: AppColors.textTertiary,
                   ),
@@ -449,7 +445,6 @@ class _FileInfoCard extends StatelessWidget {
     );
   }
 
-  /// `Document · 210 KB`, `Video · 14.8 MB · 2:34`, etc.
   String _metaLine(AssignmentAttachment a) {
     final parts = <String>[_kindLabel(a.kind), a.sizeLabel];
     if (a.durationLabel != null) parts.add(a.durationLabel!);
@@ -482,22 +477,22 @@ class _InfoIcon extends StatelessWidget {
     late final IconData icon;
     switch (kind) {
       case AssignmentAttachmentKind.document:
-        bg = AppColors.studentPresentBg;
-        fg = AppColors.studentPresentText;
+        bg = AppColors.successBg;
+        fg = AppColors.successGreen;
         icon = Icons.description_rounded;
         break;
       case AssignmentAttachmentKind.image:
-        bg = AppColors.studentBrandSoft;
+        bg = AppColors.primaryBrandLight;
         fg = AppColors.orangeTag;
         icon = Icons.image_rounded;
         break;
       case AssignmentAttachmentKind.video:
-        bg = AppColors.studentBrandSoft;
+        bg = AppColors.primaryBrandLight;
         fg = AppColors.orangeTag;
         icon = Icons.smart_display_rounded;
         break;
       case AssignmentAttachmentKind.audio:
-        bg = AppColors.studentBrandSoft;
+        bg = AppColors.primaryBrandLight;
         fg = AppColors.orangeTag;
         icon = Icons.audiotrack_rounded;
         break;
@@ -515,37 +510,17 @@ class _InfoIcon extends StatelessWidget {
 }
 
 class _ActionRow extends StatelessWidget {
-  final AssignmentAttachment attachment;
-
-  const _ActionRow({required this.attachment});
+  const _ActionRow();
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: _ActionButton(
-            label: AppStrings.studentAttachmentDownload,
-            icon: Icons.download_rounded,
-            isPrimary: false,
-            onTap: () =>
-                Get.find<AttachmentPreviewController>().downloadAttachment(),
-          ),
-        ),
-        AppSpacing.h12,
-        Expanded(
-          child: _ActionButton(
-            label: AppStrings.studentAttachmentShare,
-            icon: Icons.arrow_forward_rounded,
-            isPrimary: true,
-            onTap: () => Get.snackbar(
-              attachment.name,
-              AppStrings.studentAttachmentShareStarted,
-              snackPosition: SnackPosition.BOTTOM,
-            ),
-          ),
-        ),
-      ],
+    return _ActionButton(
+      label: AppStrings.studentAttachmentDownload,
+      icon: Icons.download_rounded,
+      isPrimary: true,
+      onTap: () {
+        Get.find<AttachmentPreviewController>().downloadAttachment();
+      },
     );
   }
 }
@@ -565,21 +540,20 @@ class _ActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = isPrimary ? AppColors.attachmentShareButton : AppColors.white;
+    final bg = isPrimary ? AppColors.primaryBrand : AppColors.white;
     final fg = isPrimary ? AppColors.white : AppColors.textPrimary;
     final border = isPrimary
-        ? Border.all(color: AppColors.attachmentShareButton)
+        ? Border.all(color: AppColors.primaryBrand)
         : Border.all(color: AppColors.borderGrey);
     return Material(
       color: bg,
-      borderRadius: BorderRadius.circular(AppSpacing.s12),
+      borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(AppSpacing.s12),
         child: Ink(
           decoration: BoxDecoration(
             color: bg,
-            borderRadius: BorderRadius.circular(AppSpacing.s12),
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
             border: border,
           ),
           padding: const EdgeInsets.symmetric(
@@ -595,9 +569,9 @@ class _ActionButton extends StatelessWidget {
               ],
               Text(
                 label,
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 13,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: fg,
                 ),
               ),

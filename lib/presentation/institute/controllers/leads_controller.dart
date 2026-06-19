@@ -1,6 +1,8 @@
 import 'package:tuoora/core/api/api_exception.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/utils/validation_utils.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/data/models/lead_model.dart';
 import 'package:tuoora/data/repositories_impl/leads_repository_impl.dart';
 import 'package:flutter/material.dart';
@@ -164,22 +166,20 @@ class LeadsController extends GetxController {
       };
 
       if (editingLeadId.value == null) {
-        leadData['title'] = noteTitleController.text.trim();
-        leadData['note'] = notesController.text.trim();
         await _leadsRepository.createLead(leadData);
         searchQuery.value = '';
         Get.back();
-        AppSnackBar.success('Lead created successfully');
+        AppSnackBar.success(AppStrings.leadCreatedSuccessfully);
       } else {
         await _leadsRepository.updateLead(editingLeadId.value!, leadData);
         Get.back();
-        AppSnackBar.success('Lead updated successfully');
+        AppSnackBar.success(AppStrings.leadUpdatedSuccessfully);
       }
       fetchLeads(page: 1);
     } catch (e) {
       if (e is ValidationException) {
         _handleValidationErrors(e.errors);
-        AppSnackBar.error('Please correct the highlighted errors');
+        AppSnackBar.error(AppStrings.validationErrorsBelow);
       } else {
         AppSnackBar.error('Failed to save lead: $e');
       }
@@ -254,21 +254,21 @@ class LeadsController extends GetxController {
     referenceError.value = rErr;
     if (rErr != null) isValid = false;
 
-    if (editingLeadId.value == null) {
-      final ntErr = ValidationUtils.validateRequired(
-        noteTitleController.text,
-        'Note Title',
-      );
-      noteTitleError.value = ntErr;
-      if (ntErr != null) isValid = false;
-
-      final nCerr = ValidationUtils.validateRequired(
-        notesController.text,
-        'Note',
-      );
-      noteError.value = nCerr;
-      if (nCerr != null) isValid = false;
-    }
+    // if (editingLeadId.value == null) {
+    //   final ntErr = ValidationUtils.validateRequired(
+    //     noteTitleController.text,
+    //     'Note Title',
+    //   );
+    //   noteTitleError.value = ntErr;
+    //   if (ntErr != null) isValid = false;
+    //
+    //   final nCerr = ValidationUtils.validateRequired(
+    //     notesController.text,
+    //     'Note',
+    //   );
+    //   noteError.value = nCerr;
+    //   if (nCerr != null) isValid = false;
+    // }
 
     return isValid;
   }
@@ -276,10 +276,16 @@ class LeadsController extends GetxController {
   Future<void> deleteLead(int id) async {
     try {
       isLoading.value = true;
+      Get.dialog(
+        const Center(child: CommonLoading()),
+        barrierDismissible: false,
+      );
       await _leadsRepository.deleteLead(id);
       leadsList.removeWhere((l) => l.id == id);
-      AppSnackBar.success('Lead deleted successfully');
+      Get.back(); // Dismiss loading dialog
+      AppSnackBar.success(AppStrings.leadDeletedSuccessfully);
     } catch (e) {
+      Get.back(); // Dismiss loading dialog
       AppSnackBar.error('Failed to delete lead: $e');
     } finally {
       isLoading.value = false;
@@ -354,7 +360,7 @@ class LeadsController extends GetxController {
       triedToSave.value = false;
 
       Get.back(); // Close dialog
-      AppSnackBar.success('Interaction note added successfully');
+      AppSnackBar.success(AppStrings.interactionNoteAddedSuccessfully);
     } catch (e) {
       if (e is ValidationException) {
         _handleValidationErrors(e.errors);

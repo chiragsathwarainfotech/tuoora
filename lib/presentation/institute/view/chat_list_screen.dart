@@ -1,5 +1,7 @@
 ﻿import 'package:cached_network_image/cached_network_image.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
+import 'package:tuoora/core/utils/subscription_guard.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/controllers/chat_controller.dart';
@@ -21,10 +23,10 @@ class ChatListScreen extends GetView<ChatController> {
       body: SafeArea(
         child: Column(
           children: [
-            const InstituteAppBar(title: 'Chats'),
+            const InstituteAppBar(title: AppStrings.chats),
             Expanded(
               child: Padding(
-                padding: AppSpacing.x24,
+                padding: AppSpacing.x16,
                 child: Column(
                   children: [
                     AppSpacing.v16,
@@ -35,9 +37,9 @@ class ChatListScreen extends GetView<ChatController> {
                         return CommonStateWidget(
                           isLoading: controller.isLoading.value,
                           isEmpty: controller.filteredChats.isEmpty,
-                          emptyTitle: 'No Chats Found',
+                          emptyTitle: AppStrings.noChatsFound,
                           emptySubtitle:
-                              'Start a new conversation to see your chats here.',
+                              AppStrings.startANewConversationToSee,
                           emptyIcon: Icons.chat_bubble_outline_rounded,
                           child: ListView.separated(
                             padding: const EdgeInsets.only(bottom: 88, top: 4),
@@ -63,11 +65,13 @@ class ChatListScreen extends GetView<ChatController> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () => SubscriptionGuard.runAddAction(() {
           controller.fetchParticipants();
           Get.toNamed(AppRoutes.instituteCreateChat);
-        },
-        backgroundColor: AppColors.primaryBrand,
+        }),
+        backgroundColor: SubscriptionGuard.blocksAdd
+            ? AppColors.textMuted
+            : AppColors.primaryBrand,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: const Icon(Icons.add, color: AppColors.white),
       ),
@@ -76,7 +80,7 @@ class ChatListScreen extends GetView<ChatController> {
 
   Widget _buildSearchField() {
     return AppSearchField(
-      hintText: 'Search chats...',
+      hintText: AppStrings.searchChats,
       onChanged: (value) => controller.searchQuery.value = value,
     );
   }
@@ -91,18 +95,16 @@ class _ChatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hasUnread = chat.unreadCount > 0;
-
     return Material(
       color: AppColors.white,
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       elevation: 0,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
         child: Ink(
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
             border: Border.all(
               color: hasUnread
                   ? AppColors.primaryBrand.withValues(alpha: 0.25)
@@ -117,7 +119,7 @@ class _ChatCard extends StatelessWidget {
               ),
             ],
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          padding: AppSpacing.cardPadding,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -138,9 +140,9 @@ class _ChatCard extends StatelessWidget {
                             chat.participantName.isEmpty
                                 ? 'Unknown'
                                 : chat.participantName,
-                            style: AppTextStyles.manrope(
+                            style: AppTextStyles.outfit(
                               fontSize: 15,
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.w600,
                               color: AppColors.textPrimary,
                             ),
                             maxLines: 1,
@@ -150,7 +152,7 @@ class _ChatCard extends StatelessWidget {
                         const SizedBox(width: 8),
                         Text(
                           chat.lastMessageTime,
-                          style: AppTextStyles.lexend(
+                          style: AppTextStyles.outfit(
                             fontSize: 11,
                             fontWeight: hasUnread
                                 ? FontWeight.w700
@@ -163,9 +165,6 @@ class _ChatCard extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 4),
-                    if (chat.participantRole.isNotEmpty)
-                      _RoleChip(role: chat.participantRole),
-                    const SizedBox(height: 6),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -199,9 +198,9 @@ class _Avatar extends StatelessWidget {
       backgroundColor: AppColors.primaryBrandLight,
       child: Text(
         initial,
-        style: AppTextStyles.manrope(
+        style: AppTextStyles.outfit(
           fontSize: 18,
-          fontWeight: FontWeight.w800,
+          fontWeight: FontWeight.w600,
           color: AppColors.primaryBrand,
         ),
       ),
@@ -225,35 +224,6 @@ class _Avatar extends StatelessWidget {
   }
 }
 
-class _RoleChip extends StatelessWidget {
-  final String role;
-
-  const _RoleChip({required this.role});
-
-  @override
-  Widget build(BuildContext context) {
-    // Convert backend-style "StudentParent" to "Parent" for display, and
-    // leave the rest as-is.
-    final display = role == 'StudentParent' ? 'Parent' : role;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-      decoration: BoxDecoration(
-        color: AppColors.primaryBrandLight,
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: Text(
-        display.toUpperCase(),
-        style: AppTextStyles.manrope(
-          fontSize: 9,
-          fontWeight: FontWeight.w800,
-          color: AppColors.primaryBrand,
-          letterSpacing: 0.6,
-        ),
-      ),
-    );
-  }
-}
-
 class _PreviewLine extends StatelessWidget {
   final Chat chat;
 
@@ -272,8 +242,8 @@ class _PreviewLine extends StatelessWidget {
 
     if (caption.isEmpty) {
       return Text(
-        'Tap to start chatting',
-        style: AppTextStyles.lexend(
+        AppStrings.tapToStartChatting,
+        style: AppTextStyles.outfit(
           fontSize: 13,
           color: AppColors.textTertiary,
           fontStyle: FontStyle.italic,
@@ -293,7 +263,7 @@ class _PreviewLine extends StatelessWidget {
         Flexible(
           child: Text(
             caption,
-            style: AppTextStyles.lexend(
+            style: AppTextStyles.outfit(
               fontSize: 13,
               color: color,
               fontWeight: weight,
@@ -350,7 +320,7 @@ class _UnreadBadge extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
       decoration: BoxDecoration(
         color: AppColors.primaryBrand,
-        borderRadius: BorderRadius.circular(11),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: AppColors.primaryBrand.withValues(alpha: 0.3),
@@ -364,9 +334,9 @@ class _UnreadBadge extends StatelessWidget {
         child: Text(
           label,
           textAlign: TextAlign.center,
-          style: AppTextStyles.lexend(
+          style: AppTextStyles.outfit(
             fontSize: 11,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.white,
             height: 1.2,
           ),

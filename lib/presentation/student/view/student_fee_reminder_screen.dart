@@ -1,4 +1,5 @@
 import 'package:tuoora/core/widgets/app_button.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/presentation/student/controllers/fees_controller.dart';
@@ -56,7 +57,7 @@ class StudentFeeReminderScreen extends StatelessWidget {
       height: 140,
       padding: const EdgeInsets.all(AppSpacing.s24),
       decoration: BoxDecoration(
-        color: paid ? AppColors.studentPresentText : AppColors.studentTomorrowPillText,
+        color: paid ? AppColors.successGreen : AppColors.bohoRed,
         borderRadius: BorderRadius.circular(AppSpacing.s12),
       ),
       child: Stack(
@@ -68,7 +69,7 @@ class StudentFeeReminderScreen extends StatelessWidget {
               opacity: 0.15,
               child: Text(
                 '₹',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 120,
                   fontWeight: FontWeight.w800,
                   color: AppColors.white,
@@ -82,17 +83,17 @@ class StudentFeeReminderScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'MAY 2026',
-                style: AppTextStyles.manrope(
+                AppStrings.may2026,
+                style: AppTextStyles.outfit(
                   fontSize: 10,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.white,
                   letterSpacing: 1.0,
                 ),
               ),
               Text(
-                '₹4,500',
-                style: AppTextStyles.manrope(
+                AppStrings.k4500,
+                style: AppTextStyles.outfit(
                   fontSize: 36,
                   fontWeight: FontWeight.w800,
                   color: AppColors.white,
@@ -100,9 +101,9 @@ class StudentFeeReminderScreen extends StatelessWidget {
               ),
               Text(
                 paid ? 'Paid on 20 May 2026' : '25 May 2026 - 6 days left',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 12,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.white,
                 ),
               ),
@@ -128,8 +129,8 @@ class StudentFeeReminderScreen extends StatelessWidget {
             'Status',
             paid ? 'Paid' : 'Pending',
             valueColor: paid
-                ? AppColors.studentPresentText
-                : AppColors.studentTomorrowPillText,
+                ? AppColors.successGreen
+                : AppColors.bohoRed,
             isValueBold: true,
           ),
           const Divider(height: 1, color: AppColors.borderGrey),
@@ -154,7 +155,7 @@ class StudentFeeReminderScreen extends StatelessWidget {
         children: [
           Text(
             label,
-            style: AppTextStyles.lexend(
+            style: AppTextStyles.outfit(
               fontSize: 13,
               fontWeight: FontWeight.w400,
               color: AppColors.textTertiary,
@@ -162,7 +163,7 @@ class StudentFeeReminderScreen extends StatelessWidget {
           ),
           Text(
             value,
-            style: AppTextStyles.lexend(
+            style: AppTextStyles.outfit(
               fontSize: 13,
               fontWeight: isValueBold ? FontWeight.w500 : FontWeight.w400,
               color: valueColor ?? AppColors.textPrimary,
@@ -177,7 +178,7 @@ class StudentFeeReminderScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppSpacing.s16),
       decoration: BoxDecoration(
-        color: AppColors.scaffoldBg,
+        color: AppColors.surfaceBg,
         borderRadius: BorderRadius.circular(AppSpacing.s8),
       ),
       child: Row(
@@ -195,8 +196,8 @@ class StudentFeeReminderScreen extends StatelessWidget {
           AppSpacing.h12,
           Expanded(
             child: Text(
-              'A late fee of ₹100 applies after the due date. Pay in cash at the institute or transfer via UPI.',
-              style: AppTextStyles.lexend(
+              AppStrings.aLateFeeOf100Applies,
+              style: AppTextStyles.outfit(
                 fontSize: 13,
                 fontWeight: FontWeight.w400,
                 color: AppColors.textSecondary,
@@ -211,11 +212,11 @@ class StudentFeeReminderScreen extends StatelessWidget {
 
   Widget _buildActionButton(bool paid) {
     return AppButton(
-      label: 'Open invoice',
+      label: AppStrings.openInvoice,
       icon: Icons.currency_rupee,
       backgroundColor: paid
-          ? AppColors.studentPresentText
-          : AppColors.studentTomorrowPillText,
+          ? AppColors.successGreen
+          : AppColors.bohoRed,
       borderRadius: 8,
       padding: const EdgeInsets.symmetric(vertical: 16),
       onPressed: () {

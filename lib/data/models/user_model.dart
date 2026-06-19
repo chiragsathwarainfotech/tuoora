@@ -3,28 +3,28 @@ class User {
   final String name;
   final String email;
   final String? phone;
+  final String accessToken;
+  final String refreshToken;
   final String token;
   final String role; // 'INSTITUTE', 'STUDENT'
-  
-  // Institute specific
   final String? instituteName;
   final String? logo;
   final String? address;
-  
-  // Student specific
   final int? instituteId;
   final int? batchId;
   final String? standard;
   final String? idHash;
-  
   final String? city;
   final String? state;
   final String? pincode;
   final String? website;
   final String? youtube;
   final String? instagram;
-
   final bool isProfileSetup;
+  final String? emailVerifiedAt;
+
+  bool get isEmailVerified =>
+      emailVerifiedAt != null && emailVerifiedAt!.isNotEmpty;
 
   const User({
     required this.id,
@@ -32,6 +32,8 @@ class User {
     required this.email,
     this.phone,
     required this.token,
+    required this.accessToken,
+    required this.refreshToken,
     required this.role,
     this.instituteName,
     this.logo,
@@ -47,15 +49,24 @@ class User {
     this.youtube,
     this.instagram,
     this.isProfileSetup = true,
+    this.emailVerifiedAt,
   });
 
-  factory User.fromJson(Map<String, dynamic> json, String token, String role) {
+  factory User.fromJson(
+    Map<String, dynamic> json,
+    String token,
+    String role, {
+    String? accessToken,
+    String? refreshToken,
+  }) {
     return User(
       id: json['id'],
       name: json['name'] ?? '',
       email: json['email'] ?? '',
       phone: json['phone'],
       token: token,
+      accessToken: accessToken ?? token,
+      refreshToken: refreshToken ?? '',
       role: role,
       instituteName: json['institute_name'],
       logo: json['logo'],
@@ -71,6 +82,7 @@ class User {
       youtube: json['youtube'],
       instagram: json['instagram'],
       isProfileSetup: json['is_profile_setup'] ?? true,
+      emailVerifiedAt: json['email_verified_at']?.toString(),
     );
   }
 
@@ -81,6 +93,8 @@ class User {
       'email': email,
       'phone': phone,
       'token': token,
+      'access_token': accessToken,
+      'refresh_token': refreshToken,
       'role': role,
       'institute_name': instituteName,
       'logo': logo,
@@ -96,7 +110,35 @@ class User {
       'youtube': youtube,
       'instagram': instagram,
       'is_profile_setup': isProfileSetup,
+      'email_verified_at': emailVerifiedAt,
     };
   }
-}
 
+  User copyWith({String? accessToken, String? refreshToken}) {
+    return User(
+      id: id,
+      name: name,
+      email: email,
+      phone: phone,
+      token: accessToken ?? this.accessToken,
+      accessToken: accessToken ?? this.accessToken,
+      refreshToken: refreshToken ?? this.refreshToken,
+      role: role,
+      instituteName: instituteName,
+      logo: logo,
+      address: address,
+      instituteId: instituteId,
+      batchId: batchId,
+      standard: standard,
+      idHash: idHash,
+      city: city,
+      state: state,
+      pincode: pincode,
+      website: website,
+      youtube: youtube,
+      instagram: instagram,
+      isProfileSetup: isProfileSetup,
+      emailVerifiedAt: emailVerifiedAt,
+    );
+  }
+}

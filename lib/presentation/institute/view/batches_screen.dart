@@ -1,4 +1,5 @@
-﻿import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/utils/subscription_guard.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
@@ -7,6 +8,8 @@ import 'package:tuoora/presentation/institute/models/batch_model.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/presentation/institute/widgets/common_state_widget.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
+import 'package:tuoora/core/widgets/app_search_field.dart';
+import 'package:tuoora/core/widgets/status_badge.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/config/app_routes.dart';
@@ -27,10 +30,13 @@ class _BatchesScreenState extends State<BatchesScreen> {
     super.initState();
     _scrollController.addListener(_onScroll);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (controller.batchesList.isEmpty) {
-        controller.loadBatches(isRefresh: true);
-      }
+      controller.loadBatches(isRefresh: true);
     });
+  }
+
+  Future<void> _pushAndRefresh(Future<dynamic>? push) async {
+    await push;
+    controller.loadBatches(isRefresh: true);
   }
 
   @override
@@ -59,21 +65,39 @@ class _BatchesScreenState extends State<BatchesScreen> {
                   title: AppStrings.instNavBatches,
                   onBackTap: () => Get.back(),
                 ),
+                Padding(
+                  padding: AppSpacing.screenPadding,
+                  child: AppSearchField(
+                    hintText: AppStrings.instBatchSearchHint,
+                    onChanged: controller.onBatchSearchChanged,
+                  ),
+                ),
                 Expanded(
                   child: RefreshIndicator(
                     onRefresh: () => controller.loadBatches(isRefresh: true),
                     color: AppColors.primaryBrand,
                     child: Obx(() {
+                      final isSearching = controller.batchSearchQuery.value
+                          .trim()
+                          .isNotEmpty;
                       return CommonStateWidget(
                         isLoading: controller.isLoading.value,
                         isEmpty: controller.batchesList.isEmpty,
-                        emptyTitle: 'No Batches Found',
-                        emptySubtitle:
-                            'Tap the + button to create your first batch and start managing students.',
-                        emptyIcon: Icons.school_outlined,
+                        emptyTitle: isSearching
+                            ? 'No Batches Found'
+                            : 'No Batches Found',
+                        emptySubtitle: isSearching
+                            ? 'Try searching with a different name.'
+                            : 'Tap the + button to create your first batch and start managing students.',
+                        emptyIcon: isSearching
+                            ? Icons.search_off_rounded
+                            : Icons.school_outlined,
                         child: ListView.separated(
                           controller: _scrollController,
-                          padding: AppSpacing.all24,
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          padding: AppSpacing.x16.add(
+                            const EdgeInsets.only(bottom: 96),
+                          ),
                           itemCount:
                               controller.batchesList.length +
                               (controller.isMoreLoading.value ? 1 : 0),
@@ -81,7 +105,7 @@ class _BatchesScreenState extends State<BatchesScreen> {
                           itemBuilder: (context, index) {
                             if (index < controller.batchesList.length) {
                               final batch = controller.batchesList[index];
-                              return _buildBatchCard(batch);
+                              return _buildBatchCard(batch, index);
                             } else {
                               return const Center(
                                 child: Padding(
@@ -105,24 +129,37 @@ class _BatchesScreenState extends State<BatchesScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () => SubscriptionGuard.runAddAction(() {
           controller.initAddMode();
-          Get.toNamed(AppRoutes.instituteAddBatch);
-        },
-        backgroundColor: AppColors.primaryBrand,
+          _pushAndRefresh(Get.toNamed(AppRoutes.instituteAddBatch));
+        }),
+        backgroundColor: SubscriptionGuard.blocksAdd
+            ? AppColors.textMuted
+            : AppColors.primaryBrand,
         child: const Icon(Icons.add, color: AppColors.white, size: 28),
       ),
     );
   }
 
-  Widget _buildBatchCard(BatchModel batch) {
+  static const List<Color> _stripePalette = <Color>[
+    AppColors.instBrandOrange,
+    AppColors.successGreen,
+    AppColors.orangeTag,
+    AppColors.subjectPhysics,
+    AppColors.successGreen,
+  ];
+
+  Widget _buildBatchCard(BatchModel batch, int index) {
+    final Color accent = _stripePalette[index % _stripePalette.length];
+
     return GestureDetector(
-      onTap: () =>
-          Get.toNamed(AppRoutes.instituteBatchDetails, arguments: batch),
+      onTap: () => _pushAndRefresh(
+        Get.toNamed(AppRoutes.instituteBatchDetails, arguments: batch),
+      ),
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(AppSpacing.s16),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.05),
@@ -132,14 +169,14 @@ class _BatchesScreenState extends State<BatchesScreen> {
           ],
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(AppSpacing.s16),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           child: IntrinsicHeight(
             child: Row(
               children: [
-                Container(width: AppSpacing.s4, color: batch.leftBorderColor),
+                Container(width: AppSpacing.s6, color: accent),
                 Expanded(
                   child: Padding(
-                    padding: AppSpacing.all20,
+                    padding: AppSpacing.all16,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -149,42 +186,49 @@ class _BatchesScreenState extends State<BatchesScreen> {
                             Expanded(
                               child: Text(
                                 batch.title,
-                                style: AppTextStyles.manrope(
+                                style: AppTextStyles.outfit(
                                   fontSize: 18,
-                                  fontWeight: FontWeight.w800,
-                                  color: AppColors.primaryBrand,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.textPrimary,
                                 ),
                               ),
                             ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                color: batch.statusBg.withValues(alpha: 0.1),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Text(
-                                batch.statusLabel,
-                                style: AppTextStyles.manrope(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w800,
-                                  color: batch.statusBg,
-                                ),
-                              ),
-                            ),
+                            StatusBadge.fromLabel(batch.statusLabel),
                           ],
                         ),
                         AppSpacing.v4,
                         Text(
                           batch.subject,
-                          style: AppTextStyles.manrope(
+                          style: AppTextStyles.outfit(
                             fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.primaryBrand,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.textTertiary,
                           ),
                         ),
+                        if (batch.staffName != null &&
+                            batch.staffName!.trim().isNotEmpty) ...[
+                          AppSpacing.v12,
+                          Row(
+                            children: [
+                              Text(
+                                AppStrings.faculty,
+                                style: AppTextStyles.outfit(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.fieldLabel,
+                                ),
+                              ),
+                              Text(
+                                batch.staffName!,
+                                style: AppTextStyles.outfit(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.textPrimary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                         AppSpacing.v12,
                         Row(
                           children: [
@@ -196,7 +240,7 @@ class _BatchesScreenState extends State<BatchesScreen> {
                             AppSpacing.h8,
                             Text(
                               batch.time,
-                              style: AppTextStyles.manrope(
+                              style: AppTextStyles.outfit(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
                                 color: AppColors.textSecondary,
@@ -207,17 +251,17 @@ class _BatchesScreenState extends State<BatchesScreen> {
                         AppSpacing.v12,
                         Row(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.people_outline_rounded,
                               size: AppSpacing.s18,
-                              color: AppColors.primaryBrand,
+                              color: AppColors.fieldLabel,
                             ),
                             AppSpacing.h8,
                             Text(
                               batch.studentCount,
-                              style: AppTextStyles.manrope(
+                              style: AppTextStyles.outfit(
                                 fontSize: 14,
-                                fontWeight: FontWeight.w700,
+                                fontWeight: FontWeight.w600,
                                 color: AppColors.textPrimary,
                               ),
                             ),
@@ -229,11 +273,11 @@ class _BatchesScreenState extends State<BatchesScreen> {
                             ),
                             AppSpacing.h16,
                             Text(
-                              'â‚¹${batch.baseFee.toStringAsFixed(0)}',
-                              style: AppTextStyles.manrope(
+                              '₹${batch.baseFee.toStringAsFixed(0)}',
+                              style: AppTextStyles.outfit(
                                 fontSize: 14,
-                                fontWeight: FontWeight.w800,
-                                color: AppColors.primaryBrand,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.textPrimary,
                               ),
                             ),
                           ],

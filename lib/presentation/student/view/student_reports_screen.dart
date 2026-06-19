@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/enums/app_enums.dart';
+import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
 import 'package:tuoora/presentation/student/controllers/student_reports_controller.dart';
 
@@ -18,20 +20,25 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
       body: SafeArea(
         child: Column(
           children: [
-            const StudentAppBar(title: 'Reports', showDefaultActions: false),
+            const StudentAppBar(title: AppStrings.labelReports, showDefaultActions: false),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: _buildSegmentControl(),
             ),
             Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    _buildAttendanceCard(),
-                    const SizedBox(height: 16),
-                    _buildAssignmentsCard(),
-                  ],
+              child: RefreshIndicator(
+                color: AppColors.primaryBrand,
+                onRefresh: controller.fetchReport,
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: AppSpacing.screenPaddingTop,
+                  child: Column(
+                    children: [
+                      _buildAttendanceCard(),
+                      const SizedBox(height: 16),
+                      _buildAssignmentsCard(),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -44,10 +51,10 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
   Widget _buildSegmentControl() {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.borderGrey.withValues(alpha: 0.3),
-        borderRadius: BorderRadius.circular(8),
+        color: AppColors.fieldBg,
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       ),
-      padding: const EdgeInsets.all(4),
+      padding: const EdgeInsets.all(AppSpacing.s4),
       child: Obx(
         () => Row(
           children: [
@@ -66,28 +73,21 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
       child: GestureDetector(
         onTap: () => controller.changePeriod(period),
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          decoration: isSelected
-              ? BoxDecoration(
-                  color: AppColors.white,
-                  borderRadius: BorderRadius.circular(6),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
-                      blurRadius: 4,
-                    ),
-                  ],
-                )
-              : null,
+          padding: const EdgeInsets.symmetric(
+            vertical: AppSpacing.s10,
+            horizontal: AppSpacing.s12,
+          ),
+          decoration: BoxDecoration(
+            color: isSelected ? AppColors.primaryBrand : AppColors.fieldBg,
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+          ),
           alignment: Alignment.center,
           child: Text(
             text,
-            style: AppTextStyles.manrope(
-              fontSize: 12,
-              fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
-              color: isSelected
-                  ? AppColors.textPrimary
-                  : AppColors.textSecondary,
+            style: AppTextStyles.outfit(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: isSelected ? AppColors.white : AppColors.textTertiary,
             ),
           ),
         ),
@@ -99,10 +99,10 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
     return GestureDetector(
       onTap: () => Get.offAllNamed(AppRoutes.studentAttendance),
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: AppSpacing.cardPadding,
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           border: Border.all(
             color: AppColors.borderGrey.withValues(alpha: 0.5),
           ),
@@ -125,7 +125,7 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: AppColors.studentPresentBg,
+                      color: AppColors.successBg,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: const Icon(
@@ -137,10 +137,10 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      'Attendance',
-                      style: AppTextStyles.manrope(
+                      AppStrings.instAttendanceTitle,
+                      style: AppTextStyles.outfit(
                         fontSize: 14,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.textPrimary,
                       ),
                     ),
@@ -159,7 +159,7 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
                 children: [
                   Text(
                     '${attendance.pct}%',
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 28,
                       fontWeight: FontWeight.w800,
                       color: AppColors.greenText,
@@ -169,7 +169,7 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
                   const SizedBox(width: 8),
                   Text(
                     '${summary.present} of ${summary.total} days',
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 11,
                       color: AppColors.textSecondary,
                     ),
@@ -204,7 +204,7 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
                               (e) => Text(
                                 e.label,
                                 textAlign: TextAlign.center,
-                                style: AppTextStyles.lexend(
+                                style: AppTextStyles.outfit(
                                   fontSize: 9,
                                   color: AppColors.textSecondary,
                                 ),
@@ -227,10 +227,10 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
     return GestureDetector(
       onTap: () => Get.offAllNamed(AppRoutes.studentHomework),
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: AppSpacing.cardPadding,
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           border: Border.all(
             color: AppColors.borderGrey.withValues(alpha: 0.5),
           ),
@@ -253,7 +253,7 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: AppColors.amberLight,
+                      color: AppColors.errorBg,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: const Icon(
@@ -265,10 +265,10 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      'Assignments',
-                      style: AppTextStyles.manrope(
+                      AppStrings.studentAssignmentsTitle,
+                      style: AppTextStyles.outfit(
                         fontSize: 14,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.textPrimary,
                       ),
                     ),
@@ -287,7 +287,7 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
                 children: [
                   Text(
                     '${assignments.pct}%',
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 28,
                       fontWeight: FontWeight.w800,
                       color: AppColors.textPrimary,
@@ -297,7 +297,7 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
                   const SizedBox(width: 8),
                   Text(
                     '${summary.completed} completed - ${summary.pending} pending',
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 11,
                       color: AppColors.textSecondary,
                     ),
@@ -348,7 +348,7 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
                             const SizedBox(height: 6),
                             Text(
                               e.label,
-                              style: AppTextStyles.lexend(
+                              style: AppTextStyles.outfit(
                                 fontSize: 10,
                                 color: AppColors.textSecondary,
                               ),
@@ -393,7 +393,7 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
         const SizedBox(width: 6),
         Text(
           label,
-          style: AppTextStyles.lexend(
+          style: AppTextStyles.outfit(
             fontSize: 11,
             color: AppColors.textSecondary,
           ),
@@ -415,12 +415,12 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
                 width: 34,
                 height: 34,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.white,
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
               const SizedBox(width: 12),
-              Container(width: 100, height: 16, color: Colors.white),
+              Container(width: 100, height: 16, color: AppColors.white),
             ],
           ),
           const SizedBox(height: 16),
@@ -428,13 +428,13 @@ class StudentReportsScreen extends GetView<StudentReportsController> {
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.alphabetic,
             children: [
-              Container(width: 60, height: 28, color: Colors.white),
+              Container(width: 60, height: 28, color: AppColors.white),
               const SizedBox(width: 8),
-              Container(width: 120, height: 11, color: Colors.white),
+              Container(width: 120, height: 11, color: AppColors.white),
             ],
           ),
           const SizedBox(height: 24),
-          Container(height: 100, width: double.infinity, color: Colors.white),
+          Container(height: 100, width: double.infinity, color: AppColors.white),
         ],
       ),
     );
@@ -456,7 +456,7 @@ class LineChartPainter extends CustomPainter {
       ..style = PaintingStyle.stroke;
 
     final fillPaint = Paint()
-      ..color = AppColors.studentPresentBg.withValues(alpha: 0.8)
+      ..color = AppColors.successBg.withValues(alpha: 0.8)
       ..style = PaintingStyle.fill;
 
     final pointPaint = Paint()
@@ -464,7 +464,7 @@ class LineChartPainter extends CustomPainter {
       ..style = PaintingStyle.fill;
 
     final pointInnerPaint = Paint()
-      ..color = Colors.white
+      ..color = AppColors.white
       ..style = PaintingStyle.fill;
 
     final path = Path();

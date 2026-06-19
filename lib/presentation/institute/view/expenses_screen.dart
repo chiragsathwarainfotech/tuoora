@@ -1,10 +1,14 @@
 import 'package:tuoora/config/app_routes.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/utils/subscription_guard.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/controllers/expense_controller.dart';
 import 'package:tuoora/presentation/institute/models/expense_model.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
+import 'package:tuoora/core/widgets/app_empty_view.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -20,7 +24,7 @@ class ExpensesScreen extends GetView<ExpenseController> {
         child: Column(
           children: [
             InstituteAppBar(
-              title: 'Expenses',
+              title: AppStrings.expensesOverview,
               actions: [
                 GestureDetector(
                   onTap: () => Get.toNamed(AppRoutes.instituteExpenseAnalysis),
@@ -33,7 +37,7 @@ class ExpensesScreen extends GetView<ExpenseController> {
                     ),
                     child: const Icon(
                       Icons.insights_rounded,
-                      color: AppColors.brandAppBarColor,
+                      color: AppColors.primaryBrand,
                       size: 20,
                     ),
                   ),
@@ -43,27 +47,29 @@ class ExpensesScreen extends GetView<ExpenseController> {
             Expanded(
               child: Obx(() {
                 if (controller.isLoading.value && controller.expenses.isEmpty) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const CommonLoading();
                 }
                 if (controller.expenses.isEmpty) {
-                  return Center(
-                    child: Text(
-                      'No expenses found',
-                      style: AppTextStyles.manrope(
-                        fontSize: 16,
-                        color: AppColors.textTertiary,
-                      ),
-                    ),
+                  return const AppEmptyView(
+                    icon: Icons.receipt_long_outlined,
+                    title: AppStrings.noExpensesFound,
                   );
                 }
-                return ListView.separated(
-                  padding: AppSpacing.all24,
-                  itemCount: controller.expenses.length,
-                  separatorBuilder: (context, index) => AppSpacing.v16,
-                  itemBuilder: (context, index) {
-                    final expense = controller.expenses[index];
-                    return _buildExpenseCard(expense);
-                  },
+                return RefreshIndicator(
+                  onRefresh: () => controller.loadExpenses(),
+                  color: AppColors.primaryBrand,
+                  child: ListView.separated(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: AppSpacing.screenPaddingTop.add(
+                      const EdgeInsets.only(bottom: 96),
+                    ),
+                    itemCount: controller.expenses.length,
+                    separatorBuilder: (context, index) => AppSpacing.v10,
+                    itemBuilder: (context, index) {
+                      final expense = controller.expenses[index];
+                      return _buildExpenseCard(expense);
+                    },
+                  ),
                 );
               }),
             ),
@@ -71,11 +77,13 @@ class ExpensesScreen extends GetView<ExpenseController> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () => SubscriptionGuard.runAddAction(() {
           controller.resetForm();
           Get.toNamed(AppRoutes.instituteAddExpense);
-        },
-        backgroundColor: AppColors.primaryBrand,
+        }),
+        backgroundColor: SubscriptionGuard.blocksAdd
+            ? AppColors.textMuted
+            : AppColors.primaryBrand,
         child: const Icon(Icons.add, color: AppColors.white),
       ),
     );
@@ -86,10 +94,10 @@ class ExpensesScreen extends GetView<ExpenseController> {
     final dateFormat = DateFormat('MMM dd, yyyy');
 
     return Container(
-      padding: AppSpacing.all16,
+      padding: AppSpacing.all8,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
@@ -101,10 +109,10 @@ class ExpensesScreen extends GetView<ExpenseController> {
       child: Row(
         children: [
           Container(
-            padding: AppSpacing.all12,
+            padding: AppSpacing.all8,
             decoration: BoxDecoration(
               color: expense.iconBgColor,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
             ),
             child: Icon(
               expense.icon,
@@ -119,16 +127,16 @@ class ExpensesScreen extends GetView<ExpenseController> {
               children: [
                 Text(
                   expense.category?.name ?? "",
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 16,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                 ),
                 AppSpacing.v4,
                 Text(
                   dateFormat.format(expense.date),
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 12,
                     fontWeight: FontWeight.w400,
                     color: AppColors.textTertiary,
@@ -139,9 +147,9 @@ class ExpensesScreen extends GetView<ExpenseController> {
           ),
           Text(
             currencyFormat.format(expense.amount),
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 16,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               color: AppColors.textPrimary,
             ),
           ),
@@ -151,7 +159,7 @@ class ExpensesScreen extends GetView<ExpenseController> {
   }
 
   Color _getIconColor(Color bgColor) {
-    if (bgColor == AppColors.successBg) return AppColors.activeTracker;
+    if (bgColor == AppColors.successBg) return AppColors.orangeTag;
     if (bgColor == AppColors.successBg) return AppColors.studentUpdateIconColor;
     if (bgColor == AppColors.successBg) return AppColors.subjectPhysics;
     if (bgColor == AppColors.successBg) return AppColors.greenText;

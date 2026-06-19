@@ -1,5 +1,9 @@
+import 'package:tuoora/core/widgets/app_pickers.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
+import 'package:tuoora/data/models/staff_model.dart';
 import 'package:tuoora/presentation/institute/models/batch_model.dart';
 import 'package:tuoora/core/widgets/common_dialog.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
@@ -18,12 +22,25 @@ class BatchController extends GetxController {
   final currentPage = 1.obs;
   final lastPage = 1.obs;
 
+  // Debounced search for the batches list (separate from [searchQuery]
+  // which is used by the assign-students flow).
+  final batchSearchQuery = ''.obs;
+
   @override
   void onInit() {
     super.onInit();
     batchNameController.addListener(() => _clearError(batchNameError));
     subjectController.addListener(() => _clearError(subjectError));
     batchFeeController.addListener(() => _clearError(feeError));
+    debounce(
+      batchSearchQuery,
+      (_) => loadBatches(isRefresh: true),
+      time: const Duration(milliseconds: 500),
+    );
+  }
+
+  void onBatchSearchChanged(String query) {
+    batchSearchQuery.value = query;
   }
 
   void _clearError(RxnString error) {
@@ -37,6 +54,7 @@ class BatchController extends GetxController {
   final subjectController = TextEditingController();
   final descriptionController = TextEditingController();
   final batchFeeController = TextEditingController();
+  final classroomController = TextEditingController();
   final startTime = const TimeOfDay(hour: 0, minute: 0).obs;
   final endTime = const TimeOfDay(hour: 0, minute: 0).obs;
   final selectedDays = <String>[].obs;
@@ -45,11 +63,19 @@ class BatchController extends GetxController {
   final currentEditingBatchId = ''.obs;
   final allDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
+  // Assigned staff dropdown state — list is fetched on demand each time the
+  // add/edit form is opened so it picks up newly-added staff without needing
+  // a controller restart.
+  final staffList = <Staff>[].obs;
+  final isLoadingStaff = false.obs;
+  final selectedStaffId = Rxn<int>();
+
   final triedToSave = false.obs;
   final batchNameError = RxnString();
   final subjectError = RxnString();
   final feeError = RxnString();
   final daysError = RxnString();
+  final staffError = RxnString();
 
   bool validateForm() {
     bool isValid = true;
@@ -81,24 +107,36 @@ class BatchController extends GetxController {
     daysError.value = daysVal;
     if (daysVal != null) isValid = false;
 
+    if (selectedStaffId.value == null) {
+      staffError.value = 'Please select a staff member';
+      isValid = false;
+    } else {
+      staffError.value = null;
+    }
+
     return isValid;
   }
 
   Future<void> loadBatches({bool isRefresh = true}) async {
+    if (isLoading.value || isMoreLoading.value) return;
+
     if (isRefresh) {
       currentPage.value = 1;
-      // Only show central loading if we don't have ANY data yet
-      // This prevents double loaders (RefreshIndicator + CommonStateWidget)
       if (batchesList.isEmpty) {
         isLoading.value = true;
       }
     } else {
-      if (currentPage.value >= lastPage.value) return;
+      if (currentPage.value > lastPage.value) return;
       isMoreLoading.value = true;
     }
 
     try {
-      final response = await _repository.listBatches(page: currentPage.value);
+      final response = await _repository.listBatches(
+        page: currentPage.value,
+        search: batchSearchQuery.value.trim().isEmpty
+            ? null
+            : batchSearchQuery.value.trim(),
+      );
       final uiBatches = response.items.map((b) => b.toUIModel()).toList();
 
       if (isRefresh) {
@@ -108,9 +146,7 @@ class BatchController extends GetxController {
       }
 
       lastPage.value = response.lastPage;
-      if (currentPage.value < lastPage.value) {
-        currentPage.value++;
-      }
+      currentPage.value++;
     } catch (e) {
       AppSnackBar.error('Failed to load batches: ${e.toString()}');
     } finally {
@@ -125,6 +161,7 @@ class BatchController extends GetxController {
     subjectController.clear();
     descriptionController.clear();
     batchFeeController.clear();
+    classroomController.clear();
     startTime.value = const TimeOfDay(hour: 0, minute: 0);
     endTime.value = const TimeOfDay(hour: 0, minute: 0);
     selectedDays.clear();
@@ -136,6 +173,9 @@ class BatchController extends GetxController {
     subjectError.value = null;
     feeError.value = null;
     daysError.value = null;
+    staffError.value = null;
+    selectedStaffId.value = null;
+    fetchStaffForAssignment();
   }
 
   void initEditMode(BatchModel batch) {
@@ -145,6 +185,7 @@ class BatchController extends GetxController {
     subjectController.text = batch.subject;
     descriptionController.text = batch.description;
     batchFeeController.text = batch.baseFee.toStringAsFixed(0);
+    classroomController.text = batch.classroom ?? '';
 
     final times = batch.time.split(' - ');
     if (times.length == 2) {
@@ -159,6 +200,28 @@ class BatchController extends GetxController {
     subjectError.value = null;
     feeError.value = null;
     daysError.value = null;
+    staffError.value = null;
+    selectedStaffId.value = batch.staffId;
+    fetchStaffForAssignment();
+  }
+
+  Future<void> fetchStaffForAssignment() async {
+    try {
+      isLoadingStaff.value = true;
+      final response = await _repository.listStaff();
+      staffList.assignAll(response.items);
+    } catch (e) {
+      AppSnackBar.error(AppStrings.failedToLoadStaffList);
+    } finally {
+      isLoadingStaff.value = false;
+    }
+  }
+
+  void selectStaff(int? id) {
+    selectedStaffId.value = id;
+    if (triedToSave.value && id != null) {
+      staffError.value = null;
+    }
   }
 
   TimeOfDay _parseTime(String timeStr) {
@@ -210,16 +273,16 @@ class BatchController extends GetxController {
   }
 
   Future<void> selectStartTime(BuildContext context) async {
-    final TimeOfDay? picked = await showTimePicker(
-      context: context,
+    final TimeOfDay? picked = await AppPickers.time(
+      context,
       initialTime: startTime.value,
     );
     if (picked != null) startTime.value = picked;
   }
 
   Future<void> selectEndTime(BuildContext context) async {
-    final TimeOfDay? picked = await showTimePicker(
-      context: context,
+    final TimeOfDay? picked = await AppPickers.time(
+      context,
       initialTime: endTime.value,
     );
     if (picked != null) endTime.value = picked;
@@ -227,15 +290,27 @@ class BatchController extends GetxController {
 
   void deleteBatchWithConfirmation(String id) {
     CommonDialog.showDeleteConfirmation(
-      title: 'Delete Batch',
-      description: 'Are you sure you want to delete this batch?',
+      title: AppStrings.deleteBatch,
+      description: AppStrings.areYouSureYouWantTo,
       onConfirm: () async {
         try {
           isLoading.value = true;
+          Get.dialog(
+            const Center(child: CommonLoading()),
+            barrierDismissible: false,
+          );
           await _repository.deleteBatch(int.parse(id));
           batchesList.removeWhere((batch) => batch.id == id);
-          AppSnackBar.success('Batch deleted successfully', title: 'Deleted');
+
+          Get.back(); // close loading dialog
+          Get.back(); // Pop the BatchDetailsScreen
+
+          AppSnackBar.success(
+            AppStrings.batchDeletedSuccessfully,
+            title: AppStrings.deleted,
+          );
         } catch (e) {
+          Get.back(); // close loading dialog
           AppSnackBar.error(e.toString());
         } finally {
           isLoading.value = false;
@@ -258,6 +333,8 @@ class BatchController extends GetxController {
       'end_time':
           '${endTime.value.hour.toString().padLeft(2, '0')}:${endTime.value.minute.toString().padLeft(2, '0')}',
       'days': selectedDays.toList(),
+      'classroom': classroomController.text.trim(),
+      'staff_id': selectedStaffId.value,
     };
 
     try {
@@ -295,7 +372,7 @@ class BatchController extends GetxController {
     } catch (e) {
       if (e is ValidationException) {
         _handleValidationErrors(e.errors);
-        AppSnackBar.error('Please correct the highlighted errors');
+        AppSnackBar.error(AppStrings.validationErrorsBelow);
       } else {
         AppSnackBar.error(e.toString());
       }
@@ -317,6 +394,9 @@ class BatchController extends GetxController {
     if (errors.containsKey('days')) {
       daysError.value = (errors['days'] as List).first.toString();
     }
+    if (errors.containsKey('staff_id')) {
+      staffError.value = (errors['staff_id'] as List).first.toString();
+    }
   }
 
   void applyStudentAssignment() {
@@ -324,8 +404,8 @@ class BatchController extends GetxController {
     // For now keeping it local or showing a placeholder message
     Get.back();
     AppSnackBar.warning(
-      'Student assignment is currently managed via Student Profile',
-      title: 'Notice',
+      AppStrings.studentAssignmentIsCurrentlyManagedVia,
+      title: AppStrings.notice,
     );
   }
 
@@ -335,6 +415,7 @@ class BatchController extends GetxController {
     subjectController.dispose();
     descriptionController.dispose();
     batchFeeController.dispose();
+    classroomController.dispose();
     super.onClose();
   }
 }

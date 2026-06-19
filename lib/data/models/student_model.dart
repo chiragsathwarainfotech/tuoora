@@ -4,6 +4,7 @@ class Student {
   final String email;
   final String phone;
   final int instituteId;
+  final String? enrollmentID;
   final int? parentId;
   final int? batchId;
   final String standard;
@@ -17,6 +18,9 @@ class Student {
   final String updatedAt;
   final String profileImageUrl;
   final dynamic batch;
+  final num totalDue;
+  final num totalPaid;
+  final List<StudentFee> fees;
 
   const Student({
     required this.id,
@@ -24,6 +28,7 @@ class Student {
     required this.email,
     required this.phone,
     required this.instituteId,
+    this.enrollmentID,
     this.parentId,
     this.batchId,
     required this.standard,
@@ -37,6 +42,9 @@ class Student {
     required this.updatedAt,
     required this.profileImageUrl,
     this.batch,
+    this.totalDue = 0,
+    this.totalPaid = 0,
+    this.fees = const [],
   });
 
   factory Student.fromJson(Map<String, dynamic> json) {
@@ -58,6 +66,7 @@ class Student {
       email: json['email']?.toString() ?? '',
       phone: json['phone']?.toString() ?? '',
       instituteId: safeInt(json['institute_id']),
+      enrollmentID: json['enrollment_id'],
       parentId: safeNullableInt(json['parent_id']),
       batchId: safeNullableInt(json['batch_id']),
       standard: json['standard']?.toString() ?? '',
@@ -66,11 +75,22 @@ class Student {
       monthlyFee: json['monthly_fee']?.toString(),
       schoolName: json['school_name']?.toString(),
       status: json['status']?.toString() ?? '1',
-      idHash: json['id_hash']?.toString() ?? '',
+      idHash:
+          json['id_hash']?.toString() ??
+          json['enrollment_id']?.toString() ??
+          '',
       createdAt: json['created_at']?.toString() ?? '',
       updatedAt: json['updated_at']?.toString() ?? '',
       profileImageUrl: json['profile_image_url']?.toString() ?? '',
       batch: json['batch'],
+      totalDue: num.tryParse(json['total_due']?.toString() ?? '0') ?? 0,
+      totalPaid: num.tryParse(json['total_paid']?.toString() ?? '0') ?? 0,
+      fees:
+          (json['fees'] as List?)
+              ?.whereType<Map>()
+              .map((e) => StudentFee.fromJson(e.cast<String, dynamic>()))
+              .toList() ??
+          const [],
     );
   }
 
@@ -81,6 +101,7 @@ class Student {
       'email': email,
       'phone': phone,
       'institute_id': instituteId,
+      'enrollment_id': enrollmentID,
       'parent_id': parentId,
       'batch_id': batchId,
       'standard': standard,
@@ -94,6 +115,9 @@ class Student {
       'updated_at': updatedAt,
       'profile_image_url': profileImageUrl,
       'batch': batch,
+      'total_due': totalDue,
+      'total_paid': totalPaid,
+      'fees': fees.map((f) => f.toJson()).toList(),
     };
   }
 
@@ -116,6 +140,9 @@ class Student {
     String? updatedAt,
     String? profileImageUrl,
     dynamic batch,
+    num? totalDue,
+    num? totalPaid,
+    List<StudentFee>? fees,
   }) {
     return Student(
       id: id ?? this.id,
@@ -136,6 +163,9 @@ class Student {
       updatedAt: updatedAt ?? this.updatedAt,
       profileImageUrl: profileImageUrl ?? this.profileImageUrl,
       batch: batch ?? this.batch,
+      totalDue: totalDue ?? this.totalDue,
+      totalPaid: totalPaid ?? this.totalPaid,
+      fees: fees ?? this.fees,
     );
   }
 
@@ -148,5 +178,44 @@ class Student {
     }
     return 'Not Assigned';
   }
+
+  String get enrollmentId => idHash.isNotEmpty ? idHash : id.toString();
 }
 
+class StudentFee {
+  final int id;
+  final int studentId;
+  final String totalAmount;
+  final String paidAmount;
+  final String status;
+  final String date;
+
+  const StudentFee({
+    required this.id,
+    required this.studentId,
+    required this.totalAmount,
+    required this.paidAmount,
+    required this.status,
+    required this.date,
+  });
+
+  factory StudentFee.fromJson(Map<String, dynamic> json) {
+    return StudentFee(
+      id: int.tryParse(json['id']?.toString() ?? '0') ?? 0,
+      studentId: int.tryParse(json['student_id']?.toString() ?? '0') ?? 0,
+      totalAmount: json['total_amount']?.toString() ?? '0.00',
+      paidAmount: json['paid_amount']?.toString() ?? '0.00',
+      status: json['status']?.toString() ?? '',
+      date: json['date']?.toString() ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'student_id': studentId,
+    'total_amount': totalAmount,
+    'paid_amount': paidAmount,
+    'status': status,
+    'date': date,
+  };
+}

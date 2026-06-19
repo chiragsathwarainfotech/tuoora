@@ -6,6 +6,8 @@ import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/enums/app_enums.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/app_empty_view.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/core/widgets/student_bottom_nav.dart';
 import 'package:tuoora/presentation/student/controllers/assignments_controller.dart';
 import 'package:tuoora/presentation/student/models/assignment_model.dart';
@@ -30,64 +32,62 @@ class StudentAssignmentsScreen extends GetView<AssignmentsController> {
               isRoot: true,
             ),
             Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(
-                  AppSpacing.s16,
-                  AppSpacing.s4,
-                  AppSpacing.s16,
-                  AppSpacing.s24,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Obx(
-                      () => _WeeklyProgressCard(
-                        remaining: controller.weeklyRemaining.value,
-                        total: controller.weeklyTotal.value,
-                        completed: controller.weeklyCompleted.value,
-                        teacherName: controller.teacherName.value,
+              child: RefreshIndicator(
+                color: AppColors.primaryBrand,
+                onRefresh: controller.loadAssignments,
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: AppSpacing.screenPaddingTop,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Obx(
+                        () => _WeeklyProgressCard(
+                          remaining: controller.weeklyRemaining.value,
+                          total: controller.weeklyTotal.value,
+                          completed: controller.weeklyCompleted.value,
+                          teacherName: controller.teacherName.value,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: AppSpacing.s16),
-                    Obx(
-                      () => _SegmentedTabs(
-                        activeIndex: controller.activeTab.value,
-                        pendingCount: controller.pending.length,
-                        completedCount: controller.completed.length,
-                        onChange: controller.selectTab,
+                      const SizedBox(height: AppSpacing.s16),
+                      Obx(
+                        () => _SegmentedTabs(
+                          activeIndex: controller.activeTab.value,
+                          pendingCount: controller.pending.length,
+                          completedCount: controller.completed.length,
+                          onChange: controller.selectTab,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: AppSpacing.s16),
-                    Obx(() {
-                      if (controller.isLoading.value) {
-                        return const Center(
-                          child: Padding(
+                      const SizedBox(height: AppSpacing.s16),
+                      Obx(() {
+                        if (controller.isLoading.value) {
+                          return const Padding(
                             padding: EdgeInsets.all(32.0),
-                            child: CircularProgressIndicator(
-                              color: AppColors.primaryBrand,
+                            child: CommonLoading(color: AppColors.primaryBrand),
+                          );
+                        }
+
+                        final items = controller.activeItems;
+                        if (items.isEmpty) {
+                          return _EmptyState(
+                            active: controller.activeTab.value,
+                          );
+                        }
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: _interleave(
+                            items.map(
+                              (a) => _AssignmentCard(
+                                item: a,
+                                onTap: () => controller.openAssignment(a),
+                              ),
                             ),
+                            const SizedBox(height: AppSpacing.s12),
                           ),
                         );
-                      }
-
-                      final items = controller.activeItems;
-                      if (items.isEmpty) {
-                        return _EmptyState(active: controller.activeTab.value);
-                      }
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: _interleave(
-                          items.map(
-                            (a) => _AssignmentCard(
-                              item: a,
-                              onTap: () => controller.openAssignment(a),
-                            ),
-                          ),
-                          const SizedBox(height: AppSpacing.s12),
-                        ),
-                      );
-                    }),
-                  ],
+                      }),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -100,8 +100,6 @@ class StudentAssignmentsScreen extends GetView<AssignmentsController> {
     );
   }
 
-  /// Inserts [separator] between each element of [items]. Returns a new
-  /// list; safe to call with an empty iterable.
   static List<Widget> _interleave(Iterable<Widget> items, Widget separator) {
     final list = items.toList();
     if (list.length <= 1) return list;
@@ -113,8 +111,6 @@ class StudentAssignmentsScreen extends GetView<AssignmentsController> {
     return out;
   }
 }
-
-// ─────────────────────────────────────────────────────────── Progress card
 
 class _WeeklyProgressCard extends StatelessWidget {
   final int remaining;
@@ -132,9 +128,10 @@ class _WeeklyProgressCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.s16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
@@ -147,62 +144,59 @@ class _WeeklyProgressCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const _SegmentedProgressBar(),
-          Padding(
-            padding: const EdgeInsets.all(AppSpacing.s14),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  '$remaining',
-                  style: AppTextStyles.manrope(
-                    fontSize: 30,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.textPrimary,
-                    height: 1,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                '$remaining',
+                style: AppTextStyles.outfit(
+                  fontSize: 30,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.textPrimary,
+                  height: 1,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 2, top: 6),
+                child: Text(
+                  '/$total',
+                  style: AppTextStyles.outfit(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textTertiary,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 2, top: 6),
-                  child: Text(
-                    '/$total',
-                    style: AppTextStyles.manrope(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.textTertiary,
+              ),
+              AppSpacing.h12,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      AppStrings.studentAssignmentsStillToDo,
+                      style: AppTextStyles.outfit(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textPrimary,
+                      ),
                     ),
-                  ),
-                ),
-                AppSpacing.h12,
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        AppStrings.studentAssignmentsStillToDo,
-                        style: AppTextStyles.manrope(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w800,
-                          color: AppColors.textPrimary,
-                        ),
+                    const SizedBox(height: 2),
+                    Text(
+                      '$completed ${AppStrings.studentAssignmentsCompletedBy} $teacherName',
+                      style: AppTextStyles.outfit(
+                        fontSize: 12,
+                        color: AppColors.textTertiary,
                       ),
-                      const SizedBox(height: 2),
-                      Text(
-                        '$completed ${AppStrings.studentAssignmentsCompletedBy} $teacherName',
-                        style: AppTextStyles.lexend(
-                          fontSize: 11,
-                          color: AppColors.textTertiary,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ),
-                AppSpacing.h8,
-                const _SubjectAvatarStack(),
-              ],
-            ),
+              ),
+              AppSpacing.h8,
+              const _SubjectAvatarStack(),
+            ],
           ),
         ],
       ),
@@ -224,18 +218,12 @@ class _SegmentedProgressBar extends StatelessWidget {
         height: 6,
         child: Row(
           children: const [
-            Expanded(
-              flex: 5,
-              child: ColoredBox(color: AppColors.studentProgressOrange),
-            ),
+            Expanded(flex: 5, child: ColoredBox(color: AppColors.primaryBrand)),
             Expanded(
               flex: 4,
-              child: ColoredBox(color: AppColors.studentProgressBlue),
+              child: ColoredBox(color: AppColors.subjectPhysics),
             ),
-            Expanded(
-              flex: 3,
-              child: ColoredBox(color: AppColors.successGreen),
-            ),
+            Expanded(flex: 3, child: ColoredBox(color: AppColors.successGreen)),
           ],
         ),
       ),
@@ -256,21 +244,21 @@ class _SubjectAvatarStack extends StatelessWidget {
         children: [
           _SubjectAvatar(
             offset: 0,
-            bg: AppColors.studentBrandSoft,
+            bg: AppColors.primaryBrandLight,
             icon: Icons.functions_rounded,
-            iconColor: AppColors.studentProgressOrange,
+            iconColor: AppColors.primaryBrand,
           ),
           _SubjectAvatar(
             offset: 22,
-            bg: AppColors.studentUpdateIconBg,
+            bg: AppColors.subjectPhysicsSoft,
             icon: Icons.science_outlined,
-            iconColor: AppColors.studentUpdateIconColor,
+            iconColor: AppColors.subjectPhysics,
           ),
           _SubjectAvatar(
             offset: 44,
-            bg: AppColors.studentPresentBg,
+            bg: AppColors.successBg,
             icon: Icons.menu_book_rounded,
-            iconColor: AppColors.studentPresentText,
+            iconColor: AppColors.successGreen,
           ),
         ],
       ),
@@ -328,8 +316,8 @@ class _SegmentedTabs extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppSpacing.s4),
       decoration: BoxDecoration(
-        color: AppColors.studentTabInactiveBg,
-        borderRadius: BorderRadius.circular(AppSpacing.s12),
+        color: AppColors.fieldBg,
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       ),
       child: Row(
         children: [
@@ -376,27 +364,16 @@ class _TabButton extends StatelessWidget {
           horizontal: AppSpacing.s12,
         ),
         decoration: BoxDecoration(
-          color: isActive ? AppColors.white : AppColors.studentTabInactiveBg,
-          borderRadius: BorderRadius.circular(AppSpacing.s10),
-          boxShadow: isActive
-              ? [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 6,
-                    offset: const Offset(0, 1),
-                  ),
-                ]
-              : null,
+          color: isActive ? AppColors.primaryBrand : AppColors.fieldBg,
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         ),
         child: Center(
           child: Text(
             label,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 13,
-              fontWeight: FontWeight.w800,
-              color: isActive
-                  ? AppColors.textPrimary
-                  : AppColors.textTertiary,
+              fontWeight: FontWeight.w600,
+              color: isActive ? AppColors.white : AppColors.textTertiary,
             ),
           ),
         ),
@@ -404,8 +381,6 @@ class _TabButton extends StatelessWidget {
     );
   }
 }
-
-// ───────────────────────────────────────────────────────── Assignment card
 
 class _AssignmentCard extends StatelessWidget {
   final Assignment item;
@@ -415,22 +390,19 @@ class _AssignmentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Overdue rows: nothing the student can do anymore — disable tap so
-    // the InkWell shows no ripple, and dull the whole card so it visually
-    // reads as inactive (like an expired offer tile).
-    final bool disabled = item.isOverdue;
-    final VoidCallback? effectiveOnTap = disabled ? null : onTap;
+    // Overdue rows stay tappable — the detail screen still opens; it just
+    // disables the Submit action. We dim the card slightly so the user
+    // still gets a visual cue that no action is possible.
+    final bool dimmed = item.isOverdue;
 
     final card = Material(
       color: AppColors.white,
-      borderRadius: BorderRadius.circular(AppSpacing.s16),
       child: InkWell(
-        onTap: effectiveOnTap,
-        borderRadius: BorderRadius.circular(AppSpacing.s16),
+        onTap: onTap,
         child: Ink(
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(AppSpacing.s16),
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.03),
@@ -440,7 +412,7 @@ class _AssignmentCard extends StatelessWidget {
             ],
           ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(AppSpacing.s16),
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
             child: IntrinsicHeight(
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -448,7 +420,7 @@ class _AssignmentCard extends StatelessWidget {
                   Container(width: 5, color: item.stripe),
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.all(AppSpacing.s14),
+                      padding: AppSpacing.cardPadding,
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -476,9 +448,9 @@ class _AssignmentCard extends StatelessWidget {
                                 Text(
                                   item.title,
                                   style:
-                                      AppTextStyles.manrope(
+                                      AppTextStyles.outfit(
                                         fontSize: 14,
-                                        fontWeight: FontWeight.w800,
+                                        fontWeight: FontWeight.w600,
                                         color: item.isCompleted
                                             ? AppColors.textMuted
                                             : AppColors.textPrimary,
@@ -486,8 +458,7 @@ class _AssignmentCard extends StatelessWidget {
                                         decoration: item.isCompleted
                                             ? TextDecoration.lineThrough
                                             : TextDecoration.none,
-                                        decorationColor:
-                                            AppColors.textMuted,
+                                        decorationColor: AppColors.textMuted,
                                         decorationThickness: 1.5,
                                       ),
                                   maxLines: 2,
@@ -499,18 +470,18 @@ class _AssignmentCard extends StatelessWidget {
                                     children: [
                                       TextSpan(
                                         text: item.subjectLabel,
-                                        style: AppTextStyles.manrope(
+                                        style: AppTextStyles.outfit(
                                           fontSize: 11,
-                                          fontWeight: FontWeight.w800,
+                                          fontWeight: FontWeight.w600,
                                           color: item.stripe,
                                           letterSpacing: 0.6,
                                         ),
                                       ),
                                       TextSpan(
                                         text: _statusSuffix(item),
-                                        style: AppTextStyles.manrope(
+                                        style: AppTextStyles.outfit(
                                           fontSize: 10,
-                                          fontWeight: FontWeight.w800,
+                                          fontWeight: FontWeight.w600,
                                           color: _statusColor(item),
                                           letterSpacing: 0.6,
                                         ),
@@ -523,11 +494,6 @@ class _AssignmentCard extends StatelessWidget {
                               ],
                             ),
                           ),
-                          // Right-side pill: shown ONLY for completed items
-                          // ("Done"). Pending items now communicate their
-                          // due-ness inline via "Due: <date>" on the line
-                          // above, so a separate Today/Tomorrow pill is
-                          // redundant.
                           if (item.isCompleted) ...[
                             AppSpacing.h8,
                             _DuePill(badge: item.badge),
@@ -543,22 +509,12 @@ class _AssignmentCard extends StatelessWidget {
         ),
       ),
     );
-
-    // "Expired offer" look: knock the whole row's opacity down so it
-    // visually reads as inactive. AbsorbPointer guarantees no tap or
-    // hover effect lands even if a child has its own GestureDetector.
-    if (disabled) {
-      return AbsorbPointer(
-        child: Opacity(opacity: 0.55, child: card),
-      );
+    if (dimmed) {
+      return Opacity(opacity: 0.7, child: card);
     }
     return card;
   }
 
-  /// Inline suffix after the subject label. Three buckets:
-  ///   - Completed → "Submitted" (no date — completion is the message)
-  ///   - Overdue   → `Was due on …` (past-tense, signals missed)
-  ///   - Active    → `Due: …` (action-oriented, keeps urgency)
   static String _statusSuffix(Assignment item) {
     if (item.isCompleted) return '  ·  Submitted';
     if (item.isOverdue) return '  ·  Was due on ${item.dueLabel}';
@@ -566,7 +522,7 @@ class _AssignmentCard extends StatelessWidget {
   }
 
   static Color _statusColor(Assignment item) {
-    if (item.isCompleted) return AppColors.studentPresentText;
+    if (item.isCompleted) return AppColors.successGreen;
     if (item.isOverdue) return AppColors.bohoRed;
     return AppColors.textTertiary;
   }
@@ -580,25 +536,22 @@ class _DuePill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     late final Color bg;
-    late final Color fg;
     late final String label;
     switch (badge) {
       case AssignmentBadge.today:
-        bg = AppColors.studentBrandSoft;
-        fg = AppColors.studentBrand;
+        bg = AppColors.primaryBrand;
         label = AppStrings.studentTodayPill;
         break;
       case AssignmentBadge.tomorrow:
-        bg = AppColors.amberLight;
-        fg = AppColors.studentTomorrowPillText;
+        bg = AppColors.orangeTag;
         label = AppStrings.studentTomorrowPill;
         break;
       case AssignmentBadge.done:
-        bg = AppColors.studentPresentBg;
-        fg = AppColors.studentPresentText;
+        bg = AppColors.successGreen;
         label = AppStrings.studentDonePill;
         break;
     }
+    const fg = AppColors.white;
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.s12,
@@ -606,13 +559,13 @@ class _DuePill extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: bg,
-        borderRadius: BorderRadius.circular(AppSpacing.s12),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       ),
       child: Text(
         label,
-        style: AppTextStyles.manrope(
-          fontSize: 11,
-          fontWeight: FontWeight.w700,
+        style: AppTextStyles.outfit(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
           color: fg,
         ),
       ),
@@ -629,38 +582,14 @@ class _EmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final msg = active == 0
-        ? AppStrings.studentAssignmentsEmptyPending
-        : AppStrings.studentAssignmentsEmptyCompleted;
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: AppSpacing.s40),
-      child: Column(
-        children: [
-          Container(
-            width: 72,
-            height: 72,
-            decoration: BoxDecoration(
-              color: AppColors.studentBrandSoft,
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(
-              Icons.task_alt_rounded,
-              color: AppColors.studentBrand,
-              size: 32,
-            ),
-          ),
-          const SizedBox(height: AppSpacing.s16),
-          Text(
-            msg,
-            textAlign: TextAlign.center,
-            style: AppTextStyles.lexend(
-              fontSize: 13,
-              color: AppColors.textSecondary,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
-      ),
+    return AppEmptyView(
+      icon: Icons.task_alt_rounded,
+      title: active == 0
+          ? 'No pending assignments'
+          : 'No completed assignments',
+      message: active == 0
+          ? AppStrings.studentAssignmentsEmptyPending
+          : AppStrings.studentAssignmentsEmptyCompleted,
     );
   }
 }

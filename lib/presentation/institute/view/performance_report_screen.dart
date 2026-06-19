@@ -1,10 +1,13 @@
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/controllers/reports_controller.dart';
+import 'package:tuoora/presentation/institute/widgets/export_report.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/presentation/institute/widgets/report_widgets.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
+import 'package:tuoora/core/widgets/app_empty_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/config/app_routes.dart';
@@ -21,7 +24,10 @@ class PerformanceReportScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const InstituteAppBar(title: 'Performance Report', isRoot: false),
+            const InstituteAppBar(
+              title: AppStrings.studentPerformanceReport,
+              isRoot: false,
+            ),
             Expanded(
               child: Obx(() {
                 if (controller.isPerformanceLoading.value) {
@@ -30,18 +36,19 @@ class PerformanceReportScreen extends StatelessWidget {
 
                 final report = controller.performanceReport.value;
                 if (report == null) {
-                  return const Center(
-                    child: Text('No performance data available'),
+                  return const AppEmptyView(
+                    icon: Icons.insights_outlined,
+                    title: AppStrings.noPerformanceDataAvailable,
                   );
                 }
 
                 return SingleChildScrollView(
-                  padding: AppSpacing.all24,
+                  padding: AppSpacing.all16,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ReportSummaryCard(
-                        title: 'Overall Average Performance',
+                        title: AppStrings.overallAveragePerformance,
                         value: report.summary.averagePerformance,
                       ),
                       AppSpacing.v32,
@@ -99,44 +106,16 @@ class PerformanceReportScreen extends StatelessWidget {
         Expanded(
           child: Text(
             title,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 18,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.textPrimary,
             ),
           ),
         ),
         AppSpacing.h16,
-        GestureDetector(
-          onTap: () => controller.exportReport('Performance'),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            decoration: BoxDecoration(
-              color: AppColors.primaryBrand,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Row(
-              children: [
-                const Icon(
-                  Icons.file_download_outlined,
-                  color: AppColors.white,
-                  size: 16,
-                ),
-                AppSpacing.h8,
-                Text(
-                  'Export',
-                  style: AppTextStyles.manrope(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.white,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+        ExportReport(onTap: () => controller.exportReport('Performance')),
       ],
     );
   }
 }
-

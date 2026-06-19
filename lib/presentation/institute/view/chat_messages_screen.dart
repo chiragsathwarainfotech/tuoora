@@ -1,20 +1,25 @@
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/enums/app_enums.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/utils/date_format_utils.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/core/widgets/common_dialog.dart';
 import 'package:tuoora/presentation/institute/controllers/chat_controller.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
+import 'package:tuoora/presentation/institute/widgets/chat_attachment_view.dart';
+import 'package:tuoora/presentation/institute/widgets/chat_date_separator.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/data/models/chat_model.dart';
+import 'package:tuoora/core/constants/app_images.dart';
+import 'package:tuoora/core/widgets/app_action_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class ChatMessagesScreen extends GetView<ChatController> {
   const ChatMessagesScreen({super.key});
@@ -40,7 +45,7 @@ class ChatMessagesScreen extends GetView<ChatController> {
                     PopupMenuButton<ChatMenuAction>(
                       icon: const Icon(
                         Icons.more_vert_rounded,
-                        color: AppColors.primaryBrand,
+                        color: AppColors.fieldLabel,
                       ),
                       onSelected: (action) {
                         switch (action) {
@@ -53,15 +58,14 @@ class ChatMessagesScreen extends GetView<ChatController> {
                           value: ChatMenuAction.delete,
                           child: Row(
                             children: [
-                              const Icon(
-                                Icons.delete_outline_rounded,
-                                color: AppColors.bohoRed,
+                              const AppActionIcon(
+                                asset: AppImages.icDelete,
                                 size: 20,
                               ),
                               const SizedBox(width: 12),
                               Text(
-                                'Delete chat',
-                                style: AppTextStyles.lexend(
+                                AppStrings.labelDeleteChat,
+                                style: AppTextStyles.outfit(
                                   fontSize: 14,
                                   color: AppColors.bohoRed,
                                   fontWeight: FontWeight.w600,
@@ -76,32 +80,88 @@ class ChatMessagesScreen extends GetView<ChatController> {
                 );
               }),
               Expanded(
-                child: Obx(() {
-                  if (controller.isLoading.value &&
-                      controller.messages.isEmpty) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
+                child: Stack(
+                  children: [
+                    Obx(() {
+                      if (controller.isLoading.value &&
+                          controller.messages.isEmpty) {
+                        return const CommonLoading();
+                      }
 
-                  if (controller.messages.isEmpty) {
-                    return _buildEmptyChatView();
-                  }
+                      if (controller.messages.isEmpty) {
+                        return _buildEmptyChatView();
+                      }
 
-                  return ListView.builder(
-                    controller: controller.scrollController,
-                    padding: AppSpacing.all24,
-                    itemCount: controller.messages.length,
-                    itemBuilder: (context, index) {
-                      final message = controller.messages[index];
-                      return _buildMessageBubble(message);
-                    },
-                  );
-                }),
+                      return ListView.builder(
+                        controller: controller.scrollController,
+                        padding: AppSpacing.all24,
+                        itemCount: controller.messages.length,
+                        itemBuilder: (context, index) {
+                          final message = controller.messages[index];
+                          return _buildMessageRow(index, message);
+                        },
+                      );
+                    }),
+                    _buildLoadingMoreIndicator(),
+                    _buildScrollToBottomButton(),
+                  ],
+                ),
               ),
               _buildMessageInput(context),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildLoadingMoreIndicator() {
+    return Positioned(
+      top: 12,
+      left: 0,
+      right: 0,
+      child: Obx(
+        () => controller.isLoadingMore.value
+            ? const Center(child: CommonLoading(size: 22))
+            : const SizedBox.shrink(),
+      ),
+    );
+  }
+
+  // Floating jump-to-bottom button — only visible once the user scrolls up
+  // away from the newest message (controller.showScrollToBottom).
+  Widget _buildScrollToBottomButton() {
+    return Positioned(
+      right: 16,
+      bottom: 16,
+      child: Obx(() {
+        if (!controller.showScrollToBottom.value) {
+          return const SizedBox.shrink();
+        }
+        return GestureDetector(
+          onTap: controller.scrollToBottom,
+          child: Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.15),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: const Icon(
+              Icons.keyboard_arrow_down_rounded,
+              color: AppColors.primaryBrand,
+              size: 26,
+            ),
+          ),
+        );
+      }),
     );
   }
 
@@ -126,22 +186,41 @@ class ChatMessagesScreen extends GetView<ChatController> {
           AppSpacing.v24,
           Text(
             'Say Hello to ${chat?.participantName ?? 'them'}!',
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 18,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.textPrimary,
             ),
           ),
           AppSpacing.v8,
           Text(
-            'Type a message to start your conversation.',
-            style: AppTextStyles.lexend(
+            AppStrings.typeAMessageToStartYour,
+            style: AppTextStyles.outfit(
               fontSize: 14,
               color: AppColors.textSecondary,
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildMessageRow(int index, Message message) {
+    final bubble = _buildMessageBubble(message);
+    final createdAt = message.createdAt;
+    if (createdAt == null) return bubble;
+
+    final prevAt = index > 0 ? controller.messages[index - 1].createdAt : null;
+    final showSeparator =
+        index == 0 || DateFormatUtils.isDifferentDay(prevAt, createdAt);
+    if (!showSeparator) return bubble;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        ChatDateSeparator(label: DateFormatUtils.chatDaySeparator(createdAt)),
+        bubble,
+      ],
     );
   }
 
@@ -160,7 +239,7 @@ class ChatMessagesScreen extends GetView<ChatController> {
       constraints: BoxConstraints(maxWidth: Get.width * 0.75),
       padding: isVisualAttachment
           ? const EdgeInsets.all(4)
-          : const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          : const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: isMe ? AppColors.primaryBrand : AppColors.white,
         borderRadius: BorderRadius.only(
@@ -189,7 +268,7 @@ class ChatMessagesScreen extends GetView<ChatController> {
                   : EdgeInsets.only(top: hasAttachment ? 8 : 0),
               child: Text(
                 message.content,
-                style: AppTextStyles.lexend(
+                style: AppTextStyles.outfit(
                   fontSize: 14,
                   color: isMe ? AppColors.white : AppColors.textPrimary,
                   height: 1.4,
@@ -199,7 +278,7 @@ class ChatMessagesScreen extends GetView<ChatController> {
           Padding(
             padding: isVisualAttachment
                 ? const EdgeInsets.fromLTRB(8, 4, 8, 4)
-                : const EdgeInsets.only(top: 4),
+                : const EdgeInsets.only(top: 2),
             child: Align(
               alignment: Alignment.bottomRight,
               child: Row(
@@ -207,7 +286,7 @@ class ChatMessagesScreen extends GetView<ChatController> {
                 children: [
                   Text(
                     message.timestamp,
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 10,
                       color: isMe
                           ? AppColors.white.withValues(alpha: 0.7)
@@ -256,8 +335,8 @@ class ChatMessagesScreen extends GetView<ChatController> {
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      'Tap to retry',
-                      style: AppTextStyles.lexend(
+                      AppStrings.labelTapToRetry,
+                      style: AppTextStyles.outfit(
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
                         color: Colors.redAccent,
@@ -274,193 +353,40 @@ class ChatMessagesScreen extends GetView<ChatController> {
 
   Widget _buildAttachmentContent(Message message, bool isMe) {
     final url = message.attachment ?? '';
-    switch (message.messageType) {
-      case 'image':
-        return _buildImageContent(url, isMe);
-      case 'video':
-        return _buildVideoContent(url, isMe);
-      case 'audio':
-        return _buildAudioContent(url, isMe);
-      case 'document':
-        return _buildDocumentContent(url, isMe);
-      default:
-        return const SizedBox.shrink();
-    }
-  }
+    if (url.isEmpty) return const SizedBox.shrink();
 
-  bool _isLocalPath(String urlOrPath) => !urlOrPath.startsWith('http');
-
-  String _displayFilename(String urlOrPath) {
-    if (urlOrPath.isEmpty) return 'File';
-    try {
-      final segments = Uri.parse(urlOrPath).pathSegments;
-      if (segments.isNotEmpty && segments.last.isNotEmpty) {
-        return segments.last;
-      }
-    } catch (_) {
-      /* fall through */
-    }
-    return urlOrPath.split(RegExp(r'[\\/]')).last;
-  }
-
-  Future<void> _openExternal(String url) async {
-    if (url.isEmpty || _isLocalPath(url)) return;
-    final uri = Uri.tryParse(url);
-    if (uri == null) return;
-    await launchUrl(uri, mode: LaunchMode.externalApplication);
-  }
-
-  Widget _buildImageContent(String urlOrPath, bool isMe) {
-    final isLocal = _isLocalPath(urlOrPath);
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(12),
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(
-          maxHeight: 240,
-          minWidth: 180,
-          maxWidth: 280,
-        ),
-        child: isLocal
-            ? Image.file(
-                File(urlOrPath),
-                fit: BoxFit.cover,
-                errorBuilder: (_, _, _) => _imageErrorBox(isMe),
-              )
-            : CachedNetworkImage(
-                imageUrl: urlOrPath,
-                fit: BoxFit.cover,
-                placeholder: (_, _) => Container(
-                  height: 200,
-                  width: 200,
-                  alignment: Alignment.center,
-                  color: AppColors.background.withValues(alpha: 0.3),
-                  child: const SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  ),
-                ),
-                errorWidget: (_, _, _) => _imageErrorBox(isMe),
-              ),
-      ),
+    final content = ChatAttachmentView(
+      url: url,
+      type: message.messageType,
+      isMe: isMe,
     );
-  }
 
-  Widget _imageErrorBox(bool isMe) => Container(
-    height: 120,
-    width: 200,
-    alignment: Alignment.center,
-    color: AppColors.background.withValues(alpha: 0.3),
-    child: Icon(
-      Icons.broken_image_outlined,
-      color: isMe ? AppColors.white : AppColors.textTertiary,
-    ),
-  );
-
-  Widget _buildVideoContent(String urlOrPath, bool isMe) {
-    return GestureDetector(
-      onTap: () => _openExternal(urlOrPath),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: Container(
-          height: 160,
-          width: 220,
-          color: Colors.black87,
-          alignment: Alignment.center,
-          child: const Icon(
-            Icons.play_circle_outline_rounded,
-            color: Colors.white,
-            size: 48,
+    // While the optimistic message is still uploading, overlay a progress
+    // ring with the live percentage so the user can watch the upload move.
+    // Once bytes finish uploading but the server is still processing, we
+    // fall back to an indeterminate spinner for the short tail.
+    if (isMe && message.status == MessageStatus.sending) {
+      return Stack(
+        children: [
+          content,
+          Positioned.fill(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Container(
+                color: Colors.black.withValues(alpha: 0.35),
+                alignment: Alignment.center,
+                child: _UploadProgressOverlay(localPath: url),
+              ),
+            ),
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildAudioContent(String urlOrPath, bool isMe) {
-    return _buildFileTile(
-      icon: Icons.audiotrack_rounded,
-      label: _displayFilename(urlOrPath),
-      sublabel: 'Audio',
-      onTap: () => _openExternal(urlOrPath),
-      isMe: isMe,
-    );
-  }
-
-  Widget _buildDocumentContent(String urlOrPath, bool isMe) {
-    final name = _displayFilename(urlOrPath);
-    final ext = name.contains('.')
-        ? name.split('.').last.toUpperCase()
-        : 'FILE';
-    return _buildFileTile(
-      icon: Icons.description_rounded,
-      label: name,
-      sublabel: ext,
-      onTap: () => _openExternal(urlOrPath),
-      isMe: isMe,
-    );
-  }
-
-  Widget _buildFileTile({
-    required IconData icon,
-    required String label,
-    required String sublabel,
-    required VoidCallback onTap,
-    required bool isMe,
-  }) {
-    final tint = isMe ? AppColors.white : AppColors.primaryBrand;
-    final textColor = isMe ? AppColors.white : AppColors.textPrimary;
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        constraints: const BoxConstraints(minWidth: 200, maxWidth: 240),
-        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: tint.withValues(alpha: isMe ? 0.2 : 0.1),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Icon(icon, color: tint, size: 22),
-            ),
-            const SizedBox(width: 10),
-            Flexible(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    label,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTextStyles.lexend(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: textColor,
-                    ),
-                  ),
-                  Text(
-                    sublabel,
-                    style: AppTextStyles.lexend(
-                      fontSize: 11,
-                      color: textColor.withValues(alpha: 0.7),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+        ],
+      );
+    }
+    return content;
   }
 
   Widget _buildStatusTick(MessageStatus status) {
-    const sentColor = AppColors.studentTabInactiveBg;
+    const sentColor = AppColors.background;
     const readColor = AppColors.subjectPhysics;
 
     switch (status) {
@@ -498,59 +424,147 @@ class ChatMessagesScreen extends GetView<ChatController> {
           ),
         ],
       ),
-      child: Row(
-        children: [
-          IconButton(
-            onPressed: () => _showAttachmentSheet(context),
-            icon: const Icon(Icons.add, color: AppColors.textSecondary),
-          ),
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                color: AppColors.paleSilver.withValues(alpha: 0.5),
-                borderRadius: BorderRadius.circular(24),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: controller.messageController,
-                      style: AppTextStyles.lexend(fontSize: 14),
-                      decoration: const InputDecoration(
-                        hintText: 'Type a message...',
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(vertical: 12),
-                      ),
-                      maxLines: null,
-                    ),
-                  ),
-                  const Icon(
-                    Icons.sentiment_satisfied_alt_rounded,
-                    color: AppColors.textTertiary,
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(width: 12),
-          GestureDetector(
-            onTap: () => controller.sendMessage(),
-            child: Container(
-              padding: const EdgeInsets.all(12),
-              decoration: const BoxDecoration(
-                color: AppColors.primaryBrand,
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.send_rounded,
-                color: AppColors.white,
-                size: 20,
-              ),
-            ),
-          ),
-        ],
+      child: Obx(
+        () => controller.isRecording.value
+            ? _buildRecordingBar()
+            : _buildComposerRow(context),
       ),
+    );
+  }
+
+  Widget _buildComposerRow(BuildContext context) {
+    return Row(
+      children: [
+        IconButton(
+          onPressed: () => _showAttachmentSheet(context),
+          icon: const Icon(Icons.add, color: AppColors.textSecondary),
+        ),
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            decoration: BoxDecoration(
+              color: AppColors.fieldBg.withValues(alpha: 0.5),
+              borderRadius: BorderRadius.circular(24),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: controller.messageController,
+                    style: AppTextStyles.outfit(fontSize: 14),
+                    decoration: const InputDecoration(
+                      hintText: AppStrings.hintTypeMessage,
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.symmetric(vertical: 12),
+                    ),
+                    maxLines: null,
+                  ),
+                ),
+                const Icon(
+                  Icons.sentiment_satisfied_alt_rounded,
+                  color: AppColors.textTertiary,
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(width: 8),
+        // Mic — starts voice recording.
+        GestureDetector(
+          onTap: controller.startRecording,
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: AppColors.fieldBg.withValues(alpha: 0.5),
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.mic_rounded,
+              color: AppColors.primaryBrand,
+              size: 22,
+            ),
+          ),
+        ),
+        const SizedBox(width: 8),
+        GestureDetector(
+          onTap: () => controller.sendMessage(),
+          child: Container(
+            padding: const EdgeInsets.all(12),
+            decoration: const BoxDecoration(
+              color: AppColors.primaryBrand,
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.send_rounded,
+              color: AppColors.white,
+              size: 20,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // WhatsApp-style recording bar: cancel (trash) · red dot + timer · send.
+  Widget _buildRecordingBar() {
+    return Row(
+      children: [
+        IconButton(
+          onPressed: controller.cancelRecording,
+          icon: const Icon(
+            Icons.delete_outline_rounded,
+            color: AppColors.bohoRed,
+          ),
+        ),
+        Expanded(
+          child: Row(
+            children: [
+              Container(
+                width: 10,
+                height: 10,
+                decoration: const BoxDecoration(
+                  color: AppColors.bohoRed,
+                  shape: BoxShape.circle,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Obx(
+                () => Text(
+                  controller.recordTimeLabel,
+                  style: AppTextStyles.outfit(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Text(
+                AppStrings.labelRecording,
+                style: AppTextStyles.outfit(
+                  fontSize: 13,
+                  color: AppColors.textTertiary,
+                ),
+              ),
+            ],
+          ),
+        ),
+        GestureDetector(
+          onTap: controller.stopAndSendRecording,
+          child: Container(
+            padding: const EdgeInsets.all(12),
+            decoration: const BoxDecoration(
+              color: AppColors.primaryBrand,
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.send_rounded,
+              color: AppColors.white,
+              size: 20,
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -634,9 +648,9 @@ class ChatMessagesScreen extends GetView<ChatController> {
           const SizedBox(height: 8),
           Text(
             label,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 10,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               color: AppColors.textSecondary,
             ),
           ),
@@ -650,7 +664,7 @@ class ChatMessagesScreen extends GetView<ChatController> {
   void _confirmDeleteConversation(Chat? chat) {
     if (chat == null) return;
     CommonDialog.showDeleteConfirmation(
-      title: 'Delete chat',
+      title: AppStrings.labelDeleteChat,
       description:
           'Are you sure you want to delete your chat with '
           '${chat.participantName}? This will permanently remove all '
@@ -722,5 +736,61 @@ class ChatMessagesScreen extends GetView<ChatController> {
     } catch (e) {
       AppSnackBar.error('Could not pick document: $e');
     }
+  }
+}
+
+/// Overlay shown on top of a sending attachment bubble. Reads live progress
+/// from [ChatController.uploadingPath] / [ChatController.uploadProgress] and
+/// shows a determinate ring + percentage while bytes are flowing. Falls back
+/// to an indeterminate spinner for the brief window between 100% upload and
+/// the server's response (so the overlay never blinks off prematurely).
+class _UploadProgressOverlay extends StatelessWidget {
+  final String localPath;
+  const _UploadProgressOverlay({required this.localPath});
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = Get.find<ChatController>();
+    return Obx(() {
+      final isThisUpload = controller.uploadingPath.value == localPath;
+      final percent = controller.uploadProgress.value;
+      final showDeterminate = isThisUpload && percent > 0 && percent < 100;
+
+      if (!showDeterminate) {
+        return const SizedBox(
+          width: 28,
+          height: 28,
+          child: CircularProgressIndicator(
+            strokeWidth: 2.5,
+            color: AppColors.white,
+          ),
+        );
+      }
+
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            width: 40,
+            height: 40,
+            child: CircularProgressIndicator(
+              strokeWidth: 3,
+              value: percent / 100,
+              color: AppColors.white,
+              backgroundColor: AppColors.white.withValues(alpha: 0.25),
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            '${percent.toInt()}%',
+            style: AppTextStyles.outfit(
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+              color: AppColors.white,
+            ),
+          ),
+        ],
+      );
+    });
   }
 }

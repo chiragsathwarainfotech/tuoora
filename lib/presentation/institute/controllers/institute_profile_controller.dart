@@ -1,8 +1,10 @@
 import 'package:tuoora/config/app_routes.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/services/auth_service.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/data/repositories/auth_repository.dart';
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
 import 'package:tuoora/core/utils/validation_utils.dart';
 import 'package:tuoora/data/models/institute_profile_model.dart';
@@ -11,6 +13,9 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tuoora/core/api/api_exception.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
+import 'dart:io';
+import 'package:permission_handler/permission_handler.dart';
 
 class InstituteProfileController extends GetxController {
   final InstituteRepositoryImpl _instituteRepository;
@@ -40,7 +45,30 @@ class InstituteProfileController extends GetxController {
   final ownerNameError = RxnString();
   final emailError = RxnString();
   final phoneError = RxnString();
+  final addressError = RxnString();
+  final cityError = RxnString();
+  final stateError = RxnString();
+  final countryError = RxnString();
   final pincodeError = RxnString();
+
+  // ----- UPI Payment Settings (edit screen + profile-view card) -----
+  /// Saved merchant UPI handle (e.g. `merchant@bank`). Empty when the
+  /// institute hasn't configured it yet.
+  final upiId = ''.obs;
+
+  /// Server-hosted QR image URL once saved. Becomes null after the user
+  /// picks a fresh local file but hasn't hit Save yet — at which point
+  /// [upiQrLocalPath] takes over for the preview.
+  final upiQrCodeUrl = RxnString();
+
+  /// Local file path of a freshly-picked QR image. Cleared after Save.
+  final upiQrLocalPath = RxnString();
+
+  /// Saving spinner for the edit screen's Save button.
+  final isSavingPayment = false.obs;
+
+  final upiIdError = RxnString();
+  final upiQrError = RxnString();
 
   // Controllers for text fields (for editing)
   late TextEditingController nameController;
@@ -83,6 +111,10 @@ class InstituteProfileController extends GetxController {
     ownerController.addListener(() => _clearError(ownerNameError));
     emailController.addListener(() => _clearError(emailError));
     phoneController.addListener(() => _clearError(phoneError));
+    addressLine1Controller.addListener(() => _clearError(addressError));
+    cityController.addListener(() => _clearError(cityError));
+    stateController.addListener(() => _clearError(stateError));
+    countryController.addListener(() => _clearError(countryError));
     pincodeController.addListener(() => _clearError(pincodeError));
   }
 
@@ -113,16 +145,111 @@ class InstituteProfileController extends GetxController {
         profileImagePath.value = data.logoUrl;
       }
 
+      // Pull UPI payment fields out of the profile response so the
+      // profile view's "UPI Payment Details" card shows them and the
+      // edit screen has its starting values.
+      upiId.value = data.upiId ?? '';
+      upiQrCodeUrl.value = data.upiQrCodeUrl;
+      upiQrLocalPath.value = null;
+
       _initializeControllers();
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Failed to load profile: $e',
-        backgroundColor: Colors.redAccent,
-        colorText: AppColors.white,
-      );
+      AppSnackBar.error(AppStrings.errFailedLoadProfile);
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  bool get hasUpiPayment =>
+      upiId.value.trim().isNotEmpty || (upiQrCodeUrl.value ?? '').isNotEmpty;
+
+  String? get upiQrPreviewSource => upiQrLocalPath.value ?? upiQrCodeUrl.value;
+
+  Future<void> pickUpiQrImage(ImageSource source) async {
+    try {
+      if (source == ImageSource.camera) {
+        final status = await Permission.camera.request();
+        if (status.isPermanentlyDenied) {
+          openAppSettings();
+          return;
+        } else if (!status.isGranted) {
+          return;
+        }
+      } else if (source == ImageSource.gallery) {
+        if (Platform.isIOS) {
+          final status = await Permission.photos.request();
+          if (status.isPermanentlyDenied) {
+            openAppSettings();
+            return;
+          } else if (!status.isGranted && !status.isLimited) {
+            return;
+          }
+        } else {
+          final storage = await Permission.storage.request();
+          final photos = await Permission.photos.request();
+          if (storage.isPermanentlyDenied || photos.isPermanentlyDenied) {
+            openAppSettings();
+            return;
+          } else if (!storage.isGranted && !photos.isGranted) {
+            return;
+          }
+        }
+      }
+
+      final XFile? image = await _picker.pickImage(
+        source: source,
+        imageQuality: 80,
+      );
+      if (image != null) {
+        upiQrLocalPath.value = image.path;
+        // Clear any prior "QR required" error as soon as the user picks one.
+        upiQrError.value = null;
+      }
+    } catch (_) {
+      AppSnackBar.error(AppStrings.errFailedPickImage);
+    }
+  }
+
+  Future<void> savePaymentSettings(String upiIdInput) async {
+    final trimmed = upiIdInput.trim();
+    // UPI ID is OPTIONAL now — only QR code is mandatory. The backend
+    // requires a QR image either uploaded fresh in this submission OR
+    // previously persisted on the profile (in which case we keep it).
+    upiIdError.value = null;
+    final hasFreshQr = (upiQrLocalPath.value ?? '').isNotEmpty;
+    final hasSavedQr = (upiQrCodeUrl.value ?? '').isNotEmpty;
+    upiQrError.value = (hasFreshQr || hasSavedQr)
+        ? null
+        : 'Please upload a UPI QR code image';
+    if (upiQrError.value != null) {
+      AppSnackBar.error(upiQrError.value!);
+      return;
+    }
+
+    try {
+      isSavingPayment.value = true;
+      final result = await _instituteRepository.updatePaymentSettings(
+        upiId: trimmed,
+        qrImagePath: upiQrLocalPath.value,
+      );
+      // Cache new values + sync them onto the profile object so the
+      // profile view's Obx-wrapped card reflects them without a reload.
+      upiId.value = result.upiId;
+      upiQrCodeUrl.value = result.upiQrCodeUrl;
+      upiQrLocalPath.value = null;
+      final p = profile.value;
+      if (p != null) {
+        profile.value = p.copyWithPayment(
+          upiId: result.upiId,
+          upiQrCodeUrl: result.upiQrCodeUrl,
+        );
+      }
+      AppSnackBar.success(AppStrings.paymentSettingsSaved);
+      Get.back();
+    } catch (e) {
+      AppSnackBar.error(e.toString().replaceAll('Exception: ', ''));
+    } finally {
+      isSavingPayment.value = false;
     }
   }
 
@@ -150,15 +277,22 @@ class InstituteProfileController extends GetxController {
                 ),
               ),
               title: Text(
-                'Camera',
-                style: AppTextStyles.manrope(
+                AppStrings.labelCamera,
+                style: AppTextStyles.outfit(
                   fontSize: 16,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
                 ),
               ),
               onTap: () async {
                 Get.back();
+                final status = await Permission.camera.request();
+                if (status.isPermanentlyDenied) {
+                  openAppSettings();
+                  return;
+                } else if (!status.isGranted) {
+                  return;
+                }
                 final XFile? image = await _picker.pickImage(
                   source: ImageSource.camera,
                 );
@@ -181,15 +315,34 @@ class InstituteProfileController extends GetxController {
                 ),
               ),
               title: Text(
-                'Gallery',
-                style: AppTextStyles.manrope(
+                AppStrings.labelGallery,
+                style: AppTextStyles.outfit(
                   fontSize: 16,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
                 ),
               ),
               onTap: () async {
                 Get.back();
+                if (Platform.isIOS) {
+                  final status = await Permission.photos.request();
+                  if (status.isPermanentlyDenied) {
+                    openAppSettings();
+                    return;
+                  } else if (!status.isGranted && !status.isLimited) {
+                    return;
+                  }
+                } else {
+                  final storage = await Permission.storage.request();
+                  final photos = await Permission.photos.request();
+                  if (storage.isPermanentlyDenied ||
+                      photos.isPermanentlyDenied) {
+                    openAppSettings();
+                    return;
+                  } else if (!storage.isGranted && !photos.isGranted) {
+                    return;
+                  }
+                }
                 final XFile? image = await _picker.pickImage(
                   source: ImageSource.gallery,
                 );
@@ -231,6 +384,12 @@ class InstituteProfileController extends GetxController {
     phoneError.value = phoneErr;
     if (phoneErr != null) return;
 
+    final pincodeText = pincodeController.text.trim();
+    if (pincodeText.isNotEmpty && pincodeText.length != 6) {
+      pincodeError.value = 'Pincode must be 6 digits';
+      return;
+    }
+
     try {
       isLoading.value = true;
       final updateData = {
@@ -252,18 +411,11 @@ class InstituteProfileController extends GetxController {
       await fetchProfile();
 
       Get.back();
-      Get.snackbar(
-        'Profile Updated',
-        'Institute details have been successfully saved.',
-        backgroundColor: AppColors.darkGreen,
-        colorText: AppColors.white,
-        snackPosition: SnackPosition.BOTTOM,
-        margin: const EdgeInsets.all(16),
-      );
+      AppSnackBar.success(AppStrings.profileUpdated);
     } catch (e) {
       if (e is ValidationException) {
         _handleValidationErrors(e.errors);
-        AppSnackBar.error('Please correct the highlighted errors');
+        AppSnackBar.error(AppStrings.validationErrorsBelow);
       } else {
         AppSnackBar.error('Failed to update profile: $e');
       }
@@ -286,6 +438,18 @@ class InstituteProfileController extends GetxController {
     if (errors.containsKey('phone')) {
       phoneError.value = (errors['phone'] as List).first.toString();
     }
+    if (errors.containsKey('address')) {
+      addressError.value = (errors['address'] as List).first.toString();
+    }
+    if (errors.containsKey('city')) {
+      cityError.value = (errors['city'] as List).first.toString();
+    }
+    if (errors.containsKey('state')) {
+      stateError.value = (errors['state'] as List).first.toString();
+    }
+    if (errors.containsKey('country')) {
+      countryError.value = (errors['country'] as List).first.toString();
+    }
     if (errors.containsKey('pincode')) {
       pincodeError.value = (errors['pincode'] as List).first.toString();
     }
@@ -296,6 +460,10 @@ class InstituteProfileController extends GetxController {
     ownerNameError.value = null;
     emailError.value = null;
     phoneError.value = null;
+    addressError.value = null;
+    cityError.value = null;
+    stateError.value = null;
+    countryError.value = null;
     pincodeError.value = null;
   }
 
@@ -305,9 +473,30 @@ class InstituteProfileController extends GetxController {
   }
 
   void logout() async {
+    try {
+      await Get.find<AuthRepository>().logout('INSTITUTE');
+    } catch (_) {}
     final authService = Get.find<AuthService>();
     await authService.clearSession();
-    Get.offAllNamed(AppRoutes.login, arguments: 'INSTITUTE');
+    Get.offAllNamed(AppRoutes.roleSelection);
+  }
+
+  Future<void> deleteAccount() async {
+    CommonLoading.show();
+    try {
+      await _instituteRepository.deleteAccount();
+      final authService = Get.find<AuthService>();
+      await authService.clearSession();
+      CommonLoading.dismiss();
+      Get.offAllNamed(AppRoutes.roleSelection);
+      AppSnackBar.success(AppStrings.accountDeletedSuccessfully);
+    } catch (e) {
+      CommonLoading.dismiss();
+      AppSnackBar.error(
+        e.toString().replaceAll('Exception: ', ''),
+        title: AppStrings.accountDeletionFailed,
+      );
+    }
   }
 
   @override

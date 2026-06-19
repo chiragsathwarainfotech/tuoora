@@ -22,16 +22,21 @@ class InstituteBottomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: AppSpacing.all24,
-      child: ElevatedButton(
+    // SafeArea so the button never sits under the system navigation bar on
+    // devices that show one. Top inset is disabled because this button is
+    // always rendered at the bottom of a Scaffold body / bottomNavigationBar.
+    return SafeArea(
+      top: false,
+      child: Container(
+        padding: AppSpacing.all16,
+        child: ElevatedButton(
         onPressed: isLoading ? null : onTap,
         style: ElevatedButton.styleFrom(
           backgroundColor: backgroundColor ?? AppColors.primaryBrand,
           disabledBackgroundColor:
               backgroundColor?.withValues(alpha: 0.6) ??
               AppColors.primaryBrand.withValues(alpha: 0.6),
-          minimumSize: const Size(double.infinity, 56),
+          minimumSize: const Size(double.infinity, 48),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
@@ -55,14 +60,15 @@ class InstituteBottomButton extends StatelessWidget {
                   ],
                   Text(
                     label,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 18,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.white,
                     ),
                   ),
                 ],
               ),
+        ),
       ),
     );
   }

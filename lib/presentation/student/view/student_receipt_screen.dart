@@ -6,6 +6,7 @@ import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/presentation/student/controllers/fees_controller.dart';
 import 'package:tuoora/presentation/student/models/fee_model.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
@@ -30,15 +31,11 @@ class StudentReceiptScreen extends GetView<FeesController> {
               child: Obx(() {
                 if (controller.isReceiptLoading.value &&
                     controller.currentReceipt.value == null) {
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.studentBrand,
-                    ),
-                  );
+                  return const CommonLoading(color: AppColors.primaryBrand);
                 }
                 final receipt = controller.currentReceipt.value;
                 if (receipt == null) {
-                  return const Center(child: Text('No receipt selected'));
+                  return const Center(child: Text(AppStrings.noReceiptSelected));
                 }
                 return _Body(
                   receipt: receipt,
@@ -70,13 +67,8 @@ class _Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(
-        AppSpacing.s16,
-        AppSpacing.s4,
-        AppSpacing.s16,
-        AppSpacing.s24,
-      ),
+    return Padding(
+      padding: AppSpacing.cardPadding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -86,9 +78,9 @@ class _Body extends StatelessWidget {
           const SizedBox(height: AppSpacing.s16),
           Center(
             child: Text(
-              'This is a system generated receipt and doesn\'t require a signature.',
-              style: AppTextStyles.lexend(
-                fontSize: 11,
+              AppStrings.thisIsASystemGeneratedReceipt,
+              style: AppTextStyles.outfit(
+                fontSize: 12,
                 color: AppColors.textTertiary,
               ),
               textAlign: TextAlign.center,
@@ -115,7 +107,7 @@ class _ReceiptCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.s16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
@@ -125,16 +117,16 @@ class _ReceiptCard extends StatelessWidget {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.s16),
+        padding: AppSpacing.cardPadding,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               monthHeader,
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 10,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 color: AppColors.textTertiary,
                 letterSpacing: 1.2,
               ),
@@ -146,7 +138,7 @@ class _ReceiptCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     '₹${receipt.amount}',
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 26,
                       fontWeight: FontWeight.w800,
                       color: AppColors.textPrimary,
@@ -175,8 +167,8 @@ class _ReceiptCard extends StatelessWidget {
               label: AppStrings.studentReceiptInvoiceNo,
               value: receipt.receiptNumber,
             ),
-            _DetailRow(label: 'Payment method', value: receipt.paymentMethod),
-            _DetailRow(label: 'Date', value: receipt.date, isLast: true),
+            _DetailRow(label: AppStrings.paymentMethod, value: receipt.paymentMethod),
+            _DetailRow(label: AppStrings.labelDate, value: receipt.date, isLast: true),
           ],
         ),
       ),
@@ -208,7 +200,7 @@ class _DetailRow extends StatelessWidget {
               Expanded(
                 child: Text(
                   label,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                     color: AppColors.textTertiary,
@@ -220,7 +212,7 @@ class _DetailRow extends StatelessWidget {
                 child: Text(
                   value,
                   textAlign: TextAlign.right,
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 12,
                     color: AppColors.textPrimary,
                     fontWeight: FontWeight.w600,
@@ -275,23 +267,22 @@ class _StatusPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = isPaid ? AppColors.studentPresentBg : AppColors.studentBrandSoft;
-    final fg = isPaid ? AppColors.studentPresentText : AppColors.orangeTag;
+    final bg = isPaid ? AppColors.successGreen : AppColors.bohoRed;
     final label = isPaid
-        ? AppStrings.studentFeesPillPaid
-        : AppStrings.studentFeesPillPending;
+        ? AppStrings.instStatusPaid
+        : AppStrings.studentAssignmentsTabPending;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
         color: bg,
-        borderRadius: BorderRadius.circular(99),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       ),
       child: Text(
         label,
-        style: AppTextStyles.manrope(
+        style: AppTextStyles.outfit(
           fontSize: 11,
-          fontWeight: FontWeight.w800,
-          color: fg,
+          fontWeight: FontWeight.w600,
+          color: AppColors.white,
         ),
       ),
     );
@@ -312,7 +303,7 @@ class _ActionRow extends StatelessWidget {
           child: _ActionButton(
             label: isDownloading
                 ? AppStrings.studentAttachmentDownloadStarted
-                : AppStrings.studentReceiptDownload,
+                : AppStrings.studentAttachmentDownload,
             icon: Icons.download_rounded,
             isPrimary: false,
             isLoading: isDownloading,
@@ -351,21 +342,21 @@ class _ActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = isPrimary ? AppColors.attachmentShareButton : AppColors.white;
+    final bg = isPrimary ? AppColors.textPrimary : AppColors.white;
     final fg = isPrimary ? AppColors.white : AppColors.textPrimary;
     final border = Border.all(
-      color: isPrimary ? AppColors.attachmentShareButton : AppColors.borderGrey,
+      color: isPrimary ? AppColors.textPrimary : AppColors.borderGrey,
     );
     return Material(
       color: bg,
-      borderRadius: BorderRadius.circular(AppSpacing.s12),
+      borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(AppSpacing.s12),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         child: Ink(
           decoration: BoxDecoration(
             color: bg,
-            borderRadius: BorderRadius.circular(AppSpacing.s12),
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
             border: border,
           ),
           padding: const EdgeInsets.symmetric(
@@ -389,9 +380,9 @@ class _ActionButton extends StatelessWidget {
               AppSpacing.h8,
               Text(
                 label,
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 13,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: fg,
                 ),
               ),

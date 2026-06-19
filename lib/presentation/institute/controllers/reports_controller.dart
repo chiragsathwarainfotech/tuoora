@@ -1,11 +1,11 @@
-import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/widgets/app_snack_bar.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/presentation/institute/controllers/batch_controller.dart';
 import 'package:tuoora/presentation/institute/controllers/institute_controller.dart';
 import 'package:tuoora/presentation/institute/models/batch_performance_model.dart';
 import 'package:tuoora/presentation/institute/models/report_models.dart';
 import 'package:tuoora/core/services/download_service.dart';
 import 'package:tuoora/presentation/institute/models/student_performance_model.dart';
-import 'package:flutter/material.dart';
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
 import 'package:get/get.dart';
 
@@ -58,12 +58,7 @@ class ReportsController extends GetxController {
       isFeeLoading.value = true;
       feeReport.value = await _repository.getFeeReport();
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Failed to load fee report: $e',
-        backgroundColor: Colors.redAccent,
-        colorText: AppColors.white,
-      );
+      AppSnackBar.error(AppStrings.failedToLoadFeeReport);
     } finally {
       isFeeLoading.value = false;
     }
@@ -74,12 +69,7 @@ class ReportsController extends GetxController {
       isAttendanceLoading.value = true;
       attendanceReport.value = await _repository.getAttendanceReport();
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Failed to load attendance report: $e',
-        backgroundColor: Colors.redAccent,
-        colorText: AppColors.white,
-      );
+      AppSnackBar.error(AppStrings.failedToLoadAttendanceReport);
     } finally {
       isAttendanceLoading.value = false;
     }
@@ -90,12 +80,7 @@ class ReportsController extends GetxController {
       isPerformanceLoading.value = true;
       performanceReport.value = await _repository.getPerformanceReport();
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Failed to load performance report: $e',
-        backgroundColor: Colors.redAccent,
-        colorText: AppColors.white,
-      );
+      AppSnackBar.error(AppStrings.failedToLoadPerformanceReport);
     } finally {
       isPerformanceLoading.value = false;
     }
@@ -117,52 +102,25 @@ class ReportsController extends GetxController {
             .getBatchPerformanceReport(batchId);
       }
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Failed to load batch $type details: $e',
-        backgroundColor: Colors.redAccent,
-        colorText: AppColors.white,
-      );
+      AppSnackBar.error(AppStrings.failedToLoadBatchDetails);
     } finally {
       isBatchDetailLoading.value = false;
     }
   }
 
   Future<void> exportReport(String type) async {
-    try {
-      Get.snackbar(
-        'Downloading',
-        'Preparing $type report...',
-        backgroundColor: AppColors.primaryBrand,
-        colorText: AppColors.white,
-        showProgressIndicator: true,
-      );
-
-      List<int> bytes;
-      if (type == 'Fee') {
-        bytes = await _repository.exportFeeReport();
-      } else if (type == 'Attendance') {
-        bytes = await _repository.exportAttendanceReport();
-      } else {
-        bytes = await _repository.exportPerformanceReport();
-      }
-
-      final fileName =
-          '${type}_Report_${DateTime.now().millisecondsSinceEpoch}.pdf';
-
-      await _downloadService.saveFile(
-        bytes: bytes,
-        fileName: fileName,
-        successMessage: '$type report downloaded successfully',
-      );
-    } catch (e) {
-      Get.snackbar(
-        'Download Error',
-        e.toString().replaceAll('Exception: ', ''),
-        backgroundColor: Colors.redAccent,
-        colorText: AppColors.white,
-      );
-    }
+    final fileName =
+        '${type}_Report_${DateTime.now().millisecondsSinceEpoch}.pdf';
+    await _downloadService.download(
+      label: 'Preparing $type report…',
+      fileName: fileName,
+      successMessage: AppStrings.reportDownloadedSuccess,
+      fetch: () {
+        if (type == 'Fee') return _repository.exportFeeReport();
+        if (type == 'Attendance') return _repository.exportAttendanceReport();
+        return _repository.exportPerformanceReport();
+      },
+    );
   }
 
   void loadPerformanceData() {

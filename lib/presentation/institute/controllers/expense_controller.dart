@@ -1,11 +1,12 @@
 import 'package:tuoora/core/utils/validation_utils.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
+import 'package:tuoora/core/widgets/app_pickers.dart';
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
 import 'package:tuoora/presentation/institute/models/expense_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/core/api/api_exception.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 
 class ExpenseController extends GetxController {
@@ -34,7 +35,6 @@ class ExpenseController extends GetxController {
   final selectedCategory = Rxn<ExpenseCategory>();
   final selectedDate = DateTime.now().obs;
   final isOnlinePayment = false.obs;
-  final selectedReceiptPath = RxnString();
   final formKey = GlobalKey<FormState>();
 
   // Validation States (Pattern consistent with Add Student)
@@ -135,6 +135,18 @@ class ExpenseController extends GetxController {
     }
   }
 
+  Future<void> createNewCategory(String name) async {
+    try {
+      final newCategory = await _repository.createExpenseCategory({'name': name});
+      categories.add(newCategory);
+      selectedCategory.value = newCategory;
+      AppSnackBar.success('Category "$name" created successfully.');
+    } catch (e) {
+      debugPrint('Error creating category: $e');
+      AppSnackBar.error('Failed to create category.');
+    }
+  }
+
   Future<void> loadExpenseAnalysis() async {
     try {
       isAnalysisLoading.value = true;
@@ -192,7 +204,6 @@ class ExpenseController extends GetxController {
     selectedCategory.value = null;
     selectedDate.value = DateTime.now();
     isOnlinePayment.value = false;
-    selectedReceiptPath.value = null;
     triedToSave.value = false;
     amountError.value = null;
     descriptionError.value = null;
@@ -203,21 +214,9 @@ class ExpenseController extends GetxController {
     isOnlinePayment.value = isOnline;
   }
 
-  Future<void> pickReceipt() async {
-    try {
-      FilePickerResult? result = await FilePicker.pickFiles(type: FileType.any);
-
-      if (result != null && result.files.single.path != null) {
-        selectedReceiptPath.value = result.files.single.path!;
-      }
-    } catch (e) {
-      AppSnackBar.error('Failed to pick receipt: $e');
-    }
-  }
-
   Future<void> selectDate(BuildContext context) async {
-    final picked = await showDatePicker(
-      context: context,
+    final picked = await AppPickers.date(
+      context,
       initialDate: selectedDate.value,
       firstDate: DateTime(2020),
       lastDate: DateTime.now(),
@@ -242,21 +241,17 @@ class ExpenseController extends GetxController {
         'payment_method': isOnlinePayment.value ? 'Online' : 'Cash',
       };
 
-      if (selectedReceiptPath.value != null) {
-        data['receipt_image'] = selectedReceiptPath.value;
-      }
-
       await _repository.createExpense(data);
 
       Get.back();
-      Get.snackbar('Success', 'Expense added successfully');
+      AppSnackBar.success(AppStrings.expenseAdded);
       resetForm();
-      loadExpenses(page: 1); // Refresh list
-      loadExpenseAnalysis(); // Refresh analysis
+      loadExpenses(page: 1);
+      loadExpenseAnalysis();
     } catch (e) {
       if (e is ValidationException) {
         _handleValidationErrors(e.errors);
-        AppSnackBar.error('Please correct the highlighted errors');
+        AppSnackBar.error(AppStrings.validationErrorsBelow);
       } else {
         AppSnackBar.error(e.toString());
       }

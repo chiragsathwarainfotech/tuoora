@@ -2,25 +2,31 @@ class AppImages {
   // Base paths
   static const String _iconsPath = 'assets/icons';
 
-  // --- Header & Navigation Icons ---
-  static const String icBank = '$_iconsPath/ic_bank.svg';
-  static const String icBell = '$_iconsPath/ic_bell.svg';
-  
-  // --- Fee Breakdown & Academic Icons ---
-  static const String icTuition = '$_iconsPath/ic_tuition.svg';
-  static const String icTransport = '$_iconsPath/ic_transport.svg';
-  static const String icLab = '$_iconsPath/ic_lab.svg';
-  static const String icCertificate = '$_iconsPath/ic_certificate.svg';
+  // --- Brand ---
+  /// Full Tuoora logo with wordmark, used in auth headers + splash.
+  static const String logoWithName = '$_iconsPath/logo_w_name.png';
 
-  // --- Payment History Icons ---
-  static const String icVisa = '$_iconsPath/ic_visa.svg';
-  static const String icApplePay = '$_iconsPath/ic_apple_pay.svg';
+  // --- Action Icons (edit / delete / download) ---
+  /// Render via [AppActionIcon] to get the standard primary-brand tint.
+  static const String icEdit = '$_iconsPath/ic_edit.svg';
+  static const String icDelete = '$_iconsPath/ic_delete.svg';
   static const String icDownload = '$_iconsPath/ic_download.svg';
-  static const String icCalendar = '$_iconsPath/ic_calendar.svg';
-  static const String icFilter = '$_iconsPath/ic_filter.svg';
 
-  // --- Status & Tracking Icons ---
-  static const String icCheck = '$_iconsPath/ic_check.svg';
-  static const String icClose = '$_iconsPath/ic_close.svg';
+  // --- Institute Dashboard Module Icons ---
+  static const String icModuleReports = '$_iconsPath/reports.svg';
+  static const String icModuleBatch = '$_iconsPath/batch.svg';
+  static const String icModuleStaff = '$_iconsPath/staff.svg';
+  static const String icModuleChat = '$_iconsPath/chat.svg';
+  static const String icModuleLead = '$_iconsPath/lead.svg';
+  static const String icModuleNotes = '$_iconsPath/notes.svg';
+  static const String icModuleExpense = '$_iconsPath/expense.svg';
+  static const String icModuleUpdates = '$_iconsPath/updates.svg';
+  static const String icModuleFees = '$_iconsPath/fees.svg';
+  static const String icWhatsapp = '$_iconsPath/whatsapp.svg';
+
+  // --- Batch Details — Course Management Tab Icons ---
+  static const String icBatchStudents = '$_iconsPath/batch-students.svg';
+  static const String icBatchHomework = '$_iconsPath/batch-homework.svg';
+  static const String icBatchAttendance = '$_iconsPath/batch-attendance.svg';
+  static const String icBatchResource = '$_iconsPath/batch-resource.svg';
 }
-

@@ -1,4 +1,5 @@
 import 'package:tuoora/config/app_routes.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/utils/validation_utils.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/data/models/staff_model.dart';
@@ -25,7 +26,6 @@ class StaffController extends GetxController {
   final selectedImagePath = Rxn<String>();
 
   // Metadata
-  final roles = <StaffRole>[].obs;
   final departments = <StaffDepartment>[].obs;
   final isLoadingMetadata = false.obs;
 
@@ -88,8 +88,34 @@ class StaffController extends GetxController {
     return false;
   }
 
+  bool get canGoToNextStaffAttendanceMonth {
+    final now = DateTime.now();
+    if (selectedAttendanceMonth.value.year < now.year) return true;
+    if (selectedAttendanceMonth.value.year == now.year &&
+        selectedAttendanceMonth.value.month < now.month) {
+      return true;
+    }
+    return false;
+  }
+
+  bool get canGoToPrevStaffAttendanceMonth {
+    final staff = selectedStaff.value;
+    if (staff == null) return true;
+    final createdAt = staff.createdAt;
+    if (createdAt == null) return true;
+
+    final prevMonthDate = DateTime(
+      selectedAttendanceMonth.value.year,
+      selectedAttendanceMonth.value.month - 1,
+    );
+    final createdMonthStart = DateTime(createdAt.year, createdAt.month, 1);
+    if (prevMonthDate.isBefore(createdMonthStart)) {
+      return false;
+    }
+    return true;
+  }
+
   // Add/Edit Staff Reactive State
-  final selectedRoleId = Rxn<int>();
   final selectedDepartmentId = Rxn<int>();
   final employmentType = 'Salary'.obs;
 
@@ -104,7 +130,6 @@ class StaffController extends GetxController {
   final staffEmailError = RxnString();
   final staffPhoneError = RxnString();
   final staffSalaryError = RxnString();
-  final roleError = RxnString();
   final deptError = RxnString();
   final triedToSave = false.obs;
 
@@ -124,7 +149,15 @@ class StaffController extends GetxController {
   final salaryAmountController = TextEditingController();
   final salaryNotesController = TextEditingController();
   final salaryDateController = TextEditingController();
+  final salaryDeductionController = TextEditingController();
+  // Read-only display of the leaves count returned by the salary preview
+  // endpoint. Kept as a TextEditingController so the leaves tile can reuse
+  // the same AppInputField widget as every other input, guaranteeing the
+  // row aligns horizontally with the deduction field next to it.
+  final salaryLeavesDisplayController = TextEditingController(text: '0');
   final filteredSalaryStaffs = <Staff>[].obs;
+  final salaryPreview = Rxn<SalaryPreview>();
+  final isLoadingSalaryPreview = false.obs;
 
   @override
   void onInit() {
@@ -142,7 +175,6 @@ class StaffController extends GetxController {
     staffEmailController.addListener(() => _clearError(staffEmailError));
     staffPhoneController.addListener(() => _clearError(staffPhoneError));
     staffSalaryController.addListener(() => _clearError(staffSalaryError));
-    selectedRoleId.listen((_) => _clearError(roleError));
     selectedDepartmentId.listen((_) => _clearError(deptError));
 
     // Initialize salary date controller
@@ -152,6 +184,30 @@ class StaffController extends GetxController {
     selectedSalaryDate.listen((date) {
       salaryDateController.text = DateFormat('MM/dd/yyyy').format(date);
     });
+
+    // Keep the Total Disbursement summary in sync — any edit to salary
+    // amount OR deduction recomputes the net via GetBuilder.update(). Wired
+    // here (not via onChanged in the view) so the behaviour can't be lost
+    // to an accidental edit in the screen widget.
+    salaryAmountController.addListener(update);
+    salaryDeductionController.addListener(update);
+  }
+
+  /// Wipes the Add Salary form so re-opening the screen starts clean —
+  /// otherwise the controller is alive for the whole session and previous
+  /// staff / amount / deduction values bleed into a fresh visit.
+  void initAddSalaryMode() {
+    selectedAddSalaryStaff.value = null;
+    salaryPreview.value = null;
+    isLoadingSalaryPreview.value = false;
+    salaryAmountController.clear();
+    salaryDeductionController.clear();
+    salaryNotesController.clear();
+    salaryLeavesDisplayController.text = '0';
+    selectedSalaryDate.value = DateTime.now();
+    isOnlinePayment.value = true;
+    salarySearchQuery.value = '';
+    filteredSalaryStaffs.clear();
   }
 
   void _clearError(RxnString error) {
@@ -172,14 +228,10 @@ class StaffController extends GetxController {
   Future<void> fetchMetadata() async {
     try {
       isLoadingMetadata.value = true;
-      final results = await Future.wait([
-        _repository.getStaffRoles(),
-        _repository.getStaffDepartments(),
-      ]);
-      roles.assignAll(results[0] as List<StaffRole>);
-      departments.assignAll(results[1] as List<StaffDepartment>);
+      final depts = await _repository.getStaffDepartments();
+      departments.assignAll(depts);
     } catch (e) {
-      AppSnackBar.error('Failed to load roles and departments: $e');
+      AppSnackBar.error('Failed to load departments: $e');
     } finally {
       isLoadingMetadata.value = false;
     }
@@ -309,25 +361,25 @@ class StaffController extends GetxController {
 
     try {
       isSaving.value = true;
+      final deductionRaw = salaryDeductionController.text.trim();
       final data = {
-        'staff_id': selectedAddSalaryStaff.value!.id,
+        'staff_id': selectedAddSalaryStaff.value?.id,
         'base_salary': salaryAmountController.text.trim(),
         'payment_date': DateFormat(
           'yyyy-MM-dd',
         ).format(selectedSalaryDate.value),
         'status': 'Paid',
         'payment_method': isOnlinePayment.value ? 'Online' : 'Cash',
+        if (deductionRaw.isNotEmpty) 'deductions': deductionRaw,
         if (salaryNotesController.text.isNotEmpty)
           'notes': salaryNotesController.text.trim(),
       };
 
       await _repository.logSalary(data);
-      AppSnackBar.success('Salary record saved successfully');
+      AppSnackBar.success(AppStrings.salaryRecordSavedSuccessfully);
 
-      // Refresh global list
       fetchGlobalSalaries(page: 1);
 
-      // If we are on a staff profile, refresh their history too
       if (selectedStaff.value != null &&
           selectedStaff.value!.id == selectedAddSalaryStaff.value!.id) {
         fetchSalaryHistory(page: 1);
@@ -388,7 +440,7 @@ class StaffController extends GetxController {
       };
 
       await _repository.logStaffAttendance(data);
-      AppSnackBar.success('Attendance logged successfully');
+      AppSnackBar.success(AppStrings.attendanceLoggedSuccessfully);
 
       // Refresh logs
       fetchGlobalAttendance(page: 1);
@@ -468,6 +520,15 @@ class StaffController extends GetxController {
     filteredLogStaffs.clear();
   }
 
+  void selectLogStaffById(int? id) {
+    if (id == null) {
+      removeLogStaff();
+      return;
+    }
+    final staff = staffList.firstWhereOrNull((s) => s.id == id);
+    if (staff != null) setLogStaff(staff);
+  }
+
   void removeLogStaff() => selectedLogStaff.value = null;
 
   void selectSalaryMonth(DateTime date) => selectedSalaryMonth.value = date;
@@ -476,9 +537,42 @@ class StaffController extends GetxController {
     salarySearchQuery.value = '';
     filteredSalaryStaffs.clear();
     salaryAmountController.text = staff.baseSalary;
+    salaryDeductionController.clear();
+    fetchSalaryPreview(staff.id);
   }
 
-  void removeSalaryStaff() => selectedAddSalaryStaff.value = null;
+  /// Dropdown helper — looks up the [Staff] in [staffList] by id and
+  /// delegates to [setSalaryStaff] so the same selection side-effects
+  /// (preview fetch, amount prefill) fire regardless of entry path.
+  void selectSalaryStaffById(int? id) {
+    if (id == null) {
+      removeSalaryStaff();
+      return;
+    }
+    final staff = staffList.firstWhereOrNull((s) => s.id == id);
+    if (staff != null) setSalaryStaff(staff);
+  }
+
+  void removeSalaryStaff() {
+    selectedAddSalaryStaff.value = null;
+    salaryPreview.value = null;
+    salaryDeductionController.clear();
+  }
+
+  Future<void> fetchSalaryPreview(int staffId) async {
+    try {
+      isLoadingSalaryPreview.value = true;
+      salaryPreview.value = null;
+      salaryLeavesDisplayController.text = '0';
+      final preview = await _repository.getSalaryPreview(staffId);
+      salaryPreview.value = preview;
+      salaryLeavesDisplayController.text = preview.leaves.toString();
+    } catch (e) {
+      AppSnackBar.error(AppStrings.failedToLoadSalaryPreview);
+    } finally {
+      isLoadingSalaryPreview.value = false;
+    }
+  }
   void selectSalaryDate(DateTime date) => selectedSalaryDate.value = date;
   void togglePaymentMethod(bool isOnline) => isOnlinePayment.value = isOnline;
 
@@ -507,9 +601,6 @@ class StaffController extends GetxController {
       staffSalaryController.text,
       employmentType.value == 'Salary' ? 'Base Salary' : 'Hourly Rate',
     );
-    roleError.value = ValidationUtils.validateRoleSelection(
-      selectedRoleId.value,
-    );
     deptError.value = ValidationUtils.validateDepartmentSelection(
       selectedDepartmentId.value,
     );
@@ -519,7 +610,6 @@ class StaffController extends GetxController {
         staffEmailError.value != null ||
         staffPhoneError.value != null ||
         staffSalaryError.value != null ||
-        roleError.value != null ||
         deptError.value != null) {
       return;
     }
@@ -530,7 +620,6 @@ class StaffController extends GetxController {
         'full_name': staffNameController.text.trim(),
         'email': staffEmailController.text.trim(),
         'phone': staffPhoneController.text.trim(),
-        'staff_role_id': selectedRoleId.value.toString(),
         'staff_department_id': selectedDepartmentId.value.toString(),
         'employment_type': employmentType.value,
         'base_salary': staffSalaryController.text.trim(),
@@ -545,14 +634,14 @@ class StaffController extends GetxController {
         int index = staffList.indexWhere((s) => s.id == updated.id);
         if (index != -1) staffList[index] = updated;
         selectedStaff.value = updated;
-        AppSnackBar.success('Staff updated successfully');
+        AppSnackBar.success(AppStrings.staffUpdatedSuccessfully);
       } else {
         final created = await _repository.createStaff(
           data,
           selectedImagePath.value,
         );
         staffList.insert(0, created);
-        AppSnackBar.success('Staff created successfully');
+        AppSnackBar.success(AppStrings.staffCreatedSuccessfully);
       }
 
       // Robust navigation: go back to StaffMainScreen and set tab to Staff
@@ -561,7 +650,7 @@ class StaffController extends GetxController {
     } catch (e) {
       if (e is ValidationException) {
         _handleValidationErrors(e.errors);
-        AppSnackBar.error('Please correct the highlighted errors');
+        AppSnackBar.error(AppStrings.validationErrorsBelow);
       } else {
         AppSnackBar.error('Failed to save staff: $e');
       }
@@ -583,9 +672,6 @@ class StaffController extends GetxController {
     if (errors.containsKey('base_salary')) {
       staffSalaryError.value = (errors['base_salary'] as List).first.toString();
     }
-    if (errors.containsKey('staff_role_id')) {
-      roleError.value = (errors['staff_role_id'] as List).first.toString();
-    }
     if (errors.containsKey('staff_department_id')) {
       deptError.value = (errors['staff_department_id'] as List).first
           .toString();
@@ -597,7 +683,6 @@ class StaffController extends GetxController {
     staffEmailError.value = null;
     staffPhoneError.value = null;
     staffSalaryError.value = null;
-    roleError.value = null;
     deptError.value = null;
   }
 
@@ -606,7 +691,7 @@ class StaffController extends GetxController {
       isLoading.value = true;
       await _repository.deleteStaff(id);
       staffList.removeWhere((s) => s.id == id);
-      AppSnackBar.success('Staff deleted successfully');
+      AppSnackBar.success(AppStrings.staffDeletedSuccessfully);
 
       if (Get.currentRoute == AppRoutes.instituteStaffDetails) {
         Get.back();
@@ -623,7 +708,6 @@ class StaffController extends GetxController {
     staffEmailController.clear();
     staffPhoneController.clear();
     staffSalaryController.clear();
-    selectedRoleId.value = null;
     selectedDepartmentId.value = null;
     employmentType.value = 'Salary';
     selectedImagePath.value = null;
@@ -638,7 +722,6 @@ class StaffController extends GetxController {
     staffEmailController.text = staff.email;
     staffPhoneController.text = staff.phone;
     staffSalaryController.text = staff.baseSalary;
-    selectedRoleId.value = staff.staffRoleId;
     selectedDepartmentId.value = staff.staffDepartmentId;
     employmentType.value = staff.employmentType;
     selectedImagePath.value = null;
@@ -685,10 +768,10 @@ class StaffController extends GetxController {
                 color: AppColors.primaryBrand,
               ),
               title: Text(
-                'Camera',
-                style: AppTextStyles.manrope(
+                AppStrings.labelCamera,
+                style: AppTextStyles.outfit(
                   fontSize: 16,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               onTap: () {
@@ -703,10 +786,10 @@ class StaffController extends GetxController {
                 color: AppColors.primaryBrand,
               ),
               title: Text(
-                'Gallery',
-                style: AppTextStyles.manrope(
+                AppStrings.labelGallery,
+                style: AppTextStyles.outfit(
                   fontSize: 16,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               onTap: () {
@@ -729,6 +812,9 @@ class StaffController extends GetxController {
     staffSalaryController.dispose();
     salaryAmountController.dispose();
     salaryNotesController.dispose();
+    salaryDateController.dispose();
+    salaryDeductionController.dispose();
+    salaryLeavesDisplayController.dispose();
     logNotesController.dispose();
     super.onClose();
   }

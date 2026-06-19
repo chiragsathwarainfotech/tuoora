@@ -36,6 +36,7 @@ class PushNotificationService extends GetxService {
 
   static const String _tokenStorageKey = 'fcm_token';
   static const String _syncedTokenStorageKey = 'fcm_token_synced';
+
   /// Fingerprint (data-payload + title + body) of the most recent
   /// `getInitialMessage()` we've already routed. Persisted across kills.
   ///
@@ -111,19 +112,26 @@ class PushNotificationService extends GetxService {
       );
       await _local
           .resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin>()
+            AndroidFlutterLocalNotificationsPlugin
+          >()
           ?.createNotificationChannel(channel);
     }
   }
 
   Future<void> _requestPermissions() async {
-    final settings = await _fcm.requestPermission(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
-    if (kDebugMode) {
-      print('[FCM] permission status: ${settings.authorizationStatus}');
+    try {
+      final settings = await _fcm.requestPermission(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+      if (kDebugMode) {
+        print('[FCM] permission status: ${settings.authorizationStatus}');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('[FCM] requestPermission skipped: $e');
+      }
     }
   }
 
@@ -181,7 +189,9 @@ class PushNotificationService extends GetxService {
   Future<void> _sendTokenToServer(String token) async {
     if (token.isEmpty) return;
 
-    final auth = Get.isRegistered<AuthService>() ? Get.find<AuthService>() : null;
+    final auth = Get.isRegistered<AuthService>()
+        ? Get.find<AuthService>()
+        : null;
     if (auth == null || !auth.isAuthenticated) {
       if (kDebugMode) print('[FCM] skip sync — not authenticated');
       return;
@@ -195,10 +205,9 @@ class PushNotificationService extends GetxService {
 
     try {
       final api = Get.find<ApiClient>();
-      final response = await api.post(
-        ApiConstants.fcmToken,
-        {'fcm_token': token},
-      );
+      final response = await api.post(ApiConstants.fcmToken, {
+        'fcm_token': token,
+      });
       if (response.status.hasError) {
         if (kDebugMode) {
           print('[FCM] sync failed: ${response.statusCode} ${response.body}');
@@ -229,8 +238,7 @@ class PushNotificationService extends GetxService {
     // De-duplicate by payload fingerprint, not by messageId — see comment
     // on [_consumedInitialFingerprintKey] for why.
     final fingerprint = _fingerprintOf(initial);
-    final lastConsumed =
-        _storage.read<String>(_consumedInitialFingerprintKey);
+    final lastConsumed = _storage.read<String>(_consumedInitialFingerprintKey);
     if (kDebugMode) {
       print(
         '[FCM] initial message id=${initial.messageId} '

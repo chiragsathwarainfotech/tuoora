@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/app_empty_view.dart';
 import 'package:tuoora/presentation/student/controllers/student_study_material_controller.dart';
 import 'package:tuoora/presentation/student/widgets/student_app_bar.dart';
 import 'package:tuoora/data/models/student_resource_model.dart';
@@ -20,43 +23,51 @@ class StudentStudyMaterialScreen
         child: Column(
           children: [
             const StudentAppBar(
-              title: 'Study material',
+              title: AppStrings.labelStudyMaterial,
               showDefaultActions: false,
             ),
-            const SizedBox(height: 16),
             Expanded(
-              child: Obx(() {
-                if (controller.isLoading.value) {
+              child: RefreshIndicator(
+                color: AppColors.primaryBrand,
+                onRefresh: controller.fetchResources,
+                child: Obx(() {
+                  if (controller.isLoading.value) {
+                    return ListView.separated(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      padding: AppSpacing.x16,
+                      itemCount: 4,
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: 10),
+                      itemBuilder: (context, index) => _buildShimmerCard(),
+                    );
+                  }
+
+                  if (controller.resources.isEmpty) {
+                    return ListView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      children: const [
+                        SizedBox(height: 80),
+                        AppEmptyView(
+                          icon: Icons.menu_book_outlined,
+                          title: AppStrings.noStudyMaterialFound,
+                        ),
+                      ],
+                    );
+                  }
+
                   return ListView.separated(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    itemCount: 4,
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: AppSpacing.x16,
+                    itemCount: controller.resources.length,
                     separatorBuilder: (context, index) =>
-                        const SizedBox(height: 12),
-                    itemBuilder: (context, index) => _buildShimmerCard(),
+                        const SizedBox(height: 10),
+                    itemBuilder: (context, index) {
+                      final item = controller.resources[index];
+                      return _buildMaterialCard(item);
+                    },
                   );
-                }
-
-                if (controller.resources.isEmpty) {
-                  return const Center(child: Text('No study material found'));
-                }
-
-                return ListView.separated(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  itemCount: controller.resources.length,
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(height: 12),
-                  itemBuilder: (context, index) {
-                    final item = controller.resources[index];
-                    return _buildMaterialCard(item);
-                  },
-                );
-              }),
+                }),
+              ),
             ),
           ],
         ),
@@ -67,9 +78,7 @@ class StudentStudyMaterialScreen
   Widget _buildMaterialCard(StudentResourceModel item) {
     final hash = item.subject.hashCode;
     final isDark = hash % 2 == 0;
-    final bgColor = isDark
-        ? AppColors.studentBrandSoft
-        : AppColors.studentPresentBg;
+    final bgColor = isDark ? AppColors.primaryBrandLight : AppColors.successBg;
     final textColor = isDark ? AppColors.error : AppColors.errorRed;
 
     final isVideo = item.fileType.toLowerCase() == 'video';
@@ -78,10 +87,10 @@ class StudentStudyMaterialScreen
       onTap: () =>
           Get.toNamed(AppRoutes.studentStudyMaterialDetail, arguments: item),
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: AppSpacing.cardPadding,
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           border: Border.all(
             color: AppColors.borderGrey.withValues(alpha: 0.5),
           ),
@@ -99,20 +108,20 @@ class StudentStudyMaterialScreen
                   ),
                   decoration: BoxDecoration(
                     color: bgColor,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
                   ),
                   child: Text(
                     item.subject,
-                    style: AppTextStyles.manrope(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w800,
+                    style: AppTextStyles.outfit(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
                       color: textColor,
                     ),
                   ),
                 ),
                 Text(
                   item.date,
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 11,
                     color: AppColors.textTertiary,
                   ),
@@ -122,16 +131,16 @@ class StudentStudyMaterialScreen
             const SizedBox(height: 12),
             Text(
               item.title,
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 14,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 color: AppColors.textPrimary,
               ),
             ),
             const SizedBox(height: 8),
             Text(
               item.description,
-              style: AppTextStyles.lexend(
+              style: AppTextStyles.outfit(
                 fontSize: 12,
                 color: AppColors.textSecondary,
                 height: 1.4,
@@ -151,8 +160,8 @@ class StudentStudyMaterialScreen
                 ),
                 const SizedBox(width: 4),
                 Text(
-                  '1 file',
-                  style: AppTextStyles.lexend(
+                  AppStrings.k1File,
+                  style: AppTextStyles.outfit(
                     fontSize: 11,
                     color: AppColors.textSecondary,
                   ),
@@ -160,7 +169,7 @@ class StudentStudyMaterialScreen
                 const SizedBox(width: 8),
                 Text(
                   '•',
-                  style: AppTextStyles.lexend(
+                  style: AppTextStyles.outfit(
                     fontSize: 11,
                     color: AppColors.textTertiary,
                   ),
@@ -169,7 +178,7 @@ class StudentStudyMaterialScreen
                 Expanded(
                   child: Text(
                     item.batchName,
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 11,
                       color: AppColors.textSecondary,
                     ),
@@ -191,9 +200,10 @@ class StudentStudyMaterialScreen
       highlightColor: Colors.grey[100]!,
       child: Container(
         height: 140,
+        padding: AppSpacing.cardPadding,
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         ),
       ),
     );

@@ -12,6 +12,7 @@ class MonthSelectorWidget extends StatelessWidget {
   final String? helpText;
   final bool isNextEnabled;
   final bool isPrevEnabled;
+  final DateTime? minDate;
   final DateTime? maxDate;
 
   const MonthSelectorWidget({
@@ -21,6 +22,7 @@ class MonthSelectorWidget extends StatelessWidget {
     this.helpText,
     this.isNextEnabled = true,
     this.isPrevEnabled = true,
+    this.minDate,
     this.maxDate,
   });
 
@@ -29,13 +31,12 @@ class MonthSelectorWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        // Left: Month Picker with Dropdown Icon
         GestureDetector(
           onTap: () async {
             final picked = await Get.dialog<DateTime>(
               AppMonthPicker(
                 initialDate: selectedMonth,
-                firstDate: DateTime(2020),
+                firstDate: minDate ?? DateTime(2020),
                 lastDate: maxDate ?? DateTime.now(),
               ),
             );
@@ -44,10 +45,10 @@ class MonthSelectorWidget extends StatelessWidget {
             }
           },
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: AppSpacing.cardPadding,
             decoration: BoxDecoration(
               color: AppColors.white,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.03),
@@ -67,9 +68,9 @@ class MonthSelectorWidget extends StatelessWidget {
                 AppSpacing.h12,
                 Text(
                   DateFormat('MMMM yyyy').format(selectedMonth),
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 15,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                 ),
@@ -83,8 +84,6 @@ class MonthSelectorWidget extends StatelessWidget {
             ),
           ),
         ),
-
-        // Right: Navigation Arrows
         Row(
           children: [
             _buildArrowButton(
@@ -123,10 +122,10 @@ class MonthSelectorWidget extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         opacity: isEnabled ? 1.0 : 0.3,
         child: Container(
-          padding: const EdgeInsets.all(12),
+          padding: AppSpacing.cardPadding,
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
             boxShadow: isEnabled
                 ? [
                     BoxShadow(

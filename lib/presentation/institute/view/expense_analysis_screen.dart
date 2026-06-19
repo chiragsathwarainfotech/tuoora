@@ -1,5 +1,6 @@
-﻿import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/controllers/expense_controller.dart';
 import 'package:tuoora/presentation/institute/models/expense_model.dart';
@@ -20,24 +21,25 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
       body: SafeArea(
         child: Column(
           children: [
-            const InstituteAppBar(title: 'Expense Analysis'),
+            const InstituteAppBar(title: AppStrings.expenseAnalysis),
             Expanded(
               child: Obx(() {
                 final analysis = controller.expenseAnalysis.value;
                 return RefreshIndicator(
+                  color: AppColors.primaryBrand,
                   onRefresh: () => controller.loadExpenseAnalysis(),
                   child: ListView(
-                    padding: AppSpacing.all24,
+                    padding: AppSpacing.screenPaddingTop,
                     children: [
                       _buildTotalSpendingCard(analysis),
                       AppSpacing.v24,
                       _buildDateAndNavHeader(context),
                       AppSpacing.v24,
                       Text(
-                        'Categories Breakdown',
-                        style: AppTextStyles.manrope(
+                        AppStrings.categoriesBreakdown,
+                        style: AppTextStyles.outfit(
                           fontSize: 18,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w600,
                           color: AppColors.textPrimary,
                         ),
                       ),
@@ -46,8 +48,8 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
                         isLoading: controller.isAnalysisLoading.value,
                         isEmpty:
                             analysis == null || analysis.categories.isEmpty,
-                        emptyTitle: 'No Data for this month',
-                        emptySubtitle: 'Add expenses to see the analysis.',
+                        emptyTitle: AppStrings.noDataForThisMonth,
+                        emptySubtitle: AppStrings.addExpensesToSeeTheAnalysis,
                         emptyIcon: Icons.analytics_outlined,
                         child: _buildCategoryList(analysis),
                       ),
@@ -65,16 +67,16 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
   Widget _buildTotalSpendingCard(ExpenseAnalysis? analysis) {
     final NumberFormat currencyFormat = NumberFormat.currency(
       locale: 'en_IN',
-      symbol: 'â‚¹',
+      symbol: '₹',
       decimalDigits: 2,
     );
 
     return Container(
       width: double.infinity,
-      padding: AppSpacing.all24,
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.primaryBrand,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
@@ -90,8 +92,8 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Total Spending',
-                style: AppTextStyles.manrope(
+                AppStrings.totalSpending,
+                style: AppTextStyles.outfit(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                   color: AppColors.white.withValues(alpha: 0.8),
@@ -101,17 +103,17 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 10,
-                    vertical: 4,
+                    vertical: 6,
                   ),
                   decoration: BoxDecoration(
                     color: AppColors.white.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
                   ),
                   child: Text(
                     analysis.monthName,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 12,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.white,
                     ),
                   ),
@@ -122,9 +124,9 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
           Text(
             analysis != null
                 ? currencyFormat.format(analysis.totalSpending)
-                : 'â‚¹0.00',
-            style: AppTextStyles.manrope(
-              fontSize: 36,
+                : '₹0.00',
+            style: AppTextStyles.outfit(
+              fontSize: 32,
               fontWeight: FontWeight.w800,
               color: AppColors.white,
             ),
@@ -135,17 +137,23 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
   }
 
   Widget _buildDateAndNavHeader(BuildContext context) {
-    return Obx(
-      () => MonthSelectorWidget(
-        selectedMonth: controller.selectedAnalysisMonth.value,
+    return Obx(() {
+      final selectedDate = controller.selectedAnalysisMonth.value;
+      final isPrevEnabled = selectedDate.year > 2026 ||
+          (selectedDate.year == 2026 && selectedDate.month > 1);
+
+      return MonthSelectorWidget(
+        selectedMonth: selectedDate,
         onMonthChanged: (date) {
           controller.setAnalysisMonth(date);
         },
         isNextEnabled: controller.canGoToNextMonth,
+        isPrevEnabled: isPrevEnabled,
+        minDate: DateTime(2026, 1),
         maxDate: DateTime.now(),
         helpText: 'Select Analysis Month',
-      ),
-    );
+      );
+    });
   }
 
   Widget _buildCategoryList(ExpenseAnalysis? analysis) {
@@ -154,10 +162,10 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
     return Column(
       children: analysis.categories.map((cat) {
         return Padding(
-          padding: const EdgeInsets.only(bottom: 16),
+          padding: const EdgeInsets.only(bottom: 10),
           child: _buildCategoryProgressItem(
             cat.categoryName,
-            'â‚¹${cat.amount.toStringAsFixed(2)}',
+            '₹${cat.amount.toStringAsFixed(2)}',
             cat.percentage / 100,
             _getCategoryIcon(cat.categoryName),
             _getCategoryColor(cat.categoryName),
@@ -191,7 +199,7 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
       case 'Shopping':
         return AppColors.warningAmber;
       case 'Entertainment':
-        return AppColors.orangeDue;
+        return AppColors.warningAmber;
       case 'Food & Drink':
         return AppColors.successGreen;
       case 'Transport':
@@ -209,10 +217,10 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
     Color color,
   ) {
     return Container(
-      padding: AppSpacing.all16,
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -240,15 +248,15 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
                   children: [
                     Text(
                       title,
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 15,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.textPrimary,
                       ),
                     ),
                     Text(
                       amount,
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: AppColors.textSecondary,
@@ -259,9 +267,9 @@ class ExpenseAnalysisScreen extends GetView<ExpenseController> {
               ),
               Text(
                 '${(progress * 100).toStringAsFixed(1)}%',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 14,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
                 ),
               ),

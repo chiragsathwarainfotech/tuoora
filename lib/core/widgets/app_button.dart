@@ -42,7 +42,8 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool effectivelyDisabled = isDisabled || isLoading || onPressed == null;
+    final bool effectivelyDisabled =
+        isDisabled || isLoading || onPressed == null;
     final Color bgColor = backgroundColor ?? AppColors.primaryBrand;
     final Color contentColor = foregroundColor ?? AppColors.white;
 
@@ -50,7 +51,9 @@ class AppButton extends StatelessWidget {
       onTap: effectivelyDisabled ? null : onPressed,
       child: Container(
         width: width ?? (fullWidth ? double.infinity : null),
-        padding: padding ?? const EdgeInsets.symmetric(vertical: AppSpacing.s18),
+        constraints: const BoxConstraints(minHeight: 48),
+        padding:
+            padding ?? const EdgeInsets.symmetric(vertical: AppSpacing.s18),
         decoration: BoxDecoration(
           color: effectivelyDisabled ? AppColors.textMuted : bgColor,
           borderRadius: BorderRadius.circular(borderRadius),
@@ -69,7 +72,7 @@ class AppButton extends StatelessWidget {
                     ],
                     Text(
                       label,
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: fontSize ?? 14,
                         fontWeight: fontWeight ?? FontWeight.w800,
                         color: contentColor,
@@ -82,4 +85,3 @@ class AppButton extends StatelessWidget {
     );
   }
 }
-

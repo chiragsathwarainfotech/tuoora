@@ -19,10 +19,10 @@ class ReportSummaryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: AppSpacing.all24,
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
@@ -36,16 +36,16 @@ class ReportSummaryCard extends StatelessWidget {
         children: [
           Text(
             title,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 14,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               color: AppColors.textPrimary,
             ),
           ),
           AppSpacing.v8,
           Text(
             value,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 32,
               fontWeight: FontWeight.w800,
               color: valueColor ?? AppColors.primaryBrand,
@@ -77,76 +77,83 @@ class ReportBatchItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: AppSpacing.all20,
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(24),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.03),
-              blurRadius: 20,
-              offset: const Offset(0, 10),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              name,
-              style: AppTextStyles.manrope(
-                fontSize: 16,
-                fontWeight: FontWeight.w800,
-                color: AppColors.textPrimary,
-              ),
-            ),
-            Text(
-              'Batch Strength: $strength Students',
-              style: AppTextStyles.manrope(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-                color: AppColors.textTertiary,
-              ),
-            ),
-            AppSpacing.v20,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  metricLabel,
-                  style: AppTextStyles.manrope(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.textTertiary,
-                  ),
-                ),
-                Text(
-                  metricValue,
-                  style: AppTextStyles.manrope(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.primaryBrand,
-                  ),
+    final bool isDisabled = strength <= 0;
+
+    final card = Container(
+      padding: AppSpacing.cardPadding,
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+        boxShadow: isDisabled
+            ? null
+            : [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.03),
+                  blurRadius: 20,
+                  offset: const Offset(0, 10),
                 ),
               ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            name,
+            style: AppTextStyles.outfit(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: AppColors.textPrimary,
             ),
-            AppSpacing.v8,
-            ClipRRect(
-              borderRadius: BorderRadius.circular(4),
-              child: LinearProgressIndicator(
-                value: progress,
-                minHeight: 6,
-                backgroundColor: AppColors.background,
-                color: AppColors.primaryBrand,
+          ),
+          Text(
+            'Batch Strength: $strength Students',
+            style: AppTextStyles.outfit(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: AppColors.textTertiary,
+            ),
+          ),
+          AppSpacing.v20,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                metricLabel,
+                style: AppTextStyles.outfit(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textTertiary,
+                ),
               ),
+              Text(
+                metricValue,
+                style: AppTextStyles.outfit(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.primaryBrand,
+                ),
+              ),
+            ],
+          ),
+          AppSpacing.v8,
+          ClipRRect(
+            borderRadius: BorderRadius.circular(4),
+            child: LinearProgressIndicator(
+              value: progress,
+              minHeight: 6,
+              backgroundColor: AppColors.background,
+              color: AppColors.primaryBrand,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
+
+    if (isDisabled) {
+      return Opacity(opacity: 0.7, child: card);
+    }
+
+    return GestureDetector(onTap: onTap, child: card);
   }
 }
 
@@ -167,10 +174,10 @@ class ReportStudentItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: AppSpacing.all16,
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         border: Border.all(color: AppColors.background),
       ),
       child: Row(
@@ -182,9 +189,9 @@ class ReportStudentItemCard extends StatelessWidget {
               children: [
                 Text(
                   name,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 14,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                 ),
@@ -192,7 +199,7 @@ class ReportStudentItemCard extends StatelessWidget {
                   AppSpacing.v4,
                   Text(
                     subtitle!,
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                       color: AppColors.textTertiary,
@@ -210,9 +217,9 @@ class ReportStudentItemCard extends StatelessWidget {
             ),
             child: Text(
               metric,
-              style: AppTextStyles.manrope(
+              style: AppTextStyles.outfit(
                 fontSize: 12,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 color: metricColor,
               ),
             ),

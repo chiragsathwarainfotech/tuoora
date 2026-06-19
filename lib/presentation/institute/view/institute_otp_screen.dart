@@ -1,5 +1,7 @@
-﻿import 'package:tuoora/core/widgets/app_button.dart';
+import 'package:tuoora/core/widgets/app_button.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_images.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/presentation/institute/controllers/signup_controller.dart';
 import 'package:flutter/material.dart';
@@ -21,11 +23,11 @@ class InstituteOtpScreen extends GetView<SignupController> {
               _buildHeader(),
               AppSpacing.v40,
               Container(
-                margin: AppSpacing.x24,
-                padding: const EdgeInsets.all(AppSpacing.s28),
+                margin: AppSpacing.x16,
+                padding: AppSpacing.cardPadding,
                 decoration: BoxDecoration(
                   color: AppColors.white,
-                  borderRadius: BorderRadius.circular(AppSpacing.s32),
+                  borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withValues(alpha: 0.04),
@@ -35,23 +37,20 @@ class InstituteOtpScreen extends GetView<SignupController> {
                   ],
                 ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildLabel('VERIFICATION CODE'),
+                    _buildLabel('Enter Code'),
                     AppSpacing.v16,
-                    _buildOtpField(),
+                    Obx(() => _buildOtpField()),
                     AppSpacing.v32,
                     Obx(
                       () => AppButton(
-                        label: 'Verify OTP',
+                        label: AppStrings.verify,
                         onPressed: controller.verifyOtp,
                         isLoading: controller.isLoading.value,
                         backgroundColor: AppColors.primaryBrand,
                         foregroundColor: AppColors.white,
-                        borderRadius: AppSpacing.s24,
-                        padding: const EdgeInsets.symmetric(
-                          vertical: AppSpacing.s18,
-                        ),
+                        borderRadius: AppSpacing.cardRadius,
                         fontSize: 16,
                         fullWidth: true,
                       ),
@@ -62,25 +61,51 @@ class InstituteOtpScreen extends GetView<SignupController> {
                         child: Column(
                           children: [
                             if (!controller.canResend.value)
-                              Text(
-                                'Resend code in 00:${controller.timerSeconds.value.toString().padLeft(2, '0')}',
-                                style: AppTextStyles.manrope(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColors.blueSapphire,
-                                ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Didn\'t receive the code? ',
+                                    style: AppTextStyles.outfit(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      color: AppColors.textSecondary,
+                                    ),
+                                  ),
+                                  Text(
+                                    '00:${controller.timerSeconds.value.toString().padLeft(2, '0')}',
+                                    style: AppTextStyles.outfit(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColors.primaryBrand,
+                                    ),
+                                  ),
+                                ],
                               ),
                             if (controller.canResend.value)
-                              TextButton(
-                                onPressed: controller.resendOtp,
-                                child: Text(
-                                  'Resend Code',
-                                  style: AppTextStyles.manrope(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w700,
-                                    color: AppColors.primaryBrand,
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Didn\'t receive the code? ',
+                                    style: AppTextStyles.outfit(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      color: AppColors.textSecondary,
+                                    ),
                                   ),
-                                ),
+                                  GestureDetector(
+                                    onTap: controller.resendOtp,
+                                    child: Text(
+                                      AppStrings.resendOtp,
+                                      style: AppTextStyles.outfit(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColors.primaryBrand,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                           ],
                         ),
@@ -100,75 +125,38 @@ class InstituteOtpScreen extends GetView<SignupController> {
   Widget _buildHeader() {
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: AppSpacing.s40,
-              height: AppSpacing.s40,
-              decoration: BoxDecoration(
-                color: AppColors.primaryBrandLight,
-                shape: BoxShape.circle,
-              ),
-              child: const Center(
-                child: Icon(
-                  Icons.lock_person_outlined,
-                  color: AppColors.brandAppBarColor,
-                  size: AppSpacing.s24,
-                ),
-              ),
-            ),
-            AppSpacing.h12,
-            Text(
-              'Verification',
-              style: AppTextStyles.manrope(
-                fontSize: 22,
-                fontWeight: FontWeight.w800,
-                color: AppColors.primaryBrand,
-              ),
-            ),
-          ],
-        ),
+        Image.asset(AppImages.logoWithName, height: AppSpacing.s48),
         AppSpacing.v32,
         Text(
-          'CHECK YOUR EMAIL',
-          style: AppTextStyles.manrope(
-            fontSize: 12,
-            fontWeight: FontWeight.w800,
-            color: AppColors.brandAppBarColor,
+          AppStrings.checkYourEmail,
+          style: AppTextStyles.outfit(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            color: AppColors.primaryBrand,
             letterSpacing: 1.5,
           ),
         ),
         AppSpacing.v8,
-        Text(
-          'OTP Verification',
-          style: AppTextStyles.manrope(
-            fontSize: 28,
-            fontWeight: FontWeight.w800,
-            color: AppColors.brandAppBarColor,
-          ),
-        ),
-        AppSpacing.v8,
         Padding(
-          padding: AppSpacing.x24,
+          padding: AppSpacing.x16,
           child: RichText(
             textAlign: TextAlign.center,
             text: TextSpan(
-              style: AppTextStyles.lexend(
+              style: AppTextStyles.outfit(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
-                color: AppColors.blueSapphire,
+                color: AppColors.primaryBrand,
                 height: 1.5,
               ),
               children: [
                 const TextSpan(
-                  text: 'We have sent a 6-digit verification code to ',
+                  text: 'We have sent a 6-digit verification code to: ',
                 ),
                 TextSpan(
                   text: controller.emailController.text,
-                  style: AppTextStyles.lexend(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
+                  style: AppTextStyles.outfit(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.brandAppBarColor,
                   ),
                 ),
@@ -184,43 +172,73 @@ class InstituteOtpScreen extends GetView<SignupController> {
     return Text(
       text,
       textAlign: TextAlign.center,
-      style: AppTextStyles.manrope(
-        fontSize: 10,
-        fontWeight: FontWeight.w800,
-        color: AppColors.brandAppBarColor,
+      style: AppTextStyles.outfit(
+        fontSize: 12,
+        fontWeight: FontWeight.w600,
+        color: AppColors.fieldLabel,
         letterSpacing: 1.0,
       ),
     );
   }
 
   Widget _buildOtpField() {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.paleSilver,
-        borderRadius: BorderRadius.circular(AppSpacing.s16),
-      ),
-      child: TextField(
-        controller: controller.otpController,
-        keyboardType: TextInputType.number,
-        maxLength: 6,
-        textAlign: TextAlign.center,
-        style: AppTextStyles.manrope(
-          fontSize: 24,
-          fontWeight: FontWeight.w800,
-          color: AppColors.brandAppBarColor,
-          letterSpacing: 8.0,
-        ),
-        decoration: const InputDecoration(
-          counterText: '',
-          hintText: 'XXXXXX',
-          hintStyle: TextStyle(
-            color: AppColors.blueSapphire,
-            letterSpacing: 8.0,
+    final errorText = controller.otpError.value;
+    final hasError = errorText != null;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            color: AppColors.fieldBg,
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+            border: Border.all(
+              color: hasError ? Colors.redAccent : AppColors.fieldBorder,
+              width: hasError ? 1.5 : 1,
+            ),
           ),
-          border: InputBorder.none,
-          contentPadding: AppSpacing.all16,
+          child: TextField(
+            controller: controller.otpController,
+            keyboardType: TextInputType.number,
+            maxLength: 6,
+            textAlign: TextAlign.center,
+            onChanged: (_) {
+              if (controller.otpError.value != null) {
+                controller.otpError.value = null;
+              }
+            },
+            style: AppTextStyles.outfit(
+              fontSize: 24,
+              fontWeight: FontWeight.w800,
+              color: AppColors.brandAppBarColor,
+              letterSpacing: 8.0,
+            ),
+            decoration: const InputDecoration(
+              counterText: '',
+              hintText: AppStrings.xxxxxx,
+              hintStyle: TextStyle(
+                color: AppColors.fieldLabel,
+                letterSpacing: 8.0,
+              ),
+              border: InputBorder.none,
+              contentPadding: AppSpacing.all16,
+            ),
+          ),
         ),
-      ),
+        if (hasError) ...[
+          const SizedBox(height: 4),
+          Padding(
+            padding: const EdgeInsets.only(left: 4),
+            child: Text(
+              errorText,
+              style: AppTextStyles.outfit(
+                fontSize: 12,
+                color: Colors.redAccent,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ],
+      ],
     );
   }
 }

@@ -1,6 +1,10 @@
-﻿import 'package:tuoora/core/constants/app_colors.dart';
+﻿import 'package:cached_network_image/cached_network_image.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_strings.dart';
+import 'package:tuoora/core/utils/subscription_guard.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/status_badge.dart';
 import 'package:tuoora/presentation/institute/controllers/staff_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/config/app_routes.dart';
@@ -22,19 +26,22 @@ class AttendanceHistoryScreen extends GetView<StaffController> {
       body: SafeArea(
         child: Column(
           children: [
-            const InstituteAppBar(title: 'Attendance History'),
+            const InstituteAppBar(title: AppStrings.attendanceManagement),
             Expanded(
               child: Obx(() {
                 return CommonStateWidget(
                   isLoading: controller.isLoadingGlobalAttendance.value,
                   isEmpty: controller.globalAttendanceList.isEmpty,
-                  emptyTitle: 'No Records Found',
-                  emptySubtitle: 'No attendance logs found for this month.',
+                  emptyTitle: AppStrings.noRecordsFound,
+                  emptySubtitle: AppStrings.noAttendanceLogsFoundForThis,
                   emptyIcon: Icons.calendar_today_outlined,
                   child: RefreshIndicator(
+                    color: AppColors.primaryBrand,
                     onRefresh: () => controller.fetchGlobalAttendance(page: 1),
                     child: ListView.builder(
-                      padding: AppSpacing.all24,
+                      padding: AppSpacing.screenPaddingTop.add(
+                        const EdgeInsets.only(bottom: 96),
+                      ),
                       itemCount: controller.globalAttendanceList.length,
                       itemBuilder: (context, index) {
                         final attendance =
@@ -45,9 +52,6 @@ class AttendanceHistoryScreen extends GetView<StaffController> {
                             attendance.staff?.fullName ?? 'Unknown Staff',
                             attendance.note ?? '',
                             attendance.status,
-                            attendance.status.toLowerCase() == 'present'
-                                ? AppColors.successGreen
-                                : AppColors.errorRed,
                             attendance.staff?.profileUrl ?? '',
                             attendance.date,
                           ),
@@ -70,20 +74,19 @@ class AttendanceHistoryScreen extends GetView<StaffController> {
     String name,
     String remark,
     String status,
-    Color statusColor,
     String imageUrl,
     String date,
   ) {
     return Container(
-      padding: AppSpacing.all16,
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         border: Border.all(color: AppColors.background),
       ),
       child: Row(
         children: [
-          _buildStaffAvatar(imageUrl, name, size: 48),
+          _buildStaffAvatar(imageUrl, name, size: 38),
           AppSpacing.h16,
           Expanded(
             child: Column(
@@ -98,15 +101,15 @@ class AttendanceHistoryScreen extends GetView<StaffController> {
                         children: [
                           Text(
                             name,
-                            style: AppTextStyles.manrope(
+                            style: AppTextStyles.outfit(
                               fontSize: 16,
-                              fontWeight: FontWeight.w800,
+                              fontWeight: FontWeight.w600,
                               color: AppColors.textPrimary,
                             ),
                           ),
                           Text(
                             date,
-                            style: AppTextStyles.manrope(
+                            style: AppTextStyles.outfit(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
                               color: AppColors.textTertiary,
@@ -115,18 +118,17 @@ class AttendanceHistoryScreen extends GetView<StaffController> {
                         ],
                       ),
                     ),
-                    _buildStatusBadge(status, statusColor),
+                    StatusBadge.fromLabel(status),
                   ],
                 ),
                 if (remark.isNotEmpty) ...[
                   AppSpacing.v4,
                   Text(
                     '"$remark"',
-                    style: AppTextStyles.lexend(
-                      fontSize: 13,
+                    style: AppTextStyles.outfit(
+                      fontSize: 14,
                       fontWeight: FontWeight.w400,
                       color: AppColors.textSecondary,
-                      fontStyle: FontStyle.italic,
                     ),
                   ),
                 ],
@@ -138,41 +140,14 @@ class AttendanceHistoryScreen extends GetView<StaffController> {
     );
   }
 
-  Widget _buildStatusBadge(String status, Color color) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 6,
-            height: 6,
-            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-          ),
-          AppSpacing.h6,
-          Text(
-            status,
-            style: AppTextStyles.manrope(
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
-              color: color,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildLogAttendanceButton() {
     return FloatingActionButton(
-      onPressed: () {
+      onPressed: () => SubscriptionGuard.runAddAction(() {
         Get.toNamed(AppRoutes.instituteLogStaffAttendance);
-      },
-      backgroundColor: AppColors.primaryBrand,
+      }),
+      backgroundColor: SubscriptionGuard.blocksAdd
+          ? AppColors.textMuted
+          : AppColors.primaryBrand,
       child: const Icon(Icons.add, color: AppColors.white, size: 32),
     );
   }
@@ -188,7 +163,7 @@ class AttendanceHistoryScreen extends GetView<StaffController> {
           color: AppColors.primaryBrand.withValues(alpha: 0.1),
           shape: BoxShape.circle,
           image: DecorationImage(
-            image: NetworkImage(imageUrl),
+            image: CachedNetworkImageProvider(imageUrl),
             fit: BoxFit.cover,
           ),
         ),
@@ -205,9 +180,9 @@ class AttendanceHistoryScreen extends GetView<StaffController> {
       child: Center(
         child: Text(
           getInitials(name),
-          style: AppTextStyles.manrope(
+          style: AppTextStyles.outfit(
             fontSize: size * 0.4,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.primaryBrand,
           ),
         ),

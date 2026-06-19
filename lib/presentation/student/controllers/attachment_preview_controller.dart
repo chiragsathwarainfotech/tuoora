@@ -1,9 +1,8 @@
 import 'dart:io' as io;
+import 'package:tuoora/core/constants/app_strings.dart';
 import 'dart:typed_data';
 
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/api_constants.dart';
 import 'package:tuoora/core/enums/app_enums.dart';
 import 'package:tuoora/core/services/download_service.dart';
@@ -63,79 +62,68 @@ class AttachmentPreviewController extends GetxController {
     final attachment = selectedAttachment.value;
     if (attachment == null) return;
 
+    isDownloading.value = true;
+    downloadProgress.value = 0.0;
+
+    final ext = attachment.inferredExtension.toLowerCase();
+    final fullFileName = attachment.name.contains('.')
+        ? attachment.name
+        : '${attachment.name}.$ext';
+
     try {
-      isDownloading.value = true;
-      downloadProgress.value = 0.0;
-
-      Get.snackbar(
-        'Downloading',
-        'Please wait, your file is being downloaded...',
-        snackPosition: SnackPosition.BOTTOM,
-        showProgressIndicator: true,
-        backgroundColor: AppColors.primaryBrand,
-        colorText: AppColors.white,
-      );
-
-      final downloadService = Get.find<DownloadService>();
-      final authService = Get.find<AuthService>();
-      final client = io.HttpClient();
-
-      String endpoint = '';
-      if (sourceType == AttachmentSourceType.assignment) {
-        endpoint = '/student/homeworks/$sourceId/attachment/download';
-      } else if (sourceType == AttachmentSourceType.resource) {
-        endpoint = '/student/resources/$sourceId/download';
-      }
-
-      final uri = Uri.parse('${ApiConstants.baseUrl}$endpoint');
-      final request = await client.getUrl(uri);
-      request.headers.set(io.HttpHeaders.acceptHeader, '*/*');
-
-      if (authService.isAuthenticated) {
-        request.headers.set(
-          io.HttpHeaders.authorizationHeader,
-          'Bearer ${authService.token}',
-        );
-      }
-
-      final response = await request.close();
-
-      if (response.statusCode == 200) {
-        final totalBytes = response.contentLength;
-        int receivedBytes = 0;
-        final List<int> byteList = [];
-
-        await for (var data in response) {
-          byteList.addAll(data);
-          receivedBytes += data.length;
-          if (totalBytes > 0) {
-            downloadProgress.value = receivedBytes / totalBytes;
-          }
-        }
-
-        final bytes = Uint8List.fromList(byteList);
-        final ext = attachment.inferredExtension.toLowerCase();
-        final fullFileName = attachment.name.contains('.')
-            ? attachment.name
-            : '${attachment.name}.$ext';
-
-        await downloadService.saveFile(bytes: bytes, fileName: fullFileName);
-      } else {
-        throw Exception(
-          'Failed to download file. Status: ${response.statusCode}',
-        );
-      }
-    } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Failed to download file: ${e.toString().replaceAll('Exception: ', '')}',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.redAccent,
-        colorText: AppColors.white,
+      await Get.find<DownloadService>().download(
+        label: AppStrings.pleaseWaitYourFileIsBeing,
+        fileName: fullFileName,
+        fetch: () => _fetchAttachmentBytes(),
       );
     } finally {
       isDownloading.value = false;
       downloadProgress.value = 0.0;
     }
+  }
+
+  Future<Uint8List> _fetchAttachmentBytes() async {
+    final authService = Get.find<AuthService>();
+    final client = io.HttpClient();
+
+    String endpoint = '';
+    if (sourceType == AttachmentSourceType.assignment) {
+      endpoint = '/student/homeworks/$sourceId/attachment/download';
+    } else if (sourceType == AttachmentSourceType.resource) {
+      endpoint = '/student/resources/$sourceId/download';
+    }
+
+    final uri = Uri.parse('${ApiConstants.baseUrl}$endpoint');
+    final request = await client.getUrl(uri);
+    request.headers.set(io.HttpHeaders.acceptHeader, '*/*');
+
+    if (authService.isAuthenticated) {
+      request.headers.set(
+        io.HttpHeaders.authorizationHeader,
+        'Bearer ${authService.token}',
+      );
+    }
+
+    final response = await request.close();
+
+    if (response.statusCode != 200) {
+      throw Exception(
+        'Failed to download file. Status: ${response.statusCode}',
+      );
+    }
+
+    final totalBytes = response.contentLength;
+    int receivedBytes = 0;
+    final List<int> byteList = [];
+
+    await for (var data in response) {
+      byteList.addAll(data);
+      receivedBytes += data.length;
+      if (totalBytes > 0) {
+        downloadProgress.value = receivedBytes / totalBytes;
+      }
+    }
+
+    return Uint8List.fromList(byteList);
   }
 }

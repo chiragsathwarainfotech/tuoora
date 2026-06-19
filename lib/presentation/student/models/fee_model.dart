@@ -118,17 +118,21 @@ class StudentBillingProfile {
   final String rollNumber;
   final String instituteName;
   final String instituteUpiHandle;
+  final String? instituteUpiQrCodeUrl;
 
   const StudentBillingProfile({
     required this.studentName,
     required this.rollNumber,
     required this.instituteName,
     required this.instituteUpiHandle,
+    this.instituteUpiQrCodeUrl,
   });
+
+  bool get hasUpiPayment =>
+      (instituteUpiQrCodeUrl != null && instituteUpiQrCodeUrl!.isNotEmpty) ||
+      instituteUpiHandle.isNotEmpty;
 }
 
-/// Receipt detail for `/student/receipts/{id}` and a single item in
-/// `/student/receipts` (both endpoints return the same shape).
 class StudentReceipt {
   final int id;
   final String receiptNumber;
@@ -164,7 +168,6 @@ class StudentReceipt {
   }
 }
 
-/// Combined response wrapper for `/student/fees`.
 class StudentFeesData {
   final FeeSummary summary;
   final List<FeeStatement> fees;

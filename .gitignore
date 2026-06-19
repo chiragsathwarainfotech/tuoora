@@ -8,6 +8,11 @@ build/
 android/.gradle/
 android/app/build/
 android/local.properties
+android/key.properties
+android/keystore.properties
+android/keystore/
+android/*.jks
+android/*.keystore
 
 # iOS
 ios/Pods/

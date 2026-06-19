@@ -16,6 +16,7 @@ import 'package:tuoora/presentation/institute/models/resource_model.dart';
 import 'package:tuoora/presentation/institute/models/attendance_record_model.dart';
 import 'package:tuoora/data/models/notification_model.dart';
 import 'package:tuoora/data/models/staff_model.dart';
+import 'package:tuoora/data/models/subscription_model.dart';
 import 'package:get/get.dart';
 
 class InstituteRepository implements InstituteRepositoryImpl {
@@ -66,23 +67,76 @@ class InstituteRepository implements InstituteRepositoryImpl {
       throw Exception('Invalid profile response');
     }
 
+    final sub = body['subscription'];
+    if (sub != null) {
+      await Get.find<AuthService>().setSubscription(
+        Subscription.fromJson(Map<String, dynamic>.from(sub)),
+      );
+    }
+
     return InstituteProfile.fromJson(body['data']);
   }
 
   @override
-  Future<void> updateProfile(Map<String, dynamic> data) async {
-    final formData = FormData(data);
+  Future<void> deleteAccount() async {
+    final response = await _apiClient.delete(
+      ApiConstants.instituteAccountDelete,
+    );
+    if (response.status.hasError) {
+      _handleError(response, 'Failed to delete account');
+    }
+  }
 
-    if (data['logo_url'] != null &&
-        data['logo_url'].toString().isNotEmpty &&
-        !data['logo_url'].toString().startsWith('http')) {
+  @override
+  Future<void> renewSubscription({
+    required String transactionId,
+    required String screenshotPath,
+    String? message,
+  }) async {
+    final fields = <String, dynamic>{
+      'transaction_id': transactionId,
+      if (message != null && message.trim().isNotEmpty)
+        'message': message.trim(),
+    };
+
+    final formData = FormData(fields);
+    formData.files.add(
+      MapEntry(
+        'screenshot',
+        MultipartFile(
+          File(screenshotPath),
+          filename: screenshotPath.split('/').last,
+        ),
+      ),
+    );
+
+    final response = await _apiClient.post(
+      ApiConstants.instituteSubscriptionRenew,
+      formData,
+    );
+    if (response.status.hasError) {
+      _handleError(response, 'Failed to submit renewal request');
+    }
+  }
+
+  @override
+  Future<void> updateProfile(Map<String, dynamic> data) async {
+    final Map<String, dynamic> fields = Map.from(data);
+    final String? logoUrl = fields['logo_url'];
+
+    if (logoUrl != null && logoUrl.isNotEmpty && !logoUrl.startsWith('http')) {
+      fields.remove('logo_url');
+    }
+
+    final formData = FormData(fields);
+
+    if (logoUrl != null && logoUrl.isNotEmpty && !logoUrl.startsWith('http')) {
       formData.files.add(
         MapEntry(
           'logo_url',
-          MultipartFile(data['logo_url'], filename: 'institute_logo.jpg'),
+          MultipartFile(File(logoUrl), filename: 'institute_logo.jpg'),
         ),
       );
-      data.remove('logo_url');
     }
 
     final response = await _apiClient.post(
@@ -92,6 +146,41 @@ class InstituteRepository implements InstituteRepositoryImpl {
     if (response.status.hasError) {
       _handleError(response, 'Failed to update profile');
     }
+  }
+
+  @override
+  Future<({String upiId, String? upiQrCodeUrl})> updatePaymentSettings({
+    required String upiId,
+    String? qrImagePath,
+  }) async {
+    // Always send as multipart so the backend treats it consistently
+    // whether or not the user just picked a new QR image. When
+    // [qrImagePath] is a local path (i.e. NOT an http URL the API
+    // returned earlier), attach it as a file under `upi_qr_code`.
+    final formData = FormData({'upi_id': upiId});
+    if (qrImagePath != null &&
+        qrImagePath.isNotEmpty &&
+        !qrImagePath.startsWith('http')) {
+      formData.files.add(
+        MapEntry(
+          'upi_qr_code',
+          MultipartFile(qrImagePath, filename: 'upi_qr.png'),
+        ),
+      );
+    }
+
+    final response = await _apiClient.post(
+      ApiConstants.institutePaymentUpdate,
+      formData,
+    );
+    if (response.status.hasError) {
+      _handleError(response, 'Failed to update payment settings');
+    }
+
+    final data = response.body is Map ? response.body['data'] : null;
+    final newUpiId = (data is Map ? data['upi_id'] : null)?.toString() ?? upiId;
+    final newQrUrl = (data is Map ? data['upi_qr_code_url'] : null)?.toString();
+    return (upiId: newUpiId, upiQrCodeUrl: newQrUrl);
   }
 
   @override
@@ -176,6 +265,14 @@ class InstituteRepository implements InstituteRepositoryImpl {
   Future<List<int>> exportFees() async {
     return _downloadFile(
       ApiConstants.instituteFeesExport,
+      acceptHeader: 'application/pdf',
+    );
+  }
+
+  @override
+  Future<List<int>> downloadFeeReceipt(int feeId) async {
+    return _downloadFile(
+      ApiConstants.instituteReceiptDownload(feeId),
       acceptHeader: 'application/pdf',
     );
   }
@@ -331,10 +428,14 @@ class InstituteRepository implements InstituteRepositoryImpl {
   }
 
   @override
-  Future<BatchListResponse> listBatches({int page = 1}) async {
+  Future<BatchListResponse> listBatches({int page = 1, String? search}) async {
+    final query = <String, String>{'page': page.toString()};
+    if (search != null && search.trim().isNotEmpty) {
+      query['search'] = search.trim();
+    }
     final response = await _apiClient.get(
       ApiConstants.instituteBatches,
-      query: {'page': page.toString()},
+      query: query,
     );
     if (response.status.hasError) {
       throw Exception('Failed to fetch batches: ${response.statusText}');
@@ -375,6 +476,18 @@ class InstituteRepository implements InstituteRepositoryImpl {
   }
 
   @override
+  Future<void> closeBatch(int id) async {
+    final response = await _apiClient.post(
+      ApiConstants.instituteCloseBatch(id),
+      {},
+    );
+    if (response.status.hasError) {
+      final message = response.body?['message'] ?? 'Failed to close batch';
+      throw Exception(message);
+    }
+  }
+
+  @override
   Future<void> markAttendance(Map<String, dynamic> data) async {
     final response = await _apiClient.post(
       ApiConstants.instituteBatchAttendance,
@@ -407,6 +520,25 @@ class InstituteRepository implements InstituteRepositoryImpl {
     }
 
     return data.map((json) => HomeworkModel.fromJson(json)).toList();
+  }
+
+  @override
+  Future<HomeworkModel> getHomeworkDetails(int homeworkId) async {
+    final response = await _apiClient.get(
+      '${ApiConstants.instituteHomeworks}/$homeworkId',
+    );
+    if (response.status.hasError) {
+      throw Exception(
+        'Failed to fetch homework details: ${response.statusText}',
+      );
+    }
+
+    final body = response.body;
+    if (body == null || body['data'] == null) {
+      throw Exception('Invalid homework details response');
+    }
+
+    return HomeworkModel.fromJson(body['data']);
   }
 
   @override
@@ -604,6 +736,18 @@ class InstituteRepository implements InstituteRepositoryImpl {
   }
 
   @override
+  Future<ExpenseCategory> createExpenseCategory(Map<String, dynamic> data) async {
+    final response = await _apiClient.post(
+      ApiConstants.instituteExpenseCategories,
+      data,
+    );
+    if (response.status.hasError) {
+      throw Exception('Failed to create category: ${response.statusText}');
+    }
+    return ExpenseCategory.fromJson(response.body['data']);
+  }
+
+  @override
   Future<ExpenseModel> createExpense(Map<String, dynamic> data) async {
     final Map<String, dynamic> fields = Map.from(data);
     final String? receiptPath = fields.remove('receipt_image');
@@ -768,6 +912,19 @@ class InstituteRepository implements InstituteRepositoryImpl {
       throw Exception('Failed to fetch salary history');
     }
     return SalaryListResponse.fromJson(response.body);
+  }
+
+  @override
+  Future<SalaryPreview> getSalaryPreview(int staffId) async {
+    final response = await _apiClient.get(
+      '${ApiConstants.instituteSalaries}/preview/$staffId',
+    );
+    if (response.status.hasError) {
+      throw Exception('Failed to load salary preview');
+    }
+    return SalaryPreview.fromJson(
+      (response.body['data'] as Map?)?.cast<String, dynamic>() ?? {},
+    );
   }
 
   @override

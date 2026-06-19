@@ -5,21 +5,29 @@ class ApiConstants {
   static const String instituteLogin = '/institute/login';
   static const String instituteRegister = '/institute/register';
   static const String instituteVerifyOtp = '/institute/verify-otp';
+  static const String instituteLogout = '/institute/logout';
   static const String studentLogin = '/student/login';
-  static const String studentNotificationSettings = '/student/notification-settings';
+  static const String studentLogout = '/student/logout';
+  static const String authRefresh = '/auth/refresh';
+  static const String studentNotificationSettings =
+      '/student/notification-settings';
   static const String studentProfile = '/student/profile';
   static const String studentProfileAvatar = '/student/profile/avatar';
+  static const String studentAccountDelete = '/student/profile/delete';
   static const String studentFeedback = '/student/feedback';
   static const String studentHomeworks = '/student/homeworks';
   static String studentHomeworkDetail(int id) => '/student/homeworks/$id';
-  static String studentHomeworkAttachment(int id) => '/student/homeworks/$id/attachment';
-  static String studentHomeworkAttachmentDownload(int id) => '/student/homeworks/$id/attachment/download';
+  static String studentHomeworkAttachment(int id) =>
+      '/student/homeworks/$id/attachment';
+  static String studentHomeworkAttachmentDownload(int id) =>
+      '/student/homeworks/$id/attachment/download';
   static const String studentAttendance = '/student/attendance';
   static const String studentReport = '/student/report';
   static const String studentInstitute = '/student/institute';
   static const String studentResources = '/student/resources';
   static const String studentDashboard = '/student/dashboard';
   static const String studentFees = '/student/fees';
+  static const String studentPaymentInfo = '/student/payment-info';
   static const String studentReceipts = '/student/receipts';
   static String studentReceiptDetail(int id) => '/student/receipts/$id';
   static String studentFeeDownload(int id) => '/student/fees/$id/download';
@@ -29,6 +37,9 @@ class ApiConstants {
   static const String instituteStudents = '/institute/students';
   static const String instituteProfile = '/institute/profile';
   static const String instituteProfileUpdate = '/institute/profile/update';
+  static const String instituteAccountDelete = '/institute/profile/delete';
+  static const String institutePaymentUpdate =
+      '/institute/profile/payment/update';
   static const String instituteBatches = '/institute/batches';
   static const String instituteChangePassword =
       '/institute/profile/change-password';
@@ -36,6 +47,8 @@ class ApiConstants {
       '/institute/whatsapp-settings';
   static const String instituteFees = '/institute/fees';
   static const String instituteFeesExport = '/institute/fees/export';
+  static String instituteReceiptDownload(int id) =>
+      '/institute/receipt/$id/download';
   static const String instituteDailyUpdates = '/institute/daily-updates';
   static const String instituteAttendance = '/institute/attendance';
   static const String instituteHomeworks = '/institute/homeworks';
@@ -60,12 +73,17 @@ class ApiConstants {
   static const String instituteSalaries = '/institute/salaries';
   static const String instituteSubscriptionAllData =
       '/institute/subscriptions/all-data';
+  static const String instituteSubscriptionRenew =
+      '/institute/subscription/renew';
 
   static String removeStudentFromBatch(int batchId) =>
       '/institute/batches/$batchId/remove-student';
 
   static String assignStudentsToBatch(int batchId) =>
       '/institute/batches/$batchId/assign-students';
+
+  static String instituteCloseBatch(int batchId) =>
+      '/institute/batches/$batchId/close';
 
   // Reports Endpoints
   static const String instituteReportFee = '/institute/reports/fee';

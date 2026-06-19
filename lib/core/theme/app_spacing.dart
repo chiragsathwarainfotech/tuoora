@@ -59,6 +59,7 @@ class AppSpacing {
   static const h6 = SizedBox(width: s6);
   static const h8 = SizedBox(width: s8);
   static const h12 = SizedBox(width: s12);
+  static const h10 = SizedBox(width: s10);
   static const h16 = SizedBox(width: s16);
   static const h20 = SizedBox(width: s20);
   static const h24 = SizedBox(width: s24);
@@ -104,6 +105,7 @@ class AppSpacing {
   static const y32 = EdgeInsets.symmetric(vertical: s32);
 
   // Bottom Spacing
+  static const EdgeInsets bottom10 = EdgeInsets.only(bottom: s10);
   static const EdgeInsets bottom12 = EdgeInsets.only(bottom: s12);
   static const EdgeInsets bottom16 = EdgeInsets.only(bottom: s16);
   static const EdgeInsets bottom20 = EdgeInsets.only(bottom: s20);
@@ -115,9 +117,39 @@ class AppSpacing {
   static const EdgeInsets right16 = EdgeInsets.only(right: s16);
 
   // Semantic Spacing
-  static const screenPadding = EdgeInsets.symmetric(
-    horizontal: s28,
-    vertical: s24,
+  ///
+  /// Design-system screen padding: 16 dp on left, right, and top.
+  /// Bottom is 16 dp too — screens that want a different bottom should
+  /// use [screenPaddingTop] (no bottom) or [screenPaddingWithBottom].
+  static const EdgeInsets screenPadding = EdgeInsets.fromLTRB(
+    s16,
+    s16,
+    s16,
+    s16,
   );
+
+  /// Spec L:16, R:16, T:16, B:0 — for screens that supply their own
+  /// bottom padding (e.g. scrollable bodies needing a tall safe-area
+  /// gap below the last card).
+  static const EdgeInsets screenPaddingTop = EdgeInsets.fromLTRB(
+    s16,
+    s16,
+    s16,
+    0,
+  );
+
+  /// Same as [screenPadding] but with a caller-controlled bottom.
+  static EdgeInsets screenPaddingWithBottom(double bottom) =>
+      EdgeInsets.fromLTRB(s16, s16, s16, bottom);
+
   static const headerPaddingLarge = EdgeInsets.fromLTRB(s28, s40, s28, s32);
+
+  // ============================================
+  // Card design-system tokens
+  // ============================================
+  /// Corner radius for any card surface (8 dp).
+  static const double cardRadius = s8;
+
+  /// Internal padding for any card surface (8 dp on all sides).
+  static const EdgeInsets cardPadding = EdgeInsets.all(s8);
 }

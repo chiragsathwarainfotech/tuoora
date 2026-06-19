@@ -7,6 +7,8 @@ import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
+import 'package:tuoora/core/widgets/app_empty_view.dart';
+import 'package:tuoora/core/widgets/common_loading.dart';
 import 'package:tuoora/core/widgets/student_bottom_nav.dart';
 import 'package:tuoora/presentation/student/controllers/fees_controller.dart';
 import 'package:tuoora/presentation/student/models/fee_model.dart';
@@ -35,23 +37,14 @@ class StudentFeesScreen extends GetView<FeesController> {
               child: Obx(() {
                 if (controller.isLoading.value &&
                     controller.statements.isEmpty) {
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.studentBrand,
-                    ),
-                  );
+                  return const CommonLoading(color: AppColors.primaryBrand);
                 }
                 return RefreshIndicator(
-                  color: AppColors.studentBrand,
+                  color: AppColors.primaryBrand,
                   onRefresh: controller.loadFees,
                   child: SingleChildScrollView(
                     physics: const AlwaysScrollableScrollPhysics(),
-                    padding: const EdgeInsets.fromLTRB(
-                      AppSpacing.s16,
-                      AppSpacing.s4,
-                      AppSpacing.s16,
-                      AppSpacing.s24,
-                    ),
+                    padding: AppSpacing.screenPaddingTop,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
@@ -70,18 +63,15 @@ class StudentFeesScreen extends GetView<FeesController> {
                         ),
                         const SizedBox(height: AppSpacing.s12),
                         if (controller.statements.isEmpty)
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
+                          const Padding(
+                            padding: EdgeInsets.symmetric(
                               vertical: AppSpacing.s24,
                             ),
-                            child: Center(
-                              child: Text(
-                                'No fee statements yet.',
-                                style: AppTextStyles.lexend(
-                                  fontSize: 13,
-                                  color: AppColors.textSecondary,
-                                ),
-                              ),
+                            child: AppEmptyView(
+                              icon: Icons.receipt_long_outlined,
+                              title: AppStrings.noFeeStatementsYet,
+                              message:
+                                  'Your statements will appear here once your institute generates them.',
                             ),
                           )
                         else
@@ -119,8 +109,6 @@ class StudentFeesScreen extends GetView<FeesController> {
   }
 }
 
-// ───────────────────────────────────────────────────────────── Summary
-
 class _SummaryCard extends StatelessWidget {
   final FeeSummary summary;
 
@@ -129,10 +117,10 @@ class _SummaryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(AppSpacing.s16),
+      padding: AppSpacing.cardPadding,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.s16),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
@@ -156,9 +144,9 @@ class _SummaryCard extends StatelessWidget {
                   children: [
                     Text(
                       '${DateTime.now().year} LEDGER',
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 10,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.textTertiary,
                         letterSpacing: 1.2,
                       ),
@@ -166,7 +154,7 @@ class _SummaryCard extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       '₹${_formatThousands(summary.totalInRupees)}',
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 26,
                         fontWeight: FontWeight.w800,
                         color: AppColors.textPrimary,
@@ -177,7 +165,7 @@ class _SummaryCard extends StatelessWidget {
                     Text(
                       '${AppStrings.studentFeesBilledAcross} '
                       '${summary.billedMonths} ${AppStrings.studentFeesMonths}',
-                      style: AppTextStyles.lexend(
+                      style: AppTextStyles.outfit(
                         fontSize: 12,
                         color: AppColors.textTertiary,
                       ),
@@ -196,14 +184,14 @@ class _SummaryCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              _LegendDot(color: AppColors.studentPresentText),
+              _LegendDot(color: AppColors.successGreen),
               const SizedBox(width: 6),
               Text(
-                '${AppStrings.studentFeesLegendPaid} '
+                '${AppStrings.studentFeesPaidPercent} '
                 '₹${_formatThousands(summary.paidInRupees)}',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 11,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textSecondary,
                 ),
               ),
@@ -213,9 +201,9 @@ class _SummaryCard extends StatelessWidget {
               Text(
                 '${AppStrings.studentFeesLegendPending} '
                 '₹${_formatThousands(summary.pendingInRupees)}',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 11,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textSecondary,
                 ),
               ),
@@ -245,18 +233,18 @@ class _PaidProgressRing extends StatelessWidget {
             children: [
               Text(
                 '$percent%',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 13,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
                   height: 1,
                 ),
               ),
               Text(
                 AppStrings.studentFeesPaidPercent,
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 8,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textTertiary,
                   letterSpacing: 1.0,
                 ),
@@ -282,7 +270,7 @@ class _RingPainter extends CustomPainter {
       radius: (size.shortestSide - stroke) / 2,
     );
     final track = Paint()
-      ..color = AppColors.studentBrandSoft
+      ..color = AppColors.primaryBrandLight
       ..style = PaintingStyle.stroke
       ..strokeWidth = stroke
       ..strokeCap = StrokeCap.round;
@@ -290,7 +278,7 @@ class _RingPainter extends CustomPainter {
 
     if (percent <= 0) return;
     final progress = Paint()
-      ..color = AppColors.studentBrand
+      ..color = AppColors.primaryBrand
       ..style = PaintingStyle.stroke
       ..strokeWidth = stroke
       ..strokeCap = StrokeCap.round;
@@ -320,7 +308,7 @@ class _SplitProgressBar extends StatelessWidget {
           children: [
             Expanded(
               flex: paidFlex == 0 ? 0 : paidFlex,
-              child: const ColoredBox(color: AppColors.studentPresentText),
+              child: const ColoredBox(color: AppColors.successGreen),
             ),
             Expanded(
               flex: pendingFlex == 0 ? 0 : pendingFlex,
@@ -328,8 +316,8 @@ class _SplitProgressBar extends StatelessWidget {
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      AppColors.studentProgressOrange,
-                      AppColors.studentBrandSoft,
+                      AppColors.primaryBrand,
+                      AppColors.primaryBrandLight,
                     ],
                   ),
                 ),
@@ -357,8 +345,6 @@ class _LegendDot extends StatelessWidget {
   }
 }
 
-// ──────────────────────────────────────────────────────────── Pay button
-
 class _PayNowButton extends StatelessWidget {
   final int pendingAmount;
   final VoidCallback? onTap;
@@ -370,12 +356,12 @@ class _PayNowButton extends StatelessWidget {
     final disabled = onTap == null;
     return Material(
       color: disabled
-          ? AppColors.studentBrand.withValues(alpha: 0.4)
-          : AppColors.studentBrand,
-      borderRadius: BorderRadius.circular(AppSpacing.s12),
+          ? AppColors.primaryBrand.withValues(alpha: 0.4)
+          : AppColors.primaryBrand,
+      borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(AppSpacing.s12),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         child: Padding(
           padding: const EdgeInsets.symmetric(
             vertical: AppSpacing.s14,
@@ -392,9 +378,9 @@ class _PayNowButton extends StatelessWidget {
               AppSpacing.h8,
               Text(
                 '${AppStrings.studentFeesPayNowPrefix}${_formatThousands(pendingAmount)} ${AppStrings.studentFeesPayNowSuffix}',
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 14,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.white,
                 ),
               ),
@@ -405,8 +391,6 @@ class _PayNowButton extends StatelessWidget {
     );
   }
 }
-
-// ──────────────────────────────────────────────────────── Statement row
 
 class _StatementRow extends StatelessWidget {
   final FeeStatement statement;
@@ -420,12 +404,13 @@ class _StatementRow extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(AppSpacing.s12),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: AppSpacing.s8,
-            horizontal: AppSpacing.s4,
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           ),
+          padding: AppSpacing.cardPadding,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -441,15 +426,15 @@ class _StatementRow extends StatelessWidget {
                         children: [
                           TextSpan(
                             text: statement.periodLabel,
-                            style: AppTextStyles.manrope(
+                            style: AppTextStyles.outfit(
                               fontSize: 14,
-                              fontWeight: FontWeight.w800,
+                              fontWeight: FontWeight.w600,
                               color: AppColors.textPrimary,
                             ),
                           ),
                           TextSpan(
                             text: '  ${statement.id}',
-                            style: AppTextStyles.lexend(
+                            style: AppTextStyles.outfit(
                               fontSize: 11,
                               color: AppColors.textTertiary,
                               fontWeight: FontWeight.w500,
@@ -463,7 +448,7 @@ class _StatementRow extends StatelessWidget {
                     const SizedBox(height: 2),
                     Text(
                       statement.dateLabel,
-                      style: AppTextStyles.lexend(
+                      style: AppTextStyles.outfit(
                         fontSize: 11,
                         color: AppColors.textTertiary,
                       ),
@@ -480,9 +465,9 @@ class _StatementRow extends StatelessWidget {
                 children: [
                   Text(
                     '₹${_formatThousands(statement.amountInRupees)}',
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 14,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.textPrimary,
                     ),
                   ),
@@ -505,7 +490,7 @@ class _StatusDot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = isPaid ? AppColors.studentPresentText : AppColors.orangeTag;
+    final color = isPaid ? AppColors.successGreen : AppColors.orangeTag;
     return Container(
       width: 14,
       height: 14,
@@ -525,33 +510,29 @@ class _StatusPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = isPaid ? AppColors.studentPresentBg : AppColors.studentBrandSoft;
-    final fg = isPaid ? AppColors.studentPresentText : AppColors.studentBrand;
+    final bg = isPaid ? AppColors.successGreen : AppColors.bohoRed;
     final label = isPaid
-        ? AppStrings.studentFeesPillPaid
-        : AppStrings.studentFeesPillPending;
+        ? AppStrings.instStatusPaid
+        : AppStrings.studentAssignmentsTabPending;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
         color: bg,
-        borderRadius: BorderRadius.circular(99),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       ),
       child: Text(
         label,
-        style: AppTextStyles.manrope(
+        style: AppTextStyles.outfit(
           fontSize: 10,
-          fontWeight: FontWeight.w800,
-          color: fg,
+          fontWeight: FontWeight.w600,
+          color: AppColors.white,
         ),
       ),
     );
   }
 }
 
-// ────────────────────────────────────────────────────────── Helpers
-
 String _formatThousands(int value) {
-  // 22500 → '22,500'; 1500 → '1,500'; 999 → '999'.
   if (value < 1000) return value.toString();
   final s = value.toString();
   final buf = StringBuffer();

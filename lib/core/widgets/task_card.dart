@@ -66,7 +66,7 @@ class TaskCard extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: AppTextStyles.lexend(
+                    style: AppTextStyles.outfit(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
                       color: AppColors.textPrimary,
@@ -79,9 +79,9 @@ class TaskCard extends StatelessWidget {
                     children: [
                       Text(
                         subject,
-                        style: AppTextStyles.lexend(
+                        style: AppTextStyles.outfit(
                           fontSize: 11,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w600,
                           color: AppTheme.primary,
                         ),
                       ),
@@ -98,7 +98,7 @@ class TaskCard extends StatelessWidget {
                       Expanded(
                         child: Text(
                           statusText,
-                          style: AppTextStyles.lexend(
+                          style: AppTextStyles.outfit(
                             fontSize: 11,
                             fontWeight: FontWeight.w500,
                             color: statusColor,

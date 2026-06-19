@@ -20,15 +20,15 @@ class StudentAttachmentTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: AppColors.white,
-      borderRadius: BorderRadius.circular(AppSpacing.s14),
+      borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(AppSpacing.s14),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         child: Ink(
-          padding: const EdgeInsets.all(AppSpacing.s12),
+          padding: AppSpacing.cardPadding,
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(AppSpacing.s14),
+            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.02),
@@ -48,9 +48,9 @@ class StudentAttachmentTile extends StatelessWidget {
                   children: [
                     Text(
                       attachment.name,
-                      style: AppTextStyles.manrope(
+                      style: AppTextStyles.outfit(
                         fontSize: 13,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.textPrimary,
                       ),
                       maxLines: 1,
@@ -59,7 +59,7 @@ class StudentAttachmentTile extends StatelessWidget {
                     const SizedBox(height: 2),
                     Text(
                       '${_kindLabel(attachment.kind)} · ${attachment.sizeLabel}',
-                      style: AppTextStyles.lexend(
+                      style: AppTextStyles.outfit(
                         fontSize: 11,
                         color: AppColors.textTertiary,
                       ),
@@ -104,22 +104,22 @@ class StudentAttachmentIcon extends StatelessWidget {
     late final IconData icon;
     switch (kind) {
       case AssignmentAttachmentKind.document:
-        bg = AppColors.studentPresentBg;
-        fg = AppColors.studentPresentText;
+        bg = AppColors.successBg;
+        fg = AppColors.successGreen;
         icon = Icons.description_rounded;
         break;
       case AssignmentAttachmentKind.image:
-        bg = AppColors.studentBrandSoft;
+        bg = AppColors.primaryBrandLight;
         fg = AppColors.orangeTag;
         icon = Icons.image_rounded;
         break;
       case AssignmentAttachmentKind.video:
-        bg = AppColors.studentBrandSoft;
+        bg = AppColors.primaryBrandLight;
         fg = AppColors.orangeTag;
         icon = Icons.videocam_rounded;
         break;
       case AssignmentAttachmentKind.audio:
-        bg = AppColors.studentBrandSoft;
+        bg = AppColors.primaryBrandLight;
         fg = AppColors.orangeTag;
         icon = Icons.audiotrack_rounded;
         break;

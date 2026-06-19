@@ -34,7 +34,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
           AppSpacing.v24,
           _buildHomeworkCard(
             subject: 'HISTORY',
-            title: 'The Industrial Revolution: Socio-Economic Impacts',
+            title: AppStrings.theIndustrialRevolutionSocioEconomicImpacts,
             professor: 'Mrs. G. White',
             dueDate: 'Oct 14',
             status: 'Pending Review',
@@ -45,7 +45,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
           AppSpacing.v16,
           _buildHomeworkCard(
             subject: 'PHYSICS',
-            title: 'Quantum Mechanics: Particle in a Box Experiment',
+            title: AppStrings.quantumMechanicsParticleInABox,
             professor: 'Dr. R. Feynman',
             dueDate: 'Oct 16',
             status: 'In Progress',
@@ -57,7 +57,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
           AppSpacing.v16,
           _buildHomeworkCard(
             subject: 'LITERATURE',
-            title: 'Comparative Analysis: Romanticism vs. Realism',
+            title: AppStrings.comparativeAnalysisRomanticismVsRealism,
             professor: 'Prof. Austen',
             dueDate: 'Oct 18',
             status: '5 Days Remaining',
@@ -99,8 +99,8 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Homework Center',
-            style: AppTextStyles.manrope(
+            AppStrings.homeworkCenter,
+            style: AppTextStyles.outfit(
               fontSize: 32,
               fontWeight: FontWeight.w800,
               color: AppColors.textPrimary,
@@ -108,8 +108,8 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
           ),
           AppSpacing.v8,
           Text(
-            'Manage assignments uploaded by your tutors.',
-            style: AppTextStyles.lexend(
+            AppStrings.manageAssignmentsUploadedByYourTutors,
+            style: AppTextStyles.outfit(
               fontSize: 16,
               fontWeight: FontWeight.w400,
               color: AppColors.textTertiary,
@@ -126,7 +126,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.s24),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
@@ -141,19 +141,19 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'WEEKLY GOAL',
-                style: AppTextStyles.manrope(
+                AppStrings.weeklyGoal,
+                style: AppTextStyles.outfit(
                   fontSize: 10,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.primaryBrand,
                   letterSpacing: 1.0,
                 ),
               ),
               Text(
-                '68%',
-                style: AppTextStyles.manrope(
+                AppStrings.k68,
+                style: AppTextStyles.outfit(
                   fontSize: 10,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
                 ),
               ),
@@ -204,7 +204,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
         padding: AppSpacing.y12,
         decoration: BoxDecoration(
           color: isSelected ? AppColors.white : Colors.transparent,
-          borderRadius: BorderRadius.circular(AppSpacing.s16),
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           boxShadow: isSelected
               ? [
                   BoxShadow(
@@ -218,7 +218,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
         child: Center(
           child: Text(
             label,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 14,
               fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
               color: isSelected
@@ -236,11 +236,11 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
       margin: AppSpacing.x28,
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
-        color: AppColors.studentUpdateIconColor,
-        borderRadius: BorderRadius.circular(32),
+        color: AppColors.subjectPhysics,
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
-            color: AppColors.studentProgressBlue,
+            color: AppColors.subjectPhysics,
             blurRadius: AppSpacing.s20,
             offset: const Offset(0, AppSpacing.s10),
           ),
@@ -262,10 +262,10 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                   borderRadius: BorderRadius.circular(AppSpacing.s10),
                 ),
                 child: Text(
-                  'MATHEMATICS',
-                  style: AppTextStyles.manrope(
+                  AppStrings.mathematics,
+                  style: AppTextStyles.outfit(
                     fontSize: 9,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.white,
                     letterSpacing: 1.0,
                   ),
@@ -277,7 +277,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                   vertical: AppSpacing.s6,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.amberLight,
+                  color: AppColors.errorBg,
                   borderRadius: BorderRadius.circular(AppSpacing.s10),
                 ),
                 child: Row(
@@ -289,10 +289,10 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                     ),
                     AppSpacing.h4,
                     Text(
-                      'DUE TODAY',
-                      style: AppTextStyles.manrope(
+                      AppStrings.dueToday,
+                      style: AppTextStyles.outfit(
                         fontSize: 9,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.error,
                       ),
                     ),
@@ -303,8 +303,8 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
           ),
           AppSpacing.v12,
           Text(
-            'By Prof. Henderson',
-            style: AppTextStyles.lexend(
+            AppStrings.byProfHenderson,
+            style: AppTextStyles.outfit(
               fontSize: 10,
               fontWeight: FontWeight.w400,
               color: AppColors.white.withValues(alpha: 0.7),
@@ -313,18 +313,18 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
           ),
           AppSpacing.v16,
           Text(
-            'Advanced Calculus:\nVolume Integrals',
-            style: AppTextStyles.manrope(
+            AppStrings.advancedCalculusNvolumeIntegrals,
+            style: AppTextStyles.outfit(
               fontSize: 22,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.white,
               height: 1.2,
             ),
           ),
           AppSpacing.v12,
           Text(
-            'Complete the problem set on page 412. Focus on spherical coordinates and...',
-            style: AppTextStyles.lexend(
+            AppStrings.completeTheProblemSetOnPage,
+            style: AppTextStyles.outfit(
               fontSize: 13,
               fontWeight: FontWeight.w400,
               color: AppColors.white.withValues(alpha: 0.8),
@@ -348,7 +348,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: AppColors.studentUpdateIconColor,
+                            color: AppColors.subjectPhysics,
                             width: AppSpacing.s2,
                           ),
                         ),
@@ -364,10 +364,10 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
               AppSpacing.h8,
               Expanded(
                 child: Text(
-                  '24 students submitted',
-                  style: AppTextStyles.manrope(
+                  AppStrings.k24StudentsSubmitted,
+                  style: AppTextStyles.outfit(
                     fontSize: 11,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.white,
                   ),
                 ),
@@ -384,10 +384,10 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                     borderRadius: BorderRadius.circular(AppSpacing.s24),
                   ),
                   child: Text(
-                    'Open Task',
-                    style: AppTextStyles.manrope(
+                    AppStrings.openTask,
+                    style: AppTextStyles.outfit(
                       fontSize: 14,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.primaryBrand,
                     ),
                   ),
@@ -417,7 +417,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
       padding: AppSpacing.all24,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.s28),
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -434,9 +434,9 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
             children: [
               Text(
                 subject,
-                style: AppTextStyles.manrope(
+                style: AppTextStyles.outfit(
                   fontSize: 10,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.error,
                   letterSpacing: 1.0,
                 ),
@@ -445,19 +445,19 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    'DUE DATE',
-                    style: AppTextStyles.manrope(
+                    AppStrings.dueDate,
+                    style: AppTextStyles.outfit(
                       fontSize: 8,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.textTertiary,
                       letterSpacing: 0.5,
                     ),
                   ),
                   Text(
                     dueDate,
-                    style: AppTextStyles.manrope(
+                    style: AppTextStyles.outfit(
                       fontSize: 13,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.textPrimary,
                     ),
                   ),
@@ -468,9 +468,9 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
           AppSpacing.v8,
           Text(
             title,
-            style: AppTextStyles.manrope(
+            style: AppTextStyles.outfit(
               fontSize: 17,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.darkSlate,
               height: 1.2,
             ),
@@ -478,7 +478,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
           AppSpacing.v4,
           Text(
             'Uploaded by $professor',
-            style: AppTextStyles.lexend(
+            style: AppTextStyles.outfit(
               fontSize: 11,
               fontWeight: FontWeight.w400,
               color: AppColors.textMuted,
@@ -499,7 +499,7 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                     color: isActive
                         ? AppColors.skyBlueLight
                         : (isDeadlineStyle
-                              ? AppColors.amberLight
+                              ? AppColors.errorBg
                               : AppColors.white),
                     borderRadius: BorderRadius.circular(AppSpacing.s10),
                   ),
@@ -524,18 +524,18 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
                     children: [
                       Text(
                         isDeadlineStyle ? 'DEADLINE' : 'STATUS',
-                        style: AppTextStyles.manrope(
+                        style: AppTextStyles.outfit(
                           fontSize: 9,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w600,
                           color: AppColors.textMuted,
                           letterSpacing: 0.5,
                         ),
                       ),
                       Text(
                         status,
-                        style: AppTextStyles.manrope(
+                        style: AppTextStyles.outfit(
                           fontSize: 12,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w600,
                           color: isDeadlineStyle
                               ? AppColors.textPrimary
                               : AppColors.primaryBrand,
@@ -555,16 +555,16 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
               padding: const EdgeInsets.symmetric(vertical: AppSpacing.s14),
               decoration: BoxDecoration(
                 color: isActive
-                    ? AppColors.studentUpdateIconColor
+                    ? AppColors.subjectPhysics
                     : AppColors.background,
                 borderRadius: BorderRadius.circular(AppSpacing.s16),
               ),
               child: Center(
                 child: Text(
                   buttonLabel,
-                  style: AppTextStyles.manrope(
+                  style: AppTextStyles.outfit(
                     fontSize: 13,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: isActive ? AppColors.white : AppColors.primaryBrand,
                   ),
                 ),
@@ -600,17 +600,17 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
           ),
           AppSpacing.v24,
           Text(
-            'Preparation Guide',
-            style: AppTextStyles.manrope(
+            AppStrings.preparationGuide,
+            style: AppTextStyles.outfit(
               fontSize: 20,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.textPrimary,
             ),
           ),
           AppSpacing.v8,
           Text(
-            'Modern Literature finals study guide is now available for download.',
-            style: AppTextStyles.lexend(
+            AppStrings.modernLiteratureFinalsStudyGuideIs,
+            style: AppTextStyles.outfit(
               fontSize: 13,
               fontWeight: FontWeight.w400,
               color: AppColors.textTertiary,
@@ -628,10 +628,10 @@ class _StudentHomeworkScreenState extends State<StudentHomeworkScreen> {
             ),
             child: Center(
               child: Text(
-                'Download PDF',
-                style: AppTextStyles.manrope(
+                AppStrings.downloadPdf,
+                style: AppTextStyles.outfit(
                   fontSize: 13,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.primaryBrand,
                 ),
               ),

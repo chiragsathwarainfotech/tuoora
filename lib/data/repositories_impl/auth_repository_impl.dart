@@ -1,7 +1,12 @@
 import 'package:tuoora/data/models/user_model.dart';
 
 abstract class AuthRepositoryImpl {
-  Future<User> loginInstitute(String email, String password);
+  Future<User> loginInstitute(
+    String email,
+    String password, {
+    String? device,
+    String? os,
+  });
   Future<User> loginStudent(String email, String password);
   Future<void> logout(String role);
 

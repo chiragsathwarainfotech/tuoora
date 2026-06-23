@@ -58,6 +58,7 @@ dependencies:
   package_info_plus: ^9.0.0
   confetti: ^0.8.0
   in_app_update: ^4.2.3
+  device_info_plus: ^12.4.0
 
 dependency_overrides:
   record_linux: ^1.0.0

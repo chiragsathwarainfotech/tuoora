@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/data/repositories/auth_repository.dart';
 import 'package:tuoora/core/services/auth_service.dart';
+import 'package:tuoora/core/utils/device_info_helper.dart';
 import 'package:tuoora/core/services/institute_account_status_handler.dart';
 import 'package:tuoora/core/services/push_notification_service.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
@@ -47,7 +48,13 @@ class LoginController extends GetxController {
     try {
       dynamic user;
       if (role == 'INSTITUTE') {
-        user = await _authRepository.loginInstitute(email, password);
+        final deviceInfo = await DeviceInfoHelper.getDeviceInfo();
+        user = await _authRepository.loginInstitute(
+          email,
+          password,
+          device: deviceInfo['device'],
+          os: deviceInfo['os'],
+        );
       } else if (role == 'STUDENT') {
         user = await _authRepository.loginStudent(email, password);
       }

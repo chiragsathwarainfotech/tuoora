@@ -473,11 +473,13 @@ class InstituteProfileController extends GetxController {
   }
 
   void logout() async {
+    CommonLoading.show();
     try {
       await Get.find<AuthRepository>().logout('INSTITUTE');
     } catch (_) {}
     final authService = Get.find<AuthService>();
     await authService.clearSession();
+    CommonLoading.dismiss();
     Get.offAllNamed(AppRoutes.roleSelection);
   }
 

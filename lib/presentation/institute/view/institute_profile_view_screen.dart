@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
@@ -8,15 +7,14 @@ import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/data/models/institute_profile_model.dart';
 import 'package:tuoora/presentation/institute/controllers/institute_profile_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
-import 'package:tuoora/core/utils/url_launcher_utils.dart';
-import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/core/widgets/app_version_label.dart';
 import 'package:tuoora/core/widgets/common_loading.dart';
-import 'package:tuoora/core/constants/app_images.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:tuoora/core/services/auth_service.dart';
+import 'package:tuoora/core/utils/url_launcher_utils.dart';
+import 'package:tuoora/core/constants/url_constants.dart';
 
 class InstituteProfileViewScreen extends StatelessWidget {
   const InstituteProfileViewScreen({super.key});
@@ -30,7 +28,10 @@ class InstituteProfileViewScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            InstituteAppBar(title: AppStrings.instituteProfile, isRoot: false),
+            const InstituteAppBar(
+              title: AppStrings.instituteProfile,
+              isRoot: false,
+            ),
             Expanded(
               child: Obx(() {
                 if (controller.isLoading.value &&
@@ -78,18 +79,18 @@ class InstituteProfileViewScreen extends StatelessWidget {
                         AppSpacing.v16,
                         _buildUpiPaymentCard(controller),
                         AppSpacing.v16,
-                        _buildAccountCard(context),
+                        _buildActivePlanCard(),
                         AppSpacing.v16,
                         _buildSupportCard(),
                         AppSpacing.v16,
-                        _buildActivePlanCard(),
+                        _buildSettingsNavigationCard(),
                         AppSpacing.v16,
                         _buildDeleteAccountCard(context, controller),
                         AppSpacing.v16,
                         _buildLogoutCard(context, controller),
-                        AppSpacing.v24,
+                        AppSpacing.v16,
                         const AppVersionLabel(),
-                        AppSpacing.v24,
+                        AppSpacing.v12,
                       ],
                     ),
                   ),
@@ -368,7 +369,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
                 padding: AppSpacing.all8,
                 decoration: BoxDecoration(
                   color: AppColors.white,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
                   border: Border.all(color: AppColors.fieldBorder),
                 ),
                 child: ClipRRect(
@@ -427,7 +428,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
           Container(
             width: 56,
             height: 56,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: AppColors.primaryBrandLight,
               shape: BoxShape.circle,
             ),
@@ -484,358 +485,6 @@ class InstituteProfileViewScreen extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                   color: AppColors.white,
                 ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAccountCard(BuildContext context) {
-    return _card(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _cardSectionHeader('Account Information', Icons.settings_rounded),
-          _buildSettingsItem(
-            icon: Icons.lock_outline_rounded,
-            title: AppStrings.labelChangePassword,
-            subtitle: AppStrings.updateYourLoginCredentials,
-            onTap: () => Get.toNamed(AppRoutes.instituteChangePassword),
-          ),
-          _buildSettingsItem(
-            icon: Icons.workspace_premium_outlined,
-            title: AppStrings.subscription,
-            subtitle: AppStrings.manageYourActivePlan,
-            onTap: () => Get.toNamed(AppRoutes.instituteSubscription),
-          ),
-          _buildSettingsItem(
-            icon: Icons.chat_bubble_outline_rounded,
-            title: AppStrings.instWhatsAppIntegration,
-            subtitle: AppStrings.automateAlertsViaMetaApi,
-            isComingSoon: true,
-            onTap: () => _showWhatsAppComingSoonDialog(context),
-          ),
-          _buildSettingsItem(
-            icon: Icons.qr_code_2_rounded,
-            title: AppStrings.upiPaymentManageTile,
-            subtitle: AppStrings.upiPaymentManageSubtitle,
-            onTap: () => Get.toNamed(AppRoutes.instituteUpiPaymentSettings),
-            isLast: true,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSupportCard() {
-    return _card(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _cardSectionHeader('Support & Legal', Icons.info_outline_rounded),
-          _buildSettingsItem(
-            icon: Icons.description_outlined,
-            title: AppStrings.termsConditions,
-            subtitle: AppStrings.readOurTermsOfService,
-            onTap: () =>
-                UrlLauncherUtils.openExternal(AppStrings.urlTermsConditions),
-          ),
-          _buildSettingsItem(
-            icon: Icons.privacy_tip_outlined,
-            title: AppStrings.privacyPolicy,
-            subtitle: AppStrings.learnHowWeProtectYourData,
-            onTap: () =>
-                UrlLauncherUtils.openExternal(AppStrings.urlPrivacyPolicy),
-          ),
-          _buildSettingsItem(
-            icon: Icons.help_center_outlined,
-            title: AppStrings.helpCenter,
-            subtitle: AppStrings.getAssistanceAndFaqs,
-            onTap: () => AppSnackBar.warning(AppStrings.comingSoon),
-            isLast: true,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildLogoutCard(
-    BuildContext context,
-    InstituteProfileController controller,
-  ) {
-    return _card(
-      child: _buildSettingsItem(
-        icon: Icons.logout_rounded,
-        title: AppStrings.logout,
-        subtitle: AppStrings.signOutOfYourAccount,
-        iconColor: AppColors.bohoRed,
-        onTap: () => _showLogoutDialog(context, controller),
-        isLast: true,
-      ),
-    );
-  }
-
-  Widget _buildDeleteAccountCard(
-    BuildContext context,
-    InstituteProfileController controller,
-  ) {
-    return _card(
-      child: _buildSettingsItem(
-        icon: Icons.delete_forever_rounded,
-        title: AppStrings.deleteAccount,
-        subtitle: AppStrings.deleteAccountSubtitle,
-        iconColor: AppColors.bohoRed,
-        onTap: () => _showDeleteAccountDialog(context, controller),
-        isLast: true,
-      ),
-    );
-  }
-
-  Widget _cardSectionHeader(String title, IconData icon) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(4, 4, 4, 12),
-      child: Row(
-        children: [
-          Icon(icon, size: 18, color: AppColors.primaryBrand),
-          AppSpacing.h8,
-          Text(
-            title,
-            style: AppTextStyles.outfit(
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
-              color: AppColors.textPrimary,
-              letterSpacing: 0.8,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildInfoRow(IconData icon, String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(4, 6, 4, 6),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(icon, size: 18, color: AppColors.textMuted),
-          AppSpacing.h12,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: AppTextStyles.outfit(
-                    fontSize: 10,
-                    color: AppColors.textMuted,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 0.6,
-                  ),
-                ),
-                AppSpacing.v2,
-                Text(
-                  value,
-                  style: AppTextStyles.outfit(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSettingsItem({
-    required IconData icon,
-    required String title,
-    required String subtitle,
-    required VoidCallback onTap,
-    Color? iconColor,
-    bool isLast = false,
-    bool isComingSoon = false,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(6),
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(4, 8, 4, isLast ? 8 : 12),
-        child: Row(
-          children: [
-            Container(
-              padding: AppSpacing.all8,
-              decoration: BoxDecoration(
-                color: (iconColor ?? AppColors.primaryBrand).withValues(
-                  alpha: 0.1,
-                ),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Icon(
-                icon,
-                size: 18,
-                color: iconColor ?? AppColors.primaryBrand,
-              ),
-            ),
-            AppSpacing.h12,
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: AppTextStyles.outfit(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: iconColor ?? AppColors.textPrimary,
-                    ),
-                  ),
-                  Text(
-                    subtitle,
-                    style: AppTextStyles.outfit(
-                      fontSize: 11,
-                      color: AppColors.textMuted,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            if (isComingSoon) ...[
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppColors.primaryBrandLight,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  'COMING SOON',
-                  style: AppTextStyles.outfit(
-                    fontSize: 9,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.primaryBrand,
-                    letterSpacing: 0.5,
-                  ),
-                ),
-              ),
-              AppSpacing.h8,
-            ],
-            Icon(
-              Icons.chevron_right_rounded,
-              color: AppColors.textMuted,
-              size: 20,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showLogoutDialog(
-    BuildContext context,
-    InstituteProfileController controller,
-  ) {
-    Get.dialog(
-      AlertDialog(
-        insetPadding: EdgeInsets.symmetric(horizontal: AppSpacing.s16),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-        ),
-        title: Text(
-          AppStrings.logout,
-          style: AppTextStyles.outfit(fontWeight: FontWeight.w600),
-        ),
-        content: Text(
-          AppStrings.instituteProfileAreYouSureYouWantTo,
-          style: AppTextStyles.outfit(color: AppColors.textSecondary),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: Text(
-              AppStrings.labelCancel,
-              style: AppTextStyles.outfit(
-                color: AppColors.textSecondary,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Get.back();
-              controller.logout();
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primaryBrand,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-              ),
-            ),
-            child: Text(
-              AppStrings.logout,
-              style: AppTextStyles.outfit(
-                color: AppColors.white,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showDeleteAccountDialog(
-    BuildContext context,
-    InstituteProfileController controller,
-  ) {
-    Get.dialog(
-      AlertDialog(
-        insetPadding: EdgeInsets.symmetric(horizontal: AppSpacing.s16),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-        ),
-        title: Text(
-          AppStrings.deleteAccountConfirmTitle,
-          style: AppTextStyles.outfit(fontWeight: FontWeight.w700),
-        ),
-        content: Text(
-          AppStrings.deleteAccountConfirmMessage,
-          style: AppTextStyles.outfit(
-            color: AppColors.textSecondary,
-            height: 1.5,
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: Text(
-              AppStrings.labelCancel,
-              style: AppTextStyles.outfit(
-                color: AppColors.textSecondary,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Get.back();
-              controller.deleteAccount();
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primaryBrand,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-              ),
-            ),
-            child: Text(
-              AppStrings.deleteAccountConfirmButton,
-              style: AppTextStyles.outfit(
-                color: AppColors.white,
-                fontWeight: FontWeight.w600,
               ),
             ),
           ),
@@ -1019,118 +668,433 @@ class InstituteProfileViewScreen extends StatelessWidget {
     });
   }
 
-  void _showWhatsAppComingSoonDialog(BuildContext context) {
-    Get.dialog(
-      Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-        ),
-        insetPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.s16),
-        child: Container(
-          padding: AppSpacing.all24,
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+  Widget _buildSupportCard() {
+    return _card(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _cardSectionHeader('Support & Legal', Icons.info_outline_rounded),
+          _buildSupportItem(
+            icon: Icons.description_outlined,
+            title: AppStrings.termsConditions,
+            subtitle: AppStrings.readOurTermsOfService,
+            onTap: () =>
+                UrlLauncherUtils.openExternal(UrlConstants.urlTermsConditions),
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Align(
-                alignment: Alignment.topRight,
-                child: InkWell(
-                  onTap: () => Get.back(),
-                  child: const Icon(
-                    Icons.close_rounded,
-                    size: 20,
-                    color: AppColors.textMuted,
-                  ),
-                ),
+          _buildSupportItem(
+            icon: Icons.privacy_tip_outlined,
+            title: AppStrings.privacyPolicy,
+            subtitle: AppStrings.learnHowWeProtectYourData,
+            onTap: () =>
+                UrlLauncherUtils.openExternal(UrlConstants.urlPrivacyPolicy),
+          ),
+          _buildSupportItem(
+            icon: Icons.help_center_outlined,
+            title: AppStrings.helpSupport,
+            subtitle: AppStrings.getAssistanceAndFaqs,
+            onTap: () =>
+                UrlLauncherUtils.openExternal(UrlConstants.urlHelpSupport),
+            isLast: true,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSupportItem({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+    bool isLast = false,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(6),
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(4, 8, 4, isLast ? 8 : 12),
+        child: Row(
+          children: [
+            Container(
+              padding: AppSpacing.all8,
+              decoration: BoxDecoration(
+                color: AppColors.primaryBrand.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(10),
               ),
-              AppSpacing.v12,
-              Stack(
-                alignment: Alignment.center,
+              child: Icon(icon, size: 18, color: AppColors.primaryBrand),
+            ),
+            AppSpacing.h12,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: Color(0xFF25D366),
-                      borderRadius: BorderRadius.circular(
-                        AppSpacing.cardRadius,
-                      ),
+                  Text(
+                    title,
+                    style: AppTextStyles.outfit(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textPrimary,
                     ),
                   ),
-                  SvgPicture.asset(AppImages.icWhatsapp, width: 48, height: 48),
+                  Text(
+                    subtitle,
+                    style: AppTextStyles.outfit(
+                      fontSize: 11,
+                      color: AppColors.textMuted,
+                    ),
+                  ),
                 ],
               ),
-              AppSpacing.v20,
+            ),
+            Icon(
+              Icons.chevron_right_rounded,
+              color: AppColors.textMuted,
+              size: 20,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSettingsNavigationCard() {
+    return _card(
+      child: InkWell(
+        onTap: () => Get.toNamed(AppRoutes.instituteSettings),
+        borderRadius: BorderRadius.circular(6),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(4, 8, 4, 8),
+          child: Row(
+            children: [
               Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 6,
-                ),
+                padding: AppSpacing.all8,
                 decoration: BoxDecoration(
-                  color: AppColors.primaryBrandLight,
-                  borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+                  color: AppColors.primaryBrand.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                child: Text(
-                  'COMING SOON',
-                  style: AppTextStyles.outfit(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.primaryBrand,
-                    letterSpacing: 1.0,
-                  ),
+                child: const Icon(
+                  Icons.settings_rounded,
+                  size: 18,
+                  color: AppColors.primaryBrand,
                 ),
               ),
-              AppSpacing.v20,
-              Text(
-                'WhatsApp Integration',
-                style: AppTextStyles.outfit(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.textPrimary,
+              AppSpacing.h12,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Settings & Security',
+                      style: AppTextStyles.outfit(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                    Text(
+                      'Manage active devices, logins, passwords & alert integrations',
+                      style: AppTextStyles.outfit(
+                        fontSize: 11,
+                        color: AppColors.textMuted,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              AppSpacing.v16,
-              Text(
-                'We\'re building a direct integration with the Meta WhatsApp Cloud API. Soon you\'ll be able to send fee reminders, receipts, and daily updates straight to parents\' phones.',
-                textAlign: TextAlign.center,
-                style: AppTextStyles.outfit(
-                  fontSize: 13,
-                  height: 1.5,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.textTertiary,
-                ),
-              ),
-              AppSpacing.v32,
-              ElevatedButton(
-                onPressed: () => Get.back(),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.darkSlate,
-                  foregroundColor: AppColors.white,
-                  elevation: 0,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 40,
-                    vertical: 14,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-                  ),
-                ),
-                child: Text(
-                  'GOT IT',
-                  style: AppTextStyles.outfit(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 1.0,
-                  ),
-                ),
+              Icon(
+                Icons.chevron_right_rounded,
+                color: AppColors.textMuted,
+                size: 20,
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildLogoutCard(
+    BuildContext context,
+    InstituteProfileController controller,
+  ) {
+    return _card(
+      child: InkWell(
+        onTap: () => _showLogoutDialog(context, controller),
+        borderRadius: BorderRadius.circular(6),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(4, 8, 4, 8),
+          child: Row(
+            children: [
+              Container(
+                padding: AppSpacing.all8,
+                decoration: BoxDecoration(
+                  color: AppColors.bohoRed.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(
+                  Icons.logout_rounded,
+                  size: 18,
+                  color: AppColors.bohoRed,
+                ),
+              ),
+              AppSpacing.h12,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      AppStrings.logout,
+                      style: AppTextStyles.outfit(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.bohoRed,
+                      ),
+                    ),
+                    Text(
+                      AppStrings.signOutOfYourAccount,
+                      style: AppTextStyles.outfit(
+                        fontSize: 11,
+                        color: AppColors.textMuted,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(
+                Icons.chevron_right_rounded,
+                color: AppColors.textMuted,
+                size: 20,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDeleteAccountCard(
+    BuildContext context,
+    InstituteProfileController controller,
+  ) {
+    return _card(
+      child: InkWell(
+        onTap: () => _showDeleteAccountDialog(context, controller),
+        borderRadius: BorderRadius.circular(6),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(4, 8, 4, 8),
+          child: Row(
+            children: [
+              Container(
+                padding: AppSpacing.all8,
+                decoration: BoxDecoration(
+                  color: AppColors.bohoRed.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(
+                  Icons.delete_forever_rounded,
+                  size: 18,
+                  color: AppColors.bohoRed,
+                ),
+              ),
+              AppSpacing.h12,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      AppStrings.deleteAccount,
+                      style: AppTextStyles.outfit(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.bohoRed,
+                      ),
+                    ),
+                    Text(
+                      AppStrings.deleteAccountSubtitle,
+                      style: AppTextStyles.outfit(
+                        fontSize: 11,
+                        color: AppColors.textMuted,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(
+                Icons.chevron_right_rounded,
+                color: AppColors.textMuted,
+                size: 20,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showLogoutDialog(
+    BuildContext context,
+    InstituteProfileController controller,
+  ) {
+    Get.dialog(
+      AlertDialog(
+        insetPadding: EdgeInsets.symmetric(horizontal: AppSpacing.s16),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+        ),
+        title: Text(
+          AppStrings.logout,
+          style: AppTextStyles.outfit(fontWeight: FontWeight.w600),
+        ),
+        content: Text(
+          AppStrings.instituteProfileAreYouSureYouWantTo,
+          style: AppTextStyles.outfit(color: AppColors.textSecondary),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text(
+              AppStrings.labelCancel,
+              style: AppTextStyles.outfit(
+                color: AppColors.textSecondary,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Get.back();
+              controller.logout();
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primaryBrand,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+              ),
+            ),
+            child: Text(
+              AppStrings.logout,
+              style: AppTextStyles.outfit(
+                color: AppColors.white,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showDeleteAccountDialog(
+    BuildContext context,
+    InstituteProfileController controller,
+  ) {
+    Get.dialog(
+      AlertDialog(
+        insetPadding: EdgeInsets.symmetric(horizontal: AppSpacing.s16),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+        ),
+        title: Text(
+          AppStrings.deleteAccountConfirmTitle,
+          style: AppTextStyles.outfit(fontWeight: FontWeight.w700),
+        ),
+        content: Text(
+          AppStrings.deleteAccountConfirmMessage,
+          style: AppTextStyles.outfit(
+            color: AppColors.textSecondary,
+            height: 1.5,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text(
+              AppStrings.labelCancel,
+              style: AppTextStyles.outfit(
+                color: AppColors.textSecondary,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Get.back();
+              controller.deleteAccount();
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.bohoRed,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
+              ),
+            ),
+            child: Text(
+              AppStrings.deleteAccountConfirmButton,
+              style: AppTextStyles.outfit(
+                color: AppColors.white,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _cardSectionHeader(String title, IconData icon) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(4, 4, 4, 12),
+      child: Row(
+        children: [
+          Icon(icon, size: 18, color: AppColors.primaryBrand),
+          AppSpacing.h8,
+          Text(
+            title,
+            style: AppTextStyles.outfit(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: AppColors.textPrimary,
+              letterSpacing: 0.8,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(IconData icon, String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(4, 6, 4, 6),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, size: 18, color: AppColors.textMuted),
+          AppSpacing.h12,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: AppTextStyles.outfit(
+                    fontSize: 10,
+                    color: AppColors.textMuted,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0.6,
+                  ),
+                ),
+                AppSpacing.v2,
+                Text(
+                  value,
+                  style: AppTextStyles.outfit(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

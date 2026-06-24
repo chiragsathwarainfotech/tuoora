@@ -141,4 +141,5 @@ abstract class InstituteRepositoryImpl {
   });
   Future<void> logSalary(Map<String, dynamic> data);
   Future<void> deleteResource(int id);
+  Future<void> deleteDeviceSession(int sessionId);
 }

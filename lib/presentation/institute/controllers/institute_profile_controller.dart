@@ -499,6 +499,34 @@ class InstituteProfileController extends GetxController {
     }
   }
 
+  Future<void> deleteDeviceSession(int sessionId) async {
+    final p = profile.value;
+    final session = p?.activeSessions?.firstWhereOrNull(
+      (s) => s.id == sessionId,
+    );
+    if (session != null && session.isCurrent == true) {
+      logout();
+      return;
+    }
+
+    CommonLoading.show();
+    try {
+      await _instituteRepository.deleteDeviceSession(sessionId);
+      if (p != null && p.activeSessions != null) {
+        p.activeSessions!.removeWhere((s) => s.id == sessionId);
+        profile.refresh();
+      }
+      CommonLoading.dismiss();
+      AppSnackBar.success(AppStrings.deviceLogout);
+    } catch (e) {
+      CommonLoading.dismiss();
+      AppSnackBar.error(
+        e.toString().replaceAll('Exception: ', ''),
+        title: 'Logout Failed',
+      );
+    }
+  }
+
   @override
   void onClose() {
     nameController.dispose();

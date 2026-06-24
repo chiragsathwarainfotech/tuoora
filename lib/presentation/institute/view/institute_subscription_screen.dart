@@ -3,6 +3,7 @@ import 'dart:io' show Platform;
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/constants/url_constants.dart';
 import 'package:tuoora/core/utils/url_launcher_utils.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
 import 'package:tuoora/data/models/institute_subscription_model.dart';
@@ -249,7 +250,7 @@ class InstituteSubscriptionScreen
               label: AppStrings.subscriptionOpenWebButton,
               icon: Icons.open_in_new_rounded,
               onPressed: () => UrlLauncherUtils.openExternal(
-                AppStrings.urlInstituteSubscription,
+                UrlConstants.urlInstituteSubscription,
               ),
             ),
           ),

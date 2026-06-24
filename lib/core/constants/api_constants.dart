@@ -40,6 +40,8 @@ class ApiConstants {
   static const String instituteAccountDelete = '/institute/profile/delete';
   static const String institutePaymentUpdate =
       '/institute/profile/payment/update';
+  static String instituteDeleteDeviceSession(int sessionId) =>
+      '/institute/profile/device-sessions/$sessionId';
   static const String instituteBatches = '/institute/batches';
   static const String instituteChangePassword =
       '/institute/profile/change-password';

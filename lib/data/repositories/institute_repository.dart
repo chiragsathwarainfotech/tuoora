@@ -1024,4 +1024,14 @@ class InstituteRepository implements InstituteRepositoryImpl {
       throw Exception(e.toString());
     }
   }
+
+  @override
+  Future<void> deleteDeviceSession(int sessionId) async {
+    final response = await _apiClient.delete(
+      ApiConstants.instituteDeleteDeviceSession(sessionId),
+    );
+    if (response.status.hasError) {
+      _handleError(response, 'Failed to delete device session');
+    }
+  }
 }

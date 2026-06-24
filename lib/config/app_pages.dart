@@ -10,6 +10,7 @@ import 'package:tuoora/presentation/institute/view/institute_main_screen.dart';
 import 'package:tuoora/presentation/institute/view/add_student_screen.dart';
 import 'package:tuoora/presentation/institute/view/batch_details_screen.dart';
 import 'package:tuoora/presentation/institute/view/institute_profile_view_screen.dart';
+import 'package:tuoora/presentation/institute/view/institute_settings_screen.dart';
 import 'package:tuoora/presentation/institute/view/mark_attendance_screen.dart';
 import 'package:tuoora/presentation/institute/view/student_profile_screen.dart'
     as institute_student_profile;
@@ -310,6 +311,11 @@ class AppPages {
     GetPage(
       name: AppRoutes.instituteProfile,
       page: () => const InstituteProfileViewScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteSettings,
+      page: () => const InstituteSettingsScreen(),
       binding: InstituteBinding(),
     ),
     GetPage(

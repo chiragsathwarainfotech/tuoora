@@ -13,17 +13,12 @@ import 'package:tuoora/core/widgets/app_button.dart';
 import 'package:tuoora/presentation/institute/controllers/institute_profile_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 
-/// Edit-only screen for the institute's UPI ID + QR-code image. Reached
-/// from the profile view's "UPI Payment Details" card. On save it calls
-/// `POST /institute/profile/payment/update` via the profile controller
-/// and pops back. The web counterpart is the "UPI Configurations" card.
 class InstituteUpiPaymentSettingsScreen
     extends GetView<InstituteProfileController> {
   const InstituteUpiPaymentSettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Local editing controller — only commit to the profile model on Save.
     final upiIdField = TextEditingController(text: controller.upiId.value);
 
     return Scaffold(
@@ -70,33 +65,17 @@ class InstituteUpiPaymentSettingsScreen
     );
   }
 
-  // ----------------------------------------------------------- intro
   Widget _buildIntroBlock() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          AppStrings.upiPaymentSettingsTitle,
-          style: AppTextStyles.outfit(
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-            color: AppColors.textPrimary,
-          ),
-        ),
-        AppSpacing.v8,
-        Text(
-          AppStrings.upiPaymentSettingsSubtitle,
-          style: AppTextStyles.outfit(
-            fontSize: 13,
-            height: 1.5,
-            color: AppColors.textSecondary,
-          ),
-        ),
-      ],
+    return Text(
+      AppStrings.upiPaymentSettingsSubtitle,
+      style: AppTextStyles.outfit(
+        fontSize: 13,
+        height: 1.5,
+        color: AppColors.textSecondary,
+      ),
     );
   }
 
-  // ------------------------------------ "UPI Configurations" card
   Widget _buildConfigurationsCard(TextEditingController upiIdField) {
     return _card(
       child: Column(
@@ -109,12 +88,12 @@ class InstituteUpiPaymentSettingsScreen
           AppSpacing.v4,
           _fieldLabel(AppStrings.upiIdLabel),
           AppSpacing.v8,
-          Obx(
-            () => _upiIdInput(
+          Obx(() {
+            return _upiIdInput(
               upiIdField,
               errorText: controller.upiIdError.value,
-            ),
-          ),
+            );
+          }),
           AppSpacing.v8,
           Text(
             AppStrings.upiIdHelper,
@@ -156,10 +135,7 @@ class InstituteUpiPaymentSettingsScreen
     );
   }
 
-  Widget _upiIdInput(
-    TextEditingController upiIdField, {
-    String? errorText,
-  }) {
+  Widget _upiIdInput(TextEditingController upiIdField, {String? errorText}) {
     final hasError = errorText != null && errorText.isNotEmpty;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -201,10 +177,7 @@ class InstituteUpiPaymentSettingsScreen
           AppSpacing.v4,
           Text(
             errorText,
-            style: AppTextStyles.outfit(
-              fontSize: 11,
-              color: AppColors.bohoRed,
-            ),
+            style: AppTextStyles.outfit(fontSize: 11, color: AppColors.bohoRed),
           ),
         ],
       ],
@@ -272,10 +245,7 @@ class InstituteUpiPaymentSettingsScreen
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 18,
-                vertical: 10,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
             ),
             icon: const Icon(Icons.upload_rounded, size: 18),
             label: Text(
@@ -485,4 +455,3 @@ class InstituteUpiPaymentSettingsScreen
     );
   }
 }
-

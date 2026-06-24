@@ -81,11 +81,14 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
                                   },
                                   icon: Icons.email_outlined,
                                   backgroundColor: AppColors.white,
-                                  foregroundColor: AppColors.warningAmber, // It looks a bit more amber/yellow in the image
+                                  foregroundColor: AppColors
+                                      .warningAmber, // It looks a bit more amber/yellow in the image
                                   borderColor: AppColors.warningAmber,
                                   fontSize: 13,
                                   fontWeight: FontWeight.w600,
-                                  padding: const EdgeInsets.symmetric(vertical: AppSpacing.s14),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: AppSpacing.s14,
+                                  ),
                                 ),
                               ),
                               const SizedBox(width: AppSpacing.s16),
@@ -94,16 +97,22 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
                                   label: 'Reset Password',
                                   onPressed: () {
                                     if (student != null) {
-                                      _showResetPasswordDialog(context, student);
+                                      _showResetPasswordDialog(
+                                        context,
+                                        student,
+                                      );
                                     }
                                   },
                                   icon: Icons.lock_outline,
                                   backgroundColor: AppColors.white,
-                                  foregroundColor: AppColors.studentProgressBlue,
+                                  foregroundColor:
+                                      AppColors.studentProgressBlue,
                                   borderColor: AppColors.studentProgressBlue,
                                   fontSize: 13,
                                   fontWeight: FontWeight.w600,
-                                  padding: const EdgeInsets.symmetric(vertical: AppSpacing.s14),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: AppSpacing.s14,
+                                  ),
                                 ),
                               ),
                             ],
@@ -611,43 +620,45 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
                 ),
                 const SizedBox(height: 8),
                 // Input Field
-                Obx(() => Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: AppColors.fieldBorder),
-                  ),
-                  child: TextField(
-                    controller: passwordController,
-                    obscureText: obscurePassword.value,
-                    style: AppTextStyles.outfit(
-                      fontSize: 14,
-                      color: AppColors.textPrimary,
+                Obx(
+                  () => Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: AppColors.fieldBorder),
                     ),
-                    decoration: InputDecoration(
-                      hintText: 'Enter secure password',
-                      hintStyle: AppTextStyles.outfit(
+                    child: TextField(
+                      controller: passwordController,
+                      obscureText: obscurePassword.value,
+                      style: AppTextStyles.outfit(
                         fontSize: 14,
-                        color: AppColors.textMuted,
+                        color: AppColors.textPrimary,
                       ),
-                      border: InputBorder.none,
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 14,
-                      ),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          obscurePassword.value
-                              ? Icons.visibility_outlined
-                              : Icons.visibility_off_outlined,
+                      decoration: InputDecoration(
+                        hintText: 'Enter secure password',
+                        hintStyle: AppTextStyles.outfit(
+                          fontSize: 14,
                           color: AppColors.textMuted,
-                          size: 20,
                         ),
-                        onPressed: () => obscurePassword.toggle(),
+                        border: InputBorder.none,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 14,
+                        ),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            obscurePassword.value
+                                ? Icons.visibility_outlined
+                                : Icons.visibility_off_outlined,
+                            color: AppColors.textMuted,
+                            size: 20,
+                          ),
+                          onPressed: () => obscurePassword.toggle(),
+                        ),
                       ),
                     ),
                   ),
-                )),
+                ),
                 const SizedBox(height: 16),
                 // Requirements
                 Container(
@@ -673,7 +684,9 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
                       _buildRequirementBullet('8 to 15 characters'),
                       _buildRequirementBullet('At least 1 uppercase letter'),
                       _buildRequirementBullet('At least 1 digit (number)'),
-                      _buildRequirementBullet('At least 1 special character (@#\$% etc.)'),
+                      _buildRequirementBullet(
+                        'At least 1 special character (@#\$% etc.)',
+                      ),
                     ],
                   ),
                 ),
@@ -714,7 +727,7 @@ class StudentProfileScreen extends GetView<InstituteStudentController> {
                           controller.resetPassword(password);
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF4F46E5), // Indigo matching image
+                          backgroundColor: AppColors.studentUpdateIconColor,
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           elevation: 0,
                           shape: RoundedRectangleBorder(

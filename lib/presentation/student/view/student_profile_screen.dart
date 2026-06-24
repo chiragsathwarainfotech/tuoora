@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
+import 'package:tuoora/core/constants/url_constants.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/widgets/app_network_image.dart';
@@ -547,7 +548,7 @@ class StudentProfileScreen extends GetView<StudentProfileController> {
           icon: Icons.shield_outlined,
           title: AppStrings.privacyTerms,
           onTap: () =>
-              UrlLauncherUtils.openExternal(AppStrings.urlPrivacyPolicy),
+              UrlLauncherUtils.openExternal(UrlConstants.urlPrivacyPolicy),
         ),
         Divider(height: 1, color: AppColors.borderGrey.withValues(alpha: 0.5)),
         ProfileMenuTile(

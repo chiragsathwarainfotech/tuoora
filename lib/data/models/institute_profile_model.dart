@@ -90,6 +90,11 @@ class InstituteProfile {
       lastLogin: json['last_login']?.toString(),
       lastOpen: json['last_open']?.toString(),
       fcmToken: json['fcm_token']?.toString(),
+      activeSessions: json['active_sessions'] != null
+          ? List<ActiveSessions>.from(
+              (json['active_sessions'] as List).map((x) => ActiveSessions.fromJson(x)),
+            )
+          : null,
     );
   }
 
@@ -121,6 +126,7 @@ class InstituteProfile {
       'last_login': lastLogin,
       'last_open': lastOpen,
       'fcm_token': fcmToken,
+      'active_sessions': activeSessions?.map((x) => x.toJson()).toList(),
     };
   }
 
@@ -152,6 +158,7 @@ class InstituteProfile {
       lastLogin: lastLogin,
       lastOpen: lastOpen,
       fcmToken: fcmToken,
+      activeSessions: activeSessions ?? this.activeSessions,
     );
   }
 }

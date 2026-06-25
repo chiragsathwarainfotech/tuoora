@@ -15,6 +15,8 @@ class SubscriptionPlan {
     required this.status,
   });
 
+  String get appleProductId => 'com.tuoora.plan$id';
+
   factory SubscriptionPlan.fromJson(Map<String, dynamic> json) {
     return SubscriptionPlan(
       id: json['id'] ?? 0,

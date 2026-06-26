@@ -33,6 +33,7 @@ abstract class InstituteRepositoryImpl {
     required int planId,
     required String transactionId,
     required String receiptData,
+    required String platform,
   });
 
   // Authentication

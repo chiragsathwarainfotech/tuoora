@@ -25,13 +25,19 @@ class IAPController extends GetxController {
   final isPurchasing = false.obs;
   int? _activePlanId;
 
+  // Runs on both iOS (StoreKit) and Android (Google Play Billing)
+  static bool get _isSupported => Platform.isIOS || Platform.isAndroid;
+
+  // "ios" or "android" — sent to backend so it uses the correct receipt path
+  static String get _platform => Platform.isIOS ? 'ios' : 'android';
+
   ProductDetails? productForPlan(int planId) =>
       _products['com.tuoora.plan$planId'];
 
   @override
   void onInit() {
     super.onInit();
-    if (!Platform.isIOS) return;
+    if (!_isSupported) return;
 
     _purchaseSubscription = _iap.purchaseStream.listen(_onPurchaseUpdated);
     _initProducts();
@@ -40,7 +46,7 @@ class IAPController extends GetxController {
   Future<void> _initProducts() async {
     isAvailable.value = await _iap.isAvailable();
 
-    // Guard: controller may have been disposed while awaiting
+    // Guard: controller may have been disposed during the await
     if (_disposed || !isAvailable.value) return;
 
     try {
@@ -58,15 +64,14 @@ class IAPController extends GetxController {
       final existing = subCtrl.subscriptionData.value;
       if (existing != null) loadProductsForPlans(existing.plans);
     } catch (_) {
-      // Dependency not yet available — products will load via the Worker
-      // once InstituteSubscriptionController is registered.
+      // Dependency not yet available — Worker will trigger load when data arrives
     }
   }
 
   Future<void> loadProductsForPlans(List<SubscriptionPlan> plans) async {
-    if (_disposed || !Platform.isIOS || !isAvailable.value) return;
+    if (_disposed || !isAvailable.value) return;
 
-    final activePlans = plans.where((p) => p.status == 1).toList();
+    final activePlans = plans.where((p) => p.status == 1 && !p.isFree).toList();
     if (activePlans.isEmpty) return;
 
     isLoadingProducts.value = true;
@@ -98,8 +103,11 @@ class IAPController extends GetxController {
     _activePlanId = plan.id;
     isPurchasing.value = true;
 
-    // buyConsumable allows buying the same product ID again (needed for renewals)
-    await _iap.buyConsumable(purchaseParam: PurchaseParam(productDetails: product));
+    // buyConsumable allows re-purchasing the same product ID (needed for renewals)
+    // Works identically on iOS (StoreKit) and Android (Google Play Billing)
+    await _iap.buyConsumable(
+      purchaseParam: PurchaseParam(productDetails: product),
+    );
     // State is reset inside _onPurchaseUpdated
   }
 
@@ -107,13 +115,13 @@ class IAPController extends GetxController {
     for (final purchase in purchases) {
       switch (purchase.status) {
         case PurchaseStatus.pending:
-          // Keep isPurchasing = true while Apple processes the payment
+          // Keep isPurchasing = true while the store processes the payment
           break;
 
         case PurchaseStatus.purchased:
           // 1. Verify with backend & activate subscription
           await _verifyAndActivate(purchase);
-          // 2. Finalise the transaction with StoreKit
+          // 2. Finalise the transaction with the store (required on both platforms)
           if (purchase.pendingCompletePurchase) {
             await _iap.completePurchase(purchase);
           }
@@ -149,11 +157,11 @@ class IAPController extends GetxController {
     }
   }
 
-  /// Task 3 — Purchase Verification & Backend Processing:
-  /// 1. Captures transaction ID and base64 receipt from StoreKit.
-  /// 2. POSTs to /institute/subscription/iap-verify.
-  /// 3. Backend verifies with Apple and activates the subscription.
-  /// 4. Refreshes local subscription state and updates AuthService.
+  /// Sends transaction proof to the backend for server-side verification.
+  ///
+  /// iOS  → [receiptData] is the base64-encoded App Store receipt.
+  /// Android → [receiptData] is the Google Play purchase token.
+  /// The [platform] field lets the backend choose the correct verification path.
   Future<void> _verifyAndActivate(PurchaseDetails details) async {
     final planId = _activePlanId;
     if (planId == null) return;
@@ -161,13 +169,12 @@ class IAPController extends GetxController {
     try {
       await _repository.verifyIapPurchase(
         planId: planId,
-        // Unique Apple transaction identifier
         transactionId: details.purchaseID ?? details.productID,
-        // Base64-encoded App Store receipt for server-side verification
         receiptData: details.verificationData.serverVerificationData,
+        platform: _platform,
       );
 
-      // Refresh subscription data so the active plan card updates immediately
+      // Refresh the subscription screen so the active plan card updates
       if (!_disposed && Get.isRegistered<InstituteSubscriptionController>()) {
         await Get.find<InstituteSubscriptionController>()
             .fetchSubscriptionData();

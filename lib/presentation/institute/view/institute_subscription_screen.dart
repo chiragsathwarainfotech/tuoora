@@ -1,5 +1,3 @@
-import 'dart:io' show Platform;
-
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
@@ -59,21 +57,11 @@ class InstituteSubscriptionScreen
                       children: [
                         _buildActivePlanCard(data.subscription, data.history),
                         AppSpacing.v24,
-                        if (Platform.isIOS) ...[
-                          _buildIAPSection(data.plans),
-                          AppSpacing.v24,
-                          _buildFeatureCards(),
-                          AppSpacing.v24,
-                          _buildRecentBillingTable(data.history),
-                        ] else ...[
-                          _buildHeroHeader(),
-                          AppSpacing.v20,
-                          _buildPlansRow(data.plans, data.subscription),
-                          AppSpacing.v24,
-                          _buildFeatureCards(),
-                          AppSpacing.v24,
-                          _buildRecentBillingTable(data.history),
-                        ],
+                        _buildIAPSection(data.plans),
+                        AppSpacing.v24,
+                        _buildFeatureCards(),
+                        AppSpacing.v24,
+                        _buildRecentBillingTable(data.history),
                       ],
                     ),
                   ),
@@ -199,7 +187,7 @@ class InstituteSubscriptionScreen
 
   Widget _buildIAPSection(List<SubscriptionPlan> plans) {
     final iapCtrl = Get.find<IAPController>();
-    final activePlans = plans.where((p) => p.status == 1).toList();
+    final activePlans = plans.where((p) => p.status == 1 && !p.isFree).toList();
 
     return Obx(() {
       final isLoading = iapCtrl.isLoadingProducts.value;
@@ -465,116 +453,6 @@ class InstituteSubscriptionScreen
                   ),
                 ],
               ),
-      ),
-    );
-  }
-
-  Widget _buildHeroHeader() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text(
-          AppStrings.instChooseBestPlan,
-          textAlign: TextAlign.center,
-          style: AppTextStyles.outfit(
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-            color: AppColors.textPrimary,
-          ),
-        ),
-        AppSpacing.v8,
-        Text(
-          AppStrings.instScalableSolutions,
-          textAlign: TextAlign.center,
-          style: AppTextStyles.outfit(
-            fontSize: 13,
-            color: AppColors.textTertiary,
-            height: 1.4,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildPlansRow(List<SubscriptionPlan> plans, SubscriptionDetails sub) {
-    if (plans.isEmpty) return const SizedBox.shrink();
-    return SizedBox(
-      height: 180,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        physics: const BouncingScrollPhysics(),
-        itemCount: plans.length,
-        separatorBuilder: (_, _) => AppSpacing.h10,
-        itemBuilder: (_, i) => _buildPlanCard(plans[i], sub),
-      ),
-    );
-  }
-
-  Widget _buildPlanCard(SubscriptionPlan plan, SubscriptionDetails sub) {
-    final isCurrent =
-        plan.name.trim().toLowerCase() == sub.planName.trim().toLowerCase();
-    return Container(
-      width: 200,
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: isCurrent ? AppColors.primaryBrand : AppColors.fieldBorder,
-          width: isCurrent ? 1.5 : 1,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            plan.name.toUpperCase(),
-            textAlign: TextAlign.center,
-            style: AppTextStyles.outfit(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: AppColors.fieldLabel,
-              letterSpacing: 1.4,
-            ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          Text(
-            _formatPrice(plan.price),
-            textAlign: TextAlign.center,
-            style: AppTextStyles.outfit(
-              fontSize: 30,
-              fontWeight: FontWeight.w800,
-              color: AppColors.textPrimary,
-            ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-              border: Border.all(color: AppColors.fieldBorder),
-            ),
-            child: Text(
-              '/${plan.durationDays} DAYS',
-              style: AppTextStyles.outfit(
-                fontSize: 10,
-                fontWeight: FontWeight.w600,
-                color: AppColors.fieldLabel,
-                letterSpacing: 1.2,
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }

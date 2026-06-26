@@ -92,6 +92,7 @@ class InstituteRepository implements InstituteRepositoryImpl {
     required int planId,
     required String transactionId,
     required String receiptData,
+    required String platform,
   }) async {
     final response = await _apiClient.post(
       ApiConstants.instituteSubscriptionIapVerify,
@@ -99,6 +100,8 @@ class InstituteRepository implements InstituteRepositoryImpl {
         'plan_id': planId,
         'transaction_id': transactionId,
         'receipt_data': receiptData,
+        // "ios" → Apple receipt; "android" → Google purchase token
+        'platform': platform,
       },
     );
     if (response.status.hasError) {

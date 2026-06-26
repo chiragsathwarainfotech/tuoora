@@ -86,11 +86,6 @@ class IAPController extends GetxController {
       for (final p in response.productDetails) {
         map[p.id] = p;
       }
-      // ignore: avoid_print
-      print('[IAP] Loaded ${map.length} products: ${map.keys.toList()}');
-      // ignore: avoid_print
-      print('[IAP] Not found IDs: ${response.notFoundIDs}');
-      _products.assignAll(map);
     } finally {
       if (!_disposed) isLoadingProducts.value = false;
     }

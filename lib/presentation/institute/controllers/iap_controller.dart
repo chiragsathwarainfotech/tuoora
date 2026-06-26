@@ -86,6 +86,7 @@ class IAPController extends GetxController {
       for (final p in response.productDetails) {
         map[p.id] = p;
       }
+      _products.assignAll(map);
     } finally {
       if (!_disposed) isLoadingProducts.value = false;
     }
@@ -112,6 +113,19 @@ class IAPController extends GetxController {
     // State is reset inside _onPurchaseUpdated
   }
 
+  /// Finalises a transaction with the store, guarded against the StoreKit
+  /// plugin throwing (e.g. a null-check error in the Xcode StoreKit testing
+  /// environment) so a completion failure never crashes the app.
+  Future<void> _safeComplete(PurchaseDetails purchase) async {
+    if (!purchase.pendingCompletePurchase) return;
+    try {
+      await _iap.completePurchase(purchase);
+    } catch (_) {
+      // Completion can fail in local/sandbox testing; ignore so the
+      // purchase stream handler doesn't throw an unhandled exception.
+    }
+  }
+
   Future<void> _onPurchaseUpdated(List<PurchaseDetails> purchases) async {
     for (final purchase in purchases) {
       switch (purchase.status) {
@@ -123,9 +137,7 @@ class IAPController extends GetxController {
           // 1. Verify with backend & activate subscription
           await _verifyAndActivate(purchase);
           // 2. Finalise the transaction with the store (required on both platforms)
-          if (purchase.pendingCompletePurchase) {
-            await _iap.completePurchase(purchase);
-          }
+          await _safeComplete(purchase);
           if (!_disposed) {
             isPurchasing.value = false;
             purchasingPlanId.value = null;
@@ -136,9 +148,7 @@ class IAPController extends GetxController {
           AppSnackBar.error(
             purchase.error?.message ?? AppStrings.iapPurchaseFailed,
           );
-          if (purchase.pendingCompletePurchase) {
-            await _iap.completePurchase(purchase);
-          }
+          await _safeComplete(purchase);
           if (!_disposed) {
             isPurchasing.value = false;
             purchasingPlanId.value = null;
@@ -154,9 +164,7 @@ class IAPController extends GetxController {
 
         case PurchaseStatus.restored:
           // Finalise any previously incomplete transactions on app start
-          if (purchase.pendingCompletePurchase) {
-            await _iap.completePurchase(purchase);
-          }
+          await _safeComplete(purchase);
       }
     }
   }

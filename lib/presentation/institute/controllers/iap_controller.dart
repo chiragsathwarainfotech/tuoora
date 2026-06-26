@@ -86,10 +86,6 @@ class IAPController extends GetxController {
       for (final p in response.productDetails) {
         map[p.id] = p;
       }
-      // ignore: avoid_print
-      print('[IAP] Loaded ${map.length} products: ${map.keys.toList()}');
-      // ignore: avoid_print
-      print('[IAP] Not found IDs: ${response.notFoundIDs}');
       _products.assignAll(map);
     } finally {
       if (!_disposed) isLoadingProducts.value = false;
@@ -109,12 +105,22 @@ class IAPController extends GetxController {
     isPurchasing.value = true;
     purchasingPlanId.value = plan.id;
 
-    // buyConsumable allows re-purchasing the same product ID (needed for renewals)
-    // Works identically on iOS (StoreKit) and Android (Google Play Billing)
-    await _iap.buyConsumable(
-      purchaseParam: PurchaseParam(productDetails: product),
-    );
-    // State is reset inside _onPurchaseUpdated
+    try {
+      // buyConsumable allows re-purchasing the same product ID (needed for renewals)
+      // Works identically on iOS (StoreKit) and Android (Google Play Billing)
+      await _iap.buyConsumable(
+        purchaseParam: PurchaseParam(productDetails: product),
+      );
+      // On success: state is reset inside _onPurchaseUpdated
+    } catch (_) {
+      // StoreKit threw synchronously (e.g. duplicate pending transaction)
+      if (!_disposed) {
+        isPurchasing.value = false;
+        purchasingPlanId.value = null;
+        _activePlanId = null;
+        AppSnackBar.error(AppStrings.iapPurchaseFailed);
+      }
+    }
   }
 
   Future<void> _onPurchaseUpdated(List<PurchaseDetails> purchases) async {

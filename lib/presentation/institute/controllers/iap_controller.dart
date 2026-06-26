@@ -23,6 +23,7 @@ class IAPController extends GetxController {
   final isLoadingProducts = false.obs;
   final _products = <String, ProductDetails>{}.obs;
   final isPurchasing = false.obs;
+  final purchasingPlanId = Rx<int?>(null);
   int? _activePlanId;
 
   // Runs on both iOS (StoreKit) and Android (Google Play Billing)
@@ -85,6 +86,10 @@ class IAPController extends GetxController {
       for (final p in response.productDetails) {
         map[p.id] = p;
       }
+      // ignore: avoid_print
+      print('[IAP] Loaded ${map.length} products: ${map.keys.toList()}');
+      // ignore: avoid_print
+      print('[IAP] Not found IDs: ${response.notFoundIDs}');
       _products.assignAll(map);
     } finally {
       if (!_disposed) isLoadingProducts.value = false;
@@ -102,6 +107,7 @@ class IAPController extends GetxController {
 
     _activePlanId = plan.id;
     isPurchasing.value = true;
+    purchasingPlanId.value = plan.id;
 
     // buyConsumable allows re-purchasing the same product ID (needed for renewals)
     // Works identically on iOS (StoreKit) and Android (Google Play Billing)
@@ -127,6 +133,7 @@ class IAPController extends GetxController {
           }
           if (!_disposed) {
             isPurchasing.value = false;
+            purchasingPlanId.value = null;
             _activePlanId = null;
           }
 
@@ -139,12 +146,14 @@ class IAPController extends GetxController {
           }
           if (!_disposed) {
             isPurchasing.value = false;
+            purchasingPlanId.value = null;
             _activePlanId = null;
           }
 
         case PurchaseStatus.canceled:
           if (!_disposed) {
             isPurchasing.value = false;
+            purchasingPlanId.value = null;
             _activePlanId = null;
           }
 

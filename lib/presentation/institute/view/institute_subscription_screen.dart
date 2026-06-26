@@ -192,6 +192,7 @@ class InstituteSubscriptionScreen
     return Obx(() {
       final isLoading = iapCtrl.isLoadingProducts.value;
       final isPurchasing = iapCtrl.isPurchasing.value;
+      final purchasingPlanId = iapCtrl.purchasingPlanId.value;
       final isAvailable = iapCtrl.isAvailable.value;
 
       return Column(
@@ -241,7 +242,12 @@ class InstituteSubscriptionScreen
               children: [
                 for (int i = 0; i < activePlans.length; i++) ...[
                   if (i > 0) AppSpacing.v12,
-                  _buildIAPPlanCard(activePlans[i], iapCtrl, isPurchasing),
+                  _buildIAPPlanCard(
+                    activePlans[i],
+                    iapCtrl,
+                    isPurchasing,
+                    purchasingPlanId,
+                  ),
                 ],
               ],
             ),
@@ -273,9 +279,11 @@ class InstituteSubscriptionScreen
     SubscriptionPlan plan,
     IAPController iapCtrl,
     bool isPurchasing,
+    int? purchasingPlanId,
   ) {
     final product = iapCtrl.productForPlan(plan.id);
     final displayPrice = product?.price ?? _formatPrice(plan.price);
+    final isThisPlanPurchasing = isPurchasing && purchasingPlanId == plan.id;
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -351,13 +359,13 @@ class InstituteSubscriptionScreen
               // Pay Direct — Apple IAP
               Expanded(
                 child: _buildPayOption(
-                  label: isPurchasing
+                  label: isThisPlanPurchasing
                       ? AppStrings.iapProcessing
                       : AppStrings.iapPayDirect,
                   description: AppStrings.iapPayDirectDesc,
                   icon: Icons.apple_rounded,
                   isPrimary: true,
-                  isLoading: isPurchasing,
+                  isLoading: isThisPlanPurchasing,
                   onTap: isPurchasing ? null : () => iapCtrl.purchasePlan(plan),
                 ),
               ),

@@ -29,6 +29,13 @@ abstract class InstituteRepositoryImpl {
     String? message,
   });
 
+  Future<void> verifyIapPurchase({
+    required int planId,
+    required String transactionId,
+    required String receiptData,
+    required String platform,
+  });
+
   // Authentication
   Future<String> registerInstitute(Map<String, dynamic> data);
   Future<String> verifyOtp(Map<String, dynamic> data);

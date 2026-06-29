@@ -15,6 +15,10 @@ class SubscriptionPlan {
     required this.status,
   });
 
+  String get appleProductId => 'com.tuoora.plan$id';
+
+  bool get isFree => (double.tryParse(price) ?? 0) == 0;
+
   factory SubscriptionPlan.fromJson(Map<String, dynamic> json) {
     return SubscriptionPlan(
       id: json['id'] ?? 0,

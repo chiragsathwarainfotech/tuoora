@@ -77,6 +77,8 @@ class ApiConstants {
       '/institute/subscriptions/all-data';
   static const String instituteSubscriptionRenew =
       '/institute/subscription/renew';
+  static const String instituteSubscriptionIapVerify =
+      '/institute/subscription/iap-verify';
 
   static String removeStudentFromBatch(int batchId) =>
       '/institute/batches/$batchId/remove-student';

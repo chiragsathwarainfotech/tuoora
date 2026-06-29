@@ -88,6 +88,36 @@ class InstituteRepository implements InstituteRepositoryImpl {
   }
 
   @override
+  Future<void> verifyIapPurchase({
+    required int planId,
+    required String transactionId,
+    required String receiptData,
+    required String platform,
+  }) async {
+    final response = await _apiClient.post(
+      ApiConstants.instituteSubscriptionIapVerify,
+      {
+        'plan_id': planId,
+        'transaction_id': transactionId,
+        'receipt_data': receiptData,
+        // "ios" → Apple receipt; "android" → Google purchase token
+        'platform': platform,
+      },
+    );
+    if (response.status.hasError) {
+      _handleError(response, 'Failed to verify purchase');
+    }
+
+    final sub =
+        response.body is Map ? response.body['subscription'] : null;
+    if (sub != null) {
+      await Get.find<AuthService>().setSubscription(
+        Subscription.fromJson(Map<String, dynamic>.from(sub)),
+      );
+    }
+  }
+
+  @override
   Future<void> renewSubscription({
     required String transactionId,
     required String screenshotPath,

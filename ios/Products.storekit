@@ -1,0 +1,87 @@
+{
+  "appPolicies" : {
+    "eula" : "",
+    "policies" : [
+      {
+        "locale" : "en_US",
+        "policyText" : "",
+        "policyURL" : ""
+      }
+    ]
+  },
+  "identifier" : "2A633887",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "149.99",
+      "familyShareable" : false,
+      "internalID" : "6784576128",
+      "localizations" : [
+        {
+          "description" : "Annual Plan - 365 days access",
+          "displayName" : "Elite (Annual)",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.tuoora.plan4",
+      "referenceName" : "Elite Annual",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "19.99",
+      "familyShareable" : false,
+      "internalID" : "6784578607",
+      "localizations" : [
+        {
+          "description" : "Monthly plan - 30 days access",
+          "displayName" : "Growth (Monthly)",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.tuoora.plan6",
+      "referenceName" : "Growth Monthly",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "99.99",
+      "familyShareable" : false,
+      "internalID" : "6784577817",
+      "localizations" : [
+        {
+          "description" : "6 month plan - 180 days access",
+          "displayName" : "Professional (6 Months)",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.tuoora.plan5",
+      "referenceName" : "Professional 6 Months",
+      "type" : "Consumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "6779943679",
+    "_askToBuyEnabled" : false,
+    "_billingGracePeriodEnabled" : false,
+    "_billingIssuesEnabled" : false,
+    "_developerTeamID" : "R4FV7LN236",
+    "_disableDialogs" : false,
+    "_failTransactionsEnabled" : false,
+    "_lastSynchronizedDate" : 804159108.37115002,
+    "_locale" : "en_US",
+    "_renewalBillingIssuesEnabled" : false,
+    "_storefront" : "USA",
+    "_storeKitErrors" : [
+
+    ],
+    "_timeRate" : 0
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}

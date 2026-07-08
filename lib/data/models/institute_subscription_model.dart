@@ -1,3 +1,5 @@
+import 'package:tuoora/core/constants/api_constants.dart';
+
 class SubscriptionPlan {
   final int id;
   final String name;
@@ -97,6 +99,7 @@ class SubscriptionPaymentSettings {
   final String? bankName;
   final String? bankAccount;
   final String? bankIfsc;
+  final String? upiId;
   final String? qrPath;
   final String? qrUrl;
 
@@ -105,6 +108,7 @@ class SubscriptionPaymentSettings {
     this.bankName,
     this.bankAccount,
     this.bankIfsc,
+    this.upiId,
     this.qrPath,
     this.qrUrl,
   });
@@ -115,13 +119,17 @@ class SubscriptionPaymentSettings {
       return (v == null || v.isEmpty) ? null : v;
     }
 
+    final rawQrUrl = s('qr_url');
     return SubscriptionPaymentSettings(
       bankHolderName: s('bank_holder_name'),
       bankName: s('bank_name'),
       bankAccount: s('bank_account'),
       bankIfsc: s('bank_ifsc'),
+      upiId: s('upi_id'),
       qrPath: s('qr_path'),
-      qrUrl: s('qr_url'),
+      // Resolve server-relative paths to absolute URLs so CachedNetworkImage
+      // can load them (the API returns /admin/storage/... not https://...).
+      qrUrl: rawQrUrl != null ? ApiConstants.resolveUrl(rawQrUrl) : null,
     );
   }
 

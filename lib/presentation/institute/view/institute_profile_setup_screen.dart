@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/services.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
@@ -79,6 +80,10 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
                         prefixIcon: Icons.phone_outlined,
                         keyboardType: TextInputType.phone,
                         errorText: controller.phoneError.value,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(10),
+                        ],
                         onChanged: (_) {
                           if (controller.phoneError.value != null) {
                             controller.phoneError.value = null;
@@ -331,6 +336,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
     TextInputType? keyboardType,
     String? errorText,
     ValueChanged<String>? onChanged,
+    List<TextInputFormatter>? inputFormatters,
   }) {
     final hasError = errorText != null;
     return Column(
@@ -359,6 +365,7 @@ class InstituteProfileSetupScreen extends GetView<SignupController> {
             controller: controller,
             enabled: enabled,
             keyboardType: keyboardType,
+            inputFormatters: inputFormatters,
             onChanged: onChanged,
             style: AppTextStyles.outfit(
               fontSize: 14,

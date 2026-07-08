@@ -666,6 +666,7 @@ class AppStrings {
   static const String qrCodeWillAppearHere = 'QR code will appear here';
   static const String bankTransferDetails = 'BANK TRANSFER DETAILS';
   static const String export = 'Export';
+  static const String upiIdCopy = 'UPI ID copied';
   static const String renewalRequestPendingReview =
       'Renewal Request Pending Review';
   static const String yourSubscriptionHasBeenExpired =
@@ -936,13 +937,13 @@ class AppStrings {
   static const String iapProcessing = 'Processing…';
   static const String iapPurchaseSuccess =
       'Subscription activated successfully!';
-  static const String iapPurchaseFailed =
-      'Purchase failed. Please try again.';
+  static const String iapPurchaseFailed = 'Purchase failed. Please try again.';
   static const String iapNotAvailable =
       'In-App Purchase is not available on this device.';
   static const String iapActivationFailed =
       'Purchase successful but activation failed. Please contact support.';
   static const String iapProcessedByApple = 'Payments managed by Apple';
+  static const String iapProcessedByGoogle = 'Payments managed by Google Play';
   static const String iapPlanUnavailable =
       'This plan is currently unavailable. Please try again later.';
   static const String iapPayManually = 'Manually';

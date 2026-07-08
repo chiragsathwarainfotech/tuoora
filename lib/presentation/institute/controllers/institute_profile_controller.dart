@@ -145,9 +145,6 @@ class InstituteProfileController extends GetxController {
         profileImagePath.value = data.logoUrl;
       }
 
-      // Pull UPI payment fields out of the profile response so the
-      // profile view's "UPI Payment Details" card shows them and the
-      // edit screen has its starting values.
       upiId.value = data.upiId ?? '';
       upiQrCodeUrl.value = data.upiQrCodeUrl;
       upiQrLocalPath.value = null;
@@ -184,15 +181,6 @@ class InstituteProfileController extends GetxController {
           } else if (!status.isGranted && !status.isLimited) {
             return;
           }
-        } else {
-          final storage = await Permission.storage.request();
-          final photos = await Permission.photos.request();
-          if (storage.isPermanentlyDenied || photos.isPermanentlyDenied) {
-            openAppSettings();
-            return;
-          } else if (!storage.isGranted && !photos.isGranted) {
-            return;
-          }
         }
       }
 
@@ -202,7 +190,6 @@ class InstituteProfileController extends GetxController {
       );
       if (image != null) {
         upiQrLocalPath.value = image.path;
-        // Clear any prior "QR required" error as soon as the user picks one.
         upiQrError.value = null;
       }
     } catch (_) {
@@ -212,9 +199,6 @@ class InstituteProfileController extends GetxController {
 
   Future<void> savePaymentSettings(String upiIdInput) async {
     final trimmed = upiIdInput.trim();
-    // UPI ID is OPTIONAL now — only QR code is mandatory. The backend
-    // requires a QR image either uploaded fresh in this submission OR
-    // previously persisted on the profile (in which case we keep it).
     upiIdError.value = null;
     final hasFreshQr = (upiQrLocalPath.value ?? '').isNotEmpty;
     final hasSavedQr = (upiQrCodeUrl.value ?? '').isNotEmpty;
@@ -330,16 +314,6 @@ class InstituteProfileController extends GetxController {
                     openAppSettings();
                     return;
                   } else if (!status.isGranted && !status.isLimited) {
-                    return;
-                  }
-                } else {
-                  final storage = await Permission.storage.request();
-                  final photos = await Permission.photos.request();
-                  if (storage.isPermanentlyDenied ||
-                      photos.isPermanentlyDenied) {
-                    openAppSettings();
-                    return;
-                  } else if (!storage.isGranted && !photos.isGranted) {
                     return;
                   }
                 }

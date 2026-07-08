@@ -151,7 +151,9 @@ class SubscriptionRenewalScreen extends GetView<SubscriptionRenewalController> {
   Widget _buildQrTab() {
     return _buildCard(
       child: Obx(() {
-        final qrUrl = _paymentSettings()?.qrUrl;
+        final settings = _paymentSettings();
+        final qrUrl = settings?.qrUrl;
+        final upiId = settings?.upiId;
         return Column(
           children: [
             AspectRatio(
@@ -174,12 +176,40 @@ class SubscriptionRenewalScreen extends GetView<SubscriptionRenewalController> {
               ),
             ),
             AppSpacing.v16,
+            if (upiId != null && upiId.isNotEmpty) ...[
+              GestureDetector(
+                onTap: () {
+                  Clipboard.setData(ClipboardData(text: upiId));
+                  AppSnackBar.success(AppStrings.upiIdCopy);
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      upiId,
+                      style: AppTextStyles.outfit(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                    AppSpacing.h8,
+                    const Icon(
+                      Icons.copy_rounded,
+                      size: AppSpacing.s16,
+                      color: AppColors.textMuted,
+                    ),
+                  ],
+                ),
+              ),
+              AppSpacing.v8,
+            ],
             Text(
               AppStrings.studentPayFeesScanWith,
               style: AppTextStyles.outfit(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
-                color: AppColors.brandAppBarColor,
+                color: AppColors.textPrimary,
                 letterSpacing: 1.0,
               ),
             ),
@@ -224,7 +254,7 @@ class SubscriptionRenewalScreen extends GetView<SubscriptionRenewalController> {
               style: AppTextStyles.outfit(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
-                color: AppColors.brandAppBarColor,
+                color: AppColors.textPrimary,
                 letterSpacing: 1.0,
               ),
             ),

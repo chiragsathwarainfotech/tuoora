@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
@@ -255,14 +257,16 @@ class InstituteSubscriptionScreen
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
-                Icons.apple_rounded,
+              Icon(
+                Platform.isIOS ? Icons.apple_rounded : Icons.shop_rounded,
                 size: 14,
                 color: AppColors.textTertiary,
               ),
               AppSpacing.h6,
               Text(
-                AppStrings.iapProcessedByApple,
+                Platform.isIOS
+                    ? AppStrings.iapProcessedByApple
+                    : AppStrings.iapProcessedByGoogle,
                 style: AppTextStyles.outfit(
                   fontSize: 11,
                   color: AppColors.textTertiary,
@@ -353,24 +357,25 @@ class InstituteSubscriptionScreen
             ],
           ),
           AppSpacing.v16,
-          // Two payment option buttons
           Row(
             children: [
-              // Pay Direct — Apple IAP
               Expanded(
                 child: _buildPayOption(
                   label: isThisPlanPurchasing
                       ? AppStrings.iapProcessing
                       : AppStrings.iapPayDirect,
-                  description: AppStrings.iapPayDirectDesc,
-                  icon: Icons.apple_rounded,
+                  description: Platform.isIOS
+                      ? 'Instant · via Apple'
+                      : 'Instant · via Google',
+                  icon: Platform.isIOS
+                      ? Icons.apple_rounded
+                      : Icons.shop_rounded,
                   isPrimary: true,
                   isLoading: isThisPlanPurchasing,
                   onTap: isPurchasing ? null : () => iapCtrl.purchasePlan(plan),
                 ),
               ),
               AppSpacing.h12,
-              // Manually — UPI / Bank transfer
               Expanded(
                 child: _buildPayOption(
                   label: AppStrings.iapPayManually,
@@ -380,9 +385,7 @@ class InstituteSubscriptionScreen
                   isLoading: false,
                   onTap: isPurchasing
                       ? null
-                      : () => Get.toNamed(
-                            AppRoutes.instituteSubscriptionRenew,
-                          ),
+                      : () => Get.toNamed(AppRoutes.instituteSubscriptionRenew),
                 ),
               ),
             ],
@@ -401,12 +404,11 @@ class InstituteSubscriptionScreen
     required VoidCallback? onTap,
   }) {
     final bool disabled = onTap == null || isLoading;
-    final Color bg =
-        isPrimary ? AppColors.primaryBrand : AppColors.white;
-    final Color fg =
-        isPrimary ? AppColors.white : AppColors.primaryBrand;
-    final Color borderCol =
-        isPrimary ? AppColors.primaryBrand : AppColors.primaryBrand;
+    final Color bg = isPrimary ? AppColors.primaryBrand : AppColors.white;
+    final Color fg = isPrimary ? AppColors.white : AppColors.primaryBrand;
+    final Color borderCol = isPrimary
+        ? AppColors.primaryBrand
+        : AppColors.primaryBrand;
 
     return GestureDetector(
       onTap: disabled ? null : onTap,
@@ -416,9 +418,7 @@ class InstituteSubscriptionScreen
         decoration: BoxDecoration(
           color: disabled ? AppColors.textMuted : bg,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: disabled ? AppColors.textMuted : borderCol,
-          ),
+          border: Border.all(color: disabled ? AppColors.textMuted : borderCol),
         ),
         child: isLoading
             ? SizedBox(
@@ -427,10 +427,7 @@ class InstituteSubscriptionScreen
                   child: SizedBox(
                     width: 18,
                     height: 18,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: fg,
-                    ),
+                    child: CircularProgressIndicator(strokeWidth: 2, color: fg),
                   ),
                 ),
               )

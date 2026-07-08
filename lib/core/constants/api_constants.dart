@@ -1,6 +1,16 @@
 class ApiConstants {
   static const String baseUrl = 'https://tuoora.com/api/v1';
 
+  /// Root domain — used to resolve server-relative URLs like /admin/storage/...
+  static const String baseOrigin = 'https://tuoora.com';
+
+  /// Converts a server-relative path (e.g. /admin/storage/img.jpg) to a full
+  /// URL. Absolute URLs (http/https) are returned unchanged.
+  static String resolveUrl(String path) {
+    if (path.startsWith('http://') || path.startsWith('https://')) return path;
+    return '$baseOrigin$path';
+  }
+
   // Auth Endpoints
   static const String instituteLogin = '/institute/login';
   static const String instituteRegister = '/institute/register';

@@ -90,6 +90,14 @@ class ApiConstants {
   static const String instituteSubscriptionIapVerify =
       '/institute/subscription/iap-verify';
 
+  // Razorpay (Android only)
+  // Switch to rzp_live_XXXXXX before releasing to production.
+  static const String razorpayKeyId = 'rzp_test_oSSN6gA6B4hrJH';
+  static const String razorpayCreateOrder =
+      '/institute/subscription/create-order';
+  static const String razorpayVerifyPayment =
+      '/institute/subscription/verify-payment';
+
   static String removeStudentFromBatch(int batchId) =>
       '/institute/batches/$batchId/remove-student';
 

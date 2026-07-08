@@ -36,6 +36,15 @@ abstract class InstituteRepositoryImpl {
     required String platform,
   });
 
+  // Razorpay (Android)
+  Future<Map<String, dynamic>> createRazorpayOrder({required int planId});
+  Future<void> verifyRazorpayPayment({
+    required int planId,
+    required String razorpayOrderId,
+    required String razorpayPaymentId,
+    required String razorpaySignature,
+  });
+
   // Authentication
   Future<String> registerInstitute(Map<String, dynamic> data);
   Future<String> verifyOtp(Map<String, dynamic> data);

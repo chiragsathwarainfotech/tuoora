@@ -6,6 +6,7 @@ import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/data/models/institute_subscription_model.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/presentation/institute/controllers/iap_controller.dart';
+import 'package:tuoora/presentation/institute/controllers/razorpay_controller.dart';
 import 'package:tuoora/presentation/institute/controllers/institute_subscription_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
@@ -188,98 +189,125 @@ class InstituteSubscriptionScreen
   }
 
   Widget _buildIAPSection(List<SubscriptionPlan> plans) {
-    final iapCtrl = Get.find<IAPController>();
     final activePlans = plans.where((p) => p.status == 1 && !p.isFree).toList();
 
+    // ── iOS: full StoreKit / IAP flow ────────────────────────────────────────
+    if (Platform.isIOS) {
+      final iapCtrl = Get.find<IAPController>();
+      return Obx(() {
+        final isLoading = iapCtrl.isLoadingProducts.value;
+        final isPurchasing = iapCtrl.isPurchasing.value;
+        final purchasingPlanId = iapCtrl.purchasingPlanId.value;
+        final isAvailable = iapCtrl.isAvailable.value;
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            _buildPlansHeader(),
+            AppSpacing.v20,
+            if (!isAvailable)
+              Text(
+                AppStrings.iapNotAvailable,
+                textAlign: TextAlign.center,
+                style: AppTextStyles.outfit(
+                  fontSize: 13,
+                  color: AppColors.textSecondary,
+                ),
+              )
+            else if (isLoading)
+              const SizedBox(
+                height: 120,
+                child: Center(
+                  child: CircularProgressIndicator(
+                    color: AppColors.primaryBrand,
+                    strokeWidth: 2,
+                  ),
+                ),
+              )
+            else
+              Column(
+                children: [
+                  for (int i = 0; i < activePlans.length; i++) ...[
+                    if (i > 0) AppSpacing.v12,
+                    _buildIosPlanCard(
+                      activePlans[i],
+                      iapCtrl,
+                      isPurchasing,
+                      purchasingPlanId,
+                    ),
+                  ],
+                ],
+              ),
+            AppSpacing.v16,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.apple_rounded, size: 14, color: AppColors.textTertiary),
+                AppSpacing.h6,
+                Text(
+                  AppStrings.iapProcessedByApple,
+                  style: AppTextStyles.outfit(fontSize: 11, color: AppColors.textTertiary),
+                ),
+              ],
+            ),
+          ],
+        );
+      });
+    }
+
+    // ── Android: Razorpay flow (IAP disabled) ────────────────────────────────
+    final razorpayCtrl = Get.find<RazorpayController>();
     return Obx(() {
-      final isLoading = iapCtrl.isLoadingProducts.value;
-      final isPurchasing = iapCtrl.isPurchasing.value;
-      final purchasingPlanId = iapCtrl.purchasingPlanId.value;
-      final isAvailable = iapCtrl.isAvailable.value;
+      final isPurchasing = razorpayCtrl.isPurchasing.value;
+      final purchasingPlanId = razorpayCtrl.purchasingPlanId.value;
 
       return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
-            AppStrings.iapSelectPlanTitle,
-            textAlign: TextAlign.center,
-            style: AppTextStyles.outfit(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-              color: AppColors.textPrimary,
-            ),
-          ),
-          AppSpacing.v8,
-          Text(
-            AppStrings.iapSelectPlanSubtitle,
-            textAlign: TextAlign.center,
-            style: AppTextStyles.outfit(
-              fontSize: 13,
-              color: AppColors.textTertiary,
-              height: 1.4,
-            ),
-          ),
+          _buildPlansHeader(),
           AppSpacing.v20,
-          if (!isAvailable)
-            Text(
-              AppStrings.iapNotAvailable,
-              textAlign: TextAlign.center,
-              style: AppTextStyles.outfit(
-                fontSize: 13,
-                color: AppColors.textSecondary,
-              ),
-            )
-          else if (isLoading)
-            const SizedBox(
-              height: 120,
-              child: Center(
-                child: CircularProgressIndicator(
-                  color: AppColors.primaryBrand,
-                  strokeWidth: 2,
-                ),
-              ),
-            )
-          else
-            Column(
-              children: [
-                for (int i = 0; i < activePlans.length; i++) ...[
-                  if (i > 0) AppSpacing.v12,
-                  _buildIAPPlanCard(
-                    activePlans[i],
-                    iapCtrl,
-                    isPurchasing,
-                    purchasingPlanId,
-                  ),
-                ],
-              ],
+          for (int i = 0; i < activePlans.length; i++) ...[
+            if (i > 0) AppSpacing.v12,
+            _buildAndroidPlanCard(
+              activePlans[i],
+              razorpayCtrl,
+              isPurchasing,
+              purchasingPlanId,
             ),
-          AppSpacing.v16,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Platform.isIOS ? Icons.apple_rounded : Icons.shop_rounded,
-                size: 14,
-                color: AppColors.textTertiary,
-              ),
-              AppSpacing.h6,
-              Text(
-                Platform.isIOS
-                    ? AppStrings.iapProcessedByApple
-                    : AppStrings.iapProcessedByGoogle,
-                style: AppTextStyles.outfit(
-                  fontSize: 11,
-                  color: AppColors.textTertiary,
-                ),
-              ),
-            ],
-          ),
+          ],
         ],
       );
     });
   }
 
-  Widget _buildIAPPlanCard(
+  Widget _buildPlansHeader() {
+    return Column(
+      children: [
+        Text(
+          AppStrings.iapSelectPlanTitle,
+          textAlign: TextAlign.center,
+          style: AppTextStyles.outfit(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color: AppColors.textPrimary,
+          ),
+        ),
+        AppSpacing.v8,
+        Text(
+          AppStrings.iapSelectPlanSubtitle,
+          textAlign: TextAlign.center,
+          style: AppTextStyles.outfit(
+            fontSize: 13,
+            color: AppColors.textTertiary,
+            height: 1.4,
+          ),
+        ),
+      ],
+    );
+  }
+
+  // ── iOS plan card: IAP "Pay Direct" + "Pay Manually" ─────────────────────
+  Widget _buildIosPlanCard(
     SubscriptionPlan plan,
     IAPController iapCtrl,
     bool isPurchasing,
@@ -289,6 +317,93 @@ class InstituteSubscriptionScreen
     final displayPrice = product?.price ?? _formatPrice(plan.price);
     final isThisPlanPurchasing = isPurchasing && purchasingPlanId == plan.id;
 
+    return _buildPlanCardShell(
+      plan: plan,
+      displayPrice: displayPrice,
+      buttons: Row(
+        children: [
+          Expanded(
+            child: _buildPayOption(
+              label: isThisPlanPurchasing
+                  ? AppStrings.iapProcessing
+                  : AppStrings.iapPayDirect,
+              description: 'Instant · via Apple',
+              icon: Icons.apple_rounded,
+              isPrimary: true,
+              isLoading: isThisPlanPurchasing,
+              onTap: isPurchasing ? null : () => iapCtrl.purchasePlan(plan),
+            ),
+          ),
+          AppSpacing.h12,
+          Expanded(
+            child: _buildPayOption(
+              label: AppStrings.iapPayManually,
+              description: AppStrings.iapPayManuallyDesc,
+              icon: Icons.account_balance_rounded,
+              isPrimary: false,
+              isLoading: false,
+              onTap: isPurchasing
+                  ? null
+                  : () => Get.toNamed(AppRoutes.instituteSubscriptionRenew),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ── Android plan card: Razorpay + "Pay Manually" ────────────────────────
+  Widget _buildAndroidPlanCard(
+    SubscriptionPlan plan,
+    RazorpayController razorpayCtrl,
+    bool isPurchasing,
+    int? purchasingPlanId,
+  ) {
+    final isThisPlanPurchasing = isPurchasing && purchasingPlanId == plan.id;
+
+    return _buildPlanCardShell(
+      plan: plan,
+      displayPrice: _formatPrice(plan.price),
+      buttons: Row(
+        children: [
+          Expanded(
+            child: _buildPayOption(
+              label: isThisPlanPurchasing
+                  ? AppStrings.iapProcessing
+                  : AppStrings.iapPayDirect,
+              description: 'Instant · via Razorpay',
+              icon: Icons.currency_rupee_rounded,
+              isPrimary: true,
+              isLoading: isThisPlanPurchasing,
+              onTap: isPurchasing
+                  ? null
+                  : () => razorpayCtrl.startPayment(plan),
+            ),
+          ),
+          AppSpacing.h12,
+          Expanded(
+            child: _buildPayOption(
+              label: AppStrings.iapPayManually,
+              description: AppStrings.iapPayManuallyDesc,
+              icon: Icons.account_balance_rounded,
+              isPrimary: false,
+              isLoading: false,
+              onTap: isPurchasing
+                  ? null
+                  : () => Get.toNamed(AppRoutes.instituteSubscriptionRenew),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ── Shared plan card shell ────────────────────────────────────────────────
+  Widget _buildPlanCardShell({
+    required SubscriptionPlan plan,
+    required String displayPrice,
+    required Widget buttons,
+  }) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -306,7 +421,6 @@ class InstituteSubscriptionScreen
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Plan info row
           Row(
             children: [
               Expanded(
@@ -337,10 +451,7 @@ class InstituteSubscriptionScreen
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 5,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 decoration: BoxDecoration(
                   color: AppColors.fieldBg,
                   borderRadius: BorderRadius.circular(8),
@@ -357,39 +468,7 @@ class InstituteSubscriptionScreen
             ],
           ),
           AppSpacing.v16,
-          Row(
-            children: [
-              Expanded(
-                child: _buildPayOption(
-                  label: isThisPlanPurchasing
-                      ? AppStrings.iapProcessing
-                      : AppStrings.iapPayDirect,
-                  description: Platform.isIOS
-                      ? 'Instant · via Apple'
-                      : 'Instant · via Google',
-                  icon: Platform.isIOS
-                      ? Icons.apple_rounded
-                      : Icons.shop_rounded,
-                  isPrimary: true,
-                  isLoading: isThisPlanPurchasing,
-                  onTap: isPurchasing ? null : () => iapCtrl.purchasePlan(plan),
-                ),
-              ),
-              AppSpacing.h12,
-              Expanded(
-                child: _buildPayOption(
-                  label: AppStrings.iapPayManually,
-                  description: AppStrings.iapPayManuallyDesc,
-                  icon: Icons.account_balance_rounded,
-                  isPrimary: false,
-                  isLoading: false,
-                  onTap: isPurchasing
-                      ? null
-                      : () => Get.toNamed(AppRoutes.instituteSubscriptionRenew),
-                ),
-              ),
-            ],
-          ),
+          buttons,
         ],
       ),
     );

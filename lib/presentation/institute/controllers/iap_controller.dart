@@ -26,8 +26,8 @@ class IAPController extends GetxController {
   final purchasingPlanId = Rx<int?>(null);
   int? _activePlanId;
 
-  // Runs on both iOS (StoreKit) and Android (Google Play Billing)
-  static bool get _isSupported => Platform.isIOS || Platform.isAndroid;
+  // iOS only — Android uses Razorpay instead of Google Play Billing.
+  static bool get _isSupported => Platform.isIOS;
 
   // "ios" or "android" — sent to backend so it uses the correct receipt path
   static String get _platform => Platform.isIOS ? 'ios' : 'android';

@@ -1,4 +1,4 @@
-import 'package:tuoora/core/constants/api_constants.dart';
+import 'package:tuoora/core/constants/url_constants.dart';
 
 class SubscriptionPlan {
   final int id;
@@ -129,7 +129,7 @@ class SubscriptionPaymentSettings {
       qrPath: s('qr_path'),
       // Resolve server-relative paths to absolute URLs so CachedNetworkImage
       // can load them (the API returns /admin/storage/... not https://...).
-      qrUrl: rawQrUrl != null ? ApiConstants.resolveUrl(rawQrUrl) : null,
+      qrUrl: rawQrUrl != null ? UrlConstants.resolveUrl(rawQrUrl) : null,
     );
   }
 

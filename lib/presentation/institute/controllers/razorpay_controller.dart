@@ -1,9 +1,8 @@
 ﻿import 'dart:io' show Platform;
-
 import 'package:get/get.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
-import 'package:tuoora/core/constants/api_constants.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
+import 'package:tuoora/core/constants/url_constants.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/data/models/institute_subscription_model.dart';
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
@@ -44,7 +43,7 @@ class RazorpayController extends GetxController {
       final order = await _repository.createRazorpayOrder(planId: plan.id);
 
       final options = {
-        'key': ApiConstants.razorpayKeyId,
+        'key': UrlConstants.razorpayKeyId,
         'amount': order['amount'],
         'currency': order['currency'] ?? 'INR',
         'order_id': order['order_id'],

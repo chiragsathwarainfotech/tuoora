@@ -1,16 +1,6 @@
 class ApiConstants {
   static const String baseUrl = 'https://tuoora.com/api/v1';
 
-  /// Root domain — used to resolve server-relative URLs like /admin/storage/...
-  static const String baseOrigin = 'https://tuoora.com';
-
-  /// Converts a server-relative path (e.g. /admin/storage/img.jpg) to a full
-  /// URL. Absolute URLs (http/https) are returned unchanged.
-  static String resolveUrl(String path) {
-    if (path.startsWith('http://') || path.startsWith('https://')) return path;
-    return '$baseOrigin$path';
-  }
-
   // Auth Endpoints
   static const String instituteLogin = '/institute/login';
   static const String instituteRegister = '/institute/register';
@@ -89,10 +79,6 @@ class ApiConstants {
       '/institute/subscription/renew';
   static const String instituteSubscriptionIapVerify =
       '/institute/subscription/iap-verify';
-
-  // Razorpay (Android only)
-  // Switch to rzp_live_XXXXXX before releasing to production.
-  static const String razorpayKeyId = 'rzp_test_oSSN6gA6B4hrJH';
   static const String razorpayCreateOrder =
       '/institute/subscription/create-order';
   static const String razorpayVerifyPayment =

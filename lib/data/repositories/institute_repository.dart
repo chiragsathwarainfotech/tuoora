@@ -125,6 +125,9 @@ class InstituteRepository implements InstituteRepositoryImpl {
       ApiConstants.razorpayCreateOrder,
       {'plan_id': planId},
     );
+    if (response.status.connectionError) {
+      throw Exception('No internet connection. Please check your network and try again.');
+    }
     if (response.status.hasError) {
       _handleError(response, 'Failed to create payment order');
     }

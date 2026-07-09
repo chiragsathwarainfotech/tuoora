@@ -53,9 +53,10 @@ class RazorpayController extends GetxController {
       };
 
       _razorpay!.open(options);
-    } catch (_) {
+    } catch (e) {
       _resetState();
-      AppSnackBar.error(AppStrings.iapPlanUnavailable);
+      final msg = e.toString().replaceFirst('Exception: ', '');
+      AppSnackBar.error(msg.isNotEmpty ? msg : AppStrings.iapPlanUnavailable);
     }
   }
 
@@ -85,7 +86,7 @@ class RazorpayController extends GetxController {
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
-    if (!_disposed) {
+    if (!_disposed && response.code != Razorpay.PAYMENT_CANCELLED) {
       AppSnackBar.error(response.message ?? AppStrings.iapPurchaseFailed);
     }
     _resetState();

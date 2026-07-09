@@ -190,94 +190,32 @@ class InstituteSubscriptionScreen
 
   Widget _buildIAPSection(List<SubscriptionPlan> plans) {
     final activePlans = plans.where((p) => p.status == 1 && !p.isFree).toList();
+    if (activePlans.isEmpty) return const SizedBox.shrink();
 
-    // ── iOS: full StoreKit / IAP flow ────────────────────────────────────────
-    if (Platform.isIOS) {
-      final iapCtrl = Get.find<IAPController>();
-      return Obx(() {
-        final isLoading = iapCtrl.isLoadingProducts.value;
-        final isPurchasing = iapCtrl.isPurchasing.value;
-        final purchasingPlanId = iapCtrl.purchasingPlanId.value;
-        final isAvailable = iapCtrl.isAvailable.value;
-
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            _buildPlansHeader(),
-            AppSpacing.v20,
-            if (!isAvailable)
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        _buildPlansHeader(),
+        AppSpacing.v20,
+        _buildPlanSelector(activePlans),
+        AppSpacing.v16,
+        if (Platform.isIOS) _buildIosButtons() else _buildAndroidButtons(),
+        if (Platform.isIOS) ...[
+          AppSpacing.v12,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.apple_rounded, size: 14, color: AppColors.textTertiary),
+              AppSpacing.h6,
               Text(
-                AppStrings.iapNotAvailable,
-                textAlign: TextAlign.center,
-                style: AppTextStyles.outfit(
-                  fontSize: 13,
-                  color: AppColors.textSecondary,
-                ),
-              )
-            else if (isLoading)
-              const SizedBox(
-                height: 120,
-                child: Center(
-                  child: CircularProgressIndicator(
-                    color: AppColors.primaryBrand,
-                    strokeWidth: 2,
-                  ),
-                ),
-              )
-            else
-              Column(
-                children: [
-                  for (int i = 0; i < activePlans.length; i++) ...[
-                    if (i > 0) AppSpacing.v12,
-                    _buildIosPlanCard(
-                      activePlans[i],
-                      iapCtrl,
-                      isPurchasing,
-                      purchasingPlanId,
-                    ),
-                  ],
-                ],
+                AppStrings.iapProcessedByApple,
+                style: AppTextStyles.outfit(fontSize: 11, color: AppColors.textTertiary),
               ),
-            AppSpacing.v16,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.apple_rounded, size: 14, color: AppColors.textTertiary),
-                AppSpacing.h6,
-                Text(
-                  AppStrings.iapProcessedByApple,
-                  style: AppTextStyles.outfit(fontSize: 11, color: AppColors.textTertiary),
-                ),
-              ],
-            ),
-          ],
-        );
-      });
-    }
-
-    // ── Android: Razorpay flow (IAP disabled) ────────────────────────────────
-    final razorpayCtrl = Get.find<RazorpayController>();
-    return Obx(() {
-      final isPurchasing = razorpayCtrl.isPurchasing.value;
-      final purchasingPlanId = razorpayCtrl.purchasingPlanId.value;
-
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          _buildPlansHeader(),
-          AppSpacing.v20,
-          for (int i = 0; i < activePlans.length; i++) ...[
-            if (i > 0) AppSpacing.v12,
-            _buildAndroidPlanCard(
-              activePlans[i],
-              razorpayCtrl,
-              isPurchasing,
-              purchasingPlanId,
-            ),
-          ],
+            ],
+          ),
         ],
-      );
-    });
+      ],
+    );
   }
 
   Widget _buildPlansHeader() {
@@ -294,7 +232,9 @@ class InstituteSubscriptionScreen
         ),
         AppSpacing.v8,
         Text(
-          AppStrings.iapSelectPlanSubtitle,
+          Platform.isIOS
+              ? AppStrings.iapSelectPlanSubtitle
+              : 'Payments are processed securely via Razorpay',
           textAlign: TextAlign.center,
           style: AppTextStyles.outfit(
             fontSize: 13,
@@ -306,106 +246,9 @@ class InstituteSubscriptionScreen
     );
   }
 
-  // ── iOS plan card: IAP "Pay Direct" + "Pay Manually" ─────────────────────
-  Widget _buildIosPlanCard(
-    SubscriptionPlan plan,
-    IAPController iapCtrl,
-    bool isPurchasing,
-    int? purchasingPlanId,
-  ) {
-    final product = iapCtrl.productForPlan(plan.id);
-    final displayPrice = product?.price ?? _formatPrice(plan.price);
-    final isThisPlanPurchasing = isPurchasing && purchasingPlanId == plan.id;
-
-    return _buildPlanCardShell(
-      plan: plan,
-      displayPrice: displayPrice,
-      buttons: Row(
-        children: [
-          Expanded(
-            child: _buildPayOption(
-              label: isThisPlanPurchasing
-                  ? AppStrings.iapProcessing
-                  : AppStrings.iapPayDirect,
-              description: 'Instant · via Apple',
-              icon: Icons.apple_rounded,
-              isPrimary: true,
-              isLoading: isThisPlanPurchasing,
-              onTap: isPurchasing ? null : () => iapCtrl.purchasePlan(plan),
-            ),
-          ),
-          AppSpacing.h12,
-          Expanded(
-            child: _buildPayOption(
-              label: AppStrings.iapPayManually,
-              description: AppStrings.iapPayManuallyDesc,
-              icon: Icons.account_balance_rounded,
-              isPrimary: false,
-              isLoading: false,
-              onTap: isPurchasing
-                  ? null
-                  : () => Get.toNamed(AppRoutes.instituteSubscriptionRenew),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ── Android plan card: Razorpay + "Pay Manually" ────────────────────────
-  Widget _buildAndroidPlanCard(
-    SubscriptionPlan plan,
-    RazorpayController razorpayCtrl,
-    bool isPurchasing,
-    int? purchasingPlanId,
-  ) {
-    final isThisPlanPurchasing = isPurchasing && purchasingPlanId == plan.id;
-
-    return _buildPlanCardShell(
-      plan: plan,
-      displayPrice: _formatPrice(plan.price),
-      buttons: Row(
-        children: [
-          Expanded(
-            child: _buildPayOption(
-              label: isThisPlanPurchasing
-                  ? AppStrings.iapProcessing
-                  : AppStrings.iapPayDirect,
-              description: 'Instant · via Razorpay',
-              icon: Icons.currency_rupee_rounded,
-              isPrimary: true,
-              isLoading: isThisPlanPurchasing,
-              onTap: isPurchasing
-                  ? null
-                  : () => razorpayCtrl.startPayment(plan),
-            ),
-          ),
-          AppSpacing.h12,
-          Expanded(
-            child: _buildPayOption(
-              label: AppStrings.iapPayManually,
-              description: AppStrings.iapPayManuallyDesc,
-              icon: Icons.account_balance_rounded,
-              isPrimary: false,
-              isLoading: false,
-              onTap: isPurchasing
-                  ? null
-                  : () => Get.toNamed(AppRoutes.instituteSubscriptionRenew),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ── Shared plan card shell ────────────────────────────────────────────────
-  Widget _buildPlanCardShell({
-    required SubscriptionPlan plan,
-    required String displayPrice,
-    required Widget buttons,
-  }) {
+  // ── Plan selector: compact radio list ────────────────────────────────────
+  Widget _buildPlanSelector(List<SubscriptionPlan> activePlans) {
     return Container(
-      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(20),
@@ -419,59 +262,196 @@ class InstituteSubscriptionScreen
         ],
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      plan.name.toUpperCase(),
-                      style: AppTextStyles.outfit(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.fieldLabel,
-                        letterSpacing: 1.4,
-                      ),
-                    ),
-                    AppSpacing.v4,
-                    Text(
-                      displayPrice,
-                      style: AppTextStyles.outfit(
-                        fontSize: 28,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.textPrimary,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                decoration: BoxDecoration(
-                  color: AppColors.fieldBg,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  '${plan.durationDays} days',
-                  style: AppTextStyles.outfit(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.fieldLabel,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          AppSpacing.v16,
-          buttons,
+          for (int i = 0; i < activePlans.length; i++) ...[
+            Obx(() => _buildPlanRow(
+              activePlans[i],
+              isFirst: i == 0,
+              isLast: i == activePlans.length - 1,
+            )),
+            if (i < activePlans.length - 1)
+              Divider(height: 1, color: AppColors.fieldBorder),
+          ],
         ],
       ),
     );
+  }
+
+  Widget _buildPlanRow(
+    SubscriptionPlan plan, {
+    bool isFirst = false,
+    bool isLast = false,
+  }) {
+    final isSelected = controller.selectedPlan.value?.id == plan.id;
+    final radius = BorderRadius.only(
+      topLeft: isFirst ? const Radius.circular(20) : Radius.zero,
+      topRight: isFirst ? const Radius.circular(20) : Radius.zero,
+      bottomLeft: isLast ? const Radius.circular(20) : Radius.zero,
+      bottomRight: isLast ? const Radius.circular(20) : Radius.zero,
+    );
+
+    return GestureDetector(
+      onTap: () => controller.selectedPlan.value = plan,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.primaryBrandLight : AppColors.white,
+          borderRadius: radius,
+        ),
+        child: Row(
+          children: [
+            // Radio indicator
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 150),
+              width: 20,
+              height: 20,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: isSelected ? AppColors.primaryBrand : Colors.transparent,
+                border: Border.all(
+                  color: isSelected ? AppColors.primaryBrand : AppColors.textMuted,
+                  width: 2,
+                ),
+              ),
+              child: isSelected
+                  ? const Icon(Icons.check, size: 12, color: AppColors.white)
+                  : null,
+            ),
+            AppSpacing.h12,
+            // Plan name
+            Expanded(
+              child: Text(
+                plan.name,
+                style: AppTextStyles.outfit(
+                  fontSize: 14,
+                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                  color: isSelected ? AppColors.primaryBrand : AppColors.textPrimary,
+                ),
+              ),
+            ),
+            // Duration badge
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? AppColors.primaryBrand.withValues(alpha: 0.12)
+                    : AppColors.fieldBg,
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Text(
+                '${plan.durationDays}d',
+                style: AppTextStyles.outfit(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  color: isSelected ? AppColors.primaryBrand : AppColors.fieldLabel,
+                ),
+              ),
+            ),
+            AppSpacing.h12,
+            // Price
+            Text(
+              _formatPrice(plan.price),
+              style: AppTextStyles.outfit(
+                fontSize: 16,
+                fontWeight: FontWeight.w800,
+                color: isSelected ? AppColors.primaryBrand : AppColors.textPrimary,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ── iOS action buttons ────────────────────────────────────────────────────
+  Widget _buildIosButtons() {
+    final iapCtrl = Get.find<IAPController>();
+    return Obx(() {
+      final isAvailable = iapCtrl.isAvailable.value;
+      final isLoadingProducts = iapCtrl.isLoadingProducts.value;
+      final isPurchasing = iapCtrl.isPurchasing.value;
+      final purchasingPlanId = iapCtrl.purchasingPlanId.value;
+      final selected = controller.selectedPlan.value;
+      final isThisPurchasing = isPurchasing && purchasingPlanId == selected?.id;
+
+      // Pay Direct is disabled when IAP unavailable; Manually is always active.
+      final payDirectBlocked =
+          !isAvailable || isPurchasing || selected == null || isLoadingProducts;
+
+      return Row(
+        children: [
+          Expanded(
+            child: _buildPayOption(
+              label: isThisPurchasing
+                  ? AppStrings.iapProcessing
+                  : AppStrings.iapPayDirect,
+              description: 'Instant · via Apple',
+              icon: Icons.apple_rounded,
+              isPrimary: true,
+              isLoading: isThisPurchasing || isLoadingProducts,
+              onTap: payDirectBlocked ? null : () => iapCtrl.purchasePlan(selected),
+            ),
+          ),
+          AppSpacing.h12,
+          Expanded(
+            child: _buildPayOption(
+              label: AppStrings.iapPayManually,
+              description: AppStrings.iapPayManuallyDesc,
+              icon: Icons.account_balance_rounded,
+              isPrimary: false,
+              isLoading: false,
+              onTap: isPurchasing
+                  ? null
+                  : () => Get.toNamed(AppRoutes.instituteSubscriptionRenew),
+            ),
+          ),
+        ],
+      );
+    });
+  }
+
+  // ── Android action buttons ────────────────────────────────────────────────
+  Widget _buildAndroidButtons() {
+    final razorpayCtrl = Get.find<RazorpayController>();
+    return Obx(() {
+      final isPurchasing = razorpayCtrl.isPurchasing.value;
+      final purchasingPlanId = razorpayCtrl.purchasingPlanId.value;
+      final selected = controller.selectedPlan.value;
+      final isThisPurchasing = isPurchasing && purchasingPlanId == selected?.id;
+
+      return Row(
+        children: [
+          Expanded(
+            child: _buildPayOption(
+              label: isThisPurchasing
+                  ? AppStrings.iapProcessing
+                  : AppStrings.iapPayDirect,
+              description: 'Instant · via Razorpay',
+              icon: Icons.currency_rupee_rounded,
+              isPrimary: true,
+              isLoading: isThisPurchasing,
+              onTap: (isPurchasing || selected == null)
+                  ? null
+                  : () => razorpayCtrl.startPayment(selected),
+            ),
+          ),
+          AppSpacing.h12,
+          Expanded(
+            child: _buildPayOption(
+              label: AppStrings.iapPayManually,
+              description: AppStrings.iapPayManuallyDesc,
+              icon: Icons.account_balance_rounded,
+              isPrimary: false,
+              isLoading: false,
+              onTap: isPurchasing
+                  ? null
+                  : () => Get.toNamed(AppRoutes.instituteSubscriptionRenew),
+            ),
+          ),
+        ],
+      );
+    });
   }
 
   Widget _buildPayOption({

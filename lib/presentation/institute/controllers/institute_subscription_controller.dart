@@ -11,6 +11,7 @@ class InstituteSubscriptionController extends GetxController {
 
   final RxBool isLoading = true.obs;
   final Rx<InstituteSubscriptionData?> subscriptionData = Rx<InstituteSubscriptionData?>(null);
+  final selectedPlan = Rx<SubscriptionPlan?>(null);
 
   @override
   void onInit() {
@@ -21,7 +22,13 @@ class InstituteSubscriptionController extends GetxController {
   Future<void> fetchSubscriptionData() async {
     try {
       isLoading.value = true;
-      subscriptionData.value = await _repository.getSubscriptionData();
+      final data = await _repository.getSubscriptionData();
+      subscriptionData.value = data;
+      // Auto-select first active paid plan on initial load
+      if (selectedPlan.value == null) {
+        final active = data.plans.where((p) => p.status == 1 && !p.isFree).toList();
+        if (active.isNotEmpty) selectedPlan.value = active.first;
+      }
     } catch (e) {
       AppSnackBar.error(AppStrings.failedToFetchSubscriptionData);
     } finally {

@@ -8,7 +8,7 @@ class UrlConstants {
 
   /// Razorpay (Android only)
   /// Switch to rzp_live_XXXXXX before releasing to production.
-  static const String razorpayKeyId = 'rzp_test_oSSN6gA6B4hrJH';
+  static const String razorpayKeyId = 'rzp_test_TBICUACsY1Twmh';
 
   /// Root domain — used to resolve server-relative URLs like /admin/storage/...
   static const String baseOrigin = 'https://tuoora.com';

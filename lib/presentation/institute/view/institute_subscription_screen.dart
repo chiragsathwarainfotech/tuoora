@@ -24,48 +24,72 @@ class InstituteSubscriptionScreen
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
-        child: Column(
+        child: Stack(
           children: [
-            const InstituteAppBar(
-              title: AppStrings.subscriptionPlans,
-              isRoot: false,
-            ),
-            Expanded(
-              child: Obx(() {
-                if (controller.isLoading.value) {
-                  return const CommonLoading();
-                }
+            Column(
+              children: [
+                const InstituteAppBar(
+                  title: AppStrings.subscriptionPlans,
+                  isRoot: false,
+                ),
+                Expanded(
+                  child: Obx(() {
+                    if (controller.isLoading.value) {
+                      return const CommonLoading();
+                    }
 
-                final data = controller.subscriptionData.value;
-                if (data == null) {
-                  return Center(
-                    child: Text(
-                      AppStrings.failedToLoadSubscriptionData,
-                      style: AppTextStyles.outfit(
-                        fontSize: 16,
-                        color: AppColors.textPrimary,
+                    final data = controller.subscriptionData.value;
+                    if (data == null) {
+                      return Center(
+                        child: Text(
+                          AppStrings.failedToLoadSubscriptionData,
+                          style: AppTextStyles.outfit(
+                            fontSize: 16,
+                            color: AppColors.textPrimary,
+                          ),
+                        ),
+                      );
+                    }
+
+                    return RefreshIndicator(
+                      onRefresh: () => controller.fetchSubscriptionData(),
+                      color: AppColors.primaryBrand,
+                      child: SingleChildScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildActivePlanCard(data.subscription, data.history),
+                            AppSpacing.v24,
+                            _buildIAPSection(data.plans),
+                            AppSpacing.v24,
+                            _buildFeatureCards(),
+                            AppSpacing.v24,
+                            _buildRecentBillingTable(data.history),
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                }
-
-                return RefreshIndicator(
-                  onRefresh: () => controller.fetchSubscriptionData(),
-                  color: AppColors.primaryBrand,
-                  child: SingleChildScrollView(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildActivePlanCard(data.subscription, data.history),
-                        AppSpacing.v24,
-                        _buildIAPSection(data.plans),
-                        AppSpacing.v24,
-                        _buildFeatureCards(),
-                        AppSpacing.v24,
-                        _buildRecentBillingTable(data.history),
-                      ],
+                    );
+                  }),
+                ),
+              ],
+            ),
+            // Full-screen payment processing overlay
+            Positioned.fill(
+              child: Obx(() {
+                final bool busy = Platform.isAndroid
+                    ? Get.find<RazorpayController>().isPurchasing.value
+                    : Get.find<IAPController>().isPurchasing.value;
+                if (!busy) return const SizedBox.shrink();
+                return AbsorbPointer(
+                  child: Container(
+                    color: Colors.black.withValues(alpha: 0.45),
+                    child: const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.primaryBrand,
+                        strokeWidth: 3,
+                      ),
                     ),
                   ),
                 );
@@ -370,26 +394,20 @@ class InstituteSubscriptionScreen
     return Obx(() {
       final isAvailable = iapCtrl.isAvailable.value;
       final isLoadingProducts = iapCtrl.isLoadingProducts.value;
-      final isPurchasing = iapCtrl.isPurchasing.value;
-      final purchasingPlanId = iapCtrl.purchasingPlanId.value;
       final selected = controller.selectedPlan.value;
-      final isThisPurchasing = isPurchasing && purchasingPlanId == selected?.id;
-
-      // Pay Direct is disabled when IAP unavailable; Manually is always active.
+      // Only disable Pay Direct when IAP is genuinely unavailable or no plan selected.
+      // isPurchasing is NOT used here — the screen overlay blocks interaction instead.
       final payDirectBlocked =
-          !isAvailable || isPurchasing || selected == null || isLoadingProducts;
+          !isAvailable || isLoadingProducts || selected == null;
 
       return Row(
         children: [
           Expanded(
             child: _buildPayOption(
-              label: isThisPurchasing
-                  ? AppStrings.iapProcessing
-                  : AppStrings.iapPayDirect,
+              label: AppStrings.iapPayDirect,
               description: 'Instant · via Apple',
               icon: Icons.apple_rounded,
               isPrimary: true,
-              isLoading: isThisPurchasing || isLoadingProducts,
               onTap: payDirectBlocked ? null : () => iapCtrl.purchasePlan(selected),
             ),
           ),
@@ -400,10 +418,7 @@ class InstituteSubscriptionScreen
               description: AppStrings.iapPayManuallyDesc,
               icon: Icons.account_balance_rounded,
               isPrimary: false,
-              isLoading: false,
-              onTap: isPurchasing
-                  ? null
-                  : () => Get.toNamed(AppRoutes.instituteSubscriptionRenew),
+              onTap: () => Get.toNamed(AppRoutes.instituteSubscriptionRenew),
             ),
           ),
         ],
@@ -415,23 +430,19 @@ class InstituteSubscriptionScreen
   Widget _buildAndroidButtons() {
     final razorpayCtrl = Get.find<RazorpayController>();
     return Obx(() {
-      final isPurchasing = razorpayCtrl.isPurchasing.value;
-      final purchasingPlanId = razorpayCtrl.purchasingPlanId.value;
       final selected = controller.selectedPlan.value;
-      final isThisPurchasing = isPurchasing && purchasingPlanId == selected?.id;
+      // Only disable Pay Direct when no plan is selected.
+      // isPurchasing is NOT used here — the screen overlay blocks interaction instead.
 
       return Row(
         children: [
           Expanded(
             child: _buildPayOption(
-              label: isThisPurchasing
-                  ? AppStrings.iapProcessing
-                  : AppStrings.iapPayDirect,
+              label: AppStrings.iapPayDirect,
               description: 'Instant · via Razorpay',
               icon: Icons.currency_rupee_rounded,
               isPrimary: true,
-              isLoading: isThisPurchasing,
-              onTap: (isPurchasing || selected == null)
+              onTap: selected == null
                   ? null
                   : () => razorpayCtrl.startPayment(selected),
             ),
@@ -443,10 +454,7 @@ class InstituteSubscriptionScreen
               description: AppStrings.iapPayManuallyDesc,
               icon: Icons.account_balance_rounded,
               isPrimary: false,
-              isLoading: false,
-              onTap: isPurchasing
-                  ? null
-                  : () => Get.toNamed(AppRoutes.instituteSubscriptionRenew),
+              onTap: () => Get.toNamed(AppRoutes.instituteSubscriptionRenew),
             ),
           ),
         ],
@@ -459,15 +467,11 @@ class InstituteSubscriptionScreen
     required String description,
     required IconData icon,
     required bool isPrimary,
-    required bool isLoading,
     required VoidCallback? onTap,
   }) {
-    final bool disabled = onTap == null || isLoading;
+    final bool disabled = onTap == null;
     final Color bg = isPrimary ? AppColors.primaryBrand : AppColors.white;
     final Color fg = isPrimary ? AppColors.white : AppColors.primaryBrand;
-    final Color borderCol = isPrimary
-        ? AppColors.primaryBrand
-        : AppColors.primaryBrand;
 
     return GestureDetector(
       onTap: disabled ? null : onTap,
@@ -477,46 +481,35 @@ class InstituteSubscriptionScreen
         decoration: BoxDecoration(
           color: disabled ? AppColors.textMuted : bg,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: disabled ? AppColors.textMuted : borderCol),
+          border: Border.all(
+            color: disabled ? AppColors.textMuted : AppColors.primaryBrand,
+          ),
         ),
-        child: isLoading
-            ? SizedBox(
-                height: 38,
-                child: Center(
-                  child: SizedBox(
-                    width: 18,
-                    height: 18,
-                    child: CircularProgressIndicator(strokeWidth: 2, color: fg),
-                  ),
-                ),
-              )
-            : Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(icon, color: disabled ? AppColors.white : fg, size: 20),
-                  AppSpacing.v4,
-                  Text(
-                    label,
-                    textAlign: TextAlign.center,
-                    style: AppTextStyles.outfit(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700,
-                      color: disabled ? AppColors.white : fg,
-                    ),
-                  ),
-                  AppSpacing.v2,
-                  Text(
-                    description,
-                    textAlign: TextAlign.center,
-                    style: AppTextStyles.outfit(
-                      fontSize: 10,
-                      color: disabled
-                          ? AppColors.white
-                          : fg.withValues(alpha: 0.7),
-                    ),
-                  ),
-                ],
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, color: disabled ? AppColors.white : fg, size: 20),
+            AppSpacing.v4,
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              style: AppTextStyles.outfit(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                color: disabled ? AppColors.white : fg,
               ),
+            ),
+            AppSpacing.v2,
+            Text(
+              description,
+              textAlign: TextAlign.center,
+              style: AppTextStyles.outfit(
+                fontSize: 10,
+                color: disabled ? AppColors.white : fg.withValues(alpha: 0.7),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

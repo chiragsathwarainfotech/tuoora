@@ -6,6 +6,7 @@ import 'package:tuoora/core/constants/url_constants.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/data/models/institute_subscription_model.dart';
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
+import 'package:tuoora/presentation/institute/controllers/institute_profile_controller.dart';
 import 'package:tuoora/presentation/institute/controllers/institute_subscription_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/subscription_success_dialog.dart';
 
@@ -45,6 +46,10 @@ class RazorpayController extends GetxController {
     try {
       final order = await _repository.createRazorpayOrder(planId: plan.id);
 
+      final profile = Get.isRegistered<InstituteProfileController>()
+          ? Get.find<InstituteProfileController>().profile.value
+          : null;
+
       final options = {
         'key': UrlConstants.razorpayKeyId,
         'amount': order['amount'],
@@ -53,6 +58,11 @@ class RazorpayController extends GetxController {
         'name': 'Tuoora',
         'description': '${plan.name} · ${plan.durationDays} days',
         'theme': {'color': '#F97316'},
+        'prefill': {
+          if (profile?.name.isNotEmpty == true) 'name': profile!.name,
+          if (profile?.phone.isNotEmpty == true) 'contact': profile!.phone,
+          if (profile?.email.isNotEmpty == true) 'email': profile!.email,
+        },
       };
 
       _razorpay!.open(options);

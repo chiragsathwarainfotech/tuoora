@@ -23,10 +23,8 @@ class RazorpayController extends GetxController {
   int? _activePlanId;
   SubscriptionPlan? _activePlan;
 
-  // Cached once per session on first payment — avoids controller dependency.
   String? _prefillName;
-  String? _prefillContact;
-  String? _prefillEmail;
+  String? _prefillPhone;
   bool _prefillLoaded = false;
 
   @override
@@ -42,15 +40,12 @@ class RazorpayController extends GetxController {
 
   Future<void> _loadPrefillIfNeeded() async {
     if (_prefillLoaded) return;
-    _prefillLoaded = true;
     try {
       final profile = await _repository.getProfile();
       _prefillName = profile.name.isNotEmpty ? profile.name : null;
-      _prefillContact = profile.phone.isNotEmpty ? profile.phone : null;
-      _prefillEmail = profile.email.isNotEmpty ? profile.email : null;
-    } catch (_) {
-      // Prefill is best-effort — payment still proceeds without it.
-    }
+      _prefillPhone = profile.phone.isNotEmpty ? profile.phone : null;
+      _prefillLoaded = true; // only mark loaded on success
+    } catch (_) {}
   }
 
   Future<void> startPayment(SubscriptionPlan plan) async {
@@ -76,12 +71,11 @@ class RazorpayController extends GetxController {
         'theme': {'color': '#F97316'},
         'prefill': {
           if (_prefillName != null) 'name': _prefillName!,
-          if (_prefillContact != null) 'contact': _prefillContact!,
-          if (_prefillEmail != null) 'email': _prefillEmail!,
+          if (_prefillPhone != null) 'contact': _prefillPhone!,
         },
       };
 
-      _razorpay!.open(options);
+      _razorpay?.open(options);
     } catch (e) {
       _resetState();
       final msg = e.toString().replaceFirst('Exception: ', '');
@@ -110,10 +104,10 @@ class RazorpayController extends GetxController {
       if (!_disposed && plan != null) {
         final expiresAt = Get.isRegistered<InstituteSubscriptionController>()
             ? Get.find<InstituteSubscriptionController>()
-                .subscriptionData
-                .value
-                ?.subscription
-                .expiresAt
+                  .subscriptionData
+                  .value
+                  ?.subscription
+                  .expiresAt
             : null;
         SubscriptionSuccessDialog.show(
           planName: plan.name,

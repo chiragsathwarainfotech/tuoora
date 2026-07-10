@@ -18,7 +18,7 @@ class SubscriptionBanner extends StatelessWidget {
     if (Platform.isIOS) {
       UrlLauncherUtils.openExternal(UrlConstants.urlInstituteSubscription);
     } else {
-      Get.toNamed(AppRoutes.instituteSubscriptionRenew);
+      Get.toNamed(AppRoutes.instituteSubscription);
     }
   }
 
@@ -113,7 +113,7 @@ class SubscriptionBanner extends StatelessWidget {
         message:
             'Primary academic and data management operations are restricted. Renew now to restore full access.',
         action: 'Renew Subscription Now',
-        onAction: () => Get.toNamed(AppRoutes.instituteSubscriptionRenew),
+        onAction: _handleRenewAction,
       );
     });
   }

@@ -6,6 +6,7 @@ import 'package:tuoora/core/constants/url_constants.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/data/models/institute_subscription_model.dart';
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
+import 'package:tuoora/presentation/institute/controllers/institute_profile_controller.dart';
 import 'package:tuoora/presentation/institute/controllers/institute_subscription_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/subscription_success_dialog.dart';
 
@@ -98,10 +99,12 @@ class RazorpayController extends GetxController {
         razorpaySignature: response.signature ?? '',
       );
 
-      if (!_disposed && Get.isRegistered<InstituteSubscriptionController>()) {
-        await Get.find<InstituteSubscriptionController>()
-            .fetchSubscriptionData();
-      }
+      await Future.wait([
+        if (!_disposed && Get.isRegistered<InstituteSubscriptionController>())
+          Get.find<InstituteSubscriptionController>().fetchSubscriptionData(),
+        if (!_disposed && Get.isRegistered<InstituteProfileController>())
+          Get.find<InstituteProfileController>().fetchProfile(),
+      ]);
 
       if (!_disposed && plan != null) {
         final expiresAt = Get.isRegistered<InstituteSubscriptionController>()

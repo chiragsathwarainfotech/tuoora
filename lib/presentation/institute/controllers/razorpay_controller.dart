@@ -1,4 +1,4 @@
-﻿import 'dart:io' show Platform;
+import 'dart:io' show Platform;
 import 'package:get/get.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
@@ -6,8 +6,6 @@ import 'package:tuoora/core/constants/url_constants.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/data/models/institute_subscription_model.dart';
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
-import 'package:tuoora/data/models/institute_profile_model.dart';
-import 'package:tuoora/presentation/institute/controllers/institute_profile_controller.dart';
 import 'package:tuoora/presentation/institute/controllers/institute_subscription_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/subscription_success_dialog.dart';
 
@@ -25,6 +23,12 @@ class RazorpayController extends GetxController {
   int? _activePlanId;
   SubscriptionPlan? _activePlan;
 
+  // Cached once per session on first payment — avoids controller dependency.
+  String? _prefillName;
+  String? _prefillContact;
+  String? _prefillEmail;
+  bool _prefillLoaded = false;
+
   @override
   void onInit() {
     super.onInit();
@@ -34,6 +38,19 @@ class RazorpayController extends GetxController {
     _razorpay!.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay!.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     _razorpay!.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+  }
+
+  Future<void> _loadPrefillIfNeeded() async {
+    if (_prefillLoaded) return;
+    _prefillLoaded = true;
+    try {
+      final profile = await _repository.getProfile();
+      _prefillName = profile.name.isNotEmpty ? profile.name : null;
+      _prefillContact = profile.phone.isNotEmpty ? profile.phone : null;
+      _prefillEmail = profile.email.isNotEmpty ? profile.email : null;
+    } catch (_) {
+      // Prefill is best-effort — payment still proceeds without it.
+    }
   }
 
   Future<void> startPayment(SubscriptionPlan plan) async {
@@ -47,14 +64,7 @@ class RazorpayController extends GetxController {
     try {
       final order = await _repository.createRazorpayOrder(planId: plan.id);
 
-      InstituteProfile? profile;
-      if (Get.isRegistered<InstituteProfileController>()) {
-        final profileCtrl = Get.find<InstituteProfileController>();
-        if (profileCtrl.profile.value == null) {
-          await profileCtrl.fetchProfile();
-        }
-        profile = profileCtrl.profile.value;
-      }
+      await _loadPrefillIfNeeded();
 
       final options = {
         'key': UrlConstants.razorpayKeyId,
@@ -65,9 +75,9 @@ class RazorpayController extends GetxController {
         'description': '${plan.name} · ${plan.durationDays} days',
         'theme': {'color': '#F97316'},
         'prefill': {
-          if (profile?.name.isNotEmpty == true) 'name': profile!.name,
-          if (profile?.phone.isNotEmpty == true) 'contact': profile!.phone,
-          if (profile?.email.isNotEmpty == true) 'email': profile!.email,
+          if (_prefillName != null) 'name': _prefillName!,
+          if (_prefillContact != null) 'contact': _prefillContact!,
+          if (_prefillEmail != null) 'email': _prefillEmail!,
         },
       };
 

@@ -108,9 +108,7 @@ class InstituteSubscriptionScreen
     List<SubscriptionHistory> history,
   ) {
     final isActive = sub.status.toLowerCase() == 'active';
-    final latestAmount = history.isNotEmpty
-        ? _formatPrice(history.first.amount)
-        : '₹0';
+    final latestAmount = _formatPrice(sub.price);
 
     return Container(
       padding: const EdgeInsets.all(20),

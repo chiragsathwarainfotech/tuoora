@@ -35,6 +35,7 @@ class SubscriptionPlan {
 
 class SubscriptionDetails {
   final String planName;
+  final String price;
   final String status;
   final DateTime? expiresAt;
   final int studentsEnrolled;
@@ -42,6 +43,7 @@ class SubscriptionDetails {
 
   SubscriptionDetails({
     required this.planName,
+    required this.price,
     required this.status,
     this.expiresAt,
     required this.studentsEnrolled,
@@ -51,6 +53,7 @@ class SubscriptionDetails {
   factory SubscriptionDetails.fromJson(Map<String, dynamic> json) {
     return SubscriptionDetails(
       planName: json['plan_name'] ?? 'No Active Plan',
+      price: json['price']?.toString() ?? '0',
       status: json['status'] ?? 'Inactive',
       expiresAt: json['expires_at'] != null
           ? DateTime.parse(json['expires_at']).toLocal()

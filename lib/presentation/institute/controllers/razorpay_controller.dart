@@ -22,6 +22,7 @@ class RazorpayController extends GetxController {
 
   int? _activePlanId;
   SubscriptionPlan? _activePlan;
+  String? _activeOrderId;
 
   String? _prefillName;
   String? _prefillPhone;
@@ -58,6 +59,7 @@ class RazorpayController extends GetxController {
 
     try {
       final order = await _repository.createRazorpayOrder(planId: plan.id);
+      _activeOrderId = order['order_id']?.toString();
 
       await _loadPrefillIfNeeded();
 
@@ -91,7 +93,7 @@ class RazorpayController extends GetxController {
     try {
       await _repository.verifyRazorpayPayment(
         planId: planId,
-        razorpayOrderId: response.orderId ?? '',
+        razorpayOrderId: response.orderId ?? _activeOrderId ?? '',
         razorpayPaymentId: response.paymentId ?? '',
         razorpaySignature: response.signature ?? '',
       );
@@ -142,6 +144,7 @@ class RazorpayController extends GetxController {
     }
     _activePlanId = null;
     _activePlan = null;
+    _activeOrderId = null;
   }
 
   @override

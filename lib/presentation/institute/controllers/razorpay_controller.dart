@@ -6,6 +6,7 @@ import 'package:tuoora/core/constants/url_constants.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/data/models/institute_subscription_model.dart';
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
+import 'package:tuoora/data/models/institute_profile_model.dart';
 import 'package:tuoora/presentation/institute/controllers/institute_profile_controller.dart';
 import 'package:tuoora/presentation/institute/controllers/institute_subscription_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/subscription_success_dialog.dart';
@@ -46,9 +47,14 @@ class RazorpayController extends GetxController {
     try {
       final order = await _repository.createRazorpayOrder(planId: plan.id);
 
-      final profile = Get.isRegistered<InstituteProfileController>()
-          ? Get.find<InstituteProfileController>().profile.value
-          : null;
+      InstituteProfile? profile;
+      if (Get.isRegistered<InstituteProfileController>()) {
+        final profileCtrl = Get.find<InstituteProfileController>();
+        if (profileCtrl.profile.value == null) {
+          await profileCtrl.fetchProfile();
+        }
+        profile = profileCtrl.profile.value;
+      }
 
       final options = {
         'key': UrlConstants.razorpayKeyId,

@@ -8,6 +8,7 @@ import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/data/models/institute_subscription_model.dart';
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
 import 'package:tuoora/presentation/institute/controllers/institute_subscription_controller.dart';
+import 'package:tuoora/presentation/institute/widgets/subscription_success_dialog.dart';
 
 class IAPController extends GetxController {
   final InstituteRepositoryImpl _repository;
@@ -25,6 +26,7 @@ class IAPController extends GetxController {
   final isPurchasing = false.obs;
   final purchasingPlanId = Rx<int?>(null);
   int? _activePlanId;
+  SubscriptionPlan? _activePlan;
 
   // iOS only — Android uses Razorpay instead of Google Play Billing.
   static bool get _isSupported => Platform.isIOS;
@@ -102,6 +104,7 @@ class IAPController extends GetxController {
     }
 
     _activePlanId = plan.id;
+    _activePlan = plan;
     isPurchasing.value = true;
     purchasingPlanId.value = plan.id;
 
@@ -142,6 +145,7 @@ class IAPController extends GetxController {
             isPurchasing.value = false;
             purchasingPlanId.value = null;
             _activePlanId = null;
+            _activePlan = null;
           }
 
         case PurchaseStatus.error:
@@ -153,6 +157,7 @@ class IAPController extends GetxController {
             isPurchasing.value = false;
             purchasingPlanId.value = null;
             _activePlanId = null;
+            _activePlan = null;
           }
 
         case PurchaseStatus.canceled:
@@ -160,6 +165,7 @@ class IAPController extends GetxController {
             isPurchasing.value = false;
             purchasingPlanId.value = null;
             _activePlanId = null;
+            _activePlan = null;
           }
 
         case PurchaseStatus.restored:
@@ -176,6 +182,7 @@ class IAPController extends GetxController {
   /// The [platform] field lets the backend choose the correct verification path.
   Future<void> _verifyAndActivate(PurchaseDetails details) async {
     final planId = _activePlanId;
+    final plan = _activePlan;
     if (planId == null) return;
 
     try {
@@ -192,7 +199,20 @@ class IAPController extends GetxController {
             .fetchSubscriptionData();
       }
 
-      if (!_disposed) {
+      if (!_disposed && plan != null) {
+        final expiresAt = Get.isRegistered<InstituteSubscriptionController>()
+            ? Get.find<InstituteSubscriptionController>()
+                .subscriptionData
+                .value
+                ?.subscription
+                .expiresAt
+            : null;
+        SubscriptionSuccessDialog.show(
+          planName: plan.name,
+          addedDays: plan.durationDays,
+          expiresAt: expiresAt,
+        );
+      } else if (!_disposed) {
         AppSnackBar.success(AppStrings.iapPurchaseSuccess);
       }
     } catch (_) {

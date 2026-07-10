@@ -1,5 +1,4 @@
 ﻿import 'dart:io' show Platform;
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
@@ -8,6 +7,7 @@ import 'package:tuoora/core/widgets/app_snack_bar.dart';
 import 'package:tuoora/data/models/institute_subscription_model.dart';
 import 'package:tuoora/data/repositories_impl/institute_repository_impl.dart';
 import 'package:tuoora/presentation/institute/controllers/institute_subscription_controller.dart';
+import 'package:tuoora/presentation/institute/widgets/subscription_success_dialog.dart';
 
 class RazorpayController extends GetxController {
   final InstituteRepositoryImpl _repository;
@@ -21,6 +21,7 @@ class RazorpayController extends GetxController {
   final purchasingPlanId = Rx<int?>(null);
 
   int? _activePlanId;
+  SubscriptionPlan? _activePlan;
 
   @override
   void onInit() {
@@ -37,6 +38,7 @@ class RazorpayController extends GetxController {
     if (_disposed || isPurchasing.value || _razorpay == null) return;
 
     _activePlanId = plan.id;
+    _activePlan = plan;
     isPurchasing.value = true;
     purchasingPlanId.value = plan.id;
 
@@ -63,6 +65,7 @@ class RazorpayController extends GetxController {
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) async {
     final planId = _activePlanId;
+    final plan = _activePlan;
     if (planId == null) return;
 
     try {
@@ -78,7 +81,22 @@ class RazorpayController extends GetxController {
             .fetchSubscriptionData();
       }
 
-      if (!_disposed) AppSnackBar.success(AppStrings.iapPurchaseSuccess);
+      if (!_disposed && plan != null) {
+        final expiresAt = Get.isRegistered<InstituteSubscriptionController>()
+            ? Get.find<InstituteSubscriptionController>()
+                .subscriptionData
+                .value
+                ?.subscription
+                .expiresAt
+            : null;
+        SubscriptionSuccessDialog.show(
+          planName: plan.name,
+          addedDays: plan.durationDays,
+          expiresAt: expiresAt,
+        );
+      } else if (!_disposed) {
+        AppSnackBar.success(AppStrings.iapPurchaseSuccess);
+      }
     } catch (_) {
       if (!_disposed) AppSnackBar.error(AppStrings.iapActivationFailed);
     } finally {
@@ -103,6 +121,7 @@ class RazorpayController extends GetxController {
       purchasingPlanId.value = null;
     }
     _activePlanId = null;
+    _activePlan = null;
   }
 
   @override

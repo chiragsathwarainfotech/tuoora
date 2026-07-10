@@ -53,7 +53,7 @@ class SubscriptionDetails {
       planName: json['plan_name'] ?? 'No Active Plan',
       status: json['status'] ?? 'Inactive',
       expiresAt: json['expires_at'] != null
-          ? DateTime.parse(json['expires_at'])
+          ? DateTime.parse(json['expires_at']).toLocal()
           : null,
       studentsEnrolled: json['students_enrolled'] ?? 0,
       studentLimit: json['student_limit'] ?? 0,
@@ -84,10 +84,10 @@ class SubscriptionHistory {
       planName: json['plan_name'] ?? '',
       amount: json['amount']?.toString() ?? '0',
       startDate: json['start_date'] != null
-          ? DateTime.parse(json['start_date'])
+          ? DateTime.parse(json['start_date']).toLocal()
           : null,
       endDate: json['end_date'] != null
-          ? DateTime.parse(json['end_date'])
+          ? DateTime.parse(json['end_date']).toLocal()
           : null,
       status: json['status'] ?? '',
     );

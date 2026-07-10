@@ -60,7 +60,10 @@ class InstituteSubscriptionScreen
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _buildActivePlanCard(data.subscription, data.history),
+                            _buildActivePlanCard(
+                              data.subscription,
+                              data.history,
+                            ),
                             AppSpacing.v24,
                             _buildIAPSection(data.plans),
                             AppSpacing.v24,
@@ -75,7 +78,6 @@ class InstituteSubscriptionScreen
                 ),
               ],
             ),
-            // Full-screen payment processing overlay
             Positioned.fill(
               child: Obx(() {
                 final bool busy = Platform.isAndroid
@@ -229,11 +231,18 @@ class InstituteSubscriptionScreen
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.apple_rounded, size: 14, color: AppColors.textTertiary),
+              const Icon(
+                Icons.apple_rounded,
+                size: 14,
+                color: AppColors.textTertiary,
+              ),
               AppSpacing.h6,
               Text(
                 AppStrings.iapProcessedByApple,
-                style: AppTextStyles.outfit(fontSize: 11, color: AppColors.textTertiary),
+                style: AppTextStyles.outfit(
+                  fontSize: 11,
+                  color: AppColors.textTertiary,
+                ),
               ),
             ],
           ),
@@ -288,11 +297,13 @@ class InstituteSubscriptionScreen
       child: Column(
         children: [
           for (int i = 0; i < activePlans.length; i++) ...[
-            Obx(() => _buildPlanRow(
-              activePlans[i],
-              isFirst: i == 0,
-              isLast: i == activePlans.length - 1,
-            )),
+            Obx(
+              () => _buildPlanRow(
+                activePlans[i],
+                isFirst: i == 0,
+                isLast: i == activePlans.length - 1,
+              ),
+            ),
             if (i < activePlans.length - 1)
               Divider(height: 1, color: AppColors.fieldBorder),
           ],
@@ -334,7 +345,9 @@ class InstituteSubscriptionScreen
                 shape: BoxShape.circle,
                 color: isSelected ? AppColors.primaryBrand : Colors.transparent,
                 border: Border.all(
-                  color: isSelected ? AppColors.primaryBrand : AppColors.textMuted,
+                  color: isSelected
+                      ? AppColors.primaryBrand
+                      : AppColors.textMuted,
                   width: 2,
                 ),
               ),
@@ -350,7 +363,9 @@ class InstituteSubscriptionScreen
                 style: AppTextStyles.outfit(
                   fontSize: 14,
                   fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                  color: isSelected ? AppColors.primaryBrand : AppColors.textPrimary,
+                  color: isSelected
+                      ? AppColors.primaryBrand
+                      : AppColors.textPrimary,
                 ),
               ),
             ),
@@ -368,7 +383,9 @@ class InstituteSubscriptionScreen
                 style: AppTextStyles.outfit(
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
-                  color: isSelected ? AppColors.primaryBrand : AppColors.fieldLabel,
+                  color: isSelected
+                      ? AppColors.primaryBrand
+                      : AppColors.fieldLabel,
                 ),
               ),
             ),
@@ -379,7 +396,9 @@ class InstituteSubscriptionScreen
               style: AppTextStyles.outfit(
                 fontSize: 16,
                 fontWeight: FontWeight.w800,
-                color: isSelected ? AppColors.primaryBrand : AppColors.textPrimary,
+                color: isSelected
+                    ? AppColors.primaryBrand
+                    : AppColors.textPrimary,
               ),
             ),
           ],
@@ -408,7 +427,9 @@ class InstituteSubscriptionScreen
               description: 'Instant · via Apple',
               icon: Icons.apple_rounded,
               isPrimary: true,
-              onTap: payDirectBlocked ? null : () => iapCtrl.purchasePlan(selected),
+              onTap: payDirectBlocked
+                  ? null
+                  : () => iapCtrl.purchasePlan(selected),
             ),
           ),
           AppSpacing.h12,
@@ -426,14 +447,10 @@ class InstituteSubscriptionScreen
     });
   }
 
-  // ── Android action buttons ────────────────────────────────────────────────
   Widget _buildAndroidButtons() {
     final razorpayCtrl = Get.find<RazorpayController>();
     return Obx(() {
       final selected = controller.selectedPlan.value;
-      // Only disable Pay Direct when no plan is selected.
-      // isPurchasing is NOT used here — the screen overlay blocks interaction instead.
-
       return Row(
         children: [
           Expanded(

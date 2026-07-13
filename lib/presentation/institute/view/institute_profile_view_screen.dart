@@ -15,6 +15,7 @@ import 'package:intl/intl.dart';
 import 'package:tuoora/core/services/auth_service.dart';
 import 'package:tuoora/core/utils/url_launcher_utils.dart';
 import 'package:tuoora/core/constants/url_constants.dart';
+import 'package:tuoora/presentation/institute/view/institute_upi_payment_settings_screen.dart';
 
 class InstituteProfileViewScreen extends StatelessWidget {
   const InstituteProfileViewScreen({super.key});
@@ -75,15 +76,13 @@ class InstituteProfileViewScreen extends StatelessWidget {
                         AppSpacing.v16,
                         _buildContactCard(p),
                         AppSpacing.v16,
-                        _buildLocationCard(p),
-                        AppSpacing.v16,
-                        _buildUpiPaymentCard(controller),
-                        AppSpacing.v16,
                         _buildActivePlanCard(),
                         AppSpacing.v16,
-                        _buildSupportCard(),
+                        _buildUpiPaymentCard(context, controller),
                         AppSpacing.v16,
                         _buildSettingsNavigationCard(),
+                        AppSpacing.v16,
+                        _buildSupportCard(),
                         AppSpacing.v16,
                         _buildDeleteAccountCard(context, controller),
                         AppSpacing.v16,
@@ -245,21 +244,6 @@ class InstituteProfileViewScreen extends StatelessWidget {
   }
 
   Widget _buildContactCard(dynamic p) {
-    return _card(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _cardSectionHeader('Contact Information', Icons.contact_page_rounded),
-          _buildInfoRow(Icons.email_outlined, 'Email', p.email),
-          _buildInfoRow(Icons.phone_outlined, 'Phone', p.phone),
-          if (p.website != null)
-            _buildInfoRow(Icons.language_rounded, 'Website', p.website!),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildLocationCard(dynamic p) {
     final address = [
       p.address,
       p.addressLine2,
@@ -272,18 +256,25 @@ class InstituteProfileViewScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _cardSectionHeader('Location Information', Icons.location_on_rounded),
+          _cardSectionHeader('Contact Information', Icons.contact_page_rounded),
+          _buildInfoRow(Icons.email_outlined, 'Email', p.email),
+          _buildInfoRow(Icons.phone_outlined, 'Phone', p.phone),
           _buildInfoRow(
             Icons.map_outlined,
             'Address',
             address.isEmpty ? 'Not Provided' : address,
           ),
+          if (p.website != null)
+            _buildInfoRow(Icons.language_rounded, 'Website', p.website!),
         ],
       ),
     );
   }
 
-  Widget _buildUpiPaymentCard(InstituteProfileController controller) {
+  Widget _buildUpiPaymentCard(
+    BuildContext context,
+    InstituteProfileController controller,
+  ) {
     return _card(
       child: Obx(() {
         final hasUpi = controller.hasUpiPayment;
@@ -315,7 +306,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
                   if (hasUpi)
                     InkWell(
                       onTap: () =>
-                          Get.toNamed(AppRoutes.instituteUpiPaymentSettings),
+                          _showUpiSettingsEditDialog(context, controller),
                       borderRadius: BorderRadius.circular(6),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
@@ -341,6 +332,36 @@ class InstituteProfileViewScreen extends StatelessWidget {
                           ],
                         ),
                       ),
+                    )
+                  else
+                    InkWell(
+                      onTap: () =>
+                          _showUpiSettingsEditDialog(context, controller),
+                      borderRadius: BorderRadius.circular(6),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 4,
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.add_rounded,
+                              size: 14,
+                              color: AppColors.primaryBrand,
+                            ),
+                            AppSpacing.h4,
+                            Text(
+                              'Add',
+                              style: AppTextStyles.outfit(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.primaryBrand,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                 ],
               ),
@@ -348,100 +369,221 @@ class InstituteProfileViewScreen extends StatelessWidget {
             if (!hasUpi)
               _buildUpiEmptyState()
             else
-              _buildUpiDetailsBody(controller.upiId.value, qrUrl),
+              _buildUpiDetailsBody(context, controller.upiId.value, qrUrl),
           ],
         );
       }),
     );
   }
 
-  Widget _buildUpiDetailsBody(String upiId, String? qrUrl) {
+  Widget _buildUpiDetailsBody(
+    BuildContext context,
+    String upiId,
+    String? qrUrl,
+  ) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(4, 0, 4, 4),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _buildInfoRow(Icons.alternate_email_rounded, 'UPI ID', upiId),
-          if (qrUrl != null && qrUrl.isNotEmpty) ...[
-            AppSpacing.v12,
-            Center(
-              child: Container(
-                padding: AppSpacing.all8,
-                decoration: BoxDecoration(
-                  color: AppColors.white,
-                  borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-                  border: Border.all(color: AppColors.fieldBorder),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'UPI is configured',
+                  style: AppTextStyles.outfit(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.successGreen,
+                  ),
                 ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(6),
-                  child: CachedNetworkImage(
-                    imageUrl: qrUrl,
-                    width: 160,
-                    height: 160,
-                    fit: BoxFit.contain,
-                    placeholder: (_, _) => const SizedBox(
-                      width: 160,
-                      height: 160,
-                      child: Center(
-                        child: SizedBox(
-                          width: 22,
-                          height: 22,
-                          child: CircularProgressIndicator(strokeWidth: 2),
+                AppSpacing.v2,
+                Text(
+                  'Students can scan QR or pay via UPI ID',
+                  style: AppTextStyles.outfit(
+                    fontSize: 12,
+                    color: AppColors.textMuted,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          InkWell(
+            onTap: () => _showUpiDetailsDialog(context, upiId, qrUrl),
+            borderRadius: BorderRadius.circular(6),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.visibility_outlined,
+                    size: 14,
+                    color: AppColors.primaryBrand,
+                  ),
+                  AppSpacing.h4,
+                  Text(
+                    'View',
+                    style: AppTextStyles.outfit(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.primaryBrand,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showUpiDetailsDialog(
+    BuildContext context,
+    String upiId,
+    String? qrUrl,
+  ) {
+    Get.dialog(
+      Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        backgroundColor: AppColors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'UPI Payment Details',
+                    style: AppTextStyles.outfit(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () => Get.back(),
+                    icon: const Icon(Icons.close_rounded),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    color: AppColors.textSecondary,
+                  ),
+                ],
+              ),
+              AppSpacing.v16,
+              if (upiId.isNotEmpty) ...[
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: AppColors.fieldBg,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: AppColors.fieldBorder),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.alternate_email_rounded,
+                        size: 18,
+                        color: AppColors.textSecondary,
+                      ),
+                      AppSpacing.h12,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'UPI ID',
+                              style: AppTextStyles.outfit(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.textMuted,
+                              ),
+                            ),
+                            AppSpacing.v2,
+                            Text(
+                              upiId,
+                              style: AppTextStyles.outfit(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.textPrimary,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                    errorWidget: (_, _, _) => const SizedBox(
-                      width: 160,
-                      height: 160,
-                      child: Center(
-                        child: Icon(
-                          Icons.broken_image_rounded,
-                          color: AppColors.textMuted,
+                    ],
+                  ),
+                ),
+                AppSpacing.v16,
+              ],
+              if (qrUrl != null && qrUrl.isNotEmpty) ...[
+                Container(
+                  padding: AppSpacing.all8,
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: AppColors.fieldBorder),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(6),
+                    child: CachedNetworkImage(
+                      imageUrl: qrUrl,
+                      width: 200,
+                      height: 200,
+                      fit: BoxFit.contain,
+                      placeholder: (_, _) => const SizedBox(
+                        width: 200,
+                        height: 200,
+                        child: Center(
+                          child: SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(strokeWidth: 2.5),
+                          ),
+                        ),
+                      ),
+                      errorWidget: (_, _, _) => const SizedBox(
+                        width: 200,
+                        height: 200,
+                        child: Center(
+                          child: Icon(
+                            Icons.broken_image_rounded,
+                            color: AppColors.textMuted,
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ),
-            AppSpacing.v8,
-            Center(
-              child: Text(
-                AppStrings.upiPaymentScanHint,
-                style: AppTextStyles.outfit(
-                  fontSize: 11,
-                  color: AppColors.textMuted,
+                AppSpacing.v12,
+                Text(
+                  AppStrings.upiPaymentScanHint,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.outfit(
+                    fontSize: 12,
+                    color: AppColors.textSecondary,
+                  ),
                 ),
-              ),
-            ),
-          ],
-        ],
+              ],
+            ],
+          ),
+        ),
       ),
     );
   }
 
   Widget _buildUpiEmptyState() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 4, 8, 12),
+      padding: const EdgeInsets.fromLTRB(4, 0, 4, 4),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: 56,
-            height: 56,
-            decoration: const BoxDecoration(
-              color: AppColors.primaryBrandLight,
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(
-              Icons.qr_code_scanner_rounded,
-              color: AppColors.primaryBrand,
-              size: 28,
-            ),
-          ),
-          AppSpacing.v12,
           Text(
             AppStrings.upiPaymentEmptyTitle,
-            textAlign: TextAlign.center,
             style: AppTextStyles.outfit(
               fontSize: 14,
               fontWeight: FontWeight.w600,
@@ -451,41 +593,10 @@ class InstituteProfileViewScreen extends StatelessWidget {
           AppSpacing.v4,
           Text(
             AppStrings.upiPaymentEmptySubtitle,
-            textAlign: TextAlign.center,
             style: AppTextStyles.outfit(
               fontSize: 12,
               height: 1.5,
               color: AppColors.textMuted,
-            ),
-          ),
-          AppSpacing.v12,
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton.icon(
-              onPressed: () =>
-                  Get.toNamed(AppRoutes.instituteUpiPaymentSettings),
-              icon: const Icon(
-                Icons.add_rounded,
-                size: 18,
-                color: AppColors.white,
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primaryBrand,
-                foregroundColor: AppColors.white,
-                elevation: 0,
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              label: Text(
-                AppStrings.addPaymentDetails,
-                style: AppTextStyles.outfit(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.white,
-                ),
-              ),
             ),
           ),
         ],
@@ -522,37 +633,20 @@ class InstituteProfileViewScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Current Active Plan',
+                  'Subscription Status',
                   style: AppTextStyles.outfit(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
                     color: AppColors.textPrimary,
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    color: statusColor.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-                  ),
-                  child: Icon(statusIcon, color: statusColor, size: 20),
-                ),
+                Icon(statusIcon, color: statusColor, size: 20),
               ],
             ),
             AppSpacing.v8,
-            Text(
-              sub.planName.toUpperCase(),
-              style: AppTextStyles.outfit(
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-                color: AppColors.textPrimary,
-                letterSpacing: 0.5,
-              ),
-            ),
-            AppSpacing.v16,
             if (sub.endDate != null) ...[
               Container(
-                padding: const EdgeInsets.all(12),
+                padding: AppSpacing.cardPadding,
                 decoration: BoxDecoration(
                   color: AppColors.fieldBg,
                   borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
@@ -561,7 +655,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(AppSpacing.cardRadius),
                       decoration: BoxDecoration(
                         color: AppColors.primaryBrandLight,
                         borderRadius: BorderRadius.circular(
@@ -662,6 +756,44 @@ class InstituteProfileViewScreen extends StatelessWidget {
                 ),
               ],
             ],
+            AppSpacing.v12,
+            const Divider(height: 1, color: AppColors.fieldBorder),
+            AppSpacing.v8,
+            InkWell(
+              onTap: () => Get.toNamed(AppRoutes.instituteSubscription),
+              borderRadius: BorderRadius.circular(6),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.workspace_premium_outlined,
+                          size: 18,
+                          color: AppColors.primaryBrand,
+                        ),
+                        AppSpacing.h8,
+                        Text(
+                          'Manage Subscription',
+                          style: AppTextStyles.outfit(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.primaryBrand,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Icon(
+                      Icons.chevron_right_rounded,
+                      size: 20,
+                      color: AppColors.primaryBrand,
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       );
@@ -1096,6 +1228,16 @@ class InstituteProfileViewScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void _showUpiSettingsEditDialog(
+    BuildContext context,
+    InstituteProfileController controller,
+  ) {
+    Get.dialog(
+      const InstituteUpiPaymentSettingsScreen(),
+      barrierDismissible: false,
     );
   }
 }

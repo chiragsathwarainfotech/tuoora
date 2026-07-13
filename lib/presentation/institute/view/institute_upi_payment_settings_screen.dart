@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,54 +8,244 @@ import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
-import 'package:tuoora/core/widgets/app_button.dart';
 import 'package:tuoora/presentation/institute/controllers/institute_profile_controller.dart';
-import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 
-class InstituteUpiPaymentSettingsScreen
-    extends GetView<InstituteProfileController> {
+class InstituteUpiPaymentSettingsScreen extends StatefulWidget {
   const InstituteUpiPaymentSettingsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final upiIdField = TextEditingController(text: controller.upiId.value);
+  State<InstituteUpiPaymentSettingsScreen> createState() => _InstituteUpiPaymentSettingsScreenState();
+}
 
-    return Scaffold(
-      backgroundColor: AppColors.scaffoldBg,
-      body: SafeArea(
+class _InstituteUpiPaymentSettingsScreenState extends State<InstituteUpiPaymentSettingsScreen> {
+  late final InstituteProfileController controller;
+  late final TextEditingController _upiIdController;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.find<InstituteProfileController>();
+    _upiIdController = TextEditingController(text: controller.upiId.value);
+    controller.upiIdError.value = null;
+    controller.upiQrError.value = null;
+    controller.upiQrLocalPath.value = null;
+  }
+
+  @override
+  void dispose() {
+    _upiIdController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      backgroundColor: AppColors.white,
+      insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxHeight: MediaQuery.of(context).size.height * 0.85,
+        ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const InstituteAppBar(
-              title: AppStrings.upiPaymentSettingsTitle,
-              isRoot: false,
+            // Header
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      AppStrings.upiPaymentSettingsTitle,
+                      style: AppTextStyles.outfit(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () => Get.back(),
+                    icon: const Icon(Icons.close_rounded),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    color: AppColors.textSecondary,
+                  ),
+                ],
+              ),
             ),
+            const Divider(height: 1, color: AppColors.fieldBorder),
+            
+            // Scrollable Content
             Expanded(
               child: SingleChildScrollView(
-                padding: AppSpacing.all16,
+                padding: const EdgeInsets.all(20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildIntroBlock(),
-                    AppSpacing.v16,
-                    _buildConfigurationsCard(upiIdField),
-                    AppSpacing.v16,
-                    _buildQrSpecInfoBox(),
-                    AppSpacing.v24,
-                    Obx(
-                      () => AppButton(
-                        label: AppStrings.saveSettings,
-                        icon: Icons.check_circle_outline_rounded,
-                        isLoading: controller.isSavingPayment.value,
-                        onPressed: controller.isSavingPayment.value
-                            ? null
-                            : () => controller.savePaymentSettings(
-                                upiIdField.text,
-                              ),
+                    Text(
+                      AppStrings.upiPaymentSettingsSubtitle,
+                      style: AppTextStyles.outfit(
+                        fontSize: 12,
+                        height: 1.5,
+                        color: AppColors.textSecondary,
                       ),
                     ),
-                    AppSpacing.v24,
+                    AppSpacing.v16,
+                    
+                    // UPI ID
+                    _fieldLabel(AppStrings.upiIdLabel),
+                    AppSpacing.v8,
+                    Obx(() {
+                      final errorText = controller.upiIdError.value;
+                      final hasError = errorText != null && errorText.isNotEmpty;
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: AppSpacing.x16,
+                            decoration: BoxDecoration(
+                              color: AppColors.fieldBg,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: hasError ? AppColors.bohoRed : AppColors.fieldBorder,
+                              ),
+                            ),
+                            child: TextField(
+                              controller: _upiIdController,
+                              keyboardType: TextInputType.emailAddress,
+                              onChanged: (_) {
+                                if (controller.upiIdError.value != null) {
+                                  controller.upiIdError.value = null;
+                                }
+                              },
+                              style: AppTextStyles.outfit(
+                                fontSize: 14,
+                                color: AppColors.textPrimary,
+                              ),
+                              decoration: InputDecoration(
+                                hintText: AppStrings.upiIdHint,
+                                hintStyle: AppTextStyles.outfit(
+                                  fontSize: 14,
+                                  color: AppColors.fieldLabel,
+                                ),
+                                border: InputBorder.none,
+                                contentPadding: const EdgeInsets.symmetric(vertical: 14),
+                                isCollapsed: true,
+                              ),
+                            ),
+                          ),
+                          if (hasError) ...[
+                            AppSpacing.v4,
+                            Text(
+                              errorText,
+                              style: AppTextStyles.outfit(fontSize: 11, color: AppColors.bohoRed),
+                            ),
+                          ],
+                        ],
+                      );
+                    }),
+                    AppSpacing.v8,
+                    Text(
+                      AppStrings.upiIdHelper,
+                      style: AppTextStyles.outfit(
+                        fontSize: 11,
+                        color: AppColors.textMuted,
+                        height: 1.4,
+                      ),
+                    ),
+                    AppSpacing.v20,
+                    
+                    // QR Code required section
+                    _fieldLabel(AppStrings.upiQrCodeLabelRequired),
+                    AppSpacing.v4,
+                    Text(
+                      AppStrings.upiQrCodeRequiredHelper,
+                      style: AppTextStyles.outfit(
+                        fontSize: 11,
+                        color: AppColors.textMuted,
+                        height: 1.4,
+                      ),
+                    ),
+                    AppSpacing.v8,
+                    Obx(() => _buildQrPicker()),
+                    Obx(() {
+                      final err = controller.upiQrError.value;
+                      if (err == null || err.isEmpty) return const SizedBox.shrink();
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 6, left: 4),
+                        child: Text(
+                          err,
+                          style: AppTextStyles.outfit(
+                            fontSize: 11,
+                            color: AppColors.bohoRed,
+                          ),
+                        ),
+                      );
+                    }),
+                    AppSpacing.v16,
+                    
+                    // QR Specifications Info Box
+                    _buildQrSpecInfoBox(),
                   ],
                 ),
+              ),
+            ),
+            
+            const Divider(height: 1, color: AppColors.fieldBorder),
+            
+            // Action Button
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Obx(
+                () {
+                  final isLoading = controller.isSavingPayment.value;
+                  return ElevatedButton(
+                    onPressed: isLoading
+                        ? null
+                        : () => controller.savePaymentSettings(_upiIdController.text),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primaryBrand,
+                      foregroundColor: AppColors.white,
+                      elevation: 0,
+                      minimumSize: const Size(double.infinity, 48),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (isLoading) ...[
+                          const SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
+                            ),
+                          ),
+                          AppSpacing.h12,
+                        ] else ...[
+                          const Icon(Icons.check_circle_outline_rounded, size: 18),
+                          AppSpacing.h8,
+                        ],
+                        Text(
+                          AppStrings.saveSettings,
+                          style: AppTextStyles.outfit(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
               ),
             ),
           ],
@@ -65,132 +254,27 @@ class InstituteUpiPaymentSettingsScreen
     );
   }
 
-  Widget _buildIntroBlock() {
-    return Text(
-      AppStrings.upiPaymentSettingsSubtitle,
-      style: AppTextStyles.outfit(
-        fontSize: 13,
-        height: 1.5,
-        color: AppColors.textSecondary,
-      ),
-    );
-  }
-
-  Widget _buildConfigurationsCard(TextEditingController upiIdField) {
-    return _card(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _cardSectionHeader(
-            AppStrings.upiConfigurationsHeader,
-            Icons.qr_code_2_rounded,
-          ),
-          AppSpacing.v4,
-          _fieldLabel(AppStrings.upiIdLabel),
-          AppSpacing.v8,
-          Obx(() {
-            return _upiIdInput(
-              upiIdField,
-              errorText: controller.upiIdError.value,
-            );
-          }),
-          AppSpacing.v8,
-          Text(
-            AppStrings.upiIdHelper,
-            style: AppTextStyles.outfit(
-              fontSize: 11,
-              color: AppColors.textMuted,
-              height: 1.4,
-            ),
-          ),
-          AppSpacing.v20,
-          _fieldLabel(AppStrings.upiQrCodeLabelRequired),
-          AppSpacing.v4,
-          Text(
-            AppStrings.upiQrCodeRequiredHelper,
-            style: AppTextStyles.outfit(
-              fontSize: 11,
-              color: AppColors.textMuted,
-              height: 1.4,
-            ),
-          ),
-          AppSpacing.v8,
-          Obx(() => _buildQrPicker()),
-          Obx(() {
-            final err = controller.upiQrError.value;
-            if (err == null || err.isEmpty) return const SizedBox.shrink();
-            return Padding(
-              padding: const EdgeInsets.only(top: 6, left: 4),
-              child: Text(
-                err,
-                style: AppTextStyles.outfit(
-                  fontSize: 11,
-                  color: AppColors.bohoRed,
-                ),
-              ),
-            );
-          }),
-        ],
-      ),
-    );
-  }
-
-  Widget _upiIdInput(TextEditingController upiIdField, {String? errorText}) {
-    final hasError = errorText != null && errorText.isNotEmpty;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          padding: AppSpacing.x16,
-          decoration: BoxDecoration(
-            color: AppColors.fieldBg,
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(
-              color: hasError ? AppColors.bohoRed : AppColors.fieldBorder,
-            ),
-          ),
-          child: TextField(
-            controller: upiIdField,
-            keyboardType: TextInputType.emailAddress,
-            onChanged: (_) {
-              if (controller.upiIdError.value != null) {
-                controller.upiIdError.value = null;
-              }
-            },
-            style: AppTextStyles.outfit(
-              fontSize: 14,
-              color: AppColors.textPrimary,
-            ),
-            decoration: InputDecoration(
-              hintText: AppStrings.upiIdHint,
-              hintStyle: AppTextStyles.outfit(
-                fontSize: 14,
-                color: AppColors.fieldLabel,
-              ),
-              border: InputBorder.none,
-              contentPadding: const EdgeInsets.symmetric(vertical: 14),
-              isCollapsed: true,
-            ),
-          ),
+  Widget _fieldLabel(String label) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 4),
+      child: Text(
+        label,
+        style: AppTextStyles.outfit(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+          color: AppColors.fieldLabel,
+          letterSpacing: 0.4,
         ),
-        if (hasError) ...[
-          AppSpacing.v4,
-          Text(
-            errorText,
-            style: AppTextStyles.outfit(fontSize: 11, color: AppColors.bohoRed),
-          ),
-        ],
-      ],
+      ),
     );
   }
 
-  // -------------------------------- QR image picker / preview block
   Widget _buildQrPicker() {
     final preview = controller.upiQrPreviewSource;
     final hasError = (controller.upiQrError.value ?? '').isNotEmpty;
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.fieldBg,
         borderRadius: BorderRadius.circular(12),
@@ -206,22 +290,22 @@ class InstituteUpiPaymentSettingsScreen
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: SizedBox(
-                width: 180,
-                height: 180,
+                width: 150,
+                height: 150,
                 child: _qrImage(preview),
               ),
             )
           else
             Container(
-              width: 64,
-              height: 64,
-              decoration: BoxDecoration(
+              width: 56,
+              height: 56,
+              decoration: const BoxDecoration(
                 color: AppColors.primaryBrandLight,
                 shape: BoxShape.circle,
               ),
               child: const Icon(
                 Icons.qr_code_scanner_rounded,
-                size: 32,
+                size: 28,
                 color: AppColors.primaryBrand,
               ),
             ),
@@ -232,7 +316,7 @@ class InstituteUpiPaymentSettingsScreen
                 : 'QR code ready — pick a new file to replace',
             textAlign: TextAlign.center,
             style: AppTextStyles.outfit(
-              fontSize: 12,
+              fontSize: 11,
               color: AppColors.textSecondary,
             ),
           ),
@@ -245,13 +329,13 @@ class InstituteUpiPaymentSettingsScreen
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             ),
-            icon: const Icon(Icons.upload_rounded, size: 18),
+            icon: const Icon(Icons.upload_rounded, size: 16),
             label: Text(
               AppStrings.chooseFile,
               style: AppTextStyles.outfit(
-                fontSize: 13,
+                fontSize: 12,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -261,8 +345,6 @@ class InstituteUpiPaymentSettingsScreen
     );
   }
 
-  /// Returns a widget that renders [src] — a freshly-picked local file
-  /// path, or the server-hosted https URL once saved.
   Widget _qrImage(String src) {
     if (src.startsWith('http')) {
       return CachedNetworkImage(
@@ -270,15 +352,15 @@ class InstituteUpiPaymentSettingsScreen
         fit: BoxFit.contain,
         placeholder: (_, _) => const Center(
           child: SizedBox(
-            width: 24,
-            height: 24,
+            width: 20,
+            height: 20,
             child: CircularProgressIndicator(strokeWidth: 2),
           ),
         ),
         errorWidget: (_, _, _) => const Icon(
           Icons.broken_image_rounded,
           color: AppColors.textMuted,
-          size: 48,
+          size: 40,
         ),
       );
     }
@@ -347,110 +429,55 @@ class InstituteUpiPaymentSettingsScreen
     );
   }
 
-  // ----------------------------------------- QR specifications info
   Widget _buildQrSpecInfoBox() {
-    return _card(
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: AppSpacing.all8,
-              decoration: BoxDecoration(
-                color: AppColors.primaryBrandLight,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Icon(
-                Icons.info_outline_rounded,
-                color: AppColors.primaryBrand,
-                size: 18,
-              ),
-            ),
-            AppSpacing.h12,
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    AppStrings.upiQrCodeSpecHeader,
-                    style: AppTextStyles.outfit(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.textPrimary,
-                    ),
-                  ),
-                  AppSpacing.v4,
-                  Text(
-                    AppStrings.upiQrCodeSpec,
-                    style: AppTextStyles.outfit(
-                      fontSize: 11,
-                      height: 1.5,
-                      color: AppColors.textSecondary,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // ---------------------------------------------------------- helpers
-  Widget _card({required Widget child}) {
     return Container(
-      padding: AppSpacing.cardPadding,
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        color: AppColors.fieldBg,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: AppColors.fieldBorder),
       ),
-      child: child,
-    );
-  }
-
-  Widget _cardSectionHeader(String title, IconData icon) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(4, 4, 4, 8),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 18, color: AppColors.primaryBrand),
-          AppSpacing.h8,
+          Container(
+            padding: const EdgeInsets.all(6),
+            decoration: BoxDecoration(
+              color: AppColors.primaryBrandLight,
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: const Icon(
+              Icons.info_outline_rounded,
+              color: AppColors.primaryBrand,
+              size: 16,
+            ),
+          ),
+          AppSpacing.h12,
           Expanded(
-            child: Text(
-              title,
-              style: AppTextStyles.outfit(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: AppColors.textPrimary,
-                letterSpacing: 0.5,
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  AppStrings.upiQrCodeSpecHeader,
+                  style: AppTextStyles.outfit(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                AppSpacing.v4,
+                Text(
+                  AppStrings.upiQrCodeSpec,
+                  style: AppTextStyles.outfit(
+                    fontSize: 10,
+                    height: 1.4,
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+              ],
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _fieldLabel(String label) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 4),
-      child: Text(
-        label,
-        style: AppTextStyles.outfit(
-          fontSize: 12,
-          fontWeight: FontWeight.w600,
-          color: AppColors.fieldLabel,
-          letterSpacing: 0.4,
-        ),
       ),
     );
   }

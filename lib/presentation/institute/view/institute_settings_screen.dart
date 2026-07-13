@@ -111,12 +111,6 @@ class InstituteSettingsScreen extends StatelessWidget {
             onTap: () => Get.toNamed(AppRoutes.instituteChangePassword),
           ),
           _buildSettingsItem(
-            icon: Icons.workspace_premium_outlined,
-            title: AppStrings.subscription,
-            subtitle: AppStrings.manageYourActivePlan,
-            onTap: () => Get.toNamed(AppRoutes.instituteSubscription),
-          ),
-          _buildSettingsItem(
             icon: Icons.chat_bubble_outline_rounded,
             title: AppStrings.instWhatsAppIntegration,
             subtitle: AppStrings.automateAlertsViaMetaApi,

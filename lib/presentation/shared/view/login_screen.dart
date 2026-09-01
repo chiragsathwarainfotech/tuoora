@@ -18,7 +18,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final controller = Get.find<LoginController>();
+  LoginController get controller => Get.find<LoginController>();
   String _selectedRole = 'STUDENT';
 
   @override

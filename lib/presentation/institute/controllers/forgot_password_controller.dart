@@ -103,12 +103,12 @@ class ForgotPasswordController extends GetxController {
         'password': password,
         'password_confirmation': confirmPassword,
       });
+      isLoading.value = false;
       AppSnackBar.success(message);
       Get.offAllNamed(AppRoutes.login, arguments: 'INSTITUTE');
     } catch (e) {
-      AppSnackBar.error(e.toString().replaceAll('Exception: ', ''));
-    } finally {
       isLoading.value = false;
+      AppSnackBar.error(e.toString().replaceAll('Exception: ', ''));
     }
   }
 
@@ -153,10 +153,6 @@ class ForgotPasswordController extends GetxController {
   @override
   void onClose() {
     _timer?.cancel();
-    emailController.dispose();
-    otpController.dispose();
-    passwordController.dispose();
-    confirmPasswordController.dispose();
     super.onClose();
   }
 }

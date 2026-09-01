@@ -425,15 +425,15 @@ class SignupController extends GetxController {
         await _authService.saveSession(updatedUser, stayAuthenticated: true);
       }
 
+      isLoading.value = false;
       Get.offAllNamed(AppRoutes.instituteDashboard);
       AppSnackBar.success(AppStrings.profileCreatedSuccessfully);
     } catch (e) {
+      isLoading.value = false;
       AppSnackBar.error(
         e.toString().replaceAll('Exception: ', ''),
         title: AppStrings.setupFailed,
       );
-    } finally {
-      isLoading.value = false;
     }
   }
 
@@ -470,18 +470,6 @@ class SignupController extends GetxController {
   @override
   void onClose() {
     _timer?.cancel();
-    instituteNameController.dispose();
-    instituteOwnerNameController.dispose();
-    emailController.dispose();
-    passwordController.dispose();
-    phoneController.dispose();
-    addressLine1Controller.dispose();
-    addressLine2Controller.dispose();
-    cityController.dispose();
-    stateController.dispose();
-    countryController.dispose();
-    pincodeController.dispose();
-    otpController.dispose();
     super.onClose();
   }
 }

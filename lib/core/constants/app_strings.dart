@@ -544,13 +544,7 @@ class AppStrings {
   static const String privacyPolicy = 'Privacy Policy';
   static const String learnHowWeProtectYourData =
       'Learn how we protect your data';
-  static const String helpCenter = 'Help Center';
-  static const String getAssistanceAndFaqs = 'Get assistance and FAQs';
-  static const String urlPrivacyPolicy = 'https://tuoora.com/privacy-policy';
-  static const String urlTermsConditions =
-      'https://tuoora.com/terms-conditions';
-  static const String urlInstituteSubscription =
-      'https://tuoora.com/institute/subscription';
+  static const String getAssistanceAndFaqs = 'Contact us or view FAQ';
   static const String errFailedOpenLink = 'Could not open the link';
   static const String subscriptionManageOnWebTitle =
       'Manage Subscription on Web';
@@ -672,6 +666,7 @@ class AppStrings {
   static const String qrCodeWillAppearHere = 'QR code will appear here';
   static const String bankTransferDetails = 'BANK TRANSFER DETAILS';
   static const String export = 'Export';
+  static const String upiIdCopy = 'UPI ID copied';
   static const String renewalRequestPendingReview =
       'Renewal Request Pending Review';
   static const String yourSubscriptionHasBeenExpired =
@@ -867,7 +862,8 @@ class AppStrings {
   static const String privacyTerms = 'Privacy & terms';
   static const String studentProfileTellUsWhatSMissing =
       'Tell us what\'s missing';
-  static const String logOut = 'Log out';
+  static const String logOut = 'Log Out';
+  static const String deviceLogout = 'Device session logged out';
   static const String noReceiptSelected = 'No receipt selected';
   static const String thisIsASystemGeneratedReceipt =
       'This is a system generated receipt and doesn\'t require a signature.';
@@ -932,4 +928,25 @@ class AppStrings {
       'Manage UPI ID and QR code for fee collection';
   static const String addPaymentDetails = 'Add Payment Details';
   static const String editSettings = 'Edit Settings';
+
+  // IAP (Apple In-App Purchase) — institute subscription
+  static const String iapPayDirect = 'Pay Direct';
+  static const String iapSelectPlanTitle = 'Choose Your Plan';
+  static const String iapSelectPlanSubtitle =
+      'Payments are processed securely through Apple';
+  static const String iapProcessing = 'Processing…';
+  static const String iapPurchaseSuccess =
+      'Subscription activated successfully!';
+  static const String iapPurchaseFailed = 'Purchase failed. Please try again.';
+  static const String iapNotAvailable =
+      'In-App Purchase is not available on this device.';
+  static const String iapActivationFailed =
+      'Purchase successful but activation failed. Please contact support.';
+  static const String iapProcessedByApple = 'Payments managed by Apple';
+  static const String iapProcessedByGoogle = 'Payments managed by Google Play';
+  static const String iapPlanUnavailable =
+      'This plan is currently unavailable. Please try again later.';
+  static const String iapPayManually = 'Manually';
+  static const String iapPayDirectDesc = 'Instant · via Apple';
+  static const String iapPayManuallyDesc = 'UPI / Bank Transfer';
 }

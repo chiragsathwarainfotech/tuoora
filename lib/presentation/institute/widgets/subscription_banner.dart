@@ -2,6 +2,7 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
+import 'package:tuoora/core/constants/url_constants.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/config/app_routes.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
@@ -15,9 +16,9 @@ class SubscriptionBanner extends StatelessWidget {
 
   void _handleRenewAction() {
     if (Platform.isIOS) {
-      UrlLauncherUtils.openExternal(AppStrings.urlInstituteSubscription);
+      UrlLauncherUtils.openExternal(UrlConstants.urlInstituteSubscription);
     } else {
-      Get.toNamed(AppRoutes.instituteSubscriptionRenew);
+      Get.toNamed(AppRoutes.instituteSubscription);
     }
   }
 
@@ -112,7 +113,7 @@ class SubscriptionBanner extends StatelessWidget {
         message:
             'Primary academic and data management operations are restricted. Renew now to restore full access.',
         action: 'Renew Subscription Now',
-        onAction: () => Get.toNamed(AppRoutes.instituteSubscriptionRenew),
+        onAction: _handleRenewAction,
       );
     });
   }

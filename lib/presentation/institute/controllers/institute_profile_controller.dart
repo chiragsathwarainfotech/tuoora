@@ -145,9 +145,6 @@ class InstituteProfileController extends GetxController {
         profileImagePath.value = data.logoUrl;
       }
 
-      // Pull UPI payment fields out of the profile response so the
-      // profile view's "UPI Payment Details" card shows them and the
-      // edit screen has its starting values.
       upiId.value = data.upiId ?? '';
       upiQrCodeUrl.value = data.upiQrCodeUrl;
       upiQrLocalPath.value = null;
@@ -184,15 +181,6 @@ class InstituteProfileController extends GetxController {
           } else if (!status.isGranted && !status.isLimited) {
             return;
           }
-        } else {
-          final storage = await Permission.storage.request();
-          final photos = await Permission.photos.request();
-          if (storage.isPermanentlyDenied || photos.isPermanentlyDenied) {
-            openAppSettings();
-            return;
-          } else if (!storage.isGranted && !photos.isGranted) {
-            return;
-          }
         }
       }
 
@@ -202,7 +190,6 @@ class InstituteProfileController extends GetxController {
       );
       if (image != null) {
         upiQrLocalPath.value = image.path;
-        // Clear any prior "QR required" error as soon as the user picks one.
         upiQrError.value = null;
       }
     } catch (_) {
@@ -212,9 +199,6 @@ class InstituteProfileController extends GetxController {
 
   Future<void> savePaymentSettings(String upiIdInput) async {
     final trimmed = upiIdInput.trim();
-    // UPI ID is OPTIONAL now — only QR code is mandatory. The backend
-    // requires a QR image either uploaded fresh in this submission OR
-    // previously persisted on the profile (in which case we keep it).
     upiIdError.value = null;
     final hasFreshQr = (upiQrLocalPath.value ?? '').isNotEmpty;
     final hasSavedQr = (upiQrCodeUrl.value ?? '').isNotEmpty;
@@ -330,16 +314,6 @@ class InstituteProfileController extends GetxController {
                     openAppSettings();
                     return;
                   } else if (!status.isGranted && !status.isLimited) {
-                    return;
-                  }
-                } else {
-                  final storage = await Permission.storage.request();
-                  final photos = await Permission.photos.request();
-                  if (storage.isPermanentlyDenied ||
-                      photos.isPermanentlyDenied) {
-                    openAppSettings();
-                    return;
-                  } else if (!storage.isGranted && !photos.isGranted) {
                     return;
                   }
                 }
@@ -473,11 +447,13 @@ class InstituteProfileController extends GetxController {
   }
 
   void logout() async {
+    CommonLoading.show();
     try {
       await Get.find<AuthRepository>().logout('INSTITUTE');
     } catch (_) {}
     final authService = Get.find<AuthService>();
     await authService.clearSession();
+    CommonLoading.dismiss();
     Get.offAllNamed(AppRoutes.roleSelection);
   }
 
@@ -495,6 +471,34 @@ class InstituteProfileController extends GetxController {
       AppSnackBar.error(
         e.toString().replaceAll('Exception: ', ''),
         title: AppStrings.accountDeletionFailed,
+      );
+    }
+  }
+
+  Future<void> deleteDeviceSession(int sessionId) async {
+    final p = profile.value;
+    final session = p?.activeSessions?.firstWhereOrNull(
+      (s) => s.id == sessionId,
+    );
+    if (session != null && session.isCurrent == true) {
+      logout();
+      return;
+    }
+
+    CommonLoading.show();
+    try {
+      await _instituteRepository.deleteDeviceSession(sessionId);
+      if (p != null && p.activeSessions != null) {
+        p.activeSessions!.removeWhere((s) => s.id == sessionId);
+        profile.refresh();
+      }
+      CommonLoading.dismiss();
+      AppSnackBar.success(AppStrings.deviceLogout);
+    } catch (e) {
+      CommonLoading.dismiss();
+      AppSnackBar.error(
+        e.toString().replaceAll('Exception: ', ''),
+        title: 'Logout Failed',
       );
     }
   }

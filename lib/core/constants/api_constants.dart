@@ -40,6 +40,8 @@ class ApiConstants {
   static const String instituteAccountDelete = '/institute/profile/delete';
   static const String institutePaymentUpdate =
       '/institute/profile/payment/update';
+  static String instituteDeleteDeviceSession(int sessionId) =>
+      '/institute/profile/device-sessions/$sessionId';
   static const String instituteBatches = '/institute/batches';
   static const String instituteChangePassword =
       '/institute/profile/change-password';
@@ -75,6 +77,12 @@ class ApiConstants {
       '/institute/subscriptions/all-data';
   static const String instituteSubscriptionRenew =
       '/institute/subscription/renew';
+  static const String instituteSubscriptionIapVerify =
+      '/institute/subscription/iap-verify';
+  static const String razorpayCreateOrder =
+      '/institute/subscription/create-order';
+  static const String razorpayVerifyPayment =
+      '/institute/subscription/verify-payment';
 
   static String removeStudentFromBatch(int batchId) =>
       '/institute/batches/$batchId/remove-student';

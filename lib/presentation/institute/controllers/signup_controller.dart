@@ -104,9 +104,6 @@ class SignupController extends GetxController {
   final canResend = false.obs;
   Timer? _timer;
 
-  /// Inline per-field error messages for the signup + OTP flows. Replaces
-  /// the old "Please fill in all fields" blanket snackbar so the user sees
-  /// which specific input is missing or invalid.
   final instituteNameError = RxnString();
   final ownerNameError = RxnString();
   final emailError = RxnString();
@@ -200,6 +197,7 @@ class SignupController extends GetxController {
 
   Future<void> _handleImageSelection(ImageSource source) async {
     Get.back();
+    await Future.delayed(const Duration(milliseconds: 300));
     try {
       if (source == ImageSource.camera) {
         final status = await Permission.camera.request();
@@ -216,15 +214,6 @@ class SignupController extends GetxController {
             openAppSettings();
             return;
           } else if (!status.isGranted && !status.isLimited) {
-            return;
-          }
-        } else {
-          final storage = await Permission.storage.request();
-          final photos = await Permission.photos.request();
-          if (storage.isPermanentlyDenied || photos.isPermanentlyDenied) {
-            openAppSettings();
-            return;
-          } else if (!storage.isGranted && !photos.isGranted) {
             return;
           }
         }
@@ -349,9 +338,9 @@ class SignupController extends GetxController {
     instituteNameError.value = instituteNameController.text.trim().isEmpty
         ? 'Institute name is required'
         : null;
-    phoneError.value = phoneController.text.trim().isEmpty
-        ? 'Phone number is required'
-        : null;
+    phoneError.value = ValidationUtils.validatePhone(
+      phoneController.text.trim(),
+    );
     addressLine1Error.value = addressLine1Controller.text.trim().isEmpty
         ? 'Address is required'
         : null;

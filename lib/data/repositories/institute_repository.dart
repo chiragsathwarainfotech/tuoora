@@ -88,6 +88,81 @@ class InstituteRepository implements InstituteRepositoryImpl {
   }
 
   @override
+  Future<void> verifyIapPurchase({
+    required int planId,
+    required String transactionId,
+    required String receiptData,
+    required String platform,
+  }) async {
+    final response = await _apiClient.post(
+      ApiConstants.instituteSubscriptionIapVerify,
+      {
+        'plan_id': planId,
+        'transaction_id': transactionId,
+        'receipt_data': receiptData,
+        // "ios" → Apple receipt; "android" → Google purchase token
+        'platform': platform,
+      },
+    );
+    if (response.status.hasError) {
+      _handleError(response, 'Failed to verify purchase');
+    }
+
+    final sub =
+        response.body is Map ? response.body['subscription'] : null;
+    if (sub != null) {
+      await Get.find<AuthService>().setSubscription(
+        Subscription.fromJson(Map<String, dynamic>.from(sub)),
+      );
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> createRazorpayOrder({
+    required int planId,
+  }) async {
+    final response = await _apiClient.post(
+      ApiConstants.razorpayCreateOrder,
+      {'plan_id': planId},
+    );
+    if (response.status.connectionError) {
+      throw Exception('No internet connection. Please check your network and try again.');
+    }
+    if (response.status.hasError) {
+      _handleError(response, 'Failed to create payment order');
+    }
+    return Map<String, dynamic>.from(response.body['data']);
+  }
+
+  @override
+  Future<void> verifyRazorpayPayment({
+    required int planId,
+    required String razorpayOrderId,
+    required String razorpayPaymentId,
+    required String razorpaySignature,
+  }) async {
+    final response = await _apiClient.post(
+      ApiConstants.razorpayVerifyPayment,
+      {
+        'plan_id': planId,
+        'razorpay_order_id': razorpayOrderId,
+        'razorpay_payment_id': razorpayPaymentId,
+        'razorpay_signature': razorpaySignature,
+      },
+    );
+    if (response.status.hasError) {
+      _handleError(response, 'Payment verification failed');
+    }
+
+    final sub = response.body is Map ? response.body['subscription'] : null;
+    if (sub != null) {
+      await Get.find<AuthService>().setSubscription(
+        Subscription.fromJson(Map<String, dynamic>.from(sub)),
+      );
+    }
+  }
+
+  @override
   Future<void> renewSubscription({
     required String transactionId,
     required String screenshotPath,
@@ -1022,6 +1097,16 @@ class InstituteRepository implements InstituteRepositoryImpl {
       return InstituteSubscriptionData.fromJson(body['data']);
     } catch (e) {
       throw Exception(e.toString());
+    }
+  }
+
+  @override
+  Future<void> deleteDeviceSession(int sessionId) async {
+    final response = await _apiClient.delete(
+      ApiConstants.instituteDeleteDeviceSession(sessionId),
+    );
+    if (response.status.hasError) {
+      _handleError(response, 'Failed to delete device session');
     }
   }
 }

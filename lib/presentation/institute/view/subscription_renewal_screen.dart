@@ -1,4 +1,3 @@
-import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:flutter/services.dart';
@@ -9,7 +8,6 @@ import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
 import 'package:tuoora/core/widgets/app_network_image.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
-import 'package:tuoora/core/widgets/subscription_manage_on_web_view.dart';
 import 'package:tuoora/data/models/institute_subscription_model.dart';
 import 'package:tuoora/presentation/institute/controllers/institute_subscription_controller.dart';
 import 'package:tuoora/presentation/institute/controllers/subscription_renewal_controller.dart';
@@ -20,23 +18,6 @@ class SubscriptionRenewalScreen extends GetView<SubscriptionRenewalController> {
 
   @override
   Widget build(BuildContext context) {
-    if (Platform.isIOS) {
-      return Scaffold(
-        backgroundColor: AppColors.scaffoldBg,
-        body: SafeArea(
-          child: Column(
-            children: [
-              InstituteAppBar(
-                title: AppStrings.offlineSubscriptionRenewal,
-                onBackTap: () => Get.back(),
-              ),
-              const Expanded(child: SubscriptionManageOnWebView()),
-            ],
-          ),
-        ),
-      );
-    }
-
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
@@ -170,7 +151,9 @@ class SubscriptionRenewalScreen extends GetView<SubscriptionRenewalController> {
   Widget _buildQrTab() {
     return _buildCard(
       child: Obx(() {
-        final qrUrl = _paymentSettings()?.qrUrl;
+        final settings = _paymentSettings();
+        final qrUrl = settings?.qrUrl;
+        final upiId = settings?.upiId;
         return Column(
           children: [
             AspectRatio(
@@ -193,12 +176,40 @@ class SubscriptionRenewalScreen extends GetView<SubscriptionRenewalController> {
               ),
             ),
             AppSpacing.v16,
+            if (upiId != null && upiId.isNotEmpty) ...[
+              GestureDetector(
+                onTap: () {
+                  Clipboard.setData(ClipboardData(text: upiId));
+                  AppSnackBar.success(AppStrings.upiIdCopy);
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      upiId,
+                      style: AppTextStyles.outfit(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                    AppSpacing.h8,
+                    const Icon(
+                      Icons.copy_rounded,
+                      size: AppSpacing.s16,
+                      color: AppColors.textMuted,
+                    ),
+                  ],
+                ),
+              ),
+              AppSpacing.v8,
+            ],
             Text(
               AppStrings.studentPayFeesScanWith,
               style: AppTextStyles.outfit(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
-                color: AppColors.brandAppBarColor,
+                color: AppColors.textPrimary,
                 letterSpacing: 1.0,
               ),
             ),
@@ -243,7 +254,7 @@ class SubscriptionRenewalScreen extends GetView<SubscriptionRenewalController> {
               style: AppTextStyles.outfit(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
-                color: AppColors.brandAppBarColor,
+                color: AppColors.textPrimary,
                 letterSpacing: 1.0,
               ),
             ),

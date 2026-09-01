@@ -29,6 +29,22 @@ abstract class InstituteRepositoryImpl {
     String? message,
   });
 
+  Future<void> verifyIapPurchase({
+    required int planId,
+    required String transactionId,
+    required String receiptData,
+    required String platform,
+  });
+
+  // Razorpay (Android)
+  Future<Map<String, dynamic>> createRazorpayOrder({required int planId});
+  Future<void> verifyRazorpayPayment({
+    required int planId,
+    required String razorpayOrderId,
+    required String razorpayPaymentId,
+    required String razorpaySignature,
+  });
+
   // Authentication
   Future<String> registerInstitute(Map<String, dynamic> data);
   Future<String> verifyOtp(Map<String, dynamic> data);
@@ -141,4 +157,5 @@ abstract class InstituteRepositoryImpl {
   });
   Future<void> logSalary(Map<String, dynamic> data);
   Future<void> deleteResource(int id);
+  Future<void> deleteDeviceSession(int sessionId);
 }

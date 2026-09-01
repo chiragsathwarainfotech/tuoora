@@ -30,3 +30,6 @@ ios/Flutter/Flutter.podspec
 *.tmp
 *.swp
 .DS_Store
+
+# Environment secrets
+.env

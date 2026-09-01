@@ -13,11 +13,16 @@ class AuthRepository implements AuthRepositoryImpl {
   AuthRepository(this._apiClient);
 
   @override
-  Future<User> loginInstitute(String email, String password) async {
-    final response = await _apiClient.post(ApiConstants.instituteLogin, {
-      'email': email,
-      'password': password,
-    });
+  Future<User> loginInstitute(
+    String email,
+    String password, {
+    String? device,
+    String? os,
+  }) async {
+    final Map<String, dynamic> body = {'email': email, 'password': password};
+    if (device != null) body['device'] = device;
+    if (os != null) body['os'] = os;
+    final response = await _apiClient.post(ApiConstants.instituteLogin, body);
     if (response.statusCode == 403) {
       final body = response.body;
       if (body is Map) {

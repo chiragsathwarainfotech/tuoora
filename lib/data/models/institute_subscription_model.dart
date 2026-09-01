@@ -1,3 +1,5 @@
+import 'package:tuoora/core/constants/url_constants.dart';
+
 class SubscriptionPlan {
   final int id;
   final String name;
@@ -15,6 +17,10 @@ class SubscriptionPlan {
     required this.status,
   });
 
+  String get appleProductId => 'com.tuoora.plan$id';
+
+  bool get isFree => (double.tryParse(price) ?? 0) == 0;
+
   factory SubscriptionPlan.fromJson(Map<String, dynamic> json) {
     return SubscriptionPlan(
       id: json['id'] ?? 0,
@@ -29,6 +35,7 @@ class SubscriptionPlan {
 
 class SubscriptionDetails {
   final String planName;
+  final String price;
   final String status;
   final DateTime? expiresAt;
   final int studentsEnrolled;
@@ -36,6 +43,7 @@ class SubscriptionDetails {
 
   SubscriptionDetails({
     required this.planName,
+    required this.price,
     required this.status,
     this.expiresAt,
     required this.studentsEnrolled,
@@ -45,9 +53,10 @@ class SubscriptionDetails {
   factory SubscriptionDetails.fromJson(Map<String, dynamic> json) {
     return SubscriptionDetails(
       planName: json['plan_name'] ?? 'No Active Plan',
+      price: json['price']?.toString() ?? '0',
       status: json['status'] ?? 'Inactive',
       expiresAt: json['expires_at'] != null
-          ? DateTime.parse(json['expires_at'])
+          ? DateTime.parse(json['expires_at']).toLocal()
           : null,
       studentsEnrolled: json['students_enrolled'] ?? 0,
       studentLimit: json['student_limit'] ?? 0,
@@ -78,10 +87,10 @@ class SubscriptionHistory {
       planName: json['plan_name'] ?? '',
       amount: json['amount']?.toString() ?? '0',
       startDate: json['start_date'] != null
-          ? DateTime.parse(json['start_date'])
+          ? DateTime.parse(json['start_date']).toLocal()
           : null,
       endDate: json['end_date'] != null
-          ? DateTime.parse(json['end_date'])
+          ? DateTime.parse(json['end_date']).toLocal()
           : null,
       status: json['status'] ?? '',
     );
@@ -93,6 +102,7 @@ class SubscriptionPaymentSettings {
   final String? bankName;
   final String? bankAccount;
   final String? bankIfsc;
+  final String? upiId;
   final String? qrPath;
   final String? qrUrl;
 
@@ -101,6 +111,7 @@ class SubscriptionPaymentSettings {
     this.bankName,
     this.bankAccount,
     this.bankIfsc,
+    this.upiId,
     this.qrPath,
     this.qrUrl,
   });
@@ -111,13 +122,17 @@ class SubscriptionPaymentSettings {
       return (v == null || v.isEmpty) ? null : v;
     }
 
+    final rawQrUrl = s('qr_url');
     return SubscriptionPaymentSettings(
       bankHolderName: s('bank_holder_name'),
       bankName: s('bank_name'),
       bankAccount: s('bank_account'),
       bankIfsc: s('bank_ifsc'),
+      upiId: s('upi_id'),
       qrPath: s('qr_path'),
-      qrUrl: s('qr_url'),
+      // Resolve server-relative paths to absolute URLs so CachedNetworkImage
+      // can load them (the API returns /admin/storage/... not https://...).
+      qrUrl: rawQrUrl != null ? UrlConstants.resolveUrl(rawQrUrl) : null,
     );
   }
 

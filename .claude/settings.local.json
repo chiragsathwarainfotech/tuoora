@@ -52,7 +52,9 @@
       "Bash(/c/Users/PANCHAM/AppData/Local/Programs/Python/Python310/python tool/extract_all_ui_literals.py)",
       "Bash(grep -n \"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\'\" \"/c/Users/PANCHAM/StudioProjects/tuoora/lib/core/constants/app_strings.dart\")",
       "Bash(/c/Users/PANCHAM/AppData/Local/Programs/Python/Python310/python tool/fix_appstrings_bugs.py)",
-      "Bash(/c/Users/PANCHAM/AppData/Local/Programs/Python/Python310/python tool/fix_adjacent_strings.py)"
+      "Bash(/c/Users/PANCHAM/AppData/Local/Programs/Python/Python310/python tool/fix_adjacent_strings.py)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)"
     ],
     "additionalDirectories": [
       "c:\\c\\Users\\PANCHAM\\StudioProjects\\tuoora"

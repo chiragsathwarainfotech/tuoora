@@ -3,9 +3,10 @@ import 'dart:io' show Platform;
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
-import 'package:tuoora/core/utils/url_launcher_utils.dart';
-import 'package:tuoora/core/widgets/app_button.dart';
 import 'package:tuoora/data/models/institute_subscription_model.dart';
+import 'package:tuoora/config/app_routes.dart';
+import 'package:tuoora/presentation/institute/controllers/iap_controller.dart';
+import 'package:tuoora/presentation/institute/controllers/razorpay_controller.dart';
 import 'package:tuoora/presentation/institute/controllers/institute_subscription_controller.dart';
 import 'package:tuoora/presentation/institute/widgets/institute_app_bar.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
@@ -23,54 +24,74 @@ class InstituteSubscriptionScreen
     return Scaffold(
       backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
-        child: Column(
+        child: Stack(
           children: [
-            const InstituteAppBar(
-              title: AppStrings.subscriptionPlans,
-              isRoot: false,
-            ),
-            Expanded(
-              child: Obx(() {
-                if (controller.isLoading.value) {
-                  return const CommonLoading();
-                }
+            Column(
+              children: [
+                const InstituteAppBar(
+                  title: AppStrings.subscriptionPlans,
+                  isRoot: false,
+                ),
+                Expanded(
+                  child: Obx(() {
+                    if (controller.isLoading.value) {
+                      return const CommonLoading();
+                    }
 
-                final data = controller.subscriptionData.value;
-                if (data == null) {
-                  return Center(
-                    child: Text(
-                      AppStrings.failedToLoadSubscriptionData,
-                      style: AppTextStyles.outfit(
-                        fontSize: 16,
-                        color: AppColors.textPrimary,
+                    final data = controller.subscriptionData.value;
+                    if (data == null) {
+                      return Center(
+                        child: Text(
+                          AppStrings.failedToLoadSubscriptionData,
+                          style: AppTextStyles.outfit(
+                            fontSize: 16,
+                            color: AppColors.textPrimary,
+                          ),
+                        ),
+                      );
+                    }
+
+                    return RefreshIndicator(
+                      onRefresh: () => controller.fetchSubscriptionData(),
+                      color: AppColors.primaryBrand,
+                      child: SingleChildScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildActivePlanCard(
+                              data.subscription,
+                              data.history,
+                            ),
+                            AppSpacing.v24,
+                            _buildIAPSection(data.plans),
+                            AppSpacing.v24,
+                            _buildFeatureCards(),
+                            AppSpacing.v24,
+                            _buildRecentBillingTable(data.history),
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                }
-
-                return RefreshIndicator(
-                  onRefresh: () => controller.fetchSubscriptionData(),
-                  color: AppColors.primaryBrand,
-                  child: SingleChildScrollView(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildActivePlanCard(data.subscription, data.history),
-                        AppSpacing.v24,
-                        if (Platform.isIOS)
-                          _buildManageOnWebCard()
-                        else ...[
-                          _buildHeroHeader(),
-                          AppSpacing.v20,
-                          _buildPlansRow(data.plans, data.subscription),
-                          AppSpacing.v24,
-                          _buildFeatureCards(),
-                          AppSpacing.v24,
-                          _buildRecentBillingTable(data.history),
-                        ],
-                      ],
+                    );
+                  }),
+                ),
+              ],
+            ),
+            Positioned.fill(
+              child: Obx(() {
+                final bool busy = Platform.isAndroid
+                    ? Get.find<RazorpayController>().isPurchasing.value
+                    : Get.find<IAPController>().isPurchasing.value;
+                if (!busy) return const SizedBox.shrink();
+                return AbsorbPointer(
+                  child: Container(
+                    color: Colors.black.withValues(alpha: 0.45),
+                    child: const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.primaryBrand,
+                        strokeWidth: 3,
+                      ),
                     ),
                   ),
                 );
@@ -87,9 +108,7 @@ class InstituteSubscriptionScreen
     List<SubscriptionHistory> history,
   ) {
     final isActive = sub.status.toLowerCase() == 'active';
-    final latestAmount = history.isNotEmpty
-        ? _formatPrice(history.first.amount)
-        : '₹0';
+    final latestAmount = _formatPrice(sub.price);
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -193,77 +212,48 @@ class InstituteSubscriptionScreen
     );
   }
 
-  Widget _buildManageOnWebCard() {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 16,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Container(
-            width: 96,
-            height: 96,
-            decoration: const BoxDecoration(
-              color: AppColors.primaryBrandLight,
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(
-              Icons.open_in_browser_rounded,
-              size: 48,
-              color: AppColors.primaryBrand,
-            ),
-          ),
-          AppSpacing.v20,
-          Text(
-            AppStrings.subscriptionManageOnWebTitle,
-            textAlign: TextAlign.center,
-            style: AppTextStyles.outfit(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-              color: AppColors.textPrimary,
-            ),
-          ),
-          AppSpacing.v8,
-          Text(
-            AppStrings.subscriptionManageOnWebMessage,
-            textAlign: TextAlign.center,
-            style: AppTextStyles.outfit(
-              fontSize: 13,
-              height: 1.6,
-              color: AppColors.textSecondary,
-            ),
-          ),
-          AppSpacing.v20,
-          SizedBox(
-            width: double.infinity,
-            child: AppButton(
-              label: AppStrings.subscriptionOpenWebButton,
-              icon: Icons.open_in_new_rounded,
-              onPressed: () => UrlLauncherUtils.openExternal(
-                AppStrings.urlInstituteSubscription,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  Widget _buildIAPSection(List<SubscriptionPlan> plans) {
+    final activePlans = plans.where((p) => p.status == 1 && !p.isFree).toList();
+    if (activePlans.isEmpty) return const SizedBox.shrink();
 
-  Widget _buildHeroHeader() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        _buildPlansHeader(),
+        AppSpacing.v20,
+        _buildPlanSelector(activePlans),
+        AppSpacing.v16,
+        if (Platform.isIOS) _buildIosButtons() else _buildAndroidButtons(),
+        if (Platform.isIOS) ...[
+          AppSpacing.v12,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.apple_rounded,
+                size: 14,
+                color: AppColors.textTertiary,
+              ),
+              AppSpacing.h6,
+              Text(
+                AppStrings.iapProcessedByApple,
+                style: AppTextStyles.outfit(
+                  fontSize: 11,
+                  color: AppColors.textTertiary,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildPlansHeader() {
+    return Column(
+      children: [
         Text(
-          AppStrings.instChooseBestPlan,
+          AppStrings.iapSelectPlanTitle,
           textAlign: TextAlign.center,
           style: AppTextStyles.outfit(
             fontSize: 20,
@@ -273,7 +263,9 @@ class InstituteSubscriptionScreen
         ),
         AppSpacing.v8,
         Text(
-          AppStrings.instScalableSolutions,
+          Platform.isIOS
+              ? AppStrings.iapSelectPlanSubtitle
+              : 'Payments are processed securely via Razorpay',
           textAlign: TextAlign.center,
           style: AppTextStyles.outfit(
             fontSize: 13,
@@ -285,85 +277,254 @@ class InstituteSubscriptionScreen
     );
   }
 
-  Widget _buildPlansRow(List<SubscriptionPlan> plans, SubscriptionDetails sub) {
-    if (plans.isEmpty) return const SizedBox.shrink();
-    return SizedBox(
-      height: 180,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        physics: const BouncingScrollPhysics(),
-        itemCount: plans.length,
-        separatorBuilder: (_, _) => AppSpacing.h10,
-        itemBuilder: (_, i) => _buildPlanCard(plans[i], sub),
-      ),
-    );
-  }
-
-  Widget _buildPlanCard(SubscriptionPlan plan, SubscriptionDetails sub) {
-    final isCurrent =
-        plan.name.trim().toLowerCase() == sub.planName.trim().toLowerCase();
+  // ── Plan selector: compact radio list ────────────────────────────────────
+  Widget _buildPlanSelector(List<SubscriptionPlan> activePlans) {
     return Container(
-      width: 200,
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: isCurrent ? AppColors.primaryBrand : AppColors.fieldBorder,
-          width: isCurrent ? 1.5 : 1,
-        ),
+        border: Border.all(color: AppColors.fieldBorder),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 10,
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 12,
             offset: const Offset(0, 4),
           ),
         ],
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            plan.name.toUpperCase(),
-            textAlign: TextAlign.center,
-            style: AppTextStyles.outfit(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: AppColors.fieldLabel,
-              letterSpacing: 1.4,
-            ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          Text(
-            _formatPrice(plan.price),
-            textAlign: TextAlign.center,
-            style: AppTextStyles.outfit(
-              fontSize: 30,
-              fontWeight: FontWeight.w800,
-              color: AppColors.textPrimary,
-            ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
-              border: Border.all(color: AppColors.fieldBorder),
-            ),
-            child: Text(
-              '/${plan.durationDays} DAYS',
-              style: AppTextStyles.outfit(
-                fontSize: 10,
-                fontWeight: FontWeight.w600,
-                color: AppColors.fieldLabel,
-                letterSpacing: 1.2,
+          for (int i = 0; i < activePlans.length; i++) ...[
+            Obx(
+              () => _buildPlanRow(
+                activePlans[i],
+                isFirst: i == 0,
+                isLast: i == activePlans.length - 1,
               ),
+            ),
+            if (i < activePlans.length - 1)
+              Divider(height: 1, color: AppColors.fieldBorder),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPlanRow(
+    SubscriptionPlan plan, {
+    bool isFirst = false,
+    bool isLast = false,
+  }) {
+    final isSelected = controller.selectedPlan.value?.id == plan.id;
+    final radius = BorderRadius.only(
+      topLeft: isFirst ? const Radius.circular(20) : Radius.zero,
+      topRight: isFirst ? const Radius.circular(20) : Radius.zero,
+      bottomLeft: isLast ? const Radius.circular(20) : Radius.zero,
+      bottomRight: isLast ? const Radius.circular(20) : Radius.zero,
+    );
+
+    return GestureDetector(
+      onTap: () => controller.selectedPlan.value = plan,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.primaryBrandLight : AppColors.white,
+          borderRadius: radius,
+        ),
+        child: Row(
+          children: [
+            // Radio indicator
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 150),
+              width: 20,
+              height: 20,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: isSelected ? AppColors.primaryBrand : Colors.transparent,
+                border: Border.all(
+                  color: isSelected
+                      ? AppColors.primaryBrand
+                      : AppColors.textMuted,
+                  width: 2,
+                ),
+              ),
+              child: isSelected
+                  ? const Icon(Icons.check, size: 12, color: AppColors.white)
+                  : null,
+            ),
+            AppSpacing.h12,
+            // Plan name
+            Expanded(
+              child: Text(
+                plan.name,
+                style: AppTextStyles.outfit(
+                  fontSize: 14,
+                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                  color: isSelected
+                      ? AppColors.primaryBrand
+                      : AppColors.textPrimary,
+                ),
+              ),
+            ),
+            // Duration badge
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? AppColors.primaryBrand.withValues(alpha: 0.12)
+                    : AppColors.fieldBg,
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Text(
+                '${plan.durationDays}d',
+                style: AppTextStyles.outfit(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  color: isSelected
+                      ? AppColors.primaryBrand
+                      : AppColors.fieldLabel,
+                ),
+              ),
+            ),
+            AppSpacing.h12,
+            // Price
+            Text(
+              _formatPrice(plan.price),
+              style: AppTextStyles.outfit(
+                fontSize: 16,
+                fontWeight: FontWeight.w800,
+                color: isSelected
+                    ? AppColors.primaryBrand
+                    : AppColors.textPrimary,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ── iOS action buttons ────────────────────────────────────────────────────
+  Widget _buildIosButtons() {
+    final iapCtrl = Get.find<IAPController>();
+    return Obx(() {
+      final isAvailable = iapCtrl.isAvailable.value;
+      final isLoadingProducts = iapCtrl.isLoadingProducts.value;
+      final selected = controller.selectedPlan.value;
+      // Only disable Pay Direct when IAP is genuinely unavailable or no plan selected.
+      // isPurchasing is NOT used here — the screen overlay blocks interaction instead.
+      final payDirectBlocked =
+          !isAvailable || isLoadingProducts || selected == null;
+
+      return Row(
+        children: [
+          Expanded(
+            child: _buildPayOption(
+              label: AppStrings.iapPayDirect,
+              description: 'Instant · via Apple',
+              icon: Icons.apple_rounded,
+              isPrimary: true,
+              onTap: payDirectBlocked
+                  ? null
+                  : () => iapCtrl.purchasePlan(selected),
+            ),
+          ),
+          AppSpacing.h12,
+          Expanded(
+            child: _buildPayOption(
+              label: AppStrings.iapPayManually,
+              description: AppStrings.iapPayManuallyDesc,
+              icon: Icons.account_balance_rounded,
+              isPrimary: false,
+              onTap: () => Get.toNamed(AppRoutes.instituteSubscriptionRenew),
             ),
           ),
         ],
+      );
+    });
+  }
+
+  Widget _buildAndroidButtons() {
+    final razorpayCtrl = Get.find<RazorpayController>();
+    return Obx(() {
+      final selected = controller.selectedPlan.value;
+      return Row(
+        children: [
+          Expanded(
+            child: _buildPayOption(
+              label: AppStrings.iapPayDirect,
+              description: 'Instant · via Razorpay',
+              icon: Icons.currency_rupee_rounded,
+              isPrimary: true,
+              onTap: selected == null
+                  ? null
+                  : () => razorpayCtrl.startPayment(selected),
+            ),
+          ),
+          AppSpacing.h12,
+          Expanded(
+            child: _buildPayOption(
+              label: AppStrings.iapPayManually,
+              description: AppStrings.iapPayManuallyDesc,
+              icon: Icons.account_balance_rounded,
+              isPrimary: false,
+              onTap: () => Get.toNamed(AppRoutes.instituteSubscriptionRenew),
+            ),
+          ),
+        ],
+      );
+    });
+  }
+
+  Widget _buildPayOption({
+    required String label,
+    required String description,
+    required IconData icon,
+    required bool isPrimary,
+    required VoidCallback? onTap,
+  }) {
+    final bool disabled = onTap == null;
+    final Color bg = isPrimary ? AppColors.primaryBrand : AppColors.white;
+    final Color fg = isPrimary ? AppColors.white : AppColors.primaryBrand;
+
+    return GestureDetector(
+      onTap: disabled ? null : onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 120),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+        decoration: BoxDecoration(
+          color: disabled ? AppColors.textMuted : bg,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: disabled ? AppColors.textMuted : AppColors.primaryBrand,
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, color: disabled ? AppColors.white : fg, size: 20),
+            AppSpacing.v4,
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              style: AppTextStyles.outfit(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                color: disabled ? AppColors.white : fg,
+              ),
+            ),
+            AppSpacing.v2,
+            Text(
+              description,
+              textAlign: TextAlign.center,
+              style: AppTextStyles.outfit(
+                fontSize: 10,
+                color: disabled ? AppColors.white : fg.withValues(alpha: 0.7),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

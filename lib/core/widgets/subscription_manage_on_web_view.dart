@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tuoora/core/constants/app_colors.dart';
 import 'package:tuoora/core/constants/app_strings.dart';
 import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/constants/url_constants.dart';
 import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:tuoora/core/utils/url_launcher_utils.dart';
 import 'package:tuoora/core/widgets/app_button.dart';
@@ -58,7 +59,7 @@ class SubscriptionManageOnWebView extends StatelessWidget {
                   label: AppStrings.subscriptionOpenWebButton,
                   icon: Icons.open_in_new_rounded,
                   onPressed: () => UrlLauncherUtils.openExternal(
-                    AppStrings.urlInstituteSubscription,
+                    UrlConstants.urlInstituteSubscription,
                   ),
                 ),
               ),

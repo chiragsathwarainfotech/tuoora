@@ -48,7 +48,7 @@ class Subscription {
   factory Subscription.fromJson(Map<String, dynamic> json) {
     DateTime? parseDate(dynamic value) {
       if (value == null) return null;
-      return DateTime.tryParse(value.toString());
+      return DateTime.tryParse(value.toString())?.toLocal();
     }
 
     return Subscription(

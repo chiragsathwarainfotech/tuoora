@@ -27,6 +27,8 @@ import 'package:tuoora/presentation/institute/controllers/whatsapp_controller.da
 import 'package:tuoora/presentation/institute/controllers/chat_controller.dart';
 import 'package:tuoora/presentation/institute/controllers/staff_controller.dart';
 import 'package:tuoora/presentation/institute/controllers/expense_controller.dart';
+import 'package:tuoora/presentation/institute/controllers/iap_controller.dart';
+import 'package:tuoora/presentation/institute/controllers/razorpay_controller.dart';
 import 'package:tuoora/core/api/api_client.dart';
 import 'package:tuoora/core/services/download_service.dart';
 import 'package:get/get.dart';
@@ -73,6 +75,14 @@ class InstituteBinding extends Bindings {
     Get.lazyPut<InstituteSubscriptionController>(
       () =>
           InstituteSubscriptionController(Get.find<InstituteRepositoryImpl>()),
+      fenix: true,
+    );
+    Get.lazyPut<IAPController>(
+      () => IAPController(Get.find<InstituteRepositoryImpl>()),
+      fenix: true,
+    );
+    Get.lazyPut<RazorpayController>(
+      () => RazorpayController(Get.find<InstituteRepositoryImpl>()),
       fenix: true,
     );
     Get.lazyPut<InstituteProfileController>(

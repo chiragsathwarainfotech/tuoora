@@ -1,10 +1,14 @@
 import 'dart:async';
 
 import 'package:tuoora/core/constants/app_strings.dart';
+import 'package:tuoora/core/constants/app_colors.dart';
+import 'package:tuoora/core/constants/app_text_styles.dart';
+import 'package:tuoora/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tuoora/data/repositories/auth_repository.dart';
 import 'package:tuoora/core/services/auth_service.dart';
+import 'package:tuoora/core/utils/device_info_helper.dart';
 import 'package:tuoora/core/services/institute_account_status_handler.dart';
 import 'package:tuoora/core/services/push_notification_service.dart';
 import 'package:tuoora/core/widgets/app_snack_bar.dart';
@@ -47,7 +51,13 @@ class LoginController extends GetxController {
     try {
       dynamic user;
       if (role == 'INSTITUTE') {
-        user = await _authRepository.loginInstitute(email, password);
+        final deviceInfo = await DeviceInfoHelper.getDeviceInfo();
+        user = await _authRepository.loginInstitute(
+          email,
+          password,
+          device: deviceInfo['device'],
+          os: deviceInfo['os'],
+        );
       } else if (role == 'STUDENT') {
         user = await _authRepository.loginStudent(email, password);
       }
@@ -77,12 +87,97 @@ class LoginController extends GetxController {
         _navigateToDashboard(role);
       }
     } on AccountStatusException catch (e) {
-      accountError.value = e.message;
+      if (e.message.contains('Maximum device limit reached') ||
+          e.message.contains('5 devices')) {
+        _showDeviceLimitReachedDialog(e.message);
+      } else {
+        accountError.value = e.message;
+      }
     } catch (e) {
-      AppSnackBar.error(e.toString(), title: AppStrings.loginFailed);
+      final msg = e.toString().replaceAll('Exception: ', '');
+      if (msg.contains('Maximum device limit reached') ||
+          msg.contains('5 devices')) {
+        _showDeviceLimitReachedDialog(msg);
+      } else {
+        AppSnackBar.error(msg, title: AppStrings.loginFailed);
+      }
     } finally {
       isLoading.value = false;
     }
+  }
+
+  void _showDeviceLimitReachedDialog(String message) {
+    Get.dialog(
+      Dialog(
+        backgroundColor: AppColors.white,
+        insetPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.s24),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(24, 32, 24, 24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 64,
+                height: 64,
+                decoration: BoxDecoration(
+                  color: AppColors.errorBg,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: const Icon(
+                  Icons.devices_other_rounded,
+                  color: AppColors.bohoRed,
+                  size: 36,
+                ),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                'Device Limit Reached',
+                textAlign: TextAlign.center,
+                style: AppTextStyles.outfit(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                message,
+                textAlign: TextAlign.center,
+                style: AppTextStyles.outfit(
+                  fontSize: 13,
+                  height: 1.5,
+                  color: AppColors.textSecondary,
+                ),
+              ),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () => Get.back(),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primaryBrand,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: Text(
+                    'GOT IT',
+                    style: AppTextStyles.outfit(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   void _navigateToDashboard(String role) {

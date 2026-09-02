@@ -408,6 +408,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  gal:
+    dependency: "direct main"
+    description:
+      name: gal
+      sha256: f71e79840fe023a21f2f949771375444b6efcd34b9e625d5f4f5504971380a77
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.3"
   get:
     dependency: "direct main"
     description:
@@ -544,38 +552,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.2"
-  in_app_purchase:
-    dependency: "direct main"
-    description:
-      name: in_app_purchase
-      sha256: "0e9510b80b0074e89ab0a8e0fc901439b779dc9ae575ab8d419253c6e1627716"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.3.0"
-  in_app_purchase_android:
-    dependency: transitive
-    description:
-      name: in_app_purchase_android
-      sha256: b8af1b6f0e57076b5da5ede71e3af2d727017c0416ad2a41017c6ed2b102381d
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.5.0"
-  in_app_purchase_platform_interface:
-    dependency: transitive
-    description:
-      name: in_app_purchase_platform_interface
-      sha256: "0b0076cac8ce4fa7048f01e76af8b123aeb6a7c4e0dea2a5206d6664454f3e36"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.4.1"
-  in_app_purchase_storekit:
-    dependency: transitive
-    description:
-      name: in_app_purchase_storekit
-      sha256: "5f9d59c86c15f56429a4fdf09097c99d5b412510e1fcf80cf874fc9638fab369"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.4.10"
   in_app_update:
     dependency: "direct main"
     description:
@@ -904,6 +880,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.0"
+  qr:
+    dependency: transitive
+    description:
+      name: qr
+      sha256: "5a1d2586170e172b8a8c8470bbbffd5eb0cd38a66c0d77155ea138d3af3a4445"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.2"
+  qr_flutter:
+    dependency: "direct main"
+    description:
+      name: qr_flutter
+      sha256: "5095f0fc6e3f71d08adef8feccc8cea4f12eec18a2e31c2e8d82cb6019f4b097"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.1.0"
   razorpay_flutter:
     dependency: "direct main"
     description:
@@ -976,6 +968,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.28.0"
+  share_plus:
+    dependency: "direct main"
+    description:
+      name: share_plus
+      sha256: "223873d106614442ea6f20db5a038685cc5b32a2fba81cdecaefbbae0523f7fa"
+      url: "https://pub.dev"
+    source: hosted
+    version: "12.0.2"
+  share_plus_platform_interface:
+    dependency: transitive
+    description:
+      name: share_plus_platform_interface
+      sha256: "88023e53a13429bd65d8e85e11a9b484f49d4c190abbd96c7932b74d6927cc9a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.1.0"
   shimmer:
     dependency: "direct main"
     description:

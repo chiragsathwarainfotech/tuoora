@@ -27,8 +27,9 @@ import 'package:tuoora/presentation/institute/controllers/whatsapp_controller.da
 import 'package:tuoora/presentation/institute/controllers/chat_controller.dart';
 import 'package:tuoora/presentation/institute/controllers/staff_controller.dart';
 import 'package:tuoora/presentation/institute/controllers/expense_controller.dart';
-import 'package:tuoora/presentation/institute/controllers/iap_controller.dart';
 import 'package:tuoora/presentation/institute/controllers/razorpay_controller.dart';
+import 'package:tuoora/presentation/institute/controllers/white_label_controller.dart';
+import 'package:tuoora/presentation/institute/controllers/birthday_controller.dart';
 import 'package:tuoora/core/api/api_client.dart';
 import 'package:tuoora/core/services/download_service.dart';
 import 'package:get/get.dart';
@@ -77,12 +78,16 @@ class InstituteBinding extends Bindings {
           InstituteSubscriptionController(Get.find<InstituteRepositoryImpl>()),
       fenix: true,
     );
-    Get.lazyPut<IAPController>(
-      () => IAPController(Get.find<InstituteRepositoryImpl>()),
-      fenix: true,
-    );
     Get.lazyPut<RazorpayController>(
       () => RazorpayController(Get.find<InstituteRepositoryImpl>()),
+      fenix: true,
+    );
+    Get.lazyPut<WhiteLabelController>(
+      () => WhiteLabelController(Get.find<InstituteRepositoryImpl>()),
+      fenix: true,
+    );
+    Get.lazyPut<BirthdayController>(
+      () => BirthdayController(Get.find<InstituteRepositoryImpl>()),
       fenix: true,
     );
     Get.lazyPut<InstituteProfileController>(

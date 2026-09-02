@@ -82,6 +82,8 @@ class InstituteProfileViewScreen extends StatelessWidget {
                         AppSpacing.v16,
                         _buildSettingsNavigationCard(),
                         AppSpacing.v16,
+                        _buildWhiteLabelNavigationCard(),
+                        AppSpacing.v16,
                         _buildSupportCard(),
                         AppSpacing.v16,
                         _buildDeleteAccountCard(context, controller),
@@ -925,6 +927,62 @@ class InstituteProfileViewScreen extends StatelessWidget {
                     ),
                     Text(
                       'Manage active devices, logins, passwords & alert integrations',
+                      style: AppTextStyles.outfit(
+                        fontSize: 11,
+                        color: AppColors.textMuted,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(
+                Icons.chevron_right_rounded,
+                color: AppColors.textMuted,
+                size: 20,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildWhiteLabelNavigationCard() {
+    return _card(
+      child: InkWell(
+        onTap: () => Get.toNamed(AppRoutes.instituteWhiteLabel),
+        borderRadius: BorderRadius.circular(6),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(4, 8, 4, 8),
+          child: Row(
+            children: [
+              Container(
+                padding: AppSpacing.all8,
+                decoration: BoxDecoration(
+                  color: AppColors.primaryBrand.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(
+                  Icons.auto_awesome_rounded,
+                  size: 18,
+                  color: AppColors.primaryBrand,
+                ),
+              ),
+              AppSpacing.h12,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'White Label',
+                      style: AppTextStyles.outfit(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                    Text(
+                      'Publish this app under your own name and branding',
                       style: AppTextStyles.outfit(
                         fontSize: 11,
                         color: AppColors.textMuted,

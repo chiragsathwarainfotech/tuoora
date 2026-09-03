@@ -379,6 +379,7 @@ class AppStrings {
   static const String failedToLoadPerformanceReport =
       'Failed to load performance report';
   static const String failedToLoadBatchDetails = 'Failed to load batch details';
+  static const String failedToLoadAnalytics = 'Failed to load analytics';
   static const String resourceDeletedSuccessfully = 'Resource deleted';
   static const String onlyImageVideoAndDocumentFiles =
       'Only image, video and document files are allowed.';
@@ -615,6 +616,9 @@ class AppStrings {
   static const String deepDiveIntoExaminationResultsAssignment =
       'Deep dive into examination results, assignment completion rates, and individual student growth curves.';
   static const String studentPerformanceReports = 'Student Performance Reports';
+  static const String labelBusinessAnalytics = 'Business Analytics';
+  static const String revenueFeeCollectionAndDropoutTrends =
+      'Revenue trends, fee collection rate, and batch-wise attendance & dropout.';
   static const String academicProgressAverageGradesAndPerformance =
       'Academic progress, average grades, and performance analysis across batches.';
   static const String setNewPassword = 'Set New Password';

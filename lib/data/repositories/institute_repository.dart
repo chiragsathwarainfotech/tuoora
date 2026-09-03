@@ -21,6 +21,7 @@ import 'package:tuoora/data/models/staff_model.dart';
 import 'package:tuoora/data/models/subscription_model.dart';
 import 'package:tuoora/data/models/white_label_model.dart';
 import 'package:tuoora/presentation/institute/models/birthday_model.dart';
+import 'package:tuoora/presentation/institute/models/add_on_model.dart';
 import 'package:get/get.dart';
 
 class InstituteRepository implements InstituteRepositoryImpl {
@@ -207,6 +208,50 @@ class InstituteRepository implements InstituteRepositoryImpl {
       _handleError(response, 'Failed to submit branding');
     }
     return WhiteLabelRecord.fromJson(Map<String, dynamic>.from(response.body['data']));
+  }
+
+  @override
+  Future<List<AddOnModel>> getAddOns() async {
+    final response = await _apiClient.get(ApiConstants.instituteAddOns);
+    if (response.status.hasError) {
+      _handleError(response, 'Failed to load add-ons');
+    }
+    final data = response.body['data'] as List? ?? [];
+    return data
+        .map((json) => AddOnModel.fromJson(Map<String, dynamic>.from(json)))
+        .toList();
+  }
+
+  @override
+  Future<Map<String, dynamic>> createAddOnOrder(String addOnId) async {
+    final response = await _apiClient.post(
+      '${ApiConstants.instituteAddOns}/$addOnId/create-order',
+      {},
+    );
+    if (response.status.hasError) {
+      _handleError(response, 'Failed to create payment order');
+    }
+    return Map<String, dynamic>.from(response.body['data']);
+  }
+
+  @override
+  Future<void> verifyAddOnPayment({
+    required String addOnId,
+    required String razorpayOrderId,
+    required String razorpayPaymentId,
+    required String razorpaySignature,
+  }) async {
+    final response = await _apiClient.post(
+      '${ApiConstants.instituteAddOns}/$addOnId/verify-payment',
+      {
+        'razorpay_order_id': razorpayOrderId,
+        'razorpay_payment_id': razorpayPaymentId,
+        'razorpay_signature': razorpaySignature,
+      },
+    );
+    if (response.status.hasError) {
+      _handleError(response, 'Payment verification failed');
+    }
   }
 
   @override
@@ -462,6 +507,18 @@ class InstituteRepository implements InstituteRepositoryImpl {
       );
     }
     return PerformanceReportResponse.fromJson(response.body['data']);
+  }
+
+  @override
+  Future<AnalyticsResponse> getAnalytics({int months = 6}) async {
+    final response = await _apiClient.get(
+      ApiConstants.instituteReportAnalytics,
+      query: {'months': months.toString()},
+    );
+    if (response.status.hasError) {
+      throw Exception('Failed to fetch analytics: ${response.statusText}');
+    }
+    return AnalyticsResponse.fromJson(response.body['data']);
   }
 
   @override

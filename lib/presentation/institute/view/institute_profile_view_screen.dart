@@ -82,7 +82,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
                         AppSpacing.v16,
                         _buildSettingsNavigationCard(),
                         AppSpacing.v16,
-                        _buildWhiteLabelNavigationCard(),
+                        _buildAddOnsNavigationCard(),
                         AppSpacing.v16,
                         _buildSupportCard(),
                         AppSpacing.v16,
@@ -947,10 +947,10 @@ class InstituteProfileViewScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildWhiteLabelNavigationCard() {
+  Widget _buildAddOnsNavigationCard() {
     return _card(
       child: InkWell(
-        onTap: () => Get.toNamed(AppRoutes.instituteWhiteLabel),
+        onTap: () => Get.toNamed(AppRoutes.instituteAddOns),
         borderRadius: BorderRadius.circular(6),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(4, 8, 4, 8),
@@ -974,7 +974,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'White Label',
+                      'Add-ons',
                       style: AppTextStyles.outfit(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -982,7 +982,7 @@ class InstituteProfileViewScreen extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      'Publish this app under your own name and branding',
+                      'White Label branding and more, all in one place',
                       style: AppTextStyles.outfit(
                         fontSize: 11,
                         color: AppColors.textMuted,

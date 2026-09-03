@@ -53,6 +53,7 @@ class AppRoutes {
       '/institute/profile/changePassword';
   static const String instituteSubscription = '/institute/profile/subscription';
   static const String instituteWhiteLabel = '/institute/profile/white-label';
+  static const String instituteAddOns = '/institute/profile/add-ons';
   static const String instituteWhatsApp = '/institute/profile/whatsapp';
   static const String instituteUpiPaymentSettings =
       '/institute/profile/upi-payment';
@@ -61,6 +62,7 @@ class AppRoutes {
       '/institute/reports/attendance';
   static const String institutePerformanceReport =
       '/institute/reports/performance';
+  static const String instituteAnalytics = '/institute/reports/analytics';
   static const String instituteUpdates = '/institute/updates';
   static const String instituteCreateUpdate = '/institute/updates/create';
   static const String instituteNotifications = '/institute/notifications';

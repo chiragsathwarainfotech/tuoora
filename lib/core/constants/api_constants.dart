@@ -8,6 +8,10 @@ class ApiConstants {
   // Institute White Label add-on (purchase + branding submission)
   static const String instituteWhiteLabel = '/institute/whitelabel';
 
+  // Generic Add-ons catalog (flag/quota kind — White Label keeps using
+  // instituteWhiteLabel above, this covers everything else)
+  static const String instituteAddOns = '/institute/addons';
+
   // Auth Endpoints
   static const String instituteLogin = '/institute/login';
   static const String instituteRegister = '/institute/register';
@@ -123,6 +127,10 @@ class ApiConstants {
       '/institute/reports/performance';
   static const String instituteReportPerformanceExport =
       '/institute/reports/performance/export';
+
+  // Business Analytics
+  static const String instituteReportAnalytics =
+      '/institute/reports/analytics';
 
   // FCM Endpoints
   static const String fcmToken = '/fcm-token';

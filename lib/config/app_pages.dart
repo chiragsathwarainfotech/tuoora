@@ -20,11 +20,13 @@ import 'package:tuoora/presentation/institute/view/edit_profile_screen.dart';
 import 'package:tuoora/presentation/institute/view/institute_change_password_screen.dart';
 import 'package:tuoora/presentation/institute/view/institute_subscription_screen.dart';
 import 'package:tuoora/presentation/institute/view/white_label_screen.dart';
+import 'package:tuoora/presentation/institute/view/add_ons_screen.dart';
 import 'package:tuoora/presentation/institute/view/institute_whatsapp_screen.dart';
 import 'package:tuoora/presentation/institute/view/institute_upi_payment_settings_screen.dart';
 import 'package:tuoora/presentation/institute/view/fee_report_screen.dart';
 import 'package:tuoora/presentation/institute/view/attendance_report_screen.dart';
 import 'package:tuoora/presentation/institute/view/performance_report_screen.dart';
+import 'package:tuoora/presentation/institute/view/analytics_screen.dart';
 import 'package:tuoora/presentation/institute/view/reports_screen.dart';
 import 'package:tuoora/presentation/institute/view/institute_updates_screen.dart';
 import 'package:tuoora/presentation/institute/view/create_update_screen.dart';
@@ -373,6 +375,11 @@ class AppPages {
       binding: InstituteBinding(),
     ),
     GetPage(
+      name: AppRoutes.instituteAddOns,
+      page: () => const AddOnsScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
       name: AppRoutes.instituteWhatsApp,
       page: () => const InstituteWhatsAppScreen(),
       binding: InstituteBinding(),
@@ -400,6 +407,11 @@ class AppPages {
     GetPage(
       name: AppRoutes.institutePerformanceReport,
       page: () => const PerformanceReportScreen(),
+      binding: InstituteBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.instituteAnalytics,
+      page: () => const AnalyticsScreen(),
       binding: InstituteBinding(),
     ),
     GetPage(

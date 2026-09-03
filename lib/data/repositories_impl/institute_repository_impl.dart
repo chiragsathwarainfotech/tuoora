@@ -14,6 +14,7 @@ import 'package:tuoora/presentation/institute/models/attendance_record_model.dar
 import 'package:tuoora/data/models/notification_model.dart';
 import 'package:tuoora/data/models/white_label_model.dart';
 import 'package:tuoora/presentation/institute/models/birthday_model.dart';
+import 'package:tuoora/presentation/institute/models/add_on_model.dart';
 
 abstract class InstituteRepositoryImpl {
   Future<InstituteProfile> getProfile();
@@ -49,6 +50,17 @@ abstract class InstituteRepositoryImpl {
     String? logoPath,
     String? primaryColor,
     String? secondaryColor,
+  });
+
+  // Generic Add-ons catalog (flag/quota kind — White Label above keeps its
+  // own dedicated flow)
+  Future<List<AddOnModel>> getAddOns();
+  Future<Map<String, dynamic>> createAddOnOrder(String addOnId);
+  Future<void> verifyAddOnPayment({
+    required String addOnId,
+    required String razorpayOrderId,
+    required String razorpayPaymentId,
+    required String razorpaySignature,
   });
 
   // Birthdays
@@ -89,6 +101,9 @@ abstract class InstituteRepositoryImpl {
   Future<PerformanceReportResponse> getPerformanceReport();
   Future<BatchPerformanceDetailResponse> getBatchPerformanceReport(int batchId);
   Future<List<int>> exportPerformanceReport();
+
+  // Business Analytics
+  Future<AnalyticsResponse> getAnalytics({int months = 6});
 
   // Batches Management
   Future<BatchListResponse> listBatches({int page = 1, String? search});

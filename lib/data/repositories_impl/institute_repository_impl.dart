@@ -7,9 +7,14 @@ import 'package:tuoora/presentation/institute/models/expense_model.dart';
 import 'package:tuoora/presentation/institute/models/fee_record.dart';
 import 'package:tuoora/presentation/institute/models/report_models.dart';
 import 'package:tuoora/presentation/institute/models/homework_model.dart';
+import 'package:tuoora/presentation/institute/models/exam_model.dart';
+import 'package:tuoora/presentation/institute/models/timetable_model.dart';
 import 'package:tuoora/presentation/institute/models/resource_model.dart';
 import 'package:tuoora/presentation/institute/models/attendance_record_model.dart';
 import 'package:tuoora/data/models/notification_model.dart';
+import 'package:tuoora/data/models/white_label_model.dart';
+import 'package:tuoora/presentation/institute/models/birthday_model.dart';
+import 'package:tuoora/presentation/institute/models/add_on_model.dart';
 
 abstract class InstituteRepositoryImpl {
   Future<InstituteProfile> getProfile();
@@ -23,20 +28,7 @@ abstract class InstituteRepositoryImpl {
     String? qrImagePath,
   });
 
-  Future<void> renewSubscription({
-    required String transactionId,
-    required String screenshotPath,
-    String? message,
-  });
-
-  Future<void> verifyIapPurchase({
-    required int planId,
-    required String transactionId,
-    required String receiptData,
-    required String platform,
-  });
-
-  // Razorpay (Android)
+  // Razorpay
   Future<Map<String, dynamic>> createRazorpayOrder({required int planId});
   Future<void> verifyRazorpayPayment({
     required int planId,
@@ -44,6 +36,36 @@ abstract class InstituteRepositoryImpl {
     required String razorpayPaymentId,
     required String razorpaySignature,
   });
+
+  // White Label add-on
+  Future<WhiteLabelStatus> getWhiteLabelStatus();
+  Future<Map<String, dynamic>> createWhiteLabelOrder();
+  Future<WhiteLabelRecord> verifyWhiteLabelPayment({
+    required String razorpayOrderId,
+    required String razorpayPaymentId,
+    required String razorpaySignature,
+  });
+  Future<WhiteLabelRecord> submitWhiteLabelBranding({
+    required String appName,
+    String? logoPath,
+    String? primaryColor,
+    String? secondaryColor,
+  });
+
+  // Generic Add-ons catalog (flag/quota kind — White Label above keeps its
+  // own dedicated flow)
+  Future<List<AddOnModel>> getAddOns();
+  Future<Map<String, dynamic>> createAddOnOrder(String addOnId);
+  Future<void> verifyAddOnPayment({
+    required String addOnId,
+    required String razorpayOrderId,
+    required String razorpayPaymentId,
+    required String razorpaySignature,
+  });
+
+  // Birthdays
+  Future<List<BirthdayModel>> getBirthdays();
+  Future<void> sendBirthdayWish({required int studentId, required String studentName});
 
   // Authentication
   Future<String> registerInstitute(Map<String, dynamic> data);
@@ -80,6 +102,9 @@ abstract class InstituteRepositoryImpl {
   Future<BatchPerformanceDetailResponse> getBatchPerformanceReport(int batchId);
   Future<List<int>> exportPerformanceReport();
 
+  // Business Analytics
+  Future<AnalyticsResponse> getAnalytics({int months = 6});
+
   // Batches Management
   Future<BatchListResponse> listBatches({int page = 1, String? search});
   Future<Batch> createBatch(Map<String, dynamic> data);
@@ -99,6 +124,20 @@ abstract class InstituteRepositoryImpl {
     int homeworkId,
     Map<String, dynamic> data,
   );
+
+  // Exams
+  Future<List<ExamModel>> getExams(int batchId);
+  Future<ExamModel> createExam(Map<String, dynamic> data);
+  Future<ExamModel> updateExam(int id, Map<String, dynamic> data);
+  Future<void> deleteExam(int id);
+  Future<ExamMarksData> getExamMarks(int examId);
+  Future<ExamStats> saveExamMarks(int examId, List<Map<String, dynamic>> marks);
+
+  // Timetable
+  Future<List<TimetableSlot>> getTimetable(int batchId);
+  Future<TimetableSlot> createTimetableSlot(Map<String, dynamic> data);
+  Future<TimetableSlot> updateTimetableSlot(int id, Map<String, dynamic> data);
+  Future<void> deleteTimetableSlot(int id);
 
   // Batch Students
   Future<void> removeStudentFromBatch(int batchId, int studentId);

@@ -285,6 +285,22 @@ class _BatchDetailsScreenState extends State<BatchDetailsScreen> {
         ),
       ),
       _ManagementTileData(
+        svgAsset: AppImages.icBatchExam,
+        title: AppStrings.exams,
+        onTap: () => Get.toNamed(
+          AppRoutes.instituteBatchExams,
+          arguments: controller.batch,
+        ),
+      ),
+      _ManagementTileData(
+        svgAsset: AppImages.icBatchTimetable,
+        title: AppStrings.timetable,
+        onTap: () => Get.toNamed(
+          AppRoutes.instituteBatchTimetable,
+          arguments: controller.batch,
+        ),
+      ),
+      _ManagementTileData(
         svgAsset: AppImages.icBatchResource,
         title: AppStrings.resources,
         onTap: () => Get.toNamed(
